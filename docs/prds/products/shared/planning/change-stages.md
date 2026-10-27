@@ -16,11 +16,11 @@ A change is in exactly one planning or delivery stage, proven by a file on
 | # | Stage | Proven by | The agent | You |
 | --- | --- | --- | --- | --- |
 | 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one marked line per outcome on the page and `hands:`, with `❓` on what is still open | Drafts the marks and the three files from what you ask; asks what is a preference or a product decision | Product manager: say what is wanted and whether to do it now |
-| 2 | Designed | `ui-design.md` or `ui_waived` | Drafts the UI design from the page and the journeys | Designer: tweak and land the UI design, or record `ui_waived` |
+| 2 | Designed | `ui-design.md` or `ui_waived` | Drafts the UI design from the page and the journeys | Designer: tweak the UI design, or record `ui_waived` |
 | 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; `tech-design.md` or `design_waived` | QA1 writes the blind cases from the frozen anchors; Dev independently writes the technical design, requirements and scenarios; QA2 reconciles the two readings | Product manager: resolve every open question; QA1 does not review the requirement draft |
 | 4 | Planned | `tasks.md` | Dev writes the dependency-ordered plan after QA2 reconciliation | Engineer: read the plan and challenge the tech design before acceptance |
 | 5 | Accepted | `acceptance.json`, with a content fingerprint of the resolved plan | Reviews the page, designs and deltas against each other, then records the human's acceptance and publishes the contract to `openspec/specs/`; no product question remains open | Product manager or named owner: accept the plan |
-| 6 | Building | A ticked task; the first claim recorded the store's `main` commit and the accepted targets in `implementation.json` | Builds each group test first, audited and verified | Engineer: read each landing |
+| 6 | Building | A ticked task; the first claim recorded the store's `main` commit and the accepted targets in `implementation.json` | Builds each group test first, audited and verified | Engineer: build each group, test first |
 | 7 | Implementation complete | `implementation.json`, with the repository, commit and concrete application component ids | Records implementation and ancestry against the accepted contract | QA: run human review after implementation, on a deployed environment when required |
 | 8 | Archived | The directory under `archive/`; the accepted contract and implementation record verified | Compares the claimed targets with the current durable contract; acceptance already folded it | Engineer: archive after implementation verification |
 
@@ -41,8 +41,6 @@ A change is in exactly one planning or delivery stage, proven by a file on
 - **Availability apart from archive** - a GitHub Deployment receipt records
   whether each application component is newly, still, no longer, partially,
   unknown or stale in an environment; a deploy never waits for archive
-- **Drafted, then landed on your word** — each planning artifact reaches
-  `main` only when its hand lands it, and the landing records whose word it was
 - **The Design stage draws the UI alone** — Designed is proven by
   `ui-design.md` or `ui_waived` and nothing else; the designer is its one hand
 - **The tech design inside planning** — Dev writes `tech-design.md` in the
@@ -55,24 +53,19 @@ A change is in exactly one planning or delivery stage, proven by a file on
 
 ## Overlays
 
-A fact beside the stage, never a stage of its own. The set is five, and closed.
+A fact beside the stage, never a stage of its own. The set is four, and closed.
 
 | Overlay | Read from |
 | --- | --- |
 | Waiting | `awaiting:`, one line per artifact, dated |
 | Blocked | `depends_on:` naming a change not yet released |
-| Idle | 7 days without a tick, a claim or an artifact landing; shelved at 30 |
-| Behind | An artifact whose page lines or artifacts before it changed after it was drawn or last read again |
+| Idle | 7 days without a tick, a claim or an artifact commit; shelved at 30 |
 | Suite | `feature-tcs.md` status, `draft` or `approved` |
 
 - **Waiting and blocked** — read from the same two keys; the Monday digest
   lists a wait, and a dependency once it frees
-- **Idle** — counted from the last tick, claim or artifact landing, so a
-  repository-wide commit moves nobody's count
-- **Behind** — told once, and listed in the digest after 7 days
-  counted from the day it went behind; it holds a tick, a claim and a wait
-  never, the archive always, and the next landing where what moved is
-  major
+- **Idle** — counted from the last tick, claim or commit to the change's
+  artifacts, so a repository-wide commit moves nobody's count
 - **Suite** — read beside the stage and never holding the ladder
 - **Flag and hotfix** — the release line carries both: a flag on a change and a
   hotfix branch are read where releases are cut, not here
@@ -120,7 +113,6 @@ One handle per role on each change.
 - **Standing in** — a handle may be named for a role the team map does not
   list it under
 - **Unnamed hand** — the role's channel is told instead
-- **Who landed it** — each artifact records the hand whose word landed it
 - **Team map** — `docs/prds/team.yaml` in the store: one entry per handle
   with its e-mail, its Slack member and the roles it takes, and one channel per
   role
@@ -133,11 +125,10 @@ Slack tells one person, once per move.
 
 | When | Who is told | Carries |
 | --- | --- | --- |
-| A change reaches a hand: a stage lands, the decisions and the journeys complete Proposed, or a hand is taken off | That hand, by direct message; the role's channel when the change names nobody for it | The change, the stage, the command to paste |
+| A change reaches a hand: a stage reaches `main`, the decisions and the journeys complete Proposed, or a hand is taken off | That hand, by direct message; the role's channel when the change names nobody for it | The change, the stage, the command to paste |
 | A change reaches Implementation complete | Its QA hand, by direct message | The change, the accepted implementation identity and the run sheet to walk |
-| What moved reaches their artifacts | Each hand it reaches, one message per person per landing | What moved, before and after, and which of their artifacts it holds |
 | A change is proposed, accepted, claimed, completed or archived | The channel, once the manual has deployed it | Each change that crossed one, under its milestone |
-| Monday morning | Each person with a line to read, by direct message | On you now; open questions; idle; behind for 7 days; waiting; freed by a dependency |
+| Monday morning | Each person with a line to read, by direct message | On you now; open questions; idle; waiting; freed by a dependency |
 
 - **Once per move** — a move is the hand changing; a move told twice, or a
   message per commit, never happens
@@ -171,18 +162,16 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | Stage | Decided | Eight stages are derived from files on `main`; deployment availability comes from GitHub Deployments and never changes the stage. | Product |
 | Planning readings | Decided | QA1 writes isolated cases from the frozen anchors; Dev writes the delivery design and artifacts independently; QA2 reconciles both. | Product, QA, Engineering |
 | A page open while `main` moves | Decided | The manual doesn't watch `main`: no notice, no refresh of its own, and no pull from the local manual. A reader reloads to read the latest. | Product |
-| Human questions | Decided | One human resolves every question still open before accepting the plan; a raised question the held test does not hold closes as decided by the round. An open question prevents acceptance. | Product |
+| Human questions | Decided | One human resolves every question still open before accepting the plan; a raised question the held test does not hold closes on its recommendation. An open question prevents acceptance. | Product |
 | Human QA | Decided | QA does not review the planned suite as an execution verdict. Human QA happens after implementation, using a deployed environment when needed. | Product, QA |
-| Who drafts | Decided | The change's agent drafts artifacts; each hand lands its own artifacts. The landing records whose word it was. | Product, Engineering |
-| Approval record | Decided | The landing: an artifact reaches `main` on its hand's word, and the change records whose. No approval key beside it. | Engineering |
+| Who drafts | Decided | The planning skills draft the artifacts with the person running them; that person commits and pushes them. | Product, Engineering |
 | Tech design order | Decided | Written by Dev in the planning run, after the blind cases and before the scenarios; proves Specified; owed when the work lands outside this store. | Product, Engineering |
 | Tech PIC | Decided | Retired: the engineer who will build the change challenges the tech design, and the accepting human judges the requirements and the suite whole. | Product |
 | Raised rows | Decided | An open Raised row holds acceptance, never Specified; the product manager's turn at Specified is to resolve it. | Product |
 | Hands | Decided | Recorded in the change's manifest, one handle per role. | Product |
 | Messages | Decided | One direct message per move to the hand it reaches, each linking the change, a channel post on five milestones only, a weekly digest; never one per commit, and nothing before the manual has deployed it. | Product |
-| Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, and the next landing where what moved is major. | Product, Engineering |
 | Plan acceptance | Decided | `acceptance.json` records an immutable content fingerprint after QA2 and human resolution. | Product, Engineering |
-| Measure | Decided | Days between a stage landing and the next hand's word. | Product |
+| Measure | Decided | Days between a stage reaching `main` and the next hand's first commit. | Product |
 | Team map | Decided | `docs/prds/team.yaml`: one entry per handle with the e-mail, the Slack member and the roles, and a channel per role. | Operations |
 | Planning views | Decided | The manual shows the pages under `docs/prds/` and nothing of a change; the OpenSpec viewer reads the changes. | Product |
 | Implementation evidence | Decided | `implementation.json` records the first claim's durable baseline, the repository, commit and concrete application component ids. Archive verifies it; deployment does not wait for archive. | Engineering |

@@ -58,7 +58,6 @@ Use this Clarification Request format whenever human input is needed.
 | User-facing copy and translations | `packages/i18n/messages/{shared,<brand>}/<locale>/<namespace>.json` | `shared/` answers every key no brand claims, once per language; a brand answers only what says something about itself, in every language it speaks. Assembled in `src/catalogs.ts`. Types refuse a key the vocabulary does not name; `pnpm run test` refuses layers that leave one unanswered, or answer one twice. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
 | Product component implementation | `packages/ui/src/blocks/` | Shared compound components, one directory per capability; the capability spec remains the export contract. |
-| A change's rounds | `rounds.md` beside `tasks.md` | One row per round, written by the landing. |
 | Task group and owner format in `tasks.md` | `docs/governance/task-ownership.md` | Parsed independently by tooling in this repository and in the application repository. |
 
 If a statement is testable, it belongs in `openspec/specs/` and nowhere else, reached through a change's delta. A PRD is the capability's manual page, written before the change: it states the outcome in the reader's words, marked 🚧 or ❓ where it is not yet running, holds what a requirement cannot carry, and names its capability spec rather than restating it. Where an unmarked line and the spec disagree, the spec is correct.
@@ -84,7 +83,7 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 | 7 | `specs/<capability>/feature-tcs.md` | QA1 cases, QA2 reconciliation | `planning-dev` | Always — blind draft cases before scenarios |
 | 8 | `tasks.md` | Dev in the integrated planning run | `planning-dev` | Before acceptance and implementation |
 
-`planning-pm`, `planning-design` and `planning-dev` are current and independently usable. `workflow-*` are next-version wrappers: they may invoke planning skills and add instructions, but planning skills must not depend on them. Keep planning procedures in `planning-*` until adoption.
+`planning-pm`, `planning-design` and `planning-dev` are the planning skills, each usable on its own.
 
 The PM writes 1 to 3, and a designer adds 4 where needed. One `/planning-dev` invocation takes frozen anchors through fresh QA1 blind cases, independent Dev technical design, scenarios and tasks, then fresh QA2 reconciliation. The same human resolves requirement, design and plan questions. After a ready `accept-review` and a passing `pnpm accept:preflight <change>`, accept once with `pnpm spec:accept <change> --baseline <digest> --reviewed-by <human>`. Acceptance publishes requirements before implementation without marking cases approved or executed. An amendment names `--supersedes <old-fingerprint>` and preserves earlier snapshots. The first claim records its durable baseline; archive reconciles its target scope with the current contract, and semantic differences name evidence. Archive makes no second fold; deployment never waits for it. After deployment, human QA classifies cases with `/tcs-review` and uses `/tcs-run-sheet` for manual execution. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
 
@@ -102,7 +101,7 @@ For a new product feature:
 
 Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories.
 
-Ask only what the [held test](.claude/skills/workflow-round/SKILL.md#questions-held-or-decided-by-the-round) holds: questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
+Ask only what the [held test](docs/governance/specs-to-test-cases.md#raised) holds: questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
 
 ## Design Override
 
@@ -166,7 +165,7 @@ Run the appropriate checks before handoff:
 
 `AGENTS.md` is canonical. `AGENT.md`, `CLAUDE.md`, and `GEMINI.md` are compatibility aliases.
 
-`.claude/skills/` is canonical, with `.codex/skills/` and `.cursor/skills/` symlinked to it, so every platform reads the same files; adding a platform means adding its symlink to the parity check and sync scripts. `.claude/agents/` is canonical for the round's readers, mirrored nowhere; the parity check asserts every reader the schema names resolves.
+`.claude/skills/` is canonical, with `.codex/skills/` and `.cursor/skills/` symlinked to it, so every platform reads the same files; adding a platform means adding its symlink to the parity check and sync scripts. `.claude/agents/` is canonical for the readers `/fix-bug` and the schema name, mirrored nowhere; the parity check asserts every reader the schema names resolves.
 
 When agent-related files change, run:
 
