@@ -46,8 +46,8 @@
       link at the new screen
 - [x] 4.3 Update `docs/prds/products/grade10-site/loyalty/membership.md`:
       the Tiers & Benefits section states the page's parts and its entry
-      points; the expiry-line ❓ stands — the surface states the rule, the
-      member-dated line has no designed home
+      points; the surface states the lapse rule and draws no member-dated
+      expiry line
 - [x] 4.4 Verify: `tsc` on `@grade10/ui` and `apps/preview`,
       `pnpm storybook:check`, biome on the touched files
       (`packages/ui/tsconfig.tsbuildinfo` regenerated, uncommitted)

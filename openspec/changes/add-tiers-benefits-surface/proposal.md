@@ -37,9 +37,8 @@ workbench on this change's branch; this change records the contract.
 - The preview Tiers & Benefits screen is its own page — breadcrumbs, the
   semibold title, the ladder, the rung cards, the mechanics card — reached
   from the `TierCard` link on Membership.
-- ❓ The member-dated expiry line has no designed home yet: the surface
-  states the lapse rule but draws no "how many points expire and the day
-  they go".
+- The surface states the lapse rule and draws no member-dated "how many
+  points expire and the day they go" line (Q5).
 
 ## Non-Goals
 

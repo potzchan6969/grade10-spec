@@ -10,11 +10,9 @@
 
 ## Non-Goals
 
-- The Tiers & Benefits section inside the wide Membership page — the
-  standalone page exists; the embedded section awaits the Membership
-  page's wide composition design.
-- A member-dated expiry line. The surface states the lapse rule; where a
-  member's own date reads is still ❓.
+- A Tiers & Benefits section inside the wide Membership page — the
+  standalone page is the surface on every viewport (Q6).
+- A member-dated expiry line. The surface states the lapse rule alone (Q5).
 - Backend behaviour of any kind — the blocks are presentational.
 
 ## Decisions
@@ -25,13 +23,10 @@
 | Q2 | What does an invitation-held tier show? | Every other rung upcoming, no qualifying pill, no footnote — Figma's `blackTier` variant (`7254:384`) | Checking the earned rungs beneath — a check means earned, and an invitation earned nobody |
 | Q3 | Whose words do the mechanics speak? | The consumer's — the row titles and bodies arrive through props; the preview states the spec's own values | Hardcoding the Figma draft — it claimed a pending window and a redemption rate the programme does not have |
 | Q4 | Where does the ladder's qualifying line live? | Inside the ladder's card as a muted pill, drawn only when both the count and the target arrive | A separate block or a bare text row — the Figma slot puts the pill in the same card as the stepper |
+| Q5 | Where does a member's own expiry line read? | Nowhere — the surface states the lapse rule alone, and no member-dated line is drawn — the human's choice | Holding for a designed line — the card already lost it (`redesign-tier-card` Q3) |
+| Q6 | Does a wide viewport host Tiers & Benefits as a Membership section? | No — its own page on every viewport — the human's choice | An embedded section, which needs a wide composition design |
+| Q7 | Does Tiers & Benefits get its own navigation entry? | No — it is reached from the card only — the human's choice | An entry of its own, which needs a navigation design |
 
 ## Raised
 
-The member-dated expiry line still has no designed home; this surface is
-the expected one, but nothing draws "how many points expire and the day
-they go" yet.
-
-| Capability | Raised | Landed |
-| --- | --- | --- |
-| grade10-site/loyalty/programme | ❓ where the expiry date reads — still awaiting the design | membership PRD ❓ — `docs/prds/products/grade10-site/loyalty/membership.md` |
+Nothing. The blind pass settled everything it was given.

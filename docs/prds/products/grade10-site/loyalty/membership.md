@@ -94,8 +94,7 @@ a Google account under it -
 Every rung of the programme on one surface — what each asks, what each pays,
 where the member stands and how points work. Its own page: the breadcrumbs
 name Home, Membership and Tiers & Benefits; a small viewport navigates to
-it; ❓ whether a wide viewport hosts it as a Membership section instead is
-the Membership page's composition, not drawn yet.
+it, on a wide viewport too.
 
 | Section | Shows |
 | --- | --- |
@@ -104,10 +103,10 @@ the Membership page's composition, not drawn yet.
 | How Points Work | The mechanics as icon rows — earn, pending, spend, expiry — stacked on a narrow viewport and paired on a wide one. The preview states the programme's own values: a point redeems a Hong Kong dollar, points arrive when the order completes, and the whole balance lapses after twelve months with no activity |
 
 - **Reaches** — the `TierCard` on Membership links here whole, and it has
-  its own navigation entry ❓
+  no navigation entry of its own
 - **The expiry date's home** — the mechanics card states the lapse rule;
-  a member's own "how many points expire and the day they go" line reads
-  here, and the page design draws it
+  no line names a member's own expiring points and the day they go; the
+  programme states the rule alone
 
 ::story{id="loyalty-membership-screens-tiers-benefits--default" title="Tiers & Benefits, a gold member"}
 
