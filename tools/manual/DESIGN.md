@@ -12,9 +12,10 @@ The app never restates a fact that lives elsewhere. Visuals come from Figma,
 Storybook, and images in the manual's `assets/`; the store's
 `docs/references/` render beside the pages as evidence. A capability's page
 is its PRD, which is why the store keeps the manual under `docs/prds/`. The
-OpenSpec store is not the manual's to read: its specs and changes are read by
-`tools/openspec-store`, for the scripts under `scripts/openspec/`, and a page
-links to a spec file on GitHub.
+manual needs no OpenSpec: it runs, builds and checks in a repository with
+`docs/prds/` and no `openspec/` at all. Where a repository still plans with
+OpenSpec, `tools/openspec-store` reads its specs and changes for the scripts
+under `scripts/openspec/`, and a page links to a spec file on GitHub.
 
 ## Roots
 
@@ -33,11 +34,12 @@ manual, wherever it keeps it — an engineering manual has no business under
 content root is found where the command ran — `MANUAL_ROOT`, else the
 nearest `<MANUAL_DIR>/manual.yaml` above `INIT_CWD` or the working
 directory. The resolved directory rides the snapshot as `manualDir`, so
-the app builds every page path from it and names it nowhere. The store is the content repository itself when it carries
-`openspec/specs`; otherwise the repository's `openspec/config.yaml` names a
-store id and the `openspec` CLI resolves it through the same per-machine
-registry `pnpm plan` uses — the registered clone at its own main, never a
-pinned submodule. `MANUAL_STORE` overrides that resolution.
+the app builds every page path from it and names it nowhere. The store is
+the content repository itself. A repository that plans against another store
+with OpenSpec — `openspec/config.yaml` and no `openspec/specs` of its own —
+reads the clone the `openspec` CLI has registered for it, through the same
+per-machine registry `pnpm plan` uses, at its own main and never a pinned
+submodule. `MANUAL_STORE` overrides that resolution.
 
 What follows from a split: page and asset writes land in the content
 repository, git history and commit info merge from both clones, and the
@@ -202,7 +204,7 @@ by `snapshot.mts`) parse them from disk.
 
 Relative markdown links in a page are rewritten at render to the page or
 reference that shows the file; one to a store file no page shows — a spec
-under `openspec/`, a governance doc — opens on GitHub, and an unresolvable
+under `openspec/` where one exists, a governance doc — opens on GitHub, and an unresolvable
 one renders as a marked dead link.
 
 Two transports, one client code path:

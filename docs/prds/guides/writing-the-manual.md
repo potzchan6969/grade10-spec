@@ -35,9 +35,9 @@ Write for a teammate who joined this week and has never seen the code.
   children goes
 - **Most important first** — at each level, the item the user meets first,
   or acts on, leads
-- **Leave out what belongs elsewhere** — every edge case is in the spec and
-  the test cases, how it works is in `docs/architecture`, and small UI choices
-  are in the design record. Link to them instead
+- **Leave out what belongs elsewhere** — every edge case is in the test
+  cases, how it works is in `docs/architecture`, and small UI choices are in
+  the design record. Link to them instead
 - **Decisions are product judgments** — the `Product decisions` block at the
   end records why we chose something, for whom, and what we ruled out. It is
   not a log of every detail or of which change decided it
