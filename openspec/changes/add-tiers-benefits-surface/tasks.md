@@ -1,4 +1,4 @@
-## 1. The tier info card (grade10-spec)
+## 1. The tier info card (grade10-spec) (owner: @seankcw)
 
 - [x] 1.1 Add `packages/ui/src/blocks/loyalty-membership/tier-info-card.tsx` —
       the tier name, the ask caption and the benefits behind checks, the
