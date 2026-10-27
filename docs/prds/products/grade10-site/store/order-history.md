@@ -18,9 +18,9 @@ order, or return to the Store when the account is empty.
 
 **Active and Past** - the page keeps active orders above past ones, with
 the newest order first in each group. An order is past once nothing is left
-to happen on it: Completed, Canceled, or Refunded and either refunded in full
-or every item fulfilled. A partly refunded order still owed items, and a held
-or scheduled order whatever its refund, stay active
+to happen on it: Completed, Canceled, or Refunded. A partly refunded order
+reads its progress and stays active until it completes, and a held or
+scheduled order whatever its refund stays active
 
 **Recorded orders** - a web checkout appears once the shop records the
 order; one that fails or expires before then never appears -

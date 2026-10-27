@@ -18,13 +18,12 @@ and nothing else.
 | --- | --- |
 | Processing | Open and not yet fulfilled, or a combination nothing else claims |
 | Shipped | Fulfilled in part, fulfilled and not yet paid in full, or a parcel still with its carrier |
-| Completed | Every item fulfilled, paid in full, and every parcel delivered or picked up |
+| Completed | Every item fulfilled, paid in full or partly refunded, and every parcel delivered or picked up |
 | Canceled | The order was canceled, or its payment voided |
-| Refunded | Money has moved back to the collector, and the order is not on hold or scheduled |
+| Refunded | Refunded in full, and the order is not on hold or scheduled |
 
-- **Order of rules** - a cancellation or a void always wins; a refund comes
-  next, ahead of fulfilment, so a partly refunded order never shows as Shipped
-  or Completed
+- **Order of rules** - a cancellation or a void always wins; a refund in
+  full comes next, ahead of fulfilment
 - **Never blank** - every combination Shopify can report reads as one of the
   five
 - **Delivered** - a parcel arrives when its carrier says delivered or picked
@@ -42,12 +41,9 @@ and nothing else.
   checkout once the shop records it
 - **No archiving** - the shop does not archive orders, so whether Shopify
   archived an order never decides its badge
-- **Partly refunded** - a partly refunded order not on hold or scheduled
-  reads Refunded
-  and stays with the orders needing attention in
-  [Your Orders](/p/grade10-site/store/order-history) while items are still
-  owed; once every item is fulfilled, or the order is refunded in full, it sits
-  with past purchases
+- **Partly refunded** - a partial refund leaves the badge where the order's
+  progress puts it, Completed included: it usually settles an overpayment or
+  one item, and the order goes on
 
 ## Updates from Shopify
 
@@ -103,14 +99,15 @@ Badges beyond the five, and thresholds a merchant sets.
 | Completed | Decided | Every item fulfilled, paid in full and delivered, which is what a collector reads as done. Not archived: the shop does not archive orders, so a rule waiting on it would never show Completed. Waits for delivery since 2026-10-24: Completed beside a parcel still travelling contradicted the delivery steps. A parcel no carrier tracks arrives as it is handed over, so till sales and untracked fulfilments still complete. | Product |
 | A carrier that never reports delivery | Decided | Staff mark the order delivered in the store admin; no time limit completes it on its own. A carrier that never scans delivered is rare, and a person who knows the customer has the goods is a better judge than a clock. Decided 2026-10-26. | Product |
 | Pickup | Decided | No pickup badge this delivery. The shared pill keeps its pickup rung, since pickup is a confirmed later phase and removing the rung means adding it back. | Product |
-| Refund before fulfilment | Decided | Money going back is reported ahead of shipping progress. A held or scheduled order stays Processing, since it is still being worked on. | Product |
-| Returns | Decided | Whether items came back can choose a note, never the badge. The refund already moves the badge; the return only explains it. | Product |
+| Refund before fulfilment | Decided | A refund in full is reported ahead of shipping progress. A held or scheduled order stays Processing, since it is still being worked on. | Product |
+| A partial refund keeps the progress | Decided | A partly refunded order reads Processing, Shipped or Completed as it would paid in full; only a refund in full reads Refunded. A partial refund usually settles an overpayment or one item, so Refunded told a collector whose goods were on their way that the order had stopped. Reverses the earlier rule that any refund reads Refunded. Decided 2026-10-27 with Design. | Product |
+| Returns | Decided | Whether items came back can choose a note, never the badge. | Product |
 | Till sales | Decided | Read through the same rules as web orders. Where an order was sold is not a fact the badge reads. | Product |
 | No generic note | Decided | An order no confirmed note fits shows its badge alone. A badge from the rule is a correct answer; reassurance nobody confirmed is not. | Product |
 | No notifications | Decided | This rule names no message. The notification centre owns its own rules. | Product |
 | One stored copy | Decided | Both pages read one stored copy of Shopify's facts. Not a Shopify read on every Your Orders load, one read per order listed. | Product |
 | Orders covered | Decided | Only orders Shopify holds. The rule reads Shopify's facts alone, so a checkout Shopify never recorded has nothing to read. | Product |
 | Note on surfaces | Decided | No surface shows the note in this delivery. No design has a place for it, and the rule still names it for the surface that adds one. | Product |
-| Partly refunded | Decided | Your Orders puts an order with past purchases once nothing is left to happen on it: its badge is Completed or Canceled, or Refunded and either refunded in full or every item fulfilled. A partly refunded order still owed items, and a held or scheduled order whatever its refund, which reads Processing, stay with the orders needing attention, so a collector never finds an order still in progress among finished ones. | Product |
+| Partly refunded | Decided | Your Orders puts an order with past purchases once nothing is left to happen on it: its badge is Completed, Canceled or Refunded. A partly refunded order reads its progress, so it stays with the orders needing attention until it completes, and a held or scheduled order whatever its refund reads Processing, so a collector never finds an order still in progress among finished ones. | Product |
 | Source rows | Decided | The [Store Order Status Brief](/references/store-order-status-brief) holds one row per note and each combination a decision settles by name, and the rule is checked against each; a fulfilled order not paid in full reads Shipped, since Completed needs the order paid in full, on common storefront practice. An order fulfilled and paid in full now reads Completed without being archived, and D7 is the product owner's: no surface shows a note this delivery, so the owner's check would change nothing on screen. A canceled order carries the awaiting-refund note only when it took money and none has gone back, and a held order carrying a partial refund carries one note naming both. | Product |
 :::
