@@ -164,14 +164,6 @@ Slack tells one person, once per move, in the change's thread.
   rendered, and the capabilities each change deltas — `tools/openspec-viewer`
 - **The manual shows pages only** — no change, stage, hand or overlay; a
   page's marked line names what is being built in its own words
-- 🚧 **A page open while `main` moves** — the hosted manual says `main` moved,
-  with the commit's subject and how long ago, offers Refresh now, and refreshes
-  itself once the site has caught up, never under a reader who is typing
-- 🚧 **Ten minutes behind** — the site has not caught up, and the manual stops
-  promising to refresh itself
-- 🚧 **The locally run manual** — says how many commits behind `main` the
-  checkout is, pulls on one click, and names what is in the way of a pull it
-  cannot make
 
 :::detail{title="Product decisions" for="pm"}
 A change passes through planning and implementation, then reaches one or more
@@ -183,6 +175,7 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | --- | --- | --- | --- |
 | Stage | Decided | Eight stages are derived from files on `main`; deployment availability comes from GitHub Deployments and never changes the stage. | Product |
 | Planning readings | Decided | QA1 writes isolated cases from the frozen anchors; Dev writes the delivery design and artifacts independently; QA2 reconciles both. | Product, QA, Engineering |
+| A page open while `main` moves | Decided | The manual doesn't watch `main`: no notice, no refresh of its own, and no pull from the local manual. A reader reloads to read the latest. | Product |
 | Human questions | Decided | One human resolves every question still open before accepting the plan; a raised question the held test does not hold closes as decided by the round. An open question prevents acceptance. | Product |
 | Human QA | Decided | QA does not review the planned suite as an execution verdict. Human QA happens after implementation, using a deployed environment when needed. | Product, QA |
 | Who drafts | Decided | The change's agent drafts artifacts; each hand lands its own artifacts. The landing records whose word it was. | Product, Engineering |
