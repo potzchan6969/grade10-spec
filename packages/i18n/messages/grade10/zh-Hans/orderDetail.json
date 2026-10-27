@@ -51,6 +51,9 @@
     "canceled": "已取消",
     "refunded": "已退款"
   },
+  "line": {
+    "refundIssued": "已于 {date} 退款"
+  },
   "ask": {
     "guest": {
       "title": "将此订单添加到你的账户",
