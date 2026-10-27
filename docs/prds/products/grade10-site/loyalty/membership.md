@@ -71,13 +71,20 @@ a Google account under it -
 
 | Section | Shows |
 | --- | --- |
-| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tiers & Benefits ❓ |
-| Your member pass | The tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
+| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tiers & Benefits |
+| Your member pass | Behind the Member pass button beside the title, in a dialog: the tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
-| Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Point History | The member's own ledger — the earned, used and pending totals on top, tabs that filter the list to each, what is still on the way under Pending, and the settled entries grouped by month. Points land when an order completes — an online order once every item is fulfilled and paid, an in-store purchase at the till. Every line says where it came from — the counter, the online store, or the programme itself. Earned and topped-up points read apart, here and in the balance — [Top-ups](/p/grade10-site/loyalty/top-ups) |
 
+- 🚧 **A rail, not a scroll** — a wide viewport lays the page out as a
+  sidebar naming its sections, the picked section drawing on the right; a
+  narrow viewport reads the same names as a scrollable row above the
+  content. The rail reads Overview, Rewards, Coupons and Points History;
+  Tiers & Benefits is an Overview section, and a Member pass button beside
+  the title opens the pass in a dialog. Buying points enters from Overview
+  and Rewards, never the rail —
+  [Top-ups](/p/grade10-site/loyalty/top-ups)
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
   to say here. ❓ Where the expiry date reads instead — the Tiers & Benefits
@@ -97,8 +104,8 @@ names.
 Every rung of the programme on one surface — what each asks, what each pays,
 where the member stands and how points work. Its own page: the breadcrumbs
 name Home, Membership and Tiers & Benefits; a small viewport navigates to
-it; ❓ whether a wide viewport hosts it as a Membership section instead is
-the Membership page's composition, not drawn yet.
+it; on the Membership page it is a section of Overview, drawing the same
+list 🚧
 
 | Section | Shows |
 | --- | --- |
@@ -106,8 +113,8 @@ the Membership page's composition, not drawn yet.
 | Tier cards | One card per rung — the tier name, its ask in the member's words, and its benefits behind checks. The held rung's card wears the primary border and its tint |
 | How Points Work | The mechanics as icon rows — earn, pending, spend, expiry — stacked on a narrow viewport and paired on a wide one. The preview states the programme's own values: a point redeems a Hong Kong dollar, points arrive when the order completes, and the whole balance lapses after twelve months with no activity |
 
-- **Reaches** — the `TierCard` on Membership links here whole, and it has
-  its own navigation entry ❓
+- **Reaches** — the `TierCard` on Membership links here whole, and the same
+  list is a section of its Overview
 - **The expiry date's home** — the mechanics card states the lapse rule;
   ❓ where a member's own "how many points expire and the day they go"
   line reads is not drawn yet
