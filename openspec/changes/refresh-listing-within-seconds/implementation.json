@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "2d852d2c406ac52efae0a6969ba2f2ab39f6b0ded42fb5f49ff44229e4d70141"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "5ebb58d0d270bedc4e343db27b39c331c452fb60",
+    "capturedAt": "2026-10-27T03:17:20.521Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The listing answers while the shop is unreachable",
+          "Requirement: The listing follows the shop within seconds"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

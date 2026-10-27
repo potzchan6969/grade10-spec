@@ -8,7 +8,7 @@ of them; group 6 needs group 5's numbers.
 How the mirror applies, publishes and is followed:
 [`tech-design.md`](tech-design.md) — Decisions.
 
-## 1. The manual (grade10-spec)
+## 1. The manual (grade10-spec) (owner: @seankcw)
 
 - [x] 1.1 Say on `docs/prds/products/grade10-site/store/product-listing.md` that the listing follows the shop within seconds, answers at a quiet location and keeps answering while the shop is unreachable, with the flow and its chart; link it from `docs/prds/products/grade10-site/commerce/commerce.md`; record the mechanism on `docs/references/store-catalogue-index.md`
 - [x] 1.2 Verify: `pnpm check:manual`, `pnpm run tcs:validate`, `pnpm run diagrams:check`, `pnpm run lint`
