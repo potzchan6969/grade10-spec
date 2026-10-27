@@ -44,7 +44,7 @@ A feature run reads a bundle the caller assembles, and nothing outside it.
 - **Included** - from the capability: `## Purpose` and `## Feature set` of `spec.md`, and `user-journeys.md`. From the change: `proposal.md`, and `decisions.md` with its goals, non-goals and `## Raised`. `ui-design.md` where one exists, with the requirements pass's dispositions stripped. The linked `docs/prds/` pages and `openspec/config.yaml`'s `context`. The existing suite, without its `## Reconciliation` and with its `## Settled`, to extend a live case - a row, or a revision with its `rev` bumped where what it verifies changes - before writing a new one, and for id continuity. The domain suite above, the change's or else the durable one, without its `## Reconciliation`, so the run knows which paths are already walked
 - **Excluded** - every `## Requirements` section, scenario text as a source, `openspec/specs/` beyond the above, and `openspec/changes/archive/`. An archived change keeps a reconciliation that names scenario ids, so reading it reopens the leak
 - **Recorded** - the `## Reconciliation` Run line names what the pass read and what it was denied. Nothing verifies it: it is the run's statement, not proof. A person running the skill by hand assembles the bundle and says so
-- **An empty `## Raised`, run after run, is the failure signal** - a second reading that asks nothing has stopped being blind or stopped being a different method. `pnpm check:manual` warns on an empty one
+- **An empty `## Raised`, run after run, is the failure signal** - a second reading that asks nothing has stopped being blind or stopped being a different method. QA2 reads an empty one as that signal
 - **A different method** - the blind reader works a checklist: boundary values, equivalence partitions, state transitions, CRUD completeness, empty / one / many, null and missing, permission matrix, error taxonomy
 
 ## Raised
@@ -56,7 +56,7 @@ They go to the change's `decisions.md` under `## Raised`, one row per question, 
 - **What belongs** - a rule the input is silent on: "Is a scheduled lot open to bid on? The spec names not-yet-published, ended and called off, and never places scheduled on either side"
 - **What does not** - anything the input settles and the reader missed, anything for the technical design, anything the reader merely wants to know
 - **QA2 closes what the held test does not hold** - each row the [held test](../../.claude/skills/workflow-round/SKILL.md#questions-held-or-decided-by-the-round) does not hold closes on its recommendation, as a `Decisions` row written `<answer> - decided by the round`, and its answer goes to the suite's `## Settled`. Only a held row stays open and holds acceptance; a contradiction between the readings is always held
-- **Every row lands before the change merges** - as a `Decisions` row, or as a ❓ on the capability's PRD naming who owes the answer. `pnpm check:manual` refuses a row that names neither
+- **Every row lands before the change merges** - as a `Decisions` row, or as a ❓ on the capability's PRD naming who owes the answer. `pnpm accept:preflight` and `pnpm spec:accept` refuse a row with an empty cell, a ❓ or a `TBC`
 - **Escalated and deferred rows are written twice** - in `decisions.md`, and in the suite's `## Reconciliation` with the answer in `## Settled`, because `decisions.md` archives with the change
 - **No scenario id** - `decisions.md` goes into the next blind pass whole
 
@@ -84,7 +84,7 @@ Once both readings land, QA2 joins them on anchors and writes `## Reconciliation
 
 ## Out of Suite
 
-`**Out of suite (<category>):**` under the file header lists scenarios QA does not test. It counts as covered: `pnpm check:manual` never warns about a listed scenario, so every coverage warning left is a GUI case still owed.
+`**Out of suite (<category>):**` under the file header lists scenarios QA does not test. It counts as covered: a listed scenario owes no case, so every scenario QA2 finds unreached and unlisted is a GUI case still owed.
 
 | Category | The scenario is |
 | --- | --- |
@@ -95,7 +95,7 @@ Once both readings land, QA2 joins them on anchors and writes `## Reconciliation
 
 - **One line per category** - an optional ` - <note>` follows the ids. It names no verifier
 - **Covered elsewhere is not out of suite** - a scenario a live case walks, in this suite, another tree, a domain suite or another capability, is not listed
-- **Checked** - `pnpm check:manual` refuses a listed id a living case traces, and a list with no category or an unknown one. `**Out of suite:** none` lists nothing and needs none
+- **Held at reconciliation** - no tool checks the list; QA2 refuses a listed id a living case traces, and a list with no category or an unknown one. `**Out of suite:** none` lists nothing and needs none
 
 ## Coverage and Traceability
 
