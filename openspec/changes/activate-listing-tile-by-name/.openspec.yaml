@@ -2,7 +2,7 @@ schema: grade10-planning
 created: 2026-09-11
 hands:
   pm: "@seankcw"
-  design: "@ecchochan"
+  design: "@seankcw"
   qa: "@ecchochan"
   dev: "@ecchochan"
 depends_on:
