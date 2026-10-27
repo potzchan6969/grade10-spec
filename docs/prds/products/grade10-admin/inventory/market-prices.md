@@ -22,8 +22,13 @@ exact grade or condition the item matches.
 - 🚧 **The exact grade** - PSA 10 is never read with PSA 9, nor A with B; a
   grade SNKRDUNK does not list maps only to an equal or lower one it does,
   or the item takes a set price
-- 🚧 **Fetched daily** - each reference in use is read once a day, politely
-  paced, and every read is recorded, failed or not
+- 🚧 **Fetched after midnight** - each reference in use is read once a day,
+  just after 00:00 Hong Kong time, politely paced, so the day before is
+  read whole and every sale counts on its Hong Kong day; every read is
+  recorded, failed or not
+- ❓ **Through the house's SNKRDUNK worker** - reads will go through another
+  of the house's workers that reaches SNKRDUNK; its interface is TBC, the
+  owner to provide it
 - 🚧 **Typed by staff** - when fetching fails, staff read the page and type
   each sale it shows, its day, price and grade; a read that finds nothing
   new is recorded too, and counts as a successful read
@@ -81,5 +86,6 @@ separate. The working behind the value and the factor is
 | Eventually right | Decided | A week reads what was observed before its cutoff, so it is the same whenever it is worked, and late observations reach the next week - on the owner's direction, 2026-10-26 | Owner |
 | Every read is kept | Decided | Which source read what, when, and what it saw, so a failed read is told apart from a quiet market - 2026-10-26 | Engineering |
 | Fetching SNKRDUNK | Decided | SNKRDUNK consents to the house reading its sales; a daily fetch with staff typing as the fallback - 2026-10-26 | Owner |
+| The day a sale counts on | Decided | Hong Kong's: each day's price comes from all of that day's sales, read just after its midnight; a new reference's first read takes the older days as SNKRDUNK prints them, in Japan's - 2026-10-27 | Owner |
 | The exchange rate | Decided | An admin's exact rate, applied from the next day, as consignment's auction rate is; the platform fetches no rate - 2026-10-26 | Finance |
 :::
