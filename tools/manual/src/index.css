@@ -67,6 +67,17 @@
     scroll-margin-top: 5.5rem;
   }
 
+  /* A border being dragged owns the pointer: a story's frame would take the
+     drag the moment the pointer crossed it, and a drag would select text. */
+  body[data-resizing] {
+    cursor: col-resize;
+    user-select: none;
+  }
+
+  body[data-resizing] iframe {
+    pointer-events: none;
+  }
+
   /* An open nav drawer owns the screen: the page behind it holds still so a
      touch meant for the rail never scrolls the article instead. The scrim
      lives only as long as the drawer, and the query only below `lg`, so a

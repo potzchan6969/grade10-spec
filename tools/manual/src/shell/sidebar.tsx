@@ -123,7 +123,9 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
         open
           ? "max-lg:translate-x-0"
           : "max-lg:invisible max-lg:-translate-x-full",
-        "lg:visible lg:sticky lg:w-76 lg:translate-x-0 motion-reduce:transition-none",
+        "lg:visible lg:sticky lg:w-(--manual-nav-width) lg:translate-x-0 motion-reduce:transition-none",
+        // Folded away from the shell's handle; dimmed while a drag would fold it.
+        "lg:group-data-[nav=collapsed]/shell:hidden lg:group-data-nav-folding/shell:opacity-50",
       )}
       data-slot="manual-sidebar"
     >

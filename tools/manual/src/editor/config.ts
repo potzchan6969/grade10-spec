@@ -5,6 +5,9 @@ export const STORAGE = {
   recentSeen: "manual.recent.seen",
   /** Which rail branches and sections this reader holds open or shut. */
   nav: "manual.nav",
+  /** The rail's width, whether it is folded away, and the side panel's
+   * width and tab. */
+  layout: "manual.layout",
 } as const;
 
 export type KeyStore = {
