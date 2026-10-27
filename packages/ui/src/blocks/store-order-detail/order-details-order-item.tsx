@@ -6,6 +6,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { Tag } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { OrderHistoryStatus } from "../store-order-history/order-history-status";
+import { ORDER_TABLE_LAYOUT } from "./columns";
 import type { OrderDetailsFulfillmentStatus } from "./types";
 
 type OrderDetailsOrderItemProps = {
@@ -57,11 +58,11 @@ function OrderDetailsOrderItem({
 
   return (
     <TableRow
-      className={className}
+      className={cn(ORDER_TABLE_LAYOUT.row, className)}
       data-slot="order-details-order-item"
       data-struck-through={struckThrough || undefined}
     >
-      <TableCell className="min-w-0 flex-1">
+      <TableCell className="min-w-0">
         <HStack className="min-w-0 flex-1" gap="md" vAlign="center">
           <div
             aria-hidden={imageSrc ? undefined : true}
@@ -108,17 +109,15 @@ function OrderDetailsOrderItem({
           </VStack>
         </HStack>
       </TableCell>
-      {/* biome-ignore lint/plugin: column width matches Figma Table Head 88px */}
-      <TableCell align="end" className="w-[88px] shrink-0">
+      <TableCell align="end">
         <p className={cn(priceClass, "whitespace-nowrap")}>{subtotal}</p>
       </TableCell>
-      <TableCell align="end" className="w-14 shrink-0">
+      <TableCell align="end">
         <p className="text-sm leading-5 whitespace-nowrap text-foreground">
           {quantity}
         </p>
       </TableCell>
-      {/* biome-ignore lint/plugin: column width matches Figma Table Head 83px */}
-      <TableCell align="end" className="w-[83px] shrink-0">
+      <TableCell align="end">
         <p className={cn(totalClass, "whitespace-nowrap")}>{total}</p>
       </TableCell>
     </TableRow>

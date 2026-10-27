@@ -5,6 +5,7 @@ import {
 import { TableHead } from "@grade10/design-system/components/display/table-head";
 import { TableHeader } from "@grade10/design-system/components/display/table-header";
 import { cn } from "@grade10/design-system/lib/utils";
+import { ORDER_TABLE_LAYOUT } from "./columns";
 import { OrderDetailsOrderItem } from "./order-details-order-item";
 import type { OrderDetailsLineItem, OrderDetailsTableCopy } from "./types";
 
@@ -34,24 +35,19 @@ function OrderDetailsOrderTable({
 }: OrderDetailsOrderTableProps) {
   return (
     <Table
-      className={cn("w-full min-w-0", className)}
+      className={cn("w-full min-w-0", ORDER_TABLE_LAYOUT.table, className)}
       data-slot="order-details-order-table"
     >
-      <TableHeader data-slot="order-details-order-table-header">
-        <TableHead className="min-w-0 flex-1">{copy.items}</TableHead>
-        {/* biome-ignore lint/plugin: column width matches Figma Table Head 88px */}
-        <TableHead align="end" className="w-[88px] shrink-0">
-          {copy.subtotal}
-        </TableHead>
-        <TableHead align="end" className="w-14 shrink-0">
-          {copy.quantity}
-        </TableHead>
-        {/* biome-ignore lint/plugin: column width matches Figma Table Head 83px */}
-        <TableHead align="end" className="w-[83px] shrink-0">
-          {copy.total}
-        </TableHead>
+      <TableHeader
+        className={ORDER_TABLE_LAYOUT.row}
+        data-slot="order-details-order-table-header"
+      >
+        <TableHead className="min-w-0">{copy.items}</TableHead>
+        <TableHead align="end">{copy.subtotal}</TableHead>
+        <TableHead align="end">{copy.quantity}</TableHead>
+        <TableHead align="end">{copy.total}</TableHead>
       </TableHeader>
-      <TableBody>
+      <TableBody className={ORDER_TABLE_LAYOUT.body}>
         {lines.map((line) => (
           <OrderDetailsOrderItem
             key={line.id}
