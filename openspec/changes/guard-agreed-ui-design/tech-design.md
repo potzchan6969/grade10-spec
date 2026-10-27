@@ -2,7 +2,7 @@
 
 Neither repository installs a git hook: `.git/hooks` holds only samples, and
 there is no `core.hooksPath`, lefthook or husky. Work reaches `main` by
-pull request today and increasingly by direct push (`plan:land`, the relay,
+pull request today and increasingly by direct push (`plan:land`,
 `pnpm plan claim`), and nothing on either path reads which UI lines a commit
 removes. CI on `main` reports and never reverts.
 

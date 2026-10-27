@@ -86,9 +86,6 @@ Q7 and Q8 govern it: a hand's landing writes `reviewed:`, a tick never does.
 - **`--reviewed`** — an artifact landing carrying only the record: it resolves
   the hand in step 2 and skips the row and the held rows; the bypass and the
   other `reviewedOnly` branches are deleted
-- **Relay** — `checkReviewed` (`tools/relay/src/land.ts`) gains `checkWord`'s
-  check of the word and the hand, keeping its record-only path check; the
-  `reread` job's agent redraws for the hand's word
 - **Rejected** — the id over the branch checkout or tip, a tree `main` never
   holds; the dates as a fallback, which a tick moves; the agent landing a read
 

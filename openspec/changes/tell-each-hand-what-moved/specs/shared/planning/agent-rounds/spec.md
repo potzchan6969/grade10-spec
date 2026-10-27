@@ -84,8 +84,8 @@ what is before it now, and every artifact landing SHALL write that line on the
 hand's word; a tick SHALL NOT write it. An artifact with no line SHALL be read
 as behind everything before it, whole and major; a commit date SHALL NOT make
 an artifact fresh or behind. `plan:land --reviewed` SHALL land on the
-artifact's hand's word, as any landing does, and the relay SHALL refuse a read
-again nobody said land on or said by another hand.
+artifact's hand's word, as any landing does, and SHALL refuse a read again
+said by anybody but that hand.
 
 <!-- trace:scenario id=g10.shared-agent-rounds.SC-mv5 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-118 - An artifact landing writes its own line
@@ -96,13 +96,13 @@ again nobody said land on or said by another hand.
 - **THEN** the record carries `reviewed: ui-design: <id>` with the content id of what is before it on `main` with the landing laid over it
 - **AND** no other artifact's line is written
 
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-mv6 rev=1 -->
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-mv6 rev=2 -->
 #### Scenario: shared-planning-agent-rounds-SC-119 - A read again is its hand's word
 **Serves:** shared-planning-agent-rounds-US-19 - a read again is said by the hand
 
-- **GIVEN** a wake with no sender, or a sender who is not the artifact's hand
+- **GIVEN** a committer who is not the artifact's hand
 - **WHEN** it asks to land a read again
-- **THEN** `plan:land` and the relay refuse it, naming whose word it waits on
+- **THEN** `plan:land` refuses it, naming whose word it waits on
 
 ### Requirement: An answer that takes the recommendation is no move
 

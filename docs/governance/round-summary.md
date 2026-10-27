@@ -111,4 +111,4 @@ their words.
   reports
 - **A reader still missing** — a dispatch killed on its model and on the
   fallback stops the round before the summary: the thread is told which reader
-  the round lacks through `relay-post.mjs`, and no row is written
+  the round lacks in its reply, and no row is written

@@ -9,8 +9,8 @@ names (`landsHere`, `pathsIn`, `perspectivesCell`), the readers under
 `.claude/agents/`, and the skills `workflow-round`, `workflow-build`,
 `workflow-plan`. The messages are `stage-changes-and-notify-hands`'s: six
 keyed kinds, `Your turn` among them, sent once per key from the sent-keys
-file; the round's own replies go through `relay-post.mjs` on the wake's token,
-which reaches the change's thread alone. The manual's checks are
+file; the round's own replies are written to `.round/thread.txt` and printed,
+and a held row's through `held-row.mjs` (`run-a-round-on-every-artifact` Q120). The manual's checks are
 `tools/manual/check/`: `context.mjs` builds `ctx.changing` from the written
 deltas; `record.mjs`'s `checkAwaiting` refuses a wait on an artifact the
 change has written; `deltas.mjs`'s `checkOverlap` keys claims by spec and
@@ -31,7 +31,7 @@ proposal's Why carries where.
   than restating it; a statement an in-flight delta already makes is moved
   there, never contradicted beside it.
 - **Non-Goals** — a new message kind; a change to the eight artifacts or the
-  stages; the relay's wire; flipping a case on a test outside this store.
+  stages; flipping a case on a test outside this store.
 
 ## Decisions
 
@@ -39,15 +39,14 @@ proposal's Why carries where.
 
 `Q1`. The round posts its summary to the hand of the stage and, for each held
 row addressed to another hand, one more reply in the same thread through
-`relay-post.mjs --row <Q>`: the row's question, the sentence it would put on
+`held-row.mjs <Q>`: the row's question, the sentence it would put on
 the page and the decision rows it touches, quoted from `decisions.md`, with
 the hand mentioned. The key is `<change>/<round>/<row>` in the run's
 `.round/rows.txt` ledger, read through the sent-keys helpers every message
-uses, so a re-run posts nothing again. `--held` stays
-the boolean it is (the confirm-with-recommendations button). The summary's
+uses, so a re-run posts nothing again. The summary's
 footer lists the moves of the hand it addresses alone, from the same table
-the round derives the stage's hand from. Rejected: `--to <handle>` — the wake's
-token reaches its thread alone, and a seventh kind reopens `change-stages`'
+the round derives the stage's hand from. Rejected: `--to <handle>` — a reply
+reaches its change's thread alone, and a seventh kind reopens `change-stages`'
 closed set on a question (Q31) that names the round's replies as this
 capability's already.
 
@@ -114,7 +113,7 @@ into the perspectives cell and the summary's perspectives line from the model
 the run reports. `perspectivesCell` strips ` (fallback)` alone — today it
 strips any parenthetical — and holds the name to the schema's list. A
 dispatch the vendor kills is retried once on the fallback; a reader still
-missing stops the round before the summary, `relay-post.mjs` tells the
+missing stops the round before the summary, the round's reply tells the
 thread which reader it lacks, and no row is written. Rejected: a `fallback:`
 frontmatter key (nothing reads agent frontmatter but `model:`), a retry
 budget.
@@ -188,7 +187,7 @@ walk dependency against this change's goal.
 | `readersFor(schema, "apply", triggers)` | the apply block's `when:` | the readers summoned plus the always set |
 | `citesId(text, id)` (`lib/cites.mjs`) | a file's text, an id | whether the id appears with no digit after it |
 | `plan:land … --tests "<sc>: <path>" [--app-root <dir>] [--unrun "<why>"]` | the cell, the application root | the row; refuses a path its clone does not hold or that carries no such id |
-| `relay-post.mjs --row <Q>` | a held row's id | one reply in the thread mentioning the row's hand, once per change, round and row |
+| `held-row.mjs <Q> --change <id>` | a held row's id | one reply in the thread mentioning the row's hand, once per change, round and row |
 | `pnpm plan done <change> <group>` (grade10) | the group | the tick, or the scenario id no test cites |
 
 ## Risks / Trade-offs

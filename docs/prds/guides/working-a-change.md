@@ -50,8 +50,8 @@ The skill carries the rules — reading the capability, opening the change, the
 interview, what each artifact holds, validating. You carry the feature and what
 only you have: a frame, a value, a handle.
 
-**The product manager says the sentence**, to the app in the planning channel;
-in a terminal `/workflow-plan` comes before it:
+**The product manager says the sentence** to `/workflow-plan`, in a terminal
+or in a Routine they trigger:
 
 ```text
 cross-sell on a card's page: the products we pick per card in Shopify first,
@@ -93,8 +93,8 @@ The handles are examples; the team map names who takes each role —
 :::flow{title="add-store-cross-sell" diagram="assets/diagrams/working-a-change.svg"}
 ## *PM* — **The sentence**
 
-One message to the app in the planning channel opens `add-store-cross-sell`,
-`hands: pm: @ecchochan`, and the thread it started. The run marks
+One sentence to `/workflow-plan` opens `add-store-cross-sell` with
+`hands: pm: @ecchochan`. The run marks
 `docs/prds/products/grade10-site/store/cross-sell.md` first — one marked line
 per outcome, ❓ on what is open — and links that section from the proposal.
 Then it drafts every artifact after it and lands nothing. Two rows it holds:
@@ -199,7 +199,7 @@ say what you say, and what has to be running.
 
 | Door | You say it | It lands through | It needs |
 | --- | --- | --- | --- |
-| The thread | A sentence to the app in the planning channel, then your answers in the change's thread | The relay, on your word or the Confirm button | The Slack app, the relay and the Routine, which Operations sets up — [Agent Runner](/references/agent-runner) |
+| A Routine | The line command in a Claude Routine you trigger, on a schedule or from its own trigger, with the thread's words handed in | `plan:land` in the Routine's session, on the handle the team map gives its git e-mail | The Routine, set up as [Agent Runner](/references/agent-runner) says |
 | A terminal | The line command in Claude Code, in a clone of this store: `/workflow-plan <sentence>` first, then each hand's command from the table above | `/workflow-land <id> <artifact>` from the terminal, on the handle the team map gives your git e-mail | The clone, and a GitHub account that may push `main` — no Slack at all |
 | The locally run manual | Pull when the checkout is behind | Your working tree, uncommitted: committing and pushing it is yours, as any other edit | `pnpm manual` on the clone; the hosted manual is read-only |
 | The application repository | `pnpm plan claim`, `done`, `hand` and `implementation` | A commit straight to the store's `main` | `grade10`, with the store clone beside it |
@@ -209,9 +209,8 @@ say what you say, and what has to be running.
   drafts ahead, as above; the readers run in your session; you answer the
   numbered questions there and say land. The landing rebases, runs the gate
   and pushes `main`, and the push workflow tells the channel and the change's
-  thread by itself. Slack adds two things: the message that says it is your
-  turn, which `NOTIFY_DMS` gates, and a reply in the thread that wakes a run,
-  which the relay makes
+  thread by itself. Slack adds the message that says it is your turn,
+  which `NOTIFY_DMS` gates
 - **The doors mix** — a change opened in the thread carries on from a
   terminal and back: the files are the state, and each door reads them
 - **The old flow, meanwhile** — `spec-push` and `dev-help`

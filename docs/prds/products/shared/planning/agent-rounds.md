@@ -79,9 +79,9 @@ One round per artifact, and one per task group while the change is building.
 | Land | `land`, or `land with recommendations` | Every drafted artifact of your hand lands on `main` in order, with your handle on it; while a held question is open, `land` lands nothing and names it, and `land with recommendations` takes the recommendations and goes on |
 | Edit | An edit you push yourself, from a terminal or from GitHub | The same round: the push is your word for the lines it touched |
 
-- 🚧 **The first sentence opens the change** — a product manager's message to
-  the app in the planning channel names the change, records them as its hand,
-  and is answered in the thread it started
+- 🚧 **The first sentence opens the change** — a product manager's sentence to
+  `/workflow-plan`, in a terminal or a Routine they trigger, names the change
+  and records them as its hand
 - 🚧 **A sentence that overlaps a change in flight** — the run answers in that
   change's thread, and the change's stage decides whether it is extended, held
   for its product manager, or depended on by a new change
@@ -90,11 +90,8 @@ One round per artifact, and one per task group while the change is building.
   feature needs that no frame covers ships as the interim, and the frame waits
   on you in your own change, never on the feature
 - 🚧 **Told once** — a draft ready for you is one reply, a landing one reply
-- 🚧 **The button says it for you** — a summary waiting on your word carries
-  `Confirm <artifact>`; a press is that word, said by whoever pressed, and the
-  thread reads who pressed; a member the team map does not name lands nothing
 - 🚧 **Only the hand lands** — another teammate's land is refused and names
-  whose word it waits on, and the relay checks the word again before `main`
+  whose word it waits on, and `plan:land` checks the word before `main`
   moves; a task group lands the branch whole, so only once `main` holds every
   other artifact's text the branch does, the plan and the decisions apart
 - 🚧 **Only your moves** — the summary shows you the moves that are yours; a
@@ -142,7 +139,7 @@ An artifact is drawn from what is before it, the page's marks first.
 
 - 🚧 **Behind** — an artifact is behind when what is before it changed after
   the artifact was drawn or last read again; read from the content, never set
-- 🚧 **Read again, ahead** — a landing wakes the change's agent, which reads
+- 🚧 **Read again, ahead** — after a landing the change's agent reads
   every artifact after it in order and redraws each one the landing reached, on
   the branch, for its hand's word; where nothing reached one, the thread says
   so, and it is read again on its hand's word
@@ -239,11 +236,9 @@ A journey, a scenario and a case each keep one id for life once it lands on
   `rounds.md` among them, one tab per file; the manual shows pages only
 - 🚧 **The record** — one row per round: the artifact or group, the readers,
   what stood, what was asked, the tests per scenario; archived with the change
-- 🚧 **The runner** — a custom Slack app in front of the relay, one queue per
-  thread, and a hosted run that is a fresh session every time; a run posts and
-  lands through the relay, and one that does not finish is said so in the
-  thread with its link; what Operations sets up is [the
-  runner](/references/agent-runner)
+- 🚧 **The runner** — a round runs from a terminal or from a Claude Routine
+  its person triggers, a fresh session every time, and lands through
+  `plan:land`; what it needs is [the runner](/references/agent-runner)
 
 :::detail{title="Product decisions" for="pm"}
 The owner's brief asks that the product manager start with what is wanted and
@@ -261,7 +256,7 @@ propose, and that every step passes through layers of checks. The brief is
 | Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the engineering readings on the tech design, QA on the plan and every task group, the build's readings on a group that lands code - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |
 | The record | Decided | One row per round in the change, archived with it; a landing or a tick without its row is refused from the change's first landing on, and on every change once the old skills go. | Engineering |
 | The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards each deployment and release. | QA, Engineering |
-| Runner | Decided | A custom Slack app, the relay in this repository and a hosted Routine; the relay checks the word before `main` moves and says when a run did not finish. | Operations, Engineering |
+| Runner | Decided | A round runs from a terminal or from a Claude Routine its person triggers, on a schedule or from its own trigger; `plan:land` checks the hand's word and moves `main` itself. The relay built for it is removed, never deployed. | Operations, Engineering |
 | Who is asked, and when | Decided | Each hand reads a message that is theirs; the blind reading raises every unsettled point with a recommendation, and QA2 closes each one the held test does not hold; one human resolves every planning question still open before plan acceptance; QA performs human verification only after implementation is complete; the product manager answers any line a build round puts on their page. | Product, QA |
 | A question about a look | Decided | The feature ships an interim built from the store's existing blocks and tokens; the question waits on the designer in one change per capability and never holds a feature's acceptance. | Product, Design |
 | The interview's size | Decided | About three questions, none trivial, that change what is built, one whether to do it now; the rest listed as decided. | Product |

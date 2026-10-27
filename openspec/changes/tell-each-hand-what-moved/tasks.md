@@ -14,10 +14,10 @@ design; no `/planning-dev` run (`Q11`).
 
 - [x] 2.1 `plan:land` refuses only on a major move before the target, naming the artifact, the moved units and the hand; a small move says so and lands - `shared-planning-agent-rounds-SC-116`, `shared-planning-agent-rounds-SC-117`
 - [x] 2.2 Every artifact landing writes its own `reviewed:` line, read over `MAIN` with what it carries laid over it; `reviewedAfterDecisions` is deleted, so no answer marks a draft read - `shared-planning-agent-rounds-SC-118`, `shared-planning-agent-rounds-SC-120`
-- [x] 2.3 `--reviewed` resolves and checks the hand as any landing does; a wake with no sender lands nothing - `shared-planning-agent-rounds-SC-119`
+- [x] 2.3 `--reviewed` resolves and checks the hand as any landing does; a wake with no sender lands nothing - `shared-planning-agent-rounds-SC-119` - the relay's part removed 2026-10-27 (`run-a-round-on-every-artifact` Q120)
 - [x] 2.4 A shallow clone is deepened before the landing reads what moved
-- [x] 2.5 The relay's `checkReviewed` takes `checkWord`'s word and hand checks beside its record-only check, the room resolving the sender for both kinds - `shared-planning-agent-rounds-SC-119`
-- [x] 2.6 Tests: `round-scripts.test.mjs` and `plan-land-relay.test.mjs` over a fixture whose record carries every artifact's line, `tools/relay/test/land.test.ts` and `room.test.ts`
+- [x] 2.5 The relay's `checkReviewed` takes `checkWord`'s word and hand checks beside its record-only check, the room resolving the sender for both kinds - `shared-planning-agent-rounds-SC-119` - the relay's part removed 2026-10-27 (`run-a-round-on-every-artifact` Q120)
+- [x] 2.6 Tests: `round-scripts.test.mjs` and `plan-land-relay.test.mjs` over a fixture whose record carries every artifact's line, `tools/relay/test/land.test.ts` and `room.test.ts` - the relay's part removed 2026-10-27 (`run-a-round-on-every-artifact` Q120)
 
 ## 3. What a hand is told (grade10-spec)
 
@@ -31,4 +31,4 @@ design; no `/planning-dev` run (`Q11`).
 - [x] 4.1 `scripts/openspec/backfill-reviewed.mjs` writes today's id for every in-flight, written, unwaived artifact with no line that the retired date comparison does not name behind (`Q9`); run on the store and, with `--all`, on the manual's demo store, in a commit that touches only `reviewed:` keys
 - [x] 4.2 Rerun the backfill on the integrated branch just before this lands, then delete the script; the four records the loyalty stream still edits are left out
 - [x] 4.3 The planning pages say the rule once: what moved quoted, major holds and small is told, fresh is a hand's word
-- [x] 4.4 Verify: `pnpm run test:openspec`, `pnpm --dir tools/manual test`, `pnpm --dir tools/relay test`, `pnpm check:manual`
+- [x] 4.4 Verify: `pnpm run test:openspec`, `pnpm --dir tools/manual test`, `pnpm --dir tools/relay test`, `pnpm check:manual` - the relay's part removed 2026-10-27 (`run-a-round-on-every-artifact` Q120)

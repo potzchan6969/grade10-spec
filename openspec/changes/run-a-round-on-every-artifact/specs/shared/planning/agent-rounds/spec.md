@@ -34,7 +34,7 @@ read again before anything lands after it, with one record row per round.
   - Principles cited: the tech design's and the build's readers hold the draft to the eight principles and the reader's stance
 - Read again, in order
   - Content id: `reviewed:` holds, per artifact, a hash of the artifact's `upstream:` set read in the schema's order, the record itself never upstream, a waived artifact fresh
-  - Read in order: a landing wakes the change's agent, which reads every artifact after the one that moved, oldest first, redraws each from the redrawn one before it, drafts ahead, and lands nothing
+  - Read in order: after a landing the change's agent reads every artifact after the one that moved, oldest first, redraws each from the redrawn one before it, drafts ahead, and lands nothing
   - No-op read: a read that changes nothing writes the `reviewed:` line alone and says so in the thread; a read that edits opens a round for the artifact's hand
   - Landing refused: an artifact lands only when everything before it is fresh, the fold at archive refuses a behind delta, and a tick, a claim and a wait are never held
   - Moved goals: a goal or non-goal that moved is a question to the product manager, extend, supersede or split, and nothing is rewritten in place
@@ -55,13 +55,10 @@ read again before anything lands after it, with one record row per round.
   - Tick refused: a task naming a scenario id no test in the tree cites is not ticked; a task naming none is
   - Whole read: one reader argues the simpler shape for the whole change before staging
 - The thread and the runner
-  - One thread: `thread:` records the channel and message a change's thread hangs off, written once when it opens, and every message and wake finds it
-  - A fresh session per wake: the thread's messages reach a Slack app in front of the store's relay, which fires one run on the change's branch and hands it the wake as data
-  - Woken on a landing: the push posts one wake to the relay for each change it put behind, and the relay runs one wake per thread
-  - Its own budget: thirty minutes on a landing or a reply, two hours on a plan; a wake that does not finish posts the failure line with the run's link and frees the thread
-  - Landed through the relay: a run pushes its branch and asks the relay, which moves `main` only as a fast-forward and only on the hand's own word
-  - The word, typed or pressed: a summary that waits on the hand's word carries one Confirm button, and a press is the landing word said by the member who pressed; a landing word wakes the run at once, where a reply waits a minute for the rest of its burst
-  - Resumable: a run reads the change's branch, `main` and the wake's messages and continues from what is there; every push is force-with-lease, and a run that loses says so in the thread and stops
+  - One thread: `thread:` records the channel and message a change's thread hangs off, written once when it opens, and every message finds it
+  - The runner: a round runs from a terminal or from a Claude Routine its person triggers, and lands with `plan:land`, which moves `main` itself
+  - The artifact alone: a landing carries the artifact that landed and nothing drafted after it, and moves `main` only as a fast-forward on the hand's own word
+  - Resumable: a run reads the change's branch, `main` and the thread and continues from what is there; every push is force-with-lease, and a run that loses says so in the thread and stops
 
 ## ADDED Requirements
 
@@ -844,11 +841,11 @@ from the files.
 
 ### Requirement: A landing reads again, in order
 
-A landing wakes the change and clears what it put behind, one artifact at a
+A landing is read after, and what it put behind is cleared one artifact at a
 time.
 
-A landing on `main` SHALL wake the change's agent, which SHALL read every
-artifact after the one that moved, oldest first.
+After a landing on `main`, the change's agent SHALL read every artifact after
+the one that moved, oldest first.
 
 - **A read that changes nothing** — the agent writes that artifact's
   `reviewed:` line alone, in one commit, and says in the thread what it read
@@ -908,16 +905,16 @@ artifact after the one that moved, oldest first.
 **Serves:** shared-planning-agent-rounds-US-05 - a hand whose artifact is the last one reads one reply and no more
 
 - **GIVEN** a change whose landed artifact has nothing after it
-- **WHEN** the landing wakes the change's agent
+- **WHEN** the change's agent reads after the landing
 - **THEN** no round opens and no `reviewed:` line changes
 - **AND** the thread carries nothing beyond the landing line
 
-### Requirement: A wake asked to plan drafts the whole chain
+### Requirement: A run asked to plan drafts the whole chain
 
 A change can be drafted end to end from one ask, with nobody waiting between
 its artifacts.
 
-A wake that opens a change or is asked to plan SHALL draft every artifact it
+A run that opens a change or is asked to plan SHALL draft every artifact it
 can reach on the change's branch, each from the draft before it except the
 cases, and SHALL land nothing.
 
@@ -930,17 +927,17 @@ cases, and SHALL land nothing.
   reading sees the other's output
 - **Each with its own readers** — every draft in the chain is challenged and
   verified as its own round
-- **Pushed as it goes** — the branch is pushed after every artifact, so a wake
+- **Pushed as it goes** — the branch is pushed after every artifact, so a run
   that dies loses one artifact and not the chain
 - **Lands nothing** — every artifact waits for its hand's word
 - **What only a hand holds** — the draft that needs it writes the dated wait,
   and nothing that depends on it is drafted
 
 <!-- trace:scenario id=g10.shared-agent-rounds.SC-esw rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-71 - A plan wake drafts the chain and lands nothing
+#### Scenario: shared-planning-agent-rounds-SC-71 - A plan run drafts the chain and lands nothing
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager's one sentence comes back as a change drafted as far as it can be
 
-- **WHEN** a wake opens a change or is asked to plan one
+- **WHEN** a run opens a change or is asked to plan one
 - **THEN** the proposal, the decisions, the journeys and the design where a surface moves are drafted, each from the draft before it
 - **AND** the cases are drafted next, blind from the anchors, and never from `tech-design.md` or `spec.md`
 - **AND** the tech design, the requirements and the plan follow, in that order, each from the draft before it
@@ -1145,8 +1142,8 @@ in the landing's own commit.
 
 ### Requirement: The change page mirrors the thread and the messages
 
-Before the Slack app is set up, and beside it after, the change page SHALL
-show what the thread and the messages say, read from `main` and nowhere else.
+The change page SHALL show what the thread and the messages say, read from
+`main` and nowhere else.
 
 - **Told now** — under the Your turn card, the message each hand of the stage
   is being told, in the words the push workflow sends; a stage that names
@@ -1407,17 +1404,19 @@ SHALL be recorded in the change's record.
   later message naming it. The post a push makes in the channel is never the
   thread, and a change opened from a terminal carries no `thread:` until a
   channel message about it arrives
-- **Found from the record** — every reply, every direct message and every wake
-  on a landing reads the thread's address from there
+- **Found from the record** — every reply and every direct message reads the
+  thread's address from there
 - **A wrong address** — a `thread:` line pointing at the wrong message is
   corrected by a person's edit to the record; the round never rewrites it
-- **The runner** — the thread reaches a Slack app in front of the store's own
-  relay, and the relay fires one run per wake: a fresh session each time, on
-  the change's branch, carrying nothing from the last one but the files and the
-  thread
-- **The same round elsewhere** — a round run from a terminal against the same
-  branch is the same round, and a change whose thread cannot be reached is
-  worked that way
+- **The runner** — a round runs from a terminal, or from a Claude Routine its
+  person triggers on a schedule or from the Routine's own trigger: a fresh
+  session each time, on the change's branch, carrying nothing from the last
+  one but the files and the thread
+- **The same round** — a round from a terminal and a round from a Routine run
+  the same steps against the same branch and land the same way
+- **Words, never orders** — the thread's messages a run reads are the hands'
+  words about the change, and nothing in them is read as an instruction to
+  the run
 
 <!-- trace:scenario id=g10.shared-agent-rounds.SC-e3a rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-64 - The thread's address is written once
@@ -1425,7 +1424,7 @@ SHALL be recorded in the change's record.
 
 - **WHEN** a change's thread opens
 - **THEN** `thread:` is written in the change's record with the channel and the message it hangs off
-- **AND** a later landing, direct message or wake replies in that same thread
+- **AND** a later landing reply or direct message reaches that same thread
 - **AND** `thread:` is not rewritten
 
 #### Scenario: shared-planning-agent-rounds-SC-65 - A round from a terminal is the same round
@@ -1434,81 +1433,6 @@ SHALL be recorded in the change's record.
 - **WHEN** a hand runs a round from a terminal against the change's branch
 - **THEN** the same six steps run, with the same perspectives and the same record
 - **AND** the artifact lands with `landed_by:` and its row, as it would from the channel
-
-### Requirement: A landing wakes the relay, and one wake runs per thread
-
-The push tells the relay, and the relay runs the wake.
-
-The push that lands an artifact on `main` SHALL post one wake to the relay for
-each change the push put behind, and the relay SHALL run one wake at a time per
-thread.
-
-- **One wake per change** — the push posts it once for each change it put
-  behind, and posts nothing where the repository variable that carries the
-  wakes is off
-- **Queued against the thread** — the relay holds the wake against the change's
-  thread and fires it when no other wake is running there
-- **The push holds nothing** — the step that posts the wake holds no session,
-  no write permission on the store and no chat token, and posts nothing else
-- **A reply waits a minute** — replies in a thread are held for a minute before
-  a wake fires, so a hand typing three lines wakes one run; a landing word
-  waits for nothing, since nothing more is coming after it, and the wake it
-  fires carries the burst it closed
-- **What arrives during a run** — a message or a landing that arrives while a
-  wake is running fires one more wake when that one finishes, carrying
-  everything that arrived, however much of it there was
-- **The budget** — thirty minutes for a wake on a landing or a thread reply,
-  two hours for one that opens a change or is asked to plan
-- **Done, or the failure line** — the run's last act is to say it is done; a
-  wake past its budget without it posts the failure line with the run's link
-  and frees the thread
-
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-zmy rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-66 - A landing wakes the relay once per change
-**Serves:** shared-planning-agent-rounds-US-05 - the hand's artifact is read again because the push told the relay, once
-
-- **GIVEN** a push to `main` that puts the artifacts of two changes behind
-- **WHEN** the push's workflow runs
-- **THEN** one wake is posted to the relay for each of the two changes
-- **AND** the relay queues each against that change's thread
-- **AND** nothing is posted where the repository variable carrying the wakes is off
-
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-2x6 rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-67 - The workflow holds no session, no write permission and no chat token
-**Serves:** shared-planning-agent-rounds-US-05 - the read again the hand meets is run by the relay and never by the push
-
-- **WHEN** the push's wake step runs
-- **THEN** it holds no agent session, no write permission on the store and no chat token
-- **AND** the wake is the only thing it posts
-
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-afx rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-75 - A wake that does not finish says so
-**Serves:** shared-planning-agent-rounds-US-05 - the hand waiting on a read again is told when it did not finish, and where to look
-
-- **GIVEN** a wake running on a change's thread, acknowledged with the run's link from the moment the run started
-- **WHEN** it passes its budget - thirty minutes on a landing or a reply, two hours on a plan - without saying it is done
-- **THEN** the thread carries the failure line with that run's link
-- **AND** the thread is free for the next wake
-
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-1e2 rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-76 - One wake runs per thread, and a message during a run fires again after it
-**Serves:** shared-planning-agent-rounds-US-04 - the hand types three lines and is answered once, and nothing they say is lost
-
-- **GIVEN** a change's thread with no wake running
-- **WHEN** a hand replies twice inside a minute
-- **THEN** one wake runs, carrying both replies
-- **AND** a reply arriving while that wake runs fires one more wake once it finishes, carrying that reply
-- **AND** two wakes never run on one thread
-
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-5op rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-83 - A landing word wakes the run at once
-**Serves:** shared-planning-agent-rounds-US-01 - the product manager says land and the landing starts, not a minute later
-
-- **GIVEN** a change's thread with no wake running
-- **WHEN** the hand replies with a landing word, typed or pressed, alone or closing a burst of replies inside the minute
-- **THEN** one wake fires at once, with a reply's budget, carrying the word and the burst it closed
-- **AND** a reply that is no landing word still waits the minute out
-- **AND** a landing word arriving while a wake runs is left to the wake after it, and is not lost
 
 ### Requirement: A run is resumable and every push holds its lease
 
@@ -1528,7 +1452,7 @@ and SHALL continue from what is there.
 
 - **GIVEN** a run that pushed a draft and then stopped
 - **WHEN** a run starts again for the same change
-- **THEN** it reads the change's branch, `main` and the wake's messages
+- **THEN** it reads the change's branch, `main` and the thread
 - **AND** it continues from the pushed draft rather than drafting it again
 
 #### Scenario: shared-planning-agent-rounds-SC-69 - A run that loses the race says so and stops
@@ -1540,103 +1464,41 @@ and SHALL continue from what is there.
 - **AND** it makes no further push
 - **AND** the winning run's work is not overwritten
 
-### Requirement: A landing reaches `main` through the relay
+### Requirement: A landing carries its artifact alone, as a fast-forward of `main`
 
-The relay moves `main`: on a word it checked itself, and carrying the artifact
-that landed and nothing else.
+`plan:land` moves `main`: on the hand's word, and carrying the artifact that
+landed and nothing else.
 
-A run SHALL push its landing commit to the change's branch and ask the relay to
-move `main`, and the relay SHALL move `main` only as a fast-forward, only on
-the word of the hand of the artifact's stage, and only where the diff stays
-inside the writable set.
+A run SHALL cut its landing commit from `main` and move `main` only as a
+fast-forward, only on the word of the hand of the artifact's stage, and only
+where the diff stays inside the writable set.
 
-- **The landing asked, never pushed** — a run pushes the landing commit to the
-  change's branch and asks the relay to move `main`; a landing run from a
-  terminal pushes `main` itself
-- **The word checked twice** — the relay checks the same word again before
-  `main` moves: the member who said land, typed or pressed, resolves to the hand of the artifact's
-  stage in the record at the landing, or `main` does not move
-- **A fast-forward alone** — the relay moves `main` only where the landing sits
-  on top of it, and a `main` that moved under the run is read again once and
-  asked again
+- **The word** — the speaker's handle resolves through the team map to the
+  hand of the artifact's stage in the record, or `main` does not move
+- **A fast-forward alone** — `main` moves only where the landing sits on top
+  of it, and a `main` that moved under the run is read again once and pushed
+  again
 - **The writable set** — the run's guard holds an artifact's landing to the
-  change's own directory and the pages the proposal links before it pushes;
-  the relay holds it to the change's directory, `docs/prds/` and
-  `docs/references/`, and holds a task group's code to no path at all, since
-  the record names no code set for a group; the group's draft check — the
-  branch holding text of a schema artifact `main` does not — is the run's
-  own too, as the path check is
+  change's own directory and the pages the proposal links before it pushes,
+  and holds a task group's code to no path at all, since the record names no
+  code set for a group; a group's landing is refused while the branch holds
+  text of a schema artifact `main` does not
 - **The artifact that landed, alone** — the landing commit is cut from `main`
   with that artifact's files, the change's record, the round's row and the
   pages the change marked, and carries nothing drafted after it, so `main`
   never holds a draft no hand has landed
-- **The refusal names its check** — a landing the relay refuses leaves `main`
-  where it was, and the run's reply names the check that refused it
+- **The refusal names its check** — a landing refused leaves `main` where it
+  was, and the run's reply names the check that refused it
 
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-db1 rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-73 - A run lands through the relay, which checks the word
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-db1 rev=2 -->
+#### Scenario: shared-planning-agent-rounds-SC-73 - A landing carries its artifact alone, on its hand's word
 **Serves:** shared-planning-agent-rounds-US-02 - the designer's own word is what puts the design on `main`, whoever is running
 
 - **GIVEN** a run that has committed a landing on the change's branch
-- **WHEN** it asks the relay to land, naming the commit, the kind of landing and the artifact
-- **THEN** `main` moves only as a fast-forward onto that commit
-- **AND** it moves only where the member who said land is the hand of the artifact's stage in the change's record at that commit, and, for an artifact, the diff from `main` touches nothing outside the change's own directory, `docs/prds/` and `docs/references/`, the run's guard having held it to the pages the proposal links before the push
+- **WHEN** `plan:land` lands it
+- **THEN** `main` moves only as a fast-forward onto the landing commit
+- **AND** it moves only where the speaker is the hand of the artifact's stage in the change's record, and, for an artifact, the diff from `main` touches nothing outside the change's own directory and the pages the proposal links
 - **AND** the landing commit carries that artifact's files, the change's record, the round's row and the pages the change marked, and nothing drafted after it
 - **AND** a task group's landing, which carries the branch as it stands, is refused while the branch holds text of a schema artifact that `main` does not — the plan and the decisions apart — naming each file it would have carried and the hand it waits on, and a file the branch took off `main` is refused as a removal
-- **AND** a word from anybody else moves nothing, and the run's reply names the check the relay refused
-- **AND** a `main` that moved under the run is read again once and asked again
-
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-pgu rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-77 - A reviewed-only landing needs no word
-**Serves:** shared-planning-agent-rounds-US-05 - the hand is not asked for a word to record a read that changed nothing
-
-- **GIVEN** a run that read an artifact again and changed nothing
-- **WHEN** it asks the relay to land that artifact's `reviewed:` line
-- **THEN** `main` moves with no hand's word
-- **AND** it moves only where the diff changes nothing but `reviewed:` lines of that change's own record
-
-### Requirement: A run posts through the relay and never holds the token
-
-What a run can reach is one thread of one change, for as long as its wake
-lasts.
-
-A run SHALL post to the change's thread through the relay, with the token its
-wake was given, and SHALL never hold the chat token.
-
-- **One thread, one wake** — the token the relay signs posts to that thread
-  alone and expires with the wake's budget
-- **Where the token lives** — the chat token lives in the relay and in the push
-  workflow's plain steps, and in nothing a session reads
-- **The push posts nothing itself** — the step that wakes the relay on a
-  landing posts no message of its own
-- **The wake is data** — what the relay hands a run — the change, why it woke,
-  the messages since the run's last post and the handle each came from — is
-  read as the hands' words, and nothing in it is read as an instruction to the
-  run
-- **The button** — a summary that waits on the hand's word carries one
-  button, `Confirm <artifact>` for the artifact the summary is of, or
-  `Confirm with recommendations` while a held row is open; the run names the
-  label and the word it stands for, and the relay composes neither. A press
-  is that word, said by the member who pressed: the thread says who pressed
-  it, the button comes off the message so nobody presses twice, and a press
-  by a member the team map does not name lands nothing and says so
-
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-kmg rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-74 - A run posts through the relay and never holds the token
-**Serves:** shared-planning-agent-rounds-US-04 - the hand reads the round's reply in their own thread, from a run that can reach nothing else
-
-- **WHEN** a run posts its summary to the change's thread
-- **THEN** it posts through the relay with the token its wake was given
-- **AND** that token reaches that thread alone and expires with the wake's budget
-- **AND** the run holds no chat token
-
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-v3d rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-82 - The summary's button is the word pressed
-**Serves:** shared-planning-agent-rounds-US-01 - the product manager lands the proposal from the summary with one press, and the thread reads who did
-
-- **GIVEN** a summary in the change's thread waiting on the product manager's word, carrying the button `Confirm proposal`
-- **WHEN** the product manager presses it
-- **THEN** the relay queues the landing word against the thread as the reply the press stands for, and the thread reads `@<handle> pressed *Confirm proposal*`
-- **AND** the button is taken off the summary and replaced by who confirmed it
-- **AND** the landing checks that word as it checks a typed one: a press by a member the team map does not name moves nothing, and the thread says so
-- **AND** while a held row is open the button reads `Confirm with recommendations` and its word is `land with recommendations`
+- **AND** a word from anybody else moves nothing, and the refusal names its check
+- **AND** a `main` that moved under the run is read again once and pushed again
