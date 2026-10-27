@@ -25,7 +25,7 @@ One round per artifact, and one per task group while the change is building.
 | 5 Read | You | Read the summary and the questions in the thread; answer, remark, or say land |
 | 6 Land | The agent | On your word: every drafted artifact of your hand lands on `main` in order, the stage moves, the next hand is told, and what comes after it is read again |
 
-- 🚧 **Your word lands it** — nothing reaches `main` without your word, and
+- **Your word lands it** — nothing reaches `main` without your word, and
   whose is recorded
 - **A question, not a guess** — a question raised by a reading or met by
   the round that moves scope, is costly to undo, needs a fact only you have, or
@@ -41,21 +41,21 @@ One round per artifact, and one per task group while the change is building.
   interim built from the store's existing blocks and tokens; a look that needs
   a new variant, token or block ships without that look; the question waits on
   the designer in one change per capability
-- 🚧 **One sentence plans the change** — the first message drafts every artifact
+- **One sentence plans the change** — the first message drafts every artifact
   of the chain, each from the one before it and each read by its perspectives,
   and lands nothing; you read the held questions, not seven documents
-- 🚧 **A finding goes where it belongs** — a product detail to the page, a scope
+- **A finding goes where it belongs** — a product detail to the page, a scope
   fact to the decisions, a state to the design, a mechanism to the tech design,
   before the draft that depends on it
-- 🚧 **Sized by what it touches** — the simpler-thing reader runs on every
+- **Sized by what it touches** — the simpler-thing reader runs on every
   round; a perspective joins only when the draft touches what it reads for; one
   reader verifies itself
-- 🚧 **QA1, Dev, QA2** — QA1 writes feature cases from the frozen anchors and
+- **QA1, Dev, QA2** — QA1 writes feature cases from the frozen anchors and
   cannot read requirements, scenarios, raw Dev output or reconciliation; Dev
   then independently writes the technical design, requirements, scenarios and
   tasks from the same anchors; QA2 reads both outputs and reconciles coverage,
   testability, task coverage and technical contradictions
-- 🚧 **One human resolves what stays open** — a question stays open only when
+- **One human resolves what stays open** — a question stays open only when
   the test in **A question, not a guess** holds it; the same named human
   answers each before accepting the plan, and an open one holds acceptance
 - **The engineer challenges the tech design** — there is no tech PIC: the
@@ -63,10 +63,10 @@ One round per artifact, and one per task group while the change is building.
   flow and its rejected options before the plan is accepted, and the human who
   accepts judges the requirements and the suite whole; a question the tech
   design cannot settle is a Raised row, never a dated wait
-- 🚧 **About three questions** — the first round asks what changes what is
+- **About three questions** — the first round asks what changes what is
   built, none of it trivial, one question whether to do it now, and lists the
   rest it decided as decided by the round
-- 🚧 **No human QA before implementation** — planning leaves cases in draft
+- **No human QA before implementation** — planning leaves cases in draft
   and does not set an execution verdict; human QA reviews after implementation
   is complete, using a deployed environment where the check needs one
 
@@ -79,49 +79,49 @@ One round per artifact, and one per task group while the change is building.
 | Land | `land`, or `land with recommendations` | Every drafted artifact of your hand lands on `main` in order, with your handle on it; while a held question is open, `land` lands nothing and names it, and `land with recommendations` takes the recommendations and goes on |
 | Edit | An edit you push yourself, from a terminal or from GitHub | The same round: the push is your word for the lines it touched |
 
-- 🚧 **The first sentence opens the change** — a product manager's sentence to
+- **The first sentence opens the change** — a product manager's sentence to
   `/workflow-plan`, in a terminal or a Routine they trigger, names the change
   and records them as its hand
 - 🚧 **A sentence that overlaps a change in flight** — the run answers in that
   change's thread, and the change's stage decides whether it is extended, held
   for its product manager, or depended on by a new change
 - 🚧 **Every later hand answers in the thread** — the turn message points at it
-- 🚧 **The frames come from you** — your ask carries the frame links; a look a
+- **The frames come from you** — your ask carries the frame links; a look a
   feature needs that no frame covers ships as the interim, and the frame waits
   on you in your own change, never on the feature
-- 🚧 **Told once** — a draft ready for you is one reply, a landing one reply
-- 🚧 **Only the hand lands** — another teammate's land is refused and names
+- **Told once** — a draft ready for you is one reply, a landing one reply
+- **Only the hand lands** — another teammate's land is refused and names
   whose word it waits on, and `plan:land` checks the word before `main`
   moves; a task group lands the branch whole, so only once `main` holds every
   other artifact's text the branch does, the plan and the decisions apart
-- 🚧 **Only your moves** — the summary shows you the moves that are yours; a
+- **Only your moves** — the summary shows you the moves that are yours; a
   held question for another hand goes to them as its own reply in the thread,
   mentioning them, with the row, the sentence it would put on the page and the
   decisions it touches quoted
-- 🚧 **Your page is yours** — a line a build round puts on your page reaches
+- **Your page is yours** — a line a build round puts on your page reaches
   you as a question with the line quoted before and after, never as decided
-- 🚧 **One reply, several moves** — an answer and remarks travel in one reply;
+- **One reply, several moves** — an answer and remarks travel in one reply;
   a remark comes back to you before anything lands
 
 ## Perspectives
 
 Who reads a draft before you do: one row of the planning schema per artifact.
 
-- 🚧 **The simpler thing, always** — one reader on every round argues for the
+- **The simpler thing, always** — one reader on every round argues for the
   simpler shape, and is the floor when a round has one reader
-- 🚧 **Every reader is conscientious** — a wrong thing already there is named
+- **Every reader is conscientious** — a wrong thing already there is named
   and its structure fixed, never patched around; one fix per kind of problem
-- 🚧 **Eight principles** — determinism, simplicity, clarity, flexibility,
+- **Eight principles** — determinism, simplicity, clarity, flexibility,
   modularity, consistency, resilience, observability: one governance page the
   readers cite
-- 🚧 **Prose gets the page's readers** — a task group that lands prose, or the
+- **Prose gets the page's readers** — a task group that lands prose, or the
   words in a message catalog, is read by the reader of words, QA and the
   simpler thing, not the build's readings of missing pieces, code smell and the
   repository's conventions
-- 🚧 **Verified together** — one verifier reads a round's readings, so a
+- **Verified together** — one verifier reads a round's readings, so a
   finding several readers filed is verified once and no two verdicts disagree
   unseen
-- 🚧 **A fallback is named** — a reader or verifier that ran on a fallback
+- **A fallback is named** — a reader or verifier that ran on a fallback
   model is named so in the round's row and its summary; a reader the fallback
   could not run stops the round, and you are told which
 
@@ -137,9 +137,9 @@ An artifact is drawn from what is before it, the page's marks first.
 | `spec.md`, `feature-tcs.md` | The plan, the code |
 | `tasks.md` | The code and its end-to-end tests |
 
-- 🚧 **Behind** — an artifact is behind when what is before it changed after
+- **Behind** — an artifact is behind when what is before it changed after
   the artifact was drawn or last read again; read from the content, never set
-- 🚧 **Read again, ahead** — after a landing the change's agent reads
+- **Read again, ahead** — after a landing the change's agent reads
   every artifact after it in order and redraws each one the landing reached, on
   the branch, for its hand's word; where nothing reached one, the thread says
   so, and it is read again on its hand's word
@@ -157,38 +157,38 @@ An artifact is drawn from what is before it, the page's marks first.
   cells, the open-question mark around a recommendation, and punctuation
 - **Taking the recommendation moves nothing** — the drafts were drawn on it;
   an answer that overturns one is major, like any changed decision
-- 🚧 **Goals that moved are a question** — a re-read that finds a goal or a
+- **Goals that moved are a question** — a re-read that finds a goal or a
   non-goal moved asks the product manager to extend, supersede or split, and
   lands nothing until they answer
-- 🚧 **A waived artifact is fresh** — nothing is owed, so nothing after it waits
-- 🚧 **Extend, supersede, split** — extend reads everything after the proposal
+- **A waived artifact is fresh** — nothing is owed, so nothing after it waits
+- **Extend, supersede, split** — extend reads everything after the proposal
   again; supersede opens a new change and withdraws this one; split opens one
   for the moved part
 
 ## The Walk
 
-- 🚧 **Each group lands checked** — tests from the cases first, then the code,
+- **Each group lands checked** — tests from the cases first, then the code,
   read by the group's perspectives and verified before the engineer reads the
   landing summary
-- 🚧 **The last group is the walk** — the journeys walked end to end through
+- **The last group is the walk** — the journeys walked end to end through
   each actor's interface, kept as the suite that runs on every push to `main`,
   its smoke cases on every deploy and cut
-- 🚧 **The run sheet keeps what only staging proves** — a case the walk
+- **The run sheet keeps what only staging proves** — a case the walk
   automates is marked so, and the run sheet leaves it out
-- 🚧 **One pass over the whole** — after the last group, one reader argues the
+- **One pass over the whole** — after the last group, one reader argues the
   simpler shape for the whole change before implementation is recorded; the
   archive holds a change on that reading and on the last group's walk row
-- 🚧 **Written, not run** — a group whose lane the environment could not start
+- **Written, not run** — a group whose lane the environment could not start
   says so first in its row and keeps its tasks unticked
-- 🚧 **The record takes the application repository** — a group's repository
+- **The record takes the application repository** — a group's repository
   tag says where its test paths live, and the landing resolves them in the
   application clone it runs beside
-- 🚧 **A case names a grade10 test by its tag** — a case a test or a walk in the
+- **A case names a grade10 test by its tag** — a case a test or a walk in the
   application repository decides names it `grade10:<path>`; the store checks
   the form, and the application repository checks the file on every push
-- 🚧 **The cited test carries the id** — a row, or a suite's Manual row, that
+- **The cited test carries the id** — a row, or a suite's Manual row, that
   credits a test the file does not cite is refused
-- 🚧 **A walk may cite a draft case** — in the application repository, a walk's
+- **A walk may cite a draft case** — in the application repository, a walk's
   case need not be reviewed first; ticking its task never waits on QA
 
 ## Ids
@@ -219,12 +219,12 @@ A journey, a scenario and a case each keep one id for life once it lands on
 - **A page first, for a new capability** — a page names its capability
   before any spec or delta exists; the manual reads the name from the page
   alone
-- 🚧 **A written design may wait** — a design missing its frame stays written
+- **A written design may wait** — a design missing its frame stays written
   and open; only a wait that names nothing is refused
-- 🚧 **Two deltas on one requirement** — `pnpm accept:preflight --clusters`
+- **Two deltas on one requirement** — `pnpm accept:preflight --clusters`
   names two in-flight changes that fold one requirement to each other, however
   each has headed its block
-- 🚧 **A suite's Manual table where it is written** — a table outside the
+- **A suite's Manual table where it is written** — a table outside the
   reconciliation is refused when the suite is validated, not at the fold
 
 ## Surfaces
@@ -234,9 +234,9 @@ A journey, a scenario and a case each keep one id for life once it lands on
   re-read are replies, and the message that says it is your turn points at it
 - **The change in the OpenSpec viewer** — every artifact it carries,
   `rounds.md` among them, one tab per file; the manual shows pages only
-- 🚧 **The record** — one row per round: the artifact or group, the readers,
+- **The record** — one row per round: the artifact or group, the readers,
   what stood, what was asked, the tests per scenario; archived with the change
-- 🚧 **The runner** — a round runs from a terminal or from a Claude Routine
+- **The runner** — a round runs from a terminal or from a Claude Routine
   its person triggers, a fresh session every time, and lands through
   `plan:land`; what it needs is [the runner](/references/agent-runner)
 
@@ -252,7 +252,7 @@ propose, and that every step passes through layers of checks. The brief is
 | Challenge and verify | Decided | QA1 writes the blind cases; Dev independently writes design and requirements; QA2 reconciles their outputs; the simpler-thing reader checks each draft. | Product, QA, Engineering |
 | The tech design's reader | Decided | The engineer who will build the change challenges the tech design before acceptance; the tech PIC is retired, and a question it cannot settle is a Raised row. | Product |
 | Questions | Decided | Numbered rows in the change's decisions, or `❓` lines on the page, with a recommendation; a question the round decides holds nothing, and a held question holds the landing until it is answered or waved through. | Product |
-| Read again | Decided | A landing reads every artifact after it, in order; 🚧 what moved and is major holds a landing and the fold, what is small only the fold, never a tick. | Product, Engineering |
+| Read again | Decided | A landing reads every artifact after it, in order; what moved and is major holds a landing and the fold, what is small only the fold, never a tick. | Product, Engineering |
 | Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the engineering readings on the tech design, QA on the plan and every task group, the build's readings on a group that lands code - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |
 | The record | Decided | One row per round in the change, archived with it; a landing or a tick without its row is refused from the change's first landing on, and on every change once the old skills go. | Engineering |
 | The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards each deployment and release. | QA, Engineering |

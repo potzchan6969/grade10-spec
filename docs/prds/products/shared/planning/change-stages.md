@@ -25,24 +25,24 @@ A change is in exactly one planning or delivery stage, proven by a file on
 | 7 | Implementation complete | `implementation.json`, with the repository, commit and concrete application component ids | Records implementation and ancestry against the accepted contract | QA: run human review after implementation, on a deployed environment when required |
 | 8 | Archived | The directory under `archive/`; the accepted contract and implementation record verified | Compares the claimed targets with the current durable contract; acceptance already folded it | Engineer: archive after implementation verification |
 
-- 🚧 **One stage per change** — every command and message that names a
+- **One stage per change** — every command and message that names a
   change's stage names the same one
-- 🚧 **One stage for what is wanted** — the product manager settles the proposal,
+- **One stage for what is wanted** — the product manager settles the proposal,
   the decisions and the journeys in one sitting; a decision still open holds
   acceptance
-- 🚧 **Independent planning readings** — QA1 writes blind cases from the frozen
+- **Independent planning readings** — QA1 writes blind cases from the frozen
   anchors, then Dev writes design, requirements, scenarios and tasks without
   reading them; QA2 reconciles both and closes each raised question the [held
   test](agent-rounds#the-round) does not hold; one human resolves the rest
-- 🚧 **Implementation before human QA** — planning acceptance does not mark a
+- **Implementation before human QA** — planning acceptance does not mark a
   suite approved or actual; human QA starts after implementation is complete
-- 🚧 **Accepted and verified records** — the acceptance fingerprint stays
+- **Accepted and verified records** — the acceptance fingerprint stays
   immutable, implementation records its repository, commit and application
   component ids, and the archive verifies that record
-- 🚧 **Availability apart from archive** - a GitHub Deployment receipt records
+- **Availability apart from archive** - a GitHub Deployment receipt records
   whether each application component is newly, still, no longer, partially,
   unknown or stale in an environment; a deploy never waits for archive
-- 🚧 **Drafted, then landed on your word** — each planning artifact reaches
+- **Drafted, then landed on your word** — each planning artifact reaches
   `main` only when its hand lands it, and the landing records whose word it was
 - **The Design stage draws the UI alone** — Designed is proven by
   `ui-design.md` or `ui_waived` and nothing else; the designer is its one hand
@@ -63,22 +63,22 @@ A fact beside the stage, never a stage of its own. The set is five, and closed.
 | Waiting | `awaiting:`, one line per artifact, dated |
 | Blocked | `depends_on:` naming a change not yet released |
 | Idle | 7 days without a tick, a claim or an artifact landing; shelved at 30 |
-| 🚧 Behind | An artifact whose page lines or artifacts before it changed after it was drawn or last read again |
+| Behind | An artifact whose page lines or artifacts before it changed after it was drawn or last read again |
 | Suite | `feature-tcs.md` status, `draft` or `approved` |
 
 - **Waiting and blocked** — read from the same two keys; the Monday digest
   lists a wait, and a dependency once it frees
-- 🚧 **Idle** — counted from the last tick, claim or artifact landing, so a
+- **Idle** — counted from the last tick, claim or artifact landing, so a
   repository-wide commit moves nobody's count
-- 🚧 **Behind** — told once, and listed in the digest after 7 days
+- **Behind** — told once, and listed in the digest after 7 days
   counted from the day it went behind; it holds a tick, a claim and a wait
   never, the archive always, and the next landing where what moved is
   major —
   what clears it is [Agent Rounds · Read Again](agent-rounds#read-again)
-- 🚧 **Suite** — read beside the stage and never holding the ladder
+- **Suite** — read beside the stage and never holding the ladder
 - **Flag and hotfix** — the release line carries both: a flag on a change and a
   hotfix branch are read where releases are cut, not here
-- 🚧 **Day bounds** — whole calendar days on the Hong Kong date, the chip from
+- **Day bounds** — whole calendar days on the Hong Kong date, the chip from
   the seventh and the shelf from the thirtieth
 
 ## Environment Availability
@@ -97,7 +97,7 @@ availability stays readable for active and archived changes alike.
 | Unknown | The available evidence cannot establish the component state |
 | Stale | The receipt is older than the environment's latest evidence |
 
-- 🚧 **Receipt detail** — each row links to the GitHub Deployment, the resolved
+- **Receipt detail** — each row links to the GitHub Deployment, the resolved
   deployed ref, the component URL and the manual and QA testing links
 
 ## Hands
@@ -116,17 +116,17 @@ One handle per role on each change.
 | Engineer | `dev` | Planned, Accepted and Building |
 | Release hand | `release` | Availability review after archive |
 
-- 🚧 **Recorded in git** — `hands:` in the change's `.openspec.yaml`, written
+- **Recorded in git** — `hands:` in the change's `.openspec.yaml`, written
   by the product manager at the interview's end, or by `pnpm plan hand` from
   the application repository
-- 🚧 **Standing in** — a handle may be named for a role the team map does not
+- **Standing in** — a handle may be named for a role the team map does not
   list it under
-- 🚧 **Unnamed hand** — the role's channel is told instead
-- 🚧 **Who landed it** — each artifact records the hand whose word landed it
-- 🚧 **Team map** — `docs/prds/team.yaml` in the store: one entry per handle
+- **Unnamed hand** — the role's channel is told instead
+- **Who landed it** — each artifact records the hand whose word landed it
+- **Team map** — `docs/prds/team.yaml` in the store: one entry per handle
   with its e-mail, its Slack member and the roles it takes, and one channel per
   role
-- 🚧 **A handle's Slack member** — written into the map beside the e-mail; a
+- **A handle's Slack member** — written into the map beside the e-mail; a
   handle with no member is sent nothing
 
 ## Messages
@@ -142,7 +142,7 @@ Slack tells one person, once per move, in the change's thread.
 | A change is proposed, accepted, claimed, completed or archived | The channel, once the manual has deployed it | Each change that crossed one, under its milestone |
 | Monday morning | Each person with a line to read, by direct message | On you now; open questions; idle; behind for 7 days; waiting; freed by a dependency |
 
-- 🚧 **Once per move** — a move is the hand changing; a move told twice, or a
+- **Once per move** — a move is the hand changing; a move told twice, or a
   message per commit, never happens
 - 🚧 **One thread per change** — every direct message links the change's
   thread, and the change in the OpenSpec viewer until the round opens one; a
@@ -153,9 +153,9 @@ Slack tells one person, once per move, in the change's thread.
 - **After the deploy** — nothing is sent until the manual and the OpenSpec
   viewer have deployed what the message says; a failed deploy sends nothing,
   and the next one that succeeds carries it
-- 🚧 **Two fewer messages** — a written wait and a freed dependency are digest
+- **Two fewer messages** — a written wait and a freed dependency are digest
   lines, not messages of their own
-- 🚧 **QA follows implementation** — the QA hand is told when implementation
+- **QA follows implementation** — the QA hand is told when implementation
   is complete and sees the run sheet and application components to verify
 
 ## Surfaces
@@ -185,7 +185,7 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | Raised rows | Decided | An open Raised row holds acceptance, never Specified; the product manager's turn at Specified is to resolve it. | Product |
 | Hands | Decided | Recorded in the change's manifest, one handle per role. | Product |
 | Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, a channel post on five milestones only, a weekly digest; never one per commit, and nothing before the manual has deployed it. | Product |
-| Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, 🚧 and the next landing where what moved is major. | Product, Engineering |
+| Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, and the next landing where what moved is major. | Product, Engineering |
 | Plan acceptance | Decided | `acceptance.json` records an immutable content fingerprint after QA2 and human resolution. | Product, Engineering |
 | Measure | Decided | Days between a stage landing and the next hand's word. | Product |
 | Team map | Decided | `docs/prds/team.yaml`: one entry per handle with the e-mail, the Slack member and the roles, and a channel per role. | Operations |
