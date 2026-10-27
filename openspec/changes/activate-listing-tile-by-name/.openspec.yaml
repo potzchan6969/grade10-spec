@@ -10,7 +10,7 @@ depends_on:
 page_waived: "delivered: its 🚧 lines came off when the outcomes shipped,
   2026-10-16; awaiting archive"
 reviewed:
-  proposal: 4031690a
+  proposal: b107ce81
   decisions: 0b497f4c
   user-journeys: e93309a8
   ui-design: 4c56200e
