@@ -67,6 +67,9 @@ Apple code identifies and moves nothing.
 - 🚧 **The save action's look** - each wallet's own artwork: Apple's "Add to
   Apple Wallet" badge and Google's "Add to Google Wallet" button, as both
   vendors' brand guidelines expect
+- 🚧 **Offered where it can be saved** — an iPhone or iPad reads the Apple
+  Wallet offer, an Android device reads Google Wallet, anything else reads
+  both
 - **One per wallet** — added and ended independently of the other
 - **A new pass replaces the old** — adding a second pass to a wallet already
   holding one ends the earlier pass first

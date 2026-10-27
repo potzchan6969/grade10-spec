@@ -30,7 +30,6 @@ import {
   MEMBER,
   MEMBER_PASS_COPY,
   MEMBERSHIP_PAGE_COPY,
-  MEMBERSHIP_VIEW,
   type MembershipView,
   POINT_HISTORY_COPY,
   REWARD_MENU_COPY,
@@ -74,11 +73,30 @@ type WalletProps = {
   onEndWallet: (id: string) => void;
 };
 
-function wallets(held: readonly string[]): WalletPassWallet[] {
+/** Which wallet the device most likely carries — iOS and iPadOS take Apple,
+ * Android takes Google, everything else is offered both. */
+function walletPlatform(): "apple" | "google" | null {
+  if (typeof navigator === "undefined") return null;
+  const ua = navigator.userAgent;
+  if (
+    /iPad|iPhone|iPod/.test(ua) ||
+    (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)
+  ) {
+    return "apple";
+  }
+  return /Android/.test(ua) ? "google" : null;
+}
+
+/** `platform` pins the offer for a story; left undefined the device is
+ * read — iOS and iPadOS take Apple, Android takes Google, the rest both. */
+function wallets(
+  held: readonly string[],
+  platform = walletPlatform(),
+): WalletPassWallet[] {
   return [
     held.includes("google") ? GOOGLE_HELD : GOOGLE_OFFERED,
     held.includes("apple") ? APPLE_HELD : APPLE_OFFERED,
-  ];
+  ].filter((wallet) => platform == null || wallet.id === platform);
 }
 
 /** The member pass's code counts down from this many seconds. */
@@ -118,7 +136,11 @@ function OverviewPane({
         <PaneHeading id="membership-tiers-heading">
           {TIER_BENEFITS_PAGE_COPY.title}
         </PaneHeading>
-        <TiersBenefitsPane heldTier={view.tier} />
+        <TiersBenefitsPane
+          heldTier={view.tier}
+          qualifyingPoints={view.qualifyingPoints}
+          qualifyingTarget={view.qualifyingThreshold}
+        />
       </div>
     </>
   );
@@ -218,7 +240,15 @@ function PointHistoryPane({ view }: { view: MembershipView }) {
  * Tiers & benefits — the ladder, one card per rung and How Points Work. The
  * same composition the standalone Tiers & Benefits screen draws.
  */
-function TiersBenefitsPane({ heldTier }: { heldTier: string }) {
+function TiersBenefitsPane({
+  heldTier,
+  qualifyingPoints,
+  qualifyingTarget,
+}: {
+  heldTier: string;
+  qualifyingPoints: number;
+  qualifyingTarget: number;
+}) {
   return (
     <div className="flex flex-col gap-8">
       <section
@@ -228,8 +258,8 @@ function TiersBenefitsPane({ heldTier }: { heldTier: string }) {
         <TierLadder
           copy={TIER_LADDER_COPY}
           currentTier={heldTier}
-          qualifyingPoints={MEMBERSHIP_VIEW.qualifyingPoints}
-          qualifyingTarget={MEMBERSHIP_VIEW.qualifyingThreshold}
+          qualifyingPoints={qualifyingPoints}
+          qualifyingTarget={qualifyingTarget}
           rungs={TIER_BENEFITS.map((row) => ({
             tier: row.tier,
             caption: row.ladderCaption,
@@ -277,11 +307,13 @@ function MemberPassOverlay({
   codeGeneration,
   onRefreshCode,
   walletProps,
+  platform,
 }: {
   view: MembershipView;
   codeGeneration: number;
   onRefreshCode: () => void;
   walletProps: WalletProps;
+  platform?: "apple" | "google" | null;
 }) {
   return (
     <MemberPass
@@ -299,7 +331,7 @@ function MemberPassOverlay({
         onAdd={walletProps.onAddWallet}
         onEnd={walletProps.onEndWallet}
         state={{ status: "read" }}
-        wallets={wallets(walletProps.heldWallets)}
+        wallets={wallets(walletProps.heldWallets, platform)}
       />
     </MemberPass>
   );

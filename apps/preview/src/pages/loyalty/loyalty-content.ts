@@ -14,10 +14,7 @@ import type {
   TierCardCopy,
   WalletPassLinksCopy,
   WalletPassWallet,
-} from "@grade10/ui";
-import { AppleLogo, Wallet } from "@phosphor-icons/react";
-import { createElement } from "react";
-/* Stand-in programme content the Loyalty workbench draws with. Grade10's own
+} from "@grade10/ui";/* Stand-in programme content the Loyalty workbench draws with. Grade10's own
  * copy and figures for the examples only; a consumer supplies its own. */
 
 const RENEWS = formatDay(Date.UTC(2027, 2, 1));
@@ -470,19 +467,13 @@ const APPLE_PASS_URL = "https://example.com/passes/grade10.pkpass";
 /** A wallet the member can add the card to. */
 const GOOGLE_OFFERED: WalletPassWallet = {
   id: "google",
-  offer: {
-    icon: createElement(Wallet, { weight: "regular" }),
-    label: "Google Wallet",
-    variant: "outline",
-  },
+  artwork: { wallet: "google" },
+  offer: { label: "Add to Google Wallet" },
 };
 const APPLE_OFFERED: WalletPassWallet = {
   id: "apple",
-  offer: {
-    icon: createElement(AppleLogo, { weight: "fill" }),
-    label: "Apple Wallet",
-    variant: "default",
-  },
+  artwork: { wallet: "apple" },
+  offer: { label: "Add to Apple Wallet" },
 };
 /** Carried in Google Wallet; the install link stands beside the held sentence. */
 const GOOGLE_HELD: WalletPassWallet = {
