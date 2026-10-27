@@ -1,13 +1,14 @@
 schema: grade10-planning
 created: 2026-09-11
 hands:
-  pm: "@tangconst"
+  pm: "@seankcw"
   design: "@ecchochan"
   qa: "@ecchochan"
   dev: "@ecchochan"
 depends_on:
   - add-store-cross-sell
-page_waived: "delivered: its 🚧 lines came off when the outcomes shipped, 2026-10-16; awaiting archive"
+page_waived: "delivered: its 🚧 lines came off when the outcomes shipped,
+  2026-10-16; awaiting archive"
 reviewed:
   proposal: 4031690a
   decisions: 0b497f4c
