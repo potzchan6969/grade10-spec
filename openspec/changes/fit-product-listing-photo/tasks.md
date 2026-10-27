@@ -14,7 +14,7 @@ holds it; the `<img>` does not change
 - [x] 2.2 After group 1 is verified, take the 🚧 off **Whole photo** under `Product Tile`, restating no requirement
 - [x] 2.3 Verify: `pnpm check:manual`
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its planning input, with group 1 landed. The application's pin already carries the code,
 so the walk needs no bump and no application change. The isolated stack's
