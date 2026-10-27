@@ -7,7 +7,13 @@ import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { ArrowsCounterClockwise, CircleNotch } from "@phosphor-icons/react";
 import { QRCodeSVG } from "qrcode.react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { TierBadge } from "./tier-badge";
 
 /** The words the pass says, whoever holds it. */
@@ -47,6 +53,8 @@ type MemberPassProps = {
   refreshing?: boolean;
   /** Why the last refresh was refused, toasted once per value the consumer passes. */
   refreshFailed?: string;
+  /** Anything the consumer mounts inside the pass — the wallet links. */
+  children?: ReactNode;
   className?: string;
 };
 
@@ -104,6 +112,7 @@ function MemberPass({
   onRefresh,
   refreshing = false,
   refreshFailed,
+  children,
   className,
 }: MemberPassProps) {
   const skin = SKIN[variant];
@@ -240,6 +249,7 @@ function MemberPass({
             {copy.refresh}
           </Button>
         </HStack>
+        {children}
       </VStack>
     </div>
   );
