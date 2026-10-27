@@ -327,3 +327,35 @@ SHALL require no export of its own.
 - **WHEN** the confirm phase renders
 - **THEN** the deficit row re-reads the shortfall and refuses whole
 - **AND** the shortfall is raised outside the surface
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-vkq rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-275 - The held tier wears the emphasis
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `TierInfoCard` renders the rung marked `currentTier`
+- **THEN** it wears the primary border and its tint
+- **AND** the unheld rungs wear the plain border
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-rwd rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-276 - An invitation-held tier earns nothing beneath it
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `TierLadder` renders a member whose held rung is `invitationOnly`
+- **THEN** every other rung reads upcoming, never completed
+- **AND** no connector is drawn into the held rung, and neither the qualifying count nor its footnote renders
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-xnm rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-277 - The qualifying line waits for both figures
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `TierLadder` renders with a qualifying count but no target, or a target but no count
+- **THEN** no qualifying line is rendered
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-fzj rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-278 - The mechanics rows take the consumer's icons and words
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `HowPointsWork` renders a member's mechanics
+- **THEN** every row's icon, title and body arrived through props
+- **AND** the rows stack on a narrow viewport and pair across a wide one
+
