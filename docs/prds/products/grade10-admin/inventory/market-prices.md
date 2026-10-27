@@ -36,7 +36,13 @@ exact grade or condition the item matches.
   shows as days ago by the middle of the day it names, so up to half a day
   counts twice or not at all, and is flagged; one that cannot reach the
   last read in ten pages keeps what it read, is flagged, and claims
-  yesterday only where it reached back past its start
+  yesterday only where it reached back past yesterday's start, as after a
+  missed night
+- ❓ **A card selling more than ten pages a night** - over about 200 sales
+  between nightly reads, fewer where pages are slow, every night's read is
+  cut short in yesterday, so its claim stays put and its factor fades as if
+  reads failed; more pages a read, or the SNKRDUNK worker, would reach it -
+  TBC, owner and engineering
 - ❓ **How many a night** - at one reference a minute, 1,440 fit a day; past
   that reads fall more than a day apart. Faster reads come with the
   SNKRDUNK worker - TBC, owner and engineering
