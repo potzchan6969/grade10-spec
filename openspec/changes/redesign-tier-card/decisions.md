@@ -12,10 +12,10 @@
 - No rename of `MemberCard` or the sibling blocks.
 - Rewriting archived OpenSpec changes. Past archives keep the name they
   shipped under.
-- The Tiers & Benefits page itself. It is being designed 🚧; this change only
-  takes the `href` to it.
-- Any expiry wording on the card. Whether the inactivity date reads on the
-  Tiers & Benefits page is that page's design, not this change's.
+- The Tiers & Benefits page itself. This change only takes the `href` to it.
+- Any expiry wording on the card. The inactivity date reads on the Tiers &
+  Benefits page (Q3); drawing that line is that page's design, not this
+  change's.
 - Token work. The skins draw on the palette the design system already holds;
   `tokens.json` is untouched.
 
