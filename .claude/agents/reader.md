@@ -33,6 +33,10 @@ beside you.
 - **The reader's words** — what a member or an operator would say unprompted:
   the plain word, never the internal one, and one name per thing on every page
 - **A sentence that needs a second reading** — it is rewritten plain
+- **A label that is a riddle** — a bold label reads as a plain name ("Sale
+  prices"), never a slogan ("Zero behind a choice")
+- **A term of our own** — an internal name a new teammate would not know is
+  replaced by the user's word, or explained the first time it appears
 - **A set stated in part** — every state, refusal or tier a reader meets is
   stated whole, or the draft says nothing about it
 - **The store's word for a defined thing** — the requirement's name for it,
