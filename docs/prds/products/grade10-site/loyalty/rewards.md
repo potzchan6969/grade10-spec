@@ -202,6 +202,8 @@ A grant-only reward is one only a campaign hands out -
 - **No stock** - the campaign's quota is its one limit
 - **Not reversible** - voiding its coupon takes it back, with no points to
   return
+- **An operator's grant is one too** - a coupon an operator hands a member
+  writes no points records, just as a campaign's gift does
 
 ## Cancelling a Redemption
 

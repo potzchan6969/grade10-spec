@@ -32,6 +32,8 @@ each way once.
   never takes a slot, even when it joins the programme during it
 - **Signing up never fails over a campaign** — a slot that cannot be taken
   leaves the account and its membership as they are
+- **A link is the proof** — a submission is the link to the member's post;
+  there is no screenshot or selfie upload
 
 ## Winning and Receiving
 
@@ -65,10 +67,10 @@ and reviews submissions.
 
 ## Design
 
-❓ **Not yet designed** — the membership banner and the campaign page run on
-two prototype blocks, the card's own look standing in: the designer draws the
-banner, the page's hero and the way-of-taking-part card in each state it
-holds. Design's call.
+❓ **Not yet designed** — the membership banner and the campaign page ship on
+two prototype blocks, the card's own look standing in, until the designer
+draws the banner, the page's hero and the way-of-taking-part card in each
+state it holds. Design's call.
 
 ::story{id="loyalty-campaigns-prototypes-campaign-page--default" title="The campaign page, prototype" height="900"}
 
@@ -82,6 +84,8 @@ it: the first fifty signups and the members who find the car win a card pack.
 | Revoking a win | Decided | Not before launch. Voiding the coupon takes the gift back; the operator raises the quota to free a slot. | Product |
 | Quota during a campaign | Decided | An operator may change it while the campaign runs, never below the wins already taken. | Product |
 | Protecting a named reward | Decided | No lock: the operator owns the reward a campaign names. | Product |
-| The look | ❓ Open | Prototype blocks stand in until the banner and the page are designed. | Design |
+| The look | ❓ Open | Launch ships on the prototype blocks; they stand in until the banner and the page are designed. | Design |
+| Proof for a submission | Decided | A link to the member's Instagram or Threads post; no screenshot or selfie upload for now. | Product |
+| An operator's grant | Decided | A gift like a campaign's: no points records, reversed only by voiding its coupon. | Product |
 | A gift's point cost | Decided | Optional on a grant-only reward; the card-pack reward is created with none. | Product |
 :::
