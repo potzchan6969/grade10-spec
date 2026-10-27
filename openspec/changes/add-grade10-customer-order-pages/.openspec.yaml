@@ -10,7 +10,7 @@ reviewed:
   specs: e7a0d3b5
   test-cases: 270cbef5
   tasks: 935979ce
-  decisions: e5e370f5
+  decisions: 9cb7592a
 tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 11.4"
 hands:
   dev: "@kinisworking"
