@@ -7,18 +7,28 @@ import {
 } from "@grade10/design-system/components/display/tabs";
 import { Text } from "@grade10/design-system/components/display/text";
 import { AppWindow, Code, ListChecks } from "@phosphor-icons/react";
-import { type ReactNode, use, useLayoutEffect, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
+import {
+  type CSSProperties,
+  type ReactNode,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { dirOf, humanize } from "../api/paths";
-import { casesOfPage, type TestCase } from "../api/suites";
+import type { PageCases, TestCase } from "../api/suites";
+import { BlockList } from "../blocks/block-list";
 import { useBlockScope } from "../blocks/block-scope";
 import { BlockView } from "../blocks/block-view";
 import { Collapsible } from "../blocks/collapsible";
 import { MarkdownView } from "../blocks/markdown";
-import { SIDE_TABS, type SideItem, type SideTab } from "../blocks/side-blocks";
+import {
+  type SectionRow,
+  SIDE_TABS,
+  type SideItem,
+  type SideTab,
+} from "../blocks/side-blocks";
 import type { DetailBlock } from "../content/grammar";
 import { clamp, PAGE_MIN_WIDTH, PANEL_WIDTH, useLayout } from "./layout";
-import { type PageSection, PageSectionsContext } from "./page-sections";
 import { ResizeHandle } from "./resize-handle";
 
 const TAB_LABEL: Record<SideTab, string> = {
@@ -33,233 +43,184 @@ const TAB_ICON: Record<SideTab, ReactNode> = {
   qa: <ListChecks aria-hidden size={16} />,
 };
 
+/** The space between the two columns; the handle sits in its middle. */
+const GAP = 40;
+
+type CaseRow = { testCase: TestCase; rules: string[] };
+
+/** What one section shows beside it, tab by tab. */
+type Shelf = Record<"ui" | "tech", SideItem[]> & { qa: CaseRow[] };
+
+function shelfOf(row: SectionRow, cases: PageCases): Shelf {
+  return {
+    ui: row.side.filter((item) => item.tab === "ui"),
+    tech: row.side.filter((item) => item.tab === "tech"),
+    qa: [
+      ...(cases.bySection.get(row.section) ?? []),
+      // The cases that trace the page as a whole sit by its opening.
+      ...(row.section === ""
+        ? cases.page.map((testCase) => ({ testCase, rules: [] }))
+        : []),
+    ],
+  };
+}
+
+const isEmpty = (shelf: Shelf) =>
+  SIDE_TABS.every((tab) => shelf[tab].length === 0);
+
+/** Whether a page has anything to read beside it. */
+export function hasSide(rows: SectionRow[], cases: PageCases): boolean {
+  return rows.some((row) => !isEmpty(shelfOf(row, cases)));
+}
+
 /**
- * The column beside the page, while the rail is folded on a wide screen. It
- * is an empty slot the page draws into, and it shows only once something is
- * drawn, so a page with nothing beside it keeps the whole width.
+ * A page read in two columns, one row a section, in the one scroll the page
+ * already has. Each section's side holds still beside it while the section
+ * is read, and leaves with it.
  */
-export function SidePanelSlot({ rowWidth }: { rowWidth: () => number }) {
+export function SplitPage({
+  head,
+  rows,
+  cases,
+  children,
+}: {
+  head: ReactNode;
+  rows: SectionRow[];
+  cases: PageCases;
+  children?: ReactNode;
+}) {
   const layout = useLayout();
+  const frame = useRef<HTMLDivElement>(null);
   const [draft, setDraft] = useState<number | null>(null);
-  const max = () => rowWidth() - PAGE_MIN_WIDTH;
+  const { setSideShown } = layout;
+  const max = () => (frame.current?.clientWidth ?? 0) - PAGE_MIN_WIDTH;
   const width = draft ?? layout.panelWidth;
-  const filled = layout.split && layout.panelFilled;
-
-  return (
-    <>
-      {filled ? (
-        <ResizeHandle
-          grows={-1}
-          label="Resize the side panel"
-          max={max()}
-          min={PANEL_WIDTH.min}
-          onCommit={(next) => {
-            setDraft(null);
-            layout.setPanelWidth(clamp(next, PANEL_WIDTH.min, max()));
-          }}
-          onMove={(next) => setDraft(clamp(next, PANEL_WIDTH.min, max()))}
-          width={width}
-        />
-      ) : null}
-      <aside
-        aria-label="Beside this section"
-        className={
-          filled
-            ? "sticky top-16 h-[calc(100dvh-4rem)] shrink-0 overflow-y-auto overscroll-contain border-border border-l bg-background [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]"
-            : "hidden"
-        }
-        data-slot="manual-side-panel"
-        ref={layout.setPanel}
-        style={filled ? { width } : undefined}
-      />
-    </>
-  );
-}
-
-/** The `##` the reader is in: the active heading, or the one an active `###`
- * sits under. */
-function activeH2(
-  sections: PageSection[],
-  active?: string,
-): PageSection | null {
-  const at = sections.findIndex((section) => section.id === active);
-  for (let index = at; index >= 0; index -= 1) {
-    if (sections[index].level === 2) return sections[index];
-  }
-  return sections.find((section) => section.level === 2) ?? null;
-}
-
-type Shelf = {
-  blocks: Record<SideTab, SideItem[]>;
-  cases: { testCase: TestCase; rules: string[] }[];
-};
-
-/**
- * What a page carries beside its reading, drawn into the shell's slot: the
- * section being read, and per tab what that section holds — its stories, its
- * engineering detail, the cases that trace it.
- */
-export function PageSide({ side }: { side: SideItem[] }) {
-  const layout = useLayout();
-  const { index, pagePath } = useBlockScope();
-  const { sections, active } = use(PageSectionsContext);
-  const cases = useMemo(
-    () => casesOfPage(index.snapshot.suites ?? [], pagePath),
-    [index.snapshot.suites, pagePath],
-  );
-  const hasAny =
-    side.length > 0 || cases.bySection.size > 0 || cases.page.length > 0;
-  const { setPanelFilled } = layout;
 
   useLayoutEffect(() => {
-    if (!hasAny) return;
-    setPanelFilled(true);
-    return () => setPanelFilled(false);
-  }, [hasAny, setPanelFilled]);
+    setSideShown(true);
+    return () => setSideShown(false);
+  }, [setSideShown]);
 
-  if (!layout.split || !layout.panel || !hasAny) return null;
-
-  const section = activeH2(sections, active);
-  const first = sections.find((candidate) => candidate.level === 2);
-  const shelfOf = (id: string): Shelf => {
-    const here = (item: SideItem) =>
-      item.section === id || (item.section === "" && id === first?.id);
-    const blocks = { ui: [], tech: [], qa: [] } as Shelf["blocks"];
-    for (const item of side) if (here(item)) blocks[item.tab].push(item);
-    return { blocks, cases: cases.bySection.get(id) ?? [] };
-  };
-  const shelf = shelfOf(section?.id ?? "");
-  const count = (tab: SideTab, of: Shelf) =>
-    tab === "qa" ? of.cases.length : of.blocks[tab].length;
-  const elsewhere = (tab: SideTab) =>
-    sections.filter(
-      (candidate) =>
-        candidate.level === 2 &&
-        candidate.id !== section?.id &&
-        count(tab, shelfOf(candidate.id)) > 0,
-    );
-
-  return createPortal(
-    <Tabs
-      onValueChange={(value) => layout.setTab(value as SideTab)}
-      value={layout.tab}
-    >
-      <div className="sticky top-0 z-10 border-border border-b bg-background/95 px-4 pt-3 backdrop-blur">
-        <Text as="p" className="truncate" size="xs" tone="secondary">
-          {section ? section.title : "This page"}
-        </Text>
-        <TabsList className="mt-1" fullWidth size="sm" variant="list">
-          {SIDE_TABS.map((tab) => (
-            <TabsTrigger className="gap-1.5" key={tab} value={tab}>
-              {TAB_ICON[tab]}
-              {TAB_LABEL[tab]}
-              {count(tab, shelf) > 0 ? (
-                <Badge size="sm" variant="outline">
-                  {count(tab, shelf)}
-                </Badge>
-              ) : null}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </div>
-
-      {SIDE_TABS.map((tab) => (
-        <TabsContent className="flex flex-col gap-4 p-4" key={tab} value={tab}>
-          {count(tab, shelf) === 0 ? (
-            <Empty
-              elsewhere={elsewhere(tab)}
-              section={section?.title}
-              tab={tab}
-            />
-          ) : tab === "qa" ? (
-            shelf.cases.map(({ testCase, rules }) => (
-              <CaseCard key={testCase.id} rules={rules} testCase={testCase} />
-            ))
-          ) : (
-            shelf.blocks[tab].map((item, position) =>
-              item.block.type === "detail" ? (
-                <SideDetail
-                  block={item.block}
-                  // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-                  key={`detail-${position}`}
-                />
-              ) : (
-                <BlockView
-                  block={item.block}
-                  // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-                  key={`${item.block.type}-${position}`}
-                />
-              ),
-            )
-          )}
-          {tab === "qa" && cases.page.length > 0 ? (
-            <Collapsible
-              badge={
-                <Badge size="sm" variant="outline">
-                  {cases.page.length}
-                </Badge>
-              }
-              id="side-page-cases"
-              linkLabel="Copy link to the page's cases"
-              title="Across the page"
-              variant="ghost"
-            >
-              <div className="flex flex-col gap-3">
-                {cases.page.map((testCase) => (
-                  <CaseCard key={testCase.id} rules={[]} testCase={testCase} />
-                ))}
-              </div>
-            </Collapsible>
-          ) : null}
-        </TabsContent>
-      ))}
-    </Tabs>,
-    layout.panel,
-  );
-}
-
-const EMPTY: Record<SideTab, string> = {
-  ui: "No story or design",
-  tech: "No engineering detail",
-  qa: "No test case",
-};
-
-function Empty({
-  tab,
-  section,
-  elsewhere,
-}: {
-  tab: SideTab;
-  section?: string;
-  elsewhere: PageSection[];
-}) {
   return (
-    <div className="flex flex-col gap-2">
-      <Text as="p" size="sm" tone="secondary">
-        {EMPTY[tab]} {section ? `in ${section}` : "here"}.
-      </Text>
-      {elsewhere.length > 0 ? (
-        <ul className="flex flex-col gap-1">
-          {elsewhere.map((candidate) => (
-            <li key={candidate.id}>
-              <a
-                className="text-foreground text-sm underline decoration-border-strong underline-offset-4 hover:decoration-foreground"
-                href={`#${candidate.id}`}
-              >
-                {candidate.title}
-              </a>
-            </li>
-          ))}
-        </ul>
+    <div
+      className="relative"
+      ref={frame}
+      style={{ "--side-width": `${width}px` } as CSSProperties}
+    >
+      <div style={{ marginRight: width + GAP }}>{head}</div>
+      {rows.map((row) => {
+        const shelf = shelfOf(row, cases);
+        return (
+          <div
+            className="grid grid-cols-[minmax(0,1fr)_var(--side-width)]"
+            data-section={row.section || undefined}
+            key={row.section || "opening"}
+            style={{ columnGap: GAP }}
+          >
+            <div className="min-w-0">
+              <BlockList blocks={row.main} />
+            </div>
+            <div className="min-w-0">
+              {isEmpty(shelf) ? null : (
+                <div className="sticky top-20 py-4">
+                  <SideCard shelf={shelf} />
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+      {children ? (
+        <div style={{ marginRight: width + GAP }}>{children}</div>
       ) : null}
+      <ResizeHandle
+        className="absolute inset-y-0 top-0 h-auto"
+        grows={-1}
+        label="Resize the side column"
+        max={max()}
+        min={PANEL_WIDTH.min}
+        onCommit={(next) => {
+          setDraft(null);
+          layout.setPanelWidth(clamp(next, PANEL_WIDTH.min, max()));
+        }}
+        onMove={(next) => setDraft(clamp(next, PANEL_WIDTH.min, max()))}
+        style={{ right: width + GAP / 2 }}
+        width={width}
+      />
     </div>
   );
 }
 
-/** An engineer's detail, open: the panel is where it was asked for. */
+const EMPTY: Record<SideTab, string> = {
+  ui: "No story or design in this section.",
+  tech: "No engineering detail in this section.",
+  qa: "No test case traces this section.",
+};
+
+/** One section's side: the tabs, shared across the page, and what this
+ * section holds under each. */
+function SideCard({ shelf }: { shelf: Shelf }) {
+  const layout = useLayout();
+  return (
+    <Tabs
+      className="rounded-(--radius-xl) border border-border bg-background"
+      onValueChange={(value) => layout.setTab(value as SideTab)}
+      value={layout.tab}
+    >
+      <TabsList className="px-2" fullWidth size="sm" variant="list">
+        {SIDE_TABS.map((tab) => (
+          <TabsTrigger className="gap-1.5" key={tab} value={tab}>
+            {TAB_ICON[tab]}
+            {TAB_LABEL[tab]}
+            {shelf[tab].length > 0 ? (
+              <Badge size="sm" variant="outline">
+                {shelf[tab].length}
+              </Badge>
+            ) : null}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+
+      {SIDE_TABS.map((tab) => (
+        <TabsContent
+          className="flex max-h-[calc(100dvh-9rem)] flex-col gap-3 overflow-y-auto overscroll-contain p-3 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]"
+          key={tab}
+          value={tab}
+        >
+          {tab === "qa"
+            ? shelf.qa.map(({ testCase, rules }) => (
+                <CaseCard key={testCase.id} rules={rules} testCase={testCase} />
+              ))
+            : shelf[tab].map((item, position) =>
+                item.block.type === "detail" ? (
+                  <SideDetail
+                    block={item.block}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
+                    key={`detail-${position}`}
+                  />
+                ) : (
+                  <BlockView
+                    block={item.block}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
+                    key={`${item.block.type}-${position}`}
+                  />
+                ),
+              )}
+          {shelf[tab].length === 0 ? (
+            <Text as="p" className="px-1 py-2" size="sm" tone="secondary">
+              {EMPTY[tab]}
+            </Text>
+          ) : null}
+        </TabsContent>
+      ))}
+    </Tabs>
+  );
+}
+
+/** An engineer's detail, open: the side is where it was asked for. */
 function SideDetail({ block }: { block: DetailBlock }) {
   return (
-    <section className="flex flex-col gap-2">
+    <section className="flex flex-col gap-2 px-1">
       <Text as="h3" size="sm" weight="bold">
         {block.title}
       </Text>
@@ -274,13 +235,7 @@ function SideDetail({ block }: { block: DetailBlock }) {
 }
 
 /** One case: its title and the rules it checks, its steps a click away. */
-function CaseCard({
-  testCase,
-  rules,
-}: {
-  testCase: TestCase;
-  rules: string[];
-}) {
+function CaseCard({ testCase, rules }: CaseRow) {
   const { index } = useBlockScope();
   return (
     <Collapsible

@@ -1,4 +1,5 @@
-import { type CSSProperties, useRef, useState } from "react";
+import { cn } from "@grade10/design-system/lib/utils";
+import { type CSSProperties, useState } from "react";
 import { Outlet } from "react-router";
 import { useSnapshot } from "../api/snapshot-provider";
 import { useHashFlash } from "../blocks/anchor";
@@ -15,7 +16,6 @@ import { MainMoved } from "./main-moved";
 import { PageSectionsProvider } from "./page-sections";
 import { ResizeHandle } from "./resize-handle";
 import { useScrollMemory } from "./scroll-memory";
-import { SidePanelSlot } from "./side-panel";
 import { Sidebar } from "./sidebar";
 import {
   FixtureNotice,
@@ -34,7 +34,6 @@ export function AppShell() {
 function Shell() {
   const snapshot = useSnapshot();
   const layout = useLayout();
-  const row = useRef<HTMLDivElement>(null);
   const [navDraft, setNavDraft] = useState<number | null>(null);
   const [navOpen, setNavOpen] = useState(false);
   const closeNav = () => setNavOpen(false);
@@ -101,28 +100,32 @@ function Shell() {
           )}
 
           <div className="flex min-w-0 flex-1 flex-col">
-            <div className="flex min-w-0 flex-1" ref={row}>
-              <main className="min-w-0 flex-1 px-5 py-10 lg:px-12">
-                <div className="mx-auto w-full min-w-0 max-w-4xl">
-                  {snapshot.status === "loading" ? <SnapshotLoading /> : null}
-                  {snapshot.status === "error" ? (
-                    <SnapshotUnavailable message={snapshot.message} />
-                  ) : null}
-                  {snapshot.status === "ready" ? (
-                    <>
-                      {snapshot.source === "fixture" ? (
-                        <FixtureNotice reason={snapshot.reason} />
-                      ) : null}
-                      {/* Above the page, inside the column it reads in: what
+            <main className="min-w-0 flex-1 px-5 py-10 lg:px-12">
+              {/* A page read beside its side takes the whole width; its
+                    reading column keeps its own measure. */}
+              <div
+                className={cn(
+                  "mx-auto w-full min-w-0",
+                  layout.split && layout.sideShown ? "max-w-none" : "max-w-4xl",
+                )}
+              >
+                {snapshot.status === "loading" ? <SnapshotLoading /> : null}
+                {snapshot.status === "error" ? (
+                  <SnapshotUnavailable message={snapshot.message} />
+                ) : null}
+                {snapshot.status === "ready" ? (
+                  <>
+                    {snapshot.source === "fixture" ? (
+                      <FixtureNotice reason={snapshot.reason} />
+                    ) : null}
+                    {/* Above the page, inside the column it reads in: what
                         the banner says is about the reading, not the route. */}
-                      <MainMoved />
-                      <Outlet />
-                    </>
-                  ) : null}
-                </div>
-              </main>
-              <SidePanelSlot rowWidth={() => row.current?.clientWidth ?? 0} />
-            </div>
+                    <MainMoved />
+                    <Outlet />
+                  </>
+                ) : null}
+              </div>
+            </main>
 
             {snapshot.status === "ready" ? (
               <SnapshotFooter snapshot={snapshot.snapshot} />

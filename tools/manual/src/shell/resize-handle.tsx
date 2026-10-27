@@ -1,5 +1,11 @@
 import { cn } from "@grade10/design-system/lib/utils";
-import { type KeyboardEvent, type PointerEvent, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  type KeyboardEvent,
+  type PointerEvent,
+  useRef,
+  useState,
+} from "react";
 
 const STEP = 16;
 
@@ -18,6 +24,7 @@ type ResizeHandleProps = {
   /** Enter on the handle: what folding means for its owner. */
   onToggle?: () => void;
   className?: string;
+  style?: CSSProperties;
 };
 
 /**
@@ -36,6 +43,7 @@ export function ResizeHandle({
   onCommit,
   onToggle,
   className,
+  style,
 }: ResizeHandleProps) {
   const start = useRef<{ x: number; width: number } | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -72,6 +80,7 @@ export function ResizeHandle({
         "sticky top-16 z-20 h-[calc(100dvh-4rem)] w-0 shrink-0",
         className,
       )}
+      style={style}
     >
       {/* biome-ignore lint/a11y/useSemanticElements: a focusable separator is the ARIA pattern for a splitter; `hr` cannot take focus or a value. */}
       <div

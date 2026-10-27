@@ -81,12 +81,9 @@ export type Layout = Stored & {
   setNavCollapsed: (collapsed: boolean) => void;
   setPanelWidth: (width: number) => void;
   setTab: (tab: SideTab) => void;
-  /** The panel's slot, for the page to draw its side into. */
-  panel: HTMLElement | null;
-  setPanel: (element: HTMLElement | null) => void;
-  /** Whether the page has drawn anything into the slot. */
-  panelFilled: boolean;
-  setPanelFilled: (filled: boolean) => void;
+  /** Whether the page being read has anything to show beside it. */
+  sideShown: boolean;
+  setSideShown: (shown: boolean) => void;
 };
 
 const LayoutContext = createContext<Layout | null>(null);
@@ -95,8 +92,7 @@ export function LayoutProvider({ children }: { children: ReactNode }) {
   const [stored, setStored] = useState(() =>
     readStored(browserKeyStore.get(STORAGE.layout)),
   );
-  const [panel, setPanel] = useState<HTMLElement | null>(null);
-  const [panelFilled, setPanelFilled] = useState(false);
+  const [sideShown, setSideShown] = useState(false);
   const wide = useWide();
 
   const update = useCallback((patch: Partial<Stored>) => {
@@ -115,12 +111,10 @@ export function LayoutProvider({ children }: { children: ReactNode }) {
       setNavCollapsed: (navCollapsed) => update({ navCollapsed }),
       setPanelWidth: (panelWidth) => update({ panelWidth }),
       setTab: (tab) => update({ tab }),
-      panel,
-      setPanel,
-      panelFilled,
-      setPanelFilled,
+      sideShown,
+      setSideShown,
     }),
-    [stored, wide, update, panel, panelFilled],
+    [stored, wide, update, sideShown],
   );
 
   return <LayoutContext value={value}>{children}</LayoutContext>;

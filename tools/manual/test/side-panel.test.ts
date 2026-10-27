@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { casesOfPage, readSuite } from "../src/api/suites";
-import { splitPage } from "../src/blocks/side-blocks";
+import { sectionRows } from "../src/blocks/side-blocks";
 import { parsePage } from "../src/content/grammar";
 import { readStored } from "../src/shell/layout";
 
@@ -69,10 +69,9 @@ describe("a suite's cases", () => {
   it("groups a page's cases by section, with the rules each checks", () => {
     const cases = casesOfPage([SUITE], `${STORE}/listing.md`);
     expect(
-      cases.bySection.get("filters")?.map(({ testCase, rules }) => [
-        testCase.id,
-        rules,
-      ]),
+      cases.bySection
+        .get("filters")
+        ?.map(({ testCase, rules }) => [testCase.id, rules]),
     ).toEqual([["g10.store-listing.TC1", ["combining-options"]]]);
     expect(cases.bySection.get("links")?.[0].rules).toEqual(["address"]);
     expect(cases.page.map((testCase) => testCase.id)).toEqual([
@@ -121,18 +120,27 @@ Why.
 :::
 `);
 
-  it("moves stories, designs and the engineer's detail under their section", () => {
-    const { main, side } = splitPage(page.blocks);
-    expect(side.map(({ tab, section }) => [tab, section])).toEqual([
-      ["ui", ""],
-      ["ui", "products-display"],
-      ["tech", "filters"],
-    ]);
-    expect(main.some((block) => block.type === "story")).toBe(false);
-    expect(main.some((block) => block.type === "callout")).toBe(true);
+  it("cuts the page into one row a section, its side blocks beside it", () => {
+    const rows = sectionRows(page.blocks);
     expect(
-      main.filter((block) => block.type === "detail").map((block) => block.for),
-    ).toEqual(["pm"]);
+      rows.map((row) => [row.section, row.side.map((item) => item.tab)]),
+    ).toEqual([
+      ["", ["ui"]],
+      ["products-display", ["ui"]],
+      ["filters", ["tech"]],
+    ]);
+    const display = rows[1].main;
+    expect(display.every((block) => block.type === "prose")).toBe(true);
+    expect(
+      display.map((block) => block.type === "prose" && block.markdown),
+    ).toEqual([
+      "## Products Display\n\n- **Grid** — cards",
+      "```md\n## Not a section\n```",
+    ]);
+    const filters = rows[2].main.map((block) =>
+      block.type === "detail" ? `detail:${block.for}` : block.type,
+    );
+    expect(filters).toEqual(["prose", "callout", "detail:pm"]);
   });
 });
 

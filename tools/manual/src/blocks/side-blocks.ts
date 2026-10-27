@@ -13,53 +13,69 @@ export function sideTabOf(block: Block): SideTab | null {
   return null;
 }
 
-/** One side block, under the `##` section it sits in — `""` before the first. */
-export type SideItem = { block: Block; tab: SideTab; section: string };
+/** One side block, by the tab it shows under. */
+export type SideItem = { block: Block; tab: SideTab };
+
+/** One `##` section of a page read in two columns: what stays in the reading,
+ * and what moves beside it. `section` is the heading's anchor, `""` for what
+ * comes before the first. */
+export type SectionRow = { section: string; main: Block[]; side: SideItem[] };
 
 const H2 = /^##\s+(.+?)\s*#*\s*$/;
 const FENCE = /^(`{3,}|~{3,})/;
 
-/** The anchor of the last `##` a prose block opens, outside its code. */
-function lastSection(markdown: string): string | null {
-  let last: string | null = null;
+/** A prose block cut at each `##` outside its code, with the anchor each
+ * piece opens — `null` for a piece before the block's first heading. */
+function cutAtSections(
+  markdown: string,
+): { section: string | null; markdown: string }[] {
+  const pieces: { section: string | null; lines: string[] }[] = [
+    { section: null, lines: [] },
+  ];
   let fence: string | null = null;
   for (const line of markdown.split("\n")) {
     if (fence !== null) {
       if (line.startsWith(fence)) fence = null;
-      continue;
+    } else {
+      const opened = FENCE.exec(line);
+      if (opened) fence = opened[1];
+      const heading = opened ? null : H2.exec(line);
+      if (heading) pieces.push({ section: sectionSlug(heading[1]), lines: [] });
     }
-    const opened = FENCE.exec(line);
-    if (opened) {
-      fence = opened[1];
-      continue;
-    }
-    const heading = H2.exec(line);
-    if (heading) last = sectionSlug(heading[1]);
+    (pieces.at(-1) as (typeof pieces)[number]).lines.push(line);
   }
-  return last;
+  return pieces
+    .map(({ section, lines }) => ({
+      section,
+      markdown: lines.join("\n").trim(),
+    }))
+    .filter((piece) => piece.section !== null || piece.markdown !== "");
 }
 
 /**
- * A page read in two columns: the blocks that stay in the reading, and the
- * ones that move beside it, each under its section. Only a page's own blocks
- * move; a story inside a callout is part of what the callout says.
+ * A page read in two columns, one row a section: each row's reading on the
+ * left, and the blocks that move beside it on the right. Only a page's own
+ * blocks move; a story inside a callout is part of what the callout says.
  */
-export function splitPage(blocks: Block[]): {
-  main: Block[];
-  side: SideItem[];
-} {
-  const main: Block[] = [];
-  const side: SideItem[] = [];
-  let section = "";
+export function sectionRows(blocks: Block[]): SectionRow[] {
+  const rows: SectionRow[] = [{ section: "", main: [], side: [] }];
+  const current = () => rows.at(-1) as SectionRow;
   for (const block of blocks) {
     const tab = sideTabOf(block);
     if (tab) {
-      side.push({ block, tab, section });
-      continue;
+      current().side.push({ block, tab });
+    } else if (block.type === "prose") {
+      for (const piece of cutAtSections(block.markdown)) {
+        if (piece.section !== null)
+          rows.push({ section: piece.section, main: [], side: [] });
+        if (piece.markdown !== "")
+          current().main.push({ type: "prose", markdown: piece.markdown });
+      }
+    } else {
+      current().main.push(block);
     }
-    main.push(block);
-    if (block.type === "prose")
-      section = lastSection(block.markdown) ?? section;
   }
-  return { main, side };
+  return rows.filter(
+    (row) => row.section !== "" || row.main.length > 0 || row.side.length > 0,
+  );
 }
