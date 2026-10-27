@@ -1,0 +1,68 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "7bba7e4ec935928c2198aa751dc77ead5ea68b075900d469df018e09c20ca7d2"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "56e149c14431d5ebc0f2281bab6c0fe88b23065a",
+    "capturedAt": "2026-10-27T02:01:58.200Z",
+    "targets": [
+      {
+        "path": "openspec/changes/activate-listing-tile-by-name/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A card on the listing opens its own product page"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A card is reached from the storefront"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The product card image displays photo, sale, sold-out, and cart overlay",
+          "Requirement: The product list displays product tiles and delegates every product action"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

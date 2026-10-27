@@ -20,7 +20,7 @@ into [one function](tech-design.md#one-function-decides-when-a-product-opens).
 - [x] 2.1 After group 1 is verified, take the 🚧 off **One stop to open** and **Photo on its own** under `Product Tile` in `docs/prds/products/shared/ui/store-product-listing.md`, restating no requirement; the page's other lines this change specifies already run (Q13)
 - [x] 2.2 Verify: `pnpm check:manual`
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its planning input, with group 1 landed. The `external/grade10-spec` bump lands with
 3.2 in one commit, since the photo leaving the accessibility tree breaks every
