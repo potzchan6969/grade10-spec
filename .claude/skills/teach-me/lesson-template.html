@@ -1,0 +1,310 @@
+<!doctype html>
+<!-- The lesson page Lavish opens. Copy theme.css and grade10.css beside it;
+     every colour falls back when they are missing. Give each claim, case,
+     row and step a stable id, so a comment names exactly one of them. -->
+<html lang="en" class="theme-grade10" data-lavish-annotate="on">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TOPIC</title>
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="grade10.css" />
+    <style>
+      :root {
+        --bg: var(--background, #ffffff);
+        --fg: var(--foreground, #1c1c1c);
+        --muted: var(--muted-foreground, #666666);
+        --card: var(--background-subtle, #f4f4f2);
+        --line: var(--border, #c8c8c4);
+        --read: #2f6fb3;
+        --write: #a5520f;
+        --ext: #6b4fa8;
+        --open: #a5520f;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #141414;
+          --fg: #ededed;
+          --muted: #a0a0a0;
+          --card: #222222;
+          --line: #444444;
+          --read: #7fb2e8;
+          --write: #e8a46a;
+          --ext: #b9a2ea;
+          --open: #e8a46a;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #141414;
+        --fg: #ededed;
+        --muted: #a0a0a0;
+        --card: #222222;
+        --line: #444444;
+        --read: #7fb2e8;
+        --write: #e8a46a;
+        --ext: #b9a2ea;
+        --open: #e8a46a;
+      }
+      html,
+      body {
+        background: var(--bg);
+        color: var(--fg);
+      }
+      body {
+        margin: 0;
+        padding: 24px 16px 48px;
+        font: 15px/1.5 system-ui, sans-serif;
+      }
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .question,
+      .kind,
+      .muted {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      h1 {
+        margin: 4px 0;
+      }
+      h2 {
+        margin: 36px 0 10px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+      }
+      h3 {
+        margin: 20px 0 8px;
+        font-size: 13px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .answer {
+        font-size: 18px;
+        line-height: 1.5;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th,
+      td {
+        padding: 6px 8px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+        overflow-wrap: anywhere;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      .open {
+        color: var(--open);
+        font-weight: 600;
+      }
+      .flow {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .step {
+        min-width: 150px;
+        max-width: 220px;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--card);
+      }
+      .step.end {
+        border-radius: 999px;
+        text-align: center;
+      }
+      .step b {
+        display: block;
+      }
+      .edge {
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+      }
+      .edge::after {
+        content: "→";
+        display: block;
+        font-size: 18px;
+        line-height: 1;
+        color: var(--fg);
+      }
+      .data {
+        margin: 6px 0 0;
+        padding: 0;
+        list-style: none;
+        font-size: 12px;
+      }
+      .data li {
+        margin-top: 3px;
+        padding: 1px 6px;
+        border: 1px dashed currentColor;
+        border-radius: 4px;
+      }
+      .read {
+        color: var(--read);
+      }
+      .write {
+        color: var(--write);
+      }
+      .ext {
+        color: var(--ext);
+      }
+      .more {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .more button {
+        padding: 6px 12px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--card);
+        color: var(--fg);
+        font: inherit;
+        cursor: pointer;
+      }
+      @media (max-width: 640px) {
+        .flow {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .step {
+          max-width: none;
+        }
+        .edge::after {
+          content: "↓";
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="question" id="question">Your question: "QUESTION AS ASKED"</p>
+      <h1>TOPIC</h1>
+      <p class="kind">Kind: KIND · Purpose: PURPOSE · Read from: PAGE AND SPEC</p>
+
+      <!-- Two sentences at most: the general definition, then the Grade10 case. -->
+      <p class="answer" id="answer">SHORT ANSWER</p>
+
+      <!-- Keep only the sections the kind gives, in this order. -->
+      <h2 id="overview">Overview</h2>
+      <p id="overview-scope">Background and scope in one paragraph.</p>
+      <ul>
+        <li id="feature-1"><b>Feature</b> - what it does for the reader</li>
+      </ul>
+
+      <h2 id="flow">Product flow</h2>
+      <p class="muted">→ the reader moves to the next step · <span class="read">reads</span> · <span class="write">writes</span> · <span class="ext">calls an external service</span></p>
+      <h3>Lane name</h3>
+      <ol class="flow">
+        <li class="step end" id="step-1" title="What this step is"><b>Start</b></li>
+        <li class="edge">action</li>
+        <li class="step" id="step-2" title="What this step is">
+          <b>Screen</b>
+          <ul class="data">
+            <li class="read">reads Store</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h2 id="journeys">User journeys</h2>
+      <ol>
+        <li id="journey-1"><b>Journey title</b> - screen → screen → outcome</li>
+      </ol>
+
+      <h2 id="services">External services</h2>
+      <p id="services-summary">Which system owns what, and what Grade10 keeps.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Service</th><th>Grade10 sends</th><th>It returns</th><th>When it fails or says no</th></tr>
+          </thead>
+          <tbody>
+            <tr id="service-1"><th scope="row">Service</th><td>…</td><td>…</td><td>…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Every case: one item per case - the condition, what the reader meets, the link. -->
+      <h2 id="cases">Cases</h2>
+      <h3>Rule name</h3>
+      <ol>
+        <li id="case-1">If CONDITION, RESULT. <a href="https://spec.grade10-stg.com/p/...">Rule</a></li>
+      </ol>
+
+      <h2 id="stories">Storybook references</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Story</th><th>Shows</th></tr></thead>
+          <tbody>
+            <tr id="story-1"><th scope="row"><a href="http://localhost:6006/?path=/story/ID">Title › Export</a></th><td>…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="manual">Manual references</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Page</th><th>Section</th><th>Covers</th></tr></thead>
+          <tbody>
+            <tr id="manual-1"><th scope="row"><a href="https://spec.grade10-stg.com/p/...">Page</a></th><td>…</td><td>…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Each open question is its own target, so the reader can comment on one. -->
+      <h2 id="open-questions">Open questions</h2>
+      <ul>
+        <li id="open-1"><span class="open">❓</span> QUESTION - who confirms it</li>
+      </ul>
+
+      <h2 id="left-out">Not in this lesson</h2>
+      <p id="left-out-text">What the lesson left out, and where to look next.</p>
+
+      <!-- Answers to comments. Each round adds a block with data-lavish-revision. -->
+      <h2 id="follow-ups">Follow-ups</h2>
+      <p class="muted" id="follow-ups-empty">Comment on any line, case or row to ask about it. The answers come here.</p>
+
+      <h2 id="more">More</h2>
+      <p class="muted">Send one of these, or comment on any line.</p>
+      <div class="more" id="more-actions" hidden>
+        <button type="button" data-ask="Teach me every case of TOPIC">Every case</button>
+        <button type="button" data-ask="Teach me one behaviour of TOPIC: ">One behaviour</button>
+      </div>
+    </main>
+    <!-- Follow-up revisions registry: add only after the first round of answers.
+    <script type="application/json" data-lavish-revisions>
+    [{ "id": "r1", "label": "Round 1", "timestamp": "2026-01-01T10:00:00Z", "summary": "Answered ..." }]
+    </script>
+    -->
+    <script>
+      // Only the More buttons need Lavish; the lesson reads the same without it.
+      window.addEventListener("load", () => {
+        const more = document.getElementById("more-actions");
+        if (!window.lavish?.queuePrompt) return;
+        more.hidden = false;
+        more.addEventListener("click", (event) => {
+          const button = event.target.closest("button[data-ask]");
+          if (!button) return;
+          window.lavish.queuePrompt(button.dataset.ask, {
+            tag: "teach-me-more",
+            text: button.textContent,
+            element: button,
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

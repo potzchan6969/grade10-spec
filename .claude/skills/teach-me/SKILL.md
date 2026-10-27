@@ -1,6 +1,6 @@
 ---
 name: teach-me
-description: Teach a product topic from the store - an overview, a flow chart of the journey and its data, the journeys, the Storybook stories and the manual pages to read next - shaped by whether the ask is high level, one behaviour, or every case. Use when someone asks to learn, understand or be walked through any part of the product. Invoke as /teach-me <topic>.
+description: Teach a product topic from the store - a short answer in the chat, then the whole lesson as a Lavish page the reader comments on - an overview, a flow chart of the journey and its data, the journeys, the external services, the Storybook stories and the manual pages - shaped by whether the ask is high level, one behaviour, or every case. Use when someone asks to learn, understand or be walked through any part of the product. Invoke as /teach-me <topic>.
 ---
 
 # Teach Me
@@ -27,13 +27,17 @@ store is read-only here: this skill edits no page, spec or story.
    repeat from a marked line, and keep its doubt: a shorter line does not
    make an open question sure. Do not read again what another skill owns -
    see [Hand-offs](#hand-offs)
-5. **Give the short answer** - see [Short answer](#short-answer). For a
-   reader in the conversation, stop after the short answer and the first
-   sections, as [Depth](#depth) says
-6. **Build the sections** - the kind's sections, in the order of
-   [Sections](#sections), with the depth the purpose puts on each
-7. **Hand back** - one closing line: the sections not yet given, the other
-   two kinds, and a hand-off where one applies
+5. **Give the short answer** - see [Short answer](#short-answer), in the
+   chat. Where one sentence answers the whole ask ("Is the vault in
+   Grade10 Site?"), stop there
+6. **Build the lesson in Lavish** - every other lesson is a page the
+   reader reads and comments on, as [Lavish](#lavish) says. Build the
+   kind's sections in the order of [Sections](#sections), with the depth
+   the purpose puts on each. Lavish does not start: give the sections in
+   the chat, as [Depth](#depth) says
+7. **Hand back** - in the chat, the short answer, the Lavish link, and one
+   line that asks the reader to read and comment there. Then run the
+   follow-up loop
 
 ## Style
 
@@ -114,12 +118,15 @@ label such as "TL;DR" or "Key point".
 
 ## Depth
 
-- **A reader in the conversation** - give the short answer and the first
-  three sections the purpose puts the depth on. Offer the rest in the
-  closing line, by name. Give the next part when the reader asks
+- **In Lavish** - give every section of the kind. The page is for reading,
+  so the purpose orders the sections and sets their detail; it does not
+  remove one. Every case gives every case
+- **In the chat** - Lavish did not start. Give the short answer and the
+  first three sections the purpose puts the depth on. Offer the rest in
+  the closing line, by name
 - **No reader in the conversation** - a run with nobody to answer, or a
-  lesson written for other people: give every section of the kind
-- **Every case** - always give every case. The full list is the answer
+  lesson written for other people: give every section in the chat, and do
+  not start Lavish
 
 ## Sections
 
@@ -148,7 +155,10 @@ the agent can publish a private page, also give that link.
 
 - **No script** - do not add a script, a CDN or a chart library. A file
   viewer, a preview pane and an attachment show no script, so a chart that
-  a script draws shows as raw text there
+  a script draws shows as raw text there. In Lavish, the lanes go inside
+  the lesson page, with the same rules
+- **Annotation targets** - give each step a stable `id` and a `title` that
+  says what it is, so a comment names exactly one step
 - **Lanes** - one `<h2>` and one `<ol class="flow">` for each channel or
   actor (online, POS till, after payment). Steps alternate with
   `<li class="edge">` labels: the reader's action
@@ -321,6 +331,92 @@ The table after it stays as the reference.
 | Page | Section | Covers | Link |
 | --- | --- | --- | --- |
 | <page title> | <requirement or heading> | <the cases or decisions it holds> | [Open](https://spec.grade10-stg.com/p/...) |
+
+## Lavish
+
+[Lavish](https://github.com/kunchenguid/lavish-axi) opens the lesson as a
+page in a local browser. The reader comments on a line, a case, a row or a
+step, and the agent answers each comment. Encourage the reader to read and
+ask there: the page holds the whole lesson, and each comment points at one
+claim.
+
+Run it as `npx -y lavish-axi@0.1.93`, with `LAVISH_AXI_TELEMETRY=0` set: the
+version is pinned so the skill and the CLI agree, and the variable turns off
+Lavish's usage telemetry. A newer version is a change to this skill, made
+after its `--help` is read again.
+
+### Build the page
+
+1. **Copy the template** - [`lesson-template.html`](lesson-template.html)
+   to `${TMPDIR:-/tmp}/teach-me/<topic-slug>/lesson.html`. Copy
+   `packages/design-system/src/theme.css` and
+   `packages/design-system/src/themes/grade10.css` beside it: the page
+   then uses the Grade10 tokens, and falls back to its own colours without
+   them. Lavish names a session by the file path, so one topic keeps one
+   path
+2. **Name the question** - the reader's words at the top, then the kind,
+   the purpose and the pages read
+3. **One claim, one target** - each feature, case, row, step and open
+   question is its own element with a stable `id`. A table's row header is
+   a `<th scope="row">`, so Lavish names the row in a comment
+4. **Summary first** - a table starts with one line that says what the rows
+   show. Do not use colour as the only sign of a status: 🚧 and ❓ stay as
+   text
+5. **Known and not known** - a line from the store links its source. A line
+   the agent inferred says so, or is a ❓
+6. **End with what is left out** - the `left-out` section names what the
+   lesson did not cover and where to look next. Do not restate the lesson
+7. **More** - the More buttons queue the other kinds and the hand-offs as
+   prompts. The rest of the page needs no script
+
+### Run the session
+
+1. **Open** - `npx -y lavish-axi@0.1.93 <lesson.html>`. Give the reader the
+   link it prints
+2. **Wait** - `npx -y lavish-axi@0.1.93 poll <lesson.html>`, in the
+   foreground, with no timeout. Do not stop it, and do not move it to the
+   background with `&`, `nohup` or a detached terminal. A harness task that
+   wakes the agent when it ends is allowed - Claude Code's background Bash
+   task is one. In Codex, keep it attached to the active turn. Stopped or timed out: run it again; the
+   comments stay queued
+3. **Answer each comment** - read the whole poll response first. Then, by
+   what the comment asks:
+   - **A question** - answer it from the store, with the same rules as a
+     lesson. Add the answer under **Follow-ups**, in a block marked
+     `data-lavish-revision="r<n>"`, and add round `r<n>` to the
+     `data-lavish-revisions` registry. Add the registry only from the first
+     answered round
+   - **"This is wrong"** - check the store. Where the lesson is wrong,
+     correct it in the page. Where the reader thinks the store is wrong,
+     that is a product question: name the PRD page and who confirms it, and
+     mark the line ❓. Do not edit the store
+   - **A More button or a new topic** - a new kind of the same topic goes
+     into the same page, in new sections. A new topic is a new page and a
+     new session
+   - **Code** - the [Hand-offs](#hand-offs) line for `/teach`
+4. **Reply** - `poll <lesson.html> --agent-reply "<one or two sentences>"`
+   to say what changed and where, then wait again. A longer reply uses
+   `--agent-reply-file`, in short Markdown
+5. **End** - the reader ends the session in the browser. The poll then
+   returns `ended`: stop, give anything left in the chat, and do not
+   reopen it unless the reader asks. `browser_disconnected`: ask the reader
+   whether to reopen or end it. Do neither without an answer
+
+### Do not
+
+- **Do not run `share`** - it publishes the page on ht-ml.app, a
+  third-party host, public by default. A lesson holds staging-manual
+  content that sits behind Cloudflare Access. `export` writes a local file
+  and is allowed
+- **Do not chase layout issues** - fix one only when the reader queues it
+- **Do not open the session in the agent's browser** - Lavish shows a
+  session in one tab at a time, so the agent's tab takes it from the
+  reader. To check the page, open the HTML file itself
+- **Do not use the Mermaid whiteboard** - the lanes are the chart, so the
+  page reads the same without Lavish
+- **Fallback** - `npx` refused, no network, or no permission: give the
+  lesson in the chat with the static chart files, and say why Lavish did
+  not start
 
 ## Hand-offs
 
