@@ -70,6 +70,13 @@ warning. `alt` on an image is required:
 ::image{src="assets/tier-ladder.png" alt="The four tiers and their thresholds"}
 ```
 
+A story that only shows at a phone's width takes `width`, in px, and is drawn
+at that width, centred in its card:
+
+```md
+::story{id="store-product-listing-blocks-productbrowse--narrow" title="Small screen" height="720" width="375"}
+```
+
 A chart is an SVG the build renders from a source under `docs/prds/diagrams/`
 — archify's JSON, named `<slug>.<workflow|lifecycle|sequence|dataflow|architecture>.json`
 — into `assets/diagrams/<slug>.svg` with `pnpm diagrams`, and CI refuses a

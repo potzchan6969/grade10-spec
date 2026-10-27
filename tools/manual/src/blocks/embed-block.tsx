@@ -29,6 +29,8 @@ type EmbedCardProps = {
   openUrl: string;
   openLabel: string;
   height: number;
+  /** Draws the frame at this width, centred, rather than across the card. */
+  width?: number;
   verdict?: DesignVerdict;
   /** A third-party frame costs a network round trip and a lot of main
    * thread, so a page full of them loads none of them: the frame arrives on
@@ -48,6 +50,7 @@ function EmbedCard({
   openUrl,
   openLabel,
   height,
+  width,
   verdict,
   lazy = true,
 }: EmbedCardProps) {
@@ -101,7 +104,19 @@ function EmbedCard({
 
       {verdict && why ? <DriftNote verdict={verdict} /> : null}
 
-      {loaded ? (
+      {loaded && width ? (
+        <div className="flex justify-center bg-background-subtle px-4 py-6">
+          <iframe
+            allowFullScreen
+            className="max-w-full rounded-(--radius-2xl) border border-border bg-background"
+            height={height}
+            key={generation}
+            src={src}
+            style={{ width: `${width}px` }}
+            title={title}
+          />
+        </div>
+      ) : loaded ? (
         <iframe
           allowFullScreen
           className="w-full border-0 bg-background"
@@ -159,6 +174,7 @@ export function StoryBlockView({ block }: { block: StoryBlock }) {
     <EmbedCard
       height={block.height ?? DEFAULT_HEIGHT}
       icon={<Play aria-hidden size={16} />}
+      width={block.width}
       kind="Storybook story"
       lazy={false}
       openLabel="Open in Storybook"

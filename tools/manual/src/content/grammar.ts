@@ -35,6 +35,9 @@ export type StoryBlock = {
   id: string;
   title?: string;
   height?: number;
+  /** The story drawn at this width in px, centred in the card, for a screen
+   * that only shows at a phone's width. */
+  width?: number;
 };
 export type ImageBlock = {
   type: "image";
@@ -145,6 +148,7 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
       { name: "id", required: true },
       { name: "title" },
       { name: "height", kind: "int" },
+      { name: "width", kind: "int" },
     ],
   },
   image: {
