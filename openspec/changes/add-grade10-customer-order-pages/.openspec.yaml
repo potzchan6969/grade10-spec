@@ -5,7 +5,7 @@ page_waived: "predates the page rule"
 reviewed:
   proposal: e136b855
   ui-design: 05744b37
-  tech-design: ba9eb537
+  tech-design: 05744b37
   user-journeys: d2c3199a
   specs: 6fba2ed7
   test-cases: 270cbef5
