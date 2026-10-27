@@ -22,5 +22,14 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "e68a430cf11a416396de93a8b68aaa71c24399d2",
+      "components": [
+        "store-service",
+        "zzz-store-service"
+      ]
+    }
+  ]
 }
