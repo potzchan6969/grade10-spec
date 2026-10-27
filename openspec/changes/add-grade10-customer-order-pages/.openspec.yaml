@@ -9,7 +9,7 @@ reviewed:
   user-journeys: d2c3199a
   specs: e7a0d3b5
   test-cases: 270cbef5
-  tasks: b65a1a89
+  tasks: 935979ce
   decisions: e5e370f5
 tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 11.4"
 hands:
