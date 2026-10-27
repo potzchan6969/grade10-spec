@@ -64,9 +64,9 @@ new application tests belong to groups 8-10.
 This group establishes the wire and domain item shapes. Groups 9 and 10 depend
 on it, and can then be claimed independently against fixtures.
 
-- [ ] 8.1 Add failing production-schema and client-decoder tests for image-free legacy and enriched member, list, private-link and admin responses; assert optional strings survive decoding and malformed picture fields fail, supporting `g10.store-order-history.SC6` and `g10.store-order-detail.SC6`. Land these tests in their own commit before code and tick this task last.
-- [ ] 8.2 Add optional `imageSrc` and `imageAlt` strings to `orderItemSchema` and the frontend `OrderItem`, preserving the direct decoded repository return, so `g10.store-order-history.SC6` and `g10.store-order-detail.SC6` pass. Keep current input schemas and persistence image-free; prove enriched responses remain readable by the saved previous production schema.
-- [ ] 8.3 Verify focused contract/client compatibility tests and affected contract/frontend/admin typechecks. Check member, list, private-link and admin-card output schemas retain the same fields.
+- [x] 8.1 Add failing production-schema and client-decoder tests for image-free legacy and enriched member, list, private-link and admin responses; assert optional strings survive decoding and malformed picture fields fail, supporting `g10.store-order-history.SC6` and `g10.store-order-detail.SC6`. Land these tests in their own commit before code and tick this task last.
+- [x] 8.2 Add optional `imageSrc` and `imageAlt` strings to `orderItemSchema` and the frontend `OrderItem`, preserving the direct decoded repository return, so `g10.store-order-history.SC6` and `g10.store-order-detail.SC6` pass. Keep current input schemas and persistence image-free; prove enriched responses remain readable by the saved previous production schema.
+- [x] 8.3 Verify focused contract/client compatibility tests and affected contract/frontend/admin typechecks. Check member, list, private-link and admin-card output schemas retain the same fields.
 
 ## 9. Current order picture reads (grade10) (owner: @kinisworking)
 
