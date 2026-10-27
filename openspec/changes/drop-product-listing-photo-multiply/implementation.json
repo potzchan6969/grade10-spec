@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "6c7fa9620985e3a7df7f971fb7ea1986746105e7d8f5715599ebb80611c1ec58"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "5c924ff0857abab6946adbb175a96ab7f7c7fd8a",
+    "capturedAt": "2026-10-27T07:07:37.461Z",
+    "targets": [
+      {
+        "path": "openspec/changes/drop-product-listing-photo-multiply/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The product photo is drawn as supplied"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

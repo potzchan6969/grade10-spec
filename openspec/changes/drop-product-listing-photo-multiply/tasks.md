@@ -15,7 +15,7 @@ block, story or Code Connect template in the store blends a photo.
 - [x] 2.1 After group 1 is verified, take the 🚧 off **Photo as supplied** under `Product Tile` in `docs/prds/products/shared/ui/store-product-listing.md`, restating no requirement
 - [x] 2.2 Verify: `pnpm check:manual`
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its planning input. The pin already holds the code, so the group needs
 no bump. The three surfaces draw the tile through `@grade10/ui` and add no
