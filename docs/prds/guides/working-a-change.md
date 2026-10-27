@@ -59,12 +59,12 @@ then similar cards by the tags and the facets they share, up to six.
 Customers-also-bought from orders is phase two, once this ships.
 ```
 
-**Every later hand is told by direct message**, and answers in that change's thread —
-[Agent Rounds](/p/shared/planning/agent-rounds). You answer only what is yours:
+**Every later hand is told by direct message**, and runs its own command
+from a terminal or a Routine. You answer only what is yours:
 
 - **Your moves** — the summary lists the moves that are yours
-- **A question held for you** — arrives as its own reply mentioning you, with
-  the row and the page's sentence quoted
+- **A question held for you** — listed under your name, with the row and the
+  page's sentence quoted
 - **A line a build round puts on your page** — comes back to you as ❓, with
   the line before and after
 - **Planning questions** — go to the same human who is accepting the complete plan
@@ -109,7 +109,7 @@ recommended no cart. Six cards, the order of the similar picks and the heading
 `decisions.md` and `user-journeys.md` reach `main` in that order with
 `@ecchochan` on each — US-01 the picks the shop chose, US-02 similar cards
 where a card has none, US-03 a stock keeper's picks in Shopify admin, seen
-within the mirror's refresh. The designer alone is told in the same thread,
+within the mirror's refresh. The designer alone is told,
 and everything after the journeys is read again.
 
 ## *Designer* — **The rail**
@@ -156,7 +156,7 @@ lands its row from that clone. Its test paths are bare, and the group's tag
 names the repository. A lane the environment could not start says `written,
 not run` first and leaves its tasks unticked. A reader that ran on a fallback
 model is named so. A reader the fallback could not run stops the round and
-tells the thread which one is missing. The last group walks US-01 to US-03
+names the one that is missing. The last group walks US-01 to US-03
 end to end and leaves the end-to-end suite that runs on every push to `main`.
 
 ## *Engineer* — **Implementation and archive**
@@ -175,8 +175,7 @@ behavioural signal from `Order Paid`, the only store event sent today.
 ## How You Know It Is Your Turn
 
 The change carries its own stage, and the stage names the hand.
-Answer in the change's thread when it names you, or run the command below in a
-terminal — how an artifact gets written is [Agent Rounds](/p/shared/planning/agent-rounds).
+Run the command below in a terminal or a Routine when it names you.
 
 | # | Stage | Hand | Say |
 | --- | --- | --- | --- |
@@ -199,7 +198,7 @@ say what you say, and what has to be running.
 
 | Door | You say it | It lands through | It needs |
 | --- | --- | --- | --- |
-| A Routine | The line command in a Claude Routine you trigger, on a schedule or from its own trigger, with the thread's words handed in | `plan:land` in the Routine's session, on the handle the team map gives its git e-mail | The Routine, set up as [Agent Runner](/references/agent-runner) says |
+| A Routine | The line command in a Claude Routine you trigger, on a schedule or from its own trigger | `plan:land` in the Routine's session, on the handle the team map gives its git e-mail | The Routine, set up as [Agent Runner](/references/agent-runner) says |
 | A terminal | The line command in Claude Code, in a clone of this store: `/workflow-plan <sentence>` first, then each hand's command from the table above | `/workflow-land <id> <artifact>` from the terminal, on the handle the team map gives your git e-mail | The clone, and a GitHub account that may push `main` — no Slack at all |
 | The locally run manual | Pull when the checkout is behind | Your working tree, uncommitted: committing and pushing it is yours, as any other edit | `pnpm manual` on the clone; the hosted manual is read-only |
 | The application repository | `pnpm plan claim`, `done`, `hand` and `implementation` | A commit straight to the store's `main` | `grade10`, with the store clone beside it |
@@ -208,10 +207,9 @@ say what you say, and what has to be running.
 - **A terminal alone, end to end** — `/workflow-plan` opens the change and
   drafts ahead, as above; the readers run in your session; you answer the
   numbered questions there and say land. The landing rebases, runs the gate
-  and pushes `main`, and the push workflow tells the channel and the change's
-  thread by itself. Slack adds the message that says it is your turn,
+  and pushes `main`, and the push workflow tells the channel by itself. Slack adds the message that says it is your turn,
   which `NOTIFY_DMS` gates
-- **The doors mix** — a change opened in the thread carries on from a
+- **The doors mix** — a change opened in a Routine carries on from a
   terminal and back: the files are the state, and each door reads them
 - **The old flow, meanwhile** — `spec-push` and `dev-help`
   stay until the team has adopted the line commands. A change opened with

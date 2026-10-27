@@ -2,10 +2,9 @@
 
 Where a round runs and what the push workflow needs, as of 2026-10-27. A round
 runs in a terminal, or in a Claude Code Routine its person triggers; the push
-workflow tells the change's thread and its hands. The relay that once sat
-between Slack, the Routine and the code host is removed, never deployed — the
-rounds change's decision `Q120`. [Agent Rounds](../prds/products/shared/planning/agent-rounds.md)
-names this page as the runner and links back. Read it as what the repository
+workflow tells the channel and its hands. The relay that once sat
+between Slack, the Routine and the code host is removed, never deployed
+(decided 2026-10-27). Read it as what the repository
 and the runner need, not as a requirement.
 
 ## The Shape

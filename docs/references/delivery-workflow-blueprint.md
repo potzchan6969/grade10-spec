@@ -200,8 +200,8 @@ Overlays sit on a stage, a closed set of seven:
 ## Rounds
 
 Every artifact from the proposal to the code is written by one round, and
-the thread is where a person works it. The page is
-[Agent Rounds](../prds/products/shared/planning/agent-rounds.md).
+the thread is where a person works it. The Agent Rounds page and the Slack
+thread were removed on 2026-10-27.
 
 | Step | Who | What happens |
 | --- | --- | --- |
@@ -566,7 +566,7 @@ One meaning per word, as the line uses it.
 | Milestone | Change | Done when |
 | --- | --- | --- |
 | M1 Stages and hands | `stage-changes-and-notify-hands` - delivered; its record removed 2026-10-27, the shape is on [Change Stages](../prds/products/shared/planning/change-stages.md) | A change moving on `main` tells the next hand within a minute, and the board shows eight lanes with the agent mark and the hand's move on five |
-| M2 Rounds | `run-a-round-on-every-artifact` - delivered without the relay; its record removed 2026-10-27, the shape is on [Agent Rounds](../prds/products/shared/planning/agent-rounds.md) | A PM opens a change from one sentence in Slack and lands the three files from the thread, by word or by button; a designer and a tech PIC land a draft they tweaked or challenged; an artifact behind is read again before anything lands after it; a change ends with its walk |
+| M2 Rounds | `run-a-round-on-every-artifact` - delivered without the relay; its record removed 2026-10-27, its page removed 2026-10-27 | A PM opens a change from one sentence in Slack and lands the three files from the thread, by word or by button; a designer and a tech PIC land a draft they tweaked or challenged; an artifact behind is read again before anything lands after it; a change ends with its walk |
 | M2b Live pages | `tell-open-pages-main-moved` - dropped 2026-10-27, the manual doesn't watch `main`; was on [Change Stages · Surfaces](../prds/products/shared/planning/change-stages.md#surfaces), depending on M1 | A page open while `main` moves is told within seconds and refreshes when the site has caught up; the local manual says how far behind it is and pulls |
 | M3 Land without a pull request | `land-on-main-through-the-gate` | A week of landings with no pull request and no red `main` older than an hour; `pnpm land` is the round's landing step |
 | M4 Release line | `cut-releases-from-a-tag` | One release cut from the page and one hotfix walked end to end |

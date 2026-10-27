@@ -6,8 +6,7 @@ order: 1
 
 Where a change stands, who is on it, and how they are told. Every line here is
 read from the change's files on `main`, never set by hand —
-[How we plan](/guides/how-we-plan). How each artifact gets written is
-[Agent Rounds](agent-rounds).
+[How we plan](/guides/how-we-plan).
 
 ## Stages
 
@@ -32,8 +31,8 @@ A change is in exactly one planning or delivery stage, proven by a file on
   acceptance
 - **Independent planning readings** — QA1 writes blind cases from the frozen
   anchors, then Dev writes design, requirements, scenarios and tasks without
-  reading them; QA2 reconciles both and closes each raised question the [held
-  test](agent-rounds#the-round) does not hold; one human resolves the rest
+  reading them; QA2 reconciles both and closes each raised question that needs no human
+  decision; one human resolves the rest
 - **Implementation before human QA** — planning acceptance does not mark a
   suite approved or actual; human QA starts after implementation is complete
 - **Accepted and verified records** — the acceptance fingerprint stays
@@ -73,8 +72,7 @@ A fact beside the stage, never a stage of its own. The set is five, and closed.
 - **Behind** — told once, and listed in the digest after 7 days
   counted from the day it went behind; it holds a tick, a claim and a wait
   never, the archive always, and the next landing where what moved is
-  major —
-  what clears it is [Agent Rounds · Read Again](agent-rounds#read-again)
+  major
 - **Suite** — read beside the stage and never holding the ladder
 - **Flag and hotfix** — the release line carries both: a flag on a change and a
   hotfix branch are read where releases are cut, not here
@@ -131,22 +129,19 @@ One handle per role on each change.
 
 ## Messages
 
-Slack tells one person, once per move, in the change's thread.
+Slack tells one person, once per move.
 
 | When | Who is told | Carries |
 | --- | --- | --- |
-| A change reaches a hand: a stage lands, the decisions and the journeys complete Proposed, or a hand is taken off | That hand, by direct message; the role's channel when the change names nobody for it | The change, the stage, the thread to answer in, the command to paste |
+| A change reaches a hand: a stage lands, the decisions and the journeys complete Proposed, or a hand is taken off | That hand, by direct message; the role's channel when the change names nobody for it | The change, the stage, the command to paste |
 | A change reaches Implementation complete | Its QA hand, by direct message | The change, the accepted implementation identity and the run sheet to walk |
 | What moved reaches their artifacts | Each hand it reaches, one message per person per landing | What moved, before and after, and which of their artifacts it holds |
-| 🚧 An artifact lands from a terminal | The change's thread | What landed, whose word landed it, the stage now, and whose turn it is |
 | A change is proposed, accepted, claimed, completed or archived | The channel, once the manual has deployed it | Each change that crossed one, under its milestone |
 | Monday morning | Each person with a line to read, by direct message | On you now; open questions; idle; behind for 7 days; waiting; freed by a dependency |
 
 - **Once per move** — a move is the hand changing; a move told twice, or a
   message per commit, never happens
-- 🚧 **One thread per change** — every direct message links the change's
-  thread, and the change in the OpenSpec viewer until the round opens one; a
-  reply in the thread is how a hand answers
+- **Each message links the change** — in the OpenSpec viewer
 - **The channel post** — names a change only when it is proposed, accepted,
   claimed, has every task checked, or is archived; any other push is silent
   in the channel
@@ -184,7 +179,7 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | Tech PIC | Decided | Retired: the engineer who will build the change challenges the tech design, and the accepting human judges the requirements and the suite whole. | Product |
 | Raised rows | Decided | An open Raised row holds acceptance, never Specified; the product manager's turn at Specified is to resolve it. | Product |
 | Hands | Decided | Recorded in the change's manifest, one handle per role. | Product |
-| Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, a channel post on five milestones only, a weekly digest; never one per commit, and nothing before the manual has deployed it. | Product |
+| Messages | Decided | One direct message per move to the hand it reaches, each linking the change, a channel post on five milestones only, a weekly digest; never one per commit, and nothing before the manual has deployed it. | Product |
 | Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, and the next landing where what moved is major. | Product, Engineering |
 | Plan acceptance | Decided | `acceptance.json` records an immutable content fingerprint after QA2 and human resolution. | Product, Engineering |
 | Measure | Decided | Days between a stage landing and the next hand's word. | Product |

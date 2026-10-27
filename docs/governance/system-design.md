@@ -3,9 +3,7 @@
 What every mechanism in this store and the application repository is held
 to, and what the readers of a tech design and of a build argue for. The
 owner's brief is
-[`docs/references/delivery-workflow-blueprint.md`](../references/delivery-workflow-blueprint.md);
-the round that applies these is the manual's
-[Agent Rounds](../prds/products/shared/planning/agent-rounds.md).
+[`docs/references/delivery-workflow-blueprint.md`](../references/delivery-workflow-blueprint.md).
 
 ## The Principles
 

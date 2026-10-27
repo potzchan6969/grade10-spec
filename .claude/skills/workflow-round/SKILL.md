@@ -15,9 +15,6 @@ invocation; they do not start separate planning rounds. Other line
 commands - `/workflow-plan`, `/workflow-design`, `/workflow-build`,
 `/workflow-land` - name the artifact or group they land and follow this skill.
 
-The product's own words for all of it:
-[Agent Rounds](../../../docs/prds/products/shared/planning/agent-rounds.md).
-
 ## The Six Steps
 
 | # | Step | Who | What it produces |

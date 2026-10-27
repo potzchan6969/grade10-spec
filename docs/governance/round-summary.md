@@ -16,8 +16,6 @@ their words.
 
 ## Held Row
 
-[Agent Rounds · Your Moves](../prds/products/shared/planning/agent-rounds.md#your-moves)
-
 - **Its own message** — a held row addressed to another hand is the round's
   own reply in the change's thread, mentioning that hand: the row, the
   sentence it would put on the page, and the decision rows it touches, quoted; once
@@ -27,8 +25,6 @@ their words.
 
 ## Page Line
 
-[Agent Rounds · Your Moves](../prds/products/shared/planning/agent-rounds.md#your-moves)
-
 - **The right hand** — a product detail a build round lands on a page reaches
   the product manager as a ❓ line, never as decided by the round; the reply
   quotes the line before and after, `(none)` where it was added or removed;
@@ -36,8 +32,6 @@ their words.
   delivers it archives
 
 ## Hand's Reply
-
-[Agent Rounds · Your Moves](../prds/products/shared/planning/agent-rounds.md#your-moves)
 
 - **One reply, several moves** — a reply may carry one answer and any number
   of remarks; a remark comes back to the hand before anything lands, and the
@@ -52,8 +46,6 @@ their words.
   commit that holds the correction
 
 ## Build Round
-
-[Agent Rounds · The Walk](../prds/products/shared/planning/agent-rounds.md#the-walk)
 
 - **What has not run, above the draft** — a lane the environment cannot start,
   a helper no executed test calls, a tests commit pushed unrun. Before any
@@ -79,8 +71,6 @@ their words.
 
 ## Interview
 
-[Agent Rounds · The Round](../prds/products/shared/planning/agent-rounds.md#the-round)
-
 - **What is asked** — about three questions, the ones that change most what is
   built, none trivial, one of them whether to do it now. A sentence that
   leaves nothing else open is asked that one question alone
@@ -98,8 +88,6 @@ their words.
 - **How it is asked** — as a [Clarification Request](../../AGENTS.md#questions-and-blockers)
 
 ## Readers
-
-[Agent Rounds · Perspectives](../prds/products/shared/planning/agent-rounds.md#perspectives)
 
 - **One verifier over the round** — every reader's findings go to one
   verifier, whose table carries one row per kind of finding naming each reader
