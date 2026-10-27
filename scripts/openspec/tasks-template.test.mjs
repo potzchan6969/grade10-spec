@@ -16,7 +16,7 @@ import YAML from "yaml";
 import {
   isWalkGroup,
   taskGroupHeading,
-} from "../../tools/manual/src/store/read-changes.mts";
+} from "../../tools/openspec-store/src/read-changes.mts";
 
 const ROOT = join(dirname(dirname(fileURLToPath(import.meta.url))), "..");
 const read = (path) => readFileSync(join(ROOT, path), "utf8");

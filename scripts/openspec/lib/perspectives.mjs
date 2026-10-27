@@ -18,19 +18,22 @@
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
-import { TRIGGERS, WHOLE_CHANGE } from "../../../tools/manual/src/api/types.ts";
 import { sectionLinesOf } from "../../../tools/manual/src/content/sections.ts";
-import {
-  CASE_ID,
-  JOURNEY_ID,
-  outline,
-  SCENARIO_ID,
-} from "../../../tools/manual/src/store/markdown.mts";
+import { outline } from "../../../tools/manual/src/store/markdown.mts";
 import {
   applyPerspectives,
   bugPerspectives,
   schemaArtifacts,
-} from "../../../tools/manual/src/store/read-schema.mts";
+} from "../../../tools/openspec-store/src/read-schema.mts";
+import {
+  CASE_ID,
+  JOURNEY_ID,
+  SCENARIO_ID,
+} from "../../../tools/openspec-store/src/spec-text.mts";
+import {
+  TRIGGERS,
+  WHOLE_CHANGE,
+} from "../../../tools/openspec-store/src/types.ts";
 
 export { TRIGGERS };
 
@@ -38,7 +41,7 @@ export const SCHEMA = "grade10-planning";
 
 /** The schema as this module needs it: the artifacts with their perspectives
  * and their upstream sets, and the readers of a task group off the `apply:`
- * block. Read through `tools/manual/src/store/read-schema.mts` — the store's
+ * block. Read through `tools/openspec-store/src/read-schema.mts` — the store's
  * one reader of the file — rather than a second parse of it here.
  *
  * A schema the store holds no file for is refused rather than answered with

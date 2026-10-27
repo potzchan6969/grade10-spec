@@ -17,7 +17,7 @@ import {
   moveOf,
   ROLE_LABEL,
   STAGE_LABEL,
-} from "../../../tools/manual/src/api/stages.ts";
+} from "../../../tools/openspec-store/src/stages.ts";
 
 /** A title, safe for Slack's `mrkdwn`: the three characters its own markup
  * reads as syntax, turned into entities before anything builds a link or a

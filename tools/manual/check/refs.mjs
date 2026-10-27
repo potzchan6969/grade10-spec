@@ -31,7 +31,7 @@ export function checkRefs(ctx, page) {
   for (const block of everyBlock(page.ast.blocks)) {
     if (block.type !== "prose") continue;
     for (const raw of proseRefs(block.markdown)) {
-      const resolved = resolveRef(raw, ctx.snapshot);
+      const resolved = resolveRef(raw, ctx.titles);
       if (resolved.ok) continue;
       ctx.add("ref", page.path, `\`[[${raw}]]\`: ${resolved.reason}`);
     }

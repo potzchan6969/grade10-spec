@@ -55,9 +55,8 @@ describe("watchStore", () => {
     expect(announced).toEqual(["manual-store:changed"]);
   });
 
-  it("announces a spec, a reference, and the design-sync report", () => {
+  it("announces a reference and the design-sync report", () => {
     for (const file of [
-      "openspec/specs/store/checkout/spec.md",
       "docs/references/competitors.md",
       ".design-sync/report.json",
     ]) {
@@ -74,6 +73,7 @@ describe("watchStore", () => {
     watchStore(server, roots);
 
     touch(join(ROOT, "tools/manual/src/app.tsx"));
+    touch(join(ROOT, "openspec/specs/store/checkout/spec.md"));
     touch(join(ROOT, "docs/prds-elsewhere/index.md"));
     vi.runAllTimers();
     expect(announced).toEqual([]);

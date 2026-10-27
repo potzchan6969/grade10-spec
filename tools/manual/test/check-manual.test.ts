@@ -71,9 +71,9 @@ describe("a store that has drifted", () => {
     ]);
   });
 
-  it("refuses a listed product that is neither on disk nor paged", async () => {
+  it("refuses a listed product with no pages", async () => {
     expect(lines(await result, "config")).toEqual([
-      "docs/prds/manual.yaml — `ghost` is neither a spec-dir product nor a page-only product with pages under docs/prds/products/ghost/",
+      "docs/prds/manual.yaml — `ghost` has no pages under docs/prds/products/ghost/",
     ]);
   });
 

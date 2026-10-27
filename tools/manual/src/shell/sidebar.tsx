@@ -6,7 +6,6 @@ import { NavLink, useLocation } from "react-router";
 import type { NavGroup, NavItem, NavProduct } from "../api/derive";
 import { buildIndex, REFERENCES_ROUTE, soleProduct } from "../api/derive";
 import { useSnapshot } from "../api/snapshot-provider";
-import { CapabilityPip } from "../blocks/capability-status";
 import { PageIcon } from "../blocks/page-icon";
 import { browserKeyStore, STORAGE } from "../editor/config";
 import { NewPageAction } from "../editor/edit-actions";
@@ -23,8 +22,7 @@ const ROW =
 
 /**
  * What this reader holds open. The rail used to follow the route alone, so
- * leaving a product — or following an incubating entry onto the Board —
- * snapped the branch shut under the reader. Now a branch opens when
+ * leaving a product snapped the branch shut under the reader. Now a branch opens when
  * its own page is visited and stays as the reader last left it, across
  * navigations and reloads.
  */
@@ -414,7 +412,6 @@ function LeafLink({
       >
         <PageIcon name={item.icon} />
         <span className="min-w-0 flex-1 truncate">{item.title}</span>
-        <CapabilityPip status={item.status} />
       </NavLink>
       <RowSections onNavigate={onNavigate} to={item.to} />
     </>

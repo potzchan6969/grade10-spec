@@ -241,7 +241,7 @@ test("names the commit sha in plain text when no --commit-url was given", () => 
  * `tools/manual/test/store-main.test.ts`'s `checkout()` builds one, with each
  * commit carrying the day it is given so a freshness reading is exact rather
  * than approximately today. The script stays where it is and takes `--root`:
- * a copy in a temporary directory could not import `tools/manual/src/store`.
+ * a copy in a temporary directory could not import `tools/openspec-store`.
  */
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));

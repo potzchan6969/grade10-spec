@@ -2,45 +2,20 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router";
 import { describe, expect, it } from "vitest";
 import { buildIndex } from "../src/api/derive";
-import type { SpecEntry } from "../src/api/types";
 import { BlockScopeProvider } from "../src/blocks/block-scope";
 import { MarkdownView } from "../src/blocks/markdown";
 import { ProseBlockView } from "../src/blocks/prose-block";
 import { pageEntry, snapshotOf } from "./manual-fixture";
 
-const alpha: SpecEntry = {
-  id: "demo-product/alpha",
-  title: "alpha Specification",
-  purpose: "",
-  requirements: [
-    {
-      name: "Alpha does things",
-      text: "",
-      scenarios: [
-        { id: "alpha-SC-01", name: "Points land on the card", text: "" },
-      ],
-    },
-  ],
-  journeys: [{ id: "alpha-US-01", title: "A shopper collects points", text: "" }],
-};
-
-const beta: SpecEntry = {
-  id: "demo-product/beta",
-  title: "beta Specification",
-  purpose: "",
-  requirements: [],
-};
-
 const ALPHA_PAGE = "docs/prds/products/demo-product/alpha.md";
 
 const index = buildIndex(
   snapshotOf({
-    specs: [alpha, beta],
     pages: [
-      pageEntry(ALPHA_PAGE, { title: "Alpha", spec: alpha.id }),
+      pageEntry(ALPHA_PAGE, { title: "Alpha", spec: "demo-product/alpha" }),
       pageEntry("docs/prds/products/demo-product/beta.md", {
         title: "Beta",
-        spec: beta.id,
+        spec: "demo-product/beta",
       }),
     ],
   }),
@@ -57,28 +32,16 @@ function render(markdown: string): string {
 }
 
 describe("a reference that resolves", () => {
-  it("links a capability to its page under the name the app gives it", () => {
+  it("links a capability to the page that documents it, under its title", () => {
     const html = render("Start at [[demo-product/beta]].");
 
     expect(html).toContain('href="/p/demo-product/beta"');
     expect(html).toContain(">Beta<");
-    expect(html).not.toContain("beta Specification");
     expect(html).toContain('class="decoration-dotted"');
   });
 });
 
 describe("a reference that does not resolve", () => {
-  it("refuses an item id and names the capability to link instead", () => {
-    const html = render("See [[alpha-SC-01]].");
-
-    expect(html).toContain("line-through");
-    expect(html).toContain("[[alpha-SC-01]]");
-    expect(html).not.toContain("href=");
-    expect(html).toContain(
-      "is an item of `demo-product/alpha`; link its capability as `[[&lt;capability&gt;]]`",
-    );
-  });
-
   it("refuses a qualified item id, since a reference names a capability", () => {
     const html = render("[[demo-product/alpha#alpha-SC-01]]");
 
@@ -87,11 +50,11 @@ describe("a reference that does not resolve", () => {
     expect(html).toContain("a reference names a capability, not an item");
   });
 
-  it("marks an id nothing answers to dead, with the resolver's reason", () => {
+  it("marks an id no page documents dead, with the resolver's reason", () => {
     const html = render("[[alpha-SC-99]]");
 
     expect(html).toContain("line-through");
-    expect(html).toContain('title="nothing named `alpha-SC-99`"');
+    expect(html).toContain('title="no page documents `alpha-SC-99`"');
     expect(html).toContain("[[alpha-SC-99]]");
   });
 });
@@ -124,13 +87,13 @@ describe("where a reference is only text", () => {
     expect(html).not.toContain("line-through");
   });
 
-  it("leaves spec text mirrored from the store verbatim", () => {
+  it("leaves a reference document's text verbatim", () => {
     const html = renderToStaticMarkup(
       <MemoryRouter>
         <MarkdownView
-          baseDir="openspec/specs/demo-product/alpha"
+          baseDir="docs/references"
           index={index}
-          text="The spec says [[alpha-SC-01]] and means the brackets."
+          text="The draft says [[alpha-SC-01]] and means the brackets."
         />
       </MemoryRouter>,
     );

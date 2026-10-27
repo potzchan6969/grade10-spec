@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildIndex, type ManualIndex } from "../src/api/derive";
-import type {
-  ChangeEntry,
-  PageEntry,
-  Snapshot,
-  SpecEntry,
-} from "../src/api/types";
+import type { PageEntry, Snapshot } from "../src/api/types";
 import { draftFromSource } from "../src/editor/draft";
 import { checkReferences } from "../src/editor/validate";
 import { snapshotOf } from "./manual-fixture";
@@ -15,56 +10,19 @@ import { snapshotOf } from "./manual-fixture";
  * browser cannot see the Storybook index. */
 
 const PAGE = "docs/prds/products/demo/alpha.md";
-const _OTHER = "docs/prds/products/demo/beta.md";
 
-const ALPHA: SpecEntry = {
-  id: "demo/alpha",
-  title: "Alpha",
-  purpose: "",
-  requirements: [
-    {
-      name: "Points are earned",
-      text: "",
-      scenarios: [{ id: "alpha-SC-01", name: "earning", text: "" }],
-    },
-  ],
-  journeys: [{ id: "alpha-US-01", title: "Earn points", text: "" }],
-};
-
-const CHANGING: ChangeEntry = {
-  id: "add-gamma",
-  schema: "grade10-planning",
-  status: "in-flight",
-  owners: [],
-  created: "2026-01-01",
-  title: "Add gamma",
-  why: "",
-  taskGroups: [],
-  deltas: [{ spec: "demo/gamma", kinds: ["ADDED"], requirements: [] }],
-};
-
-function page(path: string, body: string, spec?: string): PageEntry {
-  const head = spec ? `title: Page\nspec: ${spec}\n` : "title: Page\n";
-  return { path, source: `---\n${head}---\n\n${body}\n` };
+function page(path: string, body: string): PageEntry {
+  return { path, source: `---\ntitle: Page\n---\n\n${body}\n` };
 }
 
 function indexOf(parts: Partial<Snapshot> = {}): ManualIndex {
-  return buildIndex(
-    snapshotOf({ specs: [ALPHA], changes: [CHANGING], ...parts }),
-  );
+  return buildIndex(snapshotOf(parts));
 }
 
-function problemsFor(
-  index: ManualIndex,
-  body: string,
-  spec?: string,
-  path = PAGE,
-) {
-  const head = spec ? `title: Page\nspec: ${spec}\n` : "title: Page\n";
+function problemsFor(index: ManualIndex, body: string) {
   return checkReferences(
     index,
-    path,
-    draftFromSource(`---\n${head}---\n\n${body}\n`),
+    draftFromSource(`---\ntitle: Page\n---\n\n${body}\n`),
   );
 }
 

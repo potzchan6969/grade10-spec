@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { contentIdOf } from "../../tools/manual/src/store/content-id.mts";
+import { contentIdOf } from "../../tools/openspec-store/src/content-id.mts";
 import { heldIdsOf, takeRecommendations } from "./lib/held.mjs";
 import { BRANCH, CHANGE, DIR, PROPOSAL, sandbox } from "./test/demo-store.mjs";
 import { answer, stubRelay, urlOf } from "./test/stub-relay.mjs";

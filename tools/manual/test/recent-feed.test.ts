@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { buildIndex, feedRef } from "../src/api/derive";
-import { changeEntry, pageEntry, snapshotOf } from "./manual-fixture";
+import { pageEntry, snapshotOf } from "./manual-fixture";
 
 /** What a commit touched, resolved against the store as it stands today. A
- * page deleted since and a change already archived are the two cases the feed
- * has to survive: the commit happened either way. */
+ * page deleted since is the case the feed has to survive: the commit happened
+ * either way. */
 
 const index = buildIndex(
   snapshotOf({
@@ -14,7 +14,6 @@ const index = buildIndex(
         spec: "demo/alpha",
       }),
     ],
-    changes: [changeEntry("add-beta", [])],
   }),
 );
 
@@ -40,31 +39,6 @@ describe("a history ref as a chip", () => {
       key: "page:docs/prds/products/demo/gone.md",
       label: "docs/prds/products/demo/gone.md",
       kind: "page",
-    });
-  });
-
-  it("sends a spec to the page that documents it", () => {
-    expect(feedRef(index, { kind: "spec", id: "demo/alpha" })).toEqual({
-      key: "spec:demo/alpha",
-      label: "Alpha",
-      to: "/p/demo/alpha",
-      kind: "spec",
-    });
-  });
-
-  it("names a change in flight without a link: the board is gone", () => {
-    expect(feedRef(index, { kind: "change", id: "add-beta" })).toEqual({
-      key: "change:add-beta",
-      label: "Change add-beta",
-      kind: "change",
-    });
-  });
-
-  it("names an archived change plainly, with no link", () => {
-    expect(feedRef(index, { kind: "archived", id: "add-alpha" })).toEqual({
-      key: "archived:add-alpha",
-      label: "add-alpha",
-      kind: "archived",
     });
   });
 

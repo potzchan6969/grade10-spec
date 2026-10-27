@@ -19,7 +19,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { SCENARIO_ID } from "../../../tools/manual/src/store/markdown.mts";
+import { SCENARIO_ID } from "../../../tools/openspec-store/src/spec-text.mts";
 import { DECIDED_BY } from "./decided-by.mjs";
 import { foldedGroupNames } from "./feature-set.mjs";
 

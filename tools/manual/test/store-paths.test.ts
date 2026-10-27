@@ -87,7 +87,7 @@ describe("confine against a store that exists", () => {
 });
 
 describe("store paths", () => {
-  it("finds the root by the openspec directory above it", () => {
+  it("finds the root by the manual config above it", () => {
     const root = findStoreRoot(
       join(import.meta.dirname, "../demo-store/docs/prds"),
     );

@@ -68,19 +68,3 @@ export async function openManual(path: string): Promise<void> {
   document.body.append(root);
   createRoot(root).render(createElement(StrictMode, null, createElement(App)));
 }
-
-/**
- * The `<dd>` beside a `ChangeStatus` row's `<dt>` — the change page's own
- * labelled facts (Hands, Artifacts, Delivery, Rounds, …), scoped by the
- * label because more than one row can carry the same word inside a chip.
- * Shared here rather than copied into every walk that reads the change page,
- * so the one lookup drifts nowhere.
- */
-export function rowFor(label: string): Element {
-  const term = Array.from(document.querySelectorAll("dt")).find(
-    (dt) => dt.textContent?.trim() === label,
-  );
-  const value = term?.nextElementSibling;
-  if (!value) throw new Error(`no "${label}" row on the change page`);
-  return value;
-}

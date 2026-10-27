@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { NO_GIT } from "../src/store/git.mts";
 import { rootsOf } from "../src/store/roots.mts";
 import { composeStore } from "../src/store/snapshot.mts";
@@ -15,90 +15,17 @@ const LANDING =
 const ALPHA_PAGE =
   "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha is a demo capability.\n";
 
-const ALPHA_JOURNEYS = [
-  "## User journeys",
-  "",
-  "### alpha-US-01: Someone does the thing",
-  "",
-  "They open alpha and do the thing.",
-  "",
-].join("\n");
-
-const ALPHA_SPEC = [
-  "# Alpha",
-  "",
-  "## Purpose",
-  "",
-  "Alpha exists so a page has something to embed.",
-  "",
-  "## Requirements",
-  "",
-  "### Requirement: Alpha does things",
-  "",
-  "Alpha SHALL do the thing when asked.",
-  "",
-  "#### Scenario: alpha-SC-01 - it does the thing",
-  "",
-  "- **WHEN** asked",
-  "- **THEN** it does the thing",
-  "",
-].join("\n");
-
-const ALPHA_CASES = [
-  "# demo-product/alpha Test Cases",
-  "",
-  "**Status:** pending-review",
-  "",
-  "## alpha-US-01: Someone does the thing",
-  "",
-  "**As a** someone,",
-  "**I want** the thing to happen,",
-  "**so that** it is done.",
-  "",
-  "### alpha-TC-01: Someone asks for the thing and it happens",
-  "",
-  "**Description:** Proves the thing happens on ask.",
-  "",
-  "**Preconditions:**",
-  "",
-  "- None.",
-  "",
-  "**Test data:** None — the case takes no input.",
-  "",
-  "**Steps:**",
-  "",
-  "| # | Action | Expected result |",
-  "| --- | --- | --- |",
-  "| 1 | Ask for the thing. | The thing happens. |",
-  "",
-  "**Properties:**",
-  "",
-  "- **Severity:** major",
-  "- **Priority:** high",
-  "- **Status:** draft",
-  "- **Behaviour:** positive",
-  "- **Type:** smoke",
-  "- **Automation status:** manual",
-  "- **Testability:** automation",
-  "- **Trace:** alpha-SC-01",
-  "",
-].join("\n");
-
 const BASE = {
   "docs/prds/manual.yaml": CONFIG,
   "docs/prds/index.md": HOME,
   "docs/prds/products/demo-product/index.md": LANDING,
   "docs/prds/products/demo-product/alpha.md": ALPHA_PAGE,
-  "openspec/specs/demo-product/alpha/spec.md": ALPHA_SPEC,
-  "openspec/specs/demo-product/alpha/user-journeys.md": ALPHA_JOURNEYS,
-  "openspec/specs/demo-product/alpha/feature-tcs.md": ALPHA_CASES,
 };
 
 const snapshotOfStore = async (root: string) =>
   composeStore(
     rootsOf(root),
     NO_GIT,
-    null,
     await checkWarnings(rootsOf(root), NO_GIT),
   ).snapshot;
 
@@ -129,28 +56,6 @@ describe("the assets the snapshot carries", () => {
 
   it("is empty, never absent, where the store has no assets at all", async () => {
     expect((await snapshotOfStore(writeStore(BASE))).assets).toEqual([]);
-  });
-});
-
-describe("the run sheet the snapshot carries", () => {
-  /** Composed with the variable set: the manual's Told now links the same
-   * sheet the push workflow's message does. */
-  const withSheet = (url: string | undefined) => {
-    vi.stubEnv("TCS_SHEET_URL", url);
-    return snapshotOfStore(writeStore(BASE));
-  };
-
-  it("names the run sheet the environment gave it", async () => {
-    expect((await withSheet("https://sheets.test/run")).sheetUrl).toBe(
-      "https://sheets.test/run",
-    );
-  });
-
-  it.each([
-    ["nothing is set", undefined],
-    ["the variable is empty", ""],
-  ])("names none where %s", async (_what, url) => {
-    expect((await withSheet(url)).sheetUrl).toBeUndefined();
   });
 });
 

@@ -116,9 +116,6 @@ function EventRow({ event }: { event: HistoryEvent }) {
 
 const KIND_TONE = {
   page: "default",
-  spec: "info",
-  change: "warning",
-  archived: "outline",
   file: "outline",
 } as const;
 

@@ -29,28 +29,6 @@ const write = (root, path, content) => {
 };
 const rules = (found) => found.map((one) => one.rule);
 
-test("preflight fails on the check:manual overlap that spec:accept would refuse", () => {
-  const { root } = sandbox();
-  const seen = [];
-  const result = preflightChange(root, CHANGE, (args) => {
-    seen.push(args.join(" "));
-    return args[1] === "check:manual"
-      ? {
-          status: 1,
-          stdout:
-            "manual check\n\nFAIL  Requirements two in-flight changes both fold\n      openspec/specs/site/search/spec.md — Search results is folded by build-alpha and build-beta\n\nFAIL  Permanent ids issued twice\n      site-search-US1 — issued by two changes\n\n1 failure\n",
-        }
-      : ok;
-  });
-  assert.deepEqual(rules(result.failures), [
-    "check:manual/overlap",
-    "check:manual/issued",
-  ]);
-  assert.match(result.failures[0].detail, /build-beta/);
-  assert.ok(seen.some((one) => /^run check:manual \S+folded-store-/.test(one)));
-  assert.match(formatPreflight([result]), /\[check:manual\/overlap\]/);
-});
-
 test("preflight passes a change that every gate accepts", () => {
   const { root } = sandbox();
   const result = preflightChange(root, CHANGE, passing);

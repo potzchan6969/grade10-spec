@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import YAML from "yaml";
-import { deltaSections } from "../../../tools/manual/src/store/read-changes.mts";
+import { deltaSections } from "../../../tools/openspec-store/src/read-changes.mts";
 
 const MODERN_CASE_LINE = /^#{3,4}\s+(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):\s*(.*)$/i;
 const LEGACY_CASE_LINE = /^###\s+(\S+-TC\d+)-(\d+)\b[:\s-]*(.*)$/i;

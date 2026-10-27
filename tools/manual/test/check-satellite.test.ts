@@ -52,7 +52,8 @@ describe("a manual over a store it does not own", () => {
         rule: "ref",
         level: "warn",
         path: "docs/prds/index.md",
-        reason: "`[[demo-product/gone]]`: nothing named `demo-product/gone`",
+        reason:
+          "`[[demo-product/gone]]`: no page documents `demo-product/gone`",
       },
     ]);
   });

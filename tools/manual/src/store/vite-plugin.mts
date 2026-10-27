@@ -29,8 +29,7 @@ import {
 /**
  * Dev transport for the store. Both GETs are computed from the resolved roots
  * per request — memoized on git heads plus the newest mtime, so an editor can
- * poll them — and every write is confined to the content root's manual,
- * except a proposal, which goes to the store's `openspec/changes/`.
+ * poll them — and every write is confined to the content root's manual.
  *
  * One reading of `origin/main` per server, so the tabs a teammate has open
  * share one fetch rather than one each.
@@ -99,8 +98,6 @@ function fromDist(outDir: string): Artifacts {
     JSON.parse(readFileSync(join(api, name), "utf8"));
   return async () => ({
     snapshot: readJson("snapshot"),
-    archive: readJson("archive"),
-    documents: readAll("change"),
     references: readAll("reference"),
   });
   function readAll(kind: string) {
@@ -213,14 +210,6 @@ async function route(
   if (method === "GET") {
     if (path === "/api/snapshot")
       return reply(200, (await artifacts()).snapshot);
-    if (path === "/api/archive") return reply(200, (await artifacts()).archive);
-    if (path.startsWith("/api/change/")) {
-      const id = decodeURIComponent(path.slice("/api/change/".length));
-      const found = (await artifacts()).documents.find((one) => one.id === id);
-      return found
-        ? reply(200, found)
-        : reply(404, { error: `no change in flight: ${id}` });
-    }
     if (path.startsWith("/api/reference/")) {
       const slug = decodeURIComponent(path.slice("/api/reference/".length));
       const found = (await artifacts()).references.find(

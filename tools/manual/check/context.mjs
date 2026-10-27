@@ -76,12 +76,11 @@ export function createReport() {
   return { findings, notes, add };
 }
 
-export function createContext(roots, report, { specs, stories }) {
+export function createContext(roots, report, { pages, stories }) {
   return {
     roots,
-    specs,
-    // The slice of a snapshot `resolveRef` reads, built once for all pages.
-    snapshot: { specs: [...specs.values()] },
+    // What `resolveRef` reads, built once for all pages.
+    titles: capabilityTitles(pages),
     stories,
     storyIds: new Set(),
     add: report.add,
@@ -129,16 +128,6 @@ export function readStoryIndex(root, add) {
   return null;
 }
 
-/** Every permanent scenario id a spec issues — what a scenario trace and a
- * journey's accepted-by all have to land in. */
-export const scenarioIds = (spec) =>
-  new Set(
-    spec.requirements
-      .flatMap((one) => one.scenarios)
-      .map((one) => one.id)
-      .filter((id) => id !== undefined),
-  );
-
 export function* everyBlock(blocks) {
   for (const block of blocks) {
     yield block;
@@ -151,3 +140,13 @@ export const message = (cause) =>
 
 export const plural = (count, word) =>
   `${count} ${word}${count === 1 ? "" : "s"}`;
+
+/** Every capability a page documents, against that page's title. */
+export function capabilityTitles(pages) {
+  const titles = new Map();
+  for (const { ast } of pages) {
+    const spec = ast?.frontmatter.spec;
+    if (spec && !titles.has(spec)) titles.set(spec, ast.frontmatter.title);
+  }
+  return titles;
+}

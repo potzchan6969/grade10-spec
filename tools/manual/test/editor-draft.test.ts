@@ -79,7 +79,6 @@ function pageOf(blocks: DraftBlock[]): Draft {
       icon: "",
       audience: "",
       order: "",
-      reviewed: "",
     },
     blocks,
   };
@@ -167,7 +166,6 @@ describe("what the forms refuse", () => {
         icon: "",
         audience: "",
         order: "",
-        reviewed: "",
       },
       blocks: [],
     });
@@ -220,12 +218,11 @@ describe("frontmatter", () => {
         icon: "medal",
         audience: "operator",
         order: "6",
-        reviewed: "2026-09-10",
       },
       blocks: [],
     });
     expect(built.ok && built.source).toBe(
-      "---\ntitle: Loyalty\nsummary: Points.\nspec: grade10-store/loyalty\nicon: medal\naudience: operator\norder: 6\nreviewed: 2026-09-10\n---\n",
+      "---\ntitle: Loyalty\nsummary: Points.\nspec: grade10-store/loyalty\nicon: medal\naudience: operator\norder: 6\n---\n",
     );
   });
 
@@ -238,7 +235,6 @@ describe("frontmatter", () => {
         icon: "sparkles",
         audience: "",
         order: "",
-        reviewed: "",
       },
       blocks: [],
     });

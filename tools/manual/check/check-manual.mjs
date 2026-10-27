@@ -27,8 +27,7 @@ import {
   readGitIndex,
   STORE_DIRS,
 } from "../src/store/git.mts";
-import { readManualConfig } from "../src/store/read-manual.mts";
-import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
+import { readManualConfig, readPageShape } from "../src/store/read-manual.mts";
 import { resolveRoots, rootsOf } from "../src/store/roots.mts";
 import {
   createContext,
@@ -55,19 +54,6 @@ const EMPTY_CONFIG = {
  * Pure over the roots and the git index; `git` is injectable so a fixture can
  * pin commit dates. `target` is the resolved roots, or one directory that is
  * both — the store documenting itself.
- *
- * Which rules run follows who can fix what they find. Page rules — parse,
- * canonical, every pointer resolves, staleness — run everywhere: they are
- * about this repository's own pages. Store rules — coverage, suites,
- * deltas, the fold — run only where the manual and the store share a
- * repository, because a manual mounted elsewhere can neither cause nor fix a
- * hole in the store, and failing its PRs over one would gate the wrong door.
- *
- * `pages` drops the store families on a manual that owns its store too. It is
- * for the deploy, and for nothing else: a spec two changes both fold is a
- * break in files the manual mirrors, and the site's job is to stay up and
- * point at it. Lint runs the whole check on the same push, so the family
- * still fails the pull request that wrote it.
  */
 export async function runChecks(target, git) {
   const roots = typeof target === "string" ? rootsOf(target) : target;
@@ -84,11 +70,6 @@ export async function runChecks(target, git) {
     add("config", named, message(cause).replace(`${named} `, ""));
   }
 
-  const shape = discoverSpecs(roots.store);
-  const specs = new Map(
-    readSpecs(roots.store, index).map((spec) => [spec.id, spec]),
-  );
-
   const paths = walkFiles(
     roots.content,
     join(roots.content, roots.manual),
@@ -97,7 +78,7 @@ export async function runChecks(target, git) {
   const pages = readPages(roots.content, paths, index, add);
 
   const ctx = createContext(roots, report, {
-    specs,
+    pages,
     stories: readStoryIndex(roots.store, add),
   });
 
@@ -111,7 +92,7 @@ export async function runChecks(target, git) {
     );
   }
 
-  checkTaxonomy(ctx.roots, config, shape, paths, add);
+  checkTaxonomy(ctx.roots, config, readPageShape(roots), add);
   checkIcons(ctx, pages);
 
   return { findings, notes };

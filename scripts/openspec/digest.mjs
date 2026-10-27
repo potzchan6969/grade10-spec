@@ -20,19 +20,21 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-
-import { IDLE_FROM, overlaysOf } from "../../tools/manual/src/api/overlays.ts";
-import {
-  behindOf,
-  handOf,
-  handOfArtifact,
-  STAGE_LABEL,
-} from "../../tools/manual/src/api/stages.ts";
 import {
   dayIn,
   daysBetween,
   TIME_ZONE,
 } from "../../tools/manual/src/api/time.ts";
+import {
+  IDLE_FROM,
+  overlaysOf,
+} from "../../tools/openspec-store/src/overlays.ts";
+import {
+  behindOf,
+  handOf,
+  handOfArtifact,
+  STAGE_LABEL,
+} from "../../tools/openspec-store/src/stages.ts";
 import { cliArgs } from "./lib/args.mjs";
 import { addressOf, deliver, readSentKeys } from "./lib/notify.mjs";
 import { readChangesAt } from "./lib/store-read.mjs";

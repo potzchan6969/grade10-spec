@@ -133,7 +133,7 @@ function SearchDialog({
               go(flat[cursor]);
             }
           }}
-          placeholder="Pages, requirements, scenarios, changes"
+          placeholder="Pages and references"
           ref={inputRef}
           value={query}
         />
@@ -146,7 +146,7 @@ function SearchDialog({
               size="sm"
               tone="secondary"
             >
-              Type to search pages, spec rows and changes in flight.
+              Type to search pages and references.
             </Text>
           ) : flat.length === 0 ? (
             <Text

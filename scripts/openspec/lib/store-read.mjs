@@ -17,15 +17,19 @@
  * against the origin it was cut from.
  */
 import { readRootsGitIndex } from "../../../tools/manual/src/store/git.mts";
-import { markQuestions } from "../../../tools/manual/src/store/questions.mts";
+import { readManualPages } from "../../../tools/manual/src/store/read-manual.mts";
+import { rootsOf } from "../../../tools/manual/src/store/roots.mts";
+import { markQuestions } from "../../../tools/openspec-store/src/questions.mts";
 import {
   readArchivedChanges,
   readChanges,
-} from "../../../tools/manual/src/store/read-changes.mts";
-import { readManualPages } from "../../../tools/manual/src/store/read-manual.mts";
-import { schemaArtifacts } from "../../../tools/manual/src/store/read-schema.mts";
-import { rootsOf } from "../../../tools/manual/src/store/roots.mts";
-import { markUpstream } from "../../../tools/manual/src/store/upstream.mts";
+} from "../../../tools/openspec-store/src/read-changes.mts";
+import { schemaArtifacts } from "../../../tools/openspec-store/src/read-schema.mts";
+import { markUpstream } from "../../../tools/openspec-store/src/upstream.mts";
+
+/** What the walk reads of the store: the specs and changes, and the
+ * references beside them. */
+const OPENSPEC_DIRS = ["openspec", "docs/references"];
 
 /**
  * Every in-flight change at one root, each carrying its stage and the reading
@@ -37,7 +41,7 @@ import { markUpstream } from "../../../tools/manual/src/store/upstream.mts";
  */
 export async function readChangesAt(root) {
   const roots = rootsOf(root);
-  const git = await readRootsGitIndex(roots);
+  const git = await readRootsGitIndex(roots, OPENSPEC_DIRS);
   const changes = readChanges(root, git, null);
   const schemas = {};
   for (const { schema } of changes) {

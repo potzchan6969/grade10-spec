@@ -6,13 +6,13 @@
  * `scripts/openspec/lib/` is. `handle.d.mts` and `team-parse.d.mts` are
  * beside it for the same reason.
  */
-import type { Told } from "../../../tools/manual/src/api/told.ts";
+import type { Told } from "../../../tools/openspec-store/src/told.ts";
 import type {
   BehindArtifact,
   ChangeEntry,
   Role,
   Stage,
-} from "../../../tools/manual/src/api/types.ts";
+} from "../../../tools/openspec-store/src/types.ts";
 
 /** The change as a message reads it: the id a command is written with and the
  * stage the sentence names. */

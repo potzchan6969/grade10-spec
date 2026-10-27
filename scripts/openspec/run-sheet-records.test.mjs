@@ -476,6 +476,7 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
     "scripts/openspec/lib/run-sheet-records.mjs",
     "scripts/openspec/lib/printed-run-message.mjs",
     "tools/manual/src/store/markdown.mts",
+    "tools/openspec-store/src/spec-text.mts",
   ]) {
     mkdirSync(dirname(join(root, rel)), { recursive: true });
     copyFileSync(join(sourceRoot, rel), join(root, rel));
