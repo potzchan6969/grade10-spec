@@ -1,0 +1,5 @@
+schema: grade10-planning
+created: 2026-10-27
+page_waived: "behaviour shipped before the requirement was written; nothing is still being delivered"
+awaiting:
+  specs: "planning-dev writes spec.md and the blind suite"
