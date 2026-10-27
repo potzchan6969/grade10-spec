@@ -1,6 +1,6 @@
 # grade10-site/loyalty/programme Test Cases
 
-**Status:** pending-review · 0/77
+**Status:** pending-review · 0/83
 **Drafts styled:** 2026-10-27, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
@@ -35,6 +35,11 @@ Shared test data:
 * The member's surface is `<loyalty>` on the Grade10 site; its first section, "Membership", holds the tier card, a tier-skinned card in silver, gold or black.
 * Tiers: Silver, the entry tier; Gold at 500 qualifying points over the rolling twelve months; Black by invitation alone, with no qualifying threshold.
 * A point is worth HKD1 at checkout.
+
+* The member's surface is `<loyalty>` on the Grade10 site; the member pass is its own section, "Your member pass", and the standalone pass is `<member pass page>` on a phone. A till session serves a member through the loyalty terminal's panel.
+* Tiers: Silver, the entry tier; Gold at 500 qualifying points over the rolling twelve months; Black by invitation alone. The pass's skin follows the member's tier.
+* A pass's code lives 10 minutes and is used once. The pass counts down and rotates the code out before it lapses.
+* No name is collected at registration: the pass identifies the member by the account email.
 
 ## g10.loyalty-programme.US1: Member holds one balance, with tier progress counted apart
 
@@ -996,6 +1001,235 @@ Runs once per row of **Test data**.
 
 * The card's balance, points, qualifying and Benefits words read in `<language>`, and none shows a missing-text key or another language.
 * The balance figure and its worth are the same as in English.
+
+<!-- trace:case id=g10.loyalty-programme.TC-is3 rev=1 covers=g10.loyalty-programme.SC-mp5 -->
+### g10.loyalty-programme.US4-TC14: The pass shows the tier's skin, the account email and one scannable code
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(`<tier>` member) is signed in with account email `<email>`, and no name is on the account.
+
+**Test data:**
+
+| `<tier>` | `<skin>` | `<email>` |
+| --- | --- | --- |
+| Silver | silver | `mei.chan@example.com` |
+| Gold (500 qualifying points, fixed threshold) | gold | `ho.tin@example.com` |
+| Black (granted by invitation) | black | `lau.sze@example.com` |
+| Silver | silver | `a.very.long.collector.name.with.many.parts.0123456789abcdef@example.com` (a 59-character local part) |
+
+**Steps:**
+
+1. Open `<loyalty>`.
+2. Scroll to the member pass section.
+
+**Expected Results:**
+
+* The pass loads in the `<skin>` skin, carrying the Grade10 mark and the tier badge.
+* The header reads `<email>` in full, with no part of the address cut off, and no name appears.
+* The body shows one square code with a countdown and a refresh control beneath it.
+* No typed code or short code appears beside the square. UI matching loyalty-membership-blocks-memberpass--default
+
+<!-- trace:case id=g10.loyalty-programme.TC-od4 rev=1 -->
+### g10.loyalty-programme.US4-TC15: [Mobile only] The pass stands alone on its own page and keeps the screen awake
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(Gold member) is signed in on mobile, on `<loyalty>`.
+* The phone's screen timeout is `30 seconds` (fixed, shorter than the pass's 10-minute life).
+
+**Steps:**
+
+1. Open the member pass from the member pass section.
+2. Leave the phone untouched for `<idle time>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<idle time>` | 2 minutes (range: more than the screen timeout) |
+
+**Expected Results:**
+
+* The pass opens on its own page, with no other membership section around it.
+* After `<idle time>` the screen has not dimmed or locked, and the code and countdown are still showing.
+
+<!-- trace:case id=g10.loyalty-programme.TC-3zg rev=1 covers=g10.loyalty-programme.SC-mp4 -->
+### g10.loyalty-programme.US4-TC16: A fresh code settles in over the old one, never snapping, and at once under reduced motion
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(Silver member) is signed in and is on the member pass section of `<loyalty>`.
+* The device's reduced-motion setting is `<motion>`.
+
+**Test data:**
+
+| `<motion>` | `<swap>` |
+| --- | --- |
+| not asked for | The old square fades and eases down out of view and the fresh square settles in; the area is never blank for a moment or replaced in one frame |
+| asked for | The fresh square replaces the old one in one frame, with no fade and no easing |
+
+**Steps:**
+
+1. Note the code on the square and the countdown.
+2. Select the refresh control in the pass, and read it while the new code is on its way.
+3. Watch the square until it settles.
+
+**Expected Results:**
+
+* While the new code is on its way the refresh control shows busy.
+* The swap reads as `<swap>`.
+* The countdown starts a fresh run, not from where it had reached.
+* The new square encodes a different code from the noted one.
+
+<!-- trace:case id=g10.loyalty-programme.TC-g4p rev=1 covers=g10.loyalty-programme.SC-mp7 -->
+### g10.loyalty-programme.US4-TC18: The pass rotates its code before it lapses and never shows an expired one
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(Gold member) is signed in and is on the member pass section of `<loyalty>`; the pass is left open.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<code life>` | 10 minutes (fixed) |
+| `<wait>` | 12 minutes (range: longer than the code life) |
+
+**Steps:**
+
+1. Note the code on the square and the countdown.
+2. Leave the page open for `<wait>`, watching the countdown.
+
+**Expected Results:**
+
+* The countdown reaches the end of its run before `<code life>` has passed, and a fresh code takes the square without any input.
+* At no point does the pass show an expired surface, a zero-second hold or a blank square.
+* The code showing after `<wait>` differs from the noted one, with the countdown running again.
+
+<!-- trace:case id=g10.loyalty-programme.TC-8k0 rev=1 covers=g10.loyalty-programme.SC-mp8 -->
+### g10.loyalty-programme.US4-TC19: A code the till takes is answered by the pass rotating quietly
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(Silver member) is signed in on `<phone>` and shows the member pass on `<loyalty>`.
+* A till session is open on the loyalty terminal's panel.
+
+**Steps:**
+
+1. Note the code on the member's square.
+2. At the till, scan the member's square.
+3. Read the member's pass.
+
+**Expected Results:**
+
+* The till identifies the member.
+* The member's pass shows a fresh square in place of the noted one, settling in as on a refresh.
+* The pass shows no used, frozen or refused surface, and no message about the scan.
+
+<!-- trace:case id=g10.loyalty-programme.TC-vm7 rev=1 -->
+### g10.loyalty-programme.US4-TC20: The pass reads in the member's language
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** compatibility
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(Gold member) is signed in with the site language set to `<language>`.
+
+**Test data:**
+
+| `<language>` |
+| --- |
+| English |
+| Traditional Chinese |
+| Simplified Chinese |
+| Korean |
+
+**Steps:**
+
+1. Open `<loyalty>`.
+2. Scroll to the member pass section.
+
+**Expected Results:**
+
+* The section name, the countdown label and the refresh control read in `<language>`, and none shows a missing-text key or another language.
+* The header still reads the account email, unchanged.
 
 ---
 
@@ -2698,3 +2932,6 @@ Runs once per row of **Test data**.
 - The cart drawer offers a coupon an ended order of the member's still claims, because the claim takes it back first, and one a checkout left when it stopped before its order was written; a claim on that coupon is refused by name while the claim is under five minutes old, since its sale may still be submitting
 - A reward's code dies with its sale and forfeits nothing: the coupon goes back to the wallet unused, and only a coupon passing its own validity is counted as forfeit
 - A sale, online or at the till, whose order is written more than a minute after its claim is refused with a cause of its own: the member reads that the checkout took too long and to submit it again, staff that the sale took too long and to apply it again (Q32)
+- The pass shows the member's account email in full, never cut off, because staff fall back to the exact email when a till cannot scan
+- Refresh does not void the earlier code: it stays alive until used or lapsed, so a refused refresh leaves it showing with its countdown running
+- A code the till takes is answered by the pass rotating to the next minted token, with no used, frozen or refused rendering; no timing for that rotation is asserted, the consumer owns how it learns of the scan

@@ -143,10 +143,9 @@ state.
 
 The member card SHALL present a dynamic identification code — short-lived,
 usable exactly once, refused on reuse naming where and when it was first
-used — rendered both scannable and as a short typed fallback that is
-infeasible to guess, with repeated failed attempts pausing entry for that
-shop. Staff SHALL also be able to identify a member by their exact email
-address; a miss SHALL disclose nothing beyond that no member was found.
+used — rendered scannable, a till that cannot scan it falling back to the
+member's email instead. Staff SHALL also be able to identify a member by
+their exact email address; a miss SHALL disclose nothing beyond that no member was found.
 Either way the programme SHALL record the account identity and SHALL NOT
 store the email address.
 
@@ -165,13 +164,12 @@ gives with nobody on the sale. A lookup that finds a member SHALL replace the
 one on the sale. An outdated till or membership switched off SHALL still take
 membership off the till, and the sale goes on as an ordinary sale.
 
-<!-- trace:scenario id=g10.store-membership.SC-a6l rev=1 -->
+<!-- trace:scenario id=g10.store-membership.SC-a6l rev=2 -->
 #### Scenario: grade10-site-store-membership-SC-09 - A replayed code is refused with its history
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** an identification code is presented a second time
 - **THEN** it is refused, naming where and when it was first used
-- **AND** the member's own card shows the same
 
 <!-- trace:scenario id=g10.store-membership.SC-6kj rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-10 - An email miss discloses nothing

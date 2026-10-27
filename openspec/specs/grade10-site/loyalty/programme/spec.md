@@ -1543,7 +1543,7 @@ never silent.
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the membership surface — `TierCard`, `TierInfoCard`,
-`TierLadder`, `HowPointsWork`, `RewardMenu`, `CouponList`, and
+`TierLadder`, `HowPointsWork`, `MemberPass`, `RewardMenu`, `CouponList`, and
 `PointHistory` — and the props and copy type of each.
 
 `TierCard` SHALL wear the skin of the tier held — silver, gold or black,
@@ -1563,7 +1563,27 @@ expire and the day they go, in the tone supplied with it, a member holding
 no points seeing no such line — that line is the surface's own, never the
 card's, and it SHALL NOT derive its day or tone from a clock or a balance of
 its own.
-
+`MemberPass` SHALL wear the skin of the tier held — silver, gold or
+black, taken through a `variant` prop and never derived from the tier
+name the consumer words — and SHALL render that tier name and the
+member's account email, there being no name collected at registration.
+`MemberPass` SHALL render the consumer's identification token as the
+scannable code verbatim — the square alone, no typed code beside it —
+and SHALL NOT mint, persist or substitute it — a fresh token arrives
+only through props after `onRefresh` reports the ask. While a refresh is
+in flight the refresh control SHALL show busy, and a refused refresh
+SHALL toast the reason the consumer passes, once per refusal. When a
+fresh token arrives, `MemberPass` SHALL dip the square out of view and
+settle the fresh one in — a transition, never an abrupt swap — and
+SHALL swap instantly under reduced motion. A refused refresh SHALL leave
+the earlier code on show with its countdown running. The consumer SHALL render
+`MemberPass` only once it holds a token; the block draws no placeholder of
+its own. `MemberPass` SHALL
+render a countdown to the next rotation, which the consumer sets inside the
+code's life — never an expired rendering, the consumer rotating the code out
+before it lapses — and SHALL carry no used state of its own: a code the till takes is
+answered by the next minted token arriving through props,
+so the pass keeps rotating rather than freezing on what was spent.
 `TierInfoCard` SHALL render one tier of the programme — its name, the ask
 its rung states as consumer-worded copy, and its benefits behind checks —
 and SHALL wear the held tier's emphasis, a primary border and its tint,
@@ -1634,6 +1654,71 @@ SHALL require no export of its own.
 
 - **WHEN** any of the membership surface's components is rendered
 - **THEN** every count, date, state and word it shows arrived through props
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp1 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp1 - The pass is rendered only once a token exists
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the consumer holds no token yet
+- **THEN** the consumer does not render `MemberPass`
+- **AND** the block draws no placeholder of its own
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp6 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp6 - A refresh shows busy and a refusal keeps the earlier code
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the member asks for a fresh code and the ask is in flight
+- **THEN** the refresh control shows busy
+- **AND** a refused ask toasts the consumer's reason once, leaving the earlier code on show with its countdown running
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp7 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp7 - The countdown runs to the next rotation
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` renders a token with the time to its next rotation
+- **THEN** the countdown reads down to that rotation
+- **AND** no expired code is ever drawn, the consumer rotating the code out before it lapses
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp8 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp8 - A taken code is answered by the next token
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the till takes the pass's code and the consumer mints the next token
+- **THEN** the pass shows the next token, keeping its rotation rather than freezing on the spent one
+- **AND** the pass carries no used state of its own
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp2 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp2 - The pass encodes the consumer's token, never its own
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` renders a token
+- **THEN** the scannable square encodes that token verbatim, no typed
+  code beside it
+- **AND** the pass mints, persists and substitutes it never
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp3 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp3 - The pass wears the skin of the tier held
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` is rendered for a silver, a gold or a black member
+- **THEN** it wears that tier's skin, taken from the `variant` prop
+- **AND** the skin never follows the tier name the consumer words
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp4 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp4 - A fresh code swaps the code area, never snaps
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** a fresh token arrives after `onRefresh` reported the ask
+- **THEN** the square eases out of view and the fresh one settles in
+- **AND** under reduced motion the swap is instant
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp5 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp5 - The pass names the member by account email
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` is rendered
+- **THEN** it carries the member's account email under the tier name
+- **AND** no display name, none being collected at registration
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-8qm rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-255 - The card wears the skin of the tier held
