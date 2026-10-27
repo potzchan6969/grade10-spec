@@ -909,7 +909,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#filters/worlds, product-listing#filters/types
+* **Trace:** product-listing#filters/filter-groups, product-listing#filters/worlds, product-listing#filters/types
 
 **Pre-conditions:**
 

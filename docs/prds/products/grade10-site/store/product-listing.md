@@ -26,8 +26,9 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
 
 ## Filters
 
-- **Worlds** — the top five, and a link to the rest
-- **Types** — all of them
+- **Filter Groups** — lists of options to tick
+  - **Worlds** — the franchise a card comes from; the top five, and a link to the rest
+  - **Types** — the kind of collectible; all of them
 - **Combining Choices** — choices in one group widen the results; choices in different groups narrow them
   - Pokémon + One Piece shows both worlds; adding Graded Cards keeps only the graded cards from either
 - **Option Count** — number of products picking the option would give, with the other filters
