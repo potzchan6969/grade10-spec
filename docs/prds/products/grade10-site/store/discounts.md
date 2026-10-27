@@ -2,7 +2,6 @@
 title: Discounts
 spec: grade10-site/store/discounts
 order: 20
-reviewed: 2026-10-06
 ---
 
 ## Kinds of Discount

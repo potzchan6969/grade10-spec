@@ -2,7 +2,6 @@
 title: Invoice and Receipt PDF Blocks
 spec: shared/ui/invoice-and-receipt-pdf
 order: 20
-reviewed: 2026-10-06
 ---
 
 These blocks are the shared PDF contract for an auction order's invoice and

@@ -2,7 +2,6 @@
 title: Post-Bidding
 spec: grade10-site/auction/winner-order
 order: 4
-reviewed: 2026-10-06
 ---
 
 What happens after a lot stops taking bids: the result, then the winner's

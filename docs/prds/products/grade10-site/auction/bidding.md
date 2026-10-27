@@ -2,7 +2,6 @@
 title: Bidding
 spec: grade10-site/auction/auction
 order: 3
-reviewed: 2026-10-14
 ---
 
 How a lot is won: the rules every bid is held to, the panel a collector bids

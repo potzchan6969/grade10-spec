@@ -2,7 +2,6 @@
 title: Roles & Permissions
 spec: grade10-admin/console/roles-and-permissions
 order: 2
-reviewed: 2026-09-11
 ---
 
 What each closed role may do, and what each permission means, shown to

@@ -2,7 +2,6 @@
 title: Auction Order Blocks
 spec: shared/ui/auction-order
 order: 10
-reviewed: 2026-09-30
 ---
 
 Blocks make a winner's auction order, composed by every application that

@@ -2,7 +2,6 @@
 title: Store Main Page Blocks
 spec: shared/ui/store-home
 order: 3
-reviewed: 2026-10-06
 ---
 
 Three blocks make a store's main page, between the site chrome and a row of

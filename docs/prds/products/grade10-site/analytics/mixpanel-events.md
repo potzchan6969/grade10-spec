@@ -2,7 +2,6 @@
 title: Mixpanel Events
 spec: grade10-site/analytics/analytics
 order: 1
-reviewed: 2026-09-29
 ---
 
 Who did what in Mixpanel, and the user-profile snapshot that filters

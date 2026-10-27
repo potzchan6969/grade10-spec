@@ -3,7 +3,6 @@ title: Users
 spec: shared/auth/users
 audience: operator
 order: 5
-reviewed: 2026-09-29
 ---
 
 ## Directory
