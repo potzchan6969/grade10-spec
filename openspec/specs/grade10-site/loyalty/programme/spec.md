@@ -1542,16 +1542,26 @@ never silent.
 ### Requirement: The membership surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
-components for the membership surface — `MembershipSummary`, `RewardMenu`,
+components for the membership surface — `TierCard`, `RewardMenu`,
 `CouponList`, and `PointHistory` — and the props and copy type of each.
 
-`MembershipSummary` SHALL render the two counts as two counts, never one
-total, alongside the tier held, the date its validity ends, and progress
-toward retention. Where it is given an expiry line it SHALL render one line
-naming how many points expire and the day they go, in the tone supplied with
-it, and where it is given none it SHALL render no such line. It SHALL NOT
-derive that line, that day, or that tone from a clock or a balance of its own;
-the consumer withholds the line for a member holding no points.
+`TierCard` SHALL wear the skin of the tier held — silver, gold or black,
+taken through a `variant` prop and never derived from the tier name the
+consumer words — and SHALL render that tier name, the spendable balance,
+what the balance pays at checkout as the consumer formats it, and the tier's
+earn line. Where the tier names a qualifying threshold `TierCard` SHALL
+render the qualifying count apart from the balance, never summed into it,
+with the progress toward the threshold; where it names none it SHALL render
+neither count nor progress. Given an `href` to the tier-and-benefits surface,
+the whole card SHALL be the link to it. It SHALL NOT name a balance-expiry
+day or count, nor derive any expiry wording from a clock or a balance of its
+own — the whole balance lapses on one shared inactivity date, never in
+parts.
+The membership surface SHALL still render one line naming how many points
+expire and the day they go, in the tone supplied with it, a member holding
+no points seeing no such line — that line is the surface's own, never the
+card's, and it SHALL NOT derive its day or tone from a clock or a balance of
+its own.
 `RewardMenu` SHALL price each reward in points, state a
 money-off reward's own validity period, and state what its coupon cannot be
 spent without — the basket it has to reach, and the one channel it is good at,
@@ -1601,6 +1611,29 @@ SHALL require no export of its own.
 
 - **WHEN** any of the four components is rendered
 - **THEN** every count, date, state and word it shows arrived through props
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-8qm rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-255 - The card wears the skin of the tier held
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` is rendered for a silver, a gold or a black member
+- **THEN** it wears that tier's skin, taken from the `variant` prop
+- **AND** the skin never follows the tier name the consumer words
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-3vf rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-256 - A tier that names no threshold renders no progress
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` is rendered for a tier that names no qualifying threshold
+- **THEN** neither the qualifying count nor its progress is rendered
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-257 - The whole card opens the tier-and-benefits surface
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` is given an `href`
+- **THEN** the whole card is the link to it, the Benefits affordance included
+- **AND** a plain press reports `onClick` while a modified press keeps the link's behaviour
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-tzp rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-185 - The summary names one expiry line
