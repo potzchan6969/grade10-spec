@@ -13,8 +13,8 @@ import type { Moved } from "./types.ts";
  * text repeats is read as the whole text, so a move is never pinned to the
  * wrong one of two.
  *
- * The class reads where a move sits, never what it means
- * (`tell-each-hand-what-moved` Q4): everything is major but a small set — the
+ * The class reads where a move sits, never what it means:
+ * everything is major but a small set — the
  * proposal's `## Why`, a decision row's Asked and Instead of cells, the ❓
  * wrapper around a recommendation, and punctuation. A Decided cell is
  * compared without that wrapper, so an answer that takes the recommendation

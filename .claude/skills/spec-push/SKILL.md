@@ -6,8 +6,7 @@ disable-model-invocation: true
 
 # Spec push
 
-Kept until the team has adopted the line commands (`Q84` of
-`run-a-round-on-every-artifact`). `/workflow-land` lands one artifact on
+Kept until the team has adopted the line commands. `/workflow-land` lands one artifact on
 `main` on the hand's word; this lands whatever planning commits sit ahead of
 `origin/main`.
 

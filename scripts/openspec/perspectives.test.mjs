@@ -1235,7 +1235,7 @@ test("`openspec instructions` resolves every schema artifact id", async () => {
             "instructions",
             id,
             "--change",
-            "run-a-round-on-every-artifact",
+            "hold-acceptance-on-material-questions",
           ],
           { cwd: ROOT, stdio: "pipe" },
         ),

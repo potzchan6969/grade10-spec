@@ -1,8 +1,5 @@
 schema: grade10-planning
 created: 2026-10-07
-depends_on:
-  - run-a-round-on-every-artifact
-  - stage-changes-and-notify-hands
 hands:
   pm: "@ecchochan"
   qa: "@chloe9gag"

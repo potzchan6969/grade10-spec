@@ -55,10 +55,10 @@ test("run as a script, spec:id still answers an id the store issues", () => {
   // nothing and exit 0, which no import-side case would see.
   const ran = spawnSync(
     process.execPath,
-    [SCRIPT, "shared-planning-change-stages-SC-77", "--path"],
+    [SCRIPT, "post-sale-SC-155", "--path"],
     { encoding: "utf8", env: { ...process.env, NO_COLOR: "1" } },
   );
 
   assert.equal(ran.status, 0, ran.stderr);
-  assert.match(ran.stdout, /change-stages\/spec\.md:\d+/);
+  assert.match(ran.stdout, /post-sale\/spec\.md:\d+/);
 });

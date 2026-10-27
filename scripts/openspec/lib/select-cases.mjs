@@ -190,8 +190,8 @@ export function selectCases(candidates, options = {}) {
  * again; `included` reads the picked list, which only carries an automated
  * case where the flag let one through.
  *
- * `leftOutLines` names each one under the count (Q72 of
- * `run-a-round-on-every-artifact`): the case, then what its `**Decided by:**`
+ * `leftOutLines` names each one under the count:
+ * the case, then what its `**Decided by:**`
  * line names. A count alone points at no file, so a tester wondering why a
  * journey they walk has a hole in it has nothing to open; a case carrying no
  * line says so in the same shape, which is how a hole in the store shows up

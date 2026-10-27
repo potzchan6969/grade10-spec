@@ -511,7 +511,7 @@ async function attemptLanding(attempt) {
   // read over `MAIN` with what this landing carries laid over it, the tree
   // `main` will hold. No answer marks any other draft read: a taken
   // recommendation is no move, and an overturned one is a major move its
-  // drafts' hands read again (`tell-each-hand-what-moved` Q6).
+  // drafts' hands read again.
   if (!reviewedOnly && !group) {
     const own = await reviewedOfLanding(MAIN, carried, written, artifact);
     if (own !== undefined) {

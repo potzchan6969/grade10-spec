@@ -244,7 +244,7 @@ the thread is where a person works it. The page is
 - **The runner** — a terminal, or a Claude Routine its person triggers, a
   fresh session every run; `plan:land` checks the word before `main` moves —
   [the runner](agent-runner.md). The relay first built for it is removed,
-  never deployed (`run-a-round-on-every-artifact` Q120)
+  never deployed (decided 2026-10-27)
 
 ## The Word
 
@@ -565,8 +565,8 @@ One meaning per word, as the line uses it.
 
 | Milestone | Change | Done when |
 | --- | --- | --- |
-| M1 Stages and hands | `stage-changes-and-notify-hands` - open, on the planned page [Change Stages](../prds/products/shared/planning/change-stages.md), with its journeys, `ui-design.md` and `tech-design.md`, waiting on `/planning-qa` for the requirements | A change moving on `main` tells the next hand within a minute, and the board shows eight lanes with the agent mark and the hand's move on five |
-| M2 Rounds | `run-a-round-on-every-artifact` - open, on the planned page [Agent Rounds](../prds/products/shared/planning/agent-rounds.md), depending on M1 | A PM opens a change from one sentence in Slack and lands the three files from the thread, by word or by button; a designer and a tech PIC land a draft they tweaked or challenged; an artifact behind is read again before anything lands after it; a change ends with its walk |
+| M1 Stages and hands | `stage-changes-and-notify-hands` - delivered; its record removed 2026-10-27, the shape is on [Change Stages](../prds/products/shared/planning/change-stages.md) | A change moving on `main` tells the next hand within a minute, and the board shows eight lanes with the agent mark and the hand's move on five |
+| M2 Rounds | `run-a-round-on-every-artifact` - delivered without the relay; its record removed 2026-10-27, the shape is on [Agent Rounds](../prds/products/shared/planning/agent-rounds.md) | A PM opens a change from one sentence in Slack and lands the three files from the thread, by word or by button; a designer and a tech PIC land a draft they tweaked or challenged; an artifact behind is read again before anything lands after it; a change ends with its walk |
 | M2b Live pages | `tell-open-pages-main-moved` - dropped 2026-10-27, the manual doesn't watch `main`; was on [Change Stages · Surfaces](../prds/products/shared/planning/change-stages.md#surfaces), depending on M1 | A page open while `main` moves is told within seconds and refreshes when the site has caught up; the local manual says how far behind it is and pulls |
 | M3 Land without a pull request | `land-on-main-through-the-gate` | A week of landings with no pull request and no red `main` older than an hour; `pnpm land` is the round's landing step |
 | M4 Release line | `cut-releases-from-a-tag` | One release cut from the page and one hotfix walked end to end |
@@ -586,5 +586,5 @@ One meaning per word, as the line uses it.
 | ❓ 8 | Tag format and cadence? | `vYYYY.MM.DD`, `.n` for a second cut or a hotfix, on demand | Release hand |
 | ❓ 9 | Which changes still get a pull request? | A breaking export contract; auth, payments, migrations when the tech PIC asks; a second reader a PM asks for | Engineering lead |
 | ❓ 10 | Can the hosted manual take Assign? | Local first; hosted waits for a sign-in | Operations |
-| 11 | Which app holds a change's thread, and which run re-reads on a landing? | Decided (`run-a-round-on-every-artifact` Q120, superseding Q52): a terminal or a Routine its person triggers; no relay | — |
+| 11 | Which app holds a change's thread, and which run re-reads on a landing? | Decided 2026-10-27, superseding Q52: a terminal or a Routine its person triggers; no relay | — |
 | ❓ 13 | `main` protection | Linear history required, no pull request required, every teammate allowed to push | Operations |

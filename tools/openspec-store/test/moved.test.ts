@@ -3,7 +3,7 @@ import { decidedOf, holdsOf, movedOf } from "../src/moved.ts";
 
 /**
  * What moved before an artifact, unit by unit, and whether each move is
- * major — `tell-each-hand-what-moved`'s class table, read through `movedOf`.
+ * major, read through `movedOf`.
  */
 
 const decisions = (decided: string, asked = "Does every move hold?") =>

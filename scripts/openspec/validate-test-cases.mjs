@@ -372,7 +372,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
     }
   }
 
-  // Q49 and Q69 (`run-a-round-on-every-artifact`): every automated case of an
+  // Every automated case of an
   // in-flight change names what decides it, whatever day the change opened.
   // A durable suite under `openspec/specs/` owes nothing yet - back-filling
   // those is a rules revision of its own (Q70) - and the archive is never
