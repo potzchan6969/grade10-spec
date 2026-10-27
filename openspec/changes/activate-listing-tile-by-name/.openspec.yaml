@@ -15,6 +15,6 @@ reviewed:
   user-journeys: ffb868c7
   ui-design: cbea125f
   tech-design: cbea125f
-  tasks: 0dfa5fdb
+  tasks: c7fadb2b
   specs: 52c3af5c
 tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 3.3"
