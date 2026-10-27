@@ -23,17 +23,17 @@ exact grade or condition the item matches.
   grade SNKRDUNK does not list maps only to an equal or lower one it does,
   or the item takes a set price
 - 🚧 **Fetched after midnight** - each reference in use is read once a day,
-  just after 00:00 Hong Kong time, politely paced, so the day before is
-  read whole and each sale counts on its Hong Kong day; a night missed is
-  filled from what the site still shows, and a new reference's first read
-  takes the older days in Japan's, where a sale in Hong Kong's last hour of
-  a day counts on the next. A reference read later past midnight than the
-  night before misses the sales in those minutes. Every read is recorded,
-  failed or not
-- ❓ **How many fit the hour after midnight** - at one reference a minute,
-  about 60; one read later than that claims less and its factor fades with
-  it; more needs faster reads, with the SNKRDUNK worker - TBC, owner and
-  engineering
+  just after 00:00 Hong Kong time, politely paced, and each read takes what
+  came after the one before it began, so a sale counts once, on its Hong
+  Kong day. A read that fails is tried again in five minutes; one that comes
+  more than a day after the last loses the sales SNKRDUNK by then shows only
+  as days ago, and is flagged. A new reference's first read reaches back 90
+  days or ten pages: what SNKRDUNK shows as days ago lands within half a
+  day, and older days as it prints them, in Japan's. Every read is
+  recorded, failed or not
+- ❓ **How many a night** - at one reference a minute, 1,440 fit a day; past
+  that reads fall more than a day apart. Faster reads come with the
+  SNKRDUNK worker - TBC, owner and engineering
 - ❓ **Through the house's SNKRDUNK worker** - reads will go through another
   of the house's workers that reaches SNKRDUNK, answering as SNKRDUNK
   would; its interface is TBC, the owner to provide it
