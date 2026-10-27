@@ -158,7 +158,7 @@ export const WithQrCode: Story = {
   },
 };
 
-/** A redeemed good's collection ticket — no discount code; the stub names
+/** A redeemed gift's collection ticket — no discount code; the stub names
  * the collection under a storefront mark, and Use now opens its scan
  * card. */
 export const CollectionTicket: Story = {

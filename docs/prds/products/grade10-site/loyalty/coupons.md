@@ -279,5 +279,6 @@ are on [Discounts](/p/grade10-site/store/discounts).
 | A gift on a sale locked for tender | Decided | Staff are told to cancel the tender and remove the gift. The extension cannot write to a locked sale, and letting it through hands out a gift below its minimum. | Product |
 | A gift with no membership to reach | Decided | Refused; the member comes back. A free line keyed by hand spends no coupon, so the same gift could be claimed again online or at another till. | Product |
 | A returned sale's gift | Decided | The member keeps it. Staff never price a gift out of a refund at the counter, and the coupon already stays used. | Product |
+| What a gift asks at the till | ❓ Open | Today's rules take the gift product at 100% off — its line is discounted to nothing and settlement reads it free. An item the member still part-pays at the counter fits none of those rules, and "gift" promises free in the name itself: a part-paid redemption would need the term amended or a new one. | Product |
 | A code collected after it was let go | Decided | The paid sale spends the coupon where no other sale claims it, so a counter sale that pays with its old code costs the member the coupon once. Where another sale claims it, that sale spends it and the paid one is reported. | Product |
 :::
