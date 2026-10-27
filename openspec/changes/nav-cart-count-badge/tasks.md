@@ -24,7 +24,7 @@ Verification depends on acceptance; 4.1 landed with `useCartPresentation`. Each 
 - [x] 4.4 Verify: run the cart feature's focused domain/hook tests, `node scripts/test.mjs grade10-store-frontend`, `pnpm run typecheck`, and `pnpm run lint`. Include delayed review and mutation races in the named scenario tests.
 - [x] 4.5 Add hook tests citing `grade10-site-site-page-shell-SC-43` for a reviewed empty basket and for one holding only sold-out and unavailable lines: both return `0`, and the count stays defined so the header hides the badge rather than waiting.
 
-## 5. Header and Drawer Integration (grade10)
+## 5. Header and Drawer Integration (grade10) (owner: @kinisworking)
 
 Depends on Group 4, and on the Cart-on-Auction bug fix: a `fix` commit, run through `docs/governance/bug-fixes.md`, that restores Cart on every surface once Store answers (`grade10-site-site-page-shell-SC-16`); `root.tsx:304` holds Cart to Store addresses today. Preserve existing sign-in and account-menu behavior when adapting the store pin.
 
