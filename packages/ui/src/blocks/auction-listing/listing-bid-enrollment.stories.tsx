@@ -1,6 +1,7 @@
 import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { PAYMENT_BRAND_LABEL } from "../store-order-detail/order-details-payment-logo";
 import {
   EnrollmentSetupSheet,
   PaymentMethodEmptyState,
@@ -47,36 +48,50 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const LinkedCardEditable: Story = {
+type LinkedCardStory = StoryObj<typeof PaymentMethodRow>;
+
+const LINKED_CARD_CONTROLS = {
+  argTypes: {
+    brand: {
+      control: "select",
+      options: Object.keys(PAYMENT_BRAND_LABEL),
+    },
+    maskedNumber: { control: "text" },
+    copy: { table: { disable: true } },
+    onChange: { table: { disable: true } },
+  },
+} satisfies Pick<LinkedCardStory, "argTypes">;
+
+export const LinkedCardEditable: LinkedCardStory = {
+  ...LINKED_CARD_CONTROLS,
   parameters: {
     verification: { caseId: "vc_3196476a-3ece-48b3-8f83-953e9e3cbaab" },
   },
-  render: () => (
-    <PaymentMethodRow
-      brand="visa"
-      copy={COPY}
-      maskedNumber="•••• 4242"
-      onChange={() => undefined}
-    />
-  ),
-  play: async ({ canvasElement }) => {
+  args: {
+    brand: "visa",
+    copy: COPY,
+    maskedNumber: "•••• 4242",
+    onChange: fn(),
+  },
+  render: (args) => <PaymentMethodRow {...args} />,
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("•••• 4242")).toBeVisible();
+    expect(canvas.getByText(args.maskedNumber)).toBeVisible();
     expect(canvas.getByRole("button", { name: "Change" })).toBeVisible();
     expect(canvas.getByLabelText(COPY.paymentMethodTooltip)).toBeVisible();
   },
 };
 
-export const LinkedCard: Story = {
+export const LinkedCard: LinkedCardStory = {
+  ...LINKED_CARD_CONTROLS,
   parameters: {
     verification: { caseId: "vc_62be9b0d-103c-4d2a-8adf-8113ffe74971" },
   },
-  render: () => (
-    <PaymentMethodRow brand="visa" copy={COPY} maskedNumber="•••• 4242" />
-  ),
-  play: async ({ canvasElement }) => {
+  args: { brand: "visa", copy: COPY, maskedNumber: "•••• 4242" },
+  render: (args) => <PaymentMethodRow {...args} />,
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("•••• 4242")).toBeVisible();
+    expect(canvas.getByText(args.maskedNumber)).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Change" }),
     ).not.toBeInTheDocument();
