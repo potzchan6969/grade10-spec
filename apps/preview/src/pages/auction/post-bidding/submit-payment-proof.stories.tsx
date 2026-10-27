@@ -4,6 +4,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Toast } from "@grade10/design-system/components/overlays/toast";
 import {
   PROOF_DIALOG_SUBTEXT,
+  WINNER_ORDER_PROOF_DIALOG_COPY,
   WINNER_ORDER_PROOF_FILE_HINT,
   WinnerOrderPaymentProofDialog,
 } from "@grade10/ui";
@@ -49,6 +50,7 @@ function SubmitPaymentProofDemo({
       </VStack>
 
       <WinnerOrderPaymentProofDialog
+        copy={WINNER_ORDER_PROOF_DIALOG_COPY}
         onOpenChange={setOpen}
         onSubmit={async () => {
           const refusal = await simulateProofUpload(forceFailure);

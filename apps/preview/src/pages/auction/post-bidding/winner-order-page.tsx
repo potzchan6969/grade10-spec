@@ -12,6 +12,7 @@ import {
   type AuctionWinnerOrderStep,
   type OrderDetailsPaymentBrand,
   SiteHeader,
+  WINNER_ORDER_PROOF_DIALOG_COPY,
   WinnerOrderPaymentProofDialog,
 } from "@grade10/ui";
 import { useState } from "react";
@@ -759,6 +760,7 @@ function WinnerOrderPageState({
         open={setupDialogOpen}
       />
       <WinnerOrderPaymentProofDialog
+        copy={WINNER_ORDER_PROOF_DIALOG_COPY}
         onOpenChange={setProofDialogOpen}
         onSubmit={handleProofSubmit}
         open={proofDialogOpen}

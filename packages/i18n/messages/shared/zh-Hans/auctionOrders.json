@@ -67,6 +67,49 @@
     "copyMessageManual": "请手动复制正文",
     "openMailApp": "打开邮件应用"
   },
+  "proofDialog": {
+    "title": "提交付款证明",
+    "description": "完成转账后，请在此上传收据。",
+    "senderName": "汇款人姓名",
+    "senderNameRequired": "请输入汇款人姓名。",
+    "transferDate": "转账日期",
+    "transferDateRequired": "请输入转账日期。",
+    "proof": "付款证明",
+    "dropTitle": "将文件拖放到此处或选择文件",
+    "fileHint": "PDF、PNG、JPG 或 HEIC。最多 3 个文件，每个 5 MB，总计 15 MB。",
+    "chooseFiles": "选择文件",
+    "converting": "正在转换 HEIC…",
+    "removeFile": "移除文件",
+    "filesRequired": "请附上至少一个付款证明文件。",
+    "noFilesSelected": "未选择文件",
+    "oneFileSelected": "已选择 1 个文件",
+    "filesSelected": "已选择 {count} 个文件",
+    "notes": "备注（选填）",
+    "finalNotice": "提交后将无法添加或更改文件。",
+    "leaveConfirm": "不提交就离开？你的付款证明将不会被保存。",
+    "cancel": "取消",
+    "submit": "提交付款证明",
+    "tooManyFiles": {
+      "title": "文件太多",
+      "description": "最多 3 个文件。"
+    },
+    "fileTooLarge": {
+      "title": "文件太大",
+      "description": "每个文件不得超过 5 MB。"
+    },
+    "filesTooLarge": {
+      "title": "文件总大小太大",
+      "description": "所有文件总计不得超过 15 MB。"
+    },
+    "fileTypeUnsupported": {
+      "title": "不支持此文件类型",
+      "description": "请使用 PDF、PNG、JPG 或 HEIC。"
+    },
+    "heicFailed": {
+      "title": "无法转换 HEIC",
+      "description": "请先在手机将照片导出为 JPG，再重新上传。"
+    }
+  },
   "tabs": {
     "active": "进行中",
     "upcoming": "即将开始",

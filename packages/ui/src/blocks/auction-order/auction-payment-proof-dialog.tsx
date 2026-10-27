@@ -35,18 +35,90 @@ export const WINNER_ORDER_PROOF_MAX_FILES = 3;
 export const WINNER_ORDER_PROOF_MIN_FILES = 1;
 export const WINNER_ORDER_PROOF_MAX_BYTES_PER_FILE = 5 * FILE_DROPZONE_MIB;
 export const WINNER_ORDER_PROOF_MAX_BYTES_TOTAL = 15 * FILE_DROPZONE_MIB;
+
+type ProofRejectCopy = { title: string; description: string };
+
+/** Every word the dialog draws, in the reader's language. */
+type WinnerOrderPaymentProofDialogCopy = {
+  title: string;
+  /** Dialog description — one-shot rule stays on the final notice. */
+  description: string;
+  senderName: string;
+  senderNameRequired: string;
+  transferDate: string;
+  transferDateRequired: string;
+  proof: string;
+  dropTitle: string;
+  fileHint: string;
+  chooseFiles: string;
+  converting: string;
+  removeFile: string;
+  filesRequired: string;
+  noFilesSelected: string;
+  filesSelected: (count: number) => string;
+  notes: string;
+  finalNotice: string;
+  leaveConfirm: string;
+  cancel: string;
+  submit: string;
+  tooManyFiles: ProofRejectCopy;
+  fileTooLarge: ProofRejectCopy;
+  filesTooLarge: ProofRejectCopy;
+  fileTypeUnsupported: ProofRejectCopy;
+  heicFailed: ProofRejectCopy;
+};
+
+/** The English copy — the catalog's `auctionOrders.proofDialog` in `en`. */
+export const WINNER_ORDER_PROOF_DIALOG_COPY: WinnerOrderPaymentProofDialogCopy =
+  {
+    title: "Submit Payment Proof",
+    description: "After you transfer, upload your receipt here.",
+    senderName: "Sender Name",
+    senderNameRequired: "Enter the sender name.",
+    transferDate: "Transfer Date",
+    transferDateRequired: "Enter the transfer date.",
+    proof: "Payment Proof",
+    dropTitle: "Drop files here or choose files",
+    fileHint: "PDF, PNG, JPG, or HEIC. Up to 3 files, 5 MB each, 15 MB total.",
+    chooseFiles: "Choose Files",
+    converting: "Converting HEIC…",
+    removeFile: "Remove file",
+    filesRequired: "Attach at least one proof file.",
+    noFilesSelected: "No files selected",
+    filesSelected: (count) =>
+      `${count} ${count === 1 ? "file" : "files"} selected`,
+    notes: "Additional Notes (optional)",
+    finalNotice: "You can’t add or change files after you submit.",
+    leaveConfirm:
+      "Leave without submitting? Your payment proof will not be saved.",
+    cancel: "Cancel",
+    submit: "Submit Payment Proof",
+    tooManyFiles: {
+      title: "Too many files",
+      description: `Up to ${WINNER_ORDER_PROOF_MAX_FILES} files.`,
+    },
+    fileTooLarge: {
+      title: "File too large",
+      description: "Each file must be 5 MB or less.",
+    },
+    filesTooLarge: {
+      title: "Files too large",
+      description: "All files together must be 15 MB or less.",
+    },
+    fileTypeUnsupported: {
+      title: "File type not supported",
+      description: "Use PDF, PNG, JPG, or HEIC.",
+    },
+    heicFailed: {
+      title: "Couldn’t convert HEIC",
+      description: "Try exporting as JPG from your phone, then upload again.",
+    },
+  };
+
 export const WINNER_ORDER_PROOF_FILE_HINT =
-  "PDF, PNG, JPG, or HEIC. Up to 3 files, 5 MB each, 15 MB total." as const;
+  WINNER_ORDER_PROOF_DIALOG_COPY.fileHint;
 
-/** Dialog description — one-shot rule stays on the confirm microcopy. */
-export const PROOF_DIALOG_SUBTEXT =
-  "After you transfer, upload your receipt here." as const;
-
-const PROOF_CONFIRM_MICROCOPY =
-  "You can’t add or change files after you submit." as const;
-
-const LEAVE_PROOF_CONFIRM =
-  "Leave without submitting? Your payment proof will not be saved." as const;
+export const PROOF_DIALOG_SUBTEXT = WINNER_ORDER_PROOF_DIALOG_COPY.description;
 
 type ProofDraft = {
   senderName: string;
@@ -63,6 +135,7 @@ const EMPTY_PROOF: ProofDraft = {
 };
 
 type WinnerOrderPaymentProofDialogProps = {
+  copy: WinnerOrderPaymentProofDialogCopy;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   /** Uploads proof files; resolves null once accepted, else its refusal. */
@@ -78,6 +151,7 @@ type ProofRefusal = { title: string; description: string };
  * draft and shows the refusal in place.
  */
 function WinnerOrderPaymentProofDialog({
+  copy,
   open,
   onOpenChange,
   onSubmit,
@@ -129,7 +203,7 @@ function WinnerOrderPaymentProofDialog({
       // Submitting / converting: leave is blocked — no confirm, no dismiss.
       if (formLocked) return;
       if (hasDraft) {
-        const leave = window.confirm(LEAVE_PROOF_CONFIRM);
+        const leave = window.confirm(copy.leaveConfirm);
         if (!leave) return;
       }
     }
@@ -137,35 +211,15 @@ function WinnerOrderPaymentProofDialog({
     onOpenChange(next);
   }
 
-  function handleFileReject(reason: FileDropzoneRejectReason, detail?: string) {
-    switch (reason) {
-      case "too_many":
-        toast.error("Too many files", {
-          description: detail ?? `Up to ${WINNER_ORDER_PROOF_MAX_FILES} files.`,
-        });
-        break;
-      case "too_large_file":
-        toast.error("File too large", {
-          description: detail ?? "Each file must be 5 MB or less.",
-        });
-        break;
-      case "too_large_total":
-        toast.error("Files too large", {
-          description: detail ?? "All files together must be 15 MB or less.",
-        });
-        break;
-      case "type":
-        toast.error("File type not supported", {
-          description: "Use PDF, PNG, JPG, or HEIC.",
-        });
-        break;
-      case "convert_failed":
-        toast.error("Couldn’t convert HEIC", {
-          description:
-            "Try exporting as JPG from your phone, then upload again.",
-        });
-        break;
-    }
+  function handleFileReject(reason: FileDropzoneRejectReason) {
+    const rejected = {
+      too_many: copy.tooManyFiles,
+      too_large_file: copy.fileTooLarge,
+      too_large_total: copy.filesTooLarge,
+      type: copy.fileTypeUnsupported,
+      convert_failed: copy.heicFailed,
+    }[reason];
+    toast.error(rejected.title, { description: rejected.description });
   }
 
   function scrollToCenter(target: HTMLElement) {
@@ -235,8 +289,8 @@ function WinnerOrderPaymentProofDialog({
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogContent className="max-w-lg" showCloseButton={false}>
         <DialogHeader showCloseButton={false}>
-          <DialogTitle>Submit Payment Proof</DialogTitle>
-          <DialogSubtext>{PROOF_DIALOG_SUBTEXT}</DialogSubtext>
+          <DialogTitle>{copy.title}</DialogTitle>
+          <DialogSubtext>{copy.description}</DialogSubtext>
         </DialogHeader>
         <DialogBody>
           <VStack className="w-full" gap="md" hAlign="stretch" id={formId}>
@@ -244,11 +298,11 @@ function WinnerOrderPaymentProofDialog({
               <TextInput
                 autoComplete="name"
                 disabled={formLocked}
-                label="Sender Name"
+                label={copy.senderName}
                 ref={senderNameRef}
                 message={
                   attempted && !draft.senderName.trim()
-                    ? "Enter the sender name."
+                    ? copy.senderNameRequired
                     : undefined
                 }
                 onChange={(event) =>
@@ -261,11 +315,11 @@ function WinnerOrderPaymentProofDialog({
               />
               <TextInput
                 disabled={formLocked}
-                label="Transfer Date"
+                label={copy.transferDate}
                 ref={transferDateRef}
                 message={
                   attempted && !draft.transferDate.trim()
-                    ? "Enter the transfer date."
+                    ? copy.transferDateRequired
                     : undefined
                 }
                 onChange={(event) =>
@@ -280,7 +334,7 @@ function WinnerOrderPaymentProofDialog({
             </div>
             <VStack className="w-full" gap="sm" hAlign="stretch">
               <span className="text-sm font-medium text-secondary-foreground">
-                Payment Proof
+                {copy.proof}
               </span>
               <VStack
                 className="w-full"
@@ -317,10 +371,10 @@ function WinnerOrderPaymentProofDialog({
                         accept={WINNER_ORDER_PROOF_FILE_ACCEPT}
                         converting={converting}
                         copy={{
-                          idleTitle: "Drop files here or choose files",
-                          idleDescription: WINNER_ORDER_PROOF_FILE_HINT,
-                          chooseFiles: "Choose Files",
-                          converting: "Converting HEIC…",
+                          idleTitle: copy.dropTitle,
+                          idleDescription: copy.fileHint,
+                          chooseFiles: copy.chooseFiles,
+                          converting: copy.converting,
                         }}
                         disabled={formLocked}
                         files={draft.files}
@@ -339,7 +393,7 @@ function WinnerOrderPaymentProofDialog({
                   </div>
                 </div>
                 <FileDropzoneFileList
-                  copy={{ removeFile: "Remove file" }}
+                  copy={{ removeFile: copy.removeFile }}
                   disabled={formLocked}
                   files={draft.files}
                   onRemove={(id) =>
@@ -352,19 +406,19 @@ function WinnerOrderPaymentProofDialog({
                 {attempted &&
                 usableFiles.length < WINNER_ORDER_PROOF_MIN_FILES ? (
                   <Text size="sm" tone="error">
-                    Attach at least one proof file.
+                    {copy.filesRequired}
                   </Text>
                 ) : null}
                 <span aria-live="polite" className="sr-only">
                   {usableFiles.length === 0
-                    ? "No files selected"
-                    : `${usableFiles.length} ${usableFiles.length === 1 ? "file" : "files"} selected`}
+                    ? copy.noFilesSelected
+                    : copy.filesSelected(usableFiles.length)}
                 </span>
               </VStack>
             </VStack>
             <TextInput
               disabled={formLocked}
-              label="Additional Notes (optional)"
+              label={copy.notes}
               onChange={(event) => patch("notes", event.currentTarget.value)}
               value={draft.notes}
             />
@@ -373,7 +427,7 @@ function WinnerOrderPaymentProofDialog({
                 <Warning aria-hidden size={16} weight="fill" />
               </span>
               <Text className="text-secondary-foreground" size="sm">
-                {PROOF_CONFIRM_MICROCOPY}
+                {copy.finalNotice}
               </Text>
             </HStack>
           </VStack>
@@ -399,7 +453,7 @@ function WinnerOrderPaymentProofDialog({
               />
             }
           >
-            Cancel
+            {copy.cancel}
           </DialogClose>
           <Button
             className="w-full sm:w-auto"
@@ -409,7 +463,7 @@ function WinnerOrderPaymentProofDialog({
             size="md"
             type="button"
           >
-            Submit Payment Proof
+            {copy.submit}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -417,5 +471,9 @@ function WinnerOrderPaymentProofDialog({
   );
 }
 
-export type { ProofRefusal, WinnerOrderPaymentProofDialogProps };
+export type {
+  ProofRefusal,
+  WinnerOrderPaymentProofDialogCopy,
+  WinnerOrderPaymentProofDialogProps,
+};
 export { WinnerOrderPaymentProofDialog };

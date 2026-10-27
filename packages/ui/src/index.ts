@@ -340,8 +340,10 @@ export {
 export {
   PROOF_DIALOG_SUBTEXT,
   type ProofRefusal,
+  WINNER_ORDER_PROOF_DIALOG_COPY,
   WINNER_ORDER_PROOF_FILE_HINT,
   WinnerOrderPaymentProofDialog,
+  type WinnerOrderPaymentProofDialogCopy,
   type WinnerOrderPaymentProofDialogProps,
 } from "./blocks/auction-order/auction-payment-proof-dialog";
 export {
