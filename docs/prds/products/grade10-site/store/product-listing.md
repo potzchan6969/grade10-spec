@@ -46,7 +46,7 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
 - ❓ **Sort drawer** — whether it closes on pick. Design confirms
 :::
 
-::story{id="store-product-listing-blocks-productbrowse--narrow" title="Small screen"}
+::story{id="store-product-listing-blocks-productbrowse--narrow" title="Small screen" height="720" width="375"}
 
 ## Search
 

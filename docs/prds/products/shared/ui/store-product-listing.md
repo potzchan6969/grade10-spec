@@ -34,7 +34,7 @@ The blocks a store's catalogue is browsed with: a filter sidebar, a results head
 - **Pills** — the result count, sort and one per facet group, each opening a drawer from the bottom
   - **Facet Drawers** — a draft until the shopper confirms
 
-::story{id="store-product-listing-blocks-productbrowse--narrow" title="Small screen"}
+::story{id="store-product-listing-blocks-productbrowse--narrow" title="Small screen" height="720" width="375"}
 
 ## Search
 
