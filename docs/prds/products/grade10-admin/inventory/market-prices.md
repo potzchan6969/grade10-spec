@@ -24,11 +24,19 @@ exact grade or condition the item matches.
   or the item takes a set price
 - 🚧 **Fetched after midnight** - each reference in use is read once a day,
   just after 00:00 Hong Kong time, politely paced, so the day before is
-  read whole and every sale counts on its Hong Kong day; every read is
-  recorded, failed or not
+  read whole and each sale counts on its Hong Kong day; a night missed is
+  filled from what the site still shows, and a new reference's first read
+  takes the older days in Japan's, where a sale in Hong Kong's last hour of
+  a day counts on the next. A reference read later past midnight than the
+  night before misses the sales in those minutes. Every read is recorded,
+  failed or not
+- ❓ **How many fit the hour after midnight** - at one reference a minute,
+  about 60; one read later than that claims less and its factor fades with
+  it; more needs faster reads, with the SNKRDUNK worker - TBC, owner and
+  engineering
 - ❓ **Through the house's SNKRDUNK worker** - reads will go through another
-  of the house's workers that reaches SNKRDUNK; its interface is TBC, the
-  owner to provide it
+  of the house's workers that reaches SNKRDUNK, answering as SNKRDUNK
+  would; its interface is TBC, the owner to provide it
 - 🚧 **Typed by staff** - when fetching fails, staff read the page and type
   each sale it shows, its day, price and grade; a read that finds nothing
   new is recorded too, and counts as a successful read

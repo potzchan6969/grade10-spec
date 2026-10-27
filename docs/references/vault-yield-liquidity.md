@@ -52,7 +52,8 @@ Decided by the owner since, 2026-10-26:
 2. **The source** - SNKRDUNK shows a sold history per product grade: each
    sale's date, price and condition; sales are dated by Hong Kong's day,
    read just after its midnight, and the older days a new reference's first
-   read takes are kept as the source prints them, in Japan's
+   read, or a read after missed nights, takes are kept as the source prints
+   them, in Japan's
 3. **The examples' rate** - **0.052** HKD per JPY, written `fx_e8 = 5,200,000`
    (HKD per JPY × 10⁸)
 4. **A wash trade's cost** - at least about 5% of the price in fees and
