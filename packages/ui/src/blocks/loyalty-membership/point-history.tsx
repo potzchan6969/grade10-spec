@@ -145,7 +145,8 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
             actions={
               state.action ? (
                 <Button
-                  disabled={state.action.pending}
+                  size="md"
+                disabled={state.action.pending}
                   onClick={state.action.onAction}
                   type="button"
                   variant="secondary"
