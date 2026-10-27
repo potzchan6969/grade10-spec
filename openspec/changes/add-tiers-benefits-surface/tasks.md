@@ -35,7 +35,7 @@
       dollar, points arrive when an order completes, the balance lapses
       after twelve months with no activity
 
-## 4. The surface (grade10-spec)
+## 4. The surface (grade10-spec) (owner: @seankcw)
 
 - [x] 4.1 Add `apps/preview/src/pages/loyalty/membership/tiers-benefits.stories.tsx` —
       the standalone Tiers & Benefits page: breadcrumbs, the semibold title,
