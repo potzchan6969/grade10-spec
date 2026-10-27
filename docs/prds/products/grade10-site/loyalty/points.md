@@ -313,12 +313,20 @@ the 100 the slab's rate would price.
 The redeemable balance lapses after twelve months with no activity, and a
 lapse that has happened is never undone.
 
+🚧 Activity is only what brings money in: a purchase, online or in store —
+any amount, even one too small to earn a point, even one paid partly or
+fully with points, and it still counts if the order is later refunded in
+full — or a points pack on the day it is credited. Whether redeeming still
+keeps the balance alive is open: the proposal is that it stops counting —
+❓ PM to confirm.
+
 Every point a member holds lapses on the same day, whatever recorded it.
 
 | What happens | The date |
 | --- | --- |
-| A purchase or a redemption, even one too small to earn a point | Twelve months from that day |
+| 🚧 A purchase, even one too small to earn a point, even paid with points, even refunded in full after | Twelve months from that day |
 | A points pack credited | Twelve months from that day, as a purchase moves it — [Top-ups](/p/grade10-site/loyalty/top-ups#topped-up-points) |
+| ❓ A redemption | Twelve months from that day under the running rule; the proposal is that it moves nothing — PM to confirm |
 | A grant or a correction | Unchanged; those points take the date the balance already has |
 | A grant or a correction with nothing live to join | The later of twelve months from its own day and the day still running, which moves out to it; with neither ahead, it is written already lapsed |
 | Points a reversal gives back, or points paid at checkout that a refund or an operator returns | Unchanged; they go back to the day still running, even onto a balance brought to nothing |
@@ -339,7 +347,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
 - **Dead at once** — points past the date stop counting the instant they are
   read, with nothing waiting on a nightly pass
 
-:::example{title="Buying or redeeming keeps the balance alive"}
+:::example{title="Buying keeps the balance alive — redeeming may stop counting ❓"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
@@ -348,9 +356,10 @@ Every point a member holds lapses on the same day, whatever recorded it.
 | 2027/01/03 | first earn's own year ends · date stays 2027/11/20 | 0 | 20 |
 | 2027/11/20 | lapse | −20 | 0 |
 
-Every purchase and every redemption moves one date for the whole balance,
-so the January points live as long as the November redemption does. The
-date after the arrow is when the balance lapses if nothing else happens.
+Every purchase moves one date for the whole balance. The November row is a
+redemption, which moves the date under the running rule and would move
+nothing under the proposal — ❓ PM to confirm. The date after the arrow is
+when the balance lapses if nothing else happens.
 :::
 
 :::example{title="A spend too small to earn still counts"}
@@ -449,6 +458,8 @@ spend rather than lose a balance that was about to lapse.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| What counts as activity | Decided | A purchase, online or in store — any amount, however tendered, including one paid partly or fully with points and one later refunded in full — and a points top-up, counted on the day it is credited, since payment and credit sit a gateway instant apart. Decided 2026-10-27 — `define-activity-for-point-expiry`. | Product |
+| Whether redeeming keeps the balance alive | ❓ Open | Proposal: it stops counting, so only money in extends the date; the running rule has it reset the window. PM to confirm — `define-activity-for-point-expiry`. | Product |
 | What a grant's points live for | Decided | On a balance with points still live, they take its date and push it no further. | Product |
 | A balance with nothing live | Decided | A grant or a correction lapses on the later of twelve months from its own day and the day still running, and moves that day out, never back (grade10 `packages/loyalty/backend/src/services/ledger/expiry.ts:74-83`, `packages/loyalty/backend/src/repositories/members.ts:27-45`); points a reversal gives back, or points paid at checkout that a refund or an operator returns, go back to the day still running (grade10 `packages/loyalty/backend/src/services/ledger/lots.ts:42`, `packages/loyalty/backend/src/services/ledger/expiry.ts:140`). | Product |
 | Points that should outlive the balance | Decided | An operator restarts the window instead, on the record. | Product |
