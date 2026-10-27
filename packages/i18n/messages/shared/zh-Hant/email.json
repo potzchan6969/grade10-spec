@@ -5,7 +5,8 @@
     "body": "你要求了登入連結。請使用一次。",
     "expires": "此連結將於 {minutes} 分鐘後失效。",
     "action": "登入",
-    "whyYouGotThis": "你在 {brandName} 要求了登入連結。"
+    "whyYouGotThis": "你在 {brandName} 要求了登入連結。",
+    "sentAt": "發送時間：{sentAt}"
   },
   "appointment": {
     "greeting": "{name} 你好，",

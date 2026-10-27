@@ -5,7 +5,8 @@
     "body": "你申请了登录链接。请使用一次。",
     "expires": "此链接将在 {minutes} 分钟后失效。",
     "action": "登录",
-    "whyYouGotThis": "你在 {brandName} 申请了登录链接。"
+    "whyYouGotThis": "你在 {brandName} 申请了登录链接。",
+    "sentAt": "发送时间：{sentAt}"
   },
   "appointment": {
     "greeting": "{name} 你好，",

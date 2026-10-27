@@ -5,7 +5,8 @@
     "body": "You asked for a sign-in link. Use it once.",
     "expires": "This link expires in {minutes} minutes.",
     "action": "Sign In",
-    "whyYouGotThis": "You asked for a sign-in link on {brandName}."
+    "whyYouGotThis": "You asked for a sign-in link on {brandName}.",
+    "sentAt": "Sent at {sentAt}"
   },
   "appointment": {
     "greeting": "Hi {name},",
