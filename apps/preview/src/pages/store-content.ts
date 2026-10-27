@@ -15,6 +15,8 @@ import { createElement, type ReactNode } from "react";
 import {
   HELP_NAV_ITEM,
   INDEX_NAV_ITEM,
+  MEMBERSHIP_STORY_ID,
+  navigateToStory,
   PRIVACY_POLICY_HREF,
   SHOWS_NAV_ITEM,
   STORE_LOCATOR_HREF,
@@ -55,6 +57,7 @@ const STORE_SITE_HEADER = {
     profile: "Profile",
     myOrders: "My Orders",
     myAuctions: "My Auctions",
+    membership: "Membership",
     signOut: "Sign Out",
   },
   session: "signed-in" as const,
@@ -79,8 +82,8 @@ const STORE_SITE_HEADER = {
   ],
   onLocaleChange: noop,
   onSignIn: noop,
-  onProfile: noop,
   onMyAuctions: noop,
+  onMembership: () => navigateToStory(MEMBERSHIP_STORY_ID),
   onSignOut: noop,
   onCartClick: noop,
 };

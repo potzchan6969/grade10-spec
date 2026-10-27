@@ -21,6 +21,9 @@ const TERMS_OF_SERVICE_STORY_ID =
 /** Storybook story id for the Privacy Policy page assembly. */
 const PRIVACY_POLICY_STORY_ID =
   "site-carried-surfaces-screens-legal--privacy-policy";
+/** Storybook story id for the Membership page assembly. */
+const MEMBERSHIP_STORY_ID = "loyalty-membership-screens-membership--default";
+
 /** Storybook story id for the My Auctions page assembly (list → Winner Order). */
 const MY_AUCTIONS_PAGE_STORY_ID =
   "auction-bidding-screens-my-auctions--post-auction";
@@ -122,6 +125,7 @@ const MEDIA_COVERAGE_PAGE_STORY_ID =
  */
 const ROUTE_STORY_IDS: Record<string, string> = {
   "/about": ABOUT_PAGE_STORY_ID,
+  "/membership": MEMBERSHIP_STORY_ID,
   "/media-coverage": MEDIA_COVERAGE_PAGE_STORY_ID,
   "/press-releases": PRESS_PAGE_STORY_ID,
   "/shows": SHOWS_PAGE_STORY_ID,
@@ -185,6 +189,7 @@ export {
   INDEX_NAV_ITEM,
   interceptWorkbenchStoryLinks,
   MEDIA_COVERAGE_PAGE_STORY_ID,
+  MEMBERSHIP_STORY_ID,
   MY_AUCTIONS_PAGE_HREF,
   MY_AUCTIONS_PAGE_STORY_ID,
   navigateToStory,

@@ -110,10 +110,11 @@ type SiteHeaderProps = {
  * the supplied items, then Sign Out (destructive, separated). Cart, search,
  * Profile, My Orders, My Auctions,
  * Submissions, and Membership stay optional via handlers — Profile joins first
- * once its handler is supplied, My Orders joins ahead of My Auctions once
- * Store answers, My Auctions joins once its handler is supplied, Submissions joins after My Auctions once its copy and handler
- * are supplied, and Membership joins after that once its copy and handler are
- * supplied. When cart is present,
+ * once its handler is supplied, Membership follows it once its copy and handler
+ * are supplied, My Orders joins ahead of My Auctions once
+ * Store answers, My Auctions joins once its handler is supplied, and
+ * Submissions joins after My Auctions once its copy and handler
+ * are supplied. When cart is present,
  * `SiteHeader` owns the active-line count badge on the cart icon
  * (`cartItemCount`), matching the cart drawer title. On compact viewports,
  * `Nav` moves primary nav, utilities, search, and language into the left menu
@@ -205,6 +206,11 @@ function SiteHeader({
             {onProfile != null ? (
               <DropdownMenuItem onClick={onProfile}>{profile}</DropdownMenuItem>
             ) : null}
+            {membership && onMembership ? (
+              <DropdownMenuItem onClick={onMembership}>
+                {membership}
+              </DropdownMenuItem>
+            ) : null}
             {onMyOrders != null ? (
               <DropdownMenuItem onClick={onMyOrders}>
                 {myOrders}
@@ -218,11 +224,6 @@ function SiteHeader({
             {submissions && onSubmissions ? (
               <DropdownMenuItem onClick={onSubmissions}>
                 {submissions}
-              </DropdownMenuItem>
-            ) : null}
-            {membership && onMembership ? (
-              <DropdownMenuItem onClick={onMembership}>
-                {membership}
               </DropdownMenuItem>
             ) : null}
           </DropdownMenuGroup>
