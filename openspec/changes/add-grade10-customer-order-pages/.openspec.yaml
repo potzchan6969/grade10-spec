@@ -14,3 +14,4 @@ tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 11.4"
 hands:
   dev: "@kinisworking"
   pm: "@kinisworking"
+  design: "@kinisworking"
