@@ -1,5 +1,5 @@
 reviewed: b1022c21c53b8d62b6edf65a781909a55f487606
-source-identity: 
+source-identity: 66418c92bd94da3fc0457dbc0a381efad8ac7d0856d617a58cfdcac1d548e520
 baseline-identity: 96074f586ef36533265eb016973afd2d37be6a3809cc05f979f10fe205a5b342
 verdict: Ready to accept
 
@@ -14,7 +14,7 @@ verdict: Ready to accept
 
 | Source or dependency | Checked identity | Checks applied | Carried from |
 | --- | --- | --- | --- |
-| `add-tiers-benefits-surface` sources | `` review-scope digest | full read; page-to-delta, same-facts, nothing-open, folded result | — |
+| `add-tiers-benefits-surface` sources | `66418c92bd94da3fc0457dbc0a381efad8ac7d0856d617a58cfdcac1d548e520` review-scope digest | full read; page-to-delta, same-facts, nothing-open, folded result | — |
 | `docs/prds/products/grade10-site/loyalty/membership.md` | `b1022c21c53b8d62b6edf65a781909a55f487606` | Q5 to Q7 wording; Membership page keeps its dated line | — |
 | sibling deltas on the shared requirement | `b1022c21c53b8d62b6edf65a781909a55f487606` | overlap and fold order | — |
 | `pnpm accept:preflight` | — | ready to fold and accept | — |
