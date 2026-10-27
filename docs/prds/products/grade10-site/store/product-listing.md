@@ -120,7 +120,7 @@ The listing answers from the store's mirror of the shop's catalogue.
 | A change the shop never reports | Within 5 minutes |
 | A location's check on the mirror | Every 3 s while the listing is in use |
 
-- 🚧 **Within seconds** — a product the shop publishes, takes down, reprices,
+- **Within seconds** — a product the shop publishes, takes down, reprices,
   sells out or brings back reaches the cards, the counts and the sidebar
   within seconds, the same at every location; the store reads the product back
   from the shop rather than trusting the report
@@ -129,7 +129,7 @@ The listing answers from the store's mirror of the shop's catalogue.
 - **No collector waits on the mirror** — a listing view answers from the
   copy its own location holds, and the location asks the mirror for a newer one
   at most every 3 seconds, however many collectors it is serving
-- 🚧 **A quiet location answers too** — the first collector at a location that
+- **A quiet location answers too** — the first collector at a location that
   has not served the listing waits on no read of the catalogue, and gets the
   cards, counts and sidebar everyone else gets
 - **While the shop is unreachable** — the cards, the counts and the sidebar
