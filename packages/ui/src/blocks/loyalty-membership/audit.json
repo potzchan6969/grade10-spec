@@ -76,7 +76,7 @@
   },
   {
     "label": "reward-menu/price",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7270-1382",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7330-929",
     "classes": "shrink-0 items-end justify-center text-right font-semibold"
   },
   {
@@ -91,13 +91,13 @@
   },
   {
     "label": "reward-menu/card-row",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7270:1377",
-    "classes": "flex w-full items-center gap-4"
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7254:2284",
+    "classes": "flex w-full items-center gap-4 border border-border bg-card"
   },
   {
     "label": "reward-menu/coupon-card-row",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7264:6652",
-    "classes": "flex w-full items-center gap-4"
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7330:1106",
+    "classes": "flex w-full items-center gap-4 border border-border bg-card"
   },
   {
     "label": "reward-art/hero",
