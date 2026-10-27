@@ -56,7 +56,9 @@ back to that page.
 
 ## Pending Operations
 
-**Wait before another action** - the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
+**Wait before another action** - the drawer accepts no promo or points actions, account links or Checkout while it reads, saves or starts checkout. The collector can still close it.
+
+🚧 **Quantity keeps up with the presses** - + and − move a line on every press, up to the stock the shop last named, while the change before is still saving; only the latest quantity is sent once the one in flight answers. Prices, totals, the code, the points and Checkout wait until the shop has answered for it, and a change that did not land is said on its line. The cart's lines stay locked only while the drawer opens, a code or points change saves, or checkout starts.
 
 ::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
 

@@ -592,13 +592,23 @@ first and the soonest to expire first among them, across both kinds.
 
 ### Requirement: Pending drawer operations hold actions until work ends
 
-The drawer SHALL disable quantity and removal, promo and points inputs and
-non-dismissal disclosures, Apply, Use max, held-code selection, tender
-removal, product and account/loyalty navigation and Checkout while any current
-drawer operation is active. This includes current cart reads and writes,
-price/stock review, saved tender and eligibility/points reads, tender quoting
-and persistence, confirming reads and checkout creation. Unrelated page
-requests SHALL NOT hold this guard.
+The drawer SHALL disable promo and points inputs and non-dismissal
+disclosures, Apply, Use max, held-code selection, tender removal,
+account/loyalty navigation and Checkout while any current drawer operation is
+active. This includes current cart reads and writes, price/stock review, saved
+tender and eligibility/points reads, tender quoting and persistence,
+confirming reads and checkout creation. Unrelated page requests SHALL NOT hold
+this guard.
+
+A line's quantity, removal and product link SHALL stay available through cart
+line writes and the reads, review and quote they start, and SHALL be disabled
+only while the drawer's opening refresh, a tender change or checkout creation
+is active. Each quantity press SHALL show its quantity on the line at once, up
+to the count the shop last exposed for the line. A line SHALL have at most one
+write in flight; presses made meanwhile SHALL be sent as the latest quantity
+alone once it answers. Prices, totals and Checkout SHALL keep waiting until the
+shop has answered for the latest quantity and the review and quote it starts
+have ended. A refused or failed line write SHALL be said on its line.
 
 Every active operation SHALL keep the guard until it succeeds, is refused or
 fails. Completing one operation SHALL NOT release the guard while another is
@@ -608,7 +618,7 @@ guards SHALL decide which actions return. The drawer SHALL replay no action
 automatically. An accepted choice retained after a failed change SHALL remain
 usable only where the existing same-basket guard permits it.
 
-Pointer and keyboard action attempts while pending SHALL start no cart/tender
+Pointer and keyboard attempts at a disabled action SHALL start no cart/tender
 write, read proposal or navigation. Accepted same-basket figures and entered
 values SHALL remain under the existing skeleton and unchecked-fact treatments.
 Pending SHALL NOT make held facts current. Scrolling and Close, backdrop and
@@ -617,23 +627,23 @@ Closing SHALL NOT cancel or roll back a sent operation. An older tender answer
 SHALL NOT update a reopened drawer; the current member's outstanding work and fresh
 reads SHALL continue to decide interaction availability there.
 
-<!-- trace:scenario id=g10.store-cart-drawer.SC-tmf rev=1 -->
+<!-- trace:scenario id=g10.store-cart-drawer.SC-tmf rev=2 -->
 #### Scenario: g10.store-cart-drawer.SC34 - Current reads hold drawer actions
 **Serves:** g10.store-cart-drawer.US7 - Collector waits for current cart and tender facts
 
 - **GIVEN** an open member drawer reading cart, review, saved tender, promo eligibility, points or a current quote, including a background refresh with cached values
-- **WHEN** the collector tries any non-dismissal drawer action by pointer or keyboard
+- **WHEN** the collector tries a tender, disclosure, account/loyalty or Checkout action by pointer or keyboard
 - **THEN** its control is disabled and no action starts a write, tender proposal or navigation
 - **AND** existing loaders or unchecked facts remain without presenting held facts as current
 
-<!-- trace:scenario id=g10.store-cart-drawer.SC-8et rev=1 -->
-#### Scenario: g10.store-cart-drawer.SC35 - Cart writes hold item and tender actions together
+<!-- trace:scenario id=g10.store-cart-drawer.SC-8et rev=2 -->
+#### Scenario: g10.store-cart-drawer.SC35 - Quantity keeps up with presses while tender and Checkout wait
 **Serves:** g10.store-cart-drawer.US7 - Collector waits for the saved quantity or removal
 
-- **GIVEN** a quantity or removal write is active
-- **WHEN** another item edit, tender input/action, disclosure, product/account link or Checkout is attempted, including a second activation in the same turn
-- **THEN** no second user action is dispatched and all those controls remain disabled
-- **AND** the guard continues through the current review and quote needed after the write
+- **GIVEN** a quantity write is active on a line the shop holds three of, at one
+- **WHEN** the collector presses + three more times, including twice in the same turn
+- **THEN** the line shows each quantity at once and stops at three, and no more than the in-flight quantity and three are sent
+- **AND** tender inputs/actions, disclosures, account links and Checkout stay disabled through the write and the review and quote it starts, and Checkout returns on three
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-7zb rev=1 -->
 #### Scenario: g10.store-cart-drawer.SC36 - Tender work holds every drawer action
