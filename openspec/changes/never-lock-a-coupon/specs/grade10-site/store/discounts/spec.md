@@ -107,7 +107,14 @@ shop for the same benefit twice and spend the order's one discount-code slot
 on a line already at nothing. Settlement SHALL read a till gift by that line,
 as it reads a code. A sale rung below the gift's minimum spend after it was
 applied SHALL take the gift's line back off and return the coupon to the
-member, and staff SHALL be told.
+member, and staff SHALL be told. A sale already locked for tender when it falls
+below the minimum SHALL keep the line, since nothing may write to it, and staff
+SHALL be told to cancel the tender and remove the gift rather than let the sale
+through. A sale the till cannot tie to a member - membership out of reach, or
+a guest sale - SHALL offer no gift, and the coupon SHALL stay with the member
+for a later visit; staff SHALL NOT key a free line in its place. A return
+SHALL NOT take a gift back: the member keeps it whatever the sale falls to,
+and its coupon stays used.
 
 Every such code SHALL be minted when an order claims the coupon, and SHALL be
 scoped to the member's paired Shopify customer. A member with no paired
@@ -157,6 +164,33 @@ code that is not scoped to its member is a bearer string anyone may spend.
 - **WHEN** staff ring the sale below the gift's minimum spend
 - **THEN** the gift's line comes back off the sale and the coupon returns to the member
 - **AND** staff are told why
+
+<!-- trace:scenario id=g10.store-discounts.SC-y3y rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-34 - A gift on a sale locked for tender stays for staff to remove
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
+
+- **GIVEN** a gift applied to a counter sale, and the sale locked for tender
+- **WHEN** staff ring the sale below the gift's minimum spend
+- **THEN** the gift's line stays on the sale
+- **AND** staff are told to cancel the tender and remove the gift
+
+<!-- trace:scenario id=g10.store-discounts.SC-nh2 rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-35 - A gift is not offered where the till cannot reach membership
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
+
+- **GIVEN** a member holding a gift at a till that cannot reach membership
+- **WHEN** staff ring the member's sale
+- **THEN** no gift is offered and the sale goes on as an ordinary sale
+- **AND** the coupon stays available to the member
+
+<!-- trace:scenario id=g10.store-discounts.SC-1mr rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-36 - A returned sale leaves the gift with the member
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
+
+- **GIVEN** a paid counter sale that carried a gift
+- **WHEN** goods on it are returned, whatever the sale falls to
+- **THEN** the member keeps the gift
+- **AND** the gift's coupon stays used
 
 <!-- trace:scenario id=g10.store-discounts.SC-2qg rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-12 - A member with no paired Shopify customer is refused
