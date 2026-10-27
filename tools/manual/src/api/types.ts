@@ -45,6 +45,10 @@ export type PageEntry = {
   warningSignatures?: WarningSignature[];
 };
 
+/** A `*-tcs.md` suite beside the pages it tests, as written; the app reads
+ * its cases. */
+export type SuiteEntry = { path: string; source: string };
+
 /** A derived callout signature — git's answer to whose judgment and when. */
 export type WarningSignature = { author: string; date: string } | null;
 
@@ -115,6 +119,9 @@ export type Snapshot = {
    * store's own. Every page path opens with it. */
   manualDir: string;
   pages: PageEntry[];
+  /** The test-case suites under the manual. Absent from a snapshot built
+   * before they shipped. */
+  suites?: SuiteEntry[];
   /** Every file under the manual's `assets/`, as `assets/<name>` paths. */
   assets: string[];
   /** The store's `docs/references/`, in path order, without their text. The
