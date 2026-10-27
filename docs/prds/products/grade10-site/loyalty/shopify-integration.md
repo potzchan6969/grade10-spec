@@ -250,7 +250,6 @@ The loyalty terminal is a Shopify POS UI extension.
 | Arm | Identifies by | Spends | Collects | Switch |
 | --- | --- | --- | --- | --- |
 | QR | The square on the member card, or on a coupon the member opens, which also chooses that coupon | Yes | Yes | None |
-| Short code | The 8 letters beneath a coupon's or wallet pass's QR | Yes | Yes | None |
 | Wallet pass, Google | The code the phone makes from the pass | Yes | Yes | None |
 | Wallet pass, Apple | The durable code printed in the pass | No | No | None, and no switch can grant either |
 | Email | The exact email on the account | With Email spend | Always | Email spend |
