@@ -3,7 +3,7 @@
 The owner's draft PRD for a vault that pays collectors to keep cards in it and
 a consignment that sells them, as of 2026-10-27, with the owner's answers to
 the first gap review on the same day. The vault side is carried by the
-`add-vault-earnings` change and the [Earnings](../prds/products/grade10-site/vault/earnings.md)
+[Earnings](../prds/products/grade10-site/vault/earnings.md)
 page; the consignment side is marked on
 [Consignment](../prds/products/grade10-site/consignment/index.md). Read this
 as the shape the product starts from, not as its requirements. The draft

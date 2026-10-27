@@ -107,7 +107,7 @@ fees; renewing a live loan.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Custody is the product, financing an attachment | Decided | One case, two lanes, decided by the financing amount at intake | Product |
-| One case is one item | 🚧 | Reversed by the owner on 2026-10-27: a case holds many cards, each with its own incentive rate and financing term, because the vault and finance share one vaulting base — `add-vault-earnings` | Owner |
+| One case is one item | 🚧 | Reversed by the owner on 2026-10-27: a case holds many cards, each with its own incentive rate and financing term, because the vault and finance share one vaulting base | Owner |
 | The vault pays to keep cards | 🚧 | Each card earns a daily incentive into one balance on the owner's account — [Earnings](/p/grade10-site/vault/earnings) | Owner |
 | A payout takes two people; a correction takes a second one | Decided | Staff and treasurer share no money grant, and nobody may take back a row they recorded | Product |
 | Entity, retention and lending policy are data | Decided | Three per-brand tables on one mechanism, every undecided field null and named by the checks with its owner and its cost. A set bound refuses; a null one allows outside production and, where a loan cannot be written without it, refuses the offer in production; a field marked blocking refuses a production deploy | Engineering |

@@ -1,6 +1,5 @@
 ---
 title: Earnings
-spec: grade10-site/vault/earnings
 order: 3
 ---
 
