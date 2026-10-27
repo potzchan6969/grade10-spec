@@ -54,8 +54,8 @@ Completed step is reached
 no date of its own, only Completed's labelled estimate; a just-placed order
 has only Order Placed reached. Design confirms
 
-❓ **A full refund** — the summary keeps the paid total and shows the whole
-amount as its Refund row. Design confirms
+**A full refund** — the summary keeps the paid total and shows the whole
+amount as its Refund row below the total: charged, then returned
 
 **A safe carrier address** — an `https` address opens; any other scheme,
 such as `javascript:`, offers no Track Order
