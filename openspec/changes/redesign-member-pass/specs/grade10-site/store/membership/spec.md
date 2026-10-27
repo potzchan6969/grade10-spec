@@ -7,7 +7,7 @@
 The member card SHALL present a dynamic identification code — short-lived,
 usable exactly once, refused on reuse naming where and when it was first
 used — rendered scannable, a till that cannot scan it falling back to the
-member's email instead. Staff SHALL also be able to identify a member by
+member's email instead; the short code under a coupon's or wallet pass's QR is unaffected. Staff SHALL also be able to identify a member by
 their exact email
 address; a miss SHALL disclose nothing beyond that no member was found.
 Either way the programme SHALL record the account identity and SHALL NOT

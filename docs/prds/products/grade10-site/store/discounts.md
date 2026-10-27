@@ -253,7 +253,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 
 :::detail{title="Each step" for="operator"}
 1. **Staff ring the goods** — barcode scanner into Shopify POS's own cart; the extension adds nothing here
-2. **Staff identify the member** — the QR on the member card (profile page) or on one of the member's coupons, the short code under it, or the exact account email; phone number and "the customer already on the sale" are switches, off by default. A miss says only that no member was found
+2. **Staff identify the member** — the QR on the member card (profile page), the QR on one of the member's coupons or wallet passes with the short code under it, or the exact account email; phone number and "the customer already on the sale" are switches, off by default. A miss says only that no member was found
    - A card presentation lives ten minutes and is consumed once; a second till scanning the same screenshot is refused, naming where the first was used. A coupon's QR is a card presentation and follows the same rule
 3. **A session opens** — ten minutes from the server's clock, bound to the shop and the member, never to the staff label; a second identify of the same member at the same shop ends the first; a switch flipped mid-session only ever takes capability away
    - A scanned session outlives the modal: reopening it resumes, and it ends only when the customer on the sale becomes somebody else
