@@ -71,7 +71,7 @@ In Your Orders.
 
 - **Paid Order** — Shopify tells the store, and the order moves from pending to paid within seconds
 - 🚧 **Your Orders Link** — Shopify's Thank You and Order status page offers a link to Your Orders in Grade10, where the matching purchase appears; Shopify's own Continue shopping button is not the way back
-- **Cleared Cart** — payment clears the cart it bought, unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart
+- 🚧 **Cleared Cart** — payment clears the cart it bought, unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart
 - **Order Labels** — the shared order-status labels, with no unpaid badge of its own
 
 ## Guest Checkout
@@ -83,7 +83,7 @@ In Your Orders.
   - **No Account** — paying makes no account, now or later
   - **Joining an Account** — a guest order joins the account whose proven email it was placed under: at payment when that account exists, otherwise at that account's next sign-in. Every other guest order under that email joins with it
     - **Post-Checkout Account** — the order page after payment asks the buyer to sign in to add the order to an account; a sign-in that proves the order's email adds it — [Order Detail](/p/grade10-site/store/order-detail#back-from-checkout)
-    - **No Points** — a guest order never earns, joined or not; only an order placed with an account earns — [Points](/p/grade10-site/loyalty/points#rules)
+    - 🚧 **No Points** — a guest order never earns, joined or not; only an order placed with an account earns — [Points](/p/grade10-site/loyalty/points#rules)
 - **Order Link** — every web order's emails, guest and member, carry the private link; Grade10 sends no store email of its own — [Order Detail](/p/grade10-site/store/order-detail#order-link)
 
 ::story{id="store-cart-screens-cart-drawer-guest--guest" title="The signed-out drawer leads with guest checkout"}
