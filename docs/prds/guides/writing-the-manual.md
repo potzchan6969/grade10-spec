@@ -47,6 +47,10 @@ Write for a teammate who joined this week and has never seen the code.
 - **Leave out what belongs elsewhere** — every edge case is in the test
   cases, how it works is in `docs/architecture`, and small UI choices are in
   the design record. Link to them instead
+- **A rename moves its cases** — a case traces a heading and a rule by their
+  anchors, so renaming either strands it. Rename on the page, then
+  `pnpm tcs:retrace <old> <new>`, as `product-listing#links` to
+  `product-listing#links-and-back-button`
 - **Decisions are product judgments** — the `Product decisions` block at the
   end records why we chose something, for whom, and what we ruled out. It is
   not a log of every detail or of which change decided it
