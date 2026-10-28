@@ -28,20 +28,20 @@
   the Hong Kong clock (`dayValue(new Date(), config.timeZone)`) and the
   links at the reader's language (`siteAddress`) where none exists yet, linked from the pull request
 
-## 2. The walk (grade10-spec)
+## 2. The walk (grade10-spec) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its planning input, and the groups it walks
 landed. The interface the collector uses is the page itself, walked in the
 workbench stories.
 
-- [ ] 2.1 Walk `grade10-site-site-shows-US-01` — open the page at a wide
+- [x] 2.1 Walk `grade10-site-site-shows-US-01` — open the page at a wide
   and a narrow viewport and read it top to bottom
-- [ ] 2.2 Walk `grade10-site-site-shows-US-02` — follow every press-release
+- [x] 2.2 Walk `grade10-site-site-shows-US-02` — follow every press-release
   link on the page and confirm the destination it names
-- [ ] 2.3 Walk `grade10-site-site-shows-US-03` — activate both chapter
+- [x] 2.3 Walk `grade10-site-site-shows-US-03` — activate both chapter
   videos and confirm the embed replaces the poster in place
-- [ ] 2.4 Flip the cases the walks decide with
+- [x] 2.4 Flip the cases the walks decide with
   `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks'
   own commit; the ones that stay manual are named in the suite and in the
   walk's record in the pull request
-- [ ] 2.5 Verify: `pnpm run tcs:validate`
+- [x] 2.5 Verify: `pnpm run tcs:validate`
