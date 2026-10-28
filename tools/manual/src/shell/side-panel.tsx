@@ -119,7 +119,7 @@ function SectionHint({ section, shelf }: { section: string; shelf: Shelf }) {
     sections.find((found) => found.id === section)?.title ?? "Opening";
 
   return (
-    <div className="absolute inset-y-0 left-full ml-3 max-lg:hidden">
+    <div className="absolute inset-y-0 left-full z-10 ml-3 max-lg:hidden">
       <nav
         aria-label={`Beside ${title}`}
         className={`sticky top-32 flex flex-col gap-0.5 rounded-(--radius-xl) border border-border bg-popover p-1 shadow-sm transition-opacity duration-150 group-hover/section:opacity-100 focus-within:opacity-100 motion-reduce:transition-none ${
