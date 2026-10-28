@@ -79,7 +79,8 @@ function passedSection(sections: PageSection[]): string[] {
     const top = document
       .getElementById(section.id)
       ?.getBoundingClientRect().top;
-    if (top === undefined || top > BAR_LINE) break;
+    if (top === undefined) continue;
+    if (top > BAR_LINE) break;
     if (section.level === 2) {
       h2 = section.title;
       h3 = "";
