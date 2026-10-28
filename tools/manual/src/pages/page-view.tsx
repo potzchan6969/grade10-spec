@@ -5,7 +5,6 @@ import { BlockList } from "../blocks/block-list";
 import { BlockScopeProvider } from "../blocks/block-scope";
 import { BrokenCard } from "../blocks/broken-card";
 import { sectionRows } from "../blocks/side-blocks";
-import { PageActions } from "../editor/edit-actions";
 import { useEditMode } from "../editor/edit-mode";
 import { PageEditor } from "../editor/page-editor";
 import { useLayoutMaybe } from "../shell/layout";
@@ -46,7 +45,6 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
   const { frontmatter } = page.ast;
   const head = (
     <>
-      <PageActions path={path} />
       <PageHeading
         eyebrow={eyebrow}
         summary={frontmatter.summary}

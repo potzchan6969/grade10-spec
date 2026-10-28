@@ -8,7 +8,6 @@ import { buildIndex, REFERENCES_ROUTE, soleProduct } from "../api/derive";
 import { useSnapshot } from "../api/snapshot-provider";
 import { PageIcon } from "../blocks/page-icon";
 import { browserKeyStore, STORAGE } from "../editor/config";
-import { NewPageAction } from "../editor/edit-actions";
 import {
   navSections,
   PageSectionsContext,
@@ -174,8 +173,6 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
             </div>
           )}
         </nav>
-
-        <NewPageAction />
       </div>
     </aside>
   );

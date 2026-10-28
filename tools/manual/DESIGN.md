@@ -132,7 +132,6 @@ Grammar edge rules (each has a test):
 
 A capability page opens the same way on every page, so every role finds
 theirs in the same place: what it is, then how it looks (figma, stories).
-The editor scaffolds a new capability page with those two paragraphs.
 
 ### Canonical form
 
@@ -222,7 +221,7 @@ The manual is edited locally only: `pnpm dev` runs a Vite plugin that
 answers the `/api/*` endpoints above, confined to the manual's directory, and that
 presence is the only thing that turns editing on. The built, deployed site
 has no dev server behind it, so `useEditorSession` finds no store, and
-every editor surface — the Edit button, New page, asset upload —
+every editor surface — asset upload among them —
 hides itself rather than rendering read-only. Nothing about the hosted
 site changes for this: it is a static build of the store, same as it was
 before any of this existed.
@@ -250,8 +249,8 @@ form, image paths against `assets`, and `[[refs]]` against the pages' `spec`
 keys. Story ids stay a build-side check — the browser cannot see the Storybook index, and does
 not pretend to.
 
-New pages are created from the editor (path picker constrained to the
-manual's tree); deleting a page is offered the same way.
+The editor opens on a page's `?edit=1`; the page carries no button for it.
+A new page is a file added to the manual's tree.
 
 ## App
 
