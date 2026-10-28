@@ -6,8 +6,8 @@ order: 13
 
 Blocks drawn only for grading's collector screens.
 
-❓ **Which blocks** — @tangconst names them while designing the screens —
-[Grading](/p/grade10-site/grading)
+- ❓ **Which blocks** — @tangconst names them while designing the screens —
+  [Grading](/p/grade10-site/grading)
 
 ## The Blocks
 
