@@ -181,7 +181,8 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
     the consignor's list for the counter to pick on the next consignment
   - **Into the vault balance** - a person's proceeds go to their vault
     balance as each sale is credited, and need no bank details on file; a
-    refund after that takes them back off the balance
+    refund after that takes them back off the balance. An incentive credited
+    at signing goes there too, unless the counter pays it on the spot
 - ❓ Owner - **Where proceeds go by default** - recommended the vault
   balance; built as a bank account kept on the consignor's list until the
   owner decides
