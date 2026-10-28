@@ -2,7 +2,7 @@
 
 ## Purpose
 What the Shows surface tells a collector about the events: the next dates,
-the scale the shows reach, the three format chapters with their editions,
+the scale the shows reach, the format chapters with their editions,
 and the record of every show — and where each link on it leads.
 
 ## Feature set
@@ -13,10 +13,10 @@ and the record of every show — and where each link on it leads.
     current or upcoming
   - Event scale: a statement about physical proof over a show-floor photo
     and three statistic cards
-  - Event formats: three chapters — Hong Kong, Overseas Partnership,
-    Chinese Mainland — each with an intro, a video or photo presentation,
+  - Event formats: the published chapters — today Hong Kong, Overseas
+    Partnership and Chinese Mainland — each with an intro, a video or photo presentation,
     and edition cards carrying a carousel and a press-release link
-  - Event records: every published record, newest first
+  - Event records: every published record, in the order it gives them
   - Published content: the shows the admin has published, in the reader's
     language; nothing published answers not found
   - Jump navigation: the hero's Explore Shows and the sticky chapter list
@@ -39,22 +39,23 @@ The Shows surface SHALL present, in order: Grade10 Shows as the eyebrow
 over the top-level heading "Asia’s card shows, at full scale." with an
 Explore Shows and a Press Releases action, beside an Upcoming Shows card;
 an Event Scale section headed "Real Trends. In the Room." with a
-show-floor photo and three statistic cards — 25,000+ visitors at Grade10
-FEST Summer 2026, 120+ exhibitors, millions in revenue for the industry;
-an Event Formats section headed "Three Platforms. One Community." with
-its chapter list over the Hong Kong, Overseas Partnership and Chinese
-Mainland chapters, stacked; and an Event Records section headed "Every
+show-floor photo and three statistic cards for the published statistics; an Event Formats section
+headed "Three Platforms. One Community." with its chapter list over the
+published chapters, stacked, one pill per chapter; and an Event Records section headed "Every
 Show. A Milestone.".
 
-Hong Kong SHALL present Grade10 FEST HK over its video and two edition
-cards, Grade10 FEST Summer 2026 and Grade10 Festival 2025, the latter
-dated NOV 2025. Overseas Partnership SHALL present Seoul Auction × ZZZ
-over a captioned photo and, while its release is published, its Press
-Release link. Chinese Mainland SHALL
-present CARDJOY × Grade10 over its video and two edition cards, Shanghai
-and Hangzhou. Every edition card SHALL carry a photo carousel, a date, a
-description and a Press Release link. Wherever the page names the Seoul
-partner, it SHALL read ZZZ.
+Each published chapter SHALL present its title and intro over its video or
+captioned photo and its edition cards, and, while its release is
+published, its Press Release link. Every edition card SHALL carry a photo
+carousel, a date, a description and a Press Release link. The workbench's
+sample content carries three chapters: Hong Kong, Grade10 FEST HK over its
+video and two editions, Grade10 FEST Summer 2026 and Grade10 Festival 2025
+dated NOV 2025; Overseas Partnership, Seoul Auction × ZZZ over a captioned
+photo; and Chinese Mainland, CARDJOY × Grade10 over its video and two
+editions, Shanghai and Hangzhou. The sample's statistics read 25,000+
+visitors at Grade10 FEST Summer 2026, 120+ exhibitors and millions in
+revenue for the industry. Wherever the sample names the Seoul partner, it
+reads ZZZ.
 
 The Upcoming Shows card SHALL list its shows in the order its content
 gives them, only those whose month has not passed by the date in Hong
@@ -123,8 +124,8 @@ when no show is current or upcoming.
 ### Requirement: The chapter list jumps to its chapter
 The Explore Shows action SHALL be a hash link to the Event Formats
 section's top, `#shows-formats`, and each pill in the chapter list SHALL be
-a hash link to its chapter — `#hong-kong`, `#overseas`,
-`#chinese-mainland`. Activating one SHALL scroll to its target without
+a hash link to its chapter — the chapter's own id, in the sample
+`#hong-kong`, `#overseas` and `#chinese-mainland`. Activating one SHALL scroll to its target without
 hiding the other chapters and put its fragment in the address, so a
 chapter can be shared and Back returns to where the collector was. The
 chapter list SHALL stay pinned while the chapters scroll under it, as the
@@ -227,7 +228,7 @@ SHALL show no link. The workbench's sample content links:
 ### Requirement: The page shows what is published
 The Shows surface SHALL present the Shows content the admin publishes, as
 one document, in the language the address names; a published value with no
-words in that language SHALL read in its base text. Each format chapter
+words in that language SHALL read in its base text, English. Each format chapter
 SHALL stay on the page with the editions the document gives it, and a
 chapter given none SHALL show no edition cards: a show has no published
 state of its own. When the Shows content is not published the surface SHALL

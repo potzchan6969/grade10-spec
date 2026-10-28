@@ -18,8 +18,8 @@ system.
   Upcoming Shows card, an event-scale section with three statistic cards,
   three event-format chapters under a sticky pill tab list — Hong Kong,
   Overseas Partnership, Chinese Mainland — each carrying a video or photo
-  presentation and edition cards, and an event-records timeline newest
-  first.
+  presentation and edition cards, and an event-records timeline in the order
+  the admin gives.
 - **Edition cards with carousels.** Each edition pages through the live
   show's photo set with arrows and progress dots, and links to its
   press-release article at `/press-releases/{slug}`.

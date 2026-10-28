@@ -33,7 +33,7 @@ answers without a session, like any public surface —
   container: the poster and a play affordance, and on click the embed
   plays inside the same container
 - 🚧 **Event records** — Every Show. A Milestone. lists every published
-  edition newest first — today Seoul Auction, FEST Summer 2026, Shanghai, Hangzhou,
+  record in the order the admin gives — today Seoul Auction, FEST Summer 2026, Shanghai, Hangzhou,
   Festival 2025
 - 🚧 **Published content** — the page shows the shows the admin has
   published, in the reader's language, falling back to the base text for what is not

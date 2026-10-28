@@ -27,6 +27,9 @@ are, the formats they run in, and the record of past editions,
 
 **Pre-conditions:**
 
+* The published shows are the workbench sample content (three chapters,
+  the sample statistics and records); against other published content the
+  names and values below are that content's.
 * At least one show the Upcoming Shows card carries falls in the current
   month or later.
 
@@ -207,6 +210,8 @@ None.
 
 **Pre-conditions:**
 
+* The published shows are the workbench sample content; against other
+  published content the chapters below are that content's.
 * The Seoul Auction × ZZZ chapter's press release is published.
 
 **Steps:**
