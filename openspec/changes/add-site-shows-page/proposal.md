@@ -16,8 +16,8 @@ system.
 - **The Shows surface on the design system.** `/shows` renders inside the
   same shell as every surface and reads as one page: the hero beside an
   Upcoming Shows card while a show is current or upcoming, an event-scale section with a card for each published statistic,
-  the published event-format chapters under a sticky pill tab list — today
-  Hong Kong, Overseas Partnership, Chinese Mainland — each carrying a video
+  the published event-format chapters under a sticky pill tab list — in the
+  sample Hong Kong, Overseas Partnership, Chinese Mainland — each carrying a video
   or photo presentation when it has one, and the edition cards it holds, and an event-records timeline in the order
   the admin gives.
 - **Edition cards with carousels.** Each edition pages through the live
