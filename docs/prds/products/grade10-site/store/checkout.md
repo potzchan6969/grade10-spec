@@ -8,6 +8,35 @@ Checkout is Shopify's page, under `checkout.grade10.com`. The store hands it
 the cart, Shopify takes the address and the money, and the order comes back
 to Grade10.
 
+:::flow{title="From the cart to the order"}
+# Leaving the store
+
+## Collector — Press checkout
+In the cart drawer, signed in or as a guest.
+
+## Store — Read every line live
+Current price and stock, from Shopify. A line that moved comes back named.
+
+## Collector — Check the price
+The promo code and points chosen in the drawer, and the estimated total.
+
+# On Shopify's page
+
+## Collector — Fill in shipping and pay
+Shipping and tax are added here.
+
+## Shopify — Take the payment
+An item that sold out meanwhile is refused, named.
+
+# Back at Grade10
+
+## Shopify — Tell the store
+The order moves from pending to paid within seconds.
+
+## Collector — Find the order
+In Your Orders.
+:::
+
 ## Proceed to Checkout
 
 - **Pay** — the cart drawer's Proceed to Checkout button, signed in with Google or a magic link, or as a guest; there is no checkout page of the store's own — [Cart Drawer](/p/grade10-site/store/cart)
