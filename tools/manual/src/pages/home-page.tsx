@@ -40,7 +40,9 @@ export function HomePage() {
 
       {index.groups.map((group) => (
         <section className="mt-10" key={group.title}>
-          <h2 className="mb-3 font-heading font-bold text-lg">{group.title}</h2>
+          <h2 className="mb-3 font-bold font-heading text-manual-h2">
+            {group.title}
+          </h2>
           <ul className="grid gap-3 sm:grid-cols-2">
             {group.products.map((product) => (
               <li key={product.id}>
@@ -53,7 +55,7 @@ export function HomePage() {
 
       {index.topics.length > 0 ? (
         <section className="mt-10">
-          <h2 className="mb-3 font-heading font-bold text-lg">
+          <h2 className="mb-3 font-bold font-heading text-manual-h2">
             Cross-cutting topics
           </h2>
           <div className="space-y-4">

@@ -102,7 +102,7 @@ function Shelf({
     <section>
       <div className="mb-2 flex flex-wrap items-baseline gap-2">
         <h2
-          className="font-heading font-bold text-base"
+          className="font-bold font-heading text-manual-h3"
           id={slugify(shelf.route)}
         >
           <Link className="hover:underline" to={shelf.route}>

@@ -21,7 +21,7 @@ export function PageHeading({
           {eyebrow}
         </div>
       ) : null}
-      <h1 className="font-heading font-bold text-3xl text-foreground leading-tight">
+      <h1 className="font-heading font-bold text-foreground text-manual-h1 leading-tight">
         {title}
       </h1>
       {summary ? (
