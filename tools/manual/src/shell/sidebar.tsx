@@ -128,7 +128,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
       )}
       data-slot="manual-sidebar"
     >
-      <div className="flex flex-col gap-5 px-3 py-6">
+      <div className="flex flex-col gap-5 px-3 py-2">
         {/* One landmark: the fixed views and the store's contents are two
          * lists of the same rail, and two `nav`s named alike gave a screen
          * reader's landmark list two entries a reader could not tell apart.
@@ -139,7 +139,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
               Navigation appears once the snapshot is in hand.
             </Text>
           ) : (
-            <div className="flex flex-col gap-5 pt-4">
+            <div className="flex flex-col gap-5 pt-2">
               {index.groups.map((group) => (
                 <GroupSection
                   group={group}

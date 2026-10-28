@@ -122,7 +122,7 @@ export function SplitPage({
         >
           <TabsList fullWidth size="sm" variant="list">
             {SIDE_TABS.map((tab) => (
-              <TabsTrigger className="gap-1.5" key={tab} value={tab}>
+              <TabsTrigger className="gap-1.5 mb-2" key={tab} value={tab}>
                 {TAB_ICON[tab]}
                 {TAB_LABEL[tab]}
                 {total(tab) > 0 ? (
@@ -140,7 +140,7 @@ export function SplitPage({
         const shelf = shelves[position];
         return (
           <div
-            className="grid grid-cols-[minmax(0,1fr)_var(--side-width)]"
+            className="grid grid-cols-[minmax(0,1fr)_var(--side-width)] mt-6"
             data-section={row.section || undefined}
             key={row.section || "opening"}
             style={{ columnGap: GAP }}

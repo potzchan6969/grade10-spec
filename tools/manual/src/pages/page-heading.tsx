@@ -32,7 +32,7 @@ export function PageHeading({
   const place = usePassed(ref);
 
   return (
-    <header className="mb-8 border-border-subtle border-b pb-6" ref={ref}>
+    <header className="mt-6 mb-8 border-border-subtle border-b pb-6" ref={ref}>
       {eyebrow ? (
         <div className="mb-2 font-medium text-secondary-foreground text-xs uppercase tracking-wide">
           {eyebrow}

@@ -101,7 +101,7 @@ function Shell() {
           )}
 
           <div className="flex min-w-0 flex-1 flex-col">
-            <main className="min-w-0 flex-1 px-5 py-10 lg:px-12">
+            <main className="min-w-0 flex-1 px-5 lg:px-12">
               {/* A page read beside its side takes the whole width; its
                     reading column keeps its own measure. */}
               <div
