@@ -1,4 +1,4 @@
-## 1. The About page in the workbench (grade10-spec)
+## 1. The About page in the workbench (grade10-spec) (owner: @seankcw)
 
 - [x] 1.1 The `Site/About/Screens/About` stories' play pass asserts the
   sections, the link destinations, the unlaunched mentions staying text,

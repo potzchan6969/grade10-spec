@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "14439f5a7827cdcfd421ba16fd8ac665780a2eebc4c00977f116d053428857a6"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "d5943bdf7857b3af3f83f998c23d3cabd9e4cfc5",
+    "capturedAt": "2026-10-28T06:28:30.253Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-site-about-page/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/about/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/about/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Every link leads to its named surface",
+          "Requirement: The Market indexes tabs show each index",
+          "Requirement: The milestones read newest first",
+          "Requirement: The page fits the viewport",
+          "Requirement: The page presents the company"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/about/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
