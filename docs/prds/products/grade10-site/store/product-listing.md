@@ -4,8 +4,6 @@ spec: grade10-site/store/product-listing
 order: 2
 ---
 
-Where collectors browse the store, narrow it to what they collect, and open a product.
-
 ## Products Display
 
 - **Product Count** — number of products given the filters
