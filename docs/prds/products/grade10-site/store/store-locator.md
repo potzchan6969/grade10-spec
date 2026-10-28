@@ -67,35 +67,9 @@ Collectors need one honest answer for where the shop is. A finder UI for one
 Hong Kong location would invent search, distance and a store list nobody can
 use.
 
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Collector looking for the shop | Opens Store Locator from chrome or free pick-up | Sees the Hong Kong address, hours, and a map that opens Google Maps. |
-| Collector on Product Details | Reads free pick-up | Opens Store Locator for the same shop. |
-| Crawler or link preview | Fetches the address with no scripts | Gets a distinct title, description, and Open Graph tags. |
-
-**Not in scope.** Multi-store search, ZIP or city, distance, amenities chips,
-stock by store, store picker, in-app turn-by-turn, checkout store selection.
-GRADE as a chrome destination. A separate SEO programme beyond crawlable-pages.
-
-**Measurement.**
-
-| Signal | Definition | Owner |
-| --- | --- | --- |
-| Store Locator opens | Opens of the public address from chrome and from free pick-up. Unmeasured; first delivery sets the baseline. | Product |
-| Maps opens | Activations of the map that leave for Google Maps. Unmeasured. | Product |
-
-**Decisions.**
-
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| One shop, detail only | Decided | Grade10 has one Hong Kong store; the page is Location & Hours, not a finder. | Product |
-| Same shop as free pick-up | Decided | Name, address, hours and Maps destination are the free pick-up claim's shop, kept in one place. | Product |
-| Map opens Maps | Decided | The map is one link to Google Maps, in a new tab; no second Get directions control. | Product |
-| Free pick-up links here | Decided | Product Details free pick-up opens this page. | Product |
-| Waits with the store | Decided | Store Locator is carried with the store, so a build without the store has no page, link or sitemap entry for it. The footer already draws it only beside the shop column (grade10 `apps/frontend/grade10/src/chrome/SiteShell.tsx:184-195`). | Product |
-| URL path | Decided | `/<lang>/store-locator`, matching the chrome label and the block. It is top-level, since an address under `/store` would mark Store as current too; `/<lang>/find-us` and `/<lang>/store-location` were the alternatives. | Product |
-| Where the facts are kept | Decided | The brand's own copy, shared with the free pick-up claim and translated. The booking diary's main shop takes over once booking launches and the diary is translated; booking is not carried on public builds yet, and the diary's name and address are English only. | Ops / Product |
-| Phone and holiday hours | Decided | Neither for now: every day uses 11am – 9pm until Operations names a public phone and holiday hours, which a follow-on change adds. | Ops / Product |
-| Title and description strings | Decided | The strings under The Page. The description leaves the hours out so it cannot drift from them. | Product |
-| Translated address and hours | Decided | The address is translated like the store name, and the hours are written in each language's own format, so the page reads in one language. | Product |
+- **`/<lang>/store-locator`** — it matches the chrome label and the block; `/<lang>/find-us` and `/<lang>/store-location` were the alternatives
+- **The brand's own copy of the facts** — shared with the free pick-up claim and translated; the booking diary's main shop takes over once booking is carried on public builds and the diary is translated, since its name and address are English only
+- **Address and hours translated** — so the page reads in one language
+- **Not in scope** — multi-store search, ZIP or city, distance, amenities, stock by store, a store picker, turn-by-turn, choosing a store at checkout; GRADE as a chrome destination; SEO beyond Crawlable Pages
+- ❓ **Unmeasured** — Store Locator opens from chrome and free pick-up, and map activations that leave for Google Maps; nothing records them yet. Product confirms
 :::

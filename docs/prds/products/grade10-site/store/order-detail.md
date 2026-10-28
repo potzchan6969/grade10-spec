@@ -161,17 +161,13 @@ the order this browser last sent to Shopify.
 ::story{id="store-order-detail-screens-order-link--member-order-signed-out" title="A member's order link, signed out"}
 
 :::detail{title="Product decisions" for="pm"}
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Order pictures | Decided | Use the first current product picture, as the cart does, rather than a purchase-time image. A later product-image edit can appear on an earlier order; a removed or unpublished product may have no picture. Order access and recorded purchase facts stay unchanged. Selected from the recommended fix on 2026-10-22. | Product |
-| Order link for every order | Decided | Every order email's View order button carries the private link, member orders included. A forwarded email lets a holder see a member's order — accepted; the page shows no account facts. Decided 2026-10-13. | Product |
-| Post-checkout prompt | Decided | The account prompt lives on the Grade10 order page after checkout, not on a Shopify Thank-you extension. Decided 2026-10-13. | Product |
-| Another email | Decided | Only a sign-in that proves the order's email adds it — a magic link to that email or a Google account under it; a Google account under another email signs the buyer in and adds nothing, and the toast offers a magic link to the order's email. Decided 2026-10-13. | Product |
-| Points section | Decided | An order that will earn shows Points to Earn before completion and Points Earned after; an order that will not earn — canceled or fully refunded, or a guest order, joined or not — shows no points section at all. Decided 2026-10-13; a joined guest order earns nothing from 2026-10-14. | Product |
-| Shipping step label | Decided | The delivery step reads Shipping (in progress), matching winner orders; the status badge keeps the status name Shipped. Decided 2026-10-13. | Product |
-| Delivery steps follow the parcel | Decided | The steps read each parcel's carrier state rather than the order status badge. The badge reads Completed once every item is handed over and paid, so a stepper driven by it ticked Completed while the parcel was still travelling, ticked every step on a refund before shipping, and drew a canceled order as still on its way. A parcel whose carrier never reports delivery stays on Shipping until staff mark the order delivered - [Order Status](/p/grade10-site/commerce/order-status). Decided 2026-10-24. | Product |
-| How a stopped order ends | Decided | A canceled order's last step draws a muted ✕, never the reached tick, so a collector never reads a stop as delivered. A refunded order keeps the tick: the money came back as asked, and a cancel with no refund is rare. Dropping the steps for a sentence was ruled out. Decided 2026-10-27 - [handoff](https://github.com/9gag/grade10-spec/pull/1346). | Design |
-| Steps not reached | Decided | An unreached step shows nothing under its label, and only Completed carries Estimated delivery while a parcel is on its way; a Pending placeholder was ruled out. Decided 2026-10-27. | Design |
-| Refunded items | Decided | A line a refund named splits into the units kept and the units refunded, the refunded row struck through under Refunded with the day the latest refund was issued, as the block's refunded row draws it. Showing the refund only in the summary was ruled out: it leaves a collector guessing which item came back. Decided 2026-10-27. | Product |
-| A full refund's summary | Decided | A full refund draws as a partial one: the paid total stays and the Refund row below it shows the whole amount. A note under the total and a netted HK$0.00 row were ruled out. Decided 2026-10-27. | Design |
+- **Order pictures** — the first current product picture, as the cart does, rather than a purchase-time image; a later image edit can appear on an earlier order, and a removed product may have none
+- **Order link for every order** — member orders included; a forwarded email lets a holder see a member's order, accepted because the page shows no account facts
+- **The account prompt on our order page** — not on a Shopify Thank-you extension
+- **Shipping step label** — the step reads Shipping, matching winner orders; the badge keeps the status name Shipped
+- **Delivery steps follow the parcel** — a stepper driven by the badge ticked Completed while the parcel was still travelling, ticked every step on a refund before shipping, and drew a canceled order as still on its way. A parcel whose carrier never reports delivery stays on Shipping until staff mark it delivered - [Order Status](/p/grade10-site/commerce/order-status)
+- **How a stopped order ends** — a canceled order's muted ✕ means a stop never reads as delivered; a refunded order keeps the tick, since the money came back as asked. Dropping the steps for a sentence was ruled out - [handoff](https://github.com/9gag/grade10-spec/pull/1346)
+- **Steps not reached** — nothing under an unreached step's label; a Pending placeholder was ruled out
+- **Refunded items** — showing the refund only in the summary was ruled out: it leaves a collector guessing which item came back
+- **A full refund's summary** — drawn as a partial one; a note under the total and a netted HK$0.00 row were ruled out
 :::

@@ -59,11 +59,8 @@ order, or return to the Store when the account is empty.
 ::story{id="store-order-history-screens-order-history--with-guest-orders" title="Guest orders under the member's email, listed"}
 
 :::detail{title="Product decisions" for="pm"}
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Page name | Decided | "My Orders", the same words the account menu uses to open it, and the order details breadcrumb and back link follow. Rejected keeping "Your Orders", which left the menu item and the page it opens under two names. Decided 2026-10-29. | Product |
-| Order pictures | Decided | Use the first current product picture, as the cart does. Images identify products; recorded names, quantities and money remain the purchase's facts. Historical image storage is outside this change. Selected from the recommended fix on 2026-10-22. | Product |
-| Guest orders after sign-in | Decided | Every paid guest order placed under an email appears in the account automatically once a sign-in proves that email — the way Shopify customer accounts and WooCommerce already list a guest's orders under a proven email, and the reason the member is the order's owner rather than a recipient of a saved link. Linking gives the order an owner and earns nothing. Decided 2026-10-13, earning dropped 2026-10-14; supersedes prompt-only saving (earlier 2026-10-13), which itself superseded the first email-match row (2026-10-12). | Product |
-| Join at payment | Decided | A guest order placed under the proven email of an existing account joins that account at payment, so it is listed without waiting for a sign-in. Decided 2026-10-13, the owner's answer. | Product |
-| A changed sign-in email | Decided | A guest order joins under the email the account holds. A member whose Google account changes its email keeps the old one on the account, so guest orders under the new email do not join it. Accepted: a Gmail address cannot change, and following Google's email would move an identity across auth, the store, loyalty and Shopify for a rare case. Decided 2026-10-14, the owner's answer. | Product |
+- **Page name** — "My Orders", the words the account menu uses to open it, with the order details breadcrumb and back link following; keeping "Your Orders" left the menu item and the page it opens under two names
+- **Order pictures** — the first current product picture, as the cart does: images identify products, while recorded names, quantities and money remain the purchase's facts; storing a purchase-time image was ruled out
+- **Guest orders after sign-in** — every paid guest order under an email joins once a sign-in proves it, the way Shopify customer accounts and WooCommerce list a guest's orders, so the member owns the order rather than holding a saved link; joining earns nothing
+- **A changed sign-in email** — a guest order joins under the email the account holds; following Google's email would move an identity across auth, the store, loyalty and Shopify for a rare case, and a Gmail address cannot change
 :::

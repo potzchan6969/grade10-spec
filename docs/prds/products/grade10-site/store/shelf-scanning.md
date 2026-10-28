@@ -163,38 +163,5 @@ product names. Every slab on the shop's shelf is a registered inventory item.
 Shopkeepers need the store's answer for the product in their hand, and the
 scanner can only give it if it holds the store's catalogue.
 
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Shopkeeper | A customer asks about a product on the shelf | Sees its title, price and availability, and can open its store page |
-| Shopkeeper | Holds one slab of a card the store lists several times | Sees the listing of that slab, with its grade and cert |
-| Stock keeper | Lists a house-stock slab | Writes its label code on the product, so the scanner names that copy |
-
-**Measurement.**
-
-| Signal | Definition | Owner |
-| --- | --- | --- |
-| Scanner in step | Share of published products the scanner holds with the store's current title, price and availability. Unmeasured; first delivery sets the baseline | Product |
-| Slabs without a unit | Graded products held without grade or cert. Alerted to Operations | Operations |
-
-**Decisions.**
-
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| What is held | Decided | Every published product but gift cards; sold out kept — decided by the owner, 2026-10-13 | Product |
-| Production | Decided | Synced now; the store-page link only where the store is carried — decided by the owner, 2026-10-13 | Product |
-| Not yet recognisable | Decided | Sealed boxes, merch and comics held now, recognised once the box detector ships — decided by the owner, 2026-10-13 | Product |
-| Slabs | Decided | Resolved to the exact unit through the inventory item the product names — decided by the owner, 2026-10-13 | Product |
-| House-stock slabs | Decided | The shop product names its item's label code; grader, grade and cert come from inventory — decided by the owner, 2026-10-13 | Product |
-| What makes a slab | Decided | Consigned: its inventory item holds a grader, whatever its type. House stock: a graded collectible type — decided by the round, 2026-10-13 | Product |
-| A slab with no known unit | Decided | Recognised by its photos, without grade or cert; Operations alerted — decided by the owner, 2026-10-13 | Product |
-| Availability | Decided | Available or Sold out, no count — decided by the owner, 2026-10-13 | Product |
-| Freshness | Decided | Follows the store's mirror; photos every two hours on staging and production; an open scanner refreshes every few minutes — decided by the owner, 2026-10-22 | Product |
-| The link | Decided | One fixed scan-only link, bookmarked or printed; retired by rotating its key — decided by the owner, 2026-10-13 | Product |
-| ZZZ | Decided | Grade10's store only — decided by the owner, 2026-10-13 | Product |
-| Certs | Decided | A slab's cert and house label code are public, printed on the slab — decided by the owner, 2026-10-13 | Product |
-| Two listings of one art | Decided | Each close product shown, slabs included unless a label was read, closest first; the shopkeeper picks — decided by the owner, 2026-10-13 | Product |
-| Raw copy of a slab-only card | Decided | Names the slab's product without grade or cert, or offers the pick where another product matches as closely — decided by the owner, 2026-10-13 | Product |
-| Retired link | Decided | The usual refusal; the shop manager hands out the new QR code — decided by the owner, 2026-10-13 | Product |
-| Discounts | Decided | The price the shopper pays with a Sale badge — decided by the owner, 2026-10-13 | Product |
-| Title language | Decided | The store's default — decided by the owner, 2026-10-13 | Product |
+- ❓ **Unmeasured** — the share of published products the scanner holds with the store's current title, price and availability, and graded products held without grade or cert; nothing records them yet. Product and Operations confirm
 :::
