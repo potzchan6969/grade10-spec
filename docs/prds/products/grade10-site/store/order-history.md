@@ -39,10 +39,10 @@ order, or return to the Store when the account is empty.
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 - 🚧 **No points** — a joined guest order earns none
 
-🚧 **Store orders only** - a ticket order placed on
-[Tickets](/p/grade10-site/ticketing) never appears here; the ticketing
-platform's own order pages carry it -
-[Your Tickets](/p/grade10-site/ticketing/your-tickets)
+- 🚧 **Store orders only** — a ticket order placed on
+  [Tickets](/p/grade10-site/ticketing) never appears here; the ticketing
+  platform's own order pages carry it -
+  [Your Tickets](/p/grade10-site/ticketing/your-tickets)
 
 ## Product Pictures
 
