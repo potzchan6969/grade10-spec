@@ -21,9 +21,11 @@ are, the formats they run in, and the record of past editions,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-shows-US-01
+
+**Decided by:** `apps/preview/src/pages/site/shows/shows-page.stories.tsx`
 
 **Pre-conditions:**
 
@@ -125,9 +127,11 @@ None.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-shows-US-01
+
+**Decided by:** `apps/preview/src/pages/site/shows/shows-page.stories.tsx`
 
 **Pre-conditions:**
 * The published shows are the workbench sample content; against other
@@ -577,9 +581,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-shows-US-02
+
+**Decided by:** `apps/preview/src/pages/site/shows/shows-page.stories.tsx`
 
 **Pre-conditions:**
 
@@ -707,9 +713,11 @@ opening a new tab.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-shows-US-03
+
+**Decided by:** `apps/preview/src/pages/site/shows/shows-page.stories.tsx`
 
 **Pre-conditions:**
 * The published shows are the workbench sample content; against other
