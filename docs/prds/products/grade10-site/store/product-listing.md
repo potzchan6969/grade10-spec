@@ -108,54 +108,19 @@ order: 2
 :::
 
 :::detail{title="Product decisions" for="pm"}
-Collectors arrive knowing what they collect, usually a world or a kind of
-card. The shop's collections are a merchandiser's groupings, which don't match
-how collectors think, so the listing filters by world and type and lets
-collections stay a way in from the home page. Every option shows a count so a
-collector can see how much is there before picking.
+Collectors arrive knowing their world or kind of card; the shop's collections
+are a merchandiser's groupings, so the listing filters by world and type and
+collections stay a way in from the home page.
 
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Collector who collects one world | Opens the listing cold | Narrows to their world and sees how much is there before picking. |
-| Collector following a home page tile | Arrives inside a collection | Sees which collection they are in, and can step out of it. |
-| Collector hunting a price | Sorts by lowest price | Sees the cheapest product for sale in the whole store, not the cheapest already loaded. |
-| Collector sharing what they found | Pastes the address | The receiver opens the same view. |
-
-**Not in scope.** Filtering inside a collection. Searching inside a
-collection. Sorting by popularity, since nothing measures it. The home page's
-collection grid.
-
-**Measurement.**
-
-| Signal | Definition | Owner |
-| --- | --- | --- |
-| Filtered sessions | Share of listing visits that apply any filter, search or collection. No baseline yet; the first release sets it. | Product |
-| Time to first filtered result | From opening the listing to the first filtered grid. Not measured yet. | Product |
-| Search use | Share of listing visits that search or pick a suggestion, and the time from first keystroke to a product or results. No baseline yet. | Product |
-| Product opens from the listing | Share of listing visits that open a product, read as Product Viewed with Source `Listing` or `Search` - [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events). | Product |
-| Listing response time | From a filter change to its first grid, p95, at the edge. ❓ Nothing records it yet; staging figures are in [the design note](/references/store-catalogue-index). | Engineering |
-| Shop change to listing | From Shopify returning a change to every server having it, p95. ❓ Not measured until the release records it. | Engineering |
-
-**Decisions.**
-
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Filter by world and type, not collection | Decided | Collections are a merchandiser's grouping and stay a way in. | Design |
-| A collection or filters, not both | Decided | Shopify can't filter within a collection natively; doing it ourselves would scan the whole catalogue for every request. Sort is not a filter, so it keeps the collection. | Engineering |
-| Our own copy of the catalogue | Decided | The listing reads one copy the store keeps per shop, so Shopify's load doesn't grow with traffic and browsing survives a Shopify outage. Checkout still prices live — [Commerce](/p/grade10-site/commerce/commerce). | Engineering |
-| Seconds, not minutes | Decided | A change should reach the listing in seconds. Shopify's own speed is the floor; the 5-minute refresh catches what it never reports. | Product |
-| For sale first; price sorts on the cheapest variant | Decided | Sorting on the card's own price instead would mean backend changes and a collection would still sort Shopify's way. Product may reopen it. | Product |
-| The address holds the view | Decided | Filters, search and sort are each a history entry, so a view can be shared and Back widens it. | Product |
-| The count is the store's total | Decided | Counting loaded cards read the page size back as the store's size and grew as the collector scrolled, so it couldn't answer the one question a count is for: is it worth going on. Before the first results arrive the count shows nothing rather than `0 products`. | Engineering |
-| Scroll position isn't kept | Decided | An address that carried scroll depth would no longer be the view people share. Keeping a collector's place needs its own evidence. | Product |
-| Worlds show five | Decided | A shop can add worlds without limit; types are a closed list. | Design |
-| No popularity sort | Decided | Nothing ranks products by popularity, so the menu doesn't pretend to. Latest is the default because the store can answer it. | Product |
-| Keep an option at 0 | Decided | Hiding an option that a filter or search ruled out would leave the collector unable to undo it. | Design |
-| Search on the listing, wide screens only | Decided | A search box in the site header would read as site-wide search, and the auction has none. Small screens use the filter pills instead. | Design |
-| Signed-out cart | Decided | A signed-out collector adds to a cart kept in the browser and can check out from it. Replaces sign-in to add. | Product |
-| No stock on browse | Decided | No remaining count, scarcity cue or quantity cap on the listing or product page. The cart is the only authority on quantity. | Product |
-| Discounts on the card | Decided | The shop's automatic discounts are read from Shopify every minute and shown as [Discounts](/p/grade10-site/store/discounts#where-each-shows) describes. A discount that depends on the basket is the cart's to price; one an app computes can't be read, so it isn't shown. | Product |
-| Filtering inside a collection | ❓ Open | Whether a collection and a filter can apply together; Shopify's reads don't prevent it. | Product |
-| What search matches | ❓ Open | Titles only, as today, or titles, descriptions, tags and vendor as Shopify's own search does. | Product |
-| Footer links | ❓ Open | The footer still shows destinations the site doesn't answer yet; [Page Shell](/p/grade10-site/site/page-shell) owns it. | Product |
+- **A collection or filters, not both** — Shopify can't filter within a collection, and doing it ourselves scans the whole catalogue per request. Sort isn't a filter, so it keeps the collection
+- **Our own copy of the catalogue** — Shopify's load doesn't grow with traffic, and browsing survives its outage; checkout still prices live — [Commerce](/p/grade10-site/commerce/commerce)
+- **Price sorts on the cheapest variant** — the card's own price needs backend changes, and a collection would still sort Shopify's way. Product may reopen it
+- **The count is the store's total** — counting loaded cards grew with the scroll, so it couldn't say whether going on is worth it
+- **Scroll position isn't kept** — an address carrying scroll depth stops being the view people share
+- **Keep an option at 0** — hiding one a filter ruled out leaves no way to undo it
+- **Search on the listing, not the header** — a header box reads as site-wide search, and the auction has none
+- **No popularity sort** — nothing measures popularity
+- **Not in scope** — filtering or searching inside a collection; the home page's collection grid
+- **Measured by** — product opens from the listing, as Product Viewed from `Listing` or `Search` — [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events)
+  - ❓ **Unmeasured** — filtered sessions, time to a filtered result, search use, listing response time and shop-change lag; nothing records them yet. Product and Engineering confirm
 :::
