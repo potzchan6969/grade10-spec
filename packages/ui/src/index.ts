@@ -500,6 +500,12 @@ export {
   type WalletPassState,
   type WalletPassWallet,
 } from "./blocks/loyalty-membership/wallet-pass-links";
+// shared-ui/loyalty-top-ups
+export {
+  TopUpPackCard,
+  type TopUpPackCardCopy,
+  type TopUpPackCardProps,
+} from "./blocks/loyalty-top-ups/top-up-pack-card";
 // shared/ui/page-blocks
 export {
   FactCard,
