@@ -251,8 +251,8 @@
 
 .verification-image-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
   align-items: start;
 }
 
@@ -450,23 +450,6 @@
   gap: 4px 12px;
 }
 
-.verification-status-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-}
-
-.verification-status-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  min-width: 0;
-  border: 1px solid var(--vp-border, #d7d9df);
-  border-radius: 10px;
-  padding: 10px 12px;
-}
-
 .verification-chip {
   display: inline-flex;
   align-items: center;
@@ -574,60 +557,101 @@
   padding: 0;
 }
 
-/* Flows: the panel's own Screen control and the Canvas overview */
-.verification-flow-strip {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* Scores: blue under 0.5%, orange up to 20%, red over 20% */
+.verification-panel [data-tone="ok"] {
+  --vp-score: var(--vp-score-ok);
 }
 
-.verification-flow-screens {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  border: 0;
+.verification-panel [data-tone="warn"] {
+  --vp-score: var(--vp-score-warn);
 }
 
-.verification-flow-screens legend {
+.verification-panel [data-tone="high"] {
+  --vp-score: var(--vp-score-high);
+}
+
+.verification-visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
+  white-space: nowrap;
 }
 
-.verification-flow-screen input {
+.verification-context > summary {
+  cursor: pointer;
+}
+
+.verification-context[open] > summary {
+  margin-bottom: 8px;
+}
+
+/* One size at a time, its score on the tab */
+.verification-size-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin: 0;
+  padding: 4px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--vp-surface, #f0f2f5);
+}
+
+.verification-panel .verification-size-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 48px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--vp-fg, #20232a);
+  cursor: pointer;
+}
+
+.verification-size-tab input {
   position: absolute;
   opacity: 0;
   pointer-events: none;
 }
 
-.verification-flow-screen:focus-within {
+.verification-size-tab:focus-within {
   outline: 2px solid var(--vp-accent, #1f6feb);
   outline-offset: 2px;
 }
 
-.verification-panel .verification-flow-screen {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  min-height: 32px;
-  padding: 0 10px;
-  border: 1px solid var(--vp-border, #c5c8cf);
-  border-radius: 6px;
-  color: var(--vp-fg, #20232a);
-  background: var(--vp-surface, #f0f2f5);
-  cursor: pointer;
+.verification-size-tab strong {
+  color: var(--vp-score, var(--vp-muted, #626875));
+  font-variant-numeric: tabular-nums;
 }
 
-.verification-panel .verification-flow-screen[data-checked="true"] {
-  border-color: var(--vp-accent, #1f6feb);
-  color: var(--vp-on-accent, #fff);
-  background: var(--vp-accent, #1f6feb);
+.verification-panel .verification-size-tab[data-checked="true"] {
+  border-color: var(--vp-score, var(--vp-border, #c5c8cf));
+  background: var(--vp-bg, #fff);
   font-weight: 700;
+}
+
+/* Flows: the panel's own Screen control and the Canvas overview */
+.verification-flow-select {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.verification-flow-select select {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--vp-accent, #1f6feb);
+  border-radius: 8px;
+  color: var(--vp-fg, #20232a);
+  background: var(--vp-surface, #f0f2f5);
+  font: inherit;
+  font-weight: 600;
 }
 
 .verification-flow-overview {
@@ -639,57 +663,105 @@
 .verification-flow-counts {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  gap: 6px;
   margin: 0;
 }
 
 .verification-flow-counts > div {
-  border: 1px solid var(--vp-border, #c5c8cf);
-  border-radius: 6px;
-  padding: 8px 12px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  border-radius: 8px;
+  padding: 8px 10px;
   background: var(--vp-surface, #f0f2f5);
 }
 
 .verification-flow-counts dt {
   color: var(--vp-muted, #626875);
+  font-size: 11px;
 }
 
 .verification-flow-counts dd {
   margin: 0;
+  color: var(--vp-score, var(--vp-fg, #20232a));
   font-size: 18px;
   font-weight: 700;
 }
 
-.verification-flow-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.verification-flow-table th,
-.verification-flow-table td {
-  padding: 6px 8px;
-  border-top: 1px solid var(--vp-border, #c5c8cf);
-  text-align: left;
-  vertical-align: middle;
-}
-
-.verification-flow-table thead th {
-  border-top: 0;
-  color: var(--vp-muted, #626875);
-  font-weight: 500;
-}
-
-.verification-panel .verification-flow-table tbody th button {
-  border: 0;
+.verification-flow-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
   padding: 0;
-  color: var(--vp-accent, #1f6feb);
-  background: none;
-  font-weight: 700;
+  list-style: none;
+}
+
+.verification-panel .verification-flow-list button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--vp-border, #c5c8cf);
+  border-radius: 10px;
+  color: var(--vp-fg, #20232a);
+  background: var(--vp-surface, #f0f2f5);
+  font: inherit;
+  text-align: left;
   cursor: pointer;
 }
 
-@container (max-width: 640px) {
+.verification-panel .verification-flow-list button[data-tone="high"] {
+  border-color: var(--vp-score-high);
+}
+
+.verification-flow-thumb {
+  flex-shrink: 0;
+  width: 120px;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--vp-bg, #fff);
+}
+
+.verification-flow-thumb img {
+  display: block;
+  width: 100%;
+}
+
+.verification-flow-row {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.verification-flow-name {
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+}
+
+.verification-flow-name span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.verification-flow-score {
+  color: var(--vp-score, var(--vp-muted, #626875));
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+@container (max-width: 360px) {
   .verification-flow-counts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .verification-flow-thumb {
+    width: 80px;
   }
 }

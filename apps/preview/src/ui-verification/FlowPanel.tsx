@@ -12,104 +12,31 @@ import { comparePixels } from "./pixel-compare";
 // The Storybook manager builder compiles this TSX with React.createElement.
 void React;
 
-/** A desktop pixel diff under this share of the region reads as a match. */
+/** A pixel diff under this share of the region reads as a match. */
 const MATCH_RATIO = 0.005;
+/** Over this share the screen reads as broken, in red. */
+const HIGH_RATIO = 0.2;
+
+export type DiffTone = "ok" | "warn" | "high";
+
+export function diffTone(ratio: number): DiffTone {
+  if (ratio > HIGH_RATIO) return "high";
+  return ratio < MATCH_RATIO ? "ok" : "warn";
+}
+
+export function diffLabel(ratio: number): string {
+  if (ratio === 0) return "Diff 0%";
+  return `Diff ${(ratio * 100).toFixed(1)}%`;
+}
 
 type FlowScreenRef = FlowParameter["screens"][number];
 
-type ScreenStatus =
+export type ScreenScore =
   | { kind: "loading" }
   | { kind: "missing" }
   | { kind: "failed" }
   | { kind: "compared"; ratio: number }
   | { kind: "error"; message: string };
-
-/** The panel's own Screen control, so a viewer never leaves Verification. */
-export function FlowScreenStrip({
-  screens,
-  current,
-  onSelect,
-}: {
-  screens: readonly FlowScreenRef[];
-  current: string;
-  onSelect: (id: string) => void;
-}) {
-  const ids = [CANVAS, ...screens.map((screen) => screen.id)];
-  const index = Math.max(0, ids.indexOf(current));
-  const nameOf = (id: string) => {
-    const screen = screens.find((item) => item.id === id);
-    return screen ? screenLabel(screen) : "Canvas";
-  };
-  return (
-    <div className="verification-flow-strip">
-      <button
-        aria-label={
-          index > 0 ? `Previous: ${nameOf(ids[index - 1])}` : "Previous"
-        }
-        className="verification-icon-button"
-        disabled={index === 0}
-        onClick={() => onSelect(ids[index - 1])}
-        type="button"
-      >
-        ‹
-      </button>
-      <fieldset className="verification-flow-screens">
-        <legend>Screen</legend>
-        {ids.map((id) => (
-          <label
-            className="verification-flow-screen"
-            data-checked={id === current}
-            key={id}
-            title={nameOf(id)}
-          >
-            <input
-              checked={id === current}
-              name="verification-flow-screen"
-              onChange={() => onSelect(id)}
-              type="radio"
-              value={id}
-            />
-            {id === CANVAS ? "Canvas" : id}
-          </label>
-        ))}
-      </fieldset>
-      <button
-        aria-label={
-          index < ids.length - 1 ? `Next: ${nameOf(ids[index + 1])}` : "Next"
-        }
-        className="verification-icon-button"
-        disabled={index === ids.length - 1}
-        onClick={() => onSelect(ids[index + 1])}
-        type="button"
-      >
-        ›
-      </button>
-    </div>
-  );
-}
-
-function statusOf(status: ScreenStatus): { text: string; tone: string } {
-  switch (status.kind) {
-    case "loading":
-      return { text: "Comparing…", tone: "idle" };
-    case "missing":
-      return { text: "Not captured", tone: "idle" };
-    case "failed":
-      return { text: "Capture failed", tone: "warn" };
-    case "error":
-      return { text: "Comparison failed", tone: "warn" };
-    default:
-      return status.ratio < MATCH_RATIO
-        ? { text: "Matches", tone: "ok" }
-        : { text: "Differs", tone: "warn" };
-  }
-}
-
-function diffText(status: ScreenStatus): string {
-  if (status.kind !== "compared") return "-";
-  if (status.ratio === 0) return "0%";
-  return `${(status.ratio * 100).toFixed(status.ratio < 0.1 ? 2 : 1)}%`;
-}
 
 function capturesOf(
   run: VerificationManifest | undefined,
@@ -126,70 +53,64 @@ function capturesOf(
 }
 
 /**
- * The Canvas's verification: every screen of the flow from the newest run
- * that holds it, its desktop pair compared in the browser, and a count of how
- * many match, differ or wait for a capture. Nothing is stored.
+ * Every screen of the flow from the newest run that holds it, its desktop
+ * pair compared in the browser. Nothing is stored.
  */
-export function FlowOverview({
+export function useFlowScores({
   active,
   archiveBase,
   caseId,
   runs,
   screens,
-  onSelect,
 }: {
   active: boolean;
   archiveBase: string;
   caseId: string;
   runs: readonly VerificationManifest[];
-  screens: readonly FlowScreenRef[];
-  onSelect: (id: string) => void;
+  screens: readonly FlowScreenRef[] | undefined;
 }) {
   const run = useMemo(
     () =>
-      runs.find((item) =>
-        item.captures.some((capture) => capture.caseId === caseId),
-      ),
-    [caseId, runs],
+      screens
+        ? runs.find((item) =>
+            item.captures.some((capture) => capture.caseId === caseId),
+          )
+        : undefined,
+    [caseId, runs, screens],
   );
-  const [statuses, setStatuses] = useState<Record<string, ScreenStatus>>({});
+  const [scores, setScores] = useState<Record<string, ScreenScore>>({});
+  const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    if (!active || !run) return;
+    setScores({});
+    setThumbnails({});
+    if (!active || !run || !screens) return;
     const controller = new AbortController();
     const urls: string[] = [];
-    setStatuses({});
+    const score = (id: string, value: ScreenScore) => {
+      if (!controller.signal.aborted)
+        setScores((previous) => ({ ...previous, [id]: value }));
+    };
     for (const screen of screens) {
       const desktop = capturesOf(run, caseId, screen).find(
         (capture) => capture.profileId === "desktop",
       );
-      if (!desktop) {
-        setStatuses((previous) => ({
-          ...previous,
-          [screen.id]: { kind: "missing" },
-        }));
-        continue;
-      }
-      if (desktop.status !== "captured" || !desktop.reference) {
-        setStatuses((previous) => ({
-          ...previous,
-          [screen.id]: {
-            kind: desktop.status === "failed" ? "failed" : "missing",
-          },
-        }));
+      if (desktop?.status !== "captured" || !desktop.reference) {
+        score(screen.id, {
+          kind: desktop?.status === "failed" ? "failed" : "missing",
+        });
         continue;
       }
       const reference = desktop.reference;
-      setStatuses((previous) => ({
-        ...previous,
-        [screen.id]: { kind: "loading" },
-      }));
+      score(screen.id, { kind: "loading" });
       void (async () => {
         const [siteUrl, referenceUrl] = await Promise.all([
           verifiedPngUrl(archiveBase, desktop.site, controller.signal),
           verifiedPngUrl(archiveBase, reference, controller.signal),
         ]);
         urls.push(siteUrl, referenceUrl);
+        if (!controller.signal.aborted)
+          setThumbnails((previous) => ({ ...previous, [screen.id]: siteUrl }));
         const result = await comparePixels({
           referenceUrl,
           siteUrl,
@@ -197,29 +118,23 @@ export function FlowOverview({
           siteRegion: desktop.siteRegion,
         });
         if (result.kind === "compared") urls.push(result.diffUrl);
-        if (controller.signal.aborted) return;
-        setStatuses((previous) => ({
-          ...previous,
-          [screen.id]:
-            result.kind === "compared"
-              ? { kind: "compared", ratio: result.ratio }
-              : {
-                  kind: "error",
-                  message:
-                    result.kind === "error"
-                      ? result.message
-                      : "The two images differ in size.",
-                },
-        }));
+        score(
+          screen.id,
+          result.kind === "compared"
+            ? { kind: "compared", ratio: result.ratio }
+            : {
+                kind: "error",
+                message:
+                  result.kind === "error"
+                    ? result.message
+                    : "The two images differ in size.",
+              },
+        );
       })().catch((error: unknown) => {
-        if (controller.signal.aborted) return;
-        setStatuses((previous) => ({
-          ...previous,
-          [screen.id]: {
-            kind: "error",
-            message: error instanceof Error ? error.message : String(error),
-          },
-        }));
+        score(screen.id, {
+          kind: "error",
+          message: error instanceof Error ? error.message : String(error),
+        });
       });
     }
     return () => {
@@ -228,6 +143,109 @@ export function FlowOverview({
     };
   }, [active, archiveBase, caseId, run, screens]);
 
+  return { run, scores, thumbnails };
+}
+
+function scoreText(score: ScreenScore | undefined): string {
+  switch (score?.kind) {
+    case "compared":
+      return diffLabel(score.ratio);
+    case "missing":
+      return "Not captured";
+    case "failed":
+      return "Capture failed";
+    case "error":
+      return "Comparison failed";
+    default:
+      return "Comparing…";
+  }
+}
+
+function scoreTone(score: ScreenScore | undefined): DiffTone | "idle" {
+  if (score?.kind === "compared") return diffTone(score.ratio);
+  return score?.kind === "failed" || score?.kind === "error" ? "warn" : "idle";
+}
+
+/** The panel's own Screen control, so a viewer never leaves Verification. */
+export function FlowScreenSelect({
+  screens,
+  scores,
+  current,
+  onSelect,
+}: {
+  screens: readonly FlowScreenRef[];
+  scores: Record<string, ScreenScore>;
+  current: string;
+  onSelect: (id: string) => void;
+}) {
+  const ids = [CANVAS, ...screens.map((screen) => screen.id)];
+  const index = Math.max(0, ids.indexOf(current));
+  const nameOf = (id: string) => {
+    const screen = screens.find((item) => item.id === id);
+    if (!screen) return `Canvas - all ${screens.length} screens`;
+    const score = scores[id];
+    return score?.kind === "compared"
+      ? `${screenLabel(screen)} · ${diffLabel(score.ratio)}`
+      : screenLabel(screen);
+  };
+  return (
+    <div className="verification-flow-select">
+      <button
+        aria-label={
+          index > 0 ? `Previous: ${nameOf(ids[index - 1])}` : "Previous"
+        }
+        className="verification-icon-button"
+        disabled={index === 0}
+        onClick={() => onSelect(ids[index - 1])}
+        type="button"
+      >
+        ‹
+      </button>
+      <label className="verification-visually-hidden" htmlFor="flow-screen">
+        Screen
+      </label>
+      <select
+        id="flow-screen"
+        onChange={(event) => onSelect(event.currentTarget.value)}
+        value={ids[index]}
+      >
+        {ids.map((id) => (
+          <option key={id} value={id}>
+            {nameOf(id)}
+          </option>
+        ))}
+      </select>
+      <button
+        aria-label={
+          index < ids.length - 1 ? `Next: ${nameOf(ids[index + 1])}` : "Next"
+        }
+        className="verification-icon-button"
+        disabled={index === ids.length - 1}
+        onClick={() => onSelect(ids[index + 1])}
+        type="button"
+      >
+        ›
+      </button>
+    </div>
+  );
+}
+
+/** The Canvas's verification: every screen as a row, scored and counted. */
+export function FlowOverview({
+  caseId,
+  run,
+  scores,
+  thumbnails,
+  screens,
+  onSelect,
+}: {
+  caseId: string;
+  run: VerificationManifest | undefined;
+  scores: Record<string, ScreenScore>;
+  thumbnails: Record<string, string>;
+  screens: readonly FlowScreenRef[];
+  onSelect: (id: string) => void;
+}) {
   if (!run) {
     return (
       <p className="verification-empty">
@@ -237,79 +255,79 @@ export function FlowOverview({
     );
   }
 
-  const counted = screens.map((screen) =>
-    statusOf(statuses[screen.id] ?? { kind: "loading" }),
-  );
-  const count = (text: string) =>
-    counted.filter((item) => item.text === text).length;
+  const tones = screens.map((screen) => scoreTone(scores[screen.id]));
+  const ratios = screens.flatMap((screen) => {
+    const score = scores[screen.id];
+    return score?.kind === "compared" ? [score.ratio] : [];
+  });
+  const missing = screens.filter((screen) => {
+    const kind = scores[screen.id]?.kind;
+    return kind === "missing" || kind === "failed";
+  }).length;
+  const high = tones.filter((tone) => tone === "high").length;
 
   return (
     <section aria-label="Flow overview" className="verification-flow-overview">
-      <p className="verification-label">
+      <dl className="verification-flow-counts">
+        <div>
+          <dd>{screens.length}</dd>
+          <dt>Screens</dt>
+        </div>
+        <div data-tone="ok">
+          <dd>{ratios.filter((ratio) => ratio < MATCH_RATIO).length}</dd>
+          <dt>Match</dt>
+        </div>
+        <div data-tone={high > 0 ? "high" : "warn"}>
+          <dd>{ratios.filter((ratio) => ratio >= MATCH_RATIO).length}</dd>
+          <dt>{high > 0 ? `Differ, ${high} over 20%` : "Differ"}</dt>
+        </div>
+        <div>
+          <dd>{missing}</dd>
+          <dt>Missing</dt>
+        </div>
+      </dl>
+      <p className="verification-metadata">
         Run {run.runId.slice(0, 8)} · app{" "}
         {run.checkpoint.app.commit.slice(0, 7)} · reference{" "}
         {run.checkpoint.reference.commit.slice(0, 7)}
       </p>
-      <dl className="verification-flow-counts">
-        <div>
-          <dt>Screens</dt>
-          <dd>{screens.length}</dd>
-        </div>
-        <div>
-          <dt>Match the design</dt>
-          <dd>{count("Matches")}</dd>
-        </div>
-        <div>
-          <dt>Differ</dt>
-          <dd>{count("Differs")}</dd>
-        </div>
-        <div>
-          <dt>Not captured</dt>
-          <dd>{count("Not captured") + count("Capture failed")}</dd>
-        </div>
-      </dl>
-      <table className="verification-flow-table">
-        <thead>
-          <tr>
-            <th scope="col">Screen</th>
-            <th scope="col">Step</th>
-            <th scope="col">Desktop pixel diff</th>
-            <th scope="col">Sizes captured</th>
-            <th scope="col">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {screens.map((screen) => {
-            const status = statuses[screen.id] ?? { kind: "loading" as const };
-            const { text, tone } = statusOf(status);
-            const captured = capturesOf(run, caseId, screen).filter(
-              (capture) => capture.status === "captured",
-            ).length;
-            return (
-              <tr key={screen.id}>
-                <th scope="row">
-                  <button onClick={() => onSelect(screen.id)} type="button">
-                    {screen.id}
-                  </button>
-                </th>
-                <td>{screen.name}</td>
-                <td>{diffText(status)}</td>
-                <td>
-                  {captured} of {Object.keys(PROFILES).length}
-                </td>
-                <td>
-                  <span
-                    className={`verification-chip verification-chip--${tone}`}
-                    title={status.kind === "error" ? status.message : undefined}
-                  >
-                    {text}
+      <ul className="verification-flow-list">
+        {screens.map((screen, index) => {
+          const score = scores[screen.id];
+          const captured = capturesOf(run, caseId, screen).filter(
+            (capture) => capture.status === "captured",
+          ).length;
+          return (
+            <li key={screen.id}>
+              <button
+                data-tone={tones[index]}
+                onClick={() => onSelect(screen.id)}
+                title={score?.kind === "error" ? score.message : undefined}
+                type="button"
+              >
+                <span aria-hidden="true" className="verification-flow-thumb">
+                  {thumbnails[screen.id] ? (
+                    <img alt="" src={thumbnails[screen.id]} />
+                  ) : null}
+                </span>
+                <span className="verification-flow-row">
+                  <span className="verification-flow-name">
+                    <strong>{screen.id}</strong>
+                    <span>{screen.name}</span>
                   </span>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  <span className="verification-flow-score">
+                    {scoreText(score)}
+                  </span>
+                  <span className="verification-metadata">
+                    {captured} of {Object.keys(PROFILES).length} sizes captured
+                  </span>
+                </span>
+                <span aria-hidden="true">›</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }

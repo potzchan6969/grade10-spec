@@ -26,7 +26,13 @@ import {
   verifiedPngUrl,
 } from "./archive-client";
 
-import { FlowOverview, FlowScreenStrip } from "./FlowPanel";
+import {
+  diffLabel,
+  diffTone,
+  FlowOverview,
+  FlowScreenSelect,
+  useFlowScores,
+} from "./FlowPanel";
 import { CANVAS, type FlowParameter } from "./flow-tree";
 import type { PixelComparison } from "./pixel-compare";
 import { anchorOf, comparePixels, describeAnchor } from "./pixel-compare";
@@ -302,14 +308,6 @@ function profileStatus(
   };
 }
 
-function Chip({ tone = "idle", children }: { tone?: Tone; children: string }) {
-  return (
-    <span className={`verification-chip verification-chip--${tone}`}>
-      {children}
-    </span>
-  );
-}
-
 function ImageEvidence({
   title,
   artifact,
@@ -364,6 +362,11 @@ function ImageEvidence({
         <code title={`SHA-256 ${artifact.sha256}`}>
           sha256 {shortHash(artifact.sha256)}
         </code>
+        {imageUrl ? (
+          <a href={imageUrl} rel="noreferrer" target="_blank">
+            Open full size
+          </a>
+        ) : null}
         {imageUrl ? (
           <a
             href={imageUrl}
@@ -448,6 +451,11 @@ function DiffEvidence({
       <div className="verification-image-heading">
         <h4>Pixel diff</h4>
         <span>{note}</span>
+        {framed ? (
+          <a href={comparison.diffUrl} rel="noreferrer" target="_blank">
+            Open full size
+          </a>
+        ) : null}
       </div>
       <div
         className={`verification-image-frame${framed ? "" : " verification-image-frame--empty"}`}
@@ -483,6 +491,9 @@ function themeVariables(theme: ReturnType<typeof useTheme>) {
     "--vp-error-border": dark ? "#9b3b3b" : "#d65a5a",
     "--vp-error-fg": dark ? "#ffc9c9" : "#7d1818",
     "--vp-diff": dark ? "#ff6b6b" : "#d92d2d",
+    "--vp-score-ok": dark ? "#a9ccff" : "#1f5fbf",
+    "--vp-score-warn": dark ? "#f6c78e" : "#8a5300",
+    "--vp-score-high": dark ? "#ff9b9b" : "#b42318",
   } as React.CSSProperties;
 }
 
@@ -534,6 +545,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
   const [runs, setRuns] = useState<VerificationManifest[]>([]);
   const [manifest, setManifest] = useState<VerificationManifest | null>(null);
   const [localeId, setLocaleId] = useState<string>("en");
+  const [selectedProfile, setSelectedProfile] = useState<ProfileId>("desktop");
   const [imageUrls, setImageUrls] = useState<
     Partial<Record<ProfileId, ImageUrls>>
   >({});
@@ -860,6 +872,10 @@ export function VerificationPanel({ active }: { active: boolean }) {
 
   async function runComparison(ids: ProfileId[]) {
     const generation = comparisonGeneration.current;
+    setComparisons((previous) => ({
+      ...previous,
+      ...Object.fromEntries(ids.map((id) => [id, "running"])),
+    }));
     for (const id of ids) {
       const capture = captures[id];
       const urls = imageUrls[id];
@@ -871,7 +887,6 @@ export function VerificationPanel({ active }: { active: boolean }) {
       ) {
         continue;
       }
-      setComparisons((previous) => ({ ...previous, [id]: "running" }));
       const result = await comparePixels({
         referenceUrl: urls.reference,
         siteUrl: urls.site,
@@ -891,6 +906,19 @@ export function VerificationPanel({ active }: { active: boolean }) {
   const comparing = PROFILE_TABS.some(
     (item) => comparisons[item.id] === "running",
   );
+  const uncompared = comparableIds.filter((id) => !comparisons[id]).join(",");
+  // biome-ignore lint/correctness/useExhaustiveDependencies: each pair is compared once its two images arrive
+  useEffect(() => {
+    if (active && uncompared)
+      void runComparison(uncompared.split(",") as ProfileId[]);
+  }, [active, uncompared]);
+  const flowScores = useFlowScores({
+    active,
+    archiveBase,
+    caseId: caseIdHint,
+    runs,
+    screens: flow?.screens,
+  });
 
   const selectedDeclaration = manifest?.catalogue.find(
     (entry) =>
@@ -1020,28 +1048,33 @@ export function VerificationPanel({ active }: { active: boolean }) {
       </header>
 
       {flow && !storyListOpen ? (
-        <FlowScreenStrip
+        <FlowScreenSelect
           current={flowScreenId}
           onSelect={(id) => updateStoryArgs({ screen: id })}
+          scores={flowScores.scores}
           screens={flow.screens}
         />
       ) : null}
 
       {flow && !storyListOpen && flowScreenId === CANVAS ? (
         <FlowOverview
-          active={active}
-          archiveBase={archiveBase}
           caseId={caseIdHint}
           onSelect={(id) => updateStoryArgs({ screen: id })}
-          runs={runs}
+          run={flowScores.run}
+          scores={flowScores.scores}
           screens={flow.screens}
+          thumbnails={flowScores.thumbnails}
         />
       ) : (
         <>
-          <section
+          <details
             className="verification-context"
             aria-labelledby="verification-story-heading"
+            open={!flow || storyListOpen}
           >
+            <summary className="verification-label">
+              Details: story, version and run
+            </summary>
             <div className="verification-context-grid">
               <div className="verification-story-block">
                 <h3
@@ -1197,7 +1230,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
                 ) : null}
               </>
             ) : null}
-          </section>
+          </details>
 
           {!storyListOpen && !currentStoryId ? (
             <p className="verification-empty">
@@ -1335,26 +1368,46 @@ export function VerificationPanel({ active }: { active: boolean }) {
                           Selected locale: {localeLabel(localeId)}
                         </p>
                       </div>
-                      <div className="verification-status-grid">
+                      <fieldset className="verification-size-tabs">
+                        <legend className="verification-visually-hidden">
+                          Size, with how far the site differs from the design
+                        </legend>
                         {PROFILE_TABS.map((item) => {
-                          const status = profileStatus(
-                            captures[item.id],
-                            comparisons[item.id],
-                          );
+                          const comparison = comparisons[item.id];
+                          const scored =
+                            comparison !== undefined &&
+                            comparison !== "running" &&
+                            comparison.kind === "compared"
+                              ? comparison.ratio
+                              : null;
+                          const status =
+                            scored === null
+                              ? profileStatus(captures[item.id], comparison)
+                              : {
+                                  text: diffLabel(scored),
+                                  tone: diffTone(scored),
+                                };
                           return (
-                            <div
+                            <label
                               key={item.id}
-                              className="verification-status-card"
+                              className="verification-size-tab"
+                              data-checked={item.id === selectedProfile}
+                              data-tone={status.tone}
+                              title={item.size}
                             >
-                              <h4>{item.shortLabel}</h4>
-                              <span className="verification-metadata">
-                                {item.size}
-                              </span>
-                              <Chip tone={status.tone}>{status.text}</Chip>
-                            </div>
+                              <input
+                                checked={item.id === selectedProfile}
+                                name="verification-size"
+                                onChange={() => setSelectedProfile(item.id)}
+                                type="radio"
+                                value={item.id}
+                              />
+                              <span>{item.shortLabel}</span>
+                              <strong>{status.text}</strong>
+                            </label>
                           );
                         })}
-                      </div>
+                      </fieldset>
                     </section>
 
                     {loadingImages ? (
@@ -1368,7 +1421,9 @@ export function VerificationPanel({ active }: { active: boolean }) {
                       </p>
                     ) : null}
 
-                    {PROFILE_TABS.map((item) => {
+                    {PROFILE_TABS.filter(
+                      (item) => item.id === selectedProfile,
+                    ).map((item) => {
                       const capture = captures[item.id];
                       const urls = imageUrls[item.id];
                       return (
@@ -1465,7 +1520,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
                 className="verification-section"
                 aria-label="Run provenance"
               >
-                <details className="verification-details-toggle" open>
+                <details className="verification-details-toggle">
                   <summary>
                     <h3 className="verification-inline-heading">
                       {manifest.runId}
