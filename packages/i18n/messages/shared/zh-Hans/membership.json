@@ -198,9 +198,7 @@
     "remaining": "尚余 {count} 份",
     "rules": "完整条款",
     "join": "成为会员即可领取礼物",
-    "joinAction": "立即加入",
     "signIn": "登录以参加活动。",
-    "signInAction": "登录",
     "linkLabel": "帖子链接",
     "linkHint": "请粘贴你公开的 Instagram 或 Threads 帖子链接。",
     "submitAction": "提交审核",
@@ -266,6 +264,8 @@
     "heldTitle": "你赢了，礼物属于你。",
     "grantedTitle": "可到店领取。",
     "rejectedTitle": "这个链接不符合要求。",
-    "endedThanks": "感谢参加。"
+    "endedThanks": "感谢参加。",
+    "joinOnce": "参加活动需要免费的 Grade10 账户。",
+    "joinOnceAction": "免费加入或登录"
   }
 }

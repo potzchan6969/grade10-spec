@@ -444,6 +444,7 @@ export {
   type CampaignHeroPhase,
   type CampaignHeroProps,
 } from "./blocks/loyalty-campaign/campaign-hero";
+export { CampaignJoin } from "./blocks/loyalty-campaign/campaign-join";
 export {
   CampaignMechanicCard,
   type CampaignMechanicCardProps,

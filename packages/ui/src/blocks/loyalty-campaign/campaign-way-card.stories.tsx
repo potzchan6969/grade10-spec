@@ -3,6 +3,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import cover from "../store-home/store-home-hero.fixture.png";
 import { CampaignWayCard } from "./campaign-way-card";
 
 const stages = ["Sent", "Checking", "Won", "Collect"];
@@ -97,5 +98,54 @@ export const AllGone: Story = {
   play: async ({ canvasElement }) => {
     const card = canvasElement.querySelector('[data-slot="campaign-way"]');
     expect(card).toHaveAttribute("data-tone", "off");
+  },
+};
+
+/** A scene across the top; the gift moves down beside its name. */
+export const WithCover: Story = {
+  args: { coverImageUrl: cover },
+  play: async ({ canvasElement }) => {
+    const top = canvasElement.querySelector('[data-slot="campaign-way-cover"]');
+    expect(top?.tagName).toBe("IMG");
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="campaign-way-gift"] [data-slot="campaign-gift-art"]',
+      ),
+    ).not.toBeNull();
+  },
+};
+
+/** Two cards side by side: one height, bands level whatever each holds. */
+export const SideBySide: Story = {
+  decorators: [
+    (Story) => (
+      <div className="grid max-w-4xl gap-4 md:grid-cols-2">
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => (
+    <>
+      <CampaignWayCard
+        kindLabel="Sign-up win"
+        rewardLabel="A Pokémon card pack"
+        step="join"
+        steps={["Join Grade10 free.", "The first 50 each win a pack."]}
+        title="First 50 sign-ups"
+        tone="act"
+      >
+        <Text weight="bold">Become a member to claim yours.</Text>
+      </CampaignWayCard>
+      <CampaignWayCard {...args} coverImageUrl={cover} step="signIn">
+        <Text weight="bold">Sign in to take part.</Text>
+      </CampaignWayCard>
+    </>
+  ),
+  play: async ({ canvasElement }) => {
+    const bands = [
+      ...canvasElement.querySelectorAll('[data-slot="campaign-way-band"]'),
+    ].map((band) => band.getBoundingClientRect().bottom);
+    expect(bands).toHaveLength(2);
+    if (window.innerWidth >= 768) expect(bands[0]).toBe(bands[1]);
   },
 };

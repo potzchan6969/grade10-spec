@@ -198,9 +198,7 @@
     "remaining": "{count} left",
     "rules": "Full rules",
     "join": "Become a member to claim yours",
-    "joinAction": "Join now",
     "signIn": "Sign in to take part.",
-    "signInAction": "Sign in",
     "linkLabel": "Link to your post",
     "linkHint": "Paste the link to your public Instagram or Threads post.",
     "submitAction": "Send for review",
@@ -266,6 +264,8 @@
     "heldTitle": "You won. The gift is yours.",
     "grantedTitle": "Ready at the store.",
     "rejectedTitle": "That link didn't count.",
-    "endedThanks": "Thanks for taking part."
+    "endedThanks": "Thanks for taking part.",
+    "joinOnce": "Taking part needs a free Grade10 account.",
+    "joinOnceAction": "Join free or sign in"
   }
 }

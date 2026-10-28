@@ -12,11 +12,11 @@ function CampaignGiftArt({
   dimmed = false,
 }: {
   imageUrl?: string | null;
-  size?: "md" | "lg";
+  size?: "sm" | "md" | "lg";
   /** Gone for this member: drawn faded. */
   dimmed?: boolean;
 }) {
-  const box = size === "lg" ? "size-28" : "size-16";
+  const box = { sm: "size-8", md: "size-16", lg: "size-28" }[size];
   const faded = dimmed && "opacity-50 grayscale";
   if (imageUrl) {
     return (
@@ -38,7 +38,7 @@ function CampaignGiftArt({
       )}
       data-slot="campaign-gift-art"
     >
-      <Gift aria-hidden size={size === "lg" ? 48 : 28} />
+      <Gift aria-hidden size={{ sm: 16, md: 28, lg: 48 }[size]} />
     </span>
   );
 }

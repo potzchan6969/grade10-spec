@@ -198,9 +198,7 @@
     "remaining": "{count}개 남음",
     "rules": "전체 약관",
     "join": "회원이 되어 선물을 받으세요",
-    "joinAction": "지금 가입",
     "signIn": "참여하려면 로그인하세요.",
-    "signInAction": "로그인",
     "linkLabel": "게시물 링크",
     "linkHint": "공개된 Instagram 또는 Threads 게시물 링크를 붙여 넣으세요.",
     "submitAction": "검토 요청",
@@ -266,6 +264,8 @@
     "heldTitle": "당첨되었습니다. 선물은 회원님의 것입니다.",
     "grantedTitle": "매장에서 받을 수 있습니다.",
     "rejectedTitle": "이 링크는 인정되지 않았습니다.",
-    "endedThanks": "참여해 주셔서 감사합니다."
+    "endedThanks": "참여해 주셔서 감사합니다.",
+    "joinOnce": "참여하려면 무료 Grade10 계정이 필요합니다.",
+    "joinOnceAction": "무료 가입 또는 로그인"
   }
 }

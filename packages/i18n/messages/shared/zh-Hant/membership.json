@@ -198,9 +198,7 @@
     "remaining": "尚餘 {count} 份",
     "rules": "完整條款",
     "join": "成為會員即可領取禮物",
-    "joinAction": "立即加入",
     "signIn": "登入以參加活動。",
-    "signInAction": "登入",
     "linkLabel": "貼文連結",
     "linkHint": "請貼上你公開的 Instagram 或 Threads 貼文連結。",
     "submitAction": "提交審核",
@@ -266,6 +264,8 @@
     "heldTitle": "你贏了，禮物屬於你。",
     "grantedTitle": "可到店領取。",
     "rejectedTitle": "這個連結不符合要求。",
-    "endedThanks": "多謝參加。"
+    "endedThanks": "多謝參加。",
+    "joinOnce": "參加活動需要免費的 Grade10 帳戶。",
+    "joinOnceAction": "免費加入或登入"
   }
 }

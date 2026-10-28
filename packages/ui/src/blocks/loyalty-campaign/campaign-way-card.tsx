@@ -24,6 +24,11 @@ type CampaignWayCardProps = {
   /** The gift's name, written beside its picture. */
   rewardLabel: string;
   rewardImageUrl?: string | null;
+  /**
+   * The picture across the card's top, cropped to fill: the scene of this way
+   * to win. Absent, the top shows the gift itself, large.
+   */
+  coverImageUrl?: string | null;
   /** How to take part, in order; none, and the card lists nothing. */
   steps?: readonly string[];
   tone: CampaignWayTone;
@@ -49,7 +54,8 @@ const BAND: Record<CampaignWayTone, string> = {
  * One way to win a campaign's gift. The top never changes — the gift, the
  * kind, the title and how to take part — and the band at the foot is where
  * the member stands, toned so a glance down the page tells "do this" from
- * "waiting", "won" and "closed".
+ * "waiting", "won" and "closed". Cards side by side stretch to one height and
+ * keep their bands level.
  */
 function CampaignWayCard({
   kindLabel,
@@ -57,42 +63,65 @@ function CampaignWayCard({
   description,
   rewardLabel,
   rewardImageUrl,
+  coverImageUrl,
   steps = [],
   tone,
   track,
   step,
   children,
 }: CampaignWayCardProps) {
+  const off = tone === "off";
   return (
     <article
-      className="grid overflow-hidden rounded-2xl border border-border bg-card text-card-foreground"
+      className="grid grid-rows-[auto_auto_1fr_auto] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground"
       data-slot="campaign-way"
       data-step={step}
       data-tone={tone}
     >
-      <HStack className="p-5" gap="md" vAlign="start">
-        <CampaignGiftArt dimmed={tone === "off"} imageUrl={rewardImageUrl} />
-        <VStack className="min-w-0" gap="xs">
-          <span className="text-xs font-bold tracking-widest text-primary uppercase">
-            {kindLabel}
-          </span>
-          <h3 className="text-xl leading-tight font-bold text-balance">
-            {title}
-          </h3>
-          {description ? (
-            <Text size="sm" tone="secondary">
-              {description}
-            </Text>
+      {coverImageUrl ? (
+        <img
+          alt=""
+          className={cn(
+            "h-40 w-full object-cover",
+            off && "opacity-50 grayscale",
+          )}
+          data-slot="campaign-way-cover"
+          src={coverImageUrl}
+        />
+      ) : (
+        <div
+          className="grid h-40 place-items-center bg-primary-muted"
+          data-slot="campaign-way-cover"
+        >
+          <CampaignGiftArt dimmed={off} imageUrl={rewardImageUrl} size="lg" />
+        </div>
+      )}
+
+      <VStack className="p-5" gap="xs">
+        <span className="text-xs font-bold tracking-widest text-primary uppercase">
+          {kindLabel}
+        </span>
+        <h3 className="text-xl leading-tight font-bold text-balance">
+          {title}
+        </h3>
+        {description ? (
+          <Text size="sm" tone="secondary">
+            {description}
+          </Text>
+        ) : null}
+        <HStack data-slot="campaign-way-gift" gap="sm" vAlign="center">
+          {coverImageUrl ? (
+            <CampaignGiftArt dimmed={off} imageUrl={rewardImageUrl} size="sm" />
           ) : null}
-          <Text data-slot="campaign-way-gift" size="sm" weight="medium">
+          <Text size="sm" weight="medium">
             {rewardLabel}
           </Text>
-        </VStack>
-      </HStack>
+        </HStack>
+      </VStack>
 
       {steps.length > 0 ? (
         <ol
-          className="m-0 grid list-none gap-3 px-5 pb-5"
+          className="m-0 grid list-none content-start gap-3 px-5 pb-5"
           data-slot="campaign-way-steps"
         >
           {steps.map((one, at) => (
@@ -107,7 +136,9 @@ function CampaignWayCard({
             </li>
           ))}
         </ol>
-      ) : null}
+      ) : (
+        <div />
+      )}
 
       <VStack
         className={cn("border-t border-border px-5 py-4", BAND[tone])}

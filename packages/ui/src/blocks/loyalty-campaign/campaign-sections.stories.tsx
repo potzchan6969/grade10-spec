@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { CampaignFacts } from "./campaign-facts";
 import { CampaignGift } from "./campaign-gift";
+import { CampaignJoin } from "./campaign-join";
 import {
   CampaignDates,
   CampaignPanel,
@@ -25,6 +26,14 @@ function CampaignSections() {
         eyebrow="What you can win"
         text="One per way to win. Collect it at the store once it opens."
         title="A sealed Pokémon card pack"
+      />
+      <CampaignJoin
+        action={
+          <Button size="sm" type="button">
+            Join free or sign in
+          </Button>
+        }
+        text="Taking part needs a free Grade10 account."
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <CampaignPanel title="Key dates">
@@ -75,6 +84,9 @@ export const Default: Story = {
     expect(canvas.getByText("Collect at")).toBeVisible();
     expect(canvas.getByText("A sealed Pokémon card pack")).toBeVisible();
     expect(canvas.getByText("Yes.")).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: "Join free or sign in" }),
+    ).toBeVisible();
     expect(
       canvasElement.querySelector('[data-slot="campaign-dates"] [data-past]'),
     ).toHaveTextContent("1 Nov");
