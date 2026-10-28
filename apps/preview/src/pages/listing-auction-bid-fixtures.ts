@@ -18,6 +18,7 @@ import {
   FIXTURE_AUCTION_ENDS_AT_MS,
   FIXTURE_AUCTION_OPENS_AT_MS,
 } from "@grade10/ui/lib/datetime-fixtures";
+import AUCTION_LOT_FIXTURE from "./auction-lot.fixture.json";
 
 export type BiddingState =
   | "opens"
@@ -61,8 +62,8 @@ export const BIDDING_STATE_LABELS: Record<BiddingState, string> = {
 export const BID_FIXTURE_LOT = {
   currency: DEFAULT_LISTING_CURRENCY,
   ceilingMinor: 8_000_000_000,
-  /** Near the low end of the lot's historical comps. */
-  startingBidMinor: 4_800_000,
+  /** Near the low end of the lot's historical comps; the seed starts here too. */
+  startingBidMinor: AUCTION_LOT_FIXTURE.startingBidMinor,
   /** Live mid-ladder current bid (a few increments above start). */
   currentBidMinor: 5_800_000,
   /** Step sized for a mid–six-figure USD lot. */
