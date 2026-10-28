@@ -15,6 +15,7 @@ import {
 import { PageSectionsProvider } from "./page-sections";
 import { ResizeHandle } from "./resize-handle";
 import { useScrollMemory } from "./scroll-memory";
+import { SectionPeek } from "./section-peek";
 import { Sidebar } from "./sidebar";
 import {
   FixtureNotice,
@@ -77,6 +78,7 @@ function Shell() {
       ) : null}
 
       <PageSectionsProvider ready={ready}>
+        {layout.navCollapsed ? <SectionPeek /> : null}
         <div className="mx-auto flex w-full max-w-[100rem]">
           <Sidebar onNavigate={closeNav} open={navOpen} />
           {layout.navCollapsed ? null : (
