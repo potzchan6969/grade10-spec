@@ -105,6 +105,15 @@ const REQUIRED = [
   "Trace",
 ];
 const CASE_HEADING = /^#{3,4}\s+(\S+?):\s/;
+const GROUP = /^#{2,3}\s+([a-z0-9-]+(?:#[\p{L}\p{N}-]+)?):\s/u;
+const RETRACE =
+  "if it was renamed, `pnpm tcs:retrace <old> <new>` moves every trace";
+
+/** Whether a trace target sits inside `scope`: the page, or the section and
+ *  its rules. */
+export const within = (target, scope) =>
+  target === scope ||
+  target.startsWith(`${scope}${scope.includes("#") ? "/" : "#"}`);
 const PROPERTY = /^[*-]\s+\*\*([\w ]+?):\*\*\s*(.*?)\s*$/;
 
 /** Check one store suite; `report(severity, line, message)`. Each live case's
@@ -143,15 +152,19 @@ export function checkStoreSuite(
 
   const cases = [];
   let current = null;
+  let group = null;
   lines.forEach((line, i) => {
     const heading = CASE_HEADING.exec(line);
     if (heading && /-?TC-?\d+/.test(heading[1])) {
-      current = { id: heading[1], line: i + 1, props: new Map() };
+      current = { id: heading[1], line: i + 1, props: new Map(), group };
       cases.push(current);
       return;
     }
     if (/^#{2,4}\s/.test(line)) {
       current = null;
+      // `## <page>#<section>: Title` files the cases below it; any other
+      // heading - a walk, the background, Ungrouped - files none.
+      if (!/^####/.test(line)) group = GROUP.exec(line)?.[1] ?? null;
       return;
     }
     const prop = current && PROPERTY.exec(line);
@@ -184,10 +197,17 @@ export function checkStoreSuite(
       );
     const trace = tc.props.get("Trace");
     if (!trace) continue;
-    for (const target of trace.value
+    const targets = trace.value
       .split(",")
       .map((s) => s.trim())
-      .filter(Boolean)) {
+      .filter(Boolean);
+    if (tc.group && !targets.some((target) => within(target, tc.group)))
+      report(
+        "error",
+        trace.line,
+        `case \`${tc.id}\` sits under \`${tc.group}\` but traces ${targets.map((t) => `\`${t}\``).join(", ")} — move it under the heading of what it traces, or trace what it sits under`,
+      );
+    for (const target of targets) {
       // `<page>#<section>/<rule>`, `<page>#<section>`, or `<page>` alone for
       // the page's opening rules.
       const section =
@@ -208,7 +228,7 @@ export function checkStoreSuite(
         report(
           "error",
           trace.line,
-          `case \`${tc.id}\` traces \`${target}\`, but ${STORE_PRD}/${page}.md does not exist`,
+          `case \`${tc.id}\` traces \`${target}\`, but ${STORE_PRD}/${page}.md does not exist — ${RETRACE}`,
         );
         continue;
       }
@@ -216,7 +236,7 @@ export function checkStoreSuite(
         report(
           "error",
           trace.line,
-          `case \`${tc.id}\` traces \`${target}\`, but ${page}.md has no heading with that anchor`,
+          `case \`${tc.id}\` traces \`${target}\`, but ${page}.md has no heading with that anchor — ${RETRACE}`,
         );
         continue;
       }
@@ -224,7 +244,7 @@ export function checkStoreSuite(
         report(
           "error",
           trace.line,
-          `case \`${tc.id}\` traces \`${target}\`, but ${page}.md's \`${anchor}\` names no rule with that anchor`,
+          `case \`${tc.id}\` traces \`${target}\`, but ${page}.md's \`${anchor}\` names no rule with that anchor — ${RETRACE}`,
         );
         continue;
       }
