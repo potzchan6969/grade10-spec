@@ -15,14 +15,10 @@ import {
   useRef,
   useState,
 } from "react";
-import { dirOf, humanize } from "../api/paths";
-import type { PageCases, TestCase } from "../api/suites";
+import type { PageCases } from "../api/suites";
 import { BlockList } from "../blocks/block-list";
-import { useBlockScope } from "../blocks/block-scope";
 import { BlockView } from "../blocks/block-view";
-import { Collapsible } from "../blocks/collapsible";
 import { BareEmbedContext } from "../blocks/embed-block";
-import { MarkdownView } from "../blocks/markdown";
 import {
   type SectionRow,
   SIDE_TABS,
@@ -30,6 +26,7 @@ import {
   type SideTab,
 } from "../blocks/side-blocks";
 import type { DetailBlock } from "../content/grammar";
+import { CaseList, type CaseRow } from "./case-list";
 import { clamp, PAGE_MIN_WIDTH, PANEL_WIDTH, useLayout } from "./layout";
 import { PageSectionsContext } from "./page-sections";
 import { ResizeHandle } from "./resize-handle";
@@ -48,8 +45,6 @@ const TAB_ICON: Record<SideTab, ReactNode> = {
 
 /** The space between the two columns; the handle sits in its middle. */
 const GAP = 40;
-
-type CaseRow = { testCase: TestCase; rules: string[] };
 
 /** What one section shows beside it, tab by tab. */
 type Shelf = Record<"ui" | "tech", SideItem[]> & { qa: CaseRow[] };
@@ -344,25 +339,25 @@ function SideItems({ shelf, tab }: { shelf: Shelf; tab: SideTab }) {
 function SideList({ shelf, tab }: { shelf: Shelf; tab: SideTab }) {
   return (
     <div className="flex flex-col gap-3">
-      {tab === "qa"
-        ? shelf.qa.map(({ testCase, rules }) => (
-            <CaseCard key={testCase.id} rules={rules} testCase={testCase} />
-          ))
-        : shelf[tab].map((item, position) =>
-            item.block.type === "detail" ? (
-              <SideDetail
-                block={item.block}
-                // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-                key={`detail-${position}`}
-              />
-            ) : (
-              <BlockView
-                block={item.block}
-                // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-                key={`${item.block.type}-${position}`}
-              />
-            ),
-          )}
+      {tab === "qa" ? (
+        <CaseList rows={shelf.qa} />
+      ) : (
+        shelf[tab].map((item, position) =>
+          item.block.type === "detail" ? (
+            <SideDetail
+              block={item.block}
+              // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
+              key={`detail-${position}`}
+            />
+          ) : (
+            <BlockView
+              block={item.block}
+              // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
+              key={`${item.block.type}-${position}`}
+            />
+          ),
+        )
+      )}
     </div>
   );
 }
@@ -381,39 +376,5 @@ function SideDetail({ block }: { block: DetailBlock }) {
         ))}
       </div>
     </section>
-  );
-}
-
-/** One case: its title and the rules it checks, its steps a click away. */
-function CaseCard({ testCase, rules }: CaseRow) {
-  const { index } = useBlockScope();
-  return (
-    <Collapsible
-      badge={
-        <span className="flex flex-wrap items-center gap-1">
-          {rules.map((rule) => (
-            <Badge key={rule} size="sm" variant="outline">
-              {humanize(rule)}
-            </Badge>
-          ))}
-        </span>
-      }
-      id={`case-${testCase.id.replace(/\W+/g, "-").toLowerCase()}`}
-      linkLabel="Copy link to this case"
-      title={testCase.title}
-    >
-      <div className="flex flex-col gap-2 border-border-subtle border-t px-4 py-3">
-        <Text as="p" face="mono" size="xs" tone="secondary">
-          {testCase.id}
-          {testCase.severity ? ` · ${testCase.severity}` : ""}
-        </Text>
-        <MarkdownView
-          baseDir={dirOf(testCase.suite)}
-          className="text-sm"
-          index={index}
-          text={testCase.body}
-        />
-      </div>
-    </Collapsible>
   );
 }
