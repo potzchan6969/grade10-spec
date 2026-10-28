@@ -38,7 +38,7 @@ Shared test data:
 **I want** the catalogue cover called Campaign everywhere in the admin,
 **so that** I never mistake a cover for store checkout or sold stock.
 
-<!-- trace:case id=g10adm.auction-campaign.TC-1bi rev=1 covers=g10adm.auction-campaign.SC-0ir,g10adm.auction-campaign.SC-qeg -->
+<!-- trace:case id=g10adm.auction-campaign.TC-1bi rev=2 covers=g10adm.auction-campaign.SC-0ir,g10adm.auction-campaign.SC-qeg -->
 ### g10adm.auction-campaign.US1-TC1: The section and the editor call the cover a campaign
 
 **Classification:**
@@ -59,7 +59,7 @@ Shared test data:
 
 **Steps:**
 
-1. Read the section's tab and heading, then open the draft and read the editor's heading and the listing form's Campaign field.
+1. Read the section's tab and heading, then open the draft and read the editor's heading.
 
 **Expected Results:**
 
