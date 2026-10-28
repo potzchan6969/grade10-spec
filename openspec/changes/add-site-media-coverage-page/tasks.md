@@ -46,7 +46,7 @@ come first and the implementation is only repaired if they fail.
 - [x] 2.4 Verify: the package's typecheck and lint, `surfaces.test.ts`,
   `hydration.test.tsx`, and the new tests
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its planning input, and the groups it walks
 landed. Walks the site at `/media-coverage`.
