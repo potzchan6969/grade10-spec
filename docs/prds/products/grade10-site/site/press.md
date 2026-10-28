@@ -25,15 +25,15 @@ answers without a session, like any public surface —
 - 🚧 **Responsive** — wide viewports lay the filter beside the intro and
   each release as a date-title-arrow row; narrow viewports stack the
   filter under the header and each date over its title
-- 🚧 **Article header** — a Press breadcrumb back to the record over the
+- **Article header** — a Press breadcrumb back to the record over the
   release's title, its publish date and its location badges
-- 🚧 **Feature image** — the article's 1200:630 lead image; the same
+- **Feature image** — the article's 1200:630 lead image; the same
   asset is its OG image
-- 🚧 **Article body** — what an editor composes in the admin portal:
+- **Article body** — what an editor composes in the admin portal:
   paragraphs, bold and inline links, headings two through six, bullet
   and numbered lists, blockquotes, and images with or without captions,
   each drawn in the template's own styles
-- 🚧 **Sidebar** — About Grade10, About MemeStrategy and Media
+- **Sidebar** — About Grade10, About MemeStrategy and Media
   Enquiries, fixed cards every article shares; sticky beside
   the body on a wide viewport, after it on a narrow one
 
