@@ -18,7 +18,7 @@ Shared test data:
 ### Route
 
 1. Read the 10,000-point pack's row.
-   * The row shows its price, the list price struck through and a save badge. `g10.loyalty-programme.US9-TC1`
+   * The row shows the paid points struck beside the count, the price at the edge and a bonus points line. `g10.loyalty-programme.US9-TC1`
 2. Read a pack over today's remaining limit.
    * The pack cannot be picked, and its reason is in its name and a tooltip on the warning icon. `g10.loyalty-programme.US9-TC2`
 

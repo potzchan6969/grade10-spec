@@ -42,7 +42,7 @@ export const PackSelected: Story = {
   play: async () => {
     const overlay = within(document.body);
     await overlay.findByRole("dialog", { name: "Top Up Points" });
-    await userEvent.click(overlay.getByRole("radio", { name: /^10,000/ }));
+    await userEvent.click(overlay.getByRole("radio", { name: /10,000 pts/ }));
     await waitFor(() =>
       expect(
         overlay.getByText(
@@ -82,7 +82,7 @@ export const LimitAlmostReached: Story = {
     for (const radio of refused) {
       expect(radio).toHaveAttribute("aria-disabled", "true");
     }
-    expect(overlay.getByRole("radio", { name: /^5,000/ })).not.toHaveAttribute(
+    expect(overlay.getByRole("radio", { name: /5,000 pts/ })).not.toHaveAttribute(
       "aria-disabled",
       "true",
     );
@@ -96,7 +96,7 @@ export const CheckoutNotOpened: Story = {
   play: async () => {
     const overlay = within(document.body);
     await overlay.findByRole("dialog", { name: "Top Up Points" });
-    await userEvent.click(overlay.getByRole("radio", { name: /^10,000/ }));
+    await userEvent.click(overlay.getByRole("radio", { name: /10,000 pts/ }));
     await userEvent.click(
       overlay.getByRole("button", { name: "Pay HK$9,500" }),
     );

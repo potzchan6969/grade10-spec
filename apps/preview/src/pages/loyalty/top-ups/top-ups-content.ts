@@ -53,9 +53,11 @@ export const TOP_UP_COPY = {
   packsLegend: "Choose a pack",
   packPoints: (value: number) => value.toLocaleString("en-US"),
   packPointsSuffix: "points",
+  packCardUnit: "pts",
   packPrice: hkd,
-  packWasPrice: hkd,
-  packSave: (percent: number) => `Save ${percent}%`,
+  packPaidPoints: (value: number) => value.toLocaleString("en-US"),
+  packBonus: (value: number) =>
+    `+${value.toLocaleString("en-US")} bonus points`,
   packOverLimit: "Over today’s limit",
 
   /** One line under the button once a pack is picked: what, what it costs,

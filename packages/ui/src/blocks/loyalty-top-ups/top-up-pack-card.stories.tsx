@@ -34,41 +34,42 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     copy: {
-      unit: "points",
-      save: "Save 5%",
+      unit: "pts",
       unavailable: "Over today’s limit",
     },
     value: "pack-10k",
     pointsLabel: "10,000",
     priceLabel: "HK$9,500",
-    wasPriceLabel: "HK$10,000",
+    paidPointsLabel: "9,500",
+    bonusLabel: "+500 bonus points",
   },
 } satisfies Meta<typeof TopUpPackCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** A discounted pack, picked in the list: struck list price and a save badge. */
+/** A discounted pack, picked in the list: the paid points struck beside the
+ * count, the price at the edge, and the bonus line under it. */
 export const Pack: Story = {
   render: (args: TopUpPackCardProps) => (
     <PackList selected={args.value}>
       <TopUpPackCard {...args} />
       <TopUpPackCard
         {...args}
+        bonusLabel={undefined}
+        paidPointsLabel={undefined}
         priceLabel="HK$20,000"
         pointsLabel="20,000"
         value="pack-20k"
-        wasPriceLabel={undefined}
       />
     </PackList>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const radio = canvas.getByRole("radio", { name: /^10,000/ });
+    const radio = canvas.getByRole("radio", { name: /10,000 pts/ });
     expect(radio).toBeChecked();
     expect(canvas.getByText("HK$9,500")).toBeVisible();
-    expect(canvas.getByText("HK$10,000")).toBeVisible();
-    expect(canvas.getByText("Save 5%")).toBeVisible();
+    expect(canvas.getByText("+500 bonus points")).toBeVisible();
   },
 };
 

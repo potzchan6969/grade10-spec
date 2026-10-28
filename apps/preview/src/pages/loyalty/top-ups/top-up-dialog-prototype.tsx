@@ -127,24 +127,25 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
       >
         {TOP_UP_PACKS.map((pack) => (
           <TopUpPackCard
+            bonusLabel={
+              pack.discountPercent > 0
+                ? copy.packBonus(pack.points - packPrice(pack))
+                : undefined
+            }
             copy={{
-              unit: copy.packPointsSuffix,
-              save:
-                pack.discountPercent > 0
-                  ? copy.packSave(pack.discountPercent)
-                  : undefined,
+              unit: copy.packCardUnit,
               unavailable: copy.packOverLimit,
             }}
             disabled={packDisabled(pack)}
             key={pack.id}
+            paidPointsLabel={
+              pack.discountPercent > 0
+                ? copy.packPaidPoints(packPrice(pack))
+                : undefined
+            }
             pointsLabel={copy.packPoints(pack.points)}
             priceLabel={copy.packPrice(packPrice(pack))}
             value={pack.id}
-            wasPriceLabel={
-              pack.discountPercent > 0
-                ? copy.packWasPrice(pack.points)
-                : undefined
-            }
           />
         ))}
       </RadioList>
