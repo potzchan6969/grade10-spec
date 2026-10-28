@@ -286,9 +286,9 @@ export function SplitPage({
             key={row.section || "opening"}
             style={{ columnGap: GAP }}
           >
-            <div className="min-w-0">
+            <HeldReading>
               <BlockList blocks={row.main} />
-            </div>
+            </HeldReading>
             <div className="min-w-0">
               {/* Blank where the section has nothing under the tab. */}
               {shelf[layout.tab].length > 0 ? (
@@ -317,6 +317,43 @@ export function SplitPage({
         style={{ right: width + GAP / 2 }}
         width={width}
       />
+    </div>
+  );
+}
+
+/** Where a held column's top sits: below the header and the compact heading,
+ * on the line a jump lands a section's heading. */
+const HELD_TOP = 124;
+
+/** A section's reading, held still beside its side while the side is read,
+ * as long as it fits on the screen; a longer one scrolls, or its end could
+ * never be reached while it is held. */
+function HeldReading({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [fits, setFits] = useState(false);
+
+  useLayoutEffect(() => {
+    const reading = ref.current;
+    if (!reading) return;
+    const measure = () =>
+      setFits(reading.offsetHeight <= window.innerHeight - HELD_TOP);
+    const resize = new ResizeObserver(measure);
+    resize.observe(reading);
+    window.addEventListener("resize", measure);
+    measure();
+    return () => {
+      resize.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  return (
+    <div
+      className={`min-w-0 self-start ${fits ? "sticky" : ""}`}
+      ref={ref}
+      style={fits ? { top: HELD_TOP } : undefined}
+    >
+      {children}
     </div>
   );
 }
