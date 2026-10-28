@@ -355,7 +355,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#filters/several-options, product-listing#filters/option-count, product-listing#links-and-back/address
+* **Trace:** product-listing#filters/combining-options, product-listing#filters/option-count, product-listing#links-and-back/address
 
 **Pre-conditions:**
 
@@ -715,7 +715,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#collection-page/exit
+* **Trace:** product-listing#collection-page/leaving
 
 **Pre-conditions:**
 
@@ -748,7 +748,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#collection-page/exit
+* **Trace:** product-listing#collection-page/leaving
 
 **Pre-conditions:**
 
@@ -1107,7 +1107,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#search/chosen-suggestion
+* **Trace:** product-listing#search/picking-a-suggestion
 
 **Pre-conditions:**
 

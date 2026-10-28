@@ -30,9 +30,10 @@ Write for a teammate who joined this week and has never seen the code.
   context: "Sort Options", not "Orders", where an order is what a customer
   pays for. Choose the word that carries the meaning alone, rather than
   rely on the section around it
-- **Nouns over verbs** — a name is the thing the user meets, so it is a
-  noun where one fits: "Product Link", not "Opening a Product"; "Sort", not
-  "Sorting". A verb names it only where no noun does
+- **Things are nouns, behaviours are verbs** — a thing the user meets is
+  named with a noun: "Product Link", not "Opening a Product"; "Sort", not
+  "Sorting". A behaviour, what happens when the user does something, keeps
+  its verb: "Combining Options", because the act is what the line defines
 - **Define what it is, not what it isn't** — "number of products given the
   filters" already rules out counting the loaded cards. Say what doesn't
   happen only when the block can do it and the product doesn't, such as a

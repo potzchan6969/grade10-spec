@@ -29,7 +29,7 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
 - **Filter Groups** — lists of options to tick
   - **Worlds** — such as Pokémon and One Piece; the top five, then a link to the rest
   - **Types** — such as Graded Card and Booster Box; always listed in full
-- **Several Options** — options ticked in one group widen the results; options in different groups narrow them
+- **Combining Options** — options ticked in one group widen the results; options in different groups narrow them
   - Pokémon + One Piece shows both worlds; adding Graded Cards keeps only the graded cards from either
 - **Option Count** — number of products picking the option would give, with the other filters
   - **Empty Option** — hidden when the store has nothing for it; shown at 0 when the current filters rule it out
@@ -52,7 +52,7 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
 
 - **Search Box** — wide screens only, at the top of the filter sidebar
   - **Suggestions** — up to five products and five worlds or types, from the whole store
-    - **Chosen Suggestion** — a product opens it; a world or type applies that filter
+    - **Picking a Suggestion** — a product opens it; a world or type applies that filter
   - **Enter** — searches the typed words, shown as a removable chip
 
 :::callout{kind="note"}
@@ -71,7 +71,7 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
 ## Collection Page
 
 - **Entry** — a home page tile opens the listing as its collection's page: only the products the shop groups together in Shopify, the collection named above the grid, with a way out to the whole store
-- **Exit** — a filter or a search leaves the collection; a sort keeps it
+- **Leaving** — a filter or a search leaves the collection; a sort keeps it
 
 ## Links and Back
 
