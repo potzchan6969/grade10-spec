@@ -27,7 +27,7 @@ import {
 } from "./top-ups-shared";
 
 /** The pack picker the empty state opens. */
-const TOP_UP_DIALOG_STORY_ID = "loyalty-top-ups-parts-topupdialog--default";
+const TOP_UP_DIALOG_STORY_ID = "loyalty-top-ups-screens-top-up-dialog--default";
 
 type TopUpHistoryState = "default" | "empty";
 

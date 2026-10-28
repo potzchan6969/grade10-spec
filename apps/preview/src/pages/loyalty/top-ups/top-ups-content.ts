@@ -64,6 +64,7 @@ export const TOP_UP_COPY = {
     `${points(pts)} for ${hkd(price)}. Balance after: ${points(after)}`,
 
   continue: "Continue to payment",
+  pay: hkd,
   opening: "Opening checkout…",
   paymentNote: "Secure checkout by Stripe",
 

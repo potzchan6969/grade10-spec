@@ -3,7 +3,7 @@ import { expect, userEvent, waitFor, within } from "storybook/test";
 import { TopUpDialogPrototype } from "./top-up-dialog-prototype";
 
 const meta = {
-  title: "Loyalty/Top Ups/Parts/TopUpDialog",
+  title: "Loyalty/Top Ups/Screens/Top Up Dialog",
   component: TopUpDialogPrototype,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -52,9 +52,7 @@ export const PackSelected: Story = {
         ),
       ).toBeVisible(),
     );
-    expect(
-      overlay.getByRole("button", { name: "Continue to payment" }),
-    ).toBeEnabled();
+    expect(overlay.getByRole("button", { name: "Pay HK$9,500" })).toBeEnabled();
   },
 };
 
@@ -102,7 +100,7 @@ export const CheckoutNotOpened: Story = {
     await overlay.findByRole("dialog", { name: "Top Up Points" });
     await userEvent.click(overlay.getByRole("radio", { name: /^10,000/ }));
     await userEvent.click(
-      overlay.getByRole("button", { name: "Continue to payment" }),
+      overlay.getByRole("button", { name: "Pay HK$9,500" }),
     );
     await waitFor(() =>
       expect(

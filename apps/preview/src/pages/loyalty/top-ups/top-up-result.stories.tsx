@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { TopUpResultPrototype } from "./top-up-result-prototype";
 
 const meta = {
-  title: "Loyalty/Top Ups/Parts/TopUpResult",
+  title: "Loyalty/Top Ups/Screens/Top Up Result",
   component: TopUpResultPrototype,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

@@ -36,7 +36,7 @@ import {
 } from "../loyalty-content";
 
 /** Buying points opens the pack picker over the page. */
-const TOP_UP_STORY_ID = "loyalty-top-ups-parts-topupdialog--default";
+const TOP_UP_STORY_ID = "loyalty-top-ups-screens-top-up-dialog--default";
 
 /** The membership page's sections, keyed for the sidebar's swap. */
 type MembershipTab = "overview" | "rewards" | "coupons" | "points";
