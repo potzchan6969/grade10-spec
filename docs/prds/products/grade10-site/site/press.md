@@ -39,7 +39,7 @@ answers without a session, like any public surface —
 
 - **Copy - Date style** - the page writes `Sep 15, 2026`: the live
   page's month-first title casing, confirmed by design
-- ❓ Product - **Filter semantics** - the frame draws an All Time
+- **Product - Filter semantics** - the frame draws an All Time
   dropdown with a checked item; the page treats it as a year filter
   rather than jump navigation to each group
 - **Navigation entry** — Press Releases sits in the footer's Company

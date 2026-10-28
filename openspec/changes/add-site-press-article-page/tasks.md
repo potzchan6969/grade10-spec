@@ -15,7 +15,7 @@
   `g10.site-press.SC-12`)
 - [x] 1.3 Draw every body element at `Site/Press/Parts/Article Blocks` —
   paragraph runs, headings two through six, both list styles, the pull
-  quote, figures with and without captions, and the gallery
+  quote, and figures with and without captions
   (`g10.site-press.SC-09`, `g10.site-press.SC-10`)
 - [x] 1.4 Route `/press-releases/{slug}` in `workbench-story-nav.ts` to
   the article screen, so a release row and the Shows page's links open

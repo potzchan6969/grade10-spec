@@ -87,7 +87,7 @@ None.
 **Pre-conditions:**
 An article whose body carries each element — paragraphs with bold and
 inline links, headings two through six, both list styles, a blockquote,
-figures and a gallery.
+figures with and without captions.
 
 **Steps:**
 
