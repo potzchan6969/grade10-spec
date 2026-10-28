@@ -1,0 +1,144 @@
+import { Step } from "@grade10/design-system/components/display/step";
+import { Stepper } from "@grade10/design-system/components/display/stepper";
+import { Text } from "@grade10/design-system/components/display/text";
+import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
+import type { ReactNode } from "react";
+import { CampaignGiftArt } from "./campaign-gift-art";
+
+/**
+ * What the band at the foot of the card says at a glance:
+ * - `act`: something for the member to do.
+ * - `wait`: waiting on us, or try again.
+ * - `won`: the gift is theirs.
+ * - `off`: nothing more here for them.
+ */
+type CampaignWayTone = "act" | "wait" | "won" | "off";
+
+type CampaignWayCardProps = {
+  /** How one takes part, in a word or two: "Sign-up win", "Photo hunt". */
+  kindLabel: string;
+  title: string;
+  description?: string | null;
+  /** The gift's name, written beside its picture. */
+  rewardLabel: string;
+  rewardImageUrl?: string | null;
+  /** How to take part, in order; none, and the card lists nothing. */
+  steps?: readonly string[];
+  tone: CampaignWayTone;
+  /**
+   * Where a sent entry has got to: the stage names in order and the one it is
+   * at. Absent, the band draws no track.
+   */
+  track?: { stages: readonly string[]; at: number };
+  /** The consumer's name for the member's state, carried as `data-step`. */
+  step?: string;
+  /** The band's own words and the one next step. */
+  children?: ReactNode;
+};
+
+const BAND: Record<CampaignWayTone, string> = {
+  act: "bg-primary-muted",
+  wait: "bg-warning-muted",
+  won: "bg-success-muted",
+  off: "bg-muted text-secondary-foreground",
+};
+
+/**
+ * One way to win a campaign's gift. The top never changes — the gift, the
+ * kind, the title and how to take part — and the band at the foot is where
+ * the member stands, toned so a glance down the page tells "do this" from
+ * "waiting", "won" and "closed".
+ */
+function CampaignWayCard({
+  kindLabel,
+  title,
+  description,
+  rewardLabel,
+  rewardImageUrl,
+  steps = [],
+  tone,
+  track,
+  step,
+  children,
+}: CampaignWayCardProps) {
+  return (
+    <article
+      className="grid overflow-hidden rounded-2xl border border-border bg-card text-card-foreground"
+      data-slot="campaign-way"
+      data-step={step}
+      data-tone={tone}
+    >
+      <HStack className="p-5" gap="md" vAlign="start">
+        <CampaignGiftArt dimmed={tone === "off"} imageUrl={rewardImageUrl} />
+        <VStack className="min-w-0" gap="xs">
+          <span className="text-xs font-bold tracking-widest text-primary uppercase">
+            {kindLabel}
+          </span>
+          <h3 className="text-xl leading-tight font-bold text-balance">
+            {title}
+          </h3>
+          {description ? (
+            <Text size="sm" tone="secondary">
+              {description}
+            </Text>
+          ) : null}
+          <Text data-slot="campaign-way-gift" size="sm" weight="medium">
+            {rewardLabel}
+          </Text>
+        </VStack>
+      </HStack>
+
+      {steps.length > 0 ? (
+        <ol
+          className="m-0 grid list-none gap-3 px-5 pb-5"
+          data-slot="campaign-way-steps"
+        >
+          {steps.map((one, at) => (
+            <li className="grid grid-cols-[1.5rem_1fr] gap-3 text-sm" key={one}>
+              <span
+                aria-hidden
+                className="grid size-6 place-items-center rounded-full bg-muted text-xs font-bold"
+              >
+                {at + 1}
+              </span>
+              <span>{one}</span>
+            </li>
+          ))}
+        </ol>
+      ) : null}
+
+      <VStack
+        className={cn("border-t border-border px-5 py-4", BAND[tone])}
+        data-slot="campaign-way-band"
+        gap="sm"
+        hAlign="start"
+      >
+        {track ? (
+          <Stepper aria-label={title} data-slot="campaign-way-track">
+            {track.stages.map((stage, at) => (
+              <Step
+                key={stage}
+                label={stage}
+                showLeadingConnector={at > 0}
+                showTrailingConnector={at < track.stages.length - 1}
+                state={
+                  at < track.at
+                    ? "completed"
+                    : at === track.at
+                      ? "progress"
+                      : "upcoming"
+                }
+              />
+            ))}
+          </Stepper>
+        ) : null}
+        {children}
+      </VStack>
+    </article>
+  );
+}
+
+export type { CampaignWayCardProps, CampaignWayTone };
+export { CampaignWayCard };

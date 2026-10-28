@@ -430,10 +430,36 @@ export {
   CampaignBanner,
   type CampaignBannerProps,
 } from "./blocks/loyalty-campaign/campaign-banner";
+// shared-ui/loyalty-campaign - the campaign page
+export {
+  type CampaignFact,
+  CampaignFacts,
+} from "./blocks/loyalty-campaign/campaign-facts";
+export {
+  CampaignGift,
+  type CampaignGiftProps,
+} from "./blocks/loyalty-campaign/campaign-gift";
+export {
+  CampaignHero,
+  type CampaignHeroPhase,
+  type CampaignHeroProps,
+} from "./blocks/loyalty-campaign/campaign-hero";
 export {
   CampaignMechanicCard,
   type CampaignMechanicCardProps,
 } from "./blocks/loyalty-campaign/campaign-mechanic-card";
+export {
+  type CampaignDate,
+  CampaignDates,
+  CampaignPanel,
+  CampaignQuestions,
+} from "./blocks/loyalty-campaign/campaign-panel";
+export { CampaignShare } from "./blocks/loyalty-campaign/campaign-share";
+export {
+  CampaignWayCard,
+  type CampaignWayCardProps,
+  type CampaignWayTone,
+} from "./blocks/loyalty-campaign/campaign-way-card";
 export {
   CouponList,
   type CouponListCopy,
