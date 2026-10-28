@@ -186,11 +186,6 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
           )}
         </Text>
       ) : null}
-      {selectedPack && selectedPack.points > REVIEW_THRESHOLD ? (
-        <Text as="p" size="sm" tone="muted">
-          {copy.reviewNote}
-        </Text>
-      ) : null}
       <Button
         className="w-full"
         disabled={!selectedPack}

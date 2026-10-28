@@ -63,7 +63,6 @@ export const TOP_UP_COPY = {
    *  where the balance lands. */
   selectedLine: (pts: number, price: number, after: number) =>
     `${points(pts)} for ${hkd(price)}. Balance after: ${points(after)}`,
-  reviewNote: "Reviewed before the points arrive. Charged only if approved.",
 
   continue: "Continue to payment",
   opening: "Opening checkout…",

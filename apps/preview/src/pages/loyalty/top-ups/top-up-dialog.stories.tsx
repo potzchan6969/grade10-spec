@@ -58,24 +58,6 @@ export const PackSelected: Story = {
   },
 };
 
-/** Above the review threshold a quiet line says the pack is held for review. */
-export const ReviewedPack: Story = {
-  name: "Reviewed Pack",
-  args: { state: "default" },
-  play: async () => {
-    const overlay = within(document.body);
-    await overlay.findByRole("dialog", { name: "Top Up Points" });
-    await userEvent.click(overlay.getByRole("radio", { name: /^50,000/ }));
-    await waitFor(() =>
-      expect(
-        overlay.getByText(
-          "Reviewed before the points arrive. Charged only if approved.",
-        ),
-      ).toBeVisible(),
-    );
-  },
-};
-
 /** While Stripe's checkout opens the button shows the wait. */
 export const OpeningCheckout: Story = {
   name: "Opening Checkout",
