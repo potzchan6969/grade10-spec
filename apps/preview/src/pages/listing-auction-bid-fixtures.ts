@@ -58,6 +58,11 @@ export const BIDDING_STATE_LABELS: Record<BiddingState, string> = {
   "closed-unsold": "Closed — unsold",
 };
 
+type FixtureBid = (typeof AUCTION_LOT_FIXTURE.bids.live)[number];
+
+/** Newest first, as Recent Bids lists them; the seed places them oldest first. */
+const LOT_BIDS = AUCTION_LOT_FIXTURE.bids;
+
 /** Numeric lot facts shared by bid-card fixtures and preview page content. */
 export const BID_FIXTURE_LOT = {
   currency: DEFAULT_LISTING_CURRENCY,
@@ -65,17 +70,15 @@ export const BID_FIXTURE_LOT = {
   /** Near the low end of the lot's historical comps; the seed starts here too. */
   startingBidMinor: AUCTION_LOT_FIXTURE.startingBidMinor,
   /** Live mid-ladder current bid (a few increments above start). */
-  currentBidMinor: 5_800_000,
+  currentBidMinor: LOT_BIDS.live[0].amountMinor,
   /** Step sized for a mid–six-figure USD lot. */
   incrementMinor: 250_000,
-  bidCount: 6,
   /** Private maximum below the high comps band while still leading. */
   viewerMaximumMinor: 9_500_000,
 } as const;
 
 /** Live-auto-outbid: market above the viewer's maximum. */
-const OUTBID_CURRENT_MINOR =
-  BID_FIXTURE_LOT.viewerMaximumMinor + BID_FIXTURE_LOT.incrementMinor;
+const OUTBID_CURRENT_MINOR = LOT_BIDS.outbid[0].amountMinor;
 
 /** Live-past-ceiling: bidding has reached the ceiling, so the next bid sits above it. */
 const PAST_CEILING_CURRENT_MINOR = BID_FIXTURE_LOT.ceilingMinor;
@@ -85,7 +88,7 @@ const NEAR_CEILING_MAXIMUM_MINOR =
   BID_FIXTURE_LOT.ceilingMinor - BID_FIXTURE_LOT.incrementMinor * 3;
 
 /** Closed hammer for sold / won / lost fixtures. */
-const CLOSED_SOLD_MINOR = 7_250_000;
+const CLOSED_SOLD_MINOR = LOT_BIDS.won[0].amountMinor;
 
 const FIXTURE_LOCALE = "en-HK";
 
@@ -97,35 +100,35 @@ function fixtureAmount(minor: number): string {
 
 const DAY_SECONDS = 24 * 60 * 60;
 const HOUR_SECONDS = 60 * 60;
-const VIEWER_INITIALS = "john@example.com";
 
 function msAgo(minutes: number, nowMs = Date.now()): number {
   return nowMs - minutes * 60_000;
 }
 
-const BID_HISTORY: ListingBidHistoryRow[] = [
-  {
-    id: "bid-john-5800",
-    initials: VIEWER_INITIALS,
-    amountMinor: BID_FIXTURE_LOT.currentBidMinor,
-    acceptedAtMs: msAgo(2),
-    isViewer: true,
-  },
-  {
-    id: "bid-mike-5550",
-    initials: "mike@example.com",
-    amountMinor:
-      BID_FIXTURE_LOT.currentBidMinor - BID_FIXTURE_LOT.incrementMinor,
-    acceptedAtMs: msAgo(6),
-  },
-  {
-    id: "bid-alex-5300",
-    initials: "alex@example.com",
-    amountMinor:
-      BID_FIXTURE_LOT.currentBidMinor - BID_FIXTURE_LOT.incrementMinor * 2,
-    acceptedAtMs: msAgo(12),
-  },
-];
+function historyRows(
+  ladder: readonly FixtureBid[],
+  key: string,
+): ListingBidHistoryRow[] {
+  return ladder.map((bid) => ({
+    id: `bid-${key}-${bid.bidder}-${bid.amountMinor}`,
+    initials: `${bid.bidder}@example.com`,
+    amountMinor: bid.amountMinor,
+    acceptedAtMs: msAgo(bid.minutesAgo),
+    ...(bid.bidder === AUCTION_LOT_FIXTURE.viewer ? { isViewer: true } : {}),
+  }));
+}
+
+function ladderForState(state: BiddingState): readonly FixtureBid[] {
+  if (
+    state === "opens" ||
+    state === "live-no-bids" ||
+    state === "closed-unsold"
+  )
+    return [];
+  if (state === "live-auto-outbid") return LOT_BIDS.outbid;
+  if (state.startsWith("closed")) return LOT_BIDS.won;
+  return LOT_BIDS.live;
+}
 
 export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   recentBids: "Recent Bids",
@@ -257,7 +260,7 @@ export function stateMeta(state: BiddingState) {
       ? null
       : opens
         ? 2 * DAY_SECONDS + 4 * HOUR_SECONDS + 12 * 60
-        : 6 * 60 + 9,
+        : AUCTION_LOT_FIXTURE.closesInSeconds,
     countdownFormat: opens ? ("long" as const) : ("short" as const),
     deadlineAtMs: closed
       ? FIXTURE_AUCTION_CLOSED_AT_MS
@@ -279,10 +282,7 @@ export function stateMeta(state: BiddingState) {
                   state === "closed-lost"
                 ? CLOSED_SOLD_MINOR
                 : BID_FIXTURE_LOT.currentBidMinor,
-    bidCount:
-      state === "live-no-bids" || state === "closed-unsold"
-        ? 0
-        : BID_FIXTURE_LOT.bidCount,
+    bidCount: ladderForState(state).length,
   };
 }
 
@@ -290,55 +290,23 @@ export function bidHistoryForState(
   state: BiddingState,
 ): ListingBidHistoryRow[] {
   if (!stateMeta(state).hasBids) return [];
-
-  if (state === "live-auto-outbid") {
-    return [
-      {
-        id: "bid-mike-outbid",
-        initials: "mike@example.com",
-        amountMinor: OUTBID_CURRENT_MINOR,
-        acceptedAtMs: msAgo(1),
-      },
-      {
-        id: "bid-john-max",
-        initials: "john@example.com",
-        amountMinor: BID_FIXTURE_LOT.viewerMaximumMinor,
-        acceptedAtMs: msAgo(5),
-        isViewer: true,
-      },
-      {
-        id: "bid-alex-prior",
-        initials: "alex@example.com",
-        amountMinor:
-          BID_FIXTURE_LOT.viewerMaximumMinor - BID_FIXTURE_LOT.incrementMinor,
-        acceptedAtMs: msAgo(10),
-      },
-    ];
-  }
-
   if (state.startsWith("closed")) {
     const viewerWon =
       state === "closed-won-payment-due" || state === "closed-won-settled";
+    const [winner, runnerUp] = LOT_BIDS.won;
+    const ladder = viewerWon
+      ? LOT_BIDS.won
+      : [
+          { ...winner, bidder: runnerUp.bidder },
+          { ...runnerUp, bidder: winner.bidder },
+        ];
+    const [hammer, prior] = historyRows(ladder, "closed");
     return [
-      {
-        id: viewerWon ? "bid-john-sold" : "bid-mike-sold",
-        initials: viewerWon ? VIEWER_INITIALS : "mike@example.com",
-        amountMinor: CLOSED_SOLD_MINOR,
-        acceptedAtMs: msAgo(60),
-        isViewer: viewerWon,
-        isWinner: true,
-      },
-      {
-        id: viewerWon ? "bid-mike-prior" : "bid-john-closed",
-        initials: viewerWon ? "mike@example.com" : VIEWER_INITIALS,
-        amountMinor: CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
-        acceptedAtMs: msAgo(90),
-        isViewer: state === "closed-lost",
-      },
+      { ...hammer, isViewer: viewerWon, isWinner: true },
+      { ...prior, isViewer: state === "closed-lost" },
     ];
   }
-
-  return BID_HISTORY;
+  return historyRows(ladderForState(state), state);
 }
 
 export type UserBidHistoryFixture = {

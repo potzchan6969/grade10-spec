@@ -19,5 +19,73 @@
       "file": "auction-catalogue-mew-ex.fixture.png",
       "alt": "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10, detail"
     }
-  ]
+  ],
+  "closesInSeconds": 369,
+  "facts": [
+    {
+      "label": "Year",
+      "value": "1997"
+    },
+    {
+      "label": "Set",
+      "value": "Pocket Monsters Carddass"
+    },
+    {
+      "label": "Grade",
+      "value": "PSA 10"
+    },
+    {
+      "label": "Cert number",
+      "value": "95109007"
+    }
+  ],
+  "viewer": "john",
+  "bids": {
+    "live": [
+      {
+        "bidder": "john",
+        "amountMinor": 5800000,
+        "minutesAgo": 2
+      },
+      {
+        "bidder": "mike",
+        "amountMinor": 5550000,
+        "minutesAgo": 6
+      },
+      {
+        "bidder": "alex",
+        "amountMinor": 5300000,
+        "minutesAgo": 12
+      }
+    ],
+    "outbid": [
+      {
+        "bidder": "mike",
+        "amountMinor": 9750000,
+        "minutesAgo": 1
+      },
+      {
+        "bidder": "john",
+        "amountMinor": 9500000,
+        "minutesAgo": 5
+      },
+      {
+        "bidder": "alex",
+        "amountMinor": 9250000,
+        "minutesAgo": 10
+      }
+    ],
+    "won": [
+      {
+        "bidder": "john",
+        "amountMinor": 7250000,
+        "minutesAgo": 60
+      },
+      {
+        "bidder": "mike",
+        "amountMinor": 7000000,
+        "minutesAgo": 90
+      }
+    ]
+  }
 }

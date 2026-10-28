@@ -117,12 +117,7 @@ export const AUCTION_LOT_BADGES: readonly ListingLotMetaBadge[] = [
   { label: "Bandai Starters" },
 ];
 
-export const AUCTION_LOT_FACTS = [
-  { label: "Year", value: "1997" },
-  { label: "Set", value: "Pocket Monsters Carddass" },
-  { label: "Grade", value: "PSA 10" },
-  { label: "Cert number", value: "95109007" },
-] as const;
+export const AUCTION_LOT_FACTS = AUCTION_LOT_FIXTURE.facts;
 
 /** Demo linked card — matches Auction Listing → Bid Panel → Ready. */
 export const AUCTION_LOT_LINKED_PAYMENT_METHOD = {
