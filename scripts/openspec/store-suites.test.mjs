@@ -546,3 +546,22 @@ test("a numbered item's bold name is a rule, so its order can be the rule", () =
   assert.doesNotMatch(result.text, /names no rule/);
   assert.match(result.text, /rule \*\*Name\*\* .* has no case/);
 });
+
+test("a row of a table headed Rule is a rule", () => {
+  const root = store({
+    "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
+    [`${PRD}/order-detail.md`]: `${PAGE}\n| Rule | Value |\n| --- | --- |\n| Picture | **1** per item |\n| ❓ Zoom | TBC |\n\n| Item | Note |\n| --- | --- |\n| Not a rule | x |\n`,
+    [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+      "**Capabilities:** grade10-site/store/order-detail",
+      "",
+      "## order-detail#product-pictures: Product Pictures",
+      "",
+      "### g10.store-order-detail.TC1: Each item shows its picture",
+      "",
+      ...STORE_PROPS("order-detail#product-pictures/picture"),
+    ]),
+  });
+  const result = out(root);
+  assert.equal(result.status, 0, result.text);
+  assert.doesNotMatch(result.text, /names no rule|has no case/);
+});

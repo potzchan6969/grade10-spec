@@ -38,9 +38,10 @@ Write for a teammate who joined this week and has never seen the code.
   filters" already rules out counting the loaded cards. Say what doesn't
   happen only when the block can do it and the product doesn't, such as a
   stock count the card can show
-- **A rule is a list item** — `- **Name** — definition`, or a numbered item
-  where the order is the rule. A bold name opening a paragraph names no rule,
-  so no case can trace it; `check:manual` warns on one
+- **A rule is a list item** — `- **Name** — definition`, a numbered item
+  where the order is the rule, or a row of a table headed `Rule`. A bold name
+  opening a paragraph names no rule, so no case can trace it; `check:manual`
+  warns on one
 - **Nest what belongs to something** — a part sits under its whole: how a
   card opens sits under the grid, not beside it. Siblings are things of the
   same kind. The heading is the top parent, so an item that only names its

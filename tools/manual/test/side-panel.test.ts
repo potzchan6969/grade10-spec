@@ -225,6 +225,10 @@ describe("a section's rules", () => {
           "  - 🚧 **Refusals in the reader's language** — in its words",
           "1. **Repriced** — first, where it applies",
           "",
+          "| Rule | Value |",
+          "| --- | --- |",
+          "| Shop's answer | Within **2.5 s** |",
+          "",
           "```",
           "- **Not a rule**",
           "```",
@@ -238,6 +242,7 @@ describe("a section's rules", () => {
         name: "Refusals in the reader's language",
       },
       { anchor: "repriced", name: "Repriced" },
+      { anchor: "shops-answer", name: "Shop's answer" },
     ]);
   });
 });

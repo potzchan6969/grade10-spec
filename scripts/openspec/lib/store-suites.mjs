@@ -41,11 +41,15 @@ export function headingAnchor(text) {
 }
 
 const RULE = /^\s*(?:[-*]|\d+\.)\s+(?:(🚧|❓)\s*)?\*\*([^*]+?)\*\*/u;
+const RULE_TABLE = /^\|\s*Rule\s*\|/;
+const ROW = /^\|\s*(?:(🚧|❓)\s*)?(?:\*\*)?([^|*]+?)(?:\*\*)?\s*\|/u;
+const DIVIDER = /^\|[\s:|-]+\|\s*$/;
 
 /** A PRD page's sections, `anchor -> Map(rule anchor -> { name, open, line })`,
  *  or null when the page is missing. A rule is a list item's bold name under a
- *  heading, at any depth, outside fenced code and `:::` blocks other than a
- *  callout; `open` marks a ❓ rule. */
+ *  heading, at any depth, or a row's first cell in a table headed `Rule`,
+ *  outside fenced code and `:::` blocks other than a callout; `open` marks a
+ *  ❓ rule. */
 export function pageSections(root, page, cache = new Map()) {
   if (cache.has(page)) return cache.get(page);
   const file = join(root, STORE_PRD, `${page}.md`);
@@ -57,6 +61,7 @@ export function pageSections(root, page, cache = new Map()) {
   let rules = null;
   let fenced = false;
   let block = 0;
+  let table = false;
   readFileSync(file, "utf8")
     .split("\n")
     .forEach((line, i) => {
@@ -82,7 +87,13 @@ export function pageSections(root, page, cache = new Map()) {
         sections.set(headingAnchor(heading[1]), rules);
         return;
       }
-      const rule = rules && RULE.exec(line);
+      table = table ? line.startsWith("|") : RULE_TABLE.test(line);
+      const row =
+        table &&
+        !RULE_TABLE.test(line) &&
+        !DIVIDER.test(line) &&
+        ROW.exec(line);
+      const rule = rules && (row || RULE.exec(line));
       if (rule)
         rules.set(headingAnchor(rule[2]), {
           name: rule[2],
