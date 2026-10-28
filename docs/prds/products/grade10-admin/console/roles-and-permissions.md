@@ -2,7 +2,6 @@
 title: Roles & Permissions
 spec: grade10-admin/console/roles-and-permissions
 order: 2
-reviewed: 2026-09-11
 ---
 
 What each closed role may do, and what each permission means, shown to
@@ -61,5 +60,5 @@ Non-goals:
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-admin/console/roles-and-permissions"}
+[Test cases · grade10-admin/console/roles-and-permissions](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/console/roles-and-permissions)
 :::

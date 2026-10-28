@@ -15,9 +15,8 @@
  */
 import {
   moveOf,
-  ROLE_LABEL,
   STAGE_LABEL,
-} from "../../../tools/manual/src/api/stages.ts";
+} from "../../../tools/openspec-store/src/stages.ts";
 
 /** A title, safe for Slack's `mrkdwn`: the three characters its own markup
  * reads as syntax, turned into entities before anything builds a link or a
@@ -53,10 +52,10 @@ export function linkedOf(url, title) {
   return `<${url}|${escapeSlackText(title)}>`;
 }
 
-/** A change's own page on the manual: `<manualUrl>/in-flight/<id>`, what a
- * message links to where the record names no thread. */
-export function changePageOf(manualUrl, id) {
-  return `${manualUrl.replace(/\/$/, "")}/in-flight/${encodeURIComponent(id)}`;
+/** A change's own page in the OpenSpec viewer: `<openspecUrl>/#/change/<id>`,
+ * what a message links to where the record names no thread. */
+export function changePageOf(openspecUrl, id) {
+  return `${openspecUrl.replace(/\/$/, "")}/#/change/${encodeURIComponent(id)}`;
 }
 
 /**
@@ -69,8 +68,9 @@ export function changePageOf(manualUrl, id) {
  * names one, and the digest — which never reads a thread — always gets the
  * change page.
  */
-export function linkOf({ manualUrl, workspaceUrl, thread, id, title }) {
-  const url = permalinkOf(workspaceUrl, thread) ?? changePageOf(manualUrl, id);
+export function linkOf({ openspecUrl, workspaceUrl, thread, id, title }) {
+  const url =
+    permalinkOf(workspaceUrl, thread) ?? changePageOf(openspecUrl, id);
   return linkedOf(url, title);
 }
 
@@ -122,94 +122,4 @@ export function yourTurnText(at, role, linked) {
 export function toldBodyOf(at, role, { linked }) {
   const lines = [yourTurnText(at, role, linked)];
   return { kind: "your-turn", text: lines.join("\n") };
-}
-
-/**
- * What moved before one person's artifacts, in one message: each artifact the
- * landing reached, each unit that moved quoted before and after with its
- * class, and which of them holds the next landing. A move that could not be
- * split names the item it sits in and is read again whole.
- */
-export function movedText(told, linked) {
-  const artifacts = told.behind.map((one) => `\`${one.artifact}\``);
-  const lines = [`*What moved* on ${linked}, before ${artifacts.join(", ")}`];
-  const quoted = new Set();
-  for (const behind of told.behind) {
-    for (const one of behind.moved) {
-      const unit = `${one.item}\u0000${one.key}\u0000${one.after ?? ""}`;
-      if (quoted.has(unit)) continue;
-      quoted.add(unit);
-      lines.push(movedLine(one));
-    }
-  }
-  const holding = told.behind.filter((one) => one.holds);
-  lines.push(
-    holding.length > 0
-      ? `Holds every landing after ${holding.map((one) => `\`${one.artifact}\``).join(", ")} until you read it again or land it.`
-      : "Holds nothing but the fold: read it again when you can.",
-  );
-  return lines.join("\n");
-}
-
-/** One unit that moved: where it sits, its class, and what it read before
- * and after — a unit with neither side quoted is the whole item. */
-function movedLine(one) {
-  const where =
-    one.key === one.item ? `\`${one.item}\`` : `\`${one.item}\` ${one.key}`;
-  const kind = one.major ? "major" : "small";
-  if (one.before === undefined && one.after === undefined)
-    return `${where}, ${kind} — read it again whole`;
-  const sides = [
-    `before: ${one.before === undefined ? "(none)" : clip(one.before)}`,
-    `after: ${one.after === undefined ? "(removed)" : clip(one.after)}`,
-  ];
-  return `${where}, ${kind} — ${sides.join(" — ")}`;
-}
-
-/** A quote cut to what one line of a message holds. */
-function clip(text) {
-  const flat = text.replace(/\s+/g, " ").trim();
-  return flat.length > QUOTE ? `${flat.slice(0, QUOTE - 1)}…` : flat;
-}
-
-const QUOTE = 200;
-
-/** The label a chip and a row give one behind artifact: what moved, and
- * whether it holds the next landing. */
-export function behindLabelOf(behind) {
-  if (behind.whole) return `read again against ${behind.changed.join(", ")}`;
-  return `${behind.changed.join(", ")} moved — ${behind.holds ? "holds the next landing" : "small, holds only the fold"}`;
-}
-
-/** A hand as a thread names it: `@<handle> (<role>)`, or `<role> (open)`
- * where the change names nobody for that role — one spelling for every reply
- * that asks a hand to act. */
-export function handText(role, hand) {
-  const label = ROLE_LABEL[role] ?? role;
-  return hand ? `@${hand.replace(/^@/, "")} (${label})` : `${label} (open)`;
-}
-
-/**
- * One reply in the change's thread: what landed, whose word landed it, where
- * the change stands now, and whose turn it is.
- *
- * The change is not linked and not named — the reply hangs in its own thread,
- * where every reader already has it. A role of the stage the change names no
- * hand for is named as open, never left out and never written as its channel:
- * the reply is read by everybody on the change, so an unnamed hand is the one
- * thing in it somebody has to act on, and a stage with no role at all is the
- * only `nobody`. Nothing here says who pushed the landing; the caller decides
- * whether the reply is owed at all.
- */
-export function landedText(at, landed) {
-  const words = new Map();
-  for (const { artifact, by } of landed) {
-    words.set(by, [...(words.get(by) ?? []), `\`${artifact}\``]);
-  }
-  const what = [...words]
-    .map(([by, artifacts]) => `${artifacts.join(", ")} by @${by}`)
-    .join(", ");
-  const turns = at.roles.map((role) => handText(role, at.hands[role]));
-  const turn = turns.length > 0 ? turns.join(", ") : "nobody";
-  return `*Landed* — ${what} · now at *${STAGE_LABEL[at.stage]}* · your turn: ${turn}`;
 }

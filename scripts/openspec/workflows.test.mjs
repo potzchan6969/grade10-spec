@@ -94,7 +94,7 @@ const workflows = () =>
     ]);
 
 /** A workflow one of whose steps runs a gate that reads a change's plan:
- * `check:manual` — never `check:manual:pages`, which reads the pages alone —
+ * `check:manual` —
  * or `validate-changes`, by its script or its `validate:changes` alias. */
 const readsThePlan = (workflow) =>
   Object.values(workflow.jobs ?? {}).some((job) =>
@@ -145,12 +145,12 @@ const runsOn = (trigger, path) =>
 
 /** A change's plan, and the two files of the same name a filter written for
  * the tick may not catch: the plan template `test:openspec` reads, and the
- * demo store's plans the manual's tests read. Both asserted to exist, so a
+ * demo store's plans the OpenSpec readers' tests read. Both asserted to exist, so a
  * moved file fails here rather than passing on a path nothing writes. */
 const PLAN = "openspec/changes/some-change/tasks.md";
 const TEMPLATE = "openspec/schemas/grade10-planning/templates/tasks.md";
 const FIXTURE_PLAN =
-  "tools/manual/demo-store/openspec/changes/add-thing/tasks.md";
+  "tools/openspec-store/demo-store/openspec/changes/add-thing/tasks.md";
 for (const path of [TEMPLATE, FIXTURE_PLAN])
   assert.ok(existsSync(join(ROOT, path)), `${path} is not there`);
 /** The workflows that skip the tick's push: the set the skip case holds,
@@ -275,8 +275,6 @@ test("shared-planning-change-stages-SC-72 - the manual deploys on every push to 
   );
   assert.match(commit.run, /gh workflow run manual\.yml/);
   assert.equal(lint.jobs.biome.permissions.actions, "write");
-  const build = manual.jobs.deploy.steps.find((step) => step.name === "Build");
-  assert.equal(build.env.RELAY_URL, "${{ vars.RELAY_URL }}");
 });
 
 test("the channel post falls back to the store's own channel", () => {
@@ -465,7 +463,6 @@ test("Test's jobs skip only what they do not read", () => {
     "packages/i18n/messages/shared/en/a.json",
     "apps/preview/src/a.tsx",
     "apps/emails/src/a.tsx",
-    "tools/relay/src/a.ts",
   ])
     assert.equal(tooling.test(path), false, `${path} runs the manual's tools`);
   assert.match(step.run, /"\$EVENT" != pull_request/);

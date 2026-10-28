@@ -146,9 +146,9 @@ every bound unset and writes no offer in production.
 
 ## Specs and journeys
 
-::spec{id="grade10-site/vault/valuation-and-offer"}
+[Requirements · grade10-site/vault/valuation-and-offer](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/vault/valuation-and-offer/spec.md)
 
-::spec{id="grade10-site/vault/loan-and-settlement"}
+[Requirements · grade10-site/vault/loan-and-settlement](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/vault/loan-and-settlement/spec.md)
 
 :::detail{title="Code map" for="engineer"}
 - **The one function** — `packages/vault/backend/src/money/computeDue.ts`,

@@ -68,6 +68,49 @@
     "copyMessageManual": "메시지를 직접 복사하세요",
     "openMailApp": "메일 앱 열기"
   },
+  "proofDialog": {
+    "title": "결제 증빙 제출",
+    "description": "송금 후 여기에서 영수증을 업로드하세요.",
+    "senderName": "송금인 이름",
+    "senderNameRequired": "송금인 이름을 입력하세요.",
+    "transferDate": "송금일",
+    "transferDateRequired": "송금일을 입력하세요.",
+    "proof": "결제 증빙",
+    "dropTitle": "파일을 여기에 놓거나 파일을 선택하세요",
+    "fileHint": "PDF, PNG, JPG 또는 HEIC. 최대 3개 파일, 파일당 5MB, 총 15MB.",
+    "chooseFiles": "파일 선택",
+    "converting": "HEIC 변환 중…",
+    "removeFile": "파일 삭제",
+    "filesRequired": "증빙 파일을 하나 이상 첨부하세요.",
+    "noFilesSelected": "선택한 파일 없음",
+    "oneFileSelected": "파일 1개 선택됨",
+    "filesSelected": "파일 {count}개 선택됨",
+    "notes": "추가 메모(선택)",
+    "finalNotice": "제출한 후에는 파일을 추가하거나 변경할 수 없습니다.",
+    "leaveConfirm": "제출하지 않고 나가시겠습니까? 결제 증빙이 저장되지 않습니다.",
+    "cancel": "취소",
+    "submit": "결제 증빙 제출",
+    "tooManyFiles": {
+      "title": "파일이 너무 많습니다",
+      "description": "최대 3개 파일까지 가능합니다."
+    },
+    "fileTooLarge": {
+      "title": "파일이 너무 큽니다",
+      "description": "파일당 5MB 이하여야 합니다."
+    },
+    "filesTooLarge": {
+      "title": "파일이 너무 큽니다",
+      "description": "전체 파일 합계가 15MB 이하여야 합니다."
+    },
+    "fileTypeUnsupported": {
+      "title": "지원하지 않는 파일 형식",
+      "description": "PDF, PNG, JPG 또는 HEIC를 사용하세요."
+    },
+    "heicFailed": {
+      "title": "HEIC를 변환할 수 없습니다",
+      "description": "휴대폰에서 JPG로 내보낸 후 다시 업로드하세요."
+    }
+  },
   "tabs": {
     "active": "진행 중",
     "upcoming": "예정",

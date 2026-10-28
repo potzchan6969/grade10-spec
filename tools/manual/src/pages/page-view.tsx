@@ -1,18 +1,19 @@
-import type { ReactNode } from "react";
-import {
-  changesForSpec,
-  type ManualIndex,
-  type ParsedPage,
-  proposalsForSpec,
-} from "../api/derive";
+import { type ReactNode, useMemo } from "react";
+import type { ManualIndex, ParsedPage } from "../api/derive";
+import { casesOfPage } from "../api/suites";
 import { BlockList } from "../blocks/block-list";
 import { BlockScopeProvider } from "../blocks/block-scope";
 import { BrokenCard } from "../blocks/broken-card";
-import { ChangeRibbon } from "../blocks/change-views";
-import { PageActions } from "../editor/edit-actions";
+import { sectionRows } from "../blocks/side-blocks";
 import { useEditMode } from "../editor/edit-mode";
 import { PageEditor } from "../editor/page-editor";
-import { ArchiveTimeline } from "./archive-timeline";
+import { useLayoutMaybe } from "../shell/layout";
+import {
+  hasSide,
+  ReadingRunout,
+  SideHint,
+  SplitPage,
+} from "../shell/side-panel";
 import { PageWarnings, warningsForPage } from "./check-warnings";
 import { NotFoundPage } from "./not-found";
 import { PageHeading } from "./page-heading";
@@ -22,61 +23,60 @@ type PageViewProps = {
   index: ManualIndex;
   path: string;
   eyebrow?: ReactNode;
-  /** Rendered after the page's own blocks, before the archive. */
+  /** Rendered after the page's own blocks. */
   children?: ReactNode;
 };
 
 /**
  * One page, rendered the same way wherever it sits: heading from frontmatter,
- * blocks in order, and — when the page names a spec — the ribbon and the
- * archive that spec earns automatically.
+ * blocks in order.
  */
 export function PageView({ index, path, eyebrow, children }: PageViewProps) {
   const page = index.pageByPath.get(path);
   useDocumentTitle(page?.ast?.frontmatter.title);
   const { editing } = useEditMode();
+  const layout = useLayoutMaybe();
+  const blocks = page?.ast?.blocks;
+  const suites = index.snapshot.suites;
+  const rows = useMemo(() => sectionRows(blocks ?? []), [blocks]);
+  const cases = useMemo(() => casesOfPage(suites ?? [], path), [suites, path]);
+  const side = hasSide(rows, cases);
+  const split = (layout?.split ?? false) && side;
 
   if (!page) return <NotFoundPage index={index} path={path} />;
   // A page that does not parse is exactly the page you want to open.
   if (editing) return <PageEditor path={path} />;
   if (!page.ast) return <PageBroken page={page} />;
 
-  const { frontmatter, blocks } = page.ast;
-  const specId = frontmatter.spec;
-  const changes = specId ? changesForSpec(index, specId) : [];
-  const proposals = specId ? proposalsForSpec(index, specId) : [];
-  // A change a proposal placed on a section shows there and nowhere else;
-  // the ribbon keeps what has no section on this page.
-  const unplaced = changes.filter(
-    (change) => !change.sections?.some((section) => section.page === path),
-  );
-  const ribbon =
-    unplaced.length > 0 || proposals.length > 0 || changes.length === 0;
-
-  return (
+  const { frontmatter } = page.ast;
+  const head = (
     <>
-      <PageActions path={path} />
       <PageHeading
         eyebrow={eyebrow}
         summary={frontmatter.summary}
         title={frontmatter.title}
       />
       <PageWarnings warnings={warningsForPage(index.snapshot.warnings, path)} />
-      {specId && ribbon ? (
-        <ChangeRibbon
-          changes={unplaced}
-          proposals={proposals}
-          specId={specId}
-        />
-      ) : null}
-
-      <BlockScopeProvider value={{ index, pagePath: path }}>
-        <BlockList blocks={blocks} />
-        {children}
-      </BlockScopeProvider>
-
-      {specId ? <ArchiveTimeline specId={specId} /> : null}
     </>
+  );
+  return (
+    <BlockScopeProvider value={{ index, pagePath: path }}>
+      {/* Folded rail, wide screen: each section's stories, engineering
+          detail and cases sit beside it. */}
+      {split ? (
+        <SplitPage cases={cases} head={head} rows={rows}>
+          {children}
+        </SplitPage>
+      ) : (
+        <>
+          {head}
+          <BlockList blocks={page.ast.blocks} />
+          {children}
+          {layout && side ? <SideHint cases={cases} rows={rows} /> : null}
+        </>
+      )}
+      {layout && side ? <ReadingRunout /> : null}
+    </BlockScopeProvider>
   );
 }
 

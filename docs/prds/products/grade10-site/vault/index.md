@@ -55,10 +55,10 @@ made.
 
 ## Where It Is Open
 
-**Not open to the public yet** — the vault's one site page, the signing
-ceremony, is carried in development and staging, and on no lane the public
-reaches —
-[Carried Surfaces](/p/grade10-site/site/carried-surfaces)
+- **Not open to the public yet** — the vault's one site page, the signing
+  ceremony, is carried in development and staging, and on no lane the public
+  reaches —
+  [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
 ## Users
 

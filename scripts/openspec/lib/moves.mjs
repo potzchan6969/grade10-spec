@@ -1,10 +1,10 @@
 /*
  * What a push moved: one reading of a tree, and the pure comparison of two
- * readings that says whose turn changed, what went newly behind, what landed,
- * and the message each of those is.
+ * readings that says whose turn changed and which milestones a change
+ * crossed, and the message each of those is.
  *
- * Its own module, beside `notify.mjs`, so `movesBetween`, `newlyBehind`,
- * `landedBetween` and `messagesOf` are tested as what they are — a comparison
+ * Its own module, beside `notify.mjs`, so `movesBetween`, `milestonesBetween`
+ * and `messagesOf` are tested as what they are — a comparison
  * over two plain `Map`s, no git and no filesystem involved — without a
  * fixture store to drive them. `readingOf` is the one impure piece, kept here
  * because both halves of one push read a tree the same way; the push
@@ -12,23 +12,15 @@
  * stays beside its caller.
  */
 import {
-  behindOf,
   handOf,
   taskTotals,
-} from "../../../tools/manual/src/api/stages.ts";
-import { toldOf } from "../../../tools/manual/src/api/told.ts";
+} from "../../../tools/openspec-store/src/stages.ts";
 import { addressOf } from "./notify.mjs";
 import { readChangesAt } from "./store-read.mjs";
-import {
-  landedText,
-  linkOf,
-  movedText,
-  threadPartsOf,
-  toldBodyOf,
-} from "./wording.mjs";
+import { linkOf, threadPartsOf, toldBodyOf } from "./wording.mjs";
 
-/** Every change of one tree: its stage, whose turn it is, the handle each of
- * those roles names, and the artifacts behind what they were drawn from. */
+/** Every change of one tree: its stage, whose turn it is, and the handle each
+ * of those roles names. */
 export async function readingOf(root) {
   const { changes, artifactsOf } = await readChangesAt(root);
   const read = new Map();
@@ -43,8 +35,6 @@ export async function readingOf(root) {
       hands: change.hands ?? {},
       thread: change.thread,
       deployedBuild: change.deployedBuild,
-      behind: behindOf(change, artifactsOf(change)),
-      landedBy: change.landedBy ?? {},
       suites: change.suites,
       accepted: change.accepted === true,
       // The groups an engineer has put their name on, in the plan's order:
@@ -79,41 +69,6 @@ export function movesBetween(base, head) {
     }
   }
   return moves;
-}
-
-/**
- * Who each change's landing tells what moved, one entry per person: every
- * artifact of theirs a unit that moved at the head and not at the base
- * reaches, through `toldOf` — the reading Told now shows with an empty base.
- */
-export function toldBetween(base, head) {
-  const told = [];
-  for (const [id, at] of head) {
-    const was = base.get(id)?.behind ?? [];
-    for (const person of toldOf(was, at.behind, at.artifacts, at.hands))
-      told.push({ id, ...person });
-  }
-  return told;
-}
-
-/**
- * What each change's `landed_by:` gained or changed between the two readings.
- *
- * One entry per change, naming the artifacts that landed and the handle whose
- * word landed each, in the record's own order — which is the order the
- * landing wrote them in. An entry that changed hands is a landing too: the
- * artifact reached `main` again on somebody else's word.
- */
-export function landedBetween(base, head) {
-  const landings = [];
-  for (const [id, at] of head) {
-    const was = base.get(id)?.landedBy ?? {};
-    const landed = Object.entries(at.landedBy)
-      .filter(([artifact, by]) => was[artifact] !== by)
-      .map(([artifact, by]) => ({ artifact, by }));
-    if (landed.length > 0) landings.push({ id, landed });
-  }
-  return landings;
 }
 
 /** The five moments the channel post reports, in the order a change meets
@@ -180,9 +135,9 @@ export function milestonesBetween(base, head, archived = []) {
 
 /** The change, linked: its thread where the record names one, the change page
  * where it does not. */
-function linkedTitle(at, { manualUrl, workspaceUrl }) {
+function linkedTitle(at, { openspecUrl, workspaceUrl }) {
   return linkOf({
-    manualUrl,
+    openspecUrl,
     workspaceUrl,
     thread: at.thread,
     id: at.id,
@@ -193,12 +148,10 @@ function linkedTitle(at, { manualUrl, workspaceUrl }) {
 /**
  * One message per move, addressed and keyed.
  *
- * The key is the move: `<change>:<stage>:<role>` for a turn,
- * `<change>:behind:<artifact>` for an artifact and `<change>:landed:<head>`
- * for a landing, so a re-run of one push reads its own keys back and sends
- * nothing twice, while a stage re-entered after a revert is a different push
- * and is told again. `options.pushHead` is the push's own head, the one thing
- * a landing's key needs. Each message also carries the change's own id, so a
+ * The key is the move, `<change>:<stage>:<role>`, so a re-run of one push
+ * reads its own keys back and sends nothing twice, while a stage re-entered
+ * after a revert is a different push and is told again. Each message also
+ * carries the change's own id, so a
  * caller filters a change it drops by it directly rather than splitting the
  * key back apart.
  */
@@ -229,27 +182,6 @@ export function messagesOf(base, head, map, options) {
     });
   };
 
-  // The thread hears what landed before the hands are told whose turn it is.
-  // Every landing the change has a thread for is composed here, and whether
-  // it is owed at all is the caller's: a run's own landing marks its commit
-  // and the caller drops it, which takes a git call and cannot be read from
-  // two `Map`s. The key is the push's own head, so a re-run of one push posts
-  // nothing twice.
-  for (const { id, landed } of landedBetween(base, head)) {
-    const at = head.get(id);
-    const thread = threadPartsOf(at.thread);
-    if (!thread) continue;
-    messages.push({
-      key: `${id}:landed:${options.pushHead}`,
-      id,
-      kind: "landed",
-      to: "channel",
-      channel: thread.channel,
-      threadTs: thread.ts,
-      text: landedText(at, landed),
-    });
-  }
-
   for (const move of movesBetween(base, head)) {
     const at = head.get(move.id);
     const { kind, text } = toldBodyOf(at, move.role, {
@@ -266,17 +198,5 @@ export function messagesOf(base, head, map, options) {
     );
   }
 
-  for (const person of toldBetween(base, head)) {
-    const at = head.get(person.id);
-    const [role] = person.roles;
-    take(
-      at,
-      `${person.id}:behind:${person.hand ?? role}`,
-      "behind",
-      role,
-      person.hand,
-      movedText(person, linkedTitle(at, options)),
-    );
-  }
   return { messages, skipped };
 }

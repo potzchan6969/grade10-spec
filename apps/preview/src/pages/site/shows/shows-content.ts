@@ -100,7 +100,7 @@ const SHOWS_PAGE = {
       {
         month: "November",
         year: "2026",
-        title: "Seoul Auction × Gana Art Premium Private Sale",
+        title: "Seoul Auction × ZZZ Premium Private Sale",
         city: "Seoul",
       },
     ] satisfies readonly UpcomingShow[],
@@ -141,7 +141,7 @@ const SHOWS_PAGE = {
         tab: "Hong Kong",
         label: "Hong Kong",
         title: "Grade10 FEST HK",
-        dek: "Asia’s largest card show — five editions and counting, drawing 25,000+ collectors each time.",
+        dek: "Asia’s largest card show — five editions and counting.",
         video: {
           poster: photos("grade10-fest-summer-2026", "photo-01.webp"),
           posterAlt: "Grade10 FEST Summer 2026 show floor",
@@ -159,7 +159,7 @@ const SHOWS_PAGE = {
               "/press-releases/grade10-fest-summer-2026-concludes-successfully",
           },
           {
-            date: "NOV 2026",
+            date: "NOV 2025",
             title: "Grade10 Festival 2025",
             description:
               "A record-setting Grade10 Festival anchored by the Van Gogh Pikachu showcase and Hong Kong’s collector community.",
@@ -173,7 +173,7 @@ const SHOWS_PAGE = {
         id: "overseas",
         tab: "Overseas",
         label: "Overseas Partnership",
-        title: "Seoul Auction × Gana Art",
+        title: "Seoul Auction × ZZZ",
         dek: "Partnered with Korea’s premium auction house to position cards as fine art in Asia.",
         image: {
           src: events("seoul-auction.webp"),

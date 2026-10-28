@@ -2,7 +2,6 @@
 title: Shopify Integration
 spec: grade10-site/store/membership
 order: 7
-reviewed: 2026-10-14
 ---
 
 Shopify is the online checkout and the till: it prices the basket, takes the
@@ -251,7 +250,6 @@ The loyalty terminal is a Shopify POS UI extension.
 | Arm | Identifies by | Spends | Collects | Switch |
 | --- | --- | --- | --- | --- |
 | QR | The square on the member card, or on a coupon the member opens, which also chooses that coupon | Yes | Yes | None |
-| Short code | The 8 letters beneath either | Yes | Yes | None |
 | Wallet pass, Google | The code the phone makes from the pass | Yes | Yes | None |
 | Wallet pass, Apple | The durable code printed in the pass | No | No | None, and no switch can grant either |
 | Email | The exact email on the account | With Email spend | Always | Email spend |
@@ -380,9 +378,9 @@ enforced on the next request. An operator flips them from the admin console.
 QR and a wallet pass have no switch of their own; the terminal
 switch is what stops them.
 
-❓ **Phone lookup** — ships off until mobile numbers on the
-[account profile](/p/grade10-site/account/profile) are verified; when it turns
-on is the owner's call.
+- ❓ **Phone lookup** — ships off until mobile numbers on the
+  [account profile](/p/grade10-site/account/profile) are verified; when it turns
+  on is the owner's call.
 
 ## Discounts and Shipping
 

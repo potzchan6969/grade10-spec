@@ -20,7 +20,7 @@ names it.
   the browser's fallback sans immediately and swaps in Gibson only if and
   when the kit resolves, with no retry or timeout of its own
 
-::cases{id="grade10-site/site/typography"}
+[Test cases · grade10-site/site/typography](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/site/typography)
 
 :::detail{title="Product decisions" for="pm"}
 A collector on staging still saw system sans — Gibson was already decided in

@@ -5,8 +5,8 @@ import { dirname, join, resolve } from "node:path";
 /**
  * The two directories everything here reads from. `content` holds the manual —
  * `manual.yaml` and the pages beside it, in the directory `manual` names,
- * relative to the content root. `store` holds the OpenSpec store —
- * `openspec/specs` and `openspec/changes`. In the store's own repository they
+ * relative to the content root. `store` is the spec store the pages draw on —
+ * its references, its stories and its design-sync report. In the store's own repository they
  * are the same directory; a repository that mounts this viewer carries its
  * own manual and points at the store it plans against, so every reader has
  * to say which of the two it means.
@@ -47,13 +47,13 @@ export function rootsOf(root: string, manual = DEFAULT_MANUAL_DIR): Roots {
  * a submodule and walking up from here would land on the store's own manual
  * instead of theirs.
  *
- * The store is the content repository itself when it carries `openspec/specs`.
- * Otherwise `openspec/config.yaml` names a store id and the `openspec` CLI
- * resolves it through the same per-machine registry `pnpm plan` uses — the
- * registered clone at its own main, not whatever SHA a submodule pins.
+ * The store is the content repository itself. A repository that plans against
+ * another store with OpenSpec — `openspec/config.yaml` and no `openspec/specs`
+ * of its own — reads the clone the `openspec` CLI has registered for it, at
+ * its own main rather than whatever SHA a submodule pins.
  *
  * `MANUAL_ROOT` and `MANUAL_STORE` override the respective search; both fail
- * loudly on a directory that does not hold what they promise.
+ * loudly on a directory that does not exist or holds no manual.
  */
 export function resolveRoots(env: NodeJS.ProcessEnv = process.env): Roots {
   const manual = manualDir(env);
@@ -115,18 +115,13 @@ function storeRoot(content: string, env: NodeJS.ProcessEnv): string {
   const set = env.MANUAL_STORE;
   if (set) {
     const dir = resolve(set);
-    if (!existsSync(join(dir, "openspec", "specs"))) {
-      throw new Error(`MANUAL_STORE=${set} holds no openspec/specs`);
-    }
+    if (!existsSync(dir)) throw new Error(`MANUAL_STORE=${set} does not exist`);
     return dir;
   }
-  if (existsSync(join(content, "openspec", "specs"))) return content;
-  if (existsSync(join(content, "openspec", "config.yaml"))) {
-    return registeredStore(content);
-  }
-  throw new Error(
-    `${content} holds no openspec/specs and no openspec/config.yaml — the manual needs a store to read`,
-  );
+  const plansElsewhere =
+    existsSync(join(content, "openspec", "config.yaml")) &&
+    !existsSync(join(content, "openspec", "specs"));
+  return plansElsewhere ? registeredStore(content) : content;
 }
 
 function registeredStore(content: string): string {
@@ -151,7 +146,7 @@ function registeredStore(content: string): string {
   // Some commands print a "Using OpenSpec root:" banner before the JSON.
   const parsed: unknown = JSON.parse(out.slice(out.indexOf("{")));
   const path = (parsed as { root?: { path?: unknown } }).root?.path;
-  if (typeof path !== "string" || !existsSync(join(path, "openspec"))) {
+  if (typeof path !== "string" || !existsSync(path)) {
     throw new Error(
       `\`openspec list\` answered with no usable store path for ${content}`,
     );

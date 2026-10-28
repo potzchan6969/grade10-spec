@@ -160,7 +160,7 @@ keeps its own name in code; everything else calls it the mirror.
 
 ![A change reaches the listing](../prds/assets/diagrams/store-catalogue-change.svg)
 
-The flow is walked on [Product Listing](../prds/products/grade10-site/store/product-listing.md#product-data).
+The flow is walked on [Product Listing](../prds/products/grade10-site/store/product-listing.md#catalogue-source).
 
 ## Reads
 

@@ -67,6 +67,49 @@
     "copyMessageManual": "請手動複製訊息",
     "openMailApp": "開啟郵件應用程式"
   },
+  "proofDialog": {
+    "title": "提交付款證明",
+    "description": "完成轉帳後，請在此上載收據。",
+    "senderName": "匯款人姓名",
+    "senderNameRequired": "請輸入匯款人姓名。",
+    "transferDate": "轉帳日期",
+    "transferDateRequired": "請輸入轉帳日期。",
+    "proof": "付款證明",
+    "dropTitle": "將檔案拖放到此處或選擇檔案",
+    "fileHint": "PDF、PNG、JPG 或 HEIC。最多 3 個檔案，每個 5 MB，合共 15 MB。",
+    "chooseFiles": "選擇檔案",
+    "converting": "正在轉換 HEIC…",
+    "removeFile": "移除檔案",
+    "filesRequired": "請附上至少一個付款證明檔案。",
+    "noFilesSelected": "未選擇檔案",
+    "oneFileSelected": "已選擇 1 個檔案",
+    "filesSelected": "已選擇 {count} 個檔案",
+    "notes": "備註（選填）",
+    "finalNotice": "提交後將無法新增或更改檔案。",
+    "leaveConfirm": "不提交就離開？你的付款證明將不會被儲存。",
+    "cancel": "取消",
+    "submit": "提交付款證明",
+    "tooManyFiles": {
+      "title": "檔案太多",
+      "description": "最多 3 個檔案。"
+    },
+    "fileTooLarge": {
+      "title": "檔案太大",
+      "description": "每個檔案不得超過 5 MB。"
+    },
+    "filesTooLarge": {
+      "title": "檔案總大小太大",
+      "description": "所有檔案合共不得超過 15 MB。"
+    },
+    "fileTypeUnsupported": {
+      "title": "不支援此檔案類型",
+      "description": "請使用 PDF、PNG、JPG 或 HEIC。"
+    },
+    "heicFailed": {
+      "title": "無法轉換 HEIC",
+      "description": "請先在手機將相片匯出為 JPG，再重新上載。"
+    }
+  },
   "tabs": {
     "active": "進行中",
     "upcoming": "即將開始",

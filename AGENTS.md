@@ -5,7 +5,7 @@ This repository is the versioned source of truth for product requirements and th
 ## Operating principles
 
 - Treat product managers, designers, and engineers as collaborators. Check existing PRDs, specs, primitives, and conventions before proposing a new structure.
-- There is no house writing style: write whatever reads most naturally. The marks are tools the manual and its check read: ❓ or `TBC` on anything unconfirmed, naming who confirms it; 🚧 only on what is confirmed and being built - [Marks](docs/prds/guides/writing-the-manual.md#marks). Never cite a scenario id (`…-SC-32`) on a manual page — state the rule and link the capability. A case that proves a rule, a state that dresses an outcome and a mechanism belong to the suite, the design record and the architecture doc.
+- Write a manual page as [Writing the manual](docs/prds/guides/writing-the-manual.md) says: each rule a bold name and a short definition, in the words a customer would use, nested under what it belongs to. Mark ❓ or `TBC` on anything unconfirmed, naming who confirms it, and 🚧 only on what is confirmed and being built - [Marks](docs/prds/guides/writing-the-manual.md#marks). Never cite a scenario id (`…-SC-32`) on a manual page — state the rule and link the capability. Edge cases belong in the test cases, a screen's look and states in Storybook, and how it works in the architecture docs.
 - Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
 - Keep changes reviewable: one product decision or component capability per push where practical.
 - `spec-to-tcs`, its rulebook and its template have one owner, `docs/prds/team.yaml`'s `owns: [tcs-rules]` handle: change them only for that person - [The Rules Have One Owner](docs/governance/specs-to-test-cases.md#rules-revisions).
@@ -51,14 +51,13 @@ Use this Clarification Request format whenever human input is needed.
 | Durable requirements and component export contracts | `openspec/specs/<product>/<domain>/<capability>/spec.md` | The rolling latest accepted contract. Acceptance preserves planning history; the first task claim records its baseline and target scope. Archive reconciles it. See [`PRDs and OpenSpec`](docs/governance/prd-and-openspec.md#the-changes-record). Applications and the shared layer are in `openspec/specs/README.md`. |
 | The PRD: what a capability is and should be, and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` | Written first, and moved first by whoever learns a product detail — PM, designer, QA or engineer; the product manager keeps it whole. The manual (`pnpm manual`) renders these pages; each names its spec and carries the shape in prose — what runs unmarked, 🚧 on what an active change delivers, ❓ on what nobody has confirmed — with problem, users, non-goals, measurement and decisions in its `Product decisions` block. Never restates a requirement. Page grammar: `docs/prds/guides/writing-the-manual.md`. |
 | Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a page or change cites as evidence; the manual renders them under References. Explanatory, never authoritative. See `docs/references/README.md`. |
-| Proposed change | `openspec/changes/<change-name>/` | Delta design, specs, and tasks; archive after delivery. Not for bugs: `docs/governance/bug-fixes.md`. |
+| Proposed change | `openspec/changes/<change-name>/` | Delta design, specs, and tasks; archive after delivery. Not for bugs or an exact code edit: `docs/governance/bug-fixes.md`. |
 | Who walks a capability | `user-journeys.md` beside its `spec.md` | The INVEST journeys. It names no scenario: a scenario names the journey it serves. A capability nobody reaches on its own — a policy, a package contract — writes `**Walked by:** nobody` instead; the suites that reach it walk its rules. A tool only the product's makers use writes `**Walked by:** makers only` and owes no suite. |
 | Test cases for a capability | `feature-tcs.md` beside its `spec.md` | An independent blind reading of that capability's anchors, written without sight of the scenarios and reconciled against them after. Its name carries its level — one domain's is `domain-tcs.md` beside them, the wider smoke passes `product-tcs.md` and `platform-tcs.md`. See `docs/governance/specs-to-test-cases.md`. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
 | User-facing copy and translations | `packages/i18n/messages/{shared,<brand>}/<locale>/<namespace>.json` | `shared/` answers every key no brand claims, once per language; a brand answers only what says something about itself, in every language it speaks. Assembled in `src/catalogs.ts`. Types refuse a key the vocabulary does not name; `pnpm run test` refuses layers that leave one unanswered, or answer one twice. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
 | Product component implementation | `packages/ui/src/blocks/` | Shared compound components, one directory per capability; the capability spec remains the export contract. |
-| A change's rounds | `rounds.md` beside `tasks.md` | One row per round, written by the landing. |
 | Task group and owner format in `tasks.md` | `docs/governance/task-ownership.md` | Parsed independently by tooling in this repository and in the application repository. |
 
 If a statement is testable, it belongs in `openspec/specs/` and nowhere else, reached through a change's delta. A PRD is the capability's manual page, written before the change: it states the outcome in the reader's words, marked 🚧 or ❓ where it is not yet running, holds what a requirement cannot carry, and names its capability spec rather than restating it. Where an unmarked line and the spec disagree, the spec is correct.
@@ -84,13 +83,13 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 | 7 | `specs/<capability>/feature-tcs.md` | QA1 cases, QA2 reconciliation | `planning-dev` | Always — blind draft cases before scenarios |
 | 8 | `tasks.md` | Dev in the integrated planning run | `planning-dev` | Before acceptance and implementation |
 
-`planning-pm`, `planning-design` and `planning-dev` are current and independently usable. `workflow-*` are next-version wrappers: they may invoke planning skills and add instructions, but planning skills must not depend on them. Keep planning procedures in `planning-*` until adoption.
+`planning-pm`, `planning-design` and `planning-dev` are the planning skills, each usable on its own.
 
 The PM writes 1 to 3, and a designer adds 4 where needed. One `/planning-dev` invocation takes frozen anchors through fresh QA1 blind cases, independent Dev technical design, scenarios and tasks, then fresh QA2 reconciliation. The same human resolves requirement, design and plan questions. After a ready `accept-review` and a passing `pnpm accept:preflight <change>`, accept once with `pnpm spec:accept <change> --baseline <digest> --reviewed-by <human>`. Acceptance publishes requirements before implementation without marking cases approved or executed. An amendment names `--supersedes <old-fingerprint>` and preserves earlier snapshots. The first claim records its durable baseline; archive reconciles its target scope with the current contract, and semantic differences name evidence. Archive makes no second fold; deployment never waits for it. After deployment, human QA classifies cases with `/tcs-review` and uses `/tcs-run-sheet` for manual execution. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
 
 The PRD is the exception to teammates. It is the source of truth for what the product should be, so a product detail learned anywhere — a designer's state, an engineer's constraint, a QA case that exposes an unwritten rule, a delta that says more than the PRD — lands on the PRD first, marked 🚧 or ❓, by whoever learned it, before the artifact that depends on it. A product detail is a line the reader would act differently without — a value, a set they meet, an outcome they see, a decision — and one 🚧 line carries an outcome however many scenarios prove it; what each teammate learns beyond that stays in its own artifact, tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#what-does-not-go-on-the-prd). The product manager keeps the PRD whole.
 
-The journeys are their own file beside each `spec.md`, never a `## User journeys` section inside it — `pnpm check:manual` refuses a delta that holds one, and the archive copies the file across beside the feature set. Every capability has the file: the journeys, or the one line `**Walked by:** nobody on their own - <why>` for a policy, a package contract or a convention, which owes no suite of its own: the suites that reach it walk its rules. A tool only the product's makers use writes `**Walked by:** makers only - <who uses it>` and gets no test cases.
+The journeys are their own file beside each `spec.md`, never a `## User journeys` section inside it — the archive copies the file across beside the feature set. Every capability has the file: the journeys, or the one line `**Walked by:** nobody on their own - <why>` for a policy, a package contract or a convention, which owes no suite of its own: the suites that reach it walk its rules. A tool only the product's makers use writes `**Walked by:** makers only - <who uses it>` and gets no test cases.
 
 For a new product feature:
 
@@ -102,7 +101,7 @@ For a new product feature:
 
 Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories.
 
-Ask only what the [held test](.claude/skills/workflow-round/SKILL.md#questions-held-or-decided-by-the-round) holds: questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
+Ask only what the [held test](docs/governance/specs-to-test-cases.md#raised) holds: questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
 
 ## Design Override
 
@@ -145,11 +144,10 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
-- `pnpm push:main` runs `pnpm check:manual`, `pnpm run validate:changes` and `pnpm run tcs:validate` on what it sends, as CI does; run one alone while drafting. `check:manual` refuses an unmarked page, application work with no tech design, a capability with no journeys file, a backticked id the store issues nowhere; it warns (`dense`) past the budget in `docs/prds/guides/writing-the-manual.md`.
+- `pnpm push:main` runs `pnpm check:manual`, `pnpm run validate:changes` and `pnpm run tcs:validate` on what it sends, as CI does; run one alone while drafting. `check:manual` holds the pages under `docs/prds/` to their grammar and `manual.yaml` to the pages that exist, and warns (`dense`) past the budget in `docs/prds/guides/writing-the-manual.md`; it reads nothing under `openspec/`. `pnpm accept:preflight <change>` refuses application work with no tech design.
 - `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
 - `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
 - `pnpm run test:openspec` after anything under `scripts/openspec/` changes.
-- `pnpm --dir tools/relay test` after anything under `tools/relay/` changes.
 - `pnpm run design-sync:check` after a design-system primitive changes.
 - `pnpm run diagrams` after a chart source under `docs/prds/diagrams/` changes; commit the rendered SVG, which `pnpm run diagrams:check` holds to its source in CI.
 - `pnpm run tokens:build` after `tokens.json` or `tokens.config.json` changes; commit the regenerated theme CSS.
@@ -167,7 +165,7 @@ Run the appropriate checks before handoff:
 
 `AGENTS.md` is canonical. `AGENT.md`, `CLAUDE.md`, and `GEMINI.md` are compatibility aliases.
 
-`.claude/skills/` is canonical, with `.codex/skills/` and `.cursor/skills/` symlinked to it, so every platform reads the same files; adding a platform means adding its symlink to the parity check and sync scripts. `.claude/agents/` is canonical for the round's readers, mirrored nowhere; the parity check asserts every reader the schema names resolves.
+`.claude/skills/` is canonical, with `.codex/skills/` and `.cursor/skills/` symlinked to it, so every platform reads the same files; adding a platform means adding its symlink to the parity check and sync scripts. `.claude/agents/` is canonical for the readers `/fix-bug` and the schema name, mirrored nowhere; the parity check asserts every reader the schema names resolves.
 
 When agent-related files change, run:
 

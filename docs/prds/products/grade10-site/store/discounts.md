@@ -2,7 +2,6 @@
 title: Discounts
 spec: grade10-site/store/discounts
 order: 20
-reviewed: 2026-10-06
 ---
 
 ## Kinds of Discount
@@ -17,7 +16,7 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 | **Buy X get Y** | An automatic: a reward product discounted or free after a trigger purchase | Merchandiser, Shopify Admin automatic discounts | Product |
 | **Order coupon** | A code for a fixed amount off the whole order, or off named products or variants; single use, `PREFIX-XXXXXXXX`, one member, an expiry | Operator, the store admin console | Order, or product where it names products |
 | **Product coupon** | A reward: a fixed amount, or a % with a ceiling, off its scope — [Rewards](/p/grade10-site/loyalty/rewards#reward-types) | Operator defines the reward in the loyalty admin; the member redeems it | Product, or order where its scope is the whole order |
-| **Gift** | A reward: the gift product at 100% off once the goods pass a threshold | As a product coupon | Product |
+| **Gift** | A reward or a store coupon: the gift product at 100% off once the goods pass a threshold, handed over at the till alone | As a product coupon, or an operator mints it | Product |
 | **Public code** | A Shopify discount code open to everyone, not minted to a member; shown in the drawer's picker to guests and members — [Public Codes](#public-codes) | Merchandiser, Shopify Admin | Order |
 | **Points** | **$1** per point, paid against the bill — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) | The member, in the cart drawer or at the till | Outside the count |
 
@@ -49,7 +48,7 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 - **A code joins** - the shop keeps the combination that takes the most off,
   so a product discount not set to combine can leave the cart above the card
 
-::cases{id="grade10-site/store/site-discounts"}
+[Test cases · grade10-site/store/site-discounts](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/site-discounts)
 
 ## Order of Application
 
@@ -254,7 +253,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 
 :::detail{title="Each step" for="operator"}
 1. **Staff ring the goods** — barcode scanner into Shopify POS's own cart; the extension adds nothing here
-2. **Staff identify the member** — the QR on the member card (profile page) or on one of the member's coupons, the short code under it, or the exact account email; phone number and "the customer already on the sale" are switches, off by default. A miss says only that no member was found
+2. **Staff identify the member** — the QR on the member card (membership page), on one of the member's coupons or on a wallet pass, or the exact account email; phone number and "the customer already on the sale" are switches, off by default. A miss says only that no member was found
    - A card presentation lives ten minutes and is consumed once; a second till scanning the same screenshot is refused, naming where the first was used. A coupon's QR is a card presentation and follows the same rule
 3. **A session opens** — ten minutes from the server's clock, bound to the shop and the member, never to the staff label; a second identify of the same member at the same shop ends the first; a switch flipped mid-session only ever takes capability away
    - A scanned session outlives the modal: reopening it resumes, and it ends only when the customer on the sale becomes somebody else
@@ -276,7 +275,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
    4. Product coupon or order coupon — added as a Shopify discount code the shop evaluates, whichever one the plan carries; a product coupon's code is minted the moment it is taken; taken only when the cart shows one more discount than before
    - A step that did not take is a sentence staff read aloud, never a retry loop
 9. **Apply — the store trims the promise** to what landed, and the cart has the last word: a write that landed after its own deadline counts as landed, so a coupon the shop is still taking off is never freed underneath it. Points the shop never discounted, a code it dropped, a coupon refused and a gift blocked come off the row. Idempotent, and a sale already settled is left alone
-10. **The extension keeps watching** — every cart signal is read against what the sale was promised, because anybody at the terminal can take a benefit off without telling it (POS's own 管理折扣 → 全部移除, a staff order discount replacing ours, the customer lifted off the sale). What the cart stops showing goes back to the member, our own gift line comes off once it stops being free, and staff are told in a sentence
+10. **The extension keeps watching** — every cart signal is read against what the sale was promised, because anybody at the terminal can take a benefit off without telling it (POS's own 管理折扣 → 全部移除, a staff order discount replacing ours, the customer lifted off the sale). What the cart stops showing goes back to the member, our own gift line comes off once it stops being free or once the goods fall below the gift's minimum spend, and staff are told in a sentence
     - A points discount POS cuts smaller after a line change, never past the amount written, keeps its points held; settlement takes them in proportion to what the discount took
 11. **Staff tender** — Shopify POS takes the payment; nothing of ours runs
 12. **The paid order arrives** by webhook or sweep, carrying the attribute, and binds to the row only when the row is a till promise with no payment yet, the order came through the POS channel (a cart permalink could write our attribute on a web order), its customer is the member's, and the currency matches. Anything else counts `store.pos.sale.unbound` for an operator's claw-back, never silence
@@ -320,11 +319,11 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 - **A tender reaches stored value, and comes back only whole** — one discount over every line the shop sold, so a gift card on the sale is part-paid by points (`store.points_tender.gift_card_on_sale`) and nothing comes back while the card is kept; the member left short is counted (`store.points_tender.return_held`) and paid by hand
 :::
 
-❓ **A sale that names no allocations** — settlement falls back to what settlement read before the shop stated them — the variant alone corroborates a welded coupon, so a cut staff took off still spends it, and the points capture is the applied total less every other instrument, in which an adopted order code counts at the cut recorded when its code was minted, and at its face value only for a code minted before those records (grade10 `packages/grade10-store/backend/src/services/coupons/money.ts:92-98`). A source that cannot name a cut cannot rule one out either, so refusing there would free every coupon on every sale it reports; whether a POS sale ever reaches us that way is the open part, for engineering to confirm with Shopify POS.
+- ❓ **A sale that names no allocations** — settlement falls back to what settlement read before the shop stated them — the variant alone corroborates a welded coupon, so a cut staff took off still spends it, and the points capture is the applied total less every other instrument, in which an adopted order code counts at the cut recorded when its code was minted, and at its face value only for a code minted before those records (grade10 `packages/grade10-store/backend/src/services/coupons/money.ts:92-98`). A source that cannot name a cut cannot rule one out either, so refusing there would free every coupon on every sale it reports; whether a POS sale ever reaches us that way is the open part, for engineering to confirm with Shopify POS.
 
 ### Switches
 
-Per shop, flipped from the admin console, enforced on the next request: terminal, email spend, phone identify, phone spend, cart identify, cart spend. QR and short code carry no switch of their own, so stopping the counter means the terminal switch.
+Per shop, flipped from the admin console, enforced on the next request: terminal, email spend, phone identify, phone spend, cart identify, cart spend. The QR carries no switch of its own, so stopping the counter means the terminal switch.
 
 ## Designs
 
@@ -355,7 +354,8 @@ price already lives.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Mechanism | Decided | Site discounts are Shopify's own automatic discounts, authored in Shopify Admin; grade10 only accepts them on the draft order. | Product |
-| Reward coupon transport | Decided | Online, a product coupon and a gift ride as a Shopify Discount too, minted when the checkout is submitted, the same as an order coupon. At the till a gift is its own line discounted to nothing: a code as well would take the benefit twice and use the order's one code slot. | Product |
+| Reward coupon transport | Decided | Online, a product coupon rides as a Shopify Discount too, minted when the checkout is submitted, the same as an order coupon. At the till a gift is its own line discounted to nothing: a code as well would take the benefit twice and use the order's one code slot. | Product |
+| Gift channel | Decided | A gift, a reward's or the store's own, is handed over at the till alone, whatever channels it names; online refuses it as the wrong channel. Its line comes back off a sale rung below its minimum spend. | Product |
 | Coupon precedence | Decided | A checkout eligible for more than one coupon has the collector pick the one to apply — the order's one discount-code slot takes only one. | Product |
 | One code slot | Decided | One coupon per order, by choice, to keep the sale simple — a free reward and a money-off coupon are two sales. The picker isolates the rule, so a later change can widen it without deleting the one-slot logic. | Product |
 | Site discount beside a coupon | Decided | Shopify's own combine rules decide; grade10 accepts what the shop priced. A coupon the shop sets aside for a larger site discount goes back to the wallet and the order completes, never fails. | Product |

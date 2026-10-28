@@ -4,12 +4,9 @@ summary: The store, the loop, and how to work both with an agent.
 order: 1
 ---
 
-This site is a reading surface over the spec store — a git repository where
-every product spec, in-flight change, and page of prose lives as a file. A
-page states the shape we want in plain words and pictures; the evidence
-around it is live. Work in flight shows up on the pages it touches with
-tasks done over total, journeys and test cases are embedded from the spec
-named in the page's frontmatter, and visuals come straight from Figma and
+This site is a reading surface over the pages of the spec store — a git
+repository where every product spec, change, and page of prose lives as a
+file. A page states the shape we want in plain words and pictures. Work in flight shows up as 🚧 lines on the pages it touches, and visuals come straight from Figma and
 the deployed Storybook.
 
 ## How it is organized
@@ -34,11 +31,9 @@ requirements, so there is one place to read a capability and nothing beside
 it to keep in step.
 
 Every capability has a page, whatever state its contract is in, and the pip
-beside it says which: **planned** (the page states an intended shape nothing
-carries yet), **incubating** (a change in flight is writing the spec),
-**changing** (a change touches a durable spec), or no pip at all — stable. A
-page whose spec is moving carries the change in its in-flight ribbon; the
-delta itself, requirement by requirement, is read on the change's own page.
+beside it says which: **incubating** (a change in flight is writing the spec),
+**changing** (a change touches a durable spec), or no pip at all — stable, or
+not yet in the store, where the page's 🚧 and ❓ lines say what is planned. The delta itself, requirement by requirement, lives in the change folder.
 How we work lives under Guides, and [Start here](/guides/start-here) lays a
 first hour's path for each job.
 
@@ -50,28 +45,23 @@ building, and git carries every step, so nobody ever updates this site by
 hand.
 
 :::flow{title="An idea becomes shipped truth"}
-## Propose it where you read it
-On the locally-run manual, any requirement row or page header has a propose
-action — the hosted site is read-only, here as everywhere. Say why in your
-own words — the ids travel along on their own. The proposal lands in
-[Board](/in-flight)'s Proposed lane.
+## Propose it in the store
+A proposal is a change folder the product manager writes in the store.
 ## An agent drafts the change
-Someone points an agent at the proposal — the card names the command to
-paste, `/planning-pm <change>`. The agent writes
+Someone points an agent at the proposal — run the agent with `/planning-pm <change>`. The agent writes
 the change: the reasoning, and a delta against each spec it touches — never a
 rewritten copy of the file. People discuss the delta, because the delta is
 what there is to decide.
 ## The work ticks in git
 A full change carries a task list, and a task is done when its box is ticked
-in a commit. PRDs show the count the moment it moves. There is no
+in a commit. PRDs carry the 🚧 marks as the work moves. There is no
 board to update.
 ## The archive folds it in
 Once the code is live, archiving folds the delta into the durable specs and
 files the change away. The spec now says in present tense what it used to
 promise.
 ## The manual already knows
-Every page names its spec, so its acceptance shelf and its ribbon show the
-new truth on the next build.
+Every page names its spec, and its 🚧 and ❓ lines show the new truth on the next build.
 :::
 
 ## Working with an agent
@@ -91,8 +81,8 @@ whole loop once, end to end, in agent terms.
 
 ## Editing
 
-Every page is editable in the browser when the manual is running locally, and
-every edit lands in git as a commit — git is the only state this app has. The
+Every page is editable in the browser when the manual is running locally, by
+adding `?edit=1` to its address, and every edit lands in git as a commit — git is the only state this app has. The
 hosted site is a static build of the store and is always read-only.
 [Writing the manual](/guides/writing-the-manual) covers the page grammar and
 the block palette.

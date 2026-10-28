@@ -2,8 +2,11 @@
 
 ## Purpose
 
-The customer order history lets a signed-in collector find their Store orders,
-understand which still need attention, and open tracking or one order safely.
+The customer order history lets a signed-in collector find their Store orders —
+online and counter purchases — understand which still need attention, and open
+tracking or one order safely. A ticket order placed on the ticketing platform
+is not a Store order; it SHALL NOT be listed here and is served by the
+platform's own order pages.
 
 ## Feature set
 
@@ -51,10 +54,8 @@ sign-in surface decides the session.
 The page SHALL present orders newest first. It SHALL list a web order only
 once Shopify holds it. It SHALL pass the customer-facing badge defined by
 `grade10-site/commerce/order-status` to every order summary. It SHALL classify
-an order as Past when that badge is `completed` or `canceled`, or is
-`refunded` with payment state `refunded` or fulfilment state `fulfilled` as
-`grade10-site/commerce/order-status` reads them, and every other order as
-Active. It SHALL NOT read whether Shopify archived the order.
+an order as Past when that badge is `completed`, `canceled` or `refunded`,
+and every other order as Active. It SHALL NOT read whether Shopify archived the order.
 
 Each summary SHALL show the Store-supplied shop order number when it is present
 and non-empty, otherwise the Store order id. It SHALL also show the placed date,

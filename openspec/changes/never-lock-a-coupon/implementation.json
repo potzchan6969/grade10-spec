@@ -1,0 +1,58 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "33d04ba62b8251bcc2dee6eab2521b3867202c627c6fbc1ee7e43da87b6f10f4"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "a95f097fc9796d8a917d1b308f8bc7f066473ad7",
+    "capturedAt": "2026-10-27T04:46:19.175Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A coupon is held by nothing, and the newest claim is the only live one",
+          "Requirement: A member runs their own membership from one surface",
+          "Requirement: A redemption settles as a coupon, whatever the reward",
+          "Requirement: A spent redemption stays spent when its artifact expires",
+          "Requirement: Every recorded mutation answers the same way when retried",
+          "Requirement: Reversing a redemption restores the points it consumed, while its coupon is unused",
+          "Requirement: The membership surface exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/discounts/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/discounts/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A code carries its own coupon's combine setting",
+          "Requirement: A coupon reaches the order as its own ephemeral Shopify Discount code",
+          "Requirement: A live cart price previews locally, and mints nothing until an order claims the coupon",
+          "Requirement: A sale that loses its claim loses its code, and a paid sale is settled against what it carried",
+          "Requirement: The same discount-code mechanism applies online and at the POS till"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/discounts/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

@@ -15,7 +15,7 @@ restates the reward, names where the coupon is spendable and how long it is
 good for, shows the point balance before and after, and redeems in place.
 The same surface then draws the redeemed state: the ticket the redemption
 issued, with the unique per-redemption code a discount coupon carries and
-the collection line a good carries.
+the collection line a gift carries.
 
 ## What Changes
 
@@ -38,7 +38,7 @@ the collection line a good carries.
   redemption it draws the redeemed phase instead: the check, the
   consumer-worded title, the points line, and the promo ticket — a
   discount coupon's ticket carries the unique code minted at redemption, a
-  good's carries its collect-by and the collect-in-store line and no code
+  gift's carries its collect-by and the collect-in-store line and no code
   and no apply.
 - `RewardItem` joins the exports — the card `RewardMenu` draws per reward,
   on its own for consumers that place one outside the menu.

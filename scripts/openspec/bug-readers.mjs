@@ -49,12 +49,12 @@ if (round === "fix" && !flags.diff)
 const root = flags.root ?? join(HERE, "..", "..");
 const schema = planningSchema(root);
 const diagnosis = asAddedLines(read(flags.diagnosis));
-const raisedByDiagnosis = classifyDiff(diagnosis, schema, "bug:diagnosis");
+const raisedByDiagnosis = classifyDiff(diagnosis, "bug:diagnosis");
 const triggers =
   round === "diagnosis"
     ? raisedByDiagnosis
     : new Set([
-        ...classifyDiff(read(flags.diff), schema, "bug:fix"),
+        ...classifyDiff(read(flags.diff), "bug:fix"),
         ...[...raisedByDiagnosis].filter((one) => one === "surface"),
       ]);
 

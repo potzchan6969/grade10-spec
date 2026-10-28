@@ -1,0 +1,216 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "3d0ad9b9ae375f829378f17e4a8b051058c91beb6eb4042e444cc97b3de88d10"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "612585f6303648181c2268b5ba8fc085fc8fc3c7",
+    "capturedAt": "2026-10-12T02:13:01.210Z",
+    "targets": [
+      {
+        "path": "openspec/changes/separate-site-and-admin-sessions/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/session/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/session/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A sign-in covers the surface that made it, on its own brand",
+          "Requirement: A signed-in person is named by id, email, name, and roles",
+          "Requirement: An open surface keeps up with the session on this device",
+          "Requirement: Every open surface of the brand in this browser keeps up",
+          "Requirement: Every open tab of a surface in this browser keeps up",
+          "Requirement: Release asks operators to sign in to the console once more",
+          "Requirement: Second factor and recent sign-in are read on the console's own session",
+          "Requirement: Sign-in covers the brand, not another brand",
+          "Requirement: The console accepts only a session the console made",
+          "Requirement: The site session and the console session last and end on their own",
+          "Requirement: What an open surface shows about the person follows the person"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/session/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/sessions/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/sessions/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An operator who can revoke can end a session",
+          "Requirement: Only operators who can list sessions see them"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/sessions/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-in/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-in/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A failed link follow lands on the brand home with a toast",
+          "Requirement: A failed link follow leaves the asking surface with the failure announced",
+          "Requirement: A new link replaces earlier unused links",
+          "Requirement: A sign-in dialog closes when the session arrives",
+          "Requirement: A sign-in signs in the surface that asked for it",
+          "Requirement: A signed-in mismatch prompts Switch or Stay instead of replacing the session",
+          "Requirement: A surface still waiting stops waiting once its address settles elsewhere",
+          "Requirement: A trusted product may create or enter an account by a verified email",
+          "Requirement: Google's auto-prompt offers sign-in and yields to the sign-in dialog",
+          "Requirement: Sign-in stays on the brand",
+          "Requirement: Sign-in-link emails are capped per address"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-in/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-out/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-out/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A confirmed sign-out returns the surface to its signed-out presentation"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-out/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/console/user-directory/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/console/user-directory/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A session is named without its secret"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/console/user-directory/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "1d3972db9d49c8dfce88ad1b43d72ec5ecbf1e89",
+      "components": [
+        "admin",
+        "api",
+        "auction-service",
+        "auth",
+        "grading-service",
+        "inventory-service",
+        "store-service",
+        "vault-service",
+        "web"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@seankcw",
+    "reviewedAt": "2026-10-27T00:00:00Z",
+    "changes": [
+      {
+        "path": "openspec/changes/separate-site-and-admin-sessions/ui-design.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Two links re-pointed after the PRD and Storybook ids moved; no design changed"
+      },
+      {
+        "path": "openspec/specs/shared/auth/domain-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements"
+      },
+      {
+        "path": "openspec/specs/shared/auth/session/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements"
+      },
+      {
+        "path": "openspec/specs/shared/auth/sessions/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements"
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-in/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements"
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-out/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements"
+      },
+      {
+        "path": "openspec/specs/shared/console/user-directory/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements; the withdrawn session-surface cases left with 8341b40de"
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-in/spec.md",
+        "anchors": [
+          "Requirement: A failed link follow leaves the asking surface with the failure announced"
+        ],
+        "classification": "semantic",
+        "reason": "Adds SC-115: a failed console-asked link leaves an already signed-in operator in the console unchanged; the change's behaviour already did this",
+        "evidence": [
+          "grade10:apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts (shared-auth-sign-in-SC-115 walk)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/console/user-directory/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The session-surface display was withdrawn after the console redesign (8341b40de); the change keeps surface on AdminSession and the operator list, which the spec still allows",
+        "evidence": [
+          "grade10:packages/grade10-auth/admin-frontend/src/core/client/UserDirectoryClient.ts (AdminSession.surface is carried, not displayed)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/console/user-directory/spec.md",
+        "anchors": [
+          "Requirement: A session is named without its secret"
+        ],
+        "classification": "semantic",
+        "reason": "The requirement no longer names the surface as a rendered field; sessions are still named by id and never by their secret",
+        "evidence": [
+          "grade10:packages/grade10-auth/admin-frontend/src/core/client/UserDirectoryClient.ts (AdminSession carries id, never the secret)"
+        ]
+      }
+    ]
+  }
+}

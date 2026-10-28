@@ -2,7 +2,6 @@
 title: Product Details
 spec: grade10-site/store/product-page
 order: 3
-reviewed: 2026-10-23
 ---
 
 The product details page shows one product, its price, and the one sellable
@@ -46,22 +45,21 @@ item a collector can add.
 
 ## Buy
 
-**Signed-out Add to cart** - adds the line to the cart this browser holds,
-with no sign-in; signing in later moves those lines into the member's cart -
-[Cart Drawer](/p/grade10-site/store/cart#reviewing-the-cart)
+- **Signed-out Add to cart** — adds the line to the cart this browser holds,
+  with no sign-in; signing in later moves those lines into the member's cart -
+  [Cart Drawer](/p/grade10-site/store/cart#reviewing-the-cart)
 
 ## Free Pick-up
 
-**Opens Store Locator** - the store name in the free pick-up claim opens
-Store Locator in the same tab, in the page's language
-
-**No dead label** - Shipping fee has no page behind it, so it is plain
-text, not a link
+- **Opens Store Locator** — the store name in the free pick-up claim opens
+  Store Locator in the same tab, in the page's language
+- **No dead label** — Shipping fee has no page behind it, so it is plain
+  text, not a link
 
 ## You May Also Like
 
-**You may also like** — related cards under the card —
-[You May Also Like](/p/grade10-site/store/cross-sell)
+- **You may also like** — related cards under the card —
+  [You May Also Like](/p/grade10-site/store/cross-sell)
 
 ## Designs
 

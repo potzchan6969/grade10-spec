@@ -1,8 +1,6 @@
-import { useManualIndex } from "../api/use-manual-index";
 import { PAGE_ICONS } from "../content/icons";
 import type { BlockProblem, DraftFrontmatter } from "./draft";
 import { TextField } from "./fields";
-import { suggestionsFor } from "./suggestions";
 
 /** Every frontmatter field, in the order the grammar prints them. */
 
@@ -15,7 +13,6 @@ export function FrontmatterForm({
   problems: BlockProblem[];
   onChange: (next: DraftFrontmatter) => void;
 }) {
-  const { specIds } = suggestionsFor(useManualIndex());
   const problemOf = (attr: string) =>
     problems.find((problem) => problem.attr === attr)?.message;
 
@@ -34,7 +31,6 @@ export function FrontmatterForm({
           label="spec"
           onChange={(spec) => onChange({ ...frontmatter, spec })}
           problem={problemOf("spec")}
-          suggestions={specIds}
           value={frontmatter.spec}
         />
         <div className="sm:col-span-2">
@@ -69,13 +65,6 @@ export function FrontmatterForm({
           onChange={(order) => onChange({ ...frontmatter, order })}
           problem={problemOf("order")}
           value={frontmatter.order}
-        />
-        <TextField
-          hint="The day the page was read against a spec that changed under it and found right; clears the stale warning"
-          label="reviewed"
-          onChange={(reviewed) => onChange({ ...frontmatter, reviewed })}
-          problem={problemOf("reviewed")}
-          value={frontmatter.reviewed}
         />
       </div>
     </section>

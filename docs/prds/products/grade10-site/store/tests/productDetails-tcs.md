@@ -4,7 +4,6 @@ title: Store Product Details Test Cases
 
 # grade10-site/store/product-page Test Cases
 
-**Status:** pending-review · 0/20
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/product-page, grade10-site/store/cross-sell, grade10-site/store/discounts
 
@@ -44,7 +43,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -81,7 +79,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -118,7 +115,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -149,13 +145,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#free-pick-up
+* **Trace:** product-page#free-pick-up/opens-store-locator, product-page#free-pick-up/no-dead-label, product-page
 
 **Pre-conditions:**
 
@@ -190,13 +185,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#buy
+* **Trace:** product-page, product-page#buy/signed-out-add-to-cart
 
 **Pre-conditions:**
 
@@ -225,13 +219,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail
+* **Trace:** cross-sell#rail/one-rail, cross-sell#rail/never-itself
 
 **Pre-conditions:**
 
@@ -260,13 +253,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail
+* **Trace:** cross-sell#rail/opens-the-card
 
 **Pre-conditions:**
 
@@ -295,7 +287,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -325,7 +316,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -365,13 +355,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#unknown-product-address
+* **Trace:** product-page#unknown-product-address/unknown-product-address
 
 **Pre-conditions:**
 
@@ -404,13 +393,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#buy
+* **Trace:** product-page, product-page#buy/signed-out-add-to-cart
 
 **Pre-conditions:**
 
@@ -435,13 +423,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#buy
+* **Trace:** product-page#buy/signed-out-add-to-cart
 
 **Pre-conditions:**
 
@@ -476,13 +463,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#where-each-shows
+* **Trace:** discounts#where-each-shows/named
 
 **Pre-conditions:**
 
@@ -522,13 +508,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail
+* **Trace:** cross-sell#rail/nothing-to-show-no-rail, cross-sell#rail/switched-off, cross-sell#rail/a-rail-the-store-cannot-compose
 
 **Pre-conditions:**
 
@@ -557,13 +542,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail
+* **Trace:** cross-sell#rail/arrives-with-the-card
 
 **Pre-conditions:**
 
@@ -586,13 +570,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail
+* **Trace:** cross-sell#rail/one-row
 
 **Pre-conditions:**
 
@@ -614,13 +597,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail
+* **Trace:** cross-sell#rail/sold-out
 
 **Pre-conditions:**
 
@@ -645,13 +627,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#picks
+* **Trace:** cross-sell#rail/sold-out, cross-sell#picks/chosen-in-shopify
 
 **Pre-conditions:**
 
@@ -676,13 +657,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#picks
+* **Trace:** cross-sell#picks/chosen-in-shopify, cross-sell#rail/picks-the-store-cannot-read
 
 **Pre-conditions:**
 
@@ -716,13 +696,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#similar-cards
+* **Trace:** cross-sell#similar-cards/shared-facts
 
 **Pre-conditions:**
 

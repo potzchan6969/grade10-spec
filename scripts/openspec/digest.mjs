@@ -4,44 +4,39 @@
  *
  *   node scripts/openspec/digest.mjs [--root <dir>] [--team <path>]
  *                                    [--sent-keys <file>] [--send]
- *                                    [--manual-url <url>] [--now <iso>]
+ *                                    [--openspec-url <url>] [--now <iso>]
  *
- * Six lines, from the same derivation every surface reads: the questions
+ * Five lines, from the same derivation every surface reads: the questions
  * addressed to them, the changes on them now, the changes nothing has moved
- * for a week, the artifacts something before them moved past, the waits they
- * wrote, and the changes a released dependency has freed. Five of the six are
- * the page's own list; the sixth — a freed dependency — and a written wait are
- * lines here rather than messages of their own (decisions Q31).
+ * for a week, the waits they wrote, and the changes a released dependency has
+ * freed. A freed dependency and a written wait are lines here rather than
+ * messages of their own.
  *
  * The push workflow tells a hand the day a change reaches them. This is for
  * the week that went by without one: a question nobody answered, a change
- * nobody moved, an artifact nobody read again.
+ * nobody moved.
  */
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-
-import { IDLE_FROM, overlaysOf } from "../../tools/manual/src/api/overlays.ts";
-import {
-  behindOf,
-  handOf,
-  handOfArtifact,
-  STAGE_LABEL,
-} from "../../tools/manual/src/api/stages.ts";
 import {
   dayIn,
   daysBetween,
   TIME_ZONE,
 } from "../../tools/manual/src/api/time.ts";
+import {
+  IDLE_FROM,
+  overlaysOf,
+} from "../../tools/openspec-store/src/overlays.ts";
+import { handOf, STAGE_LABEL } from "../../tools/openspec-store/src/stages.ts";
 import { cliArgs } from "./lib/args.mjs";
 import { addressOf, deliver, readSentKeys } from "./lib/notify.mjs";
 import { readChangesAt } from "./lib/store-read.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
 import { linkOf } from "./lib/wording.mjs";
 
-/** A behind artifact is listed from the seventh day it has been behind, and a
- * dependency freed a change within the last seven days is still news — one
- * bound, the week the digest covers. */
+/** A dependency freed a change within the last seven days is still news —
+ * the week the digest covers. */
 const AFTER_DAYS = IDLE_FROM;
 
 /**
@@ -89,7 +84,7 @@ function linesFor(handle, changes, ctx) {
       held.includes(role),
     );
     const named = linkOf({
-      manualUrl: ctx.manualUrl,
+      openspecUrl: ctx.openspecUrl,
       id: change.id,
       title: change.title,
     });
@@ -125,27 +120,6 @@ function linesFor(handle, changes, ctx) {
         text: `${named} — nothing landed for ${idle.days} days`,
       });
     }
-    // Every artifact of theirs that is still behind, a small move as much as
-    // a major one: a small move holds nothing but stays on the hand's list
-    // until they read it. The week is counted from `since`, the day it went
-    // behind.
-    const artifacts = ctx.artifactsOf(change);
-    for (const behind of behindOf(change, artifacts)) {
-      const role = handOfArtifact(behind.artifact, artifacts);
-      if (!role || change.hands?.[role] !== handle) continue;
-      const days =
-        behind.since === undefined
-          ? undefined
-          : daysBetween(behind.since, ctx.now, TIME_ZONE);
-      if (days === undefined || days < AFTER_DAYS) continue;
-      lines.push({
-        kind: "behind",
-        change: change.id,
-        days,
-        artifact: behind.artifact,
-        text: `\`${behind.artifact}\` on ${named} — behind for ${days} days${behind.holds ? "" : ", a small move"}`,
-      });
-    }
     for (const wait of overlays) {
       if (wait.kind !== "waiting" || wait.hand !== handle) continue;
       lines.push({
@@ -178,7 +152,6 @@ const HEADINGS = [
   ["now", "On you now"],
   ["question", "Open questions"],
   ["idle", "Nothing moved"],
-  ["behind", "Behind"],
   ["waiting", "Waiting"],
   ["freed", "Freed"],
 ];
@@ -232,9 +205,9 @@ async function main() {
       "sent-keys": { type: "string" },
       send: { type: "boolean", default: false },
       now: { type: "string" },
-      "manual-url": {
+      "openspec-url": {
         type: "string",
-        default: "https://spec.grade10-stg.com/planning",
+        default: "https://spec.grade10-stg.com/openspec/",
       },
     },
   });
@@ -260,7 +233,7 @@ async function main() {
     now,
     released: new Set(releases.keys()),
     releases,
-    manualUrl: values["manual-url"],
+    openspecUrl: values["openspec-url"],
     artifactsOf: read.artifactsOf,
   });
   const sent = readSentKeys(values["sent-keys"]);

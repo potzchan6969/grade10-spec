@@ -1,6 +1,6 @@
 ---
 name: storybook-workbench
-description: Draw a feature's screens, states, click-through journeys, Scenarios and prototypes in the workbench Storybook, placed and named the way the manual reads. Use when a designer or anyone asks to add or change a story, a state, a Scenario or a prototype, or to show a feature's stories.
+description: Draw a feature's screens, states, click-through journeys, flows, Scenarios and prototypes in the workbench Storybook, placed and named the way the manual reads. Use when a designer or anyone asks to add or change a story, a state, a Scenario or a prototype, or to show a feature's stories.
 ---
 
 # Storybook Workbench
@@ -28,7 +28,9 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
    `user-journeys.md` beside each spec the page names, and
    `pnpm storybook:coverage --gaps` for what the feature still owes
 3. **Pick the kind** — a whole screen or its state is a story under `Screens`; a
-   journey walked screen to screen is a click-through; an outcome that turns
+   journey walked screen to screen is a click-through; a domain's critical
+   journey shown as its steps, for review and site capture, is a Flow under
+   `<Domain>/Flows` (`docs/governance/storybook.md#journeys`); an outcome that turns
    on what staging is set to is the Screen's Scenario; a screen not yet designed is a
    wireframe Prototype; three directions to choose from is a Prototype; a piece
    only this feature draws is a Part; an `@grade10/ui` export's own state is a
@@ -41,6 +43,9 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
    data in the feature's `*-content.ts`; screens fullscreen; a journey's
    buttons open the next screen's story through `workbench-story-nav.ts`,
    with `parameters: { journeys: [...] }` naming the journey ids it walks.
+   Every state story gets a `play` interaction test that asserts what its
+   Shows cell says, and reaches a state the reader gets to by acting with
+   `userEvent` from the default (`docs/governance/storybook.md#states`).
    Where the outcome turns on what staging is set to, add the Screen's
    Scenario, as `docs/governance/storybook.md#scenarios` says: one `Scenario`
    story whose settings reach every case, and each case a unit-test row. A

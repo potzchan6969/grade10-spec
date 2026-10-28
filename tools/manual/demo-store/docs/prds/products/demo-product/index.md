@@ -8,8 +8,6 @@ order: 1
 
 What the product is for, in a person's words.
 
-::spec{id="demo-product/alpha"}
-
 ## Refunds
 
 Refunds follow one rule the store already draws elsewhere.

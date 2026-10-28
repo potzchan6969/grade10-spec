@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-09-03
+ui_waived: "the fixture is about the tech design, not the UI design"
+hands:
+  pm: tester
+  dev: tester

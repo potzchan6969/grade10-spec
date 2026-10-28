@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "14439f5a7827cdcfd421ba16fd8ac665780a2eebc4c00977f116d053428857a6"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "d5943bdf7857b3af3f83f998c23d3cabd9e4cfc5",
+    "capturedAt": "2026-10-28T06:28:30.253Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-site-about-page/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/about/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/about/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Every link leads to its named surface",
+          "Requirement: The Market indexes tabs show each index",
+          "Requirement: The milestones read newest first",
+          "Requirement: The page fits the viewport",
+          "Requirement: The page presents the company"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/about/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "0fce6e280b0c7f1b3ed503863c041a749af8fe18",
+      "components": [
+        "storybook"
+      ],
+      "verifiedBy": "seankcw",
+      "verification": "The About page body block, its stories and the workbench page are on the store's main. At this commit the About story play pass passes (2 of 2) in apps/preview's vitest storybook project, lint (warnings only), `pnpm storybook:check` and `pnpm check:manual` (0 failures) pass. `pnpm run typecheck` reports one error, in `apps/preview/src/pages/page-heading.tsx`, that `main` carries without this change. The browser walks (tasks 2.1-2.4) were waived by the owner; the site's own consumption of `AboutPageBody` is not part of this change."
+    }
+  ]
+}

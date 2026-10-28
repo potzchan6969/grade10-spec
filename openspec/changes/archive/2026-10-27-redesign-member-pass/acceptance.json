@@ -1,0 +1,96 @@
+{
+  "version": 2,
+  "change": "redesign-member-pass",
+  "baseline": "58c6bf3cd6151b5fec4f91387e46faf5b566ee0c52d2d554c1e1ae76013964b7",
+  "fingerprint": "2ec65ff33a2c5b1c010155c5d5f67c76803c438acb3ac9b713a5c6443d70699d",
+  "reviewedBy": "seankcw",
+  "acceptedAt": "2026-10-27T06:44:53.123Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/redesign-member-pass/decisions.md",
+      "sha256": "a6f6179ad97501b8271201a7511f45a9cb07a11c00d60d64eaea88e93e6e2665",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-member-pass/proposal.md",
+      "sha256": "1de92e1991c31be526d89ed5b364f613539cf339d1dec0a79d186d4489edf6b0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-member-pass/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "sha256": "1bf85f8757a00c1f4d59d2154fdf79a4dcb569746800fcb1adab3dc80eb06d6b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-member-pass/specs/grade10-site/loyalty/programme/spec.md",
+      "sha256": "e25a2c1fa6e3123b0b01eec677b5c1d1061a47a64d1cc94693c83664f76e15e3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-member-pass/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "sha256": "6fcd72556f5547f10fba9a53fc15f291fb2e9912c67de7c4696a35df3b6ba8d0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-member-pass/specs/grade10-site/store/membership/spec.md",
+      "sha256": "ee880babc68dae8511fad98f081510ce5c53879b0947be9180183c3347372f28",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-member-pass/specs/grade10-site/store/membership/user-journeys.md",
+      "sha256": "f4ddf27ac10dcca314e83c7844df97b064c3132cc5adf0ae508225e9b06c31b2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "sha256": "dbe076611635e36acb67f5dd009b52267e768b50f204afe7506abde57660aa24",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+      "sha256": "11a054521ecfaa9acb5e9b51dd61006f890521794f048c0917316aa81db389b4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "sha256": "11b89cd078b28da7306f0a5c25ba349fff297b64ef2271d873ef2d53c55db1f5",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/membership/spec.md",
+      "sha256": "bd20f6410bf8bb46ec19bc3e7c20b11b510d5e8ec34cbfa05d89ad203f3aad13",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/membership/user-journeys.md",
+      "sha256": "e9f27c2e846e53f45559764d90150e3bc3e5122f756b03e5e0e3c8ccd767eb84",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+      "anchors": [
+        "Requirement: The membership surface exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/membership/spec.md",
+      "anchors": [
+        "Requirement: A member identifies at the till by a dynamic code or their email"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/membership/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

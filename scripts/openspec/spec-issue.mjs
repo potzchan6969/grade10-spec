@@ -2,7 +2,7 @@
 /**
  * Issue the next journey, scenario or case id, and move a branch's ids that
  * the published `main` already holds — so nobody counts "the next unused" by
- * hand (`allocate-ids-across-open-changes`).
+ * hand.
  *
  *   pnpm run spec:issue <prefix> US             # the next journey of a capability
  *   pnpm run spec:issue <prefix> SC             # the next scenario
@@ -24,7 +24,7 @@ import {
   issuedIdsIn,
   issuedKey,
   issuing,
-} from "../../tools/manual/src/store/issued-ids.mts";
+} from "../../tools/openspec-store/src/issued-ids.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { git, storeMain } from "./store-main.mjs";
 

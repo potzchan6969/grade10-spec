@@ -4,7 +4,6 @@ title: Store Location Test Cases
 
 # grade10-site/store/store-locator Test Cases
 
-**Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/store-locator
 
@@ -36,13 +35,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#shop
+* **Trace:** store-locator#shop/in-each-language, store-locator#shop/no-phone-no-holiday-hours, store-locator#the-page/location--hours
 
 **Pre-conditions:**
 
@@ -81,13 +79,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page
+* **Trace:** store-locator#the-page/map-opens-maps
 
 **Pre-conditions:**
 
@@ -120,13 +117,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page
+* **Trace:** store-locator#the-page/url, store-locator#the-page/chrome-reaches-it
 
 **Pre-conditions:**
 
@@ -162,13 +158,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#from-elsewhere
+* **Trace:** store-locator#the-page/chrome-reaches-it, store-locator#from-elsewhere/free-pick-up-on-product-details
 
 **Pre-conditions:**
 
@@ -205,13 +200,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page
+* **Trace:** store-locator#the-page/narrow-screens
 
 **Pre-conditions:**
 
@@ -233,13 +227,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page
+* **Trace:** store-locator#the-page/document-identity
 
 **Pre-conditions:**
 
@@ -253,10 +246,6 @@ Runs once per row of **Test data**.
 
 * The preview reads `Store Locator — Grade10` and `Where to find the Grade10 shop in Causeway Bay, Hong Kong, and when it is open.`, and no other page's title.
 
----
-
-### store-locator#from-elsewhere: From Elsewhere
-
 <!-- trace:case id=g10.store-store-locator.TC-36r rev=2 -->
 #### g10.store-store-locator.TC7: Where the store is not carried, there is no Store Locator
 
@@ -264,13 +253,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#from-elsewhere
+* **Trace:** store-locator#the-page/chrome-reaches-it
 
 **Pre-conditions:**
 

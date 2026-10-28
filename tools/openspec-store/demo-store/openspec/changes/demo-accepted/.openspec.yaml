@@ -1,0 +1,10 @@
+schema: grade10-planning
+created: 2026-08-01
+promoted_by: "@tester"
+design_waived: "the fixture is about the Accepted stage, not the tech design"
+hands:
+  pm: tester
+  design: tester
+  qa: tester
+  dev: tester
+  release: tester

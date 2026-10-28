@@ -6,6 +6,7 @@ import { expect, fn, waitFor, within } from "storybook/test";
 import { SAMPLE_HELD_PROMO_CODES } from "./fixtures";
 import { PromoQrCard } from "./promo-qr-card";
 import { PromoTicket } from "./promo-ticket";
+import type { HeldPromoCode } from "./types";
 
 const applicable = SAMPLE_HELD_PROMO_CODES.find((c) => c.applicable)!;
 const inapplicable = SAMPLE_HELD_PROMO_CODES.find((c) => !c.applicable)!;
@@ -75,6 +76,141 @@ export const ExpiringSoon: Story = {
       "text-accent-foreground",
       "font-medium",
     );
+  },
+};
+
+const CONTRACT_CODES = [
+  {
+    id: "contract-near-expiry",
+    label: "NEAR-EXPIRY",
+    title: "HK$100 discount",
+    detailLabel: "Use by 8 Nov 2026",
+    detailEmphasis: true,
+    applicable: true,
+  },
+  {
+    id: "contract-plain-expiry",
+    label: "PLAIN-EXPIRY",
+    title: "HK$50 discount",
+    detailLabel: "Use by 31 Dec 2026",
+    detailEmphasis: false,
+    applicable: true,
+  },
+  {
+    id: "contract-omitted-expiry",
+    label: "OMITTED-EXPIRY",
+    title: "HK$20 discount",
+    detailLabel: "Online only",
+    applicable: true,
+  },
+  {
+    id: "contract-refused-near-expiry",
+    label: "REFUSED-EXPIRY",
+    title: "HK$10 discount",
+    detailLabel: "Use by 8 Nov 2026",
+    detailEmphasis: true,
+    applicable: false,
+    inapplicableReason: "Does not apply to this basket",
+  },
+] satisfies readonly HeldPromoCode[];
+
+const CONTRACT_APPLY = {
+  nearExpiry: fn(),
+  plain: fn(),
+  omitted: fn(),
+};
+
+/** Contract coverage for consumer-owned detail emphasis. */
+export const ContractStates: Story = {
+  render: () => (
+    <div className="flex w-full flex-col gap-2">
+      {CONTRACT_CODES.map((code, index) => (
+        <PromoTicket
+          key={code.id}
+          code={code}
+          muted={!code.applicable}
+          action={
+            code.applicable ? (
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={
+                  [
+                    CONTRACT_APPLY.nearExpiry,
+                    CONTRACT_APPLY.plain,
+                    CONTRACT_APPLY.omitted,
+                  ][index]
+                }
+              >
+                Apply
+              </Button>
+            ) : undefined
+          }
+        />
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement, userEvent }) => {
+    const canvas = within(canvasElement);
+    const tickets = canvas.getAllByRole("group");
+
+    expect(tickets.map((ticket) => ticket.getAttribute("aria-label"))).toEqual(
+      CONTRACT_CODES.map((code) => code.label),
+    );
+
+    const nearExpiryDetail = within(tickets[0]).getByText("Use by 8 Nov 2026");
+    expect(nearExpiryDetail).toHaveClass(
+      "text-accent-foreground",
+      "font-medium",
+    );
+    expect(canvas.getByText("HK$100 discount")).toBeInTheDocument();
+    expect(canvas.getByText("NEAR-EXPIRY")).toBeInTheDocument();
+
+    const plainDetail = canvas.getByText("Use by 31 Dec 2026");
+    expect(plainDetail).not.toHaveClass(
+      "text-accent-foreground",
+      "font-medium",
+    );
+    expect(canvas.getByText("HK$50 discount")).toBeInTheDocument();
+    expect(canvas.getByText("PLAIN-EXPIRY")).toBeInTheDocument();
+
+    const omittedDetail = canvas.getByText("Online only");
+    expect(omittedDetail).not.toHaveClass(
+      "text-accent-foreground",
+      "font-medium",
+    );
+    expect(canvas.getByText("HK$20 discount")).toBeInTheDocument();
+    expect(canvas.getByText("OMITTED-EXPIRY")).toBeInTheDocument();
+
+    const refused = tickets[3];
+    expect(refused).toHaveAttribute("aria-disabled", "true");
+    expect(refused).toHaveClass("opacity-70");
+    expect(canvas.getByText("HK$10 discount")).toBeInTheDocument();
+    expect(canvas.getByText("REFUSED-EXPIRY")).toBeInTheDocument();
+    expect(
+      canvas.getByText("Does not apply to this basket"),
+    ).toBeInTheDocument();
+    expect(within(refused).getByText("Use by 8 Nov 2026")).toHaveClass(
+      "text-accent-foreground",
+      "font-medium",
+    );
+    expect(within(refused).queryByRole("button")).not.toBeInTheDocument();
+
+    CONTRACT_APPLY.nearExpiry.mockClear();
+    CONTRACT_APPLY.plain.mockClear();
+    CONTRACT_APPLY.omitted.mockClear();
+    await userEvent.click(
+      within(tickets[0]).getByRole("button", { name: "Apply" }),
+    );
+    await userEvent.click(
+      within(tickets[1]).getByRole("button", { name: "Apply" }),
+    );
+    await userEvent.click(
+      within(tickets[2]).getByRole("button", { name: "Apply" }),
+    );
+    expect(CONTRACT_APPLY.nearExpiry).toHaveBeenCalledTimes(1);
+    expect(CONTRACT_APPLY.plain).toHaveBeenCalledTimes(1);
+    expect(CONTRACT_APPLY.omitted).toHaveBeenCalledTimes(1);
   },
 };
 
@@ -158,7 +294,7 @@ export const WithQrCode: Story = {
   },
 };
 
-/** A redeemed good's collection ticket — no discount code; the stub names
+/** A redeemed gift's collection ticket — no discount code; the stub names
  * the collection under a storefront mark, and Use now opens its scan
  * card. */
 export const CollectionTicket: Story = {

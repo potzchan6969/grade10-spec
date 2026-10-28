@@ -4,39 +4,15 @@ import {
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import {
-  HowPointsWork,
-  SiteHeader,
-  TierInfoCard,
-  TierLadder,
-} from "@grade10/ui";
-import {
-  Basket,
-  ClockCountdown,
-  HandCoins,
-  Truck,
-} from "@phosphor-icons/react";
+import { SiteHeader } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { storyHref } from "../../workbench-story-nav";
-import {
-  HOW_POINTS_WORK,
-  MEMBERSHIP_VIEW,
-  TIER_BENEFITS,
-  TIER_BENEFITS_PAGE_COPY,
-  TIER_LADDER_COPY,
-} from "../loyalty-content";
+import { MEMBERSHIP_VIEW, TIER_BENEFITS_PAGE_COPY } from "../loyalty-content";
+import { TiersBenefitsPane } from "./membership-sections";
 
 const MEMBERSHIP_STORY_ID = "loyalty-membership-screens-membership--default";
-
-/** The mark each mechanic row wears, keyed to the content's row ids. */
-const HOW_POINTS_WORK_ICONS = {
-  earn: <Basket size={20} weight="regular" />,
-  pending: <Truck size={20} weight="regular" />,
-  spend: <HandCoins size={20} weight="regular" />,
-  expiry: <ClockCountdown size={20} weight="regular" />,
-} as const;
 
 /**
  * Tiers & Benefits as its own page — what a small viewport navigates to from
@@ -66,51 +42,11 @@ function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
           <h1 className="text-xl font-semibold text-foreground sm:text-3xl">
             {TIER_BENEFITS_PAGE_COPY.title}
           </h1>
-          <section
-            aria-label={TIER_BENEFITS_PAGE_COPY.title}
-            className="flex flex-col gap-4"
-          >
-            <TierLadder
-              copy={TIER_LADDER_COPY}
-              currentTier={heldTier}
-              qualifyingPoints={MEMBERSHIP_VIEW.qualifyingPoints}
-              qualifyingTarget={MEMBERSHIP_VIEW.qualifyingThreshold}
-              rungs={TIER_BENEFITS.map((row) => ({
-                tier: row.tier,
-                caption: row.ladderCaption,
-                invitationOnly: row.invitationOnly,
-              }))}
-            />
-            <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
-              {TIER_BENEFITS.map((row) => (
-                <TierInfoCard
-                  benefits={[...row.benefits]}
-                  caption={row.caption}
-                  currentTier={row.tier === heldTier}
-                  key={row.id}
-                  tier={row.tier}
-                />
-              ))}
-            </div>
-          </section>
-          <section
-            aria-labelledby="how-points-work-heading"
-            className="flex flex-col gap-3"
-          >
-            <h2
-              className="text-sm font-semibold uppercase text-secondary-foreground"
-              id="how-points-work-heading"
-            >
-              {HOW_POINTS_WORK.heading}
-            </h2>
-            <HowPointsWork
-              items={HOW_POINTS_WORK.rows.map((row) => ({
-                icon: HOW_POINTS_WORK_ICONS[row.id],
-                title: row.title,
-                body: row.body,
-              }))}
-            />
-          </section>
+          <TiersBenefitsPane
+            heldTier={heldTier}
+            qualifyingPoints={MEMBERSHIP_VIEW.qualifyingPoints}
+            qualifyingTarget={MEMBERSHIP_VIEW.qualifyingThreshold}
+          />
         </div>
       </main>
       <Footer {...STORE_FOOTER} />

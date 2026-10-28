@@ -37,17 +37,30 @@ function deliveryStepStates(
   return ["completed", "upcoming", "upcoming"];
 }
 
+type ResolvedDeliveryStep = OrderDetailsDeliveryStep & {
+  state: OrderDetailsDeliveryStepState;
+};
+
+function hasState(
+  step: OrderDetailsDeliveryStep,
+): step is ResolvedDeliveryStep {
+  return step.state != null;
+}
+
 /**
- * Derives stepper indicator states from fulfillment status and order channel.
- * Labels and dates come from the consumer; states follow the status so an
+ * Stepper indicator states for a delivery card. A consumer that knows where
+ * the parcel is states every step itself, and those steps are drawn as
+ * supplied. Otherwise states follow the order status as a fallback, so an
  * upcoming milestone is never highlighted as the current one.
  */
 function resolveDeliverySteps(
   delivery: OrderDetailsDelivery,
   status: OrderDetailsFulfillmentStatus,
-): readonly (OrderDetailsDeliveryStep & {
-  state: OrderDetailsDeliveryStepState;
-})[] {
+): readonly ResolvedDeliveryStep[] {
+  if (delivery.steps.length > 0 && delivery.steps.every(hasState)) {
+    return delivery.steps.filter(hasState);
+  }
+
   const states = deliveryStepStates(delivery.variant, status);
 
   return delivery.steps.map((step, index) => {

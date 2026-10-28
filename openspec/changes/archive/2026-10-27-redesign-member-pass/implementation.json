@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "2ec65ff33a2c5b1c010155c5d5f67c76803c438acb3ac9b713a5c6443d70699d"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "2b106aac7ec7a1ae49cbea0128e080521d598dc1",
+    "capturedAt": "2026-10-27T06:48:08.896Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+        "anchors": [
+          "Requirement: The membership surface exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/membership/spec.md",
+        "anchors": [
+          "Requirement: A member identifies at the till by a dynamic code or their email"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/membership/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "8aed92909c461a5439215b8967af8079b95d7691",
+      "components": [
+        "storybook"
+      ],
+      "verifiedBy": "seankcw",
+      "verification": "The blocks, their stories and the preview screens are on the store's main; `tsc` on @grade10/ui and `pnpm storybook:check` pass at this commit. The owner archived without the workbench walk, as for redesign-tier-card, taking Storybook as the source of truth. No grade10 application source is part of this change."
+    }
+  ]
+}

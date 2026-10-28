@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en" data-lavish-annotate="on">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TOPIC</title>
+    <style>
+:root {
+  --h-bg: #ECEBE5; --h-panel: #F6F5F0; --h-line: #D8D6CE; --h-grid: rgb(20 20 20 / .045);
+  --h-ink: #141414; --h-ink-2: #4A4945; --h-ink-3: #8A8880;
+  --h-accent: #F1411F; --h-accent-ink: #C42F12; --h-accent-soft: #FBE4DC;
+  --h-bar: #141414; --h-bar-ink: #F6F5F0;
+  --h-read: #2F6FB3; --h-write: #C42F12; --h-ext: #6B4FA8;
+  --h-sans: "Helvetica Neue", Helvetica, "Inter", Arial, sans-serif;
+  --h-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --h-bg: #0F0F0E; --h-panel: #181816; --h-line: #2C2B28; --h-grid: rgb(236 235 229 / .04);
+    --h-ink: #ECEBE5; --h-ink-2: #B9B7AF; --h-ink-3: #7D7B74;
+    --h-accent: #FF5A36; --h-accent-ink: #FF7A5C; --h-accent-soft: #2A1510;
+    --h-bar: #ECEBE5; --h-bar-ink: #141414;
+    --h-read: #7FB2E8; --h-write: #FF7A5C; --h-ext: #B9A2EA;
+  }
+}
+:root[data-theme="dark"] {
+  --h-bg: #0F0F0E; --h-panel: #181816; --h-line: #2C2B28; --h-grid: rgb(236 235 229 / .04);
+  --h-ink: #ECEBE5; --h-ink-2: #B9B7AF; --h-ink-3: #7D7B74;
+  --h-accent: #FF5A36; --h-accent-ink: #FF7A5C; --h-accent-soft: #2A1510;
+  --h-bar: #ECEBE5; --h-bar-ink: #141414;
+  --h-read: #7FB2E8; --h-write: #FF7A5C; --h-ext: #B9A2EA;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--h-bg); color: var(--h-ink); }
+body {
+  margin: 0; font: 15px/1.55 var(--h-sans); -webkit-font-smoothing: antialiased;
+  background-image: linear-gradient(var(--h-grid) 1px, transparent 1px), linear-gradient(90deg, var(--h-grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+a { color: inherit; text-decoration-color: var(--h-accent); text-underline-offset: 3px; }
+code, .mono, .tag, .chip, .top, .eyebrow, .hint, .via, .more button { font-family: var(--h-mono); }
+.page { max-width: 860px; margin: 0 auto; padding: 0 24px 96px; }
+
+/* Heron frame: the header */
+.top { display: flex; align-items: center; gap: 12px; padding: 14px 0; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--h-ink-2); }
+.top .sq { width: 8px; height: 8px; background: var(--h-accent); }
+.top .sp { flex: 1; }
+.hero { border: 1px solid var(--h-line); background: var(--h-panel); position: relative; }
+.hero > div { padding: 28px; }
+.hero > div + div { border-top: 1px solid var(--h-line); display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { margin: 0 0 14px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--h-ink-2); }
+h1 { margin: 0; font-size: 64px; line-height: .95; font-weight: 500; letter-spacing: -.03em; text-transform: uppercase; }
+.answer { margin: 0; font-size: 17px; line-height: 1.5; }
+.hint { margin: 0; font-size: 11px; color: var(--h-ink-3); letter-spacing: .06em; text-transform: uppercase; }
+.bar { display: flex; align-items: center; gap: 14px; background: var(--h-bar); color: var(--h-bar-ink); padding: 10px 14px; font: 500 12px/1 var(--h-mono); letter-spacing: .08em; text-transform: uppercase; }
+.bar::before { content: ""; width: 8px; height: 8px; background: var(--h-accent); }
+.bar span { opacity: .7; text-transform: none; letter-spacing: 0; font-family: var(--h-sans); font-size: 13px; }
+
+/* V7 section: a two-tone heading, then tiles */
+.sec { margin-top: 72px; }
+h2 { margin: 0 0 24px; font-size: 34px; line-height: 1.12; font-weight: 500; letter-spacing: -.02em; }
+h2 .sub { display: block; color: var(--h-ink-3); }
+.tiles { display: flex; flex-direction: column; gap: 12px; }
+.tile { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 18px 20px 20px; background: var(--h-panel); border: 1px solid var(--h-line); }
+.tile::before, .tile::after { content: "+"; position: absolute; font: 12px/1 var(--h-mono); color: var(--h-ink-3); }
+.tile::before { top: -7px; left: -4px; }
+.tile::after { bottom: -6px; right: -4px; }
+.tag { align-self: flex-start; display: inline-flex; gap: 8px; align-items: center; padding: 3px 7px; border: 1px solid var(--h-line); background: var(--h-bg); font-size: 11px; letter-spacing: .04em; color: var(--h-ink-2); }
+.tile h3 { margin: 0; font-size: 22px; line-height: 1.15; font-weight: 500; letter-spacing: -.015em; }
+.tile p { margin: 0; color: var(--h-ink-2); font-size: 14px; }
+.tile .foot { padding-top: 6px; }
+.go { font: 11px var(--h-mono); letter-spacing: .06em; text-transform: uppercase; text-decoration: none; color: var(--h-accent-ink); }
+.go:hover { text-decoration: underline; }
+.chip { display: inline-flex; padding: 1px 6px; font-size: 11px; border: 1px solid currentColor; white-space: nowrap; }
+.chip.read { color: var(--h-read); }
+.chip.write { color: var(--h-write); }
+.chip.ext { color: var(--h-ext); }
+.chip.wip, .chip.pending { color: var(--h-accent-ink); background: var(--h-accent-soft); border-color: transparent; }
+
+/* The flow, inside a lane tile */
+.chain { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; align-items: flex-start; }
+.node { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 9px 12px; background: var(--h-bg); border: 1px solid var(--h-ink); width: 100%; font-size: 14px; }
+.node b { font-weight: 500; }
+.node > span { display: flex; flex-wrap: wrap; gap: 4px; }
+.node.end { background: var(--h-bar); color: var(--h-bar-ink); border-color: var(--h-bar); font: 500 11px/1.3 var(--h-mono); letter-spacing: .06em; text-transform: uppercase; }
+.via { margin-left: 18px; padding: 6px 0 6px 14px; border-left: 1px solid var(--h-accent); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: var(--h-ink-3); }
+.via::before { content: "↓ "; color: var(--h-accent); }
+.branch { margin-top: 10px; font-size: 13px; color: var(--h-ink-2); }
+.branch b { color: var(--h-ink); font-weight: 500; }
+
+/* Short lists: rows inside one tile */
+.rows { list-style: none; margin: 0; padding: 0; }
+.rows li { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid var(--h-line); }
+.rows li:first-child { border-top: 0; padding-top: 0; }
+.rows code { font-size: 11px; color: var(--h-accent-ink); padding-top: 3px; }
+.rows b { font-weight: 500; }
+.rows p { margin: 2px 0 0; }
+
+/* Cases inside a rule tile */
+.cases { list-style: none; margin: 4px 0 0; padding: 0; }
+.cases li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 4px; padding: 7px 0; border-top: 1px solid var(--h-line); font-size: 14px; }
+.cases code { font-size: 11px; color: var(--h-accent-ink); padding-top: 3px; }
+
+/* Plain tables stay available for long reference lists */
+.table { border: 1px solid var(--h-line); background: var(--h-panel); overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--h-line); overflow-wrap: anywhere; }
+thead th { font: 11px var(--h-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--h-ink-3); }
+tbody th { font-weight: 500; }
+
+.open { border-color: var(--h-accent); }
+.open .tag { border-color: var(--h-accent); color: var(--h-accent-ink); }
+.note { margin-top: 24px; font: 12px/1.6 var(--h-mono); color: var(--h-ink-3); }
+.more { display: flex; flex-wrap: wrap; gap: 8px; }
+.more button { padding: 10px 16px; border: 0; background: var(--h-bar); color: var(--h-bar-ink); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.more button:hover { background: var(--h-accent); color: #fff; }
+
+@media (max-width: 640px) {
+  .page { padding: 0 16px 72px; }
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .hero > div + div { border-left: 0; border-top: 1px solid var(--h-line); }
+  h1 { font-size: 44px; }
+  h2 { font-size: 26px; }
+  .rows li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .top .sp ~ span { display: none; }
+}
+</style>
+  </head>
+  <body>
+    <div class="page">
+      <!-- The look is a deliberate choice: one column read top to bottom, V7's two-line headings, Heron AI's style. Keep every id stable: a comment names exactly one element. -->
+      <header class="top"><span class="sq"></span>Grade10 / Teach me / DOMAIN<span class="sp"></span><span>KIND · PURPOSE</span></header>
+      <section class="hero">
+        <div>
+          <p class="eyebrow" id="question">Your question · QUESTION AS ASKED</p>
+          <h1>TOPIC</h1>
+        </div>
+        <div>
+      <!-- Two sentences at most: the general definition, then the Grade10 case. -->
+          <p class="answer" id="answer">SHORT ANSWER</p>
+          <p class="hint">[Comment on any line, tile or case to ask about it]</p>
+        </div>
+      </section>
+      <div class="bar"><b>Read from</b><span>PAGES AND SPECS READ</span></div>
+
+      <!-- Keep only the sections the kind gives, in this order. Each heading is two lines: the claim, then a grey line. -->
+      <section class="sec">
+        <h2 id="overview">Overview.<span class="sub">One grey line that frames the overview.</span></h2>
+        <div class="tiles">
+          <article class="tile" id="overview-scope"><span class="tag">Scope</span><p>Background and scope in one paragraph.</p></article>
+          <article class="tile" id="kinds"><span class="tag">Features</span><ul class="rows"><li id="kind-1"><code>Feature 01</code><div><b>Feature</b><p>What it does for the reader.</p></div></li></ul></article>
+        </div>
+      </section>
+
+      <section class="sec">
+        <h2 id="flow">Product flow.<span class="sub">One grey line: from where to where.</span></h2>
+        <div class="tiles"><article class="tile" id="lane-1"><span class="tag">Lane 01</span><h3>Lane name</h3><ol class="chain"><li class="node end" id="lane-1-step-1" title="Start"><b>Start</b></li><li class="via">action</li><li class="node" id="lane-1-step-2" title="Screen"><b>Screen</b><span><span class="chip read">Store</span></span></li><li class="via">action</li><li class="node end" id="lane-1-step-3" title="Outcome"><b>Outcome</b></li></ol><p class="branch" id="lane-1-branch"><b>Step</b> - if CONDITION → <b>outcome</b></p></article></div>
+      </section>
+
+      <section class="sec">
+        <h2 id="services">External services.<span class="sub">One grey line: who owns the truth.</span></h2>
+        <div class="tiles"><article class="tile" id="service-1"><span class="tag">Service</span><h3>Call</h3><p>What Grade10 sends.</p><p>Returns: what comes back</p><p class="foot"><span class="chip read">What the reader meets when it fails</span></p></article></div>
+      </section>
+
+      <!-- Every case: one item per case - the condition, then what the reader meets. Number cases C-01 on, and rules R-01 on. -->
+      <section class="sec">
+        <h2 id="cases">Every case.<span class="sub">1 cases under 1 rules.</span></h2>
+        <div class="tiles"><article class="tile" id="rule-1"><span class="tag">R-01</span><h3>Rule name</h3><ol class="cases"><li id="case-1"><code>C-01</code><span>If CONDITION, RESULT.</span></li></ol><p class="foot"><a class="go" href="https://spec.grade10-stg.com/p/...#req-...">Rule in the manual ↗</a></p></article></div>
+      </section>
+
+      <section class="sec">
+        <h2 id="stories">See it.<span class="sub">The workbench on port 6006.</span></h2>
+        <div class="tiles"><article class="tile" id="stories-list"><ul class="rows"><li id="story-1"><code>Story 01</code><div><b><a href="http://localhost:6006/?path=/story/ID">Story ↗</a></b><p>The state or screen it shows.</p></div></li></ul></article></div>
+      </section>
+
+      <section class="sec">
+        <h2 id="manual">Read more.<span class="sub">The manual sections behind this lesson.</span></h2>
+        <div class="tiles"><article class="tile" id="manual-list"><ul class="rows"><li id="manual-1"><code>Page</code><div><b><a href="https://spec.grade10-stg.com/p/...">Section ↗</a></b><p>What it covers.</p></div></li></ul></article></div>
+      </section>
+
+      <section class="sec">
+        <h2 id="open-questions">Open questions.<span class="sub">Nobody has decided these yet.</span></h2>
+        <div class="tiles"><article class="tile open" id="open-1"><span class="tag">❓ Open · who confirms</span><h3>QUESTION</h3></article></div>
+        <p class="note" id="left-out">[Not in this lesson] What the lesson left out, and where to look next.</p>
+      </section>
+
+      <!-- Answers to comments. Each round adds a tile or a section marked data-lavish-revision. -->
+      <section class="sec">
+        <h2 id="follow-ups">Follow-ups.<span class="sub">Comment on any line to ask. The answers come here.</span></h2>
+        <div class="more" id="more-actions" hidden><button type="button" data-ask="Teach me every case of TOPIC">Every case</button><button type="button" data-ask="Teach me one behaviour of TOPIC: ">One behaviour</button></div>
+      </section>
+    </div>
+      <!-- Follow-up revisions registry: add only after the first round of answers. <script type=application/json data-lavish-revisions>[{ id: r1, label: Round 1, timestamp, summary }]</script> -->
+    <script>
+      // Only the More buttons need Lavish; the lesson reads the same without it.
+      window.addEventListener("load", () => {
+        const more = document.getElementById("more-actions");
+        if (!window.lavish?.queuePrompt) return;
+        more.hidden = false;
+        more.addEventListener("click", (event) => {
+          const button = event.target.closest("button[data-ask]");
+          if (!button) return;
+          window.lavish.queuePrompt(button.dataset.ask, { tag: "teach-me-more", text: button.textContent, element: button });
+        });
+      });
+    </script>
+  </body>
+</html>

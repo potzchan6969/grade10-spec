@@ -2,6 +2,8 @@
 export const START_HERE = "Start Here";
 export const DESIGN_SYSTEM = "Design System";
 export const KINDS = ["Screens", "Prototypes", "Parts", "Blocks"];
+/** A domain's own folder, before its features: journeys walked across them. */
+export const FLOWS = "Flows";
 /** Where a domain slug is not its Title Case words. */
 const ACRONYMS = { kyc: "KYC" };
 

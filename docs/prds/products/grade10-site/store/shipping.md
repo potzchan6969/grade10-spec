@@ -17,5 +17,4 @@ Pickup at the physical shop is a first-class choice rather than a note in an
 email. The auction's Orders workspace is the operator half of the same story;
 the store's version should not invent a second vocabulary for it.
 
-Nothing under Intended shape is specified yet. This page marks its roadmap slot; the propose
-action on it is where the requirements start.
+Nothing under Intended shape is specified yet. This page marks its roadmap slot; a change to it is where the requirements start.

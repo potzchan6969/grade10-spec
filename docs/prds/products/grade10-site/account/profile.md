@@ -86,7 +86,7 @@ for.
 ::story{id="account-profile-blocks-profilecard--error-state" title="A read that failed"}
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/store/account-profile"}
+[Test cases · grade10-site/store/account-profile](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/account-profile)
 :::
 
 :::detail{title="Product decisions" for="pm"}

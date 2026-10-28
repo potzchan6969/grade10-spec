@@ -1,9 +1,0 @@
-schema: grade10-planning
-created: 2026-10-07
-page_waived: "the order it states already runs and Product Listing states it unmarked under Price order; the change brings the listing spec to it, and Q2 is decided there"
-design_waived: "no code moves: the order already runs in services/catalog/, and group 2 only points its tests at the scenarios"
-reviewed:
-  decisions: 93428ff2
-  user-journeys: de234c07
-  tasks: 509c7f56
-tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 3.1"

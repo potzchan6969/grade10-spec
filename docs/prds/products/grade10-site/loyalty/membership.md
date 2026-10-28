@@ -2,7 +2,6 @@
 title: Membership
 spec: grade10-site/loyalty/programme
 order: 6
-reviewed: 2026-10-06
 ---
 
 An account is a member. The membership is run from `/membership`; the
@@ -18,8 +17,8 @@ collector's name, bio and email are shown on
 | Member | The programme | An opaque user id, the ledger, the tier | With the account |
 | Shopify customer | The shop | The same opaque key in a customer metafield, never the account id | Paired behind the account, once the email is verified |
 
-🚧 **Avatar** — the account profile also holds the avatar a collector chooses
-for the shop — [Profile](/p/grade10-site/account/profile)
+- 🚧 **Avatar** — the account profile also holds the avatar a collector chooses
+  for the shop — [Profile](/p/grade10-site/account/profile)
 
 :::flow{title="From registration to a paired member"}
 ## *Member* — **Registers**
@@ -52,8 +51,12 @@ exists, otherwise when a sign-in proves that email, by the magic link to it or
 a Google account under it -
 [Checkout](/p/grade10-site/store/checkout#guest-checkout).
 
-🚧 **No points** - a site guest order earns nothing, joined or not.
+- 🚧 **No points** — a site guest order earns nothing, joined or not.
 
+- 🚧 **A ticket bought on an email** — a ticket order asks no sign-in, so the
+  purchase earns under the buyer's address and lands on the member's ledger
+  once a sign-in proves it, dated to the purchase -
+  [Buying Tickets](/p/grade10-site/ticketing/buying)
 - **Customer on the sale** — a guest who gave the shop their email has a
   Shopify customer; when an account with that verified email is paired to
   it, the sale is attributed on the next pass and its points land
@@ -71,24 +74,30 @@ a Google account under it -
 
 | Section | Shows |
 | --- | --- |
-| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tiers & Benefits ❓ |
-| Your member pass | The tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
+| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. Nothing on it is a link or a button |
+| Your member pass | Behind the Member pass button beside the title, in a dialog: the tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
-| Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
-| Point History | The member's own ledger — the earned, used and pending totals on top, tabs that filter the list to each, what is still on the way under Pending, and the settled entries grouped by month. Points land when an order completes — an online order once every item is fulfilled and paid, an in-store purchase at the till. Every line says where it came from — the counter, the online store, or the programme itself. Earned and topped-up points read apart, here and in the balance — [Top-ups](/p/grade10-site/loyalty/top-ups) |
+| Point History | The member's own ledger — the earned, used and pending totals on top, tabs that filter the list to each, what is still on the way under Pending, and the settled entries grouped by month. Points land when an order completes — an online order once every item is fulfilled and paid, an in-store purchase at the till, a ticket order when it is confirmed. Every line says where it came from — the counter, the online store, the ticket office, or the programme itself; a ticket purchase names the ticket or event it bought rather than an order number. A credited top-up's entry links its Stripe receipt. Earned and topped-up points read apart, here and in the balance — [Top-ups](/p/grade10-site/loyalty/top-ups) |
 
+- 🚧 **A rail, not a scroll** — a wide viewport lays the page out as a
+  sidebar naming its sections, the picked section drawing on the right; a
+  narrow viewport reads the same names as a scrollable row above the
+  content. The rail reads Overview, Rewards, Coupons and Points History;
+  Tiers & Benefits is an Overview section, and a Member pass button beside
+  the title opens the pass in a dialog. Buying points enters from a Top-up
+  Points button beside Member pass, never the rail —
+  [Top-ups](/p/grade10-site/loyalty/top-ups)
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
-  to say here. ❓ Where the expiry date reads instead — the Tiers & Benefits
-  page is being designed 🚧
+  to say here. The Membership page keeps one dated expiry line of its own,
+  drawn outside the card
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone
 - **Each section loads on its own** — a catalog that failed to load is no
   reason to hide a balance
 
-❓ Whether "Points to spend" and the tier-progress labels are the launch
-names.
+"Points to spend" and the tier-progress labels are the launch names.
 
 ::story{id="loyalty-membership-blocks-tiercard--gold" title="Tier, balance and progress"}
 
@@ -97,8 +106,8 @@ names.
 Every rung of the programme on one surface — what each asks, what each pays,
 where the member stands and how points work. Its own page: the breadcrumbs
 name Home, Membership and Tiers & Benefits; a small viewport navigates to
-it; ❓ whether a wide viewport hosts it as a Membership section instead is
-the Membership page's composition, not drawn yet.
+it; on the Membership page it is a section of Overview, drawing the same
+list 🚧
 
 | Section | Shows |
 | --- | --- |
@@ -106,11 +115,10 @@ the Membership page's composition, not drawn yet.
 | Tier cards | One card per rung — the tier name, its ask in the member's words, and its benefits behind checks. The held rung's card wears the primary border and its tint |
 | How Points Work | The mechanics as icon rows — earn, pending, spend, expiry — stacked on a narrow viewport and paired on a wide one. The preview states the programme's own values: a point redeems a Hong Kong dollar, points arrive when the order completes, and the whole balance lapses after twelve months with no activity |
 
-- **Reaches** — the `TierCard` on Membership links here whole, and it has
-  its own navigation entry ❓
+- **Reaches** — the same list is a section of Membership's Overview
 - **The expiry date's home** — the mechanics card states the lapse rule;
-  ❓ where a member's own "how many points expire and the day they go"
-  line reads is not drawn yet
+  the Tiers & Benefits page draws no member-dated line; the Membership page's own
+  line carries the date
 
 ::story{id="loyalty-membership-screens-tiers-benefits--default" title="Tiers & Benefits, a gold member"}
 
@@ -124,10 +132,11 @@ the Membership page's composition, not drawn yet.
 
 - **Email, not name** — no name is collected at registration, so the pass
   carries the member's account email under the tier badge
-- **Its own page on a phone** — the pass is presented alone and the page
+- **Its own page on a phone** — the pass section opens it, its route the consumer app's to name, and the page
   holds a screen wake lock while it is up, so the phone cannot dim or lock
-  mid-scan; a web page cannot raise screen brightness, so keeping the screen
-  awake is the part that is feasible
+  mid-scan; the consumer renders the pass only once it holds a code; a web page cannot
+  raise screen brightness, so keeping the screen awake is the part that is
+  feasible
 - **A code swaps in and out** — a fresh code dips the square out of view,
   fading and easing down, and settles the new one in — a transition,
   never an abrupt swap, so a scanner never loses its square mid-read
@@ -136,7 +145,8 @@ the Membership page's composition, not drawn yet.
   the refusal a replayed code earns stays on the till
 - **New code on demand** — the earlier code stays alive until it is used or
   lapses, and the countdown rotates it out before it does, so the pass
-  never draws an expired code
+  never draws an expired code; the countdown runs to the next rotation, set
+  inside the code's life
 - **Never stored** — the QR payload is answered once, and only its digest is
   kept
 - **Card code history** — kept only to power the refusal above, naming
@@ -156,7 +166,7 @@ The same pass can be added to a phone wallet —
 
 | Entry | Meaning |
 | --- | --- |
-| Points earned | A purchase, or a campaign grant |
+| Points earned | A purchase — store, counter or tickets — or a campaign grant |
 | Points spent | A reward redeemed |
 | Points put toward a purchase | Points paid against a bill |
 | Points expired | The balance lapsed |

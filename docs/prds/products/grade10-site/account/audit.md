@@ -31,5 +31,5 @@ A passing consistency check says the chain is internally consistent. It does not
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/auth/audit"}
+[Test cases · shared/auth/audit](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/auth/audit)
 :::

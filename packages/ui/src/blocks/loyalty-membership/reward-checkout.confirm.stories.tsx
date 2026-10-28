@@ -17,7 +17,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** A good, confirming: the hero image, the deadline badge, the use-at and
+/** A gift, confirming: the hero image, the deadline badge, the use-at and
  * valid-for rows, and the balance before and after. */
 export const ItemConfirm: Story = {
   args: { reward: ITEM },

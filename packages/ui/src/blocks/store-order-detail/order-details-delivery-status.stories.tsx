@@ -3,6 +3,8 @@ import { expect, fn, userEvent, within } from "storybook/test";
 import {
   FILLED_DELIVERY,
   ORDER_DETAILS_COPY,
+  PARCEL_REFUNDED,
+  PARCEL_REFUNDED_AFTER_SHIP,
   PICKUP_DELIVERY,
 } from "./fixtures";
 import { OrderDetailsDeliveryStatus } from "./order-details-delivery-status";
@@ -53,5 +55,77 @@ export const InStorePickup: Story = {
     steps: resolveDeliverySteps(PICKUP_DELIVERY, "pickup"),
     trackOrder: false,
     onTrackOrder: undefined,
+  },
+};
+
+/** Placed, not yet handed to a carrier: only Order Placed is reached. */
+export const ParcelNotShipped: Story = {
+  args: {
+    steps: [
+      { label: "Order Placed", date: "26 Aug 2026", state: "completed" },
+      { label: "Shipping", state: "upcoming" },
+      {
+        label: "Completed",
+        date: "Estimated delivery: 2 Sep 2026",
+        state: "upcoming",
+      },
+    ],
+    trackOrder: false,
+    onTrackOrder: undefined,
+  },
+};
+
+/** With the carrier: Shipping is current, arrival is an estimate. */
+export const ParcelInTransit: Story = {
+  args: {
+    steps: [
+      { label: "Order Placed", date: "26 Aug 2026", state: "completed" },
+      { label: "Shipping", date: "SF Express · SF123", state: "current" },
+      {
+        label: "Completed",
+        date: "Estimated delivery: 2 Sep 2026",
+        state: "upcoming",
+      },
+    ],
+  },
+};
+
+/** The carrier confirmed delivery: every step is reached. */
+export const ParcelDelivered: Story = {
+  args: {
+    steps: [
+      { label: "Order Placed", date: "26 Aug 2026", state: "completed" },
+      { label: "Shipping", date: "SF Express · SF123", state: "completed" },
+      { label: "Completed", state: "completed" },
+    ],
+  },
+};
+
+/** Refunded before a parcel left: the steps end at Refunded. */
+export const ParcelRefunded: Story = {
+  args: {
+    steps: resolveDeliverySteps(PARCEL_REFUNDED, "refunded"),
+    trackOrder: false,
+    onTrackOrder: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Refunded")).toBeVisible();
+    expect(canvas.queryByText("Completed")).not.toBeInTheDocument();
+  },
+};
+
+/** The parcel had already left when the refund landed: Shipping stays
+ * reached and the steps still end at Refunded. */
+export const ParcelRefundedAfterShip: Story = {
+  args: {
+    steps: resolveDeliverySteps(PARCEL_REFUNDED_AFTER_SHIP, "refunded"),
+    trackOrder: false,
+    onTrackOrder: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Shipping")).toBeVisible();
+    expect(canvas.getByText("Refunded")).toBeVisible();
   },
 };

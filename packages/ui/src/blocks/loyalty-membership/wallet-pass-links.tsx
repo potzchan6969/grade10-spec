@@ -4,14 +4,14 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import type { WalletPassArtwork } from "./wallet-artwork";
 import { resolveArtwork } from "./wallet-artwork";
 
 /** The words the block says, whichever wallets a brand offers. */
 type WalletPassLinksCopy = {
-  /** Names what the actions beneath it are for. */
-  heading: string;
+  /** Names what the actions beneath it are for; absent, no line is drawn. */
+  heading?: string;
   /** Says the member's standing could not be read, and what is drawn is stale. */
   unreachable: string;
 };
@@ -29,6 +29,10 @@ type WalletPassOffer = {
   label: string;
   /** Where the member goes to install it, once there is something to install. */
   saveUrl?: string;
+  /** The wallet's mark, drawn ahead of the label. */
+  icon?: ReactNode;
+  /** The button's fill — `default` for the vendor that wants a filled pill. */
+  variant?: "default" | "outline";
 };
 
 /**
@@ -209,9 +213,11 @@ function WalletPassLinks({
     >
       {offers.length > 0 ? (
         <>
-          <Text size="sm" tone="secondary">
-            {copy.heading}
-          </Text>
+          {copy.heading ? (
+            <Text size="sm" tone="secondary">
+              {copy.heading}
+            </Text>
+          ) : null}
           {/* Announced, because a successful mint replaces the button with a
               link and a member who cannot see that swap has no other signal
               that their tap did anything. */}
@@ -242,6 +248,7 @@ function WalletPassLinks({
               }
               return offer.saveUrl ? (
                 <Link
+                  className="flex-1"
                   data-slot="wallet-pass-save"
                   data-wallet={wallet.id}
                   href={offer.saveUrl}
@@ -253,14 +260,16 @@ function WalletPassLinks({
                 </Link>
               ) : (
                 <Button
+                  className="flex-1"
                   data-slot="wallet-pass-add"
                   data-wallet={wallet.id}
                   key={wallet.id}
+                  leading={offer.icon}
                   loading={wallet.adding ?? false}
                   onClick={add}
                   size="sm"
                   type="button"
-                  variant="outline"
+                  variant={offer.variant ?? "outline"}
                 >
                   {offer.label}
                 </Button>

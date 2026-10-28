@@ -1,39 +1,18 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { cn } from "@grade10/design-system/lib/utils";
-import {
-  BookOpenText,
-  CaretDown,
-  CaretRight,
-  Globe,
-  type Icon,
-  Kanban,
-  ListChecks,
-} from "@phosphor-icons/react";
+import { BookOpenText, CaretDown, CaretRight } from "@phosphor-icons/react";
 import { type MouseEvent, use, useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router";
-import type { Incubating, NavGroup, NavItem, NavProduct } from "../api/derive";
+import type { NavGroup, NavItem, NavProduct } from "../api/derive";
 import { buildIndex, REFERENCES_ROUTE, soleProduct } from "../api/derive";
 import { useSnapshot } from "../api/snapshot-provider";
-import { CapabilityPip } from "../blocks/capability-status";
 import { PageIcon } from "../blocks/page-icon";
 import { browserKeyStore, STORAGE } from "../editor/config";
-import { NewPageAction } from "../editor/edit-actions";
 import {
   navSections,
   PageSectionsContext,
   SectionLinks,
 } from "./page-sections";
-
-/** The two views that are about the work rather than about a capability: the
- * board of everything in flight, and what is on the reader. Above the product
- * groups because neither belongs to one, and fixed because a rail built from
- * the store's pages cannot reach either. */
-const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [
-  { to: "/in-flight", label: "Board", icon: Kanban },
-  { to: "/availability", label: "Availability", icon: Globe },
-  { to: "/my-turn", label: "My turn", icon: ListChecks },
-];
 
 /** One row shape for everything in the rail — the fixed views, products and
  * leaves differ in tone, never in geometry. */
@@ -42,8 +21,7 @@ const ROW =
 
 /**
  * What this reader holds open. The rail used to follow the route alone, so
- * leaving a product — or following an incubating entry onto the Board —
- * snapped the branch shut under the reader. Now a branch opens when
+ * leaving a product snapped the branch shut under the reader. Now a branch opens when
  * its own page is visited and stays as the reader last left it, across
  * navigations and reloads.
  */
@@ -144,41 +122,24 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
         open
           ? "max-lg:translate-x-0"
           : "max-lg:invisible max-lg:-translate-x-full",
-        "lg:visible lg:sticky lg:w-76 lg:translate-x-0 motion-reduce:transition-none",
+        "lg:visible lg:sticky lg:w-(--manual-nav-width) lg:translate-x-0 motion-reduce:transition-none",
+        // Folded away from the shell's handle; dimmed while a drag would fold it.
+        "lg:group-data-[nav=collapsed]/shell:hidden lg:group-data-nav-folding/shell:opacity-50",
       )}
       data-slot="manual-sidebar"
     >
-      <div className="flex flex-col gap-5 px-3 py-6">
+      <div className="flex flex-col gap-5 px-3 py-2">
         {/* One landmark: the fixed views and the store's contents are two
          * lists of the same rail, and two `nav`s named alike gave a screen
          * reader's landmark list two entries a reader could not tell apart.
          * The divider is the second list's own top border. */}
         <nav aria-label="Manual">
-          <ul className="space-y-0.5">
-            {FIXED_ENTRIES.map((entry) => (
-              <li key={entry.to}>
-                <NavLink
-                  className={({ isActive }: { isActive: boolean }) =>
-                    cn(ROW, isActive && "bg-muted font-medium")
-                  }
-                  end
-                  onClick={onNavigate}
-                  to={entry.to}
-                >
-                  <entry.icon aria-hidden size={16} />
-                  {entry.label}
-                </NavLink>
-                <RowSections onNavigate={onNavigate} to={entry.to} />
-              </li>
-            ))}
-          </ul>
-
           {index === null ? (
             <Text as="p" className="px-4 pt-5" size="xs" tone="secondary">
               Navigation appears once the snapshot is in hand.
             </Text>
           ) : (
-            <div className="mt-5 flex flex-col gap-5 border-border-subtle border-t pt-4">
+            <div className="flex flex-col gap-5 pt-2">
               {index.groups.map((group) => (
                 <GroupSection
                   group={group}
@@ -209,16 +170,9 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
                 title="References"
                 to={REFERENCES_ROUTE}
               />
-              <IncubatingSection
-                items={index.incubating}
-                memory={memory}
-                onNavigate={onNavigate}
-              />
             </div>
           )}
         </nav>
-
-        <NewPageAction />
       </div>
     </aside>
   );
@@ -306,11 +260,6 @@ function CapabilityRows({
           <LeafLink item={capability} onNavigate={onNavigate} />
         </li>
       ))}
-      {product.incubating.map((one) => (
-        <li key={one.specId}>
-          <IncubatingLink incubating={one} onNavigate={onNavigate} />
-        </li>
-      ))}
     </>
   );
 }
@@ -338,8 +287,7 @@ function ProductBranch({
   }, [holdsPage, branchKey, openBranch]);
 
   const expanded = memory.memory.open.includes(branchKey);
-  const expandable =
-    product.capabilities.length > 0 || product.incubating.length > 0;
+  const expandable = product.capabilities.length > 0;
   const active = pathname === product.to;
 
   return (
@@ -368,11 +316,6 @@ function ProductBranch({
           <PageIcon name={product.icon} />
         </span>
         <span className="min-w-0 flex-1 truncate">{product.title}</span>
-        {product.changeCount > 0 ? (
-          <Badge className="tabular-nums" size="sm" variant="outline">
-            {product.changeCount}
-          </Badge>
-        ) : null}
         {expandable ? (
           <span className="flex size-4 shrink-0 items-center justify-center text-secondary-foreground">
             {expanded ? (
@@ -390,31 +333,6 @@ function ProductBranch({
         </ul>
       ) : null}
     </li>
-  );
-}
-
-/**
- * A capability that exists only as a delta. It has no page to link to, so this
- * points at the change writing it — otherwise the only way to learn the
- * capability is being built is to already know its change by name.
- */
-function IncubatingLink({
-  incubating,
-  onNavigate,
-}: {
-  incubating: Incubating;
-  onNavigate: () => void;
-}) {
-  return (
-    <NavLink
-      className={cn(ROW, "text-secondary-foreground hover:text-foreground")}
-      onClick={onNavigate}
-      title={`${incubating.specId} — introduced by ${incubating.change.title}`}
-      to={`/in-flight/${incubating.change.id}`}
-    >
-      <span className="min-w-0 flex-1 truncate italic">{incubating.title}</span>
-      <CapabilityPip status="incubating" />
-    </NavLink>
   );
 }
 
@@ -471,41 +389,6 @@ function FlatSection({
   );
 }
 
-/** The delta-only capabilities whose product has no branch of its own — an
- * inventory nobody has written a page for yet is the easiest thing in the store
- * to lose entirely. */
-function IncubatingSection({
-  items,
-  memory,
-  onNavigate,
-}: {
-  items: Incubating[];
-  memory: Memory;
-  onNavigate: () => void;
-}) {
-  const collapsed = memory.memory.shut.includes("Incubating");
-  if (items.length === 0) return null;
-
-  return (
-    <div>
-      <SectionHeading
-        collapsed={collapsed}
-        onToggle={() => memory.toggleSection("Incubating")}
-        title="Incubating"
-      />
-      {collapsed ? null : (
-        <ul className="mt-1 space-y-0.5 pl-5">
-          {items.map((one) => (
-            <li key={one.specId}>
-              <IncubatingLink incubating={one} onNavigate={onNavigate} />
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-
 function LeafLink({
   item,
   onNavigate,
@@ -528,7 +411,6 @@ function LeafLink({
       >
         <PageIcon name={item.icon} />
         <span className="min-w-0 flex-1 truncate">{item.title}</span>
-        <CapabilityPip status={item.status} />
       </NavLink>
       <RowSections onNavigate={onNavigate} to={item.to} />
     </>

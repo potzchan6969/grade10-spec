@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { buildIndex, feedRef } from "../src/api/derive";
-import { changeEntry, pageEntry, snapshotOf } from "./manual-fixture";
+import { pageEntry, snapshotOf } from "./manual-fixture";
 
 /** What a commit touched, resolved against the store as it stands today. A
- * page deleted since and a change already archived are the two cases the feed
- * has to survive: the commit happened either way. */
+ * page deleted since is the case the feed has to survive: the commit happened
+ * either way. */
 
 const index = buildIndex(
   snapshotOf({
@@ -14,7 +14,6 @@ const index = buildIndex(
         spec: "demo/alpha",
       }),
     ],
-    changes: [changeEntry("add-beta", [])],
   }),
 );
 
@@ -40,35 +39,6 @@ describe("a history ref as a chip", () => {
       key: "page:docs/prds/products/demo/gone.md",
       label: "docs/prds/products/demo/gone.md",
       kind: "page",
-    });
-  });
-
-  it("sends a spec to the page that documents it", () => {
-    expect(feedRef(index, { kind: "spec", id: "demo/alpha" })).toEqual({
-      key: "spec:demo/alpha",
-      label: "Alpha",
-      to: "/p/demo/alpha",
-      kind: "spec",
-    });
-  });
-
-  it("sends a change in flight to its card on the board", () => {
-    expect(feedRef(index, { kind: "change", id: "add-beta" })).toEqual({
-      key: "change:add-beta",
-      label: "Change add-beta",
-      to: "/in-flight/add-beta",
-      kind: "change",
-    });
-  });
-
-  /** An archived change has no card to anchor to, so the board itself is all
-   * there is to point at. */
-  it("sends an archived change to the board plainly", () => {
-    expect(feedRef(index, { kind: "archived", id: "add-alpha" })).toEqual({
-      key: "archived:add-alpha",
-      label: "add-alpha",
-      to: "/in-flight",
-      kind: "archived",
     });
   });
 

@@ -3,7 +3,6 @@ title: Operator Console
 spec: grade10-site/loyalty/programme
 audience: operator
 order: 9
-reviewed: 2026-10-07
 ---
 
 ## Moving Points
@@ -28,8 +27,8 @@ part on one question: do the points count toward the tier?
 - **Both carry a reason** — what the operator types goes to the audit trail;
   the ledger carries only its digest
 
-❓ **Welcome bonus** — the owner's draft posts points at enrolment; none is
-granted until the size is set. The owner's call.
+- ❓ **Welcome bonus** — the owner's draft posts points at enrolment; none is
+  granted until the size is set. The owner's call.
 
 ## Restarting the Expiry
 

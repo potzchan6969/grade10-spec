@@ -1,0 +1,114 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "d920145dc3280dd87df99e1124e6d12acf37cdf47cc2c162141dc905cf8687fb"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "9659c8784f00e12d48075959158160d3aef8c0c6",
+    "capturedAt": "2026-10-27T07:04:03.255Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-account-profile/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/account-profile/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/account-profile/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A collector removes their avatar and falls back to the display name's first letter",
+          "Requirement: A collector uploads an avatar image",
+          "Requirement: A failed read or save is reported, never hidden",
+          "Requirement: A profile holds display name, bio, avatar, email, and member-since",
+          "Requirement: An avatar image opens for anyone holding its address",
+          "Requirement: Bio is optional, trimmed, and at most 500 characters",
+          "Requirement: Display name is required, trimmed, and at most 80 characters",
+          "Requirement: Editing is explicit, and a save carrying no field is refused",
+          "Requirement: Email is read-only",
+          "Requirement: Only the signed-in collector reads or edits their profile",
+          "Requirement: The profile page is never empty"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/account-profile/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/membership/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/membership/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A till session spends for the member and notifies them once it lands"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/membership/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/wallet-member-card/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/wallet-member-card/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A member carries their card in Apple Wallet",
+          "Requirement: A member carries their card in Google Wallet",
+          "Requirement: A pass shows the member's name the way the store resolves it",
+          "Requirement: The pass follows the member's standing, one sweep behind"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/wallet-member-card/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-profile/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-profile/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Every word on the surface arrives in the component's copy group",
+          "Requirement: The avatar falls back when there is no image to show",
+          "Requirement: The bio keeps the lines the collector typed",
+          "Requirement: The card frames a body the application supplies",
+          "Requirement: The form applies the application's limits and refuses nothing itself",
+          "Requirement: The form edits the avatar alongside the text fields",
+          "Requirement: The form offers a cancel the application names",
+          "Requirement: The profile surface exports",
+          "Requirement: The read view shows avatar, display name, email, bio, and meta"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-profile/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "80cb09c3c18f02645007573b047d9540d6c1c59f",
+      "components": [
+        "store-service",
+        "web"
+      ]
+    }
+  ]
+}

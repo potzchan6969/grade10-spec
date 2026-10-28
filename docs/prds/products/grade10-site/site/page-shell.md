@@ -2,7 +2,6 @@
 title: Page Shell
 spec: grade10-site/site/page-shell
 order: 1
-reviewed: 2026-09-21
 ---
 
 One wrapper renders every surface of the site, not-found included, so no
@@ -16,40 +15,33 @@ a search surface, and no link points to a page the site does not hold. The
 header marks the item that owns the current address, and marks nothing when no
 item owns it.
 
-**Auction-first chrome** — until Store launches, the primary nav lists
-Auction (and the other surfaces that answer) without a Store entrance, and the
-cart stays absent
-
-**Global cart** — once Store answers the cart drawer, the Cart control stays
-in the header on every surface — including Auction and other non-Store pages —
-so a collector can reach checkout without returning to Store
-
-**Store Locator** — in the header and footer only where the build carries
-[Store Locator](/p/grade10-site/store/store-locator), which waits with the
-store; auction-first chrome has none
-
-**Shows** — the primary nav lists Shows once the site answers `/shows`,
-after Store Locator when that item is present and after Auction on
-auction-first, ahead of Index and Help; the header marks it current on
-`/shows` and the addresses beneath
-
-**Company column** — the footer lists the company pages the site answers
-under a Company column ahead of Help and Legal: About, Shows, Press
-Releases, Media Coverage
-
-**Index** — the primary nav lists Index after Shows and ahead of Help,
-opening the Grade10 Index hub in a new tab and carrying the external-link
-glyph that marks every external primary item; the footer lists the four
-index pages under an Index column ahead of Help and Legal: Hat Price
-Index, PTCG100, PTCG500, OPCG100
-
-**Copyright** — the footer's bottom bar reads the brand's copyright line in
-the page's language, with no year: "© Grade10. All rights reserved." in English,
-"© Grade10。保留所有權利。" in Simplified Chinese, "© Grade10。版權所有。" in
-Traditional Chinese; on ZZZ, "© ZZZ. All rights reserved."
-
-**Email footers** — every email ends its footer with its brand's copyright line
-in the letter's language, with no year, as the site footer does.
+- **Auction-first chrome** — until Store launches, the primary nav lists
+  Auction (and the other surfaces that answer) without a Store entrance, and the
+  cart stays absent
+- **Global cart** — once Store answers the cart drawer, the Cart control stays
+  in the header on every surface — including Auction and other non-Store pages —
+  so a collector can reach checkout without returning to Store
+- **Store Locator** — in the header and footer only where the build carries
+  [Store Locator](/p/grade10-site/store/store-locator), which waits with the
+  store; auction-first chrome has none
+- **Shows** — the primary nav lists Shows once the site answers `/shows`,
+  after Store Locator when that item is present and after Auction on
+  auction-first, ahead of Index and Help; the header marks it current on
+  `/shows` and the addresses beneath
+- **Company column** — the footer lists the company pages the site answers
+  under a Company column ahead of Help and Legal: About, Shows, Press
+  Releases, Media Coverage
+- **Index** — the primary nav lists Index after Shows and ahead of Help,
+  opening the Grade10 Index hub in a new tab and carrying the external-link
+  glyph that marks every external primary item; the footer lists the four
+  index pages under an Index column ahead of Help and Legal: Hat Price
+  Index, PTCG100, PTCG500, OPCG100
+- **Copyright** — the footer's bottom bar reads the brand's copyright line in
+  the page's language, with no year: "© Grade10. All rights reserved." in English,
+  "© Grade10。保留所有權利。" in Simplified Chinese, "© Grade10。版權所有。" in
+  Traditional Chinese; on ZZZ, "© ZZZ. All rights reserved."
+- **Email footers** — every email ends its footer with its brand's copyright line
+  in the letter's language, with no year, as the site footer does.
 
 ## Session
 
@@ -58,42 +50,34 @@ paint. When the session arrives, the account entry changes between a Sign In
 primary button (signed out) and the account icon with its menu (signed in); other
 controls do not appear or disappear.
 
-**Before the session answers** - the account entry is a placeholder the size of
-the account icon, with nothing to press and nothing read aloud, so a signed-in
-collector never sees Sign In first
-
-**First answer only** - the placeholder shows until the session first answers,
-and a first read that fails shows Sign In; a later read that fails keeps the
-entry already shown, and one that finds a different session changes it
-
-**Controls beside it** - only the account entry's own change in width moves the
-language and search controls to its left; the Cart control stays where it is
+- **Before the session answers** — the account entry is a placeholder the size of
+  the account icon, with nothing to press and nothing read aloud, so a signed-in
+  collector never sees Sign In first
+- **First answer only** — the placeholder shows until the session first answers,
+  and a first read that fails shows Sign In; a later read that fails keeps the
+  entry already shown, and one that finds a different session changes it
+- **Controls beside it** — only the account entry's own change in width moves the
+  language and search controls to its left; the Cart control stays where it is
 
 ## Account Menu
 
-**Account menu** - signed in, an avatar sits above the email, above
-the items: My Auctions and Sign Out on auction launch; My Orders and My
-Auctions once Store answers, with Sign Out always last. KYC stays out.
-
-**Menu avatar** - the image the collector chose on their
-[Profile](/p/grade10-site/account/profile), and their email's initial where
-they chose none
-
-**Withheld pages** - the menu never offers an item whose page the site
-withholds: My Orders, Profile or Membership
-
-**Profile** - first, opening the account page, wherever the account page is
-carried - [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
-
-**My Orders** - ahead of My Auctions once Store answers, opening
-`/profile/orders`, and omitted until then on the same gate as Cart
-
-**Membership** - after My Auctions wherever the membership page is carried,
-by the rule Profile follows; a later change offers it, and until then the
-menu leaves it out
-
-**Sign Out on the account page** - the account page offers Sign Out as well,
-wherever it is carried
+- **Account menu** — signed in, an avatar sits above the email, above
+  the items: My Auctions and Sign Out on auction launch; My Orders and My
+  Auctions once Store answers, with Sign Out always last. KYC stays out.
+- **Menu avatar** — the image the collector chose on their
+  [Profile](/p/grade10-site/account/profile), and their email's initial where
+  they chose none
+- **Withheld pages** — the menu never offers an item whose page the site
+  withholds: My Orders, Profile or Membership
+- **Profile** — first, opening the account page, wherever the account page is
+  carried - [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
+- **My Orders** — ahead of My Auctions once Store answers, opening
+  `/profile/orders`, and omitted until then on the same gate as Cart
+- **Membership** — after My Auctions wherever the membership page is carried,
+  by the rule Profile follows; a later change offers it, and until then the
+  menu leaves it out
+- **Sign Out on the account page** — the account page offers Sign Out as well,
+  wherever it is carried
 
 ## Help
 
@@ -102,35 +86,29 @@ menu). Help is the last primary item — it follows Index when that item is
 present, else Shows, else Store Locator, else Auction. It opens the
 documentation site in a new tab.
 
-**Compact menu** — below a 896px-wide container, the leading menu opens a left
-inset drawer for primary navigation and utilities; language opens a nested
-drawer (not in the compact bar); Account / Sign In and Cart stay in the bar.
+- **Compact menu** — below a 896px-wide container, the leading menu opens a left
+  inset drawer for primary navigation and utilities; language opens a nested
+  drawer (not in the compact bar); Account / Sign In and Cart stay in the bar.
 
 ## Cart
 
-🚧 **Cart count** - the header shows a member the same active-line count as the
-cart drawer title, with the drawer open or closed
-
-🚧 **No count** - an empty or unknown cart shows no count; the Cart control
-stays where it is
-
-🚧 **During a refresh** - the last verified count stays while the same member's
-cart is checked, including after a failed change, and disappears if that check
-fails
-
-🚧 **What counts** - each distinct line counts once, whatever its quantity;
-adjusted lines count, sold-out and unavailable lines do not
-
-🚧 **Member change** - signing out or changing member clears the count at once
-
-🚧 **Updates** - the count refreshes when the member's cart loads, when a cart
-change finishes, saved or failed, when the drawer opens, and on Retry, with the
-drawer open or closed; a change made on another device shows after the next of
-these, not live
-
-**Cart for anyone** - the Cart control opens the drawer whether or not the
-collector is signed in; a guest's drawer and count show the cart this browser
-holds - [Cart Drawer](/p/grade10-site/store/cart)
+- 🚧 **Cart count** — the header shows a member the same active-line count as the
+  cart drawer title, with the drawer open or closed
+- 🚧 **No count** — an empty or unknown cart shows no count; the Cart control
+  stays where it is
+- 🚧 **During a refresh** — the last verified count stays while the same member's
+  cart is checked, including after a failed change, and disappears if that check
+  fails
+- 🚧 **What counts** — each distinct line counts once, whatever its quantity;
+  adjusted lines count, sold-out and unavailable lines do not
+- 🚧 **Member change** — signing out or changing member clears the count at once
+- 🚧 **Updates** — the count refreshes when the member's cart loads, when a cart
+  change finishes, saved or failed, when the drawer opens, and on Retry, with the
+  drawer open or closed; a change made on another device shows after the next of
+  these, not live
+- **Cart for anyone** — the Cart control opens the drawer whether or not the
+  collector is signed in; a guest's drawer and count show the cart this browser
+  holds - [Cart Drawer](/p/grade10-site/store/cart)
 
 ::story{id="site-page-shell-blocks-siteheader-auction-first--signed-out" title="Auction first — signed out"}
 

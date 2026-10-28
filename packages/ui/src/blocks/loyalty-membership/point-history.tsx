@@ -145,6 +145,7 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
             actions={
               state.action ? (
                 <Button
+                  size="md"
                   disabled={state.action.pending}
                   onClick={state.action.onAction}
                   type="button"
@@ -177,7 +178,7 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
           >
             <TabsList
               aria-label={copy.label}
-              className="w-full justify-start gap-4 overflow-x-auto border-b border-border sm:gap-6"
+              className="w-full justify-start gap-4 overflow-x-auto overflow-y-hidden border-b border-border sm:gap-6"
               variant="list"
             >
               {FILTERS.filter((name) => name === "all" || counts[name] > 0).map(

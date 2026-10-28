@@ -2,7 +2,6 @@ import { createHash, randomUUID } from "node:crypto";
 import {
   existsSync,
   mkdirSync,
-  mkdtempSync,
   readdirSync,
   readFileSync,
   renameSync,
@@ -13,30 +12,10 @@ import {
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { basename, dirname, extname, join, sep } from "node:path";
 import type { Plugin, ViteDevServer } from "vite";
-import {
-  openRecord,
-  setEntry,
-} from "../../../../scripts/openspec/lib/record.mjs";
-import {
-  handleOf,
-  isHandle,
-  memberOf,
-  readTeamMap,
-  TEAM_MAP,
-} from "../../../../scripts/openspec/lib/team.mjs";
 import { STORE_CHANGED } from "../api/live.ts";
-import { ROLES, type Role } from "../api/types.ts";
 import { GrammarError, parsePage, serializePage } from "../content/grammar.ts";
-import {
-  allowedProposal,
-  MANIFEST,
-  type ProposalFile,
-  slugProblem,
-  withdrawProblem,
-} from "../editor/propose.ts";
-import { changeFile, confine, storePath } from "./disk.mts";
+import { confine, storePath } from "./disk.mts";
 import { git } from "./git.mts";
-import { liveBodies, type OriginMain, originMain } from "./main-moved.mts";
 import { type Roots, resolveRoots } from "./roots.mts";
 import {
   readHeads,
@@ -45,16 +24,11 @@ import {
   storeDirs,
   storeStamp,
 } from "./snapshot.mts";
-import { viewerMount } from "./viewer-mount.mts";
 
 /**
  * Dev transport for the store. Both GETs are computed from the resolved roots
  * per request — memoized on git heads plus the newest mtime, so an editor can
- * poll them — and every write is confined to the content root's manual,
- * except a proposal, which goes to the store's `openspec/changes/`.
- *
- * One reading of `origin/main` per server, so the tabs a teammate has open
- * share one fetch rather than one each.
+ * poll them — and every write is confined to the content root's manual.
  */
 export function manualStorePlugin(): Plugin {
   const roots = resolveRoots();
@@ -64,19 +38,11 @@ export function manualStorePlugin(): Plugin {
     configureServer(server) {
       ensureAssetsDir(roots);
       watchStore(server, roots);
-      // Before the manual's own handler and Vite's fallback, or `/openspec/`
-      // would be the manual's not-found page. The built site has the viewer
-      // as files at the same address, so a link works on both.
-      server.middlewares.use("/openspec", viewerMount(roots));
-      server.middlewares.use(
-        middleware(roots, live(roots), originMain(roots.store)),
-      );
+      server.middlewares.use(middleware(roots, live(roots)));
     },
     configurePreviewServer(server) {
       const built = join(server.config.root, server.config.build.outDir);
-      server.middlewares.use(
-        middleware(roots, fromDist(built), originMain(roots.store)),
-      );
+      server.middlewares.use(middleware(roots, fromDist(built)));
     },
   };
 }
@@ -124,8 +90,6 @@ function fromDist(outDir: string): Artifacts {
     JSON.parse(readFileSync(join(api, name), "utf8"));
   return async () => ({
     snapshot: readJson("snapshot"),
-    archive: readJson("archive"),
-    documents: readAll("change"),
     references: readAll("reference"),
   });
   function readAll(kind: string) {
@@ -165,10 +129,9 @@ export type StoreRequest = {
 export function storeEndpoints(
   roots: Roots,
   artifacts: Artifacts = live(roots),
-  origin: OriginMain = originMain(roots.store),
 ): (request: StoreRequest) => Promise<Reply> {
   return (request) =>
-    route(roots, artifacts, origin, {
+    route(roots, artifacts, {
       method: request.method ?? "GET",
       url: new URL(request.path, "http://manual.local"),
       header: (name) => request.headers?.[name],
@@ -176,7 +139,7 @@ export function storeEndpoints(
     });
 }
 
-function middleware(roots: Roots, artifacts: Artifacts, origin: OriginMain) {
+function middleware(roots: Roots, artifacts: Artifacts) {
   return (
     req: IncomingMessage,
     res: ServerResponse,
@@ -188,7 +151,7 @@ function middleware(roots: Roots, artifacts: Artifacts, origin: OriginMain) {
       next();
       return;
     }
-    route(roots, artifacts, origin, incoming(req, url))
+    route(roots, artifacts, incoming(req, url))
       .catch((cause) => {
         console.error(`manual-store: ${path} failed`, cause);
         return reply(500, { error: describe(cause) });
@@ -212,7 +175,6 @@ function incoming(req: IncomingMessage, url: URL): Incoming {
 async function route(
   roots: Roots,
   artifacts: Artifacts,
-  origin: OriginMain,
   req: Incoming,
 ): Promise<Reply> {
   const method = req.method;
@@ -238,14 +200,6 @@ async function route(
   if (method === "GET") {
     if (path === "/api/snapshot")
       return reply(200, (await artifacts()).snapshot);
-    if (path === "/api/archive") return reply(200, (await artifacts()).archive);
-    if (path.startsWith("/api/change/")) {
-      const id = decodeURIComponent(path.slice("/api/change/".length));
-      const found = (await artifacts()).documents.find((one) => one.id === id);
-      return found
-        ? reply(200, found)
-        : reply(404, { error: `no change in flight: ${id}` });
-    }
     if (path.startsWith("/api/reference/")) {
       const slug = decodeURIComponent(path.slice("/api/reference/".length));
       const found = (await artifacts()).references.find(
@@ -256,14 +210,6 @@ async function route(
         : reply(404, { error: `no reference: ${slug}` });
     }
     if (path === "/api/dirty") return reply(200, await readDirty(roots));
-    // The three the live line adds. `/api/relay` and `/api/head` are what the
-    // build writes as files, answered here from the same reading, so a page
-    // listens the same way on both transports.
-    if (path === "/api/relay" || path === "/api/head") {
-      const live = liveBodies((await artifacts()).snapshot.storeHead);
-      return reply(200, path === "/api/relay" ? live.relay : live.head);
-    }
-    if (path === "/api/upstream") return reply(200, await origin.standing());
     if (path === "/api/page")
       return readPage(roots, url.searchParams.get("path"));
     return reply(404, { error: `no such endpoint: ${path}` });
@@ -274,17 +220,9 @@ async function route(
   }
   if (method !== "POST") return notAllowed(method);
 
-  if (path === "/api/pull") {
-    const outcome = await origin.pull();
-    return reply("pulled" in outcome ? 200 : 409, outcome);
-  }
-
   const body = await req.json();
   if (path === "/api/page") return writePage(roots, body);
   if (path === "/api/asset") return writeAsset(roots, body);
-  if (path === "/api/propose") return propose(roots.store, body);
-  if (path === "/api/withdraw") return withdraw(roots.store, body);
-  if (path === "/api/hands") return assignHand(roots.store, body);
   return reply(404, { error: `no such endpoint: ${path}` });
 }
 
@@ -435,143 +373,6 @@ function writeAsset(roots: Roots, body: unknown): Reply {
     return reply(400, { error: "`base64` is not valid base64" });
   }
   return save(file, bytes, fields.baseVersion ?? null, false);
-}
-
-/**
- * The one write that leaves the manual, and it leaves it for exactly one new
- * change directory: the same allowlist the browser holds, applied again here,
- * because this endpoint writes straight to the working tree.
- *
- * The directory is built beside the changes tree and moved into place in one
- * rename, so a reader — the snapshot walk, the checker, git — sees a change
- * with both its files or no change at all.
- */
-function propose(root: string, body: unknown): Reply {
-  const files = proposalFiles(body);
-  if (!Array.isArray(files)) return reply(400, files);
-
-  const allowed = allowedProposal(files);
-  if ("error" in allowed) return reply(400, { error: allowed.error });
-  const { slug } = allowed;
-
-  const dir = changeFile(root, slug);
-  if (typeof dir !== "string") return reply(400, dir);
-  const targets: { name: string; content: string }[] = [];
-  for (const file of files) {
-    const name = file.path.split("/")[3];
-    const target = changeFile(root, slug, name);
-    if (typeof target !== "string") return reply(400, target);
-    targets.push({ name, content: file.content });
-  }
-  if (existsSync(dir)) {
-    return reply(409, { error: `a change \`${slug}\` already exists` });
-  }
-
-  mkdirSync(dirname(dir), { recursive: true });
-  const staging = mkdtempSync(join(dirname(dir), `.${slug}.`));
-  try {
-    for (const target of targets) {
-      writeFileSync(join(staging, target.name), target.content, "utf8");
-    }
-    renameSync(staging, dir);
-  } catch (cause) {
-    rmSync(staging, { recursive: true, force: true });
-    throw cause;
-  }
-  return reply(200, { id: slug });
-}
-
-/** Dev only: a proposal goes back out whole, and only while it is still just a
- * proposal. Anything else in the directory means it has become a real change. */
-function withdraw(root: string, body: unknown): Reply {
-  const id = ((body ?? {}) as Record<string, unknown>).id;
-  if (typeof id !== "string" || id === "") {
-    return reply(400, { error: "`id` is required" });
-  }
-  const shape = slugProblem(id);
-  if (shape) return reply(400, { error: shape });
-
-  const dir = changeFile(root, id);
-  if (typeof dir !== "string") return reply(400, dir);
-  if (!existsSync(dir)) return reply(404, { error: `no change \`${id}\`` });
-
-  const problem = withdrawProblem(id, readdirSync(dir));
-  if (problem) return reply(409, { error: problem });
-
-  rmSync(dir, { recursive: true });
-  return reply(200, { withdrawn: true });
-}
-
-/**
- * Assign, on the locally run manual only: `record.mjs`'s own reader, so a
- * change with no record and a record the `yaml` package cannot parse are the
- * same two problems the round already knows how to report, and `setEntry`
- * writes the mapping the way it would create one for `reviewed:`. One field
- * is touched — every other key the file carries, comments included, rides
- * through untouched — so the write is one atomic rename, the way `save`
- * below writes a page.
- *
- * Refuses before the write what `checkHands` would refuse on the push: a
- * handle that is not one token, or one `docs/prds/team.yaml` does not carry —
- * the same two conditions, in the rule's own words, so a mistake here is
- * never a commit the check then has to catch.
- */
-function assignHand(root: string, body: unknown): Reply {
-  const fields = (body ?? {}) as Record<string, unknown>;
-  const { change, role, handle } = fields;
-  if (typeof change !== "string" || change === "") {
-    return reply(400, { error: "`change` is required" });
-  }
-  const shape = slugProblem(change);
-  if (shape) return reply(400, { error: shape });
-  if (
-    typeof role !== "string" ||
-    !(ROLES as readonly string[]).includes(role)
-  ) {
-    return reply(400, { error: `\`role\` is one of ${ROLES.join(", ")}` });
-  }
-  const written = typeof handle === "string" ? handleOf(handle) : "";
-  if (written === "") return reply(400, { error: "`handle` is required" });
-  if (!isHandle(written)) {
-    return reply(400, {
-      error: `\`hands.${role}: ${written}\` is not one handle`,
-    });
-  }
-  if (!memberOf(readTeamMap(root), written)) {
-    return reply(400, {
-      error: `\`hands.${role}\` names \`${written}\`, which \`${TEAM_MAP}\` does not know`,
-    });
-  }
-
-  const dir = changeFile(root, change);
-  if (typeof dir !== "string") return reply(400, dir);
-  if (!existsSync(join(dir, MANIFEST))) {
-    return reply(404, { error: `no change \`${change}\`` });
-  }
-
-  let record: ReturnType<typeof openRecord>;
-  try {
-    record = openRecord(root, change);
-  } catch (cause) {
-    return reply(400, { error: describe(cause) });
-  }
-  setEntry(record.doc, "hands", role, written);
-  writeAtomically(record.file, Buffer.from(record.doc.toString(), "utf8"));
-  return reply(200, { role: role as Role, handle: written });
-}
-
-function proposalFiles(body: unknown): ProposalFile[] | { error: string } {
-  const sent = ((body ?? {}) as Record<string, unknown>).files;
-  if (!Array.isArray(sent)) return { error: "`files` is required" };
-  const files: ProposalFile[] = [];
-  for (const entry of sent) {
-    const file = (entry ?? {}) as Record<string, unknown>;
-    if (typeof file.path !== "string" || typeof file.content !== "string") {
-      return { error: "every file is a `path` and its `content`" };
-    }
-    files.push({ path: file.path, content: file.content });
-  }
-  return files;
 }
 
 /** Optimistic concurrency: `version` is the content hash the editor read, so

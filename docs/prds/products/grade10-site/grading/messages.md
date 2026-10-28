@@ -8,15 +8,15 @@ Every event on a submission decides one email, or silence on purpose; the
 channel is email only, in English, and every message links to the submission
 page, which needs no account.
 
-❓ **The submission's address** — every message, and the console's copy
-link and WhatsApp, open `grade10.com/grading/submissions/<id>`; whether the
-collector's redesigned pages answer at that address — Design —
-[Grading](/p/grade10-site/grading)
+- ❓ **The submission's address** — every message, and the console's copy
+  link and WhatsApp, open `grade10.com/grading/submissions/<id>`; whether the
+  collector's redesigned pages answer at that address — Design —
+  [Grading](/p/grade10-site/grading)
 
 ## Messages
 
-🚧 **One decision per event** — the table is the map, written down once so a
-new event cannot ship silent:
+- 🚧 **One decision per event** — the table is the map, written down once so a
+  new event cannot ship silent:
 
 | Event | Subject | When | Carries | Link |
 | --- | --- | --- | --- | --- |

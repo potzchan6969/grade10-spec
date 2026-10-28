@@ -32,11 +32,12 @@ A member buys points in packs an operator sets.
 - **Came back without paying** — the checkout ends at once, and its share of
   the day is free again
 - **Receipt** — Stripe's own email, to the address the member is signed in
-  with; the member's top-up history links it
+  with; the member's points history links it on the entry
 - **Account deleted** — an open checkout or a held pack closes with nothing
   charged; a payment that lands after is flagged for an operator to refund
 - **Told before paying** — checkout says a pack is never refunded, cashed
   out or moved, and the member accepts the terms before paying
+  ❓ the wireframe shows no accept step before Stripe, so whether Stripe's page carries the acceptance is open (Product, Legal)
 - ❓ **The words** — a draft until Legal confirms them. Legal
 - ❓ **A Grade10 email** — on credit, hold, approval and rejection; it waits
   on a way to reach members, chosen with the
@@ -49,6 +50,8 @@ A member buys points in packs an operator sets.
 | Paused | This member's top-ups are paused; why is the operators' to read |
 | Off sale | The pack is no longer on sale |
 | Over today's cap | The pack would pass today's top-up cap; the member reads what is left today |
+
+❓ the wireframe's refused pack only says it is over today's limit; whether it also names the remaining allowance is open (Product, Designer)
 | Not opened | Stripe would not open a checkout; nothing was charged |
 
 :::example{title="A pack bought"}
@@ -234,7 +237,7 @@ chargeback rate on top-ups.
 | Refund in Stripe's dashboard | ❓ Open | Shipped: takes back the refunded share of the points, as a chargeback does. | Product |
 | Launch | ❓ Open | Shipped off; switched on once Stripe is set up and Legal confirms the words. | Product and Legal |
 | Part returns | Decided | A part return gives no points back; an operator handles each case by hand. | Product |
-| Told before paying | Decided | Checkout states no refund, no cash-out and no transfer, and the member accepts the terms: the proof a disputed charge is fought with. | Product |
+| Told before paying | ❓ Open | Checkout states no refund, no cash-out and no transfer, and the member accepts the terms: the proof a disputed charge is fought with. | Product |
 | The words | ❓ Open | What checkout says, a draft until confirmed. | Legal |
 | Paid value lapsing | Decided | Topped-up points lapse with the balance, and end with it when an account is deleted. | Product |
 | Stored value licence | Decided | Grade10 qualifies for the single-issuer exemption under the Payment Systems and Stored Value Facilities Ordinance (Cap. 584). | Legal |

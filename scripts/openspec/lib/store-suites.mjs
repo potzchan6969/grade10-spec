@@ -1,6 +1,7 @@
 // The Grade10 store's test cases (tcs-rules r7). The store's sources of truth
 // are its PRD pages and Storybook, so its cases live only in the PRD folder,
-// one file per page, and trace PRD sections rather than openspec anchors.
+// one file per page, and trace PRD rules or sections rather than openspec
+// anchors. A store case carries no review state.
 // docs/governance/specs-to-test-cases.md, **Store**.
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
@@ -39,27 +40,74 @@ export function headingAnchor(text) {
     .replace(/\s/g, "-");
 }
 
-/** The anchors of a PRD page's headings, or null when the page is missing. */
-function pageAnchors(root, page, cache) {
+const RULE = /^\s*(?:[-*]|\d+\.)\s+(?:(🚧|❓)\s*)?\*\*([^*]+?)\*\*/u;
+const RULE_TABLE = /^\|\s*Rule\s*\|/;
+const ROW = /^\|\s*(?:(🚧|❓)\s*)?(?:\*\*)?([^|*]+?)(?:\*\*)?\s*\|/u;
+const DIVIDER = /^\|[\s:|-]+\|\s*$/;
+
+/** A PRD page's sections, `anchor -> Map(rule anchor -> { name, open, line })`,
+ *  or null when the page is missing. A rule is a list item's bold name under a
+ *  heading, at any depth, or a row's first cell in a table headed `Rule`,
+ *  outside fenced code and `:::` blocks other than a callout; `open` marks a
+ *  ❓ rule. */
+export function pageSections(root, page, cache = new Map()) {
   if (cache.has(page)) return cache.get(page);
   const file = join(root, STORE_PRD, `${page}.md`);
-  const anchors = existsSync(file)
-    ? new Set(
-        readFileSync(file, "utf8")
-          .split("\n")
-          .map((line) => /^#{1,6}\s+(.*)$/.exec(line))
-          .filter(Boolean)
-          .map((m) => headingAnchor(m[1])),
-      )
-    : null;
-  cache.set(page, anchors);
-  return anchors;
+  if (!existsSync(file)) {
+    cache.set(page, null);
+    return null;
+  }
+  const sections = new Map();
+  let rules = null;
+  let fenced = false;
+  let block = 0;
+  let table = false;
+  readFileSync(file, "utf8")
+    .split("\n")
+    .forEach((line, i) => {
+      if (/^```/.test(line)) fenced = !fenced;
+      if (fenced) return;
+      if (/^:::\w/.test(line)) {
+        if (!/^:::callout\b/.test(line)) block += 1;
+        return;
+      }
+      if (/^:::\s*$/.test(line)) {
+        block = Math.max(0, block - 1);
+        return;
+      }
+      const heading = /^#{1,6}\s+(.*)$/.exec(line);
+      // A flow step's heading is an anchor too, but holds no rules.
+      if (heading && block > 0) {
+        sections.set(headingAnchor(heading[1]), new Map());
+        return;
+      }
+      if (block > 0) return;
+      if (heading) {
+        rules = new Map();
+        sections.set(headingAnchor(heading[1]), rules);
+        return;
+      }
+      table = table ? line.startsWith("|") : RULE_TABLE.test(line);
+      const row =
+        table &&
+        !RULE_TABLE.test(line) &&
+        !DIVIDER.test(line) &&
+        ROW.exec(line);
+      const rule = rules && (row || RULE.exec(line));
+      if (rule)
+        rules.set(headingAnchor(rule[2]), {
+          name: rule[2],
+          open: rule[1] === "❓",
+          line: i + 1,
+        });
+    });
+  cache.set(page, sections);
+  return sections;
 }
 
 const REQUIRED = [
   "Severity",
   "Priority",
-  "Status",
   "Behaviour",
   "Type",
   "Suites",
@@ -68,12 +116,27 @@ const REQUIRED = [
   "Trace",
 ];
 const CASE_HEADING = /^#{3,4}\s+(\S+?):\s/;
-const PROPERTY = /^[*-]\s+\*\*([\w ]+?):\*\*\s*(.*?)\s*$/;
-const STATUS_LINE =
-  /^\*\*Status:\*\*\s*([\w-]+)(?:\s*·\s*(\d+)\s*\/\s*(\d+))?\s*$/;
+const GROUP = /^#{2,3}\s+([a-z0-9-]+(?:#[\p{L}\p{N}-]+)?):\s/u;
+const RETRACE =
+  "if it was renamed, `pnpm tcs:retrace <old> <new>` moves every trace";
 
-/** Check one store suite; `report(severity, line, message)`. */
-export function checkStoreSuite(root, file, report, cache = new Map()) {
+/** Whether a trace target sits inside `scope`: the page, or the section and
+ *  its rules. */
+export const within = (target, scope) =>
+  target === scope ||
+  target.startsWith(`${scope}${scope.includes("#") ? "/" : "#"}`);
+const PROPERTY = /^[*-]\s+\*\*([\w ]+?):\*\*\s*(.*?)\s*$/;
+
+/** Check one store suite; `report(severity, line, message)`. Each live case's
+ *  resolved traces are added to `traced`, `page -> Set(target)`, for
+ *  `checkRuleCoverage`. */
+export function checkStoreSuite(
+  root,
+  file,
+  report,
+  cache = new Map(),
+  traced = new Map(),
+) {
   const rel = relative(root, file);
   const lines = readFileSync(file, "utf8").split("\n");
 
@@ -100,15 +163,19 @@ export function checkStoreSuite(root, file, report, cache = new Map()) {
 
   const cases = [];
   let current = null;
+  let group = null;
   lines.forEach((line, i) => {
     const heading = CASE_HEADING.exec(line);
     if (heading && /-?TC-?\d+/.test(heading[1])) {
-      current = { id: heading[1], line: i + 1, props: new Map() };
+      current = { id: heading[1], line: i + 1, props: new Map(), group };
       cases.push(current);
       return;
     }
     if (/^#{2,4}\s/.test(line)) {
       current = null;
+      // `## <page>#<section>: Title` files the cases below it; any other
+      // heading - a walk, the background, Ungrouped - files none.
+      if (!/^####/.test(line)) group = GROUP.exec(line)?.[1] ?? null;
       return;
     }
     const prop = current && PROPERTY.exec(line);
@@ -127,6 +194,12 @@ export function checkStoreSuite(root, file, report, cache = new Map()) {
           tc.line,
           `case \`${tc.id}\` is missing its **${name}** property`,
         );
+    if (tc.props.has("Status"))
+      report(
+        "warning",
+        tc.props.get("Status").line,
+        `case \`${tc.id}\` carries a **Status:** line — a store case carries no review state; a retired one carries **Retired:** <date> - <why>`,
+      );
     if (tc.props.has("Layer"))
       report(
         "error",
@@ -135,53 +208,101 @@ export function checkStoreSuite(root, file, report, cache = new Map()) {
       );
     const trace = tc.props.get("Trace");
     if (!trace) continue;
-    for (const target of trace.value
+    const targets = trace.value
       .split(",")
       .map((s) => s.trim())
-      .filter(Boolean)) {
-      // `<page>#<anchor>`, or `<page>` alone for the page's opening rules.
-      const section = /^([a-z0-9-]+)(?:#([\p{L}\p{N}-]+))?$/u.exec(target);
+      .filter(Boolean);
+    if (tc.group && !targets.some((target) => within(target, tc.group)))
+      report(
+        "error",
+        trace.line,
+        `case \`${tc.id}\` sits under \`${tc.group}\` but traces ${targets.map((t) => `\`${t}\``).join(", ")} — move it under the heading of what it traces, or trace what it sits under`,
+      );
+    for (const target of targets) {
+      // `<page>#<section>/<rule>`, `<page>#<section>`, or `<page>` alone for
+      // the page's opening rules.
+      const section =
+        /^([a-z0-9-]+)(?:#([\p{L}\p{N}-]+)(?:\/([\p{L}\p{N}-]+))?)?$/u.exec(
+          target,
+        );
       if (!section) {
         report(
           "warning",
           trace.line,
-          `case \`${tc.id}\` traces \`${target}\`, an openspec anchor — a store case traces a PRD section, \`<page>#<heading-anchor>\`, or \`<page>\` for its opening rules`,
+          `case \`${tc.id}\` traces \`${target}\`, an openspec anchor — a store case traces a PRD rule, \`<page>#<section>/<rule>\`, a section, \`<page>#<section>\`, or \`<page>\` for its opening rules`,
         );
         continue;
       }
-      const anchors = pageAnchors(root, section[1], cache);
-      if (anchors === null)
+      const [, page, anchor, rule] = section;
+      const sections = pageSections(root, page, cache);
+      if (sections === null) {
         report(
           "error",
           trace.line,
-          `case \`${tc.id}\` traces \`${target}\`, but ${STORE_PRD}/${section[1]}.md does not exist`,
+          `case \`${tc.id}\` traces \`${target}\`, but ${STORE_PRD}/${page}.md does not exist — ${RETRACE}`,
         );
-      else if (section[2] !== undefined && !anchors.has(section[2]))
+        continue;
+      }
+      if (anchor !== undefined && !sections.has(anchor)) {
         report(
           "error",
           trace.line,
-          `case \`${tc.id}\` traces \`${target}\`, but ${section[1]}.md has no heading with that anchor`,
+          `case \`${tc.id}\` traces \`${target}\`, but ${page}.md has no heading with that anchor — ${RETRACE}`,
         );
+        continue;
+      }
+      if (rule !== undefined && !sections.get(anchor).has(rule)) {
+        report(
+          "error",
+          trace.line,
+          `case \`${tc.id}\` traces \`${target}\`, but ${page}.md's \`${anchor}\` names no rule with that anchor — ${RETRACE}`,
+        );
+        continue;
+      }
+      if (tc.props.has("Retired")) continue;
+      if (
+        anchor !== undefined &&
+        rule === undefined &&
+        [...sections.get(anchor).values()].some(({ open }) => !open)
+      )
+        report(
+          "warning",
+          trace.line,
+          `case \`${tc.id}\` traces the section \`${target}\`, which names rules — trace each rule it walks, the one it proves first`,
+        );
+      if (!traced.has(page)) traced.set(page, new Set());
+      traced
+        .get(page)
+        .add(anchor === undefined ? "" : `${anchor}/${rule ?? ""}`);
     }
   }
 
   const statusIndex = lines.findIndex((l) => /^\*\*Status:\*\*/.test(l));
-  const status = statusIndex >= 0 ? STATUS_LINE.exec(lines[statusIndex]) : null;
-  if (!status) {
-    report("error", 1, "store suite carries no `**Status:**` line");
-    return { rel, cases: cases.length };
-  }
-  const statusOf = (tc) => tc.props.get("Status")?.value;
-  const active = cases.filter((tc) => statusOf(tc) !== "deprecated");
-  const actual = active.filter((tc) => statusOf(tc) === "actual").length;
-  if (
-    status[2] !== undefined &&
-    (Number(status[2]) !== actual || Number(status[3]) !== active.length)
-  )
+  if (statusIndex >= 0)
     report(
-      "error",
+      "warning",
       statusIndex + 1,
-      `status says ${status[2]}/${status[3]}, but its cases are ${actual}/${active.length} actual/(total - deprecated)`,
+      "store suite carries a `**Status:**` line — a store suite carries no review state; run results live in the run sheet",
     );
   return { rel, cases: cases.length };
+}
+
+/** Every named rule a live case does not trace, on a page that any case
+ *  traces by a rule: a page is held to rule coverage once it is traced at
+ *  that depth. A ❓ rule is not yet a rule and is skipped.
+ *  `report(page, line, message)`. */
+export function checkRuleCoverage(root, traced, report, cache = new Map()) {
+  for (const [page, targets] of [...traced].sort()) {
+    if (![...targets].some((t) => /\/./.test(t))) continue;
+    const sections = pageSections(root, page, cache);
+    if (!sections) continue;
+    for (const [anchor, rules] of sections)
+      for (const [rule, { name, open, line }] of rules)
+        if (!open && !targets.has(`${anchor}/${rule}`))
+          report(
+            page,
+            line,
+            `rule **${name}** (\`${page}#${anchor}/${rule}\`) has no case — a live store case traces it`,
+          );
+  }
 }

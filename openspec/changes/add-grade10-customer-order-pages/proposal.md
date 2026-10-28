@@ -107,7 +107,7 @@ response decoding and images that actually load in the application browser.
 - **Order links** - `add-store-guest-checkout` owns private-link access and
   joining guest orders. This extension supplies pictures only after those
   checks; it adds no access or points entitlement.
-- **Order status** - `add-store-order-status` owns the badge mapping.
+- **Order status** - the durable spec `grade10-site/commerce/order-status` owns the badge mapping.
 - **Cart pictures** - `add-store-cart-thumbnails` owns cart enrichment and
   rendering. Its first-current-product-picture rule is reused for orders;
   its persistence and review behavior stay in that change.

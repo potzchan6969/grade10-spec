@@ -4,7 +4,6 @@ title: Store Order Detail Test Cases
 
 # grade10-site/store/order-detail Test Cases
 
-**Status:** pending-review · 0/23
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/order-detail
 
@@ -43,13 +42,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** order-detail#order-link/signed-out, order-detail#order-link/no-account-facts
 
 **Pre-conditions:**
 
@@ -86,13 +84,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/guest, order-detail#back-from-checkout/member
 
 **Pre-conditions:**
 
@@ -122,13 +119,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/order-confirmed, order-detail#back-from-checkout/create-an-account, order-detail#back-from-checkout/joined-at-payment, order-detail#back-from-checkout/signed-out-only
 
 **Pre-conditions:**
 
@@ -161,13 +157,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/added
 
 **Pre-conditions:**
 
@@ -206,13 +201,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/known-facts
 
 **Pre-conditions:**
 
@@ -242,13 +236,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/owner-only-address
 
 **Pre-conditions:**
 
@@ -276,13 +269,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/owner-only-address
 
 **Pre-conditions:**
 
@@ -303,13 +295,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/read-states
 
 **Pre-conditions:**
 
@@ -329,13 +320,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/read-states
 
 **Pre-conditions:**
 
@@ -360,13 +350,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/where-the-parcel-is, order-detail#order/badge-beside-the-steps, order-detail#order/steps-not-reached, order-detail#order/progress-and-tracking, order-detail#order/a-safe-carrier-address
 
 **Pre-conditions:**
 
@@ -389,6 +378,41 @@ Runs once per row of **Test data**.
 
 * The row's badge and steps, UI matching store-order-detail-blocks-orderdetailsdeliverystatus--shipped-delivery for the shipped row.
 
+<!-- trace:case id=g10.store-order-detail.TC-fbs rev=1 -->
+#### g10.store-order-detail.TC21: A refund shows its amount beside what was paid
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** order-detail#order/a-full-refund
+
+**Pre-conditions:**
+
+* customer(signed-in member) owns `<order>`: `<product A>` HKD780 and `<product B>` HKD105, paid HKD885; admin refunded the row's lines in the shop's admin.
+
+**Test data:**
+
+| Refunded | Summary |
+| --- | --- |
+| `<product B>`, HKD105 | Total HKD885; a Refund row of −HKD105, UI matching store-order-detail-screens-order-details--partial-refund |
+| ❓ both lines, HKD885 - design confirms | Total HKD885; a Refund row of −HKD885 |
+
+**Steps:**
+
+1. Open `/profile/orders/<order id>` and read the summary and the badge.
+
+**Expected Results:**
+
+* The row's summary, and the badge Refunded.
+
 ---
 
 ### order-detail#product-pictures: Product Pictures
@@ -401,13 +425,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#product-pictures
+* **Trace:** order-detail#product-pictures/recognise-an-item
 
 **Pre-conditions:**
 
@@ -442,13 +465,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** order-detail#order-link/owner-signed-in, order-detail#order-link/someone-else-signed-in
 
 **Pre-conditions:**
 
@@ -478,13 +500,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** order-detail#order-link/wrong-link
 
 **Pre-conditions:**
 
@@ -514,13 +535,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** checkout#guest-checkout/order-link, order-detail#order-link/signed-out
 
 **Pre-conditions:**
 
@@ -554,13 +574,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/signed-out-only
 
 **Pre-conditions:**
 
@@ -581,13 +600,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/another-email
 
 **Pre-conditions:**
 
@@ -612,13 +630,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/nothing-remembered, order-detail#back-from-checkout/one-day, order-detail#back-from-checkout/another-device
 
 **Pre-conditions:**
 
@@ -652,13 +669,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/amount-marks
 
 **Pre-conditions:**
 
@@ -681,13 +697,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/points, order-detail#order-summary/points-to-earn
 
 **Pre-conditions:**
 
@@ -716,13 +731,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/no-points-row, order-detail#order-summary/no-points-section
 
 **Pre-conditions:**
 
@@ -745,42 +759,6 @@ Runs once per row of **Test data**.
 
 * The row's absence.
 
-<!-- trace:case id=g10.store-order-detail.TC-fbs rev=1 -->
-#### g10.store-order-detail.TC21: A refund shows its amount beside what was paid
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** order-detail#order-summary
-
-**Pre-conditions:**
-
-* customer(signed-in member) owns `<order>`: `<product A>` HKD780 and `<product B>` HKD105, paid HKD885; admin refunded the row's lines in the shop's admin.
-
-**Test data:**
-
-| Refunded | Summary |
-| --- | --- |
-| `<product B>`, HKD105 | Total HKD885; a Refund row of −HKD105, UI matching store-order-detail-screens-order-details--partial-refund |
-| ❓ both lines, HKD885 - design confirms | Total HKD885; a Refund row of −HKD885 |
-
-**Steps:**
-
-1. Open `/profile/orders/<order id>` and read the summary and the badge.
-
-**Expected Results:**
-
-* The row's summary, and the badge Refunded.
-
 <!-- trace:case id=g10.store-order-detail.TC-wxh rev=2 -->
 #### g10.store-order-detail.TC22: Refunded goods take back the points they earned
 
@@ -788,13 +766,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/points-to-earn
 
 **Pre-conditions:**
 
@@ -815,13 +792,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/points-to-earn
 
 **Pre-conditions:**
 

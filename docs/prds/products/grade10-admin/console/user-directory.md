@@ -2,7 +2,6 @@
 title: Users (access desk)
 spec: grade10-admin/console/user-directory
 order: 3
-reviewed: 2026-09-29
 ---
 
 The Grade10 Users page is the **access desk** — who holds what, standing,

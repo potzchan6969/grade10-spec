@@ -1,0 +1,66 @@
+{
+  "version": 2,
+  "change": "add-tiers-benefits-surface",
+  "baseline": "96074f586ef36533265eb016973afd2d37be6a3809cc05f979f10fe205a5b342",
+  "fingerprint": "9b3d8b0d60aa310b5a3e0dc09baf5c3e24a29c6bda391764cd6debf38d12b8db",
+  "reviewedBy": "seankcw",
+  "acceptedAt": "2026-10-27T06:31:13.925Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/add-tiers-benefits-surface/decisions.md",
+      "sha256": "729002fa6e0db8c2fddf4d6b8af7ae60ba98326b3f62a94e67d6d8d96f5570cf",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-tiers-benefits-surface/proposal.md",
+      "sha256": "bb577d9e488e55c88982ba9d33f5989f369b2ca9bb32184e1706db39949693e9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-tiers-benefits-surface/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "sha256": "4f340bb6d7dbc5e8506727a0f89c9742f5c7956314ee9c91a82abc417a776a56",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-tiers-benefits-surface/specs/grade10-site/loyalty/programme/spec.md",
+      "sha256": "498ae267944a2e1598be5d72e380da863817287baf5da371288553e3577e0295",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-tiers-benefits-surface/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "sha256": "48a608a2e6009b1fe4f0d69aea6cef4cb8975a602d6ffd0a4750a546fff1b412",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "sha256": "892018b4ce3112daa8148e6be46db0c34563fbad59c9b0de7acfe480b9b795cc",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+      "sha256": "3defc4d2d8c61303c96211b9c6e39c984db98b88948fe92aff58eb0754077b0d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "sha256": "11b89cd078b28da7306f0a5c25ba349fff297b64ef2271d873ef2d53c55db1f5",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+      "anchors": [
+        "Requirement: The membership surface exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

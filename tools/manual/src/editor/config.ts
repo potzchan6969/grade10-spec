@@ -1,12 +1,13 @@
 export const STORAGE = {
-  /** Dev only: the handle a proposal's author line carries. */
-  handle: "manual.propose.handle",
   /** Set once the first-visit card has been answered — it never returns. */
   welcome: "manual.welcome",
   /** ISO date of the newest history event this reader has seen. */
   recentSeen: "manual.recent.seen",
   /** Which rail branches and sections this reader holds open or shut. */
   nav: "manual.nav",
+  /** The rail's width, whether it is folded away, and the side panel's
+   * width and tab. */
+  layout: "manual.layout",
 } as const;
 
 export type KeyStore = {

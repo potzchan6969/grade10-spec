@@ -19,7 +19,7 @@ invisible to the store tools.
 The PM starts with one brief:
 
 ```text
-/workflow-plan cross-sell on a card's page: complementary products picked per
+/planning-pm cross-sell on a card's page: complementary products picked per
 card in Shopify first, then similar cards by tags and shared facets, up to six.
 Customers-also-bought from orders is phase two.
 ```
@@ -73,7 +73,7 @@ output, including QA1 and QA2.
 The application repository has no planning store of its own; it reads tasks and
 accepted contracts from this store. The first claim records the durable baseline
 and target scope. Claim and complete task groups there with
-`/workflow-build add-store-cross-sell <group>`, keeping checks and implementation
+`pnpm plan claim` and `/implement add-store-cross-sell`, keeping checks and implementation
 commits linked to the historical accepted fingerprint and that baseline.
 
 After engineering verification, record implementation provenance in the app

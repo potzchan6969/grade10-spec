@@ -11,7 +11,7 @@ the evidence and fixes only what a test exposes.
 - [x] 1.6 On the Cart Drawer page, once 1.1 has created the stories: replace the `store-cart-blocks-cartdrawer--fetching-on-open` embed with `store-cart-blocks-cartdrawer--loading-with-lines`, and embed `store-cart-blocks-cartdrawer--loading-no-lines` beside the Not read yet line; `pnpm check:manual --pages` passes
 - [x] 1.7 Verify: `pnpm run test:stories:ui`, `pnpm --filter @grade10/ui exec vitest run --project audit`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run validate:changes cart-drawer-empty-state`, `pnpm openspec validate cart-drawer-empty-state --strict`, `pnpm run tcs:validate openspec/changes/cart-drawer-empty-state/specs/shared/ui/store-cart/feature-tcs.md` and `pnpm check:manual`
 
-## 2. Grade10 cart tests and the unread-cart fix (grade10)
+## 2. Grade10 cart tests and the unread-cart fix (grade10) (owner: @kinisworking)
 
 The pinned store commit already carries the block, so no submodule bump. The
 host's one change is its `loading`, which a failed review ends over a basket it
@@ -21,7 +21,7 @@ never read (`apps/frontend/grade10/src/chrome/CartDrawerHost.tsx:593`,
 
 - [x] 2.1 In `apps/frontend/grade10/src/chrome/CartDrawer.test.tsx`, in their own commit before the fix: re-cite the tests at `:920`, `:938` and `:955` from the retired five-row scenarios to the ones that replace them, drop every query for `Add more items to cart` (also in the test at `:622`), add two tests for a first open of a basket never read, each expecting the drawer still loading with no empty state and no footer: one that fails both `getCart` and `reviewCart`, which fails before 2.2, and one whose `getCart` never answers; add a third, a first open whose `getCart` answers no lines and whose `reviewCart` fails, expecting the empty state and no footer; and have the test at `:748`, whose first basket read fails, expect no empty state too. Ticked last (`shared-ui-store-cart-SC-08`, `shared-ui-store-cart-SC-23`, `shared-ui-store-cart-SC-24`, `shared-ui-store-cart-SC-25`, `shared-ui-store-cart-SC-48`, `shared-ui-store-cart-SC-51`)
 - [x] 2.2 Make the host hold `loading` until the basket is read: `loading = !basket.hasData || (!reviewUnchecked && (isOpening || !review.hasData))` in `CartDrawerHost.tsx`, so a failed review over a read basket still shows its lines unchecked, or the empty state when it has none; the host passes catalog `emptyTitle` and `emptyDescription` and the reviewed lines only (`shared-ui-store-cart-SC-23`, `shared-ui-store-cart-SC-24`, `shared-ui-store-cart-SC-25`, `shared-ui-store-cart-SC-48`, `shared-ui-store-cart-SC-51`)
-- [ ] 2.3 Verify: the focused `CartDrawer.test.tsx` run, `pnpm run typecheck` and `pnpm run lint`; do not run `pnpm run test:backend`, since the group adds no backend files — blocked: the focused CartDrawer.test.tsx run (90 tests) and biome pass; the Grade10 frontend tsc was killed by the shared machine's memory limit, so its typecheck is left to the coordinator's integrated sweep
+- [x] 2.3 Verify: the focused `CartDrawer.test.tsx` run, `pnpm run typecheck` and `pnpm run lint`; do not run `pnpm run test:backend`, since the group adds no backend files — blocked: the focused CartDrawer.test.tsx run (90 tests) and biome pass; the Grade10 frontend tsc was killed by the shared machine's memory limit, so its typecheck is left to the coordinator's integrated sweep
 
 ## 3. The walk (grade10) (owner: @kinisworking)
 

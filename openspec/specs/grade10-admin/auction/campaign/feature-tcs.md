@@ -38,7 +38,7 @@ Shared test data:
 **I want** the catalogue cover called Campaign everywhere in the admin,
 **so that** I never mistake a cover for store checkout or sold stock.
 
-<!-- trace:case id=g10adm.auction-campaign.TC-1bi rev=1 covers=g10adm.auction-campaign.SC-0ir,g10adm.auction-campaign.SC-qeg -->
+<!-- trace:case id=g10adm.auction-campaign.TC-1bi rev=2 covers=g10adm.auction-campaign.SC-0ir,g10adm.auction-campaign.SC-qeg -->
 ### g10adm.auction-campaign.US1-TC1: The section and the editor call the cover a campaign
 
 **Classification:**
@@ -59,7 +59,7 @@ Shared test data:
 
 **Steps:**
 
-1. Read the section's tab and heading, then open the draft and read the editor's heading and the listing form's Campaign field.
+1. Read the section's tab and heading, then open the draft and read the editor's heading.
 
 **Expected Results:**
 
@@ -222,7 +222,7 @@ Runs once per row of **Test data**.
 **I want** to change a campaign's title and copy while it is open,
 **so that** the public cover stays right without recreating the event.
 
-<!-- trace:case id=g10adm.auction-campaign.TC-4lv rev=1 covers=g10adm.auction-campaign.SC-1xm,g10adm.auction-campaign.SC-h9c -->
+<!-- trace:case id=g10adm.auction-campaign.TC-4lv rev=2 covers=g10adm.auction-campaign.SC-1xm,g10adm.auction-campaign.SC-h9c -->
 ### g10adm.auction-campaign.US4-TC1: A published campaign's copy can change
 
 **Classification:**
@@ -244,11 +244,11 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Change the copy to "Graded slabs from the September intake" and save.
-2. Reload, and open `<g10url>/auction`.
+2. Reload.
 
 **Expected Results:**
 
-* Step 2 reads the new copy, the title and status unchanged, and the cover shows it.
+* Step 2 reads the new copy, the title and status unchanged.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-esv rev=1 covers=g10adm.auction-campaign.SC-1xm,g10adm.auction-campaign.SC-h9c -->
 ### g10adm.auction-campaign.US4-TC2: Clearing a campaign's title is refused

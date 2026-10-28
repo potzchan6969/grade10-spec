@@ -16,7 +16,7 @@ the same answer from the same facts.
 - Secondary note
   - Confirmed combinations only: Emit a note identifier for a clarified edge case, never display copy.
 - Status meaning
-  - Conclusion, not delivery: Completed reports an order fulfilled and paid in full, not carrier confirmation.
+  - Delivered, then Completed: Completed waits until every parcel a carrier holds is delivered or picked up.
   - Pickup withheld: Do not emit a pickup badge while the data model cannot support it.
 - Surface consistency
   - One mapping: Every surface showing order status derives it here.
@@ -28,13 +28,14 @@ the same answer from the same facts.
 ### Requirement: Order status reads a named vocabulary of Shopify facts
 
 Four Shopify facts about an order decide its status: three decide the badge,
-and return state only the note. A value outside a fact's set reads as its
-default.
+and return state only the note. Completed also waits for the order's parcels
+to arrive. A value outside a fact's set reads as its default.
 
 **Named vocabulary** - Order status SHALL be derived from exactly these four
-facts about an order, read from these Shopify sources, and from no other
-input. The badge SHALL read only order state, payment state and fulfilment
-state; return state SHALL feed the note alone.
+facts about an order, read from these Shopify sources, and from whether its
+parcels arrived, and from no other input. The badge SHALL read only order
+state, payment state and fulfilment state, and whether the parcels arrived
+for Completed alone; return state SHALL feed the note alone.
 
 | Fact | Shopify source | Accepted values | Default | Feeds |
 | --- | --- | --- | --- | --- |
@@ -51,8 +52,8 @@ regard to letter case. No value of any fact SHALL prevent a badge from
 resolving.
 
 **Not read** - The mapping SHALL NOT read whether Shopify archived the order
-(`closedAt`), carrier tracking, delivery estimates, line-item quantities,
-monetary amounts, or elapsed time.
+(`closedAt`), delivery estimates, line-item quantities, monetary amounts, or
+elapsed time, and SHALL read a parcel's tracking only for whether it arrived.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-qux rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-01 - An unrecognised Shopify value is indeterminate
@@ -82,8 +83,8 @@ monetary amounts, or elapsed time.
 - **THEN** the badge is `completed`
 - **AND** it is the badge the same order resolves to with `paid` and `fulfilled`
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-unk rev=1 -->
-#### Scenario: grade10-site-commerce-order-status-SC-17 - A carrier status does not move the badge
+<!-- trace:scenario id=g10.commerce-order-status.SC-unk rev=2 -->
+#### Scenario: grade10-site-commerce-order-status-SC-17 - A delivered parcel does not complete an unfulfilled order
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
 - **GIVEN** an order whose order state is `open`, payment state is `paid`, and fulfilment state is `unfulfilled`
@@ -121,8 +122,8 @@ evaluating these rules in order and taking the first that matches:
 | --- | --- | --- |
 | 1 | Order state is `canceled` | `canceled` |
 | 2 | Payment state is `voided` | `canceled` |
-| 3 | Payment state is `refunded` or `partially_refunded`, **and** fulfilment state is neither `on_hold` nor `scheduled` | `refunded` |
-| 4 | Fulfilment state is `fulfilled` **and** payment state is `paid` | `completed` |
+| 3 | Payment state is `refunded`, **and** fulfilment state is neither `on_hold` nor `scheduled` | `refunded` |
+| 4 | Fulfilment state is `fulfilled` **and** payment state is `paid` or `partially_refunded` **and** every parcel arrived | `completed` |
 | 5 | Fulfilment state is `fulfilled` or `partially_fulfilled` | `shipped` |
 | 6 | Otherwise | `processing` |
 
@@ -130,10 +131,14 @@ evaluating these rules in order and taking the first that matches:
 to a badge. The mapping SHALL NOT return an empty, absent, or error status for
 any combination.
 
-**Refund first** - Rule 3 SHALL outrank rules 4 and 5, so that money returning
-to a collector is reported ahead of fulfilment progress. Rule 3's exclusion of
-`on_hold` and `scheduled` SHALL keep an order that is still in progress
-reported as `processing`, even when part of it has been refunded.
+**A full refund first** - Rule 3 SHALL outrank rules 4 and 5, so that money
+returned in full is reported ahead of fulfilment progress. Rule 3's exclusion
+of `on_hold` and `scheduled` SHALL keep an order that is still in progress
+reported as `processing`, even when it has been refunded in full.
+
+**A partial refund keeps the progress** - A partial refund SHALL NOT move the
+badge: an order whose payment state is `partially_refunded` SHALL resolve to
+the badge it would resolve to paid in full, `completed` included.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-ln4 rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-02 - A canceled order reports Canceled
@@ -153,14 +158,15 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `canceled`
 - **AND** the badge is not `processing`
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-o4y rev=1 -->
-#### Scenario: grade10-site-commerce-order-status-SC-04 - A refund outranks fulfilment progress
+<!-- trace:scenario id=g10.commerce-order-status.SC-o4y rev=2 -->
+#### Scenario: grade10-site-commerce-order-status-SC-04 - A partial refund leaves the badge to fulfilment progress
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
-- **GIVEN** an order whose payment state is `partially_refunded` and whose fulfilment state is `fulfilled`
+- **GIVEN** an order whose order state is `open`, payment state is `partially_refunded`, and fulfilment state is `fulfilled`
+- **AND** every parcel arrived
 - **WHEN** its order status is resolved
-- **THEN** the badge is `refunded`
-- **AND** the badge is neither `shipped` nor `completed`
+- **THEN** the badge is `completed`
+- **AND** the badge is not `refunded`
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-0st rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-05 - A held order carrying a partial refund stays Processing
@@ -171,11 +177,12 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `processing`
 - **AND** the badge is not `refunded`
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-r3l rev=2 -->
+<!-- trace:scenario id=g10.commerce-order-status.SC-r3l rev=3 -->
 #### Scenario: grade10-site-commerce-order-status-SC-06 - A fulfilled order paid in full reports Completed
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `fulfilled`, and payment state is `paid`
+- **AND** every parcel arrived
 - **WHEN** its order status is resolved
 - **THEN** the badge is `completed`
 - **AND** the badge is not `shipped`
@@ -230,11 +237,11 @@ rules in order, after the badge is known, and taking the first that matches:
 | 1 | Badge `canceled`, order state not `canceled`, payment `voided` | `payment-voided` |
 | 2 | Badge `canceled`, payment `partially_paid` or `paid` | `awaiting-refund` |
 | 3 | Badge `canceled`, fulfilment `partially_fulfilled` | `canceled-some-items-shipped` |
-| 4 | Badge `refunded`, return state `returned`, payment `partially_refunded` | `items-returned-partial-refund` |
+| 4 | Badge `completed`, `shipped` or `processing`, return state `returned`, payment `partially_refunded`, fulfilment neither `on_hold` nor `scheduled` | `items-returned-partial-refund` |
 | 5 | Badge `refunded`, return state `returned` | `items-returned` |
-| 6 | Badge `refunded`, payment `partially_refunded`, fulfilment `fulfilled` | `partial-refund-shipped` |
-| 7 | Badge `refunded`, payment `partially_refunded`, fulfilment `partially_fulfilled` | `partial-refund-partly-shipped` |
-| 8 | Badge `refunded`, payment `partially_refunded` | `partial-refund-unshipped` |
+| 6 | Badge `completed` or `shipped`, payment `partially_refunded`, fulfilment `fulfilled` | `partial-refund-shipped` |
+| 7 | Badge `shipped`, payment `partially_refunded`, fulfilment `partially_fulfilled` | `partial-refund-partly-shipped` |
+| 8 | Badge `processing`, payment `partially_refunded`, fulfilment neither `on_hold` nor `scheduled` | `partial-refund-unshipped` |
 | 9 | Badge `refunded`, payment `refunded`, fulfilment `fulfilled` | `refunded-all-items-shipped` |
 | 10 | Badge `shipped`, fulfilment `partially_fulfilled` | `some-items-shipped` |
 | 11 | Badge `processing`, fulfilment `on_hold`, payment `partially_refunded` | `on-hold-partial-refund` |
@@ -257,13 +264,13 @@ display text. A surface that displays a note SHALL take its words from the
 message catalogs, keyed by that identifier, so that a note is not pinned to
 one language or one brand.
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-t5o rev=1 -->
+<!-- trace:scenario id=g10.commerce-order-status.SC-t5o rev=2 -->
 #### Scenario: grade10-site-commerce-order-status-SC-09 - A confirmed combination carries its note
 **Serves:** Secondary note - a partial refund before shipping names its note for the surface that shows one
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `unfulfilled`, and payment state is `partially_refunded`
 - **WHEN** its order status is resolved
-- **THEN** the badge is `refunded`
+- **THEN** the badge is `processing`
 - **AND** the note identifier is `partial-refund-unshipped`
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-x4g rev=1 -->
@@ -284,13 +291,14 @@ one language or one brand.
 - **THEN** the result carries a note identifier from the table above
 - **AND** it carries no human-readable status or note text
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-zkk rev=1 -->
+<!-- trace:scenario id=g10.commerce-order-status.SC-zkk rev=2 -->
 #### Scenario: grade10-site-commerce-order-status-SC-24 - A return chooses the refund's note
 **Serves:** Secondary note - a return names which refund note that surface shows
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `fulfilled`, payment state is `partially_refunded`, and return state is `returned`
+- **AND** every parcel arrived
 - **WHEN** its order status is resolved
-- **THEN** the badge is `refunded`
+- **THEN** the badge is `completed`
 - **AND** the note identifier is `items-returned-partial-refund`
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-7ce rev=1 -->
@@ -329,32 +337,55 @@ one language or one brand.
 - **THEN** the badge is `processing`
 - **AND** the note identifier is `payment-expired`
 
-### Requirement: Completed reports a concluded order, not a delivery
+### Requirement: Completed waits for the parcels to arrive
 
-Completed says the order is concluded; no badge says a parcel arrived.
+Completed says everything reached the collector; Shipped covers the time in
+between.
 
-**Conclusion, not delivery** - The `completed` badge SHALL mean that every
-item of an order is fulfilled and the order is paid in full. It SHALL NOT be
-presented as, or derived from, carrier-confirmed delivery or Shopify archiving
-the order, and resolving it SHALL NOT require a delivery or archive fact.
+**Delivered, then Completed** - Rule 4's parcels SHALL be the order's
+fulfilments still standing: a fulfilment whose status is `cancelled`,
+`error` or `failure`, and a parcel whose display status is `canceled` or
+`label_voided`, SHALL count for nothing. A parcel SHALL have arrived when its
+display status is `delivered` or `picked_up`, or when it names no tracking
+number and no tracking link, since no carrier held it. A fulfilled order with
+no parcel recorded SHALL count as arrived.
 
-**No delivery claim** - No badge SHALL assert that a shipment reached the
-collector.
+**Staff confirm delivery** - A fulfilled web order SHALL also count as
+arrived once staff mark it delivered in the store admin, for a parcel whose
+carrier never reports delivery. The mark SHALL be offered only on a
+fulfilled web order that has not arrived, SHALL be set once, SHALL record
+who marked it and when, and no read from Shopify SHALL clear it. It SHALL
+NOT change when points are earned.
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-hv0 rev=1 -->
-#### Scenario: grade10-site-commerce-order-status-SC-12 - Completed does not assert delivery
+**One delivered rule** - Every surface that says whether an order was
+delivered - the delivery steps, the badge, and the operator's order list -
+SHALL read this one rule.
+
+<!-- trace:scenario id=g10.commerce-order-status.SC-hv0 rev=2 -->
+#### Scenario: grade10-site-commerce-order-status-SC-12 - A parcel still travelling holds Completed back
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
-- **GIVEN** an order that resolves to the `completed` badge
-- **WHEN** the order has no carrier delivery confirmation
-- **THEN** the badge still resolves to `completed`
-- **AND** no surface derives a delivered state from that badge
+- **GIVEN** an order whose fulfilment state is `fulfilled` and payment state is `paid`
+- **AND** a parcel a carrier tracks has not been delivered or picked up
+- **WHEN** its order status is resolved
+- **THEN** the badge is `shipped`
+- **AND** it becomes `completed` once every tracked parcel is delivered or picked up
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-5s3 rev=1 -->
+<!-- trace:scenario id=g10.commerce-order-status.SC-3xr rev=1 -->
+#### Scenario: grade10-site-commerce-order-status-SC-32 - Staff confirm a parcel its carrier never reported
+**Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
+
+- **GIVEN** a web order whose fulfilment state is `fulfilled` and payment state is `paid`
+- **AND** a parcel a carrier tracks has never been reported delivered or picked up
+- **WHEN** staff mark the order delivered in the store admin
+- **THEN** the badge is `completed`
+- **AND** a later read from Shopify that still shows the parcel in transit leaves it `completed`
+
+<!-- trace:scenario id=g10.commerce-order-status.SC-5s3 rev=2 -->
 #### Scenario: grade10-site-commerce-order-status-SC-31 - Archiving an order does not move the badge
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
-- **GIVEN** an order whose order state is `open`, fulfilment state is `fulfilled`, and payment state is `paid`
+- **GIVEN** an order whose order state is `open`, fulfilment state is `fulfilled`, and payment state is `paid`, and every parcel arrived
 - **AND** Shopify has archived the order
 - **WHEN** its order status is resolved
 - **THEN** the badge is `completed`
@@ -403,12 +434,12 @@ refunded or canceled SHALL reach that copy within 5 minutes. Any other change
 to an order not canceled and placed in the last 90 days - its fulfilment or
 return, or a payment voided or expired - SHALL reach it within an hour.
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-nwz rev=1 -->
+<!-- trace:scenario id=g10.commerce-order-status.SC-nwz rev=2 -->
 #### Scenario: grade10-site-commerce-order-status-SC-14 - Two surfaces report one order identically
 **Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
 
 - **GIVEN** one order read by two surfaces that both show its status
-- **WHEN** both resolve its order status from the same four facts
+- **WHEN** both resolve its order status from the same stored facts
 - **THEN** both display the same badge
 - **AND** a surface that displays the note displays the identifier this mapping emitted
 

@@ -24,6 +24,7 @@ export default defineConfig({
   test: {
     name: "walk",
     include: ["walk/**/*.walk.ts"],
+    passWithNoTests: true,
     browser: {
       enabled: true,
       headless: true,

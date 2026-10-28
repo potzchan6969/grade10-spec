@@ -1,9 +1,0 @@
-schema: grade10-planning
-created: 2026-09-01
-ui_waived: "nothing is drawn - the change moves no screen"
-hands:
-  pm: tester
-  design: tester
-reviewed:
-  decisions: "33640e83"
-  user-journeys: 61c3d0ae

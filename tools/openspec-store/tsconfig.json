@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "skipLibCheck": true,
+    // The scripts under `scripts/openspec/lib/` are read by both halves: they
+    // import these readers, and these import the one handle spelling there.
+    // Allowed, not checked - the scripts' own suite holds them.
+    "allowJs": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", "test"]
+}

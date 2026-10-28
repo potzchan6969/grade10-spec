@@ -11,6 +11,11 @@ A bug is code that does not do what is already settled. What its fix moves decid
 | Picks between outcomes a reader would notice, where nothing settled says which, or where two settled sources disagree | Change, with the page's ❓ line first |
 | Moves a requirement, a scenario, a public export or a page line | Change |
 | Keeps the code and corrects a spec that says otherwise | Change, whose delta is the correction |
+| Is already known as the exact edit - a pixel value, a class, a token or a variant, read off the frame or given by the designer | No change: a bug fix where it restores the frame; otherwise a commit under [Design Override](../prds/products/shared/design-sync/design-override.md) |
+
+A change exists to settle what is not yet decided. When the request already
+is the code or CSS edit, nothing is left to settle, so no proposal, design
+or delta is written for it.
 
 | Report | Lane | Why |
 | --- | --- | --- |
@@ -18,6 +23,7 @@ A bug is code that does not do what is already settled. What its fix moves decid
 | A price shows `$1,000.0` where the spec shows two decimals | Bug fix | The spec already says it |
 | An empty cart opens a blank drawer, and nothing says what it shows | Change | Somebody decides what the empty state says |
 | The spec lists five roles and the code enforces six | Change | The delta corrects the spec |
+| Panels need 20px padding, an 8px radius and a `#D5D3D2` field border, as the frame draws | Bug fix | The exact edit is known; nothing is left to decide |
 
 ## Rounds
 
@@ -68,12 +74,11 @@ Commit: fix(<domain>): <outcome>
 | `fixed` | A draft pull request, `fix(<domain>): <outcome>`, labelled `bug`, that closes the report. A person reviews and merges it |
 | `change` | The report goes to planning, per Turning Into a Change |
 | `moved` | The report is filed in the repository the diagnosis names |
-| `asks`, `unsettled` | A person answers the question or the standing findings, then labels the report again |
+| `asks`, `unsettled` | A person answers the question or the standing findings, then runs the rounds again |
 | `no-red`, `no-green`, `unverified`, `unreadable`, `agent-failed` | A person reads the posted rounds; the run left nothing on `main` |
 
 ## Running It
 
-- **From a report** - the `agent-fix` label, added by whoever confirms it reads as a bug, runs `scripts/bug-fix/run.mjs` in the repository's `Bug fix` workflow and posts each round
 - **In a session** - `/fix-bug` runs the same rounds and the same gates, dispatching each reader itself
 - **By hand** - `node scripts/bug-fix/run.mjs --report <file> --agent scripts/bug-fix/claude-agent.sh --out <dir>`, or `cursor-agent.sh`: the agent is any command called as `<cmd> <read|write> <prompt-file>`
 
@@ -85,4 +90,4 @@ Commit: fix(<domain>): <outcome>
 
 ## Turning Into a Change
 
-Stop coding at the first sign the fix would move something settled. Write the open question as a ❓ line on the capability's page, start the change with `/workflow-plan`, and link the change from the report.
+Stop coding at the first sign the fix would move something settled. Write the open question as a ❓ line on the capability's page, start the change with `/planning-pm`, and link the change from the report.

@@ -4,7 +4,6 @@ title: Store Cart Test Cases
 
 # grade10-site/store/cart Test Cases
 
-**Status:** pending-review · 0/54
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/cart-drawer, grade10-site/store/checkout, grade10-site/store/discounts
 
@@ -55,13 +54,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/unresolved, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -98,13 +96,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/typed
 
 **Pre-conditions:**
 
@@ -134,13 +131,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/picked, cart#promo-code/public-codes
 
 **Pre-conditions:**
 
@@ -171,13 +167,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/running-out-reads-louder
 
 **Pre-conditions:**
 
@@ -207,13 +202,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/running-out-reads-louder, cart#promo-code/picked
 
 **Pre-conditions:**
 
@@ -242,13 +236,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/running-out-reads-louder
 
 **Pre-conditions:**
 
@@ -282,13 +275,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#points/applied, cart#points/offered
 
 **Pre-conditions:**
 
@@ -321,13 +313,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#reviewing-the-cart/the-choice-follows-the-cart, cart#points/applied
 
 **Pre-conditions:**
 
@@ -353,13 +344,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#checkout/created-from-the-drawer, cart#checkout/sent
 
 **Pre-conditions:**
 
@@ -390,13 +380,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#pending-operations/wait-before-another-action, cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
 
@@ -433,13 +422,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/edits
 
 **Pre-conditions:**
 
@@ -473,13 +461,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/product-pictures
 
 **Pre-conditions:**
 
@@ -508,13 +495,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/discounts-on-a-line-and-below-it
 
 **Pre-conditions:**
 
@@ -536,13 +522,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#rules/shops-answer, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -572,13 +557,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/when-the-session-ends
 
 **Pre-conditions:**
 
@@ -607,13 +591,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/when-the-session-ends
 
 **Pre-conditions:**
 
@@ -634,13 +617,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/whose-cart
 
 **Pre-conditions:**
 
@@ -661,13 +643,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/whose-cart
 
 **Pre-conditions:**
 
@@ -691,13 +672,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -721,19 +701,18 @@ Runs once per row of **Test data**.
 * The row's line, and a total that follows its quantity times its price.
 
 <!-- trace:case id=g10.store-product-listing.TC-4ba rev=1 -->
-#### g10.store-cart.TC12: A sold-out line holds checkout until it is removed
+#### g10.store-cart.TC12: A sold-out line is skipped at checkout while another line sells
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/lines-whose-product-left-the-shop
 
 **Pre-conditions:**
 
@@ -746,7 +725,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: `<sold-out product>` marked Sold out, keeping its picture, and Proceed to Checkout unavailable; the count beside the title reads 1 and the Subtotal leaves it out.
+* Step 1: `<sold-out product>` marked Sold out, keeping its picture, and the Subtotal leaves it out; Proceed to Checkout is available, since `<product A>` still sells, and the count beside the title reads 1.
 * Step 2: Proceed to Checkout available.
 
 <!-- trace:case id=g10.store-product-listing.TC-2fl rev=1 -->
@@ -758,13 +737,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/lines-whose-product-left-the-shop
 
 **Pre-conditions:**
 
@@ -796,13 +774,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
 
@@ -834,13 +811,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
 
@@ -869,13 +845,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/lines-whose-product-left-the-shop
 
 **Pre-conditions:**
 
@@ -895,13 +870,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/current-read, cart#reviewing-the-cart/edits
 
 **Pre-conditions:**
 
@@ -925,13 +899,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/current-read, cart#reviewing-the-cart/edits
 
 **Pre-conditions:**
 
@@ -962,13 +935,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#struck-price-on-a-cart-line
+* **Trace:** discounts#struck-price-on-a-cart-line/cut-by-the-shop, discounts#struck-price-on-a-cart-line/on-sale, discounts#cart-footer/order-discount
 
 **Pre-conditions:**
 
@@ -999,13 +971,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#struck-price-on-a-cart-line
+* **Trace:** discounts#struck-price-on-a-cart-line/cut-by-the-shop, discounts#order-of-application/larger-wins, discounts#cart-footer/code
 
 **Pre-conditions:**
 
@@ -1041,13 +1012,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#cart-footer
+* **Trace:** discounts#cart-footer/order-discount, discounts#cart-footer/code, discounts#cart-footer/points, discounts#cart-footer/estimated-total, discounts#order-of-application/minimum
 
 **Pre-conditions:**
 
@@ -1075,13 +1045,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#cart-footer
+* **Trace:** discounts#cart-footer/order-discount, discounts#cart-footer/estimated-total, discounts#order-of-application/minimum
 
 **Pre-conditions:**
 
@@ -1107,13 +1076,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/typed, cart#promo-code/refusals-in-the-readers-language, cart#promo-code/public-codes
 
 **Pre-conditions:**
 
@@ -1143,13 +1111,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** discounts#one-discount-at-a-time/in-the-count, cart#promo-code/typed
 
 **Pre-conditions:**
 
@@ -1170,13 +1137,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/refused-by-the-shop, cart#promo-code/picked
 
 **Pre-conditions:**
 
@@ -1199,13 +1165,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/removed
 
 **Pre-conditions:**
 
@@ -1235,13 +1200,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/wallet-not-answered
 
 **Pre-conditions:**
 
@@ -1264,13 +1228,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/gift
 
 **Pre-conditions:**
 
@@ -1299,13 +1262,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#one-discount-at-a-time
+* **Trace:** discounts#order-of-application/larger-wins, discounts#one-discount-at-a-time/set-aside, cart#promo-code/set-aside-for-a-site-discount
 
 **Pre-conditions:**
 
@@ -1341,13 +1303,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#order-of-application
+* **Trace:** discounts#order-of-application/minimum, discounts#order-of-application/larger-wins
 
 **Pre-conditions:**
 
@@ -1376,13 +1337,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#order-of-application
+* **Trace:** cart#promo-code/the-shops-figure, discounts#order-of-application
 
 **Pre-conditions:**
 
@@ -1410,13 +1370,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#points/not-offered
 
 **Pre-conditions:**
 
@@ -1445,13 +1404,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#points/nothing-left
 
 **Pre-conditions:**
 
@@ -1478,13 +1436,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/another-pay, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1514,13 +1471,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/changed-purchase, checkout#integration-readiness/after-a-refusal, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1553,13 +1509,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#rules/carried-to-checkout, checkout#integration-readiness/later-cart, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1589,13 +1544,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/later-cart, cart#rules/carried-to-checkout, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1624,13 +1578,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/recovery, checkout#integration-readiness/lost-answer, checkout#integration-readiness/another-pay, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1656,13 +1609,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#checkout/no-identity-check
 
 **Pre-conditions:**
 
@@ -1695,13 +1647,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** checkout#guest-checkout/gateway, checkout#guest-checkout/a-public-code
 
 **Pre-conditions:**
 
@@ -1725,13 +1676,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** cart#checkout/guest, checkout#guest-checkout/gateway, cart#reviewing-the-cart/whose-cart
 
 **Pre-conditions:**
 
@@ -1764,13 +1714,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#pending-operations
+* **Trace:** cart#pending-operations/wait-before-another-action, checkout#integration-readiness/closing-during-pay, checkout#integration-readiness/one-pay-at-a-time
 
 **Pre-conditions:**
 
@@ -1797,7 +1746,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1826,7 +1774,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1864,7 +1811,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1899,7 +1845,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression

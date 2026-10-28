@@ -11,8 +11,6 @@ where you say what you say.
 
 ## If you are a product manager
 
-- [My turn](/my-turn) — what is on you, across every change in flight: the
-  open questions addressed to you, then what is yours now, then what is coming.
 - [Points](/p/grade10-site/loyalty/points) — the deepest spec we
   have, and the one written most nearly in product language. Read its journeys
   first, then the rest of [Membership](/p/grade10-site/loyalty).
@@ -21,10 +19,6 @@ where you say what you say.
   actually meets.
 - [The vault](/p/grade10-site/vault) — the most involved product, where custody, identity
   and signing all meet.
-- [Board](/in-flight) — every change moving across the platform, with tasks
-  done over total, straight out of git.
-- [Pending](/pending) — the changes waiting on a product manager: requirements
-  nobody has written, journeys and suites nobody has derived.
 - [How we plan](/guides/how-we-plan) — where a proposal stops and a spec
   starts.
 - [Working a change](/guides/working-a-change) — the sentence that opens a
@@ -38,16 +32,10 @@ check's verdict per card — `ok` means checked and matching, `warn`/`fail`
 mean drift for someone to settle, `skipped` means nothing was compared, and a
 card with no badge was not checked at all; the page says so when no report
 exists. Token values live in `packages/design-system/tokens.json` — the CSS
-themes and Figma are both projections of it. And every requirement row has a
-propose action on the locally-run manual (the hosted site is read-only):
-proposing takes thirty seconds in the browser, and everything after it is an
-agent's job — the card on [Board](/in-flight) names the command to hand
-over, or hand the change id to a PM or engineer. The workbench Storybook
+themes and Figma are both projections of it. The workbench Storybook
 (`pnpm storybook`) follows this manual's domains and pages, so a feature's
 screens, states and flows sit under the same words as its page here.
 
-- [My turn](/my-turn) — what is on you, across every change in flight: the
-  open questions addressed to you, then what is yours now, then what is coming.
 - [Package Rules](/p/shared/ui/component-package) — what the shared UI
   package owes a product, and what it refuses to hold.
 - [Site Header and Footer](/p/shared/ui/site-chrome) and
@@ -59,18 +47,12 @@ screens, states and flows sit under the same words as its page here.
   survive.
 - [Dates and times](/platform/shared/dates-and-times) — the four shapes a date takes
   on screen, before you invent a fifth.
-- [Pending](/pending) — the changes waiting on a designer, each with the line
-  its author wrote saying what is missing. A change asks by writing
-  `awaiting:` with `ui-design: <what nobody has drawn>` in its
-  `.openspec.yaml`; nothing else puts it on your section.
-- [Working a change](/guides/working-a-change) — `/workflow-design`, the screen the
-  journeys ask for, and the word that lands it.
+- [Working a change](/guides/working-a-change) — `/planning-design`, the screen the
+  journeys ask for.
 
 ## If you are in QA
 
-Your worklist is [QA](/qa): every suite awaiting review — the ones riding
-in-flight changes first, then the durable capabilities — with draft counts
-and untraced scenarios. Reviewing one is a conversation with an agent:
+Reviewing a suite is a conversation with an agent:
 `/tcs-review <capability-or-change>` walks the draft cases one at a time,
 quoting the spec behind each, and records your verdict — approve, change,
 defer, or retire — signed with your handle and the date.
@@ -79,8 +61,6 @@ runner or export consumes it yet. The whole derivation, spec journeys to
 classified cases, is
 [specs to test cases](https://github.com/9gag/grade10-spec/blob/main/docs/governance/specs-to-test-cases.md).
 
-- [My turn](/my-turn) — what is on you, across every change in flight: the
-  open questions addressed to you, then what is yours now, then what is coming.
 - [Points](/p/grade10-site/loyalty/points) — journeys, the
   scenarios that accept them, and the test cases tracing back.
 - [Sign-In](/p/grade10-site/account/sign-in) and [Sessions](/p/grade10-site/account/sessions) —
@@ -89,15 +69,11 @@ classified cases, is
   a bug report should quote.
 - [Audit trail](/p/grade10-admin/audit) — how to prove an operator action was recorded, and
   what a passing verification does not claim.
-- [Board](/in-flight) — what is moving, so a test plan is written against the
-  right version.
 - [Working a change](/guides/working-a-change) — the two blind readings of a
   change, and the one word that lands the requirements and the cases together.
 
 ## If you are an engineer
 
-- [My turn](/my-turn) — what is on you, across every change in flight: the
-  open questions addressed to you, then what is yours now, then what is coming.
 - [Frontend composition](/platform/shared/frontend-composition) — where a feature
   lives and what an application is allowed to load.
 - [Package Rules](/p/shared/ui/component-package) — what to compose before
@@ -106,8 +82,6 @@ classified cases, is
   checks against.
 - [Document signing](/p/grade10-site/doc-sign) and [KYC](/p/grade10-site/account/kyc) — the two
   services with the most decisions per line of code.
-- [Pending](/pending) — the specified changes with no plan yet, oldest first.
-  Taking one is writing its `tasks.md`.
 - [Working a change](/guides/working-a-change) — `/planning-dev`, which writes the
   tech design and the plan in one run, the groups each with its test task
   first, and the walk the last group leaves.
@@ -116,8 +90,6 @@ classified cases, is
 
 ## If you are an operator
 
-- [My turn](/my-turn) — what is on you, across every change in flight: the
-  open questions addressed to you, then what is yours now, then what is coming.
 - [Console blocks](/p/shared/console/blocks) — the shapes every console
   section is built from.
 - [User directory](/p/shared/console/user-directory) — roles, standing, and

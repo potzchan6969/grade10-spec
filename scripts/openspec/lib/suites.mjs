@@ -19,7 +19,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { SCENARIO_ID } from "../../../tools/manual/src/store/markdown.mts";
+import { SCENARIO_ID } from "../../../tools/openspec-store/src/spec-text.mts";
 import { DECIDED_BY } from "./decided-by.mjs";
 import { foldedGroupNames } from "./feature-set.mjs";
 
@@ -927,7 +927,7 @@ export function parseSuite(text) {
         continue;
       }
       // Optional, directly after the classification block: the test file(s)
-      // that decided this case (Q49 of `run-a-round-on-every-artifact`) - a
+      // that decided this case - a
       // case a store unit or script test, or the walk that drives it, decides
       // flips to `automated` in the commit that lands the test, and the suite
       // names what decides it so the run sheet's omission of it can be checked

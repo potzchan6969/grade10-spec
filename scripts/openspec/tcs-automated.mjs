@@ -13,7 +13,7 @@
  * own commit carries the flip alongside the code that proves it.
  *
  * The status and the line are one edit, which is what holds a flip to the
- * commit that lands its test (Q74 of `run-a-round-on-every-artifact`): a case
+ * commit that lands its test: a case
  * of an in-flight change cannot be flipped without naming what decides it, so
  * no commit exists where the status moved and nothing said what moved it. A
  * case already carrying the line, flipped again with no flag, keeps the line

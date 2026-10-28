@@ -2,7 +2,6 @@
 title: Cart Drawer
 spec: shared/ui/store-cart
 order: 5
-reviewed: 2026-09-11
 ---
 
 The cart is a drawer that slides in over the page. It lists the items the
@@ -28,36 +27,33 @@ actually creates the checkout session.
 
 ## Product Pictures
 
-🚧 **Product pictures** - the drawer shows the picture the application supplies, helping the shopper recognise each item
+- 🚧 **Product pictures** — the drawer shows the picture the application supplies, helping the shopper recognise each item
 
 ## Empty Cart
 
-🚧 **Empty** - when the cart holds nothing, the design-system empty state: a
-cart icon, a title, and a line under it where the application supplies one,
-with no count on the drawer title and no footer. It offers no action of its
-own.
-
-🚧 **Not read yet** - the drawer never shows the empty state for a cart it has
-not read. While the read runs, it shows a blank body, a skeleton for the
-title's count and no footer. A cart read empty shows the empty state, even
-when its price check fails.
+- 🚧 **Empty** — when the cart holds nothing, the design-system empty state: a
+  cart icon, a title, and a line under it where the application supplies one,
+  with no count on the drawer title and no footer. It offers no action of its
+  own.
+- 🚧 **Not read yet** — the drawer never shows the empty state for a cart it has
+  not read. While the read runs, it shows a blank body, a skeleton for the
+  title's count and no footer. A cart read empty shows the empty state, even
+  when its price check fails.
 
 ::story{id="store-cart-blocks-cartdrawer--loading-no-lines" title="A cart not read yet"}
 
-🚧 **First read fails** - the drawer keeps that blank body, never the empty
-state, while the application offers Retry and names no line, as
-[Cart Validation](../../grade10-site/store/cart-validation.md) asks for a cart
-whose lines are not loaded.
-
-🚧 **Only delisted lines** - the drawer shows the empty state and removes them
-with its one toast.
-
-🚧 **Only sold-out lines** - not empty: the lines show marked sold out, with
-the footer and no count on the drawer title.
+- 🚧 **First read fails** — the drawer keeps that blank body, never the empty
+  state, while the application offers Retry and names no line, as
+  [Cart Validation](../../grade10-site/store/cart-validation.md) asks for a cart
+  whose lines are not loaded.
+- 🚧 **Only delisted lines** — the drawer shows the empty state and removes them
+  with its one toast.
+- 🚧 **Only sold-out lines** — not empty: the lines show marked sold out, with
+  the footer and no count on the drawer title.
 
 ## Pending Operations
 
-**Waiting for an answer** - the drawer disables its actions while the application reads or saves the cart or starts checkout; clearing that wait restores only actions whose current state permits them. Closing remains available.
+- **Waiting for an answer** — the drawer disables its actions while the application reads or saves the cart or starts checkout; clearing that wait restores only actions whose current state permits them. Closing remains available.
 
 ::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
 
@@ -71,12 +67,11 @@ the footer and no count on the drawer title.
 
 ## Tender Actions
 
-**Unresolved choice** - tender actions and Checkout wait while the
-application saves a choice; accepted figures stay visible until it answers.
-
-**Tender actions need an answer** - a promo or points action appears only
-when the application supplies the callback that can perform it. The drawer can
-show current tender context without offering an action that cannot change it.
+- **Unresolved choice** — tender actions and Checkout wait while the
+  application saves a choice; accepted figures stay visible until it answers.
+- **Tender actions need an answer** — a promo or points action appears only
+  when the application supplies the callback that can perform it. The drawer can
+  show current tender context without offering an action that cannot change it.
 
 ## Site Sale and Promo Codes
 
@@ -84,42 +79,33 @@ A site sale is a cut the shop applies to products or collections with no code.
 The application's quote decides whether a promo code stacks on it, is refused, or
 replaces it; the drawer shows that outcome and works out no amount.
 
-**On sale** - a line on the sale shows the sale price with the list price
-struck through, even a list price equal to the sale price. The summary adds no
-Store sale row.
-
-🚧 **Order discount** - a cut the shop takes off the whole order with no code,
-such as a spend threshold, is a row of its own after the Subtotal, with the
-name the application gives it and no Remove. No line is struck for it, and
-the Subtotal reads before it.
-
-**Which price is charged** - hidden words the application supplies, such
-as Sale price and Was, tell a screen reader which price is charged.
-
-**Subtotal** - the sum of each line's price times its quantity, leaving
-out sold-out and unavailable lines, as the drawer title's count does.
-
-**Stacked** - a code that stacks leaves the sale on the lines; the summary
-shows only the code's discount.
-
-**Refused** - a refused code leaves the lines and the totals on the sale;
-the promo sheet says why. A held code the shopper picked then moves apart from
-the ones that can apply, muted, with the refusal as its reason and no Apply.
-
-**Replaced** - a code that replaces the sale puts each line it takes the
-sale from at the list price, with nothing struck through; the summary shows
-only the code's discount.
-
-**Removed** - removing the code drops its discount. Where the code had
-replaced the sale, the sale returns to the lines while it still runs.
-
-**Held, cannot apply** - a held code that cannot apply on this cart is
-listed apart from the ones that can, muted with its reason and no Apply.
-
-🚧 **Near-expiry promo detail** - when the consumer marks a live promo as
-near expiry, the ticket emphasises its existing expiry or conditions detail
-slot. The discount title, supplied wording, code, actions and list position
-remain as they are, including for a muted code that cannot apply.
+- **On sale** — a line on the sale shows the sale price with the list price
+  struck through, even a list price equal to the sale price. The summary adds no
+  Store sale row.
+- 🚧 **Order discount** — a cut the shop takes off the whole order with no code,
+  such as a spend threshold, is a row of its own after the Subtotal, with the
+  name the application gives it and no Remove. No line is struck for it, and
+  the Subtotal reads before it.
+- **Which price is charged** — hidden words the application supplies, such
+  as Sale price and Was, tell a screen reader which price is charged.
+- **Subtotal** — the sum of each line's price times its quantity, leaving
+  out sold-out and unavailable lines, as the drawer title's count does.
+- **Stacked** — a code that stacks leaves the sale on the lines; the summary
+  shows only the code's discount.
+- **Refused** — a refused code leaves the lines and the totals on the sale;
+  the promo sheet says why. A held code the shopper picked then moves apart from
+  the ones that can apply, muted, with the refusal as its reason and no Apply.
+- **Replaced** — a code that replaces the sale puts each line it takes the
+  sale from at the list price, with nothing struck through; the summary shows
+  only the code's discount.
+- **Removed** — removing the code drops its discount. Where the code had
+  replaced the sale, the sale returns to the lines while it still runs.
+- **Held, cannot apply** — a held code that cannot apply on this cart is
+  listed apart from the ones that can, muted with its reason and no Apply.
+- 🚧 **Near-expiry promo detail** — when the consumer marks a live promo as
+  near expiry, the ticket emphasises its existing expiry or conditions detail
+  slot. The discount title, supplied wording, code, actions and list position
+  remain as they are, including for a muted code that cannot apply.
 
 ::story{id="store-cart-blocks-cartitem-price--sale-price" title="A line on the site sale"}
 
@@ -152,7 +138,7 @@ remain as they are, including for a muted code that cannot apply.
 ::story{id="store-cart-blocks-cartdrawer--loading-with-lines" title="The skeleton state while the drawer re-reads prices"}
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/ui/store-cart"}
+[Test cases · shared/ui/store-cart](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/ui/store-cart)
 :::
 
 :::detail{title="Product decisions" for="pm"}

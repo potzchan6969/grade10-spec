@@ -1,4 +1,5 @@
 import { formatDay, formatMonthName } from "@grade10/date";
+import { Link } from "@grade10/design-system/components/forms/link";
 import type {
   AsyncState,
   CartItemSummary,
@@ -14,20 +15,9 @@ import type {
   TierCardCopy,
   WalletPassLinksCopy,
   WalletPassWallet,
-} from "@grade10/ui";
-import { storyHref } from "../workbench-story-nav";
-
-/* Stand-in programme content the Loyalty workbench draws with. Grade10's own
+} from "@grade10/ui"; /* Stand-in programme content the Loyalty workbench draws with. Grade10's own
  * copy and figures for the examples only; a consumer supplies its own. */
-
-/** Storybook story id for the cart drawer's Scenario, where points pay part of a basket. */
-const LOYALTY_PAY_PART_OF_BASKET_STORY_ID =
-  "store-cart-screens-cart-drawer-scenario--scenario";
-
-/** Preview href from Membership to points on the basket. */
-const LOYALTY_PAY_PART_OF_BASKET_HREF = storyHref(
-  LOYALTY_PAY_PART_OF_BASKET_STORY_ID,
-);
+import { createElement } from "react";
 
 const RENEWS = formatDay(Date.UTC(2027, 2, 1));
 const COUPON_VALID = formatDay(Date.UTC(2027, 0, 11));
@@ -45,7 +35,6 @@ const TIER_CARD_COPY: TierCardCopy = {
   points: "pts",
   worthSuffix: "off at checkout",
   qualifying: "Keep Gold",
-  benefits: "Benefits",
 };
 
 const MEMBER_PASS_COPY: MemberPassCopy = {
@@ -111,7 +100,6 @@ const POINT_HISTORY_COPY: PointHistoryCopy = {
 };
 
 const WALLET_PASS_COPY: WalletPassLinksCopy = {
-  heading: "Carry your card on your phone",
   unreachable: "We could not check your passes just now.",
 };
 
@@ -217,16 +205,12 @@ const COUPON_PROMO_COPY = {
 };
 
 const MEMBERSHIP_PAGE_COPY = {
-  breadcrumbAccount: "Account",
   title: "Membership",
-  cardHeading: "Your member pass",
+  cardHeading: "Your Member Pass",
   rewardsHeading: "Rewards",
-  couponsHeading: "Your coupons",
-  spendHeading: "Spend on your basket",
-  spendBody:
-    "Points come off your bill at checkout. No code is needed, and nothing is held until you pay.",
-  spendAction: "Go to checkout",
-  pointHistoryHeading: "Point History",
+  couponsHeading: "Your Coupons",
+  topUpAction: "Top-up Points",
+  pointHistoryHeading: "Points History",
 };
 
 /** Stand-in product art for the item rewards. */
@@ -411,6 +395,15 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     context: "Order #10514",
   },
   {
+    id: "entry-tickets",
+    kind: "Grade10 FEST Summer 2026",
+    track: "earned",
+    icon: "order",
+    delta: 60,
+    date: formatDay(Date.UTC(2026, 9, 20)),
+    month: formatMonthName(Date.UTC(2026, 9, 20)),
+  },
+  {
     id: "entry-sleeves",
     kind: "Redeemed reward",
     track: "used",
@@ -448,6 +441,31 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     delta: 200,
     date: formatDay(Date.UTC(2026, 8, 15)),
     month: formatMonthName(Date.UTC(2026, 8, 15)),
+    /* The Stripe receipt lives on the entry itself — a top-up's only
+     * paperwork, so the ledger carries no separate history surface. */
+    context: createElement(
+      Link,
+      { href: "#receipt-entry-topup", size: "sm", variant: "secondary" },
+      "View Receipt",
+    ),
+  },
+  {
+    id: "entry-topup-review",
+    kind: "Points top-up",
+    track: "earned",
+    delta: 25000,
+    pending: true,
+    context:
+      "Under review — the card is charged only if it’s approved. Reference TU-2026-0384.",
+  },
+  {
+    id: "entry-topup-chargeback",
+    kind: "Top-up charged back",
+    track: "used",
+    icon: "topup",
+    delta: -1000,
+    date: formatDay(Date.UTC(2026, 8, 5)),
+    month: formatMonthName(Date.UTC(2026, 8, 5)),
   },
   {
     id: "entry-credits",
@@ -472,7 +490,7 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
 ];
 
 const POINTS_TOTALS: PointsTotals = {
-  earned: 440,
+  earned: 500,
   used: -820,
   pending: 128,
 };
@@ -483,10 +501,12 @@ const APPLE_PASS_URL = "https://example.com/passes/grade10.pkpass";
 /** A wallet the member can add the card to. */
 const GOOGLE_OFFERED: WalletPassWallet = {
   id: "google",
+  artwork: { wallet: "google" },
   offer: { label: "Add to Google Wallet" },
 };
 const APPLE_OFFERED: WalletPassWallet = {
   id: "apple",
+  artwork: { wallet: "apple" },
   offer: { label: "Add to Apple Wallet" },
 };
 /** Carried in Google Wallet; the install link stands beside the held sentence. */
@@ -548,7 +568,7 @@ const MEMBERSHIP_STATE_VIEWS = {
     balance: 0,
     worth: "HK$0",
     qualifyingPoints: 0,
-    retentionLine: undefined,
+    retentionLine: `Earn 500+ pts by ${RENEWS} to upgrade`,
     earnLine: "Silver earning 1x points",
     coupons: {
       status: "empty",
@@ -623,8 +643,6 @@ export {
   HOW_POINTS_WORK,
   ISSUED_COUPON,
   LEDGER_ENTRIES,
-  LOYALTY_PAY_PART_OF_BASKET_HREF,
-  LOYALTY_PAY_PART_OF_BASKET_STORY_ID,
   MEMBER,
   MEMBER_PASS_COPY,
   MEMBERSHIP_PAGE_COPY,

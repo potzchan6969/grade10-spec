@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { idsInText } from "../../tools/manual/src/store/issued-ids.mts";
+import { idsInText } from "../../tools/openspec-store/src/issued-ids.mts";
 import {
   idsMainHolds,
   nextCaseOf,
@@ -16,9 +16,9 @@ import {
 } from "./spec-issue.mjs";
 
 /**
- * `allocate-ids-across-open-changes`: the next id issued by a command from the
- * branch and the fetched `main`, and a branch's ids `main` already holds moved
- * above them with every citation inside the change.
+ * The next id issued by a command from the branch and the fetched `main`, and
+ * a branch's ids `main` already holds moved above them with every citation
+ * inside the change.
  */
 
 const CLI = join(dirname(fileURLToPath(import.meta.url)), "spec-issue.mjs");

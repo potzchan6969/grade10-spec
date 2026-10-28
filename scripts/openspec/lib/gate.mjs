@@ -1,10 +1,9 @@
 /**
  * The gate a commit on `main` passes before it is pushed there:
  * `validate:changes`, `check:manual` and `tcs:validate`, run in this process
- * against a tree holding that commit. `plan:land` runs it on the commit it
- * cuts, and the application's `pnpm plan done` and `undone` run it on the
- * plan they record, so a record pushed straight to `main` faces the same
- * gate as a landing.
+ * against a tree holding that commit. The application's `pnpm plan done` and
+ * `undone` run it on the plan they record, so a record pushed straight to
+ * `main` faces the same gate as any other push.
  *
  * Returns the first refusal as one line, or null when the tree passes. The
  * reports print as they run. `PLAN_NO_FETCH` is held at 1 while it runs:

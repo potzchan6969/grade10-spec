@@ -31,11 +31,11 @@ A group is a level-two heading numbered with a single integer. Its tasks are che
 | Owner tag | `(owner: @<handle>)` | Optional, and **last on the line**. The `@` is optional; handles may hold letters, digits, `.`, `-`, `_`, and match case-insensitively. |
 | No owner | Omit the tag, or write `(owner: unassigned)` | The two are equivalent everywhere. |
 | Task | `- [ ] <id> <text>` | `- [x]` or `- [X]` when done. `<id>` is the first whitespace-delimited token; `<text>` is required. |
-| Scenario ids | `` `<capability>-SC-<n>` `` in the task's text | Optional, backticked, comma-separated, conventionally last. `<n>` may carry one lower-case letter, `-SC-07a`. The group's landing, `pnpm run plan:land … --tests`, refuses a group whose row names no test for one it names. |
+| Scenario ids | `` `<capability>-SC-<n>` `` in the task's text | Optional, backticked, comma-separated, conventionally last. `<n>` may carry one lower-case letter, `-SC-07a`. |
 
 A group title that names a repository names it by clone name — `(grade10-spec)`, `(grade10)` — never "this repo" or "here": `tasks.md` is written in this store and read from the application repository, so a deictic reference flips meaning between the two.
 
-The trailing parenthetical is read as a repository, whatever it says. A product or domain name — `grade10-site`, `auction` — goes in the title before it, never in the tag: `## 1. Vault (grade10-spec)`, not `## 1. Vault (grade10-site)`. A group tagged with a product, or not tagged at all, reads as work outside this store, and `pnpm check:manual` then asks the change for a `tech-design.md` it does not owe.
+The trailing parenthetical is read as a repository, whatever it says. A product or domain name — `grade10-site`, `auction` — goes in the title before it, never in the tag: `## 1. Vault (grade10-spec)`, not `## 1. Vault (grade10-site)`. A group tagged with a product, or not tagged at all, reads as work outside this store, and `pnpm accept:preflight` then asks the change for a `tech-design.md` it does not owe.
 
 Task ids are conventionally `<group>.<n>`, and they must be unique within a change — the tooling indexes tasks by id, so a duplicate makes one of them unreachable.
 
@@ -47,7 +47,7 @@ Group headings are free for us to use because OpenSpec parses only the checkbox 
 - **Owners are claimed at pickup, not assigned at planning time.** A name on a group therefore always means someone is on it now. Author groups without owners and let engineers claim them.
 - **Completed work never sits with nobody's name against it.** Checking off a task in an unclaimed group claims that group, and a group with checkmarks cannot be handed back — it keeps its owner as the record of who did the work.
 - **A checkmark is a claim that the work is real.** It goes in after the code is pushed, not when it is written.
-- **An id is a promise.** A scenario id in a task's text says a test cites that id in the tree the group's repository tag names — `(grade10)` reads that clone, `(grade10-spec)` reads this store. The group's landing refuses a row whose `--tests` names no test for it, naming the id; `pnpm plan done` then refuses a tick whose group has no row. A task that names no id — a verify step, a document, a configuration line — is taken as written; what asks the group for a record is the manual's `round` rule. Write the ids of what the group makes pass, never the ids it read.
+- **An id is a promise.** A scenario id in a task's text says a test cites that id in the tree the group's repository tag names — `(grade10)` reads that clone, `(grade10-spec)` reads this store. A task that names no id — a verify step, a document, a configuration line — is taken as written. Write the ids of what the group makes pass, never the ids it read.
 
 ## Who writes what
 
@@ -68,9 +68,9 @@ These are silent — the line is skipped or misread, and nothing reports an erro
 | Written | Result |
 | --- | --- |
 | `## 1. Build it (owner: @alice) — WIP` | Owner is read, but the tag is only stripped from the end, so the title keeps it |
-| `## 1. Vault (grade10-site)` | Read as a repository named `grade10-site`; the manual's `design` rule demands a `tech-design.md` |
+| `## 1. Vault (grade10-site)` | Read as a repository named `grade10-site`; `pnpm accept:preflight` demands a `tech-design.md` |
 | `## 3. Admin` | No repository; read as work outside this store, the same demand |
-| `## 4. Walk (grade10)` | Not the walk; `pnpm check:manual` never holds it to the review, and on a change opened from 2026-10-03 that somebody walks it refuses a plan ending on it |
+| `## 4. Walk (grade10)` | Not the walk, which is titled `The walk`; nothing refuses a plan that ends on it instead |
 | `## 1.2 Build it` | Group number is `1`; the title becomes `2 Build it` |
 | `### 1. Build it` | Not a group at all; its tasks attach to the previous group |
 | `- [ ] 1.1` | Not a task — the text after the id is required, so the task is invisible to every count |

@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "fc1fcf55349d739a3fdefe89b6ccea5b95803da288bcdf2d44dd801f0170ce88"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "bc891dde02167e0ccb17e426a2ad1c42280dc8bd",
+    "capturedAt": "2026-10-27T05:07:56.621Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+        "anchors": [
+          "Requirement: The membership surface exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "eabaf5f2859141a2a8a633e8ce6d35096e9b8278",
+      "components": [
+        "storybook"
+      ],
+      "verifiedBy": "seankcw",
+      "verification": "The TierCard block, its stories and the Membership page are on the store's main; `tsc` on @grade10/ui and `pnpm storybook:check` pass at this commit. The owner took Storybook (`?path=/docs/loyalty-membership-blocks-tiercard`) as the source of truth and archived without the 3.1 workbench walk. No grade10 application source is part of this change."
+    }
+  ]
+}

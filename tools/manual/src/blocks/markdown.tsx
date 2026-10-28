@@ -1,5 +1,5 @@
 import { ArrowSquareOut } from "@phosphor-icons/react";
-import { type ComponentProps, type ReactNode, useMemo } from "react";
+import { type ComponentProps, memo, type ReactNode, useMemo } from "react";
 import Markdown, { type Components } from "react-markdown";
 import { Link as RouterLink } from "react-router";
 import remarkGfm from "remark-gfm";
@@ -14,7 +14,6 @@ import {
   resolveRelative,
   routeForPagePath,
   slugify,
-  specTitle,
 } from "../api/paths";
 import { REF_PATTERN, resolveRef } from "../content/refs";
 import {
@@ -36,21 +35,11 @@ type Target =
 const SAFE_PROTOCOL = /^(https?:|mailto:)/i;
 const ANY_PROTOCOL = /^[a-z][a-z0-9+.-]*:/i;
 /** Store files the manual never renders: read them where they live. */
-const FILED_UNDER = ["docs/governance/", "docs/references/"];
-const CHANGE_FILE = /^openspec\/changes\/([^/]+)\/(.+)$/;
-const SPEC_FILE = /^openspec\/specs\/(.+)\/(?:spec|feature-tcs)\.md$/;
+const FILED_UNDER = ["docs/governance/", "docs/references/", "openspec/"];
 const REFERENCE_FILE = /^docs\/references\/(.+)\.md$/;
 /** The routes that are the app's own rather than a page's. Prose may link to
  * any of them, and a route the app does not serve still reads as dead. */
-const APP_ROUTES = new Set([
-  "/",
-  "/in-flight",
-  "/pending",
-  "/my-turn",
-  "/qa",
-  "/design",
-  REFERENCES_ROUTE,
-]);
+const APP_ROUTES = new Set(["/", "/design", REFERENCES_ROUTE]);
 
 export function classifyHref(
   href: string,
@@ -85,10 +74,7 @@ export function classifyHref(
   if (store)
     return { kind: "route", to: hash === "" ? store : `${store}#${hash}` };
 
-  if (
-    FILED_UNDER.some((prefix) => resolved.startsWith(prefix)) ||
-    resolved.startsWith("openspec/")
-  ) {
+  if (FILED_UNDER.some((prefix) => resolved.startsWith(prefix))) {
     return { kind: "github", href: `${GITHUB_BLOB}/${resolved}` };
   }
 
@@ -100,30 +86,12 @@ export function classifyHref(
   return { kind: "dead", raw: href };
 }
 
-/**
- * The page that shows a store file, where one does. A change's own artifacts
- * are its page's tabs — a proposal that says "see tech-design.md" lands on the
- * design — a durable spec is the capability page that embeds it, and a
- * reference is its own page. A change that is not in flight, a spec no page
- * shows, or a reference the snapshot does not list is read where it lives.
- */
+/** The page that shows a store file, where one does: a reference is its own
+ * page, and one the snapshot does not list is read where it lives. */
 function routeForStoreFile(
   resolved: string,
   index: ManualIndex,
 ): string | null {
-  const change = CHANGE_FILE.exec(resolved);
-  if (change) {
-    const [, id, rest] = change;
-    if (!index.changeById.has(id)) return null;
-    const tab = rest.startsWith("specs/")
-      ? "specs"
-      : rest.endsWith(".md") && !rest.includes("/")
-        ? rest.slice(0, -3)
-        : null;
-    return tab === null ? null : `/in-flight/${id}?tab=${tab}`;
-  }
-  const spec = SPEC_FILE.exec(resolved);
-  if (spec) return index.routeBySpec.get(spec[1]) ?? null;
   const reference = REFERENCE_FILE.exec(resolved);
   if (reference) {
     if (reference[1] === "README") return REFERENCES_ROUTE;
@@ -213,16 +181,8 @@ function refTokens(value: string): HastNode[] {
  * never orphan the prose that cites it. One that resolves to nothing, or to
  * two things, gets the dead-link treatment with the resolver's own words.
  */
-function InlineRef({
-  index,
-  pageSpec,
-  raw,
-}: {
-  index: ManualIndex;
-  pageSpec?: string;
-  raw: string;
-}) {
-  const resolved = resolveRef(raw, index.snapshot, pageSpec);
+function InlineRef({ index, raw }: { index: ManualIndex; raw: string }) {
+  const resolved = resolveRef(raw, index.titleBySpec);
   if (!resolved.ok) {
     return (
       <span
@@ -234,16 +194,12 @@ function InlineRef({
     );
   }
 
-  const { target } = resolved;
-  const route = routeForSpec(index, target.spec);
   return (
     <RouterLink
       className="decoration-dotted"
-      to={target.kind === "spec" ? route : `${route}#${target.id}`}
+      to={routeForSpec(index, resolved.spec)}
     >
-      {target.kind === "spec"
-        ? specTitle({ id: target.spec, title: target.title })
-        : target.title}
+      {resolved.title}
     </RouterLink>
   );
 }
@@ -259,29 +215,24 @@ type MarkdownViewProps = {
   index: ManualIndex;
   /** Headings get slug ids and a copy-link. Off where ids would collide. */
   anchors?: boolean;
-  /** Prefix for those ids, where two documents with the same headings share
-   * a page — every delta has a Purpose. */
-  anchorPrefix?: string;
-  /** Manual-page prose only. Spec text mirrored from the store is quoted, not
-   * authored here, so its brackets stay brackets. */
+  /** Manual-page prose only. A reference document is quoted, not authored
+   * here, so its brackets stay brackets. */
   refs?: boolean;
-  /** The page's own `spec:` — the scope a bare id resolves inside. */
-  pageSpec?: string;
   className?: string;
 };
 
 /**
  * GitHub markdown, raw HTML off. Off is load-bearing: pages are editable in the
  * browser, so the renderer is the line that keeps an edit from becoming script.
+ * Memoized: a parse is pure in its props, and every location change re-renders
+ * the page, so an unmemoized view re-parses all of it on a section click.
  */
-export function MarkdownView({
+export const MarkdownView = memo(function MarkdownView({
   text,
   baseDir,
   index,
   anchors = false,
-  anchorPrefix,
   refs = false,
-  pageSpec,
   className,
 }: MarkdownViewProps) {
   const components = useMemo<Components>(
@@ -289,7 +240,7 @@ export function MarkdownView({
       span: ({ children, node, ...rest }: SpanProps) => {
         const raw = node?.properties?.[REF_PROPERTY];
         if (typeof raw !== "string") return <span {...rest}>{children}</span>;
-        return <InlineRef index={index} pageSpec={pageSpec} raw={raw} />;
+        return <InlineRef index={index} raw={raw} />;
       },
       a: ({ href, children }: ComponentProps<"a">) => {
         const target = classifyHref(href ?? "", baseDir, index);
@@ -324,17 +275,17 @@ export function MarkdownView({
         );
       },
       h1: ({ children }: ComponentProps<"h1">) => (
-        <Heading anchors={anchors} level={2} prefix={anchorPrefix}>
+        <Heading anchors={anchors} level={2}>
           {children}
         </Heading>
       ),
       h2: ({ children }: ComponentProps<"h2">) => (
-        <Heading anchors={anchors} level={2} prefix={anchorPrefix}>
+        <Heading anchors={anchors} level={2}>
           {children}
         </Heading>
       ),
       h3: ({ children }: ComponentProps<"h3">) => (
-        <Heading anchors={anchors} level={3} prefix={anchorPrefix}>
+        <Heading anchors={anchors} level={3}>
           {children}
         </Heading>
       ),
@@ -373,7 +324,7 @@ export function MarkdownView({
         />
       ),
     }),
-    [anchors, anchorPrefix, baseDir, index, pageSpec],
+    [anchors, baseDir, index],
   );
 
   const remarkPlugins = useMemo<
@@ -391,21 +342,18 @@ export function MarkdownView({
       </Markdown>
     </div>
   );
-}
+});
 
 function Heading({
   level,
   anchors,
-  prefix,
   children,
 }: {
   level: 2 | 3;
   anchors: boolean;
-  prefix?: string;
   children: ReactNode;
 }) {
-  const slug = anchors ? slugify(textOf(children)) : undefined;
-  const id = slug && prefix ? `${prefix}-${slug}` : slug;
+  const id = anchors ? slugify(textOf(children)) : undefined;
   const Tag = level === 2 ? "h2" : "h3";
   return (
     <Tag className="group/anchor flex scroll-mt-24 items-center gap-1" id={id}>

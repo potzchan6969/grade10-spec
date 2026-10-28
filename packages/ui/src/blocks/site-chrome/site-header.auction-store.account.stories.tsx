@@ -57,7 +57,7 @@ export const Open: Story = {
 
 /**
  * Every handler supplied: the account menu's whole fixed order - Profile,
- * My Orders, My Auctions, Membership, Sign Out - and nothing else.
+ * Membership, My Orders, My Auctions, Sign Out - and nothing else.
  */
 export const WithProfile: Story = {
   name: "Open, with Profile",
@@ -69,9 +69,9 @@ export const WithProfile: Story = {
     const items = await body.findAllByRole("menuitem");
     expect(items.map((item) => item.textContent)).toEqual([
       "Profile",
+      "Membership",
       "My Orders",
       "My Auctions",
-      "Membership",
       "Sign Out",
     ]);
     await userEvent.click(body.getByRole("menuitem", { name: "Membership" }));

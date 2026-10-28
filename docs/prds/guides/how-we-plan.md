@@ -24,9 +24,7 @@ changes touch one capability without any of them silently reverting another.
 
 **Tasks** are a checklist inside the change, and a task is done when its box is
 ticked in git. There is no board. It is also why this manual can be honest
-about progress without anybody updating it: a PRD shows the changes
-whose deltas touch its spec, with tasks done over total, read straight out of
-the store.
+about progress without anybody updating it: a PRD carries its 🚧 lines, and the store records the rest.
 
 A change is archived only once it has actually shipped — its delta folded into
 the durable specs, the change filed under the archive. Merging a pull request
@@ -34,10 +32,9 @@ deploys nothing, so archiving asks the application repository whether the code
 is live, not whether the branch is closed.
 
 A change passes through the hands
-[Change Stages](/p/shared/planning/change-stages) names, each landing their own
-artifacts on their word — [Working a change](/guides/working-a-change) walks one
-feature through them all. Each hand answers only what is theirs, in the
-change's thread — [Agent Rounds](/p/shared/planning/agent-rounds).
+[Change Stages](/p/shared/planning/change-stages) names, each writing their own
+artifacts — [Working a change](/guides/working-a-change) walks one
+feature through them all.
 
 ## The rules themselves
 
@@ -51,5 +48,3 @@ change's thread — [Agent Rounds](/p/shared/planning/agent-rounds).
   — running several changes at once without them colliding.
 - [An agent workflow, end to end](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md)
   — the whole loop worked through once.
-
-[Board](/in-flight) is the live view of all of it.

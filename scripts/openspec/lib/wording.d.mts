@@ -6,13 +6,11 @@
  * `scripts/openspec/lib/` is. `handle.d.mts` and `team-parse.d.mts` are
  * beside it for the same reason.
  */
-import type { Told } from "../../../tools/manual/src/api/told.ts";
 import type {
-  BehindArtifact,
   ChangeEntry,
   Role,
   Stage,
-} from "../../../tools/manual/src/api/types.ts";
+} from "../../../tools/openspec-store/src/types.ts";
 
 /** The change as a message reads it: the id a command is written with and the
  * stage the sentence names. */
@@ -20,32 +18,18 @@ export type WordedChange = Pick<ChangeEntry, "id"> & {
   stage: Stage;
 };
 
-/** The change as a landing reply reads it: the stage it is at now, the roles
- * of that stage and the hand each names, where one is named. */
-export type WordedLanding = {
-  stage: Stage;
-  roles: Role[];
-  hands: Partial<Record<Role, string>>;
-};
-
-/** One artifact that landed, and whose word landed it. */
-export type WordedLanded = { artifact: string; by: string };
-
-/** One person told what moved before their artifacts. */
-export type WordedTold = Pick<Told, "behind">;
-
 export declare const escapeSlackText: (text: string) => string;
 export declare const threadPathOf: (
   thread: string | undefined,
 ) => string | undefined;
 export declare const linkedOf: (url: string, title: string) => string;
-export declare const changePageOf: (manualUrl: string, id: string) => string;
+export declare const changePageOf: (openspecUrl: string, id: string) => string;
 export declare const permalinkOf: (
   workspaceUrl: string,
   thread: string | undefined,
 ) => string | undefined;
 export declare const linkOf: (link: {
-  manualUrl: string;
+  openspecUrl: string;
   workspaceUrl: string;
   thread?: string;
   id: string;
@@ -64,10 +48,3 @@ export declare const toldBodyOf: (
   role: Role,
   options: { linked: string; sheetUrl?: string },
 ) => { kind: "your-turn"; text: string };
-export declare const movedText: (told: WordedTold, linked: string) => string;
-export declare const behindLabelOf: (behind: BehindArtifact) => string;
-export declare const handText: (role: Role, hand?: string) => string;
-export declare const landedText: (
-  at: WordedLanding,
-  landed: WordedLanded[],
-) => string;

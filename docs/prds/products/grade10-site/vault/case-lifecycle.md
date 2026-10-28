@@ -193,7 +193,7 @@ released`, guarded on nothing outstanding and no packet open.
 
 ## Specs and journeys
 
-::spec{id="grade10-site/vault/case-lifecycle"}
+[Requirements · grade10-site/vault/case-lifecycle](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/vault/case-lifecycle/spec.md)
 
 :::detail{title="Code map" for="engineer"}
 - **Vocabulary** — `packages/vault/contracts/src/vocabulary.ts`: statuses,

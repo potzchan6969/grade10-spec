@@ -67,6 +67,49 @@
     "copyMessageManual": "Copy the message manually",
     "openMailApp": "Open Mail App"
   },
+  "proofDialog": {
+    "title": "Submit Payment Proof",
+    "description": "After you transfer, upload your receipt here.",
+    "senderName": "Sender Name",
+    "senderNameRequired": "Enter the sender name.",
+    "transferDate": "Transfer Date",
+    "transferDateRequired": "Enter the transfer date.",
+    "proof": "Payment Proof",
+    "dropTitle": "Drop files here or choose files",
+    "fileHint": "PDF, PNG, JPG, or HEIC. Up to 3 files, 5 MB each, 15 MB total.",
+    "chooseFiles": "Choose Files",
+    "converting": "Converting HEIC…",
+    "removeFile": "Remove file",
+    "filesRequired": "Attach at least one proof file.",
+    "noFilesSelected": "No files selected",
+    "oneFileSelected": "1 file selected",
+    "filesSelected": "{count} files selected",
+    "notes": "Additional Notes (optional)",
+    "finalNotice": "You can’t add or change files after you submit.",
+    "leaveConfirm": "Leave without submitting? Your payment proof will not be saved.",
+    "cancel": "Cancel",
+    "submit": "Submit Payment Proof",
+    "tooManyFiles": {
+      "title": "Too many files",
+      "description": "Up to 3 files."
+    },
+    "fileTooLarge": {
+      "title": "File too large",
+      "description": "Each file must be 5 MB or less."
+    },
+    "filesTooLarge": {
+      "title": "Files too large",
+      "description": "All files together must be 15 MB or less."
+    },
+    "fileTypeUnsupported": {
+      "title": "File type not supported",
+      "description": "Use PDF, PNG, JPG, or HEIC."
+    },
+    "heicFailed": {
+      "title": "Couldn’t convert HEIC",
+      "description": "Try exporting as JPG from your phone, then upload again."
+    }
+  },
   "tabs": {
     "active": "Active",
     "upcoming": "Upcoming",

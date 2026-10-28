@@ -1,20 +1,15 @@
 #!/usr/bin/env node
 /**
- * Every reader the planning schema's rounds may dispatch resolves to a file
- * under `.claude/agents/`.
+ * Every reader the planning schema's bug rounds may dispatch resolves to a
+ * file under `.claude/agents/`, and that file names the model it runs on.
  *
  * Read through `scripts/openspec/lib/perspectives.mjs`'s `planningSchema()` —
  * the store's one reader of the schema, itself built on
- * `tools/manual/src/store/read-schema.mts` — rather than a second, grep-based
- * parse of the YAML that a multi-line `perspectives:` block or a YAML anchor
- * would silently miss. Prints one line per distinct reader, and fails where
- * the schema declares none: an empty round dispatches nobody, which is a
- * schema with a hole in it rather than something to skip past quietly.
- *
- * Each reader also runs on the model `.claude/agents/README.md` names: `opus`
- * where a task group's or the tech design's round can dispatch it, because
- * those readings are held to the principles and read code; `sonnet`
- * everywhere else.
+ * `tools/openspec-store/src/read-schema.mts` — rather than a second, grep-based
+ * parse of the YAML that a multi-line block or a YAML anchor would silently
+ * miss. Prints one line per distinct reader, and fails where the schema
+ * declares none: an empty round dispatches nobody, which is a schema with a
+ * hole in it rather than something to skip past quietly.
  *
  * `--root` reads a store other than this one, which is how the tests reach
  * each refusal: this store's own schema takes none.
@@ -33,30 +28,17 @@ const { flags } = parseArgs(process.argv.slice(2), {
 });
 const root = flags.root ?? resolve(here, "..", "..");
 
-const schema = planningSchema(root);
+const { bug } = planningSchema(root);
 const agents = new Set(
-  [
-    ...schema.artifacts.flatMap(({ perspectives }) => perspectives),
-    ...schema.apply,
-    ...schema.bug.diagnosis,
-    ...schema.bug.fix,
-  ].map(({ agent }) => agent),
+  [...bug.diagnosis, ...bug.fix].map(({ agent }) => agent),
 );
 
 if (agents.size === 0) {
   console.error(
-    `[FAIL] the ${SCHEMA} schema declares no perspectives — every round would dispatch nobody`,
+    `[FAIL] the ${SCHEMA} schema declares no bug readers — every round would dispatch nobody`,
   );
   process.exit(1);
 }
-
-const onCode = new Set(
-  [
-    ...(schema.artifacts.find(({ id }) => id === "tech-design")?.perspectives ??
-      []),
-    ...schema.apply,
-  ].map(({ agent }) => agent),
-);
 
 let failures = 0;
 for (const agent of [...agents].sort()) {
@@ -71,17 +53,11 @@ for (const agent of [...agents].sort()) {
   const front = /^---\n([\s\S]*?)\n---/.exec(
     readFileSync(join(root, agent), "utf8"),
   )?.[1];
-  const model = /^model:\s*(\S+)/m.exec(front ?? "")?.[1] ?? "no model";
-  const wanted = onCode.has(agent) ? "opus" : "sonnet";
-  if (model === wanted) {
-    console.log(`[PASS] ${agent} runs on ${wanted}`);
+  const model = /^model:\s*(\S+)/m.exec(front ?? "")?.[1];
+  if (model) {
+    console.log(`[PASS] ${agent} runs on ${model}`);
   } else {
-    const why = onCode.has(agent)
-      ? "a task group's or the tech design's round dispatches it"
-      : "no task group's or tech design's round dispatches it";
-    console.error(
-      `[FAIL] ${agent} runs on ${model}; ${why}, so it runs on ${wanted}`,
-    );
+    console.error(`[FAIL] ${agent} names no model`);
     failures += 1;
   }
 }

@@ -2,7 +2,6 @@
 title: Rewards
 spec: grade10-site/loyalty/programme
 order: 3
-reviewed: 2026-10-06
 ---
 
 ## Reward Types
@@ -11,6 +10,10 @@ reviewed: 2026-10-06
 | --- | --- | --- | --- | --- |
 | Product coupon | A fixed amount, or a percentage with an optional maximum discount | Named products or variants, a filter over the catalog's worlds and types, or the whole order | Optional | $50 off Pokémon |
 | Gift | A free line added to the order, the variant it names | — | Required, above zero, so a gift always rides on a purchase | A free booster pack over $500 |
+
+- **A gift is handed over at the till alone** — whatever channels a gift's
+  definition names, online refuses it as the wrong channel; the console locks
+  its channel to In store
 
 Both are coupons, Grade10's own instrument, and a reward that takes money
 off the whole order is a product coupon whose scope is the whole order —
@@ -38,8 +41,8 @@ Both kinds state:
 | A free booster pack | 100% | The variant it names | — |
 | A free booster pack over $500 | A free line, the pack's own variant | — | $500 |
 
-**Online only by product or filter** - a till sale names its goods by
-variant alone, so a coupon scoped to named products or a filter is online only
+- **Online only by product or filter** — a till sale names its goods by
+  variant alone, so a coupon scoped to named products or a filter is online only
 
 ## Ways to Get a Reward
 
@@ -48,7 +51,8 @@ variant alone, so a coupon scoped to named products or a filter is online only
 | Reward shop | A member buys it | Points, the reward's cost |
 | Birthday `TBC` | Once a year, on the birthday the member's profile holds | None |
 | Registration `TBC` | Once, when the account is created | None |
-| Operator gift `TBC` | An operator hands one out, for a campaign or as goodwill | None |
+| Operator gift `TBC` | An operator hands one out as goodwill | None |
+| Campaign gift | A member wins a campaign - [Campaigns](/p/grade10-site/loyalty/campaigns) | None |
 
 ## Reward Shop
 
@@ -82,8 +86,8 @@ Stock reads as a yes or no, never a count.
   the same way
 - 🚧 **The redeemed state stays in the surface** - the ticket the
   redemption issued: every redemption mints a member-readable code —
-  good or discount alike — and the scan QR names that redemption.
-  A discount coupon's ticket carries the code, a good's names the
+  gift or discount alike — and the scan QR names that redemption.
+  A discount coupon's ticket carries the code, a gift's names the
   collection in its place. A ticket
   spendable or collectable at the till carries a Use now control, and the
   member's scan QR opens as its own card apart from the ticket — a
@@ -126,13 +130,13 @@ carrying the definition it was bought under.
 
 - **Made instantly** — the coupon is idle in the member's own list the
   instant the points are spent
-- **Applied online** — on the store's own checkout page, before Shopify's
+- **Applied online** — a product coupon, on the store's own checkout page, before Shopify's
   checkout. The cut reaches the order as the coupon's own Shopify
   discount code, minted for that basket, rather than welded onto the draft's
   lines
 - 🚧 **The member reads a code of their own** — every redemption mints
   one member-readable code, unique to that redemption and bound to the
-  member, and the scan QR names it; a good's ticket shows the
+  member, and the scan QR names it; a gift's ticket shows the
   collection in its place, by display choice. The code is good online and at
   the till; the per-sale discount code a claim mints is a different code,
   unchanged
@@ -160,9 +164,9 @@ takes 100% off it, and the order goes through at nothing. ❓ Online, that order
 is HKD 0 plus shipping — whether it ships free or is collection only is
 Product's call.
 
-❓ **A redeemed item stays off the shelf** — stock comes off at the redemption,
-so a coupon that expires unspent never puts it back. Either reward stock is a
-budget rather than a shelf count, or an operator restores the unit by hand.
+- ❓ **A redeemed item stays off the shelf** — stock comes off at the redemption,
+  so a coupon that expires unspent never puts it back. Either reward stock is a
+  budget rather than a shelf count, or an operator restores the unit by hand.
 
 ## Reward Catalog
 
@@ -172,7 +176,7 @@ Every reward the programme knows, on sale or not; the
 | Field | Meaning |
 | --- | --- |
 | Slug and name | The id it is referred to by, and what the member reads |
-| Cost | Points per redemption, copied onto the redemption when it is made |
+| Cost | Points per redemption, copied onto the redemption when it is made; optional on a campaign gift |
 | Definition | Its kind, discount, scope and what it combines with, copied onto the redemption and the discount code that carries its coupon to the shop, so redefining a reward never rewrites one already taken - [Authoring a Reward](/p/grade10-site/loyalty/operator-console#authoring-a-reward) |
 | Stock | Optional; a stocked reward is never oversold |
 | Window | Optional; outside it the reward cannot be redeemed |
@@ -185,6 +189,21 @@ Every reward the programme knows, on sale or not; the
   rule the member never sees
 - ❓ **The physical catalog** - which items, and their point prices; Product's
   call
+
+## Gifts from a Campaign
+
+A grant-only reward is one only a campaign hands out -
+[Campaigns](/p/grade10-site/loyalty/campaigns).
+
+- **Never in the shop** - never listed, and no member, till or quote spends
+  points on it
+- **No cost needed** - its cost may stay empty; a reward in the shop always
+  has one
+- **No stock** - the campaign's quota is its one limit
+- **Not reversible** - voiding its coupon takes it back, with no points to
+  return
+- **An operator's grant is one too** - a coupon an operator hands a member
+  writes no points records, just as a campaign's gift does
 
 ## Cancelling a Redemption
 

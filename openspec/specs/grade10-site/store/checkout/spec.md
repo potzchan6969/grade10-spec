@@ -79,7 +79,7 @@ named line.
 #### Scenario: grade10-site-store-checkout-SC-03 - A moved line blocks a stale payment
 **Serves:** grade10-site-store-checkout-US-02 - The collector repairs a changed line before payment
 
-- **GIVEN** a collector's line is sold out, repriced or reduced while the checkout read is running
+- **GIVEN** a collector's line is repriced or reduced while the checkout read is running
 - **WHEN** the live read answers
 - **THEN** the changed line is named with the shop's current answer
 - **AND** Pay is unavailable

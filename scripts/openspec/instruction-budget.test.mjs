@@ -10,7 +10,6 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { LINE_SKILLS, skillPath } from "./lib/line-skills.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
@@ -19,35 +18,12 @@ const words = (text) => text.split(/\s+/).filter(Boolean).length;
 // Words. AGENTS.md loads on every path; each `rules.<artifact>` block loads on
 // that artifact's path through the CLI. The schema instruction and template are
 // the rules' home on the artifact path, so a block holds what only it says.
-// The clarification format lives in AGENTS.md. Transfer 310 words from the
-// round-summary allowance so the combined budget stays unchanged.
+// The clarification format lives in AGENTS.md.
 const AGENTS_BUDGET = 2970;
-// The `workflow-round` skill loads on every artifact of every change, and the seven
-// line skills load it rather than restating it, so it carries the procedure
-// for all of them. 3200 is its size after the pass that gave the landing,
-// the wake and the chain one home each (`Q77`): the next rule earns its
-// words by cutting others, or raises this number in a commit that says why.
-const ROUND_BUDGET = 3200;
-// The round summary links to AGENTS.md for the clarification format.
-const ROUND_SUMMARY_BUDGET = 970;
-// The skills a line command loads: the seven command skills a hand invokes,
-// and the three role skills each of those loads for its rules, beside `workflow-round`,
-// which carries the procedure for all of them. Each number is that skill's
-// size after the pass that gave its rules one home - `Q84` for the role
-// skills, the overlap pass for the command ones: the next rule earns its words
-// by cutting others, or raises this number in a commit that says why.
+// The planning skills: each number is that skill's size after the pass that
+// gave its rules one home. The next rule earns its words by cutting others, or
+// raises this number in a commit that says why.
 const SKILLS_BUDGET = {
-  "workflow-plan": 717,
-  "workflow-design": 253,
-  // 364 once the simpler thing reads the reconciled requirements and cases.
-  "workflow-specify": 364,
-  // 178 after the enforcement audit's pass cut its three rules to a pointer
-  // at the instruction that holds them.
-  "workflow-tasks": 178,
-  // 560 after absorbing apply rules; the combined build/apply load shrinks.
-  "workflow-build": 560,
-  // 366 once the whole-change landing's command took its own line.
-  "workflow-land": 366,
   "planning-pm": 2740,
   // 1879 after design questions link to the shared clarification-request
   // shape instead of defining a competing one.
@@ -80,41 +56,17 @@ test("AGENTS.md holds to its word budget", () => {
   );
 });
 
-test("the round skill holds to its word budget", () => {
-  const skill = ".claude/skills/workflow-round/SKILL.md";
-  const count = words(read(skill));
-  assert.ok(
-    count <= ROUND_BUDGET,
-    `${skill} is ${count} words; the budget is ${ROUND_BUDGET}. Point at the document or the script header that owns the rule, or raise the budget here and say why in the commit.`,
-  );
-});
-
-test("the round summary holds to its word budget", () => {
-  const page = "docs/governance/round-summary.md";
-  const count = words(read(page));
-  assert.ok(
-    count <= ROUND_SUMMARY_BUDGET,
-    `${page} is ${count} words; the budget is ${ROUND_SUMMARY_BUDGET}. Every round loads it: cut a rule the skill or another page owns, or raise the budget here and say why in the commit.`,
-  );
-});
-
-test("each skill a line command loads holds to its word budget", () => {
-  for (const name of Object.keys(LINE_SKILLS)) {
-    assert.ok(
-      name in SKILLS_BUDGET,
-      `${name} is a line skill with no budget here; add its row`,
-    );
-  }
+test("each planning skill holds to its word budget", () => {
   for (const [name, budget] of Object.entries(SKILLS_BUDGET)) {
-    const skill = skillPath(name);
+    const skill = `.claude/skills/${name}/SKILL.md`;
     assert.ok(
-      existsSync(skill),
+      existsSync(join(ROOT, skill)),
       `${skill} is not a skill; the budget names a directory that is not there`,
     );
     const count = words(read(skill));
     assert.ok(
       count <= budget,
-      `${skill} is ${count} words; the budget is ${budget}. Point at the command skill or the document that owns the rule, or raise the budget here and say why in the commit.`,
+      `${skill} is ${count} words; the budget is ${budget}. Point at the document that owns the rule, or raise the budget here and say why in the commit.`,
     );
   }
 });
@@ -225,14 +177,16 @@ const ROUTES = new Set([
 const HARNESS = new Set(["add-dir", "compact", "tc", "sc"]);
 // The application repository's own commands - `dev-help`'s restored router
 // names them in its `Invoke` column, its `Here` column names this store's
-// equivalent where one exists. They resolve to nothing under
-// `.claude/skills/` here because they never lived here.
+// equivalent where one exists; `teach-me` hands code questions to `teach`.
+// They resolve to nothing under `.claude/skills/` here because they never
+// lived here.
 const APP_SKILLS = new Set([
   "implement",
   "implement-then-review",
   "tdd",
   "review-changes",
   "archive-change",
+  "teach",
 ]);
 const SLASH_TREES = [".claude/skills", "docs/governance"];
 
@@ -267,25 +221,4 @@ test("every slash name a skill or a governance page writes resolves to a skill",
     [],
     "a `/<slug>` in backticks resolves to .claude/skills/<slug>/SKILL.md, or it is a manual route or a harness command on the lists above; a retired skill is swept from every page that named it",
   );
-});
-
-// The remaining skills task 3.10 kept until the line is adopted (`Q84`). Each
-// exists and opens naming the `/workflow-<artifact>` skill that replaced it.
-// This list empties at this change's archive.
-const KEPT_SKILLS = ["dev-help", "spec-push"];
-
-test("each kept skill exists and opens naming its workflow replacement", () => {
-  for (const name of KEPT_SKILLS) {
-    const skill = skillPath(name);
-    assert.ok(
-      existsSync(join(ROOT, skill)),
-      `${skill} is kept by \`Q84\` until the line is adopted; it should not be gone`,
-    );
-    const opening = read(skill).split("\n").slice(0, 12).join("\n");
-    assert.match(
-      opening,
-      /`\/workflow-[a-z-]+`/,
-      `${skill} should open naming the \`/workflow-<artifact>\` skill that replaced it`,
-    );
-  }
 });

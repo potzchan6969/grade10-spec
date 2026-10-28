@@ -3,7 +3,10 @@
 ## Purpose
 
 The customer order detail gives a signed-in collector one private account of a
-Store order without revealing another customer's order or inventing absent facts.
+Store order without revealing another customer's order or inventing absent
+facts. It answers Store orders — online and counter purchases; a ticket order
+placed on the ticketing platform is answered by that platform's own order
+page, never this one.
 
 ## Feature set
 
@@ -15,6 +18,8 @@ Store order without revealing another customer's order or inventing absent facts
   - Shipping and payment: Present buyer-safe settlement facts without filling gaps.
   - Fulfilment and tracking: Show current progress and safe carrier links.
   - Partial records: Omit facts the typed order does not provide.
+  - Refunded units: Split a line into the units kept and the units a refund gave back.
+  - Points to earn: Show what a member's order earns, and nothing where it earns none.
 - Page states
   - Loading and retry: Keep the address while the read settles or retries.
 
@@ -205,6 +210,65 @@ another fact.
 - **THEN** a recognized card or wallet uses its corresponding logo
 - **AND** an unrecognized provider remains visible as text without an unrelated logo
 - **AND** any wallet identity appears beside its supplied masked device-account number
+
+### Requirement: Refunded units and earned points come from their records
+
+A line a refund gave units back from SHALL show as two rows: the units kept,
+priced as bought, then the units refunded, struck through, under a Refunded
+label and `Refund issued on <date>`, the day the latest refund naming that line
+was issued. A line refunded whole SHALL show its refunded row alone. A line no
+refund named, or one named without a count, SHALL read as bought.
+
+The owner-only detail SHALL show a points section when the order earns its
+member points: Points to Earn until the order completes, with what the goods
+still held earn at the member's tier now, and Points Earned once it completes,
+with what its earns credited less any refund's claw-back. It SHALL show no
+points section on a guest order, joined to an account or not; on an order
+canceled or refunded in full; on an order whose goods still held earn nothing;
+or when the loyalty programme does not answer. A private link SHALL show no
+points section.
+
+<!-- trace:scenario id=g10.store-order-detail.SC-wlp rev=1 -->
+#### Scenario: grade10-site-store-order-detail-SC-20 - A partly refunded line shows the units kept and the units refunded
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
+
+- **GIVEN** an owned order for 3 units of one line at 10500 minor units `HKD`, and a refund issued on 20 October 2026 that named 1 of them
+- **WHEN** its detail renders
+- **THEN** one row shows 2 units totalling 21000 minor units `HKD`
+- **AND** a second row shows 1 unit totalling 10500 minor units `HKD`, struck through, labelled Refunded, with `Refund issued on` that day
+
+<!-- trace:scenario id=g10.store-order-detail.SC-yce rev=1 -->
+#### Scenario: grade10-site-store-order-detail-SC-21 - A line refunded whole shows only its refunded row
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
+
+- **GIVEN** an owned order whose single unit of a line a refund named
+- **WHEN** its detail renders
+- **THEN** that line shows one struck-through row labelled Refunded
+- **AND** no row shows it as kept
+
+<!-- trace:scenario id=g10.store-order-detail.SC-po8 rev=1 -->
+#### Scenario: grade10-site-store-order-detail-SC-22 - A member's order shows the points it will earn
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
+
+- **GIVEN** a member's paid web order, not yet completed, whose goods still held earn 177 points at the member's tier
+- **WHEN** its detail renders
+- **THEN** a Points to Earn section shows +177 pts
+
+<!-- trace:scenario id=g10.store-order-detail.SC-ccc rev=1 -->
+#### Scenario: grade10-site-store-order-detail-SC-23 - A completed order shows the points it earned
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
+
+- **GIVEN** a member's completed order whose earn credited 200 points and whose later refund clawed back 40
+- **WHEN** its detail renders
+- **THEN** a Points Earned section shows +160 pts
+
+<!-- trace:scenario id=g10.store-order-detail.SC-myz rev=1 -->
+#### Scenario: grade10-site-store-order-detail-SC-24 - An order that earns nothing shows no points section
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
+
+- **GIVEN** a guest order joined to the member's account, an order canceled, or an order refunded in full
+- **WHEN** its detail renders
+- **THEN** no Points to Earn or Points Earned section appears
 
 ### Requirement: Fulfilment and tracking use supplied order facts
 

@@ -43,9 +43,9 @@ one level, and every card in it carries its own outcome.
 
 ## Where It Is Open
 
-🚧 **Not open to the public yet** — carried in development and staging as the
-vault's pages are, and on no lane the public reaches —
-[Carried Surfaces](/p/grade10-site/site/carried-surfaces)
+- 🚧 **Not open to the public yet** — carried in development and staging as the
+  vault's pages are, and on no lane the public reaches —
+  [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
 ## Users
 

@@ -15,7 +15,7 @@ const contentOnly = () => writeStore({ "docs/prds/manual.yaml": CONFIG });
 const wholeStore = () =>
   writeStore({
     "docs/prds/manual.yaml": CONFIG,
-    "openspec/specs/.gitkeep": "",
+    "docs/references/README.md": "# References\n",
   });
 
 describe("resolving the two roots", () => {
@@ -42,7 +42,7 @@ describe("resolving the two roots", () => {
   it("finds the content root by walking up from where the command ran", () => {
     const root = wholeStore();
     const roots = resolveRoots({
-      INIT_CWD: join(root, "openspec", "specs"),
+      INIT_CWD: join(root, "docs", "references"),
     });
     expect(roots.content).toBe(root);
     expect(roots.own).toBe(true);
@@ -59,7 +59,6 @@ describe("resolving the two roots", () => {
   it("reads the pages from MANUAL_DIR when one is set", () => {
     const root = writeStore({
       "manual/manual.yaml": CONFIG,
-      "openspec/specs/.gitkeep": "",
     });
     expect(
       resolveRoots({ MANUAL_ROOT: root, MANUAL_DIR: "manual/" }).manual,
@@ -81,20 +80,30 @@ describe("resolving the two roots", () => {
     }
   });
 
-  it("refuses a MANUAL_STORE with no specs in it", () => {
+  it("refuses a MANUAL_STORE that does not exist", () => {
     expect(() =>
       resolveRoots({
         MANUAL_ROOT: contentOnly(),
-        MANUAL_STORE: contentOnly(),
+        MANUAL_STORE: join(contentOnly(), "missing"),
       }),
-    ).toThrow(/holds no openspec\/specs/);
+    ).toThrow(/does not exist/);
   });
 
-  /** A content repository names its store or is one; guessing a store for it
-   * would show somebody else's plan as this repository's. */
-  it("refuses a content root that neither is nor names a store", () => {
-    expect(() => resolveRoots({ MANUAL_ROOT: contentOnly() })).toThrow(
-      /no openspec\/specs and no openspec\/config\.yaml/,
-    );
+  /** The manual needs no OpenSpec: a repository with pages and nothing else
+   * is its own store. */
+  it("reads a repository with no openspec/ as its own store", () => {
+    const root = contentOnly();
+    expect(resolveRoots({ MANUAL_ROOT: root })).toEqual(rootsOf(root));
+  });
+
+  /** A repository with `openspec/specs` of its own is the store too, so the
+   * CLI is never asked. */
+  it("never asks the openspec CLI for a store that carries its specs", () => {
+    const root = writeStore({
+      "docs/prds/manual.yaml": CONFIG,
+      "openspec/config.yaml": "store: x\n",
+      "openspec/specs/.gitkeep": "",
+    });
+    expect(resolveRoots({ MANUAL_ROOT: root, PATH: "" }).own).toBe(true);
   });
 });

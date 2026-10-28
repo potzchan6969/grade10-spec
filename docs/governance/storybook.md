@@ -26,6 +26,7 @@ Published from `main` at
 | Kind | Title | File |
 | --- | --- | --- |
 | **Screen** | `<Domain>/<Feature>/Screens/<Screen>[/<Aspect>]` | `apps/preview/src/pages/<domain>/<feature>/` |
+| **Flow** | `<Domain>/Flows`, one story per flow | `apps/preview/src/pages/<domain>/flows/` |
 | **Prototype** | `<Domain>/<Feature>/Prototypes/<Piece>` | `apps/preview/src/prototypes/<domain>/<feature>/` |
 | **Part** | `<Domain>/<Feature>/Parts/<Component>[/<Aspect>]` | beside the screens |
 | **Block** | `<Domain>/<Feature>/Blocks/<Component>[/<Aspect>]` | `packages/ui/src/blocks/<dir>/` |
@@ -54,7 +55,7 @@ Published from `main` at
   `Header`, `Body` and `Footer` inside `CartDrawer`. Retitle with
   `pnpm storybook:rename <map>` so every cited id is rewritten with the move
 - **Order** — Start Here, the domains in `docs/prds/manual.yaml` order, then
-  Design System; inside a domain, features in the manual's nav order, by each
+  Design System; inside a domain, its Flows, then features in the manual's nav order, by each
   page's `order:` then its title; inside a feature, Screens, Prototypes, Parts
   and Blocks
 
@@ -87,6 +88,14 @@ Storybook holds it.
   to footer, and declares `parameters: { layout: "fullscreen" }`. The page
   owns its state and callbacks; packages only receive props
 - **Narrow** — a `Narrow` story sets `globals: { viewport: { value: "mobile1" } }`
+- **Interaction test** — every state story carries a `play` that asserts what
+  the State's Shows cell says, with `expect` on what a reader sees: roles,
+  names and text, not class names. A state the reader reaches by acting —
+  validation, busy, success, an action's error, keyboard and focus — starts
+  from the default and reaches it in `play` with `userEvent` clicks, typing
+  and keys, so `pnpm test:stories` fails when the interaction breaks. The
+  usability categories a screen walks are in the `ui-design` schema
+  instruction
 
 ## Journeys
 
@@ -94,8 +103,30 @@ Storybook holds it.
   `navigateToStory` or a `storyHref` link from `pages/workbench-story-nav.ts`,
   so a journey is walked in the canvas the way a collector walks it
 - **Combinations** — a journey whose outcome turns on what staging is set to
-  is walked by the Screen's Scenario, below; there is no separate Flows folder
-- **Journeys cited** — a click-through screen or a Scenario names the journeys
+  is walked by the Screen's Scenario, below
+- **Flows** — a domain's critical journeys, one story per flow in the
+  domain's `<Domain>/Flows` file, each a tree of existing screen stories
+  declared with `flowScreen()` in `pages/flow-screens.tsx`, so no state is drawn
+  twice and `pnpm storybook:check` holds every screen to a story that exists
+  - **Tree** — a screen's id is its place: the number is the step, a trailing
+    letter another state of that step (`1`, `1a` Empty, `1b` Not logged in,
+    `2`). The Canvas lays the steps out left to right with each step's other
+    states under it; the Screen control lists Canvas, then every screen in
+    that order, and focuses one at desktop size
+  - **Critical and MECE** — only what a collector must do (bid, pay, receive,
+    sign); no screen state appears in two flows, so a later flow starts
+    where an earlier one stops. Edge, error, copy and currency variants stay
+    screen stories unless a step needs them as its other states
+  - **Served** — a flow is drawn only where the collector site serves every
+    screen, because each flow carries a capture recipe that walks the site
+    through the same screens; a screen the site cannot reach yet waits for
+    its page
+  - **Verification** — the flow's `parameters.verification.caseId` names the
+    flow and `parameters.flow` its screens; each screen is a capture point
+    compared with its screen story. The Verification panel follows the
+    focused screen, carries its own Screen control, and on Canvas shows every
+    screen's desktop comparison at once
+- **Journeys cited** — a click-through screen, a flow or a Scenario names the journeys
   it walks, by their ids in the
   `user-journeys.md` beside the spec:
   `parameters: { journeys: ["grade10-site-store-cart-drawer-US-01"] }`, on
@@ -104,7 +135,7 @@ Storybook holds it.
 - **Collector journeys** — the workbench draws what a collector, member,
   bidder or winner walks; a journey only staff or operators walk is not drawn
   here
-- **Play** — a click-through's `play` steps through it, so
+- **Play** — a click-through's or a flow's `play` steps through it, so
   `pnpm test:stories` keeps it working
 
 ## Scenarios
@@ -185,10 +216,11 @@ story in place with `/animate`, `/transitions-polish` and `/ux-copy`.
 - **Title** — outside the grammar, or a domain or feature with no manual page
 - **Place** — a story outside its kind's folder, or a leaf that is not the
   component's name
-- **Imports** — one feature reaching into another's folder
+- **Imports** — one feature reaching into another's folder, or a flow
+  reaching outside its domain
 - **Order** — a workbench sidebar order that is not the manual's; run
   `pnpm storybook:sort`
-- **Journeys** — a journey id no
+- **Journeys** — a flow that names no journey, or a journey id no
   `user-journeys.md` holds; one only an active change holds warns
 - **Coverage** — a key in `coverage.yaml` that is no feature; a collector
   feature with no Screens or Prototypes warns

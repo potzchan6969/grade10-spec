@@ -4,7 +4,6 @@ title: Store Order History Test Cases
 
 # grade10-site/store/order-history Test Cases
 
-**Status:** pending-review · 0/13
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/order-history, grade10-site/store/checkout
 
@@ -45,13 +44,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/active-and-past
 
 **Pre-conditions:**
 
@@ -87,13 +85,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/order-actions, order-history#orders/a-safe-carrier-address
 
 **Pre-conditions:**
 
@@ -121,13 +118,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/order-actions
 
 **Pre-conditions:**
 
@@ -148,13 +144,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/private-address
 
 **Pre-conditions:**
 
@@ -177,13 +172,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/recorded-orders
 
 **Pre-conditions:**
 
@@ -206,13 +200,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/recorded-orders
 
 **Pre-conditions:**
 
@@ -241,13 +234,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/read-states
 
 **Pre-conditions:**
 
@@ -267,13 +259,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/read-states
 
 **Pre-conditions:**
 
@@ -296,13 +287,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/empty-account
 
 **Pre-conditions:**
 
@@ -327,13 +317,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/status-badge
 
 **Pre-conditions:**
 
@@ -374,13 +363,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#product-pictures
+* **Trace:** order-history#product-pictures/recognise-a-purchase
 
 **Pre-conditions:**
 
@@ -415,13 +403,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** checkout#guest-checkout/joining-an-account, checkout#guest-checkout/no-points
 
 **Pre-conditions:**
 
@@ -455,13 +442,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** checkout#guest-checkout/joining-an-account
 
 **Pre-conditions:**
 

@@ -2,7 +2,6 @@
 title: Cart Drawer
 spec: grade10-site/store/cart-drawer
 order: 4
-reviewed: 2026-10-14
 ---
 
 The Cart Drawer opens over the page the collector is on: they check what is in
@@ -56,7 +55,7 @@ back to that page.
 
 ## Pending Operations
 
-**Wait before another action** - the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
+- **Wait before another action** — the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
 
 ::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
 
@@ -127,6 +126,8 @@ The refusals are the coupon's own —
   wallet; the guest's code moves to the member's cart unless that cart
   already holds one -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+- **No identity check** — a checkout of any value asks nothing about who the
+  buyer is — [KYC](/p/grade10-site/account/kyc)
 
 ::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
 
@@ -147,7 +148,7 @@ The refusals are the coupon's own —
 ::story{id="store-cart-blocks-cartdrawerfooter-guest--member-with-public-codes" title="A member's codes beside the public ones"}
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/store/cart-drawer"}
+[Test cases · grade10-site/store/cart-drawer](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/cart-drawer)
 :::
 
 :::detail{title="Code map" for="engineer"}

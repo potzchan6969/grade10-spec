@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router";
 import { REFERENCES_ROUTE } from "../api/derive";
 import { useManualIndex } from "../api/use-manual-index";
 import { useReference } from "../api/use-reference";
-import { FileMeta, withoutLeadingTitle } from "../blocks/change-document";
+import { FileMeta, withoutLeadingTitle } from "../blocks/file-meta";
 import { MarkdownView } from "../blocks/markdown";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";

@@ -5,7 +5,7 @@
 - Rewards and redemption
   - Member-readable code: every redemption mints one member-readable code
     at the moment it settles, unique to that redemption and bound to the
-    member — good or discount alike — and the scan QR names that
+    member — gift or discount alike — and the scan QR names that
     redemption; the ticket shows code or collection line by context
 - Member surface
   - Reward shop: the menu draws each reward as a card — the item's art or
@@ -17,7 +17,7 @@
     it is good for, shows the balance before and after, refuses a short
     balance whole, and draws the redeemed state in the same surface
   - Redeemed ticket: a discount coupon's ticket carries the unique code the
-    redemption minted; a good's ticket names the collection in the code's
+    redemption minted; a gift's ticket names the collection in the code's
     place; no surface outside the cart offers Apply
 
 ## ADDED Requirements
@@ -63,7 +63,7 @@ mints for that coupon's spend: claiming mints and deactivates per sale as
 The shared UI package SHALL export, from its public entry, exactly these
 components for the membership surface — `TierCard`, `TierInfoCard`,
 `TierLadder`, `HowPointsWork`, `MemberPass`, `RewardMenu`, `RewardItem`,
-`RewardCheckout`, `CouponList`, and `ActivityList` — and the props and copy
+`RewardCheckout`, `CouponList`, and `PointHistory` — and the props and copy
 type of each.
 
 `TierCard` SHALL wear the skin of the tier held — silver, gold or black,
@@ -74,7 +74,8 @@ earn line. Where the tier names a qualifying threshold `TierCard` SHALL
 render the qualifying count apart from the balance, never summed into it,
 with the progress toward the threshold; where it names none it SHALL render
 neither count nor progress. Given an `href` to the tier-and-benefits surface,
-the whole card SHALL be the link to it. It SHALL NOT name a balance-expiry
+the Benefits affordance SHALL be the link to it, and the rest of the card
+SHALL NOT be interactive. It SHALL NOT name a balance-expiry
 day or count, nor derive any expiry wording from a clock or a balance of its
 own — the whole balance lapses on one shared inactivity date, never in
 parts.
@@ -117,10 +118,13 @@ in flight the refresh control SHALL show busy, and a refused refresh
 SHALL toast the reason the consumer passes, once per refusal. When a
 fresh token arrives, `MemberPass` SHALL dip the square out of view and
 settle the fresh one in — a transition, never an abrupt swap — and
-SHALL swap instantly under reduced motion. `MemberPass` SHALL
-still render the code's life as a countdown while it lives — never an
-expired rendering, the consumer rotating the code out before it lapses —
-and SHALL carry no used state of its own: a code the till takes is
+SHALL swap instantly under reduced motion. A refused refresh SHALL leave
+the earlier code on show with its countdown running. The consumer SHALL render
+`MemberPass` only once it holds a token; the block draws no placeholder of
+its own. `MemberPass` SHALL
+render a countdown to the next rotation, which the consumer sets inside the
+code's life — never an expired rendering, the consumer rotating the code out
+before it lapses — and SHALL carry no used state of its own: a code the till takes is
 answered by the next minted token arriving through props,
 so the pass keeps rotating rather than freezing on what was spent.
 
@@ -150,7 +154,7 @@ a balance dropped mid-checkout SHALL re-read the deficit row; either
 refusal is raised outside the surface. Given a
 redemption it SHALL
 draw the redeemed phase in the same surface: the member-readable code a
-discount coupon's ticket carries, the collection a good's ticket names in
+discount coupon's ticket carries, the collection a gift's ticket names in
 the code's place. Where the redemption supplies a scan QR the ticket
 SHALL carry a Use now control in its action slot, and the surface SHALL
 draw the scan QR as its own card apart from the ticket — collapsed until
@@ -166,9 +170,17 @@ coupon - what it is for, its own expiry, and whether it is spent, void or
 expired - and a code only where the consumer passes one; a reward coupon
 carries none. The coupons page SHALL list no spent coupon — a spent one
 leaves the section.
-`ActivityList` SHALL name entries in terms a member reads, name the channel
+`PointHistory` SHALL name entries in terms a member reads, name the channel
 each came from, and SHALL NOT carry an operator reason, a retry key, or
-internal pricing.
+internal pricing. It SHALL render the earned, used and pending totals the
+consumer passes it, offer a filter for each of those kinds alongside an
+unfiltered view, and count the entries each filter answers on its trigger. A
+filter that answers no entries SHALL NOT draw a trigger, and a ledger with
+no entries at all SHALL draw the empty state the consumer supplies — message,
+second line, and action if any. Pending entries SHALL group under their own
+card ahead of the months; settled entries SHALL group by month and year. The
+day on an entry is the day its points landed, so a pending entry carries no
+date.
 
 Each of those components SHALL take the words it renders in a single `copy`
 prop of its own copy type, or an equivalent content prop where the shape is
@@ -200,6 +212,29 @@ SHALL require no export of its own.
 
 - **WHEN** any of the membership components is rendered
 - **THEN** every count, date, state and word it shows arrived through props
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-8qm rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-255 - The card wears the skin of the tier held
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` is rendered for a silver, a gold or a black member
+- **THEN** it wears that tier's skin, taken from the `variant` prop
+- **AND** the skin never follows the tier name the consumer words
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-3vf rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-256 - A tier that names no threshold renders no progress
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` is rendered for a tier that names no qualifying threshold
+- **THEN** neither the qualifying count nor its progress is rendered
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=2 -->
+#### Scenario: grade10-site-loyalty-programme-SC-257 - The Benefits link opens the tier-and-benefits surface
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` is given an `href`
+- **THEN** the Benefits affordance is the link to it, and the rest of the card is not interactive
+- **AND** a plain press reports `onClick` while a modified press keeps the link's behaviour
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-tzp rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-185 - The summary names one expiry line
@@ -262,9 +297,9 @@ SHALL require no export of its own.
 #### Scenario: grade10-site-loyalty-programme-SC-268 - The redeemed ticket carries the code or the collection, never Apply
 **Serves:** grade10-site-loyalty-programme-US-12 - Member browses the shop, confirms the cost and sees the redemption
 
-- **WHEN** the redeemed phase renders for a discount coupon and for a good
+- **WHEN** the redeemed phase renders for a discount coupon and for a gift
 - **THEN** the coupon's ticket carries the unique code the redemption minted
-- **AND** the good's ticket names the collection in the code's place
+- **AND** the gift's ticket names the collection in the code's place
 - **AND** where the redemption supplies a scan token the ticket draws the QR
 - **AND** neither draws an Apply action
 
@@ -296,3 +331,100 @@ SHALL require no export of its own.
 - **WHEN** the confirm phase renders
 - **THEN** the deficit row re-reads the shortfall and refuses whole
 - **AND** the shortfall is raised outside the surface
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-vkq rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-275 - The held tier wears the emphasis
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `TierInfoCard` renders the rung marked `currentTier`
+- **THEN** it wears the primary border and its tint
+- **AND** the unheld rungs wear the plain border
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-rwd rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-276 - An invitation-held tier earns nothing beneath it
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `TierLadder` renders a member whose held rung is `invitationOnly`
+- **THEN** every other rung reads upcoming, never completed
+- **AND** no connector is drawn into the held rung, and neither the qualifying count nor its footnote renders
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-xnm rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-277 - The qualifying line waits for both figures
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `TierLadder` renders with a qualifying count but no target, or a target but no count
+- **THEN** no qualifying line is rendered
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-fzj rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-278 - The mechanics rows take the consumer's icons and words
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `HowPointsWork` renders a member's mechanics
+- **THEN** every row's icon, title and body arrived through props
+- **AND** the rows stack on a narrow viewport and pair across a wide one
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp1 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp1 - The pass is rendered only once a token exists
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the consumer holds no token yet
+- **THEN** the consumer does not render `MemberPass`
+- **AND** the block draws no placeholder of its own
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp2 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp2 - The pass encodes the consumer's token, never its own
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` renders a token
+- **THEN** the scannable square encodes that token verbatim, no typed
+  code beside it
+- **AND** the pass mints, persists and substitutes it never
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp3 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp3 - The pass wears the skin of the tier held
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` is rendered for a silver, a gold or a black member
+- **THEN** it wears that tier's skin, taken from the `variant` prop
+- **AND** the skin never follows the tier name the consumer words
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp4 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp4 - A fresh code swaps the code area, never snaps
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** a fresh token arrives after `onRefresh` reported the ask
+- **THEN** the square eases out of view and the fresh one settles in
+- **AND** under reduced motion the swap is instant
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp5 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp5 - The pass names the member by account email
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` is rendered
+- **THEN** it carries the member's account email under the tier name
+- **AND** no display name, none being collected at registration
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp6 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp6 - A refresh shows busy and a refusal keeps the earlier code
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the member asks for a fresh code and the ask is in flight
+- **THEN** the refresh control shows busy
+- **AND** a refused ask toasts the consumer's reason once, leaving the earlier code on show with its countdown running
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp7 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp7 - The countdown runs to the next rotation
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` renders a token with the time to its next rotation
+- **THEN** the countdown reads down to that rotation
+- **AND** no expired code is ever drawn, the consumer rotating the code out before it lapses
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp8 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp8 - A taken code is answered by the next token
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the till takes the pass's code and the consumer mints the next token
+- **THEN** the pass shows the next token, keeping its rotation rather than freezing on the spent one
+- **AND** the pass carries no used state of its own
+

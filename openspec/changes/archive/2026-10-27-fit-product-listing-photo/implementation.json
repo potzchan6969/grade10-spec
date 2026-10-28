@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "53d390f461bc65fff465353dde23264c39a3c1af592d3e0aedc76d32b1eb224f"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "532cabf2498373784e753a68b1ddbd102c5f7e37",
+    "capturedAt": "2026-10-27T07:16:37.022Z",
+    "targets": [
+      {
+        "path": "openspec/changes/fit-product-listing-photo/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The product photo fits inside the well"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "8c36c1fa775bf05c93e45ee36c9cbdb464bd4a81",
+      "components": [
+        "web"
+      ]
+    }
+  ]
+}

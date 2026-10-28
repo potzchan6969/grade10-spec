@@ -1,8 +1,5 @@
-import type { Role } from "../api/types";
-import type { ProposalFile } from "./propose";
 import {
   assertManualPath,
-  assertProposal,
   base64FromBytes,
   type ContentStore,
   type StoredFile,
@@ -129,40 +126,6 @@ export class LocalStore implements ContentStore {
       base64: base64FromBytes(bytes),
       baseVersion,
     });
-  }
-
-  async propose(files: ProposalFile[]): Promise<{ id: string }> {
-    const slug = assertProposal(files);
-    const answer = await call(this.http, "/api/propose", json({ files }));
-    if (answer.status !== 200) {
-      throw new StoreError(answer.status, errorOf(answer, "proposal refused"));
-    }
-    const id = answer.body.id;
-    if (id !== slug) {
-      throw new StoreError(answer.status, "the store wrote another change");
-    }
-    return { id };
-  }
-
-  async withdraw(id: string): Promise<void> {
-    const answer = await call(this.http, "/api/withdraw", json({ id }));
-    if (answer.status !== 200) {
-      throw new StoreError(answer.status, errorOf(answer, "withdraw refused"));
-    }
-  }
-
-  async hand(change: string, role: Role, handle: string): Promise<void> {
-    const answer = await call(
-      this.http,
-      "/api/hands",
-      json({ change, role, handle }),
-    );
-    if (answer.status !== 200) {
-      throw new StoreError(
-        answer.status,
-        errorOf(answer, "naming a hand was refused"),
-      );
-    }
   }
 
   private async save(endpoint: string, body: unknown): Promise<WriteOutcome> {

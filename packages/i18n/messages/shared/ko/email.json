@@ -5,7 +5,8 @@
     "body": "로그인 링크를 요청하셨습니다. 한 번만 사용하세요.",
     "expires": "이 링크는 {minutes}분 후에 만료됩니다.",
     "action": "로그인",
-    "whyYouGotThis": "{brandName}에서 로그인 링크를 요청하셨습니다."
+    "whyYouGotThis": "{brandName}에서 로그인 링크를 요청하셨습니다.",
+    "sentAt": "발송 시각: {sentAt}"
   },
   "appointment": {
     "greeting": "{name}님, 안녕하세요.",

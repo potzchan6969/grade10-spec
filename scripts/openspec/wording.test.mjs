@@ -4,7 +4,6 @@ import { test } from "node:test";
 import {
   escapeSlackText,
   linkedOf,
-  movedText,
   threadPathOf,
   toldBodyOf,
   yourTurnText,
@@ -17,20 +16,19 @@ import {
  * Their own suite because their own module: the push workflow sends these
  * sentences and the manual's Told now block shows them, so a case here is
  * what a hand reads wherever they read it. `moves.test.mjs` keeps the cases
- * about who a message reaches and what key stops it twice, and reads
- * `landedText` from here.
+ * about who a message reaches and what key stops it twice.
  */
 
-const LINKED = "<https://spec.test/in-flight/probe|Probe>";
+const LINKED = "<https://spec.test/openspec/#/change/probe|Probe>";
 
 test("shared-planning-change-stages-SC-88 - yourTurnText names the stage and pastes the hand's command", () => {
   assert.equal(
     yourTurnText({ id: "probe", stage: "planned" }, "dev", LINKED),
-    `*Your turn* — ${LINKED} is at *Planned*.\nRead the plan and challenge the tech design: \`/workflow-tasks probe\``,
+    `*Your turn* — ${LINKED} is at *Planned*.\nRead the plan and challenge the tech design: \`/planning-dev probe\``,
   );
   assert.equal(
     yourTurnText({ id: "probe", stage: "specified" }, "pm", LINKED),
-    `*Your turn* — ${LINKED} is at *Specified*.\nResolve the open Raised rows: \`/workflow-specify probe\``,
+    `*Your turn* — ${LINKED} is at *Specified*.\nResolve the open Raised rows: \`/planning-dev probe\``,
   );
 });
 
@@ -41,7 +39,7 @@ test("yourTurnText writes the change's own id into the command", () => {
     LINKED,
   );
 
-  assert.match(text, /`\/workflow-build add-gift-cards <group>`/);
+  assert.match(text, /`\/implement add-gift-cards`/);
   assert.doesNotMatch(text, /<id>/);
 });
 
@@ -113,80 +111,6 @@ test("shared-planning-agent-rounds-SC-89 - QA's ordinary body names no suite", (
   assert.doesNotMatch(toldBodyOf(at, "qa", { linked: LINKED }).text, /Suite:/);
 });
 
-test("shared-planning-agent-rounds-US-18 - movedText says a small move holds nothing but the fold", () => {
-  const text = movedText(
-    {
-      behind: [
-        {
-          artifact: "tasks",
-          changed: ["proposal"],
-          moved: [
-            {
-              item: "proposal",
-              key: "## Why",
-              before: "Why one.",
-              after: "Why two.",
-              major: false,
-            },
-          ],
-          holds: false,
-        },
-      ],
-    },
-    LINKED,
-  );
-  assert.equal(
-    text,
-    [
-      `*What moved* on ${LINKED}, before \`tasks\``,
-      "`proposal` ## Why, small — before: Why one. — after: Why two.",
-      "Holds nothing but the fold: read it again when you can.",
-    ].join("\n"),
-  );
-});
-
-test("movedText quotes a unit once however many artifacts it reaches, and names a whole move", () => {
-  const unit = {
-    item: "decisions",
-    key: "Q3",
-    before: "Every move holds",
-    after: "A major move holds",
-    major: true,
-  };
-  const text = movedText(
-    {
-      behind: [
-        {
-          artifact: "ui-design",
-          changed: ["decisions"],
-          moved: [unit],
-          holds: true,
-        },
-        {
-          artifact: "tasks",
-          changed: ["decisions"],
-          moved: [unit],
-          holds: true,
-        },
-        {
-          artifact: "specs",
-          changed: ["ui-design"],
-          whole: true,
-          moved: [{ item: "ui-design", key: "ui-design", major: true }],
-          holds: true,
-        },
-      ],
-    },
-    LINKED,
-  );
-  assert.equal(text.match(/`decisions` Q3/g)?.length, 1);
-  assert.match(text, /`ui-design`, major — read it again whole/);
-  assert.match(
-    text,
-    /Holds every landing after `ui-design`, `tasks`, `specs` until you read it again or land it\./,
-  );
-});
-
 test("threadPathOf writes the path Slack resolves, the separator taken out", () => {
   assert.equal(
     threadPathOf("C0123ABC/1758170000.001200"),
@@ -202,8 +126,11 @@ test("threadPathOf says nothing for a record that names no thread", () => {
 
 test("linkedOf links a title, escaped, in Slack's own markup", () => {
   assert.equal(
-    linkedOf("https://spec.test/in-flight/probe", "Gift cards & <vouchers>"),
-    "<https://spec.test/in-flight/probe|Gift cards &amp; &lt;vouchers&gt;>",
+    linkedOf(
+      "https://spec.test/openspec/#/change/probe",
+      "Gift cards & <vouchers>",
+    ),
+    "<https://spec.test/openspec/#/change/probe|Gift cards &amp; &lt;vouchers&gt;>",
   );
 });
 

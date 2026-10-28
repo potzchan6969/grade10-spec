@@ -6,10 +6,7 @@ disable-model-invocation: true
 
 # Spec push
 
-Kept until the team has adopted the line commands (`Q84` of
-`run-a-round-on-every-artifact`). `/workflow-land` lands one artifact on
-`main` on the hand's word; this lands whatever planning commits sit ahead of
-`origin/main`.
+This lands whatever planning commits sit ahead of `origin/main`.
 
 Landing is the handoff. The application repository reads this store at its
 `main`, so a change sitting on a branch reaches nobody: `pnpm plan board` there
@@ -153,6 +150,5 @@ engineer can claim it with `pnpm plan claim` in the application repository.
 
 ## Related
 
-- `/workflow-land` — one artifact, on the hand's word.
 - `/planning-pm`, `/planning-design`, `/planning-dev` — where
   the change was written.

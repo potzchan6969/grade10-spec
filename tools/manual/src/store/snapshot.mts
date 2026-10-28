@@ -1,258 +1,71 @@
 import { join } from "node:path";
-import { readTeamMap } from "../../../../scripts/openspec/lib/team.mjs";
 import type {
-  Archive,
-  ChangeDocument,
-  ChangeEntry,
   CheckWarning,
   ReferenceDocument,
-  Role,
-  SchemaArtifact,
   Snapshot,
-  SnapshotTeam,
-  SpecEntry,
-  TeamMap,
 } from "../api/types.ts";
-import { ROLES } from "../api/types.ts";
-import { projectAvailability, receiptsFrom } from "./availability.mts";
 import { DESIGN_SYNC_REPORT, readDesignSync } from "./design-sync.mts";
 import { newestMtime } from "./disk.mts";
-import {
-  type GitIndex,
-  readMain,
-  readRootsGitIndex,
-  resolveMain,
-  git as runGit,
-  type StoreMain,
-} from "./git.mts";
-import { scenarioToken } from "./markdown.mts";
-import { markQuestions } from "./questions.mts";
-import { readChangeDocuments } from "./read-change-documents.mts";
-import {
-  readArchivedChanges,
-  readChanges,
-  readIssuedIds,
-} from "./read-changes.mts";
+import { type GitIndex, readRootsGitIndex, git as runGit } from "./git.mts";
 import {
   deriveTaxonomy,
   readManualAssets,
   readManualConfig,
   readManualPages,
+  readManualSuites,
 } from "./read-manual.mts";
 import { readReferences, readReferencesReadme } from "./read-references.mts";
-import { schemaArtifacts } from "./read-schema.mts";
-import { discoverSpecs, readSpecs } from "./read-specs.mts";
 import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
-import { markUpstream } from "./upstream.mts";
 import { checkWarnings } from "./warnings.mts";
-
-/** `docs/prds/team.yaml`, projected to what the browser needs: a handle
- * against the roles it may take, its e-mail, Slack member and channels left
- * behind — those address a message, which is the notify script's own job.
- * A role the map does not spell as one of the five is dropped rather than
- * carried into a type that promises only those six: `checkHands` is where a
- * change's own `hands:` is held to that set, and the map itself owes no such
- * check yet. */
-function snapshotTeam(map: TeamMap): SnapshotTeam {
-  const known = new Set<string>(ROLES);
-  const handles: Record<string, Role[]> = {};
-  for (const [handle, member] of Object.entries(map.handles)) {
-    handles[handle] = member.roles.filter((role): role is Role =>
-      known.has(role),
-    );
-  }
-  return { handles };
-}
-
-/** The artifacts share one history walk — the only expensive part of a read.
- * `documents` is one artifact per in-flight change and `references` one per
- * reference document, each served on its own. */
-/** The artifacts of every schema the changes in flight name, for the ones
- * this store defines. A change on a CLI built-in is left out: its artifacts
- * live inside the CLI, and nothing here can say what it owes. */
-function schemasInUse(
-  root: string,
-  changes: ChangeEntry[],
-): Record<string, SchemaArtifact[]> {
-  const schemas: Record<string, SchemaArtifact[]> = {};
-  for (const { schema } of changes) {
-    if (schema === "" || schema in schemas) continue;
-    const artifacts = schemaArtifacts(root, schema);
-    if (artifacts) schemas[schema] = artifacts;
-  }
-  return schemas;
-}
-
-/**
- * The run sheet QA is sent to walk, from the environment rather than a file:
- * the push workflow's notify step reads `TCS_SHEET_URL` for the same
- * sentence, so the manual reads the same variable rather than a second name
- * for one sheet. Unset is the honest default — no per-change run tab exists
- * in the store to link (decisions Q39) — and the message names the sheet in
- * words instead of carrying a dead link.
- */
-export function sheetOf(
-  env: NodeJS.ProcessEnv = process.env,
-): string | undefined {
-  const url = env.TCS_SHEET_URL?.trim();
-  return url ? url : undefined;
-}
 
 export type Store = {
   snapshot: Snapshot;
-  archive: Archive;
-  documents: ChangeDocument[];
   references: ReferenceDocument[];
 };
 
 export async function readStore(roots: Roots): Promise<Store> {
-  const [index, main] = await Promise.all([
-    readRootsGitIndex(roots),
-    readMain(roots.store),
-  ]);
-  const store = composeStore(
-    roots,
-    index,
-    main,
-    await checkWarnings(roots, index),
-  );
+  const index = await readRootsGitIndex(roots);
+  const store = composeStore(roots, index, await checkWarnings(roots, index));
   await signWarningCallouts(roots, store.snapshot.pages);
   return store;
 }
 
-/** `main` is where every in-flight change on it has its task list read;
- * `null` only for a store with no git, whose files are all there is. */
 export function composeStore(
   roots: Roots,
   git: GitIndex,
-  main: StoreMain | null,
   warnings: CheckWarning[] = [],
 ): Store {
-  const generatedAt = new Date().toISOString();
   const config = readManualConfig(roots);
-  const shape = discoverSpecs(roots.store);
   const designSync = readDesignSync(roots.store);
-  const specs = readSpecs(roots.store, git);
-  const changes = readChanges(roots.store, git, main);
-  const archivedChanges = readArchivedChanges(roots.store, git);
-  const availabilityEnvironments = projectAvailability(
-    [...changes, ...archivedChanges],
-    receiptsFrom(process.env.MANUAL_DEPLOYMENT_RECEIPTS),
-  );
-  markIssuedIds(roots.store, specs);
   const references = readReferences(roots.store, git);
   const referencesReadme = readReferencesReadme(roots.store);
-  const { pages, asts } = readManualPages(roots, git);
-  const schemas = schemasInUse(roots.store, changes);
-  // After both: what is before an artifact is the pages the change links and
-  // the artifacts the schema names, and this is the one place holding both.
-  markUpstream(roots.store, changes, schemas, pages, asts, git);
-  // The page's own open questions merge onto the entry here too, beside its
-  // decisions rows, so the render reads one field rather than walking the
-  // pages again.
-  markQuestions(changes, pages, asts);
-  // Read the way a page is: a store with no file yet knows nobody rather than
-  // failing to boot, and My turn is what tells a handle it does not know from
-  // one it has simply never met. Projected before it reaches the snapshot: the
-  // browser is sent a handle's roles, never the e-mail or the Slack member the
-  // full map carries for the notify script alone.
-  const team = snapshotTeam(readTeamMap(roots.store));
-  const sheetUrl = sheetOf();
+  const { pages } = readManualPages(roots, git);
 
   return {
     snapshot: {
-      generatedAt,
+      generatedAt: new Date().toISOString(),
       storeHead: git.head,
       config,
-      taxonomy: deriveTaxonomy(shape, config, roots.own),
+      taxonomy: deriveTaxonomy(roots, config),
       manualDir: roots.manual,
       pages,
-      specs,
-      changes,
-      schemas,
+      suites: readManualSuites(roots),
       assets: readManualAssets(roots),
       references: references.map(({ text: _text, ...entry }) => entry),
       ...(referencesReadme === undefined ? {} : { referencesReadme }),
       history: git.history,
       warnings,
       ...(designSync ? { designSync } : {}),
-      team,
-      ...(["ready", "unconfigured"].includes(
-        process.env.MANUAL_AVAILABILITY_STATUS ?? "",
-      )
-        ? {
-            availabilityStatus: process.env.MANUAL_AVAILABILITY_STATUS as
-              | "ready"
-              | "unconfigured",
-          }
-        : {}),
-      ...(availabilityEnvironments.length > 0
-        ? { availabilityEnvironments }
-        : {}),
-      ...(sheetUrl ? { sheetUrl } : {}),
     },
-    archive: {
-      generatedAt,
-      storeHead: git.head,
-      changes: archivedChanges,
-    },
-    documents: readChangeDocuments(roots.store, git, main),
     references,
   };
 }
 
-/** What each capability has issued, counting the deltas nobody has folded yet.
- * A capability page states the ceiling so the next author clears it instead of
- * reusing an id the durable file cannot see. */
-function markIssuedIds(root: string, specs: SpecEntry[]): void {
-  const issued = readIssuedIds(root, durableIds(specs));
-  for (const spec of specs) {
-    const marks = issued.get(tokenOf(spec));
-    if (marks) spec.issuedThrough = marks;
-  }
-}
-
-/** The word a capability's permanent ids are built on. It is usually the last
- * segment of the spec id, but an id is issued once and never reissued, so a
- * capability that has since been renamed or regrouped keeps writing the token
- * it started with — `grade10-site/loyalty/programme` still issues
- * `grade10-site-loyalty-programme-SC-12`. Its own ids are therefore the authority, and the path is
- * only the fallback for a capability that has issued none yet. */
-function tokenOf(spec: SpecEntry): string {
-  for (const requirement of spec.requirements) {
-    for (const scenario of requirement.scenarios) {
-      if (scenario.id) return scenarioToken(scenario.id);
-    }
-  }
-  for (const journey of spec.journeys ?? []) {
-    const token = journey.id.replace(/(?:-US-|\.US)\d+$/, "");
-    if (token !== journey.id) return token;
-  }
-  return spec.id.split("/").pop() ?? spec.id;
-}
-
-function* durableIds(specs: SpecEntry[]): Generator<string> {
-  for (const spec of specs) {
-    for (const requirement of spec.requirements) {
-      for (const scenario of requirement.scenarios) {
-        if (scenario.id) yield scenario.id;
-      }
-    }
-    for (const journey of spec.journeys ?? []) yield journey.id;
-    for (const one of spec.testCases ?? []) yield one.id;
-  }
-}
-
-/** Every head a poll must notice moving: the store's, its main — where a
- * claim lands without touching this checkout — and the content repository's
- * when the manual lives in its own. */
+/** Every head a poll must notice moving: the store's, and the content
+ * repository's when the manual lives in its own. */
 export async function readHeads(roots: Roots): Promise<string> {
-  const [head, main] = await Promise.all([
-    runGit(roots.store, ["rev-parse", "HEAD"]),
-    resolveMain(roots.store),
-  ]);
-  const store = `${head.trim()}@${main.commit}`;
+  const store = (await runGit(roots.store, ["rev-parse", "HEAD"])).trim();
   if (roots.own) return store;
   const content = (await runGit(roots.content, ["rev-parse", "HEAD"])).trim();
   return `${store}+${content}`;
@@ -263,7 +76,6 @@ export async function readHeads(roots: Roots): Promise<string> {
  * manual says can never be one the two disagree about. */
 export function storeDirs(roots: Roots): string[] {
   return [
-    join(roots.store, "openspec"),
     join(roots.store, DESIGN_SYNC_REPORT.split("/")[0]),
     join(roots.store, "docs", "references"),
     join(roots.content, roots.manual),

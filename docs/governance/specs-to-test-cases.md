@@ -44,7 +44,7 @@ A feature run reads a bundle the caller assembles, and nothing outside it.
 - **Included** - from the capability: `## Purpose` and `## Feature set` of `spec.md`, and `user-journeys.md`. From the change: `proposal.md`, and `decisions.md` with its goals, non-goals and `## Raised`. `ui-design.md` where one exists, with the requirements pass's dispositions stripped. The linked `docs/prds/` pages and `openspec/config.yaml`'s `context`. The existing suite, without its `## Reconciliation` and with its `## Settled`, to extend a live case - a row, or a revision with its `rev` bumped where what it verifies changes - before writing a new one, and for id continuity. The domain suite above, the change's or else the durable one, without its `## Reconciliation`, so the run knows which paths are already walked
 - **Excluded** - every `## Requirements` section, scenario text as a source, `openspec/specs/` beyond the above, and `openspec/changes/archive/`. An archived change keeps a reconciliation that names scenario ids, so reading it reopens the leak
 - **Recorded** - the `## Reconciliation` Run line names what the pass read and what it was denied. Nothing verifies it: it is the run's statement, not proof. A person running the skill by hand assembles the bundle and says so
-- **An empty `## Raised`, run after run, is the failure signal** - a second reading that asks nothing has stopped being blind or stopped being a different method. `pnpm check:manual` warns on an empty one
+- **An empty `## Raised`, run after run, is the failure signal** - a second reading that asks nothing has stopped being blind or stopped being a different method. QA2 reads an empty one as that signal
 - **A different method** - the blind reader works a checklist: boundary values, equivalence partitions, state transitions, CRUD completeness, empty / one / many, null and missing, permission matrix, error taxonomy
 
 ## Raised
@@ -55,8 +55,9 @@ They go to the change's `decisions.md` under `## Raised`, one row per question, 
 
 - **What belongs** - a rule the input is silent on: "Is a scheduled lot open to bid on? The spec names not-yet-published, ended and called off, and never places scheduled on either side"
 - **What does not** - anything the input settles and the reader missed, anything for the technical design, anything the reader merely wants to know
-- **QA2 closes what the held test does not hold** - each row the [held test](../../.claude/skills/workflow-round/SKILL.md#questions-held-or-decided-by-the-round) does not hold closes on its recommendation, as a `Decisions` row written `<answer> - decided by the round`, and its answer goes to the suite's `## Settled`. Only a held row stays open and holds acceptance; a contradiction between the readings is always held
-- **Every row lands before the change merges** - as a `Decisions` row, or as a ❓ on the capability's PRD naming who owes the answer. `pnpm check:manual` refuses a row that names neither
+- **The held test** - a question is held, and keeps the ❓, when it moves scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work; a contradiction between the two blind readings is always held. A held row is written `❓ <role> - recommended: <option>`. Every other question is decided on the best option and written `<option> - decided by the round`; any hand overturns it
+- **QA2 closes what the held test does not hold** - each row the [held test](#raised) does not hold closes on its recommendation, as a `Decisions` row written `<answer> - decided by the round`, and its answer goes to the suite's `## Settled`. Only a held row stays open and holds acceptance; a contradiction between the readings is always held
+- **Every row lands before the change merges** - as a `Decisions` row, or as a ❓ on the capability's PRD naming who owes the answer. `pnpm accept:preflight` and `pnpm spec:accept` refuse a row with an empty cell, a ❓ or a `TBC`
 - **Escalated and deferred rows are written twice** - in `decisions.md`, and in the suite's `## Reconciliation` with the answer in `## Settled`, because `decisions.md` archives with the change
 - **No scenario id** - `decisions.md` goes into the next blind pass whole
 
@@ -84,7 +85,7 @@ Once both readings land, QA2 joins them on anchors and writes `## Reconciliation
 
 ## Out of Suite
 
-`**Out of suite (<category>):**` under the file header lists scenarios QA does not test. It counts as covered: `pnpm check:manual` never warns about a listed scenario, so every coverage warning left is a GUI case still owed.
+`**Out of suite (<category>):**` under the file header lists scenarios QA does not test. It counts as covered: a listed scenario owes no case, so every scenario QA2 finds unreached and unlisted is a GUI case still owed.
 
 | Category | The scenario is |
 | --- | --- |
@@ -95,7 +96,7 @@ Once both readings land, QA2 joins them on anchors and writes `## Reconciliation
 
 - **One line per category** - an optional ` - <note>` follows the ids. It names no verifier
 - **Covered elsewhere is not out of suite** - a scenario a live case walks, in this suite, another tree, a domain suite or another capability, is not listed
-- **Checked** - `pnpm check:manual` refuses a listed id a living case traces, and a list with no category or an unknown one. `**Out of suite:** none` lists nothing and needs none
+- **Held at reconciliation** - no tool checks the list; QA2 refuses a listed id a living case traces, and a list with no category or an unknown one. `**Out of suite:** none` lists nothing and needs none
 
 ## Coverage and Traceability
 
@@ -201,9 +202,11 @@ The PRD and Storybook are the store's only sources of truth. What a store spec s
 
 - **One folder** - every store case lives in `docs/prds/products/grade10-site/store/tests/`. No `*-tcs.md` exists under `openspec/specs/grade10-site/store/` or under any change's `specs/grade10-site/store/`, and `pnpm run tcs:validate` refuses one
 - **A file per page** - each file covers one store page and states what it holds in a header line: `**Capabilities:** grade10-site/store/cart-drawer, grade10-site/store/checkout`. A feature shown on several pages stays in the page file it sits in
-- **A case traces a PRD section** - `**Trace:** order-detail#product-pictures`, a heading anchor on that page under `docs/prds/products/grade10-site/store/`, or the page name alone, `**Trace:** home`, for the rules it states before its first heading. Sections in the file are named for PRD sections. Nothing in openspec is traced, unless the PM moves journeys into the PRD
+- **A case traces a PRD rule** - `**Trace:** product-listing#filters/combining-options`: the page under `docs/prds/products/grade10-site/store/`, the section's heading anchor, then the anchor of a rule's bold name in a bullet under it, at any depth. A case that walks several rules traces each, the rule it exists to prove first: the manual files the case under that rule and names the others beside it. A section alone, `product-listing#filters`, is traced only where the section names no rule, and `pnpm run tcs:validate` warns on one that does; the page name alone, `**Trace:** home`, traces the rules before its first heading. Sections in the file are named for PRD sections, and a case sits under one it traces; `pnpm run tcs:validate` refuses one that does not. After a heading or rule is renamed, `pnpm tcs:retrace <old> <new>` moves every trace and heading inside it. Nothing in openspec is traced, unless the PM moves journeys into the PRD
+- **Every rule has a case** - `pnpm run tcs:validate` warns on each named rule of a page with a suite that no case traces, by its rule anchor or its section's. A ❓ rule is not yet a rule and is skipped
+- **No review state** - a store case carries no `**Status:**`, and its file no `**Status:**` header line. A case is live until it carries `**Retired:** <YYYY-MM-DD> - <why>`; a retired case keeps its number, which is never reused. Run results live in the run sheet, and a failed case's bug is a GitHub issue the sheet links
 - **A store change writes there directly** - its QA1 drafts cases in the page file on the change's branch, and acceptance has nothing to fold. QA1 stays blind to the requirements; QA2 reconciles against the PRD page and Storybook, so store cases carry no scenario links
-- **Checked for shape, not scenarios** - store files are checked for format, ids, header, the `**Capabilities:**` line and that each trace resolves. Scenario coverage does not apply
+- **Checked for shape, not scenarios** - store files are checked for format, ids, header, the `**Capabilities:**` line and that each trace resolves. Scenario coverage does not apply; rule coverage does, as a warning
 
 ## When Suites Are Written
 
@@ -281,13 +284,13 @@ Nine properties, in the template's order, on every case.
 | --- | --- |
 | Severity | `blocker` - a main flow cannot start or finish · `critical` - money, data integrity, permission or privacy is wrong · `major` - a main result is wrong · `minor` - supporting behaviour is wrong, the flow still completes · `trivial` - presentation only |
 | Priority | `high` - core flows and major risks; run first · `medium` - rules and branches beside the main functions · `low` - presentation or convenience |
-| Status | `draft` - new or changed since review; not exported · `actual` - a reviewer stands behind it; exported · `deprecated` - retired; kept, never exported or renumbered |
+| Status | `draft` - new or changed since review; not exported · `actual` - a reviewer stands behind it; exported · `deprecated` - retired; kept, never exported or renumbered. Not on a store case - see **Store** |
 | Behaviour | `positive` - the intended thing works · `negative` - a wrong input, state or permission is refused and nothing stored changes · `destructive` - the actor removes, withdraws or cancels and the product unwinds |
 | Type | `functional` - behaviour, rules and results; the default · `usability` - whether a person can understand and operate it · `security` - identity, permission, ownership, data protection · `performance` - a stated timing or capacity · `compatibility` - the browsers, devices or locales the spec names |
 | Suites | `acceptance` - the fixed core-flow baseline · `smoke` - a build's key functions · `regression` - protects existing behaviour, selected by impact · `health-check` - the environment and its dependencies are up · `prod` - read-only, safe in production · `none` |
 | Automation status | `manual` - no test runs it yet · `automated` - a test covers it in CI |
 | Testability | `automation` - a script asserts it exactly · `manual` - a judgment a script cannot make · `automation, manual` |
-| Trace | the journey, or for store the PRD section; composed levels list every journey, in the order reached |
+| Trace | the journey, or for store the PRD rule or section; composed levels list every journey, in the order reached |
 
 - **Severity is the impact if it fails** - take the higher of two. A refusal protecting money or permission is `critical` even when nothing changes
 - **Priority is run order**, not fix urgency

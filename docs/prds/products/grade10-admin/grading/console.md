@@ -13,7 +13,7 @@ one submission in tabs whose buttons follow its status; cards are counted here, 
 
 ## Queue
 
-🚧 **Seven views** — every status belongs to one; Today is a query on the shop's own day, its drop-offs in a strip above:
+- 🚧 **Seven views** — every status belongs to one; Today is a query on the shop's own day, its drop-offs in a strip above:
 
 | View | What it lists |
 | --- | --- |
@@ -65,8 +65,6 @@ One intake label per card, the cards sealed into the intake bag with the printed
   carries type `Grading Service` or tag `no-earn` — [Points](/p/grade10-site/loyalty/points)
 
 ## Batches
-
-::changes{spec="grade10-admin/grading/batches"}
 
 - 🚧 **One grader, one level** — a batch is what the grader invoices and ships back, so it is what the shop tracks, and
   a card that does not fit waits for the next; its states: open until the cut-off → closed Thursday 19:00, ships the
@@ -158,10 +156,10 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 
 ## Settings
 
-🚧 **Every default is a setting the console reads** — never a constant, and each row stands until its owner confirms
-it; the fee sheet is pinned to a submission at booking and every figure the agreement prints at signing, so a change
-reaches only submissions not yet booked; in production a seal is refused while a figure it prints has no approver,
-so a seeded default waits for its owner:
+- 🚧 **Every default is a setting the console reads** — never a constant, and each row stands until its owner confirms
+  it; the fee sheet is pinned to a submission at booking and every figure the agreement prints at signing, so a change
+  reaches only submissions not yet booked; in production a seal is refused while a figure it prints has no approver,
+  so a seeded default waits for its owner:
 
 | Setting | Default | Confirms |
 | --- | --- | --- |

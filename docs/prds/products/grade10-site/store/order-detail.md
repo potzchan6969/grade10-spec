@@ -8,42 +8,64 @@ Order Details is one private account of a Store purchase. The address names an
 order, while the owner check decides whether anything can be shown; an unknown
 id and another collector's id deliberately look the same.
 
-The first delivery shows only facts the typed Store order already carries:
-items, quoted and paid totals, refunds, fulfilment, estimates, and tracking.
-Payment method, address, discounts, shipping, tax, and loyalty
-stay absent until the Store supplies them. Omitting those groups is more useful
-than filling the designed page with claims the frontend cannot prove.
+The page shows only facts the Store supplies: items, quoted and paid totals,
+refunds, fulfilment, estimates, tracking, payment method, address, discounts,
+shipping, tax, and the points the order earns. A fact the Store does not
+supply stays absent. Omitting a group is more useful than filling the designed
+page with claims the frontend cannot prove.
 
 ## Order
 
-**Owner-only address** — a signed-in collector sees one order at
-`grade10.com/profile/orders/<order-id>`; sign-in keeps the collector at that
-address; an unknown order and another collector's order look the same
-
-**Known facts** — the page shows the supplied order identity, items, money,
-address, payment and refund facts, and leaves each missing fact absent
-
-**Progress and tracking** — a collector sees the Store-supplied fulfilment
-state and can follow a safe carrier address when one is supplied
-
-❓ **Steps not reached** — a delivery step the order has not reached shows
-with no date; a just-placed order has only Order Placed reached. Design
-confirms
-
-❓ **A full refund** — the summary keeps the paid total and shows the whole
-amount as its Refund row. Design confirms
-
-❓ **A safe carrier address** — an `https` address opens; any other scheme,
-such as `javascript:`, offers no Track Order. Engineering confirms
-
-**Read states** — loading, localized failure with Retry, and not-found stay
-distinct at the same address
+- **Owner-only address** — a signed-in collector sees one order at
+  `grade10.com/profile/orders/<order-id>`; sign-in keeps the collector at that
+  address; an unknown order and another collector's order look the same
+- 🚧 **Store orders only** — a ticket order placed on
+  [Tickets](/p/grade10-site/ticketing) is answered by the ticketing platform's
+  own order page, never this one - [Your Tickets](/p/grade10-site/ticketing/your-tickets)
+- **Known facts** — the page shows the supplied order identity, items, money,
+  address, payment and refund facts, and leaves each missing fact absent
+- **Progress and tracking** — a collector sees the Store-supplied fulfilment
+  state and can follow a safe carrier address when one is supplied
+- **Where the parcel is** — the delivery steps follow the parcels, not the
+  status badge: Order Placed until a parcel is labelled or handed over,
+  Shipping from then on, and Completed once every item shipped and every
+  parcel arrived, as [Order Status](/p/grade10-site/commerce/order-status)
+  counts arrival
+- **Shipping and arrival** — Shipping names the carrier and number; until
+  delivery, Completed carries the latest estimate among parcels still on their
+  way, labelled as an estimate
+- **Dropped parcels** — a canceled parcel or a voided label counts for
+  nothing, Track Order included
+- **An order that stops** — canceled, or refunded in full, before delivery: the
+  steps end at Canceled or Refunded, after Shipping only when a parcel had
+  already left
+- **How a refunded order ends** — the Refunded step draws the gold tick a
+  reached step draws: the money came back as asked
+- 🚧 **How a canceled order ends** — the Canceled step draws a muted ✕ rather
+  than the gold tick, so a stop never reads as success; the stepper's design
+  adds the state
+- **Badge beside the steps** — the badge reads Completed only once the
+  Completed step is reached
+- **Steps not reached** — a delivery step the order has not reached shows no
+  date of its own, only Completed's labelled estimate; a just-placed order has
+  only Order Placed reached
+- **A full refund** — the summary keeps the paid total and shows the whole
+  amount as its Refund row below the total: charged, then returned
+- **A safe carrier address** — an `https` address opens; any other scheme,
+  such as `javascript:`, offers no Track Order
+- **Refunded items** — a line a refund gave units back from shows as two
+  rows: the units kept, then the units refunded, struck through under a
+  Refunded label with Refund issued on {date}, the day the latest refund
+  naming that line was issued. A line refunded whole shows its refunded row
+  alone; a refund that named no line, such as delivery alone, splits none
+- **Read states** — loading, localized failure with Retry, and not-found stay
+  distinct at the same address
 
 ## Product Pictures
 
-🚧 **Recognise an item** - each item shows its current product picture on the
-owned order and its private link, including earlier purchases. An unavailable
-picture keeps the existing placeholder without preventing the order from opening.
+- **Recognise an item** — each item shows its current product picture on the
+  owned order and its private link, including earlier purchases. An unavailable
+  picture keeps the existing placeholder without preventing the order from opening.
 
 ## Order Link
 
@@ -78,7 +100,7 @@ the order this browser last sent to Shopify.
 - **Order confirmed** - the guest's page is the order page; the
   placed-on line names the email the receipt went to — Placed on {date}.
   Receipt sent to {email}.
-- 🚧 **Create an account** - a persistent toast on the order page asks to
+- **Create an account** - a persistent toast on the order page asks to
   add this order to an account - Sign in to see it with your other
   orders - with one Sign in action; closing it hides it for this order
 - **Joined at payment** - a guest order that joined an account at payment
@@ -103,27 +125,26 @@ the order this browser last sent to Shopify.
 
 ## Order Summary
 
-🚧 **Points** — when the shop names the settled order's points discount, under
-either points title ([Paying with Points](/p/grade10-site/loyalty/paying-with-points#rules)),
-Order Summary shows a Points credit after Discount: the label names how many
-were deducted (for example `Points (100 pts)`), and the value is the money
-credit in the same success style as the cart drawer
-
-🚧 **No Points row** — on an order whose shop named no points discount, even
-where its points were debited from the rest of the applied total, because that
-figure can hold money staff took off by hand; the debit still shows as Points
-put toward a purchase — [Histories](/p/grade10-site/loyalty/membership#histories)
-
-🚧 **Points to earn** — an order that will earn shows Points to Earn until it
-completes, then Points Earned — [Points](/p/grade10-site/loyalty/points)
-
-🚧 **No points section** — an order that will not earn shows no points
-section at all: one canceled or refunded in full, or a guest order, joined
-to an account or not
-
-**Amount marks** — summary lines use `$` with two decimals (`$1,770.00`),
-except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
-(`HK$1,704.50`)
+- **Points** — when the shop names the settled order's points discount, under
+  either points title ([Paying with Points](/p/grade10-site/loyalty/paying-with-points#rules)),
+  Order Summary shows a Points credit after Discount: the label names how many
+  were deducted (for example `Points (100 pts)`), and the value is the money
+  credit in the same success style as the cart drawer
+- **No Points row** — on an order whose shop named no points discount, even
+  where its points were debited from the rest of the applied total, because that
+  figure can hold money staff took off by hand; the debit still shows as Points
+  put toward a purchase — [Histories](/p/grade10-site/loyalty/membership#histories)
+- **Points to earn** — an order that will earn shows Points to Earn until it
+  completes, with what the goods still held earn at the member's tier now, then
+  Points Earned, with what it earned less any refund's claw-back —
+  [Points](/p/grade10-site/loyalty/points)
+- **No points section** — an order that will not earn shows no points
+  section at all: one canceled or refunded in full, a guest order, joined
+  to an account or not, or one whose goods still held earn nothing; nor does
+  one whose points the programme cannot say right now
+- **Amount marks** — summary lines use `$` with two decimals (`$1,770.00`),
+  except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
+  (`HK$1,704.50`)
 
 ## Designs
 
@@ -148,4 +169,9 @@ except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
 | Another email | Decided | Only a sign-in that proves the order's email adds it — a magic link to that email or a Google account under it; a Google account under another email signs the buyer in and adds nothing, and the toast offers a magic link to the order's email. Decided 2026-10-13. | Product |
 | Points section | Decided | An order that will earn shows Points to Earn before completion and Points Earned after; an order that will not earn — canceled or fully refunded, or a guest order, joined or not — shows no points section at all. Decided 2026-10-13; a joined guest order earns nothing from 2026-10-14. | Product |
 | Shipping step label | Decided | The delivery step reads Shipping (in progress), matching winner orders; the status badge keeps the status name Shipped. Decided 2026-10-13. | Product |
+| Delivery steps follow the parcel | Decided | The steps read each parcel's carrier state rather than the order status badge. The badge reads Completed once every item is handed over and paid, so a stepper driven by it ticked Completed while the parcel was still travelling, ticked every step on a refund before shipping, and drew a canceled order as still on its way. A parcel whose carrier never reports delivery stays on Shipping until staff mark the order delivered - [Order Status](/p/grade10-site/commerce/order-status). Decided 2026-10-24. | Product |
+| How a stopped order ends | Decided | A canceled order's last step draws a muted ✕, never the reached tick, so a collector never reads a stop as delivered. A refunded order keeps the tick: the money came back as asked, and a cancel with no refund is rare. Dropping the steps for a sentence was ruled out. Decided 2026-10-27 - [handoff](https://github.com/9gag/grade10-spec/pull/1346). | Design |
+| Steps not reached | Decided | An unreached step shows nothing under its label, and only Completed carries Estimated delivery while a parcel is on its way; a Pending placeholder was ruled out. Decided 2026-10-27. | Design |
+| Refunded items | Decided | A line a refund named splits into the units kept and the units refunded, the refunded row struck through under Refunded with the day the latest refund was issued, as the block's refunded row draws it. Showing the refund only in the summary was ruled out: it leaves a collector guessing which item came back. Decided 2026-10-27. | Product |
+| A full refund's summary | Decided | A full refund draws as a partial one: the paid total stays and the Refund row below it shows the whole amount. A note under the total and a netted HK$0.00 row were ruled out. Decided 2026-10-27. | Design |
 :::

@@ -103,10 +103,10 @@ supply.
 
 ## Specs and journeys
 
-**Specs** — this page documents `grade10-site/vault/documents-and-signing`.
-The requirements are its; this page holds the decision behind them.
+- **Specs** — this page documents `grade10-site/vault/documents-and-signing`.
+  The requirements are its; this page holds the decision behind them.
 
-::spec{id="grade10-site/vault/documents-and-signing"}
+[Requirements · grade10-site/vault/documents-and-signing](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/vault/documents-and-signing/spec.md)
 
 :::detail{title="Code map" for="engineer"}
 - **Templates** —

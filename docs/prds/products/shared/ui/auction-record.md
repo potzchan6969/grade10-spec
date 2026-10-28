@@ -22,8 +22,6 @@ capability is the component contract underneath it.
   Unwatch or View order; the whole card opens the lot or Winner Order; from
   `md`, the five-column table
 
-::changes{spec="shared/ui/auction-record"}
-
 - **Status** — Leading or Outbid while open;
   the order's status once won; Won, Didn't win or `--` for a watch-only row;
   close urgency stays with the listing identity

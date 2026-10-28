@@ -1,3 +1,4 @@
+import { formatEvent, formatViewerZoneName } from "@grade10/date";
 import { Heading, Text } from "react-email";
 
 import { EmailFooter } from "@/emails/_components/email-footer";
@@ -15,7 +16,15 @@ export type MagicLinkEmailProps = {
   brandName?: string;
   homeUrl?: string;
   logoUrl?: string;
+  /** When the link went out, as the footer prints it: `26 Oct 2026, 17:58:04 HKT`. */
+  sentAt?: string;
 };
+
+const PREVIEW_SENT_AT = new Date("2026-10-26T09:58:04Z");
+const PREVIEW_ZONE = "Asia/Hong_Kong";
+
+/** The footer's moment, to the second: two links can go out in one minute. */
+const previewSentAt = `${formatEvent(PREVIEW_SENT_AT, { timeZone: PREVIEW_ZONE })} ${formatViewerZoneName(PREVIEW_ZONE, PREVIEW_SENT_AT)}`;
 
 export default function MagicLinkEmail({
   magicLinkUrl = "https://grade10.com/auth/magic?token=preview",
@@ -23,6 +32,7 @@ export default function MagicLinkEmail({
   brandName = "Grade10",
   homeUrl = GRADE10_HOME_URL,
   logoUrl = GRADE10_LOGO_STATIC,
+  sentAt = previewSentAt,
 }: MagicLinkEmailProps) {
   return (
     <Grade10EmailShell
@@ -41,6 +51,7 @@ export default function MagicLinkEmail({
       </Text>
       <PrimaryCta href={magicLinkUrl} label="Sign In" />
       <EmailFooter
+        lines={[`Sent at ${sentAt}`]}
         whyYouGotThis={`You asked for a sign-in link on ${brandName}.`}
       />
     </Grade10EmailShell>
@@ -53,4 +64,5 @@ MagicLinkEmail.PreviewProps = {
   brandName: "Grade10",
   homeUrl: GRADE10_HOME_URL,
   logoUrl: GRADE10_LOGO_STATIC,
+  sentAt: previewSentAt,
 } satisfies MagicLinkEmailProps;

@@ -18,11 +18,6 @@ vi.mock("../src/api/snapshot-provider", () => ({
   }),
 }));
 
-// The rail carries a New page control; the editor is not what is under test.
-vi.mock("../src/editor/session", () => ({
-  useEditorSession: () => ({ store: null }),
-}));
-
 const { Sidebar } = await import("../src/shell/sidebar");
 
 held.snapshot = snapshotOf({
@@ -58,19 +53,6 @@ function render(at: string, sections: PageSection[], active?: string): string {
  */
 describe("the rail's fixed entries", () => {
   const html = render("/guides/start-here", []);
-
-  it("opens on Board and My turn, above the products", () => {
-    expect(html).toContain('href="/in-flight"');
-    expect(html).toContain("Board");
-    expect(html).toContain('href="/my-turn"');
-    expect(html).toContain("My turn");
-    expect(html.indexOf('href="/in-flight"')).toBeLessThan(
-      html.indexOf('href="/my-turn"'),
-    );
-    expect(html.indexOf('href="/my-turn"')).toBeLessThan(
-      html.indexOf("Guides"),
-    );
-  });
 
   it("sits in the rail's one landmark, above the store's own lists", () => {
     // Two `nav`s named alike gave a screen reader's landmark list two
