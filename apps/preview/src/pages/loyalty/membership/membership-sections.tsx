@@ -35,6 +35,9 @@ import {
   WALLET_PASS_COPY,
 } from "../loyalty-content";
 
+/** Buying points opens the pack picker over the page. */
+const TOP_UP_STORY_ID = "loyalty-top-ups-parts-topupdialog--default";
+
 /** The membership page's sections, keyed for the sidebar's swap. */
 type MembershipTab = "overview" | "rewards" | "coupons" | "points";
 
@@ -97,7 +100,11 @@ function OverviewPane({
         worth={view.worth}
       />
       <div className="flex">
-        <Button render={<a href="#top-up" />} size="sm" variant="outline">
+        <Button
+          render={<a href={storyHref(TOP_UP_STORY_ID)} />}
+          size="sm"
+          variant="outline"
+        >
           {MEMBERSHIP_PAGE_COPY.topUpAction}
         </Button>
       </div>
@@ -139,7 +146,11 @@ function RewardsPane({
         <PaneHeading id="membership-rewards-heading">
           {MEMBERSHIP_PAGE_COPY.rewardsHeading}
         </PaneHeading>
-        <Button render={<a href="#top-up" />} size="sm" variant="outline">
+        <Button
+          render={<a href={storyHref(TOP_UP_STORY_ID)} />}
+          size="sm"
+          variant="outline"
+        >
           {MEMBERSHIP_PAGE_COPY.topUpAction}
         </Button>
       </div>
