@@ -230,7 +230,9 @@ export function checkStoreSuite(
       }
       if (tc.props.has("Retired")) continue;
       if (!traced.has(page)) traced.set(page, new Set());
-      traced.get(page).add(anchor === undefined ? "" : `${anchor}/${rule ?? ""}`);
+      traced
+        .get(page)
+        .add(anchor === undefined ? "" : `${anchor}/${rule ?? ""}`);
     }
   }
 

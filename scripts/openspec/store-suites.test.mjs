@@ -321,11 +321,11 @@ const RULES_PAGE = [
   "- **Option Count** — products picking it would give",
   "  - **Empty Option** — hidden when the store has nothing for it",
   "",
-  ":::callout{kind=\"note\"}",
+  ':::callout{kind="note"}',
   "- ❓ **Draft Worlds** — left out. Product confirms",
   ":::",
   "",
-  ":::detail{title=\"Code map\" for=\"engineer\"}",
+  ':::detail{title="Code map" for="engineer"}',
   "- **Reads** — `catalog.filters`",
   ":::",
   "",
@@ -401,11 +401,17 @@ test("a store case or suite that carries a status warns", () => {
   const root = rulesStore([[1, "product-listing#filters"]]);
   const file = join(root, PRD, "tests/productListing-tcs.md");
   const text0 = readFileSync(file, "utf8")
-    .replace("**Capabilities:**", "**Status:** pending-review · 0/1\n**Capabilities:**")
+    .replace(
+      "**Capabilities:**",
+      "**Status:** pending-review · 0/1\n**Capabilities:**",
+    )
     .replace("* **Behaviour:**", "* **Status:** draft\n* **Behaviour:**");
   writeFileSync(file, text0);
   const { status, text } = out(root);
   assert.equal(status, 0, text);
-  assert.match(text, /case `g10\.store-product-listing\.TC1` carries a \*\*Status:\*\* line/);
+  assert.match(
+    text,
+    /case `g10\.store-product-listing\.TC1` carries a \*\*Status:\*\* line/,
+  );
   assert.match(text, /store suite carries a `\*\*Status:\*\*` line/);
 });
