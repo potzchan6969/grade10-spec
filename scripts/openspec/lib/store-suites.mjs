@@ -40,10 +40,10 @@ export function headingAnchor(text) {
     .replace(/\s/g, "-");
 }
 
-const RULE = /^\s*[-*]\s+(?:(🚧|❓)\s*)?\*\*([^*]+?)\*\*/u;
+const RULE = /^\s*(?:[-*]|\d+\.)\s+(?:(🚧|❓)\s*)?\*\*([^*]+?)\*\*/u;
 
 /** A PRD page's sections, `anchor -> Map(rule anchor -> { name, open, line })`,
- *  or null when the page is missing. A rule is a bullet's bold name under a
+ *  or null when the page is missing. A rule is a list item's bold name under a
  *  heading, at any depth, outside fenced code and `:::` blocks other than a
  *  callout; `open` marks a ❓ rule. */
 export function pageSections(root, page, cache = new Map()) {

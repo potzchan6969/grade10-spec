@@ -80,10 +80,10 @@ export function sectionRows(blocks: Block[]): SectionRow[] {
   );
 }
 
-/** A rule a section names: a bullet's bold name, at any depth. */
+/** A rule a section names: a list item's bold name, at any depth. */
 export type SectionRule = { anchor: string; name: string };
 
-const RULE = /^\s*[-*]\s+(?:(?:🚧|❓)\s*)?\*\*([^*]+?)\*\*/u;
+const RULE = /^\s*(?:[-*]|\d+\.)\s+(?:(?:🚧|❓)\s*)?\*\*([^*]+?)\*\*/u;
 
 /** A rule's anchor as a case's trace writes it, `tcs:validate`'s
  * `headingAnchor`: punctuation dropped, not turned into a dash. */

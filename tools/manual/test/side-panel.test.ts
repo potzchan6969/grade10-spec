@@ -223,6 +223,7 @@ describe("a section's rules", () => {
           "",
           "- **Typed** — a code",
           "  - 🚧 **Refusals in the reader's language** — in its words",
+          "1. **Repriced** — first, where it applies",
           "",
           "```",
           "- **Not a rule**",
@@ -236,6 +237,7 @@ describe("a section's rules", () => {
         anchor: "refusals-in-the-readers-language",
         name: "Refusals in the reader's language",
       },
+      { anchor: "repriced", name: "Repriced" },
     ]);
   });
 });
