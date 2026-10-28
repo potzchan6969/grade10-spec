@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "41aade967fbabec56e35afc3d2394c0d297878e90df0c9f4268439ef7e2b6e14"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "4a41091613a0fc811f16a5d6fb806b7ba05faeab",
+    "capturedAt": "2026-10-28T02:24:44.892Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-site-press-article-page/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/press/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/press/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Every article carries the fixed sidebar",
+          "Requirement: The article presents the release",
+          "Requirement: The body draws what the editor composed",
+          "Requirement: The feature image leads the article"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/press/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

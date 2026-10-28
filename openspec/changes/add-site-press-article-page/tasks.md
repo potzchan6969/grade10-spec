@@ -1,4 +1,4 @@
-## 1. The Press Release article in the workbench (grade10-spec)
+## 1. The Press Release article in the workbench (grade10-spec) (owner: @seankcw)
 
 - [x] 1.1 The `Site/Press/Screens/Press Release` stories' play pass
   asserts the breadcrumb's Press crumb and current label, the title,
