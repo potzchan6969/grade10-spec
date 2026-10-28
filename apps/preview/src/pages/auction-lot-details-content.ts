@@ -52,7 +52,8 @@ const IMAGE_MEW = new URL(
 
 export const AUCTION_LOT_EXTENSION_POLICY = DEFAULT_LISTING_EXTENSION_POLICY;
 
-export const LIVE_INITIAL_REMAINING_MS = (6 * 60 + 9) * 1000;
+export const LIVE_INITIAL_REMAINING_MS =
+  AUCTION_LOT_FIXTURE.closesInSeconds * 1000;
 
 export function shouldExtendClose(
   closesAtMs: number,
