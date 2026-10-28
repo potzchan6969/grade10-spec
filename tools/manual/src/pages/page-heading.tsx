@@ -172,11 +172,9 @@ function CompactHeading({
       </span>
       {at?.section.map((name) => (
         <span className="flex min-w-0 items-center gap-2" key={name}>
-          <CaretRight
-            aria-hidden
-            className="shrink-0 text-secondary-foreground"
-            size={12}
-          />
+          <span className="flex shrink-0 text-secondary-foreground">
+            <CaretRight aria-hidden size={12} />
+          </span>
           <span className="truncate font-heading font-semibold text-manual-h4 text-secondary-foreground">
             {name}
           </span>
