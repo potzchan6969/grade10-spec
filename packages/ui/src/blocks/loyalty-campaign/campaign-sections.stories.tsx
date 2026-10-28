@@ -35,7 +35,7 @@ function CampaignSections() {
         }
         text="Taking part needs a free Grade10 account."
       />
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4">
         <CampaignPanel title="Key dates">
           <CampaignDates
             dates={[

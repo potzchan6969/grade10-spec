@@ -15,7 +15,7 @@ const meta = {
   parameters: { layout: "padded" },
   decorators: [
     (Story) => (
-      <div className="max-w-md">
+      <div className="max-w-4xl">
         <Story />
       </div>
     ),
@@ -115,11 +115,11 @@ export const WithCover: Story = {
   },
 };
 
-/** Two cards side by side: one height, bands level whatever each holds. */
-export const SideBySide: Story = {
+/** The ways stacked, as the page lays them out. */
+export const Stacked: Story = {
   decorators: [
     (Story) => (
-      <div className="grid max-w-4xl gap-4 md:grid-cols-2">
+      <div className="grid max-w-4xl gap-4">
         <Story />
       </div>
     ),
@@ -142,10 +142,9 @@ export const SideBySide: Story = {
     </>
   ),
   play: async ({ canvasElement }) => {
-    const bands = [
-      ...canvasElement.querySelectorAll('[data-slot="campaign-way-band"]'),
-    ].map((band) => band.getBoundingClientRect().bottom);
-    expect(bands).toHaveLength(2);
-    if (window.innerWidth >= 768) expect(bands[0]).toBe(bands[1]);
+    const [first, second] = [
+      ...canvasElement.querySelectorAll('[data-slot="campaign-way"]'),
+    ].map((card) => card.getBoundingClientRect());
+    expect(second?.top).toBeGreaterThanOrEqual(first?.bottom ?? 0);
   },
 };

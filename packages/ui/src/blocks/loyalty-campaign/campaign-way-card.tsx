@@ -54,8 +54,9 @@ const BAND: Record<CampaignWayTone, string> = {
  * One way to win a campaign's gift. The top never changes — the gift, the
  * kind, the title and how to take part — and the band at the foot is where
  * the member stands, toned so a glance down the page tells "do this" from
- * "waiting", "won" and "closed". Cards side by side stretch to one height and
- * keep their bands level.
+ * "waiting", "won" and "closed". The ways stack as full-width sections of one
+ * page, not tiles that lead elsewhere: the picture sits beside the words on a
+ * wide screen and above them on a narrow one.
  */
 function CampaignWayCard({
   kindLabel,
@@ -73,7 +74,7 @@ function CampaignWayCard({
   const off = tone === "off";
   return (
     <article
-      className="grid grid-rows-[auto_auto_1fr_auto] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground"
+      className="grid overflow-hidden rounded-2xl border border-border bg-card text-card-foreground md:grid-cols-[2fr_3fr] md:grid-rows-[auto_1fr_auto]"
       data-slot="campaign-way"
       data-step={step}
       data-tone={tone}
@@ -82,7 +83,7 @@ function CampaignWayCard({
         <img
           alt=""
           className={cn(
-            "h-40 w-full object-cover",
+            "h-40 w-full object-cover md:row-span-3 md:h-full md:min-h-64",
             off && "opacity-50 grayscale",
           )}
           data-slot="campaign-way-cover"
@@ -90,7 +91,7 @@ function CampaignWayCard({
         />
       ) : (
         <div
-          className="grid h-40 place-items-center bg-primary-muted"
+          className="grid h-40 place-items-center bg-primary-muted md:row-span-3 md:h-full md:min-h-64"
           data-slot="campaign-way-cover"
         >
           <CampaignGiftArt dimmed={off} imageUrl={rewardImageUrl} size="lg" />
