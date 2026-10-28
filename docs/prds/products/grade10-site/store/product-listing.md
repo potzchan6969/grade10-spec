@@ -33,20 +33,23 @@ order: 2
   - **Empty Option** — hidden when the store has nothing for it; shown at 0 when the current filters rule it out
 - **Narrowings in Force** — each ticked option, the search words and the collection, named above the grid; dismissing one widens the listing
   - ❓ **Clearing Every Filter** — one control above the grid drops them all, offered where nothing matches. Product confirms
+- **Small Screens** — the count, Worlds and Types as pills above the grid, each opening a drawer from the bottom; a drawer applies on confirm
 
 ::story{id="store-product-listing-blocks-filterpanel--default" title="Filter panel"}
 
-## Small Screens
+::story{id="store-product-listing-blocks-productbrowse--narrow" title="Small screen" height="720" width="375"}
 
-- **Pills** — the count, Sort, Worlds and Types, each opening a drawer from the bottom
-  - **Sort** — applies on pick
-  - **Worlds and Types** — apply on confirm
+## Sort
+
+- **Sort Options** — Latest (default), lowest price, highest price
+  - **Scope** — the whole store
+  - **Sold Out** — last, whichever the sort
+  - **Price** — a product's cheapest variant, which can differ from its card's price
+- **Small Screens** — a Sort pill beside the filter pills, opening a drawer from the bottom; applies on pick
 
 :::callout{kind="note"}
 - ❓ **Sort drawer** — whether it closes on pick. Design confirms
 :::
-
-::story{id="store-product-listing-blocks-productbrowse--narrow" title="Small screen" height="720" width="375"}
 
 ## Search
 
@@ -60,13 +63,6 @@ order: 2
 :::
 
 ::story{id="store-product-listing-blocks-productbrowse-search--suggestions-and-commit" title="Search"}
-
-## Sort
-
-- **Sort Options** — Latest (default), lowest price, highest price
-  - **Scope** — the whole store
-  - **Sold Out** — last, whichever the sort
-  - **Price** — a product's cheapest variant, which can differ from its card's price
 
 ## Collection Page
 
