@@ -90,6 +90,33 @@ function ScreenFrame({ screen, label }: { screen: FlowScreen; label: string }) {
   );
 }
 
+/** A canvas card's width; its screen is the 1440 x 900 capture, scaled to fit. */
+const CARD_WIDTH = 400;
+const CARD_PADDING = 8;
+const THUMBNAIL_HEIGHT =
+  ((CARD_WIDTH - CARD_PADDING * 2) * SCREEN_VIEWPORT.height) /
+  SCREEN_VIEWPORT.width;
+
+/**
+ * The focused screen, unwrapped: the story itself at the canvas's width,
+ * scrolling and answering clicks the way it does on its own.
+ */
+function LiveScreen({ screen, label }: { screen: FlowScreen; label: string }) {
+  return (
+    <iframe
+      data-flow-screen={screen.id}
+      src={`iframe.html?id=${screen.storyId}&viewMode=story`}
+      style={{
+        border: 0,
+        display: "block",
+        height: "calc(100vh - 56px)",
+        width: "100%",
+      }}
+      title={label}
+    />
+  );
+}
+
 const cardStyle: CSSProperties = {
   background: "#ffffff",
   border: `1px solid ${edge}`,
@@ -100,9 +127,9 @@ const cardStyle: CSSProperties = {
   flexDirection: "column",
   font: "inherit",
   gap: 8,
-  padding: 8,
+  padding: CARD_PADDING,
   textAlign: "left",
-  width: 220,
+  width: CARD_WIDTH,
 };
 
 function ScreenCard({
@@ -141,7 +168,7 @@ function Arrow() {
         background: muted,
         flexShrink: 0,
         height: 2,
-        marginTop: 70,
+        marginTop: CARD_PADDING + THUMBNAIL_HEIGHT / 2,
         position: "relative",
         width: 40,
       }}
@@ -176,8 +203,9 @@ function FlowCanvas({
         display: "flex",
         listStyle: "none",
         margin: 0,
+        minHeight: "calc(100vh - 96px)",
         overflowX: "auto",
-        padding: 32,
+        padding: 48,
       }}
     >
       {flowSteps(screens).map((step, index) => (
@@ -229,12 +257,17 @@ function FlowFocus({
     ? screens.find((item) => item.id === parent)
     : null;
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", gap: 12, padding: 24 }}
-    >
+    <div style={{ display: "flex", flexDirection: "column" }}>
       <nav
         aria-label="Flow"
-        style={{ alignItems: "center", display: "flex", gap: 10 }}
+        style={{
+          alignItems: "center",
+          borderBottom: `1px solid ${edge}`,
+          display: "flex",
+          gap: 10,
+          height: 56,
+          padding: "0 24px",
+        }}
       >
         <button
           onClick={() => onOpen(CANVAS)}
@@ -293,15 +326,7 @@ function FlowFocus({
           </span>
         ) : null}
       </nav>
-      <div
-        style={{
-          border: `1px solid ${edge}`,
-          borderRadius: 8,
-          overflow: "hidden",
-        }}
-      >
-        <ScreenFrame label={`Screen ${screen.id}`} screen={screen} />
-      </div>
+      <LiveScreen label={`Screen ${screen.id}`} screen={screen} />
     </div>
   );
 }
