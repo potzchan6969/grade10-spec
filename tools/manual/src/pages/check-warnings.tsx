@@ -12,6 +12,7 @@ const RULE_TITLES: Record<string, string> = {
   ref: "References that resolve to nothing, or to two things",
   dense: "Denser than the style allows",
   prose: "Marks inside a sentence, read as words",
+  rule: "Rules written as a paragraph, not a list item",
   ledger: "Ledgers written as a table, outside an example",
   icon: "No icon in the rail",
 };
