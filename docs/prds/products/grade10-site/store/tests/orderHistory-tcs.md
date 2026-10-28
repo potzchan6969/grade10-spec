@@ -408,7 +408,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** checkout#guest-checkout/joining-an-account, checkout#guest-checkout/no-points
 
 **Pre-conditions:**
 
@@ -447,7 +447,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** checkout#guest-checkout/joining-an-account
 
 **Pre-conditions:**
 

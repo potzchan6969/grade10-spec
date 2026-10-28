@@ -47,7 +47,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** order-detail#order-link/signed-out, order-detail#order-link/no-account-facts
 
 **Pre-conditions:**
 
@@ -89,7 +89,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/guest, order-detail#back-from-checkout/member
 
 **Pre-conditions:**
 
@@ -124,7 +124,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/order-confirmed, order-detail#back-from-checkout/create-an-account, order-detail#back-from-checkout/joined-at-payment, order-detail#back-from-checkout/signed-out-only
 
 **Pre-conditions:**
 
@@ -162,7 +162,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/added
 
 **Pre-conditions:**
 
@@ -435,7 +435,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** order-detail#order-link/owner-signed-in, order-detail#order-link/someone-else-signed-in
 
 **Pre-conditions:**
 
@@ -470,7 +470,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** order-detail#order-link/wrong-link
 
 **Pre-conditions:**
 
@@ -544,7 +544,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/signed-out-only
 
 **Pre-conditions:**
 
@@ -570,7 +570,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/another-email
 
 **Pre-conditions:**
 
@@ -600,7 +600,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/nothing-remembered, order-detail#back-from-checkout/one-day, order-detail#back-from-checkout/another-device
 
 **Pre-conditions:**
 

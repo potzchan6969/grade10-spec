@@ -1306,7 +1306,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display/sale-price, discounts#where-each-shows
+* **Trace:** product-listing#products-display/sale-price, discounts#where-each-shows/named
 
 **Pre-conditions:**
 

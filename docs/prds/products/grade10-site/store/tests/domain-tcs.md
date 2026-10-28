@@ -65,7 +65,7 @@ title: Store Test Cases
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-page#buy, cart#checkout, order-detail#back-from-checkout, checkout#guest-checkout
+* **Trace:** home, product-page#buy, cart#checkout/guest, order-detail#back-from-checkout/added, order-detail#back-from-checkout/order-confirmed, order-detail#back-from-checkout/create-an-account, checkout#guest-checkout/joining-an-account, checkout#guest-checkout/post-checkout-account, checkout#guest-checkout/no-points
 
 **Pre-conditions:**
 
@@ -100,7 +100,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-listing, product-page, cart#reviewing-the-cart
+* **Trace:** home, product-listing, product-page, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -135,7 +135,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-listing, product-page, cart#reviewing-the-cart
+* **Trace:** home, product-listing, product-page, cart#reviewing-the-cart/lines-whose-product-left-the-shop, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -169,7 +169,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display, cart#promo-code, cart#points, cart#checkout, order-history#orders, order-detail#order
+* **Trace:** product-listing#products-display/cart-button, cart#promo-code/picked, cart#points/applied, cart#checkout/sent, cart#checkout/created-from-the-drawer, order-history#orders, order-detail#order
 
 **Pre-conditions:**
 
@@ -200,7 +200,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display, product-page#buy, cart#checkout
+* **Trace:** product-listing#products-display/signed-out, product-page#buy, cart#checkout/guest
 
 **Pre-conditions:**
 
@@ -233,7 +233,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link, order-detail#order, order-history#orders
+* **Trace:** order-detail#order-link/owner-signed-in, order-detail#order-link/signed-out, order-detail#order-link/no-account-facts, order-detail#order, order-history#orders
 
 **Pre-conditions:**
 
