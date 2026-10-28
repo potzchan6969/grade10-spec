@@ -68,9 +68,9 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
   - **Sold Out** — last, whichever the sort
   - **Price** — a product's cheapest variant, which can differ from its card's price
 
-## Collections
+## Listing One Collection
 
-- **Entry** — a home page tile opens the listing inside its collection, named above the grid, with a way out
+- **Entry** — a home page tile opens the listing showing only its collection, the products the shop groups together in Shopify; the collection is named above the grid, with a way out to the whole store
 - **Leaving** — a filter or a search leaves the collection; a sort keeps it
 
 ## Links and Back

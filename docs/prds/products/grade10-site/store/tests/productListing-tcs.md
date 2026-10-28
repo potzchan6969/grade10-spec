@@ -685,7 +685,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#collections/entry
+* **Trace:** product-listing#listing-one-collection/entry
 
 **Pre-conditions:**
 
@@ -715,7 +715,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#collections/leaving
+* **Trace:** product-listing#listing-one-collection/leaving
 
 **Pre-conditions:**
 
@@ -748,7 +748,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#collections/leaving
+* **Trace:** product-listing#listing-one-collection/leaving
 
 **Pre-conditions:**
 
