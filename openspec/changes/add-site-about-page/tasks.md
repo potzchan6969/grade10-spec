@@ -12,7 +12,7 @@
 - [x] 1.3 Update the capability PRD
   `docs/prds/products/grade10-site/site/about.md` with the 🚧 lines this
   change delivers
-- [ ] 1.4 Verify: `pnpm run typecheck`, `pnpm run lint`,
+- [x] 1.4 Verify: `pnpm run typecheck`, `pnpm run lint`,
   `pnpm run storybook:check`, `pnpm run check:manual`, and the about-page
   story tests
 
