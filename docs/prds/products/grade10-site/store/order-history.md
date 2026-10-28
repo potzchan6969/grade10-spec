@@ -20,6 +20,8 @@ order, or return to the Store when the account is empty.
   to happen on it: Completed, Canceled, or Refunded. A partly refunded order
   reads its progress and stays active until it completes, and a held or
   scheduled order whatever its refund stays active
+- **Status badge** — each order shows the badge its Order Details shows —
+  [Order Status](/p/grade10-site/commerce/order-status#badges)
 - **Recorded orders** — a web checkout appears once the shop records the
   order; one that fails or expires before then never appears -
   [Order Status](/p/grade10-site/commerce/order-status)
