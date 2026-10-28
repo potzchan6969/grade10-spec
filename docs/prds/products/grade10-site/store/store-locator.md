@@ -8,55 +8,51 @@ Store Locator is the public page for Grade10's one Hong Kong shop: where it
 is, when it is open, and a way into Google Maps. It is a store detail, not a
 multi-store finder.
 
-## Shop
+## Location and Hours
 
-| Fact | Value |
-| --- | --- |
-| **Name** | Hong Kong Grade10 Store |
-| **Address** | 13 Pak Sha Road, Causeway Bay, Hong Kong |
-| **Hours** | 11am – 9pm, every day |
-| **Maps** | Google Maps for that address |
-
-- **In each language** — the name, the address and the hours read in the
-  collector's language, the hours in that language's own format; the name is
-  the free pick-up claim's own words, and the table gives the English
-- **No phone, no holiday hours** — the page shows no phone number, and every
+- **Map** — a map of the shop; activating it opens Google Maps for the same
+  address in a new tab, even when Google's map has not loaded; there is no
+  separate Get directions control
+- **Store Name** — Hong Kong Grade10 Store, in the free pick-up claim's own
+  words
+- **Street Address** — 13 Pak Sha Road, Causeway Bay, Hong Kong
+- **Hours** — 11am – 9pm, every day
+- **No Phone, No Holiday Hours** — the page shows no phone number, and every
   day uses the hours above until Operations names a phone and holiday hours
+- **In Each Language** — the name, the address and the hours read in the
+  collector's language, the hours in that language's own format; the values
+  above are the English
+- **Without Scripts** — the page, its facts and the map's way into Google
+  Maps all work in the first response, before any script runs
+- 🚧 **Small Screens** — at 375px wide the page scrolls only vertically
 
-## The Page
+::story{id="store-store-locator-screens-store-locator--default" title="Store Locator"}
 
-- **URL** — `grade10.com/<lang>/store-locator`, outside `/store`, so the
-  header marks Store Locator alone
-- **Location & Hours** — under that heading, the page shows a map of the
-  shop, the store name, the full street address and the week's hours, in the
-  first response before any script runs
-- **Map opens Maps** — activating the map opens Google Maps for the same
-  address in a new tab, before any script runs and when Google's map has not
-  loaded; there is no separate Get directions control
-- **Chrome reaches it** — Store Locator in the header and footer leads to
-  this page: in the header directly before Help, which ends the primary nav, and
-  first in the footer's Help column, ahead of Docs. The header marks it while the
-  collector is here. It waits with the store, so auction-first chrome has none -
-  [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
-- **Document identity** — the page carries its own title, meta description
-  and Open Graph tags, distinct from every other public surface, and the
-  sitemap lists it - [Crawlable Pages](/p/grade10-site/site/crawlable-pages).
-  The title is `Store Locator — Grade10`; the description is `Where to find
-  the Grade10 shop in Causeway Bay, Hong Kong, and when it is open.`, which
-  leaves the hours out so it cannot drift from them
-- 🚧 **Narrow screens** — at 375px wide the page scrolls only vertically
+::story{id="store-store-locator-screens-store-locator--narrow" title="Small screen"}
 
-## From Elsewhere
+## Links to the Page
 
-- **Free pick-up on Product Details** — the store name in the free pick-up
+- **Header** — Store Locator directly before Help, which ends the primary nav
+  - **Current Page** — the header marks Store Locator alone while the
+    collector is here, not Store
+- **Footer** — Store Locator first in the Help column, ahead of Docs
+- **Free Pick-Up on Product Details** — the store name in the free pick-up
   claim opens Store Locator in the same tab, in the page's language -
   [Product Details](/p/grade10-site/store/product-page#free-pick-up)
+- **Waits With the Store** — a site that doesn't carry the store, such as an
+  auction-first one, has no Store Locator in its chrome -
+  [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
-## Designs
+## Sharing the Page
 
-::story{id="store-store-locator-screens-store-locator--default" title="Store Locator - default"}
-
-::story{id="store-store-locator-screens-store-locator--narrow" title="Store Locator - narrow"}
+- **Web Address** — `grade10.com/<lang>/store-locator`, outside `/store`
+- **Link Preview** — its own title, description and Open Graph tags, distinct
+  from every other public surface; the sitemap lists it -
+  [Crawlable Pages](/p/grade10-site/site/crawlable-pages)
+  - **Title** — `Store Locator — Grade10`
+  - **Description** — `Where to find the Grade10 shop in Causeway Bay, Hong
+    Kong, and when it is open.`, leaving the hours out so it cannot drift
+    from them
 
 :::detail{title="Test cases" for="qa"}
 [Test cases · grade10-site/store/store-locator](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/store-locator)
