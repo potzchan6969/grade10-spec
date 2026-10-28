@@ -2,17 +2,18 @@
 
 - [ ] 1.1 The `Site/Shows/Screens/Shows` stories' play pass asserts the
   sections, the link destinations, the video swap, the carousel paging and
-  both viewports (`g10.site-shows.SC-01`..`SC-09`) — ticked last, in its
+  both viewports (`g10.site-shows.SC-01`..`SC-13`) — ticked last, in its
   own commit before the group's code
 - [ ] 1.2 Feed the shared `ShowsPageBody` block (`packages/ui/src/blocks/site-shows`) at
   `apps/preview/src/pages/site/shows/` with the hardcoded content and copy,
-  ZZZ and NOV 2025 settled: the production chrome, the four sections in order, the upcoming-shows card,
+  ZZZ and NOV 2025 settled, and the upcoming card's month filter run on
+  Hong Kong time (Q11): the production chrome, the four sections in order, the upcoming-shows card,
   the statistic cards, the sticky chapter tab list as jump navigation, the
   poster-first video containers, the edition carousels, the
   press-release destinations table, the records in frame order, and the
   wide/narrow layouts (`g10.site-shows.SC-01`, `g10.site-shows.SC-02`,
   `g10.site-shows.SC-03`, `g10.site-shows.SC-04`, `g10.site-shows.SC-05`,
-  `g10.site-shows.SC-06`, `g10.site-shows.SC-07`)
+  `g10.site-shows.SC-06`..`g10.site-shows.SC-13`)
 - [ ] 1.3 Update the capability PRD
   `docs/prds/products/grade10-site/site/shows.md` with the 🚧 lines this
   change delivers

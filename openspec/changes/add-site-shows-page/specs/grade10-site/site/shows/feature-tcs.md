@@ -49,7 +49,7 @@ are, the formats they run in, and the record of past editions,
   Chinese Mainland chapters, all three on the page, stacked in that order.
 * An Event Records section headed "Every Show. A Milestone." closes the
   page.
-* No text on the page names ZZZ as a partner.
+* Wherever the page names the Seoul partner, it reads ZZZ.
 
 <!-- trace:case id=g10.site-shows.TC-km4 rev=1 covers=g10.site-shows.SC-20b -->
 ### grade10-site-site-shows-US1-TC2-1: The page splits into columns on a wide viewport
@@ -105,7 +105,7 @@ None.
 **Expected Results:**
 
 * Every section stacks in the page's order at the page inset.
-* The chapter list scrolls sideways within itself; the page does not.
+* Every chapter in the chapter list can be reached and selected.
 * Records stack image over text.
 * No horizontal overflow appears.
 
@@ -140,12 +140,18 @@ None.
 3. Wait `<idle wait>` without touching the carousel.
 4. Select the next arrow on the card.
 5. Select the first progress dot.
+6. Select the previous arrow on the card.
+7. Select the next arrow on the card.
 
 **Expected Results:**
 
 * Left alone for `<idle wait>`, the carousel stays on its first photo.
 * The next arrow advances the photo and marks the second dot current.
 * The first dot returns the first photo and marks itself current.
+* The previous arrow on the first photo wraps round to the last photo and
+  marks the last dot current.
+* The next arrow on the last photo wraps round to the first photo and
+  marks the first dot current.
 
 <!-- trace:case id=g10.site-shows.TC-rec rev=2 covers=g10.site-shows.SC-aa1 -->
 ### grade10-site-site-shows-US1-TC5-2: The records list the five editions newest first
@@ -178,7 +184,7 @@ None.
   2025 (2025), each with title, description and image.
 * The Seoul Auction record names its partner Seoul Auction × ZZZ.
 
-<!-- trace:case id=g10.site-shows.TC-fmt rev=1 -->
+<!-- trace:case id=g10.site-shows.TC-fmt rev=1 covers=g10.site-shows.SC-zdn -->
 ### grade10-site-site-shows-US1-TC6-1: Each format chapter carries its presentation and editions
 
 **Classification:**
@@ -215,7 +221,7 @@ None.
 * Every edition card shows a photo carousel, a date, a description and a
   Press Release link.
 
-<!-- trace:case id=g10.site-shows.TC-jmp rev=1 -->
+<!-- trace:case id=g10.site-shows.TC-jmp rev=1 covers=g10.site-shows.SC-jn1 -->
 ### grade10-site-site-shows-US1-TC7-1: A jump control scrolls to its chapter and marks it
 
 Runs once per row of **Test data**.
@@ -237,28 +243,31 @@ None.
 
 **Test data:**
 
-| `<start>` | `<control>` | `<target>` |
-| --- | --- | --- |
-| the top of the page | the Explore Shows action in the hero | the Event Formats section, Hong Kong first |
-| the top of the Event Formats section | the Overseas Partnership link in the chapter list | the Overseas Partnership chapter |
-| the top of the Event Formats section | the Chinese Mainland link in the chapter list | the Chinese Mainland chapter |
-| the Chinese Mainland chapter | the Hong Kong link in the chapter list | the Hong Kong chapter |
+| `<start>` | `<control>` | `<target>` | `<fragment>` |
+| --- | --- | --- | --- |
+| the top of the page | the Explore Shows action in the hero | the top of the Event Formats section, its heading and chapter list | `#shows-formats` |
+| the top of the Event Formats section | the chapter list's link to the Overseas Partnership chapter | the Overseas Partnership chapter | `#overseas` |
+| the top of the Event Formats section | the chapter list's link to the Chinese Mainland chapter | the Chinese Mainland chapter | `#chinese-mainland` |
+| the Chinese Mainland chapter | the chapter list's link to the Hong Kong chapter | the Hong Kong chapter | `#hong-kong` |
 
 **Steps:**
 
 1. Open <grade10 shows url>.
 2. Scroll to `<start>`.
 3. Select `<control>`.
+4. Go Back in the browser.
 
 **Expected Results:**
 
-* The page scrolls until `<target>` sits at the top of the view, just
-  below the chapter list.
+* The page scrolls until `<target>` sits at the top of the view.
+* The address reads <grade10 shows url> followed by `<fragment>`, and the
+  page stays Shows.
 * The chapter list marks the chapter now in view as current.
 * The other chapters stay on the page, above or below `<target>`.
-* The page does not navigate away from Shows.
+* Back restores the address it had before `<control>` and returns the page
+  to `<start>`.
 
-<!-- trace:case id=g10.site-shows.TC-spy rev=1 -->
+<!-- trace:case id=g10.site-shows.TC-spy rev=1 covers=g10.site-shows.SC-vd3 -->
 ### grade10-site-site-shows-US1-TC8-1: Scrolling through the chapters moves the current mark
 
 **Classification:**
@@ -291,7 +300,7 @@ None.
   that one.
 * Scrolling back up returns the mark to Hong Kong.
 
-<!-- trace:case id=g10.site-shows.TC-upl rev=1 -->
+<!-- trace:case id=g10.site-shows.TC-upl rev=1 covers=g10.site-shows.SC-m8p -->
 ### grade10-site-site-shows-US1-TC9-1: The Upcoming Shows card keeps a show through its month
 
 Runs once per row of **Test data**.
@@ -310,15 +319,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The date the page reads is set to `<today>`.
+* The device runs in `<device zone>`, its clock set so that the moment in
+  Hong Kong is `<today>`.
 
 **Test data:**
 
-| `<entry>` | `<today>` |
-| --- | --- |
-| a show the Upcoming Shows card carries (any) | a day in the month before `<entry>`'s month |
-| the same show | the first day of `<entry>`'s month |
-| the same show | the last day of `<entry>`'s month (fixed boundary) |
+| `<entry>` | `<today>` | `<device zone>` |
+| --- | --- | --- |
+| a show the Upcoming Shows card carries (any) | a day in the month before `<entry>`'s month | Asia/Hong_Kong |
+| the same show | the first day of `<entry>`'s month | Asia/Hong_Kong |
+| the same show | the last day of `<entry>`'s month (fixed boundary) | Asia/Hong_Kong |
+| the same show | 23:30 on the last day of `<entry>`'s month (fixed boundary, Hong Kong time) | Pacific/Auckland, where the next month has already begun |
 
 **Steps:**
 
@@ -329,7 +340,7 @@ Runs once per row of **Test data**.
 
 * The card is in the hero and lists `<entry>` with its date.
 
-<!-- trace:case id=g10.site-shows.TC-upd rev=1 -->
+<!-- trace:case id=g10.site-shows.TC-upd rev=1 covers=g10.site-shows.SC-up1 -->
 ### grade10-site-site-shows-US1-TC10-1: A show drops off the card once its month has passed
 
 **Classification:**
@@ -346,7 +357,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The date the page reads is set to `<today>`.
+* The device runs in `<device zone>`, its clock set so that the moment in
+  Hong Kong is `<today>`.
 
 **Test data:**
 
@@ -354,7 +366,8 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `earlier entry` | a show the Upcoming Shows card carries, dated before another it carries |
 | `later entry` | a show the card carries, dated in a later month than `<earlier entry>` |
-| `today` | the first day of the month after `<earlier entry>`'s month (fixed boundary), and not after `<later entry>`'s month |
+| `today` | 09:00 Hong Kong time on the first day of the month after `<earlier entry>`'s month (fixed boundary), and not after `<later entry>`'s month |
+| `device zone` | America/Los_Angeles, where `<earlier entry>`'s month has not yet ended |
 
 **Steps:**
 
@@ -366,7 +379,7 @@ Runs once per row of **Test data**.
 * The card does not list `<earlier entry>`.
 * The card still lists `<later entry>`.
 
-<!-- trace:case id=g10.site-shows.TC-uph rev=1 -->
+<!-- trace:case id=g10.site-shows.TC-uph rev=1 covers=g10.site-shows.SC-bx1 -->
 ### grade10-site-site-shows-US1-TC11-1: The Upcoming Shows card leaves the hero when none remain
 
 **Classification:**
@@ -383,14 +396,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The date the page reads is set to `<today>`.
+* The device's clock is set so that the date in Hong Kong is `<today>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | `last entry` | the latest-dated show the Upcoming Shows card carries |
-| `today` | the first day of the month after `<last entry>`'s month (fixed boundary) |
+| `today` | the first day of the month after `<last entry>`'s month in Hong Kong (fixed boundary) |
 
 **Steps:**
 
@@ -485,6 +498,7 @@ None.
 3. Select the play control on the poster.
 4. Scroll to the Chinese Mainland chapter's video.
 5. Select the play control on the poster.
+6. Scroll back to the Hong Kong chapter's video.
 
 **Expected Results:**
 
@@ -494,18 +508,53 @@ None.
   container and plays — Hong Kong plays `Nf4UZyct5uM`, Chinese Mainland
   plays `fy7AfZ8ZhQo`.
 * The page does not navigate and no new tab opens.
+* Starting the Chinese Mainland video leaves the Hong Kong container
+  holding its embed; the page does not return it to its poster.
 
 ## Settled
 
 - The Festival 2025 card reads NOV 2025, the live page's date (Q7).
 - The chapter tabs are jump navigation over stacked chapters (Q1).
 - The Shows chrome entry belongs to `navigation`, not to this page (Q6).
+- The Seoul partner is ZZZ wherever the page names it (Q8).
+- The Press Release links ship before the press index and articles; a case checks the address opened, not the article (Q10).
+- The Upcoming Shows card judges a show's month by the date in Hong Kong, whatever the viewer's time zone (Q11).
+- The Upcoming Shows card lists its shows in the order the content gives; the block does not sort them (Q12).
+- Explore Shows lands on the Event Formats section's top, `#shows-formats`, not the Hong Kong chapter (Q13).
+- Each chapter jump is a hash link: the address carries the chapter's fragment, and Back returns (Q14).
+- The chapter list stays sticky as the block draws it (Q15).
+- An edition carousel's arrows wrap round at the first and last photo; no arrow is unavailable (Q16).
+- Each chapter video plays on its own; starting one does not stop the other (Q17).
 
 ## Reconciliation
 
-- **Run** — the cases above were drafted in the same context that wrote the
-  journeys and the spec, not by an isolated blind pass; the suite is written
-  from the journeys and feature set, and no `## Requirements` content was
-  used to shape a case. The isolated-input property is therefore claimed,
-  not demonstrated, and a later blind pass on the durable artifacts may
-  still raise findings.
+**Run:** 2026-10-28. QA1 ran a blind pass this round, in an isolated context, on the frozen anchors `grade10-site-site-shows-US-01` to `grade10-site-site-shows-US-03`: it read the isolated bundle `docs/governance/specs-to-test-cases.md` names and the existing suite without this section, was denied every `## Requirements` section and scenario, kept the seven live drafts, revising five of them, added `US1-TC6-1` to `US1-TC11-1`, and raised eight questions, closed as Q10 to Q17. QA2 reconciled in a fresh context, reading the delta `spec.md`, `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tasks.md`, the Shows PRD page and the `ShowsPageBody` block with the workbench page. This is the run's statement, not proof. No case has been accepted, so a draft reworded here keeps its `rev`.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `grade10-site-site-shows-US1-TC1-2` | Reached, adjusted | `grade10-site-site-shows-SC-01`. Its line "No text on the page names ZZZ as a partner" contradicted Q8 and the PRD's partner row; reversed to "Wherever the page names the Seoul partner, it reads ZZZ". The headings, actions, photo and the ZZZ clause it asserts are folded into the scenario |
+| `grade10-site-site-shows-US1-TC2-1` | Reached | `grade10-site-site-shows-SC-02` |
+| `grade10-site-site-shows-US1-TC3-2` | Reached, adjusted | `grade10-site-site-shows-SC-03`. "The chapter list scrolls sideways within itself" named a mechanism the readings do not share: `ui-design.md` says the tabs scroll horizontally, the block shrinks the list to fit a narrow viewport. Reworded to the outcome both hold, every chapter reachable; that, records image over text and no sideways page scroll are folded into the scenario |
+| `grade10-site-site-shows-US1-TC4-2` | Reached, adjusted | `grade10-site-site-shows-SC-06`. Q16 adds the wrap at both ends as steps 6 and 7; the wrap and Q5's no timer are folded into the scenario |
+| `grade10-site-site-shows-US1-TC5-2` | Reached | `grade10-site-site-shows-SC-07`; its Seoul Auction × ZZZ line is folded into the scenario |
+| `grade10-site-site-shows-US1-TC6-1` | Folded | `grade10-site-site-shows-SC-10`, new: each chapter's presentation and editions and the NOV 2025 card (Q7), which the PRD states and no scenario did |
+| `grade10-site-site-shows-US1-TC7-1` | Reached, adjusted | `grade10-site-site-shows-SC-09`. QA1 asserted the page does not navigate away and lands its target below the chapter list; Q14 makes each jump a hash link, so the case gains a `<fragment>` column, an address result and a Back step, and Q13 lands Explore Shows on the section's top, its heading and list. The pill rows name the link by its chapter, as the pill reads "Overseas", a label no anchor gives. The scenario now carries Explore Shows, the fragment and Back |
+| `grade10-site-site-shows-US1-TC8-1` | Folded | `grade10-site-site-shows-SC-13`, new: the pinned list and the mark moving on scroll, which the requirement stated and no scenario did; Q15 keeps it sticky as built |
+| `grade10-site-site-shows-US1-TC9-1` | Folded, adjusted | `grade10-site-site-shows-SC-11`, new, the keep side of `SC-08`'s rule. Q11 gives the case a device-zone column and a row on a device ahead of Hong Kong |
+| `grade10-site-site-shows-US1-TC10-1` | Reached, adjusted | `grade10-site-site-shows-SC-08`, narrowed to the drop. Q11 puts the device behind Hong Kong, where the month has not yet ended |
+| `grade10-site-site-shows-US1-TC11-1` | Folded | `grade10-site-site-shows-SC-12`, new, split from `SC-08`'s last clause; its clock is read in Hong Kong (Q11) |
+| `grade10-site-site-shows-US2-TC1-1` | Reached | `grade10-site-site-shows-SC-04`, which now states Q10: the address opens, what it shows is the press surfaces' own |
+| `grade10-site-site-shows-US3-TC1-2` | Reached, adjusted | `grade10-site-site-shows-SC-05`. Q17 adds step 6 and the Hong Kong embed staying when the second video starts. Whether YouTube's own player pauses one embed when another plays is the provider's, and not asserted |
+| `grade10-site-site-shows-SC-01` to `grade10-site-site-shows-SC-13` | Reached | each by the case above whose `covers` names it |
+
+- **Raised** - QA1's eight rows closed as Q10 to Q17, decided by the round, Q11 with the human; each answer is in `## Settled`. Four went against QA1's recommendation, as the block draws them: Q12, the order as given; Q14, a hash link; Q15, sticky as built; Q16, wrap round
+- **Folded into spec** - `grade10-site-site-shows-SC-10` to `grade10-site-site-shows-SC-13` are new; `SC-01`, `SC-03`, `SC-05`, `SC-06`, `SC-07`, `SC-08` and `SC-09` now state what their cases assert; the requirements carry Q10 to Q17, NOV 2025, ZZZ and the fragments `#shows-formats`, `#hong-kong`, `#overseas` and `#chinese-mainland` the block links to
+- **Contradicted** - `US1-TC1-2`'s ZZZ line against Q8, and `US1-TC7-1`'s unchanged address against Q14. Both were already the author's decisions, Q8 confirmed by the product owner; the cases now follow them, and none is left open
+- **Uncovered scenarios** - none: every scenario is named in exactly one case's `covers`
+- **Over-claimed cases** - none: the `covers` the earlier hand draft gave `US1-TC1-2` to `US1-TC5-2`, `US2-TC1-1` and `US3-TC1-2` were checked against each scenario as it now reads, and each case fully asserts its THEN. Q12's order stays in the requirement alone: "the order the content gives" shows only as the list itself, so no scenario or case asserts it
+- **New, not an extension** - `grade10-site-site-shows-US1-TC6-1` - `US1-TC1-2` reads the sections' order and headings as the smoke case; what each chapter carries is a different purpose at a lower severity
+- **New, not an extension** - `grade10-site-site-shows-US1-TC7-1` - no live case selects a jump control or reads the address
+- **New, not an extension** - `grade10-site-site-shows-US1-TC8-1` - no live case scrolls through the chapters checking the list
+- **New, not an extension** - `grade10-site-site-shows-US1-TC9-1` - no live case sets the clock; it keeps a show, the opposite direction of `US1-TC10-1`
+- **New, not an extension** - `grade10-site-site-shows-US1-TC10-1` - no live case sets the clock; it drops a show, the opposite of `US1-TC9-1`
+- **New, not an extension** - `grade10-site-site-shows-US1-TC11-1` - no live case sets the clock; the card leaves the hero, an outcome no other case reaches

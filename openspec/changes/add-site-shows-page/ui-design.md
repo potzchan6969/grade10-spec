@@ -41,7 +41,7 @@
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Wide viewport | Two-column hero, stats beside the photo, editions side by side, records 320px-media rows | `grade10-site-site-shows-SC-02` |
-| Narrow viewport | Everything stacked at the page inset; records image-over-text; tabs scroll horizontally | `grade10-site-site-shows-SC-03` |
+| Narrow viewport | Everything stacked at the page inset; records image-over-text; every chapter stays reachable from the list | `grade10-site-site-shows-SC-03` |
 | Entering | Hero reveals on mount; lower sections reveal as they scroll into view | **Out of suite:** the workbench stories' play pass waits on the reveal before asserting |
 | Video playing | The poster and play affordance swap for the YouTube embed in place | `grade10-site-site-shows-SC-05` |
 | Reduced motion | All content visible immediately, no transition | **Out of suite:** the workbench's `data-storybook-pause-motion` harness, which the page's `motion-reduce` fallback answers |
