@@ -28,21 +28,33 @@ export const Default: Story = {
     await waitFor(() =>
       expect(overlay.getByRole("button", { name: "Pay Now" })).toBeDisabled(),
     );
-    expect(overlay.getByText("Secure checkout by Stripe")).toBeVisible();
+    expect(overlay.getByText("Balance")).toBeVisible();
+    expect(overlay.getByText("1,200 pt")).toBeVisible();
+    expect(overlay.getByText("Secured by Stripe")).toBeVisible();
+    /* Eight packs in three columns outgrow the dialog's max height — the
+     * body scrolls instead of the dialog growing past the screen. */
+    await waitFor(() => {
+      const body = document.body.querySelector<HTMLElement>(
+        '[data-slot="dialog-body"]',
+      );
+      expect(body).not.toBeNull();
+      expect(body?.scrollHeight ?? 0).toBeGreaterThan(body?.clientHeight ?? 0);
+    });
   },
 };
 
-/** The 10,000-point pack: the way in unlocks and one line reads the pick. */
+/** The 10,000-point pack: the way in unlocks and the balance reads the pick. */
 export const PackSelected: Story = {
   name: "Pack Selected",
   args: { state: "default" },
   play: async () => {
     const overlay = within(document.body);
     await overlay.findByRole("dialog", { name: "Top Up Points" });
-    await userEvent.click(overlay.getByRole("radio", { name: /10,000 pts/ }));
+    await userEvent.click(overlay.getByRole("radio", { name: /^10,000 pt/ }));
     await waitFor(() =>
-      expect(overlay.getByText("11,200 points")).toBeVisible(),
+      expect(overlay.getByText("Balance after top-up")).toBeVisible(),
     );
+    expect(overlay.getByText("11,200 pt")).toBeVisible();
     expect(overlay.getByRole("button", { name: "Pay HK$9,500" })).toBeEnabled();
   },
 };
@@ -76,7 +88,7 @@ export const LimitAlmostReached: Story = {
       expect(radio).toHaveAttribute("aria-disabled", "true");
     }
     expect(
-      overlay.getByRole("radio", { name: /5,000 pts/ }),
+      overlay.getByRole("radio", { name: /^5,000 pt/ }),
     ).not.toHaveAttribute("aria-disabled", "true");
   },
 };
@@ -88,7 +100,7 @@ export const CheckoutNotOpened: Story = {
   play: async () => {
     const overlay = within(document.body);
     await overlay.findByRole("dialog", { name: "Top Up Points" });
-    await userEvent.click(overlay.getByRole("radio", { name: /10,000 pts/ }));
+    await userEvent.click(overlay.getByRole("radio", { name: /^10,000 pt/ }));
     await userEvent.click(
       overlay.getByRole("button", { name: "Pay HK$9,500" }),
     );
@@ -100,9 +112,7 @@ export const CheckoutNotOpened: Story = {
     expect(
       overlay.getByRole("dialog", { name: "Top Up Points" }),
     ).toBeInTheDocument();
-    await waitFor(() =>
-      expect(overlay.getByText(/11,200 points/)).toBeVisible(),
-    );
+    await waitFor(() => expect(overlay.getByText(/11,200 pt/)).toBeVisible());
   },
 };
 
@@ -170,7 +180,8 @@ export const Unavailable: Story = {
   },
 };
 
-/** Under 640px the picker is a bottom drawer, not a dialog. */
+/** Under 640px the picker is a bottom drawer, not a dialog: pack rows,
+ * a full-width pay button, and no balance line. */
 export const Narrow: Story = {
   args: { state: "default" },
   globals: { viewport: { value: "mobile1" } },
@@ -179,8 +190,19 @@ export const Narrow: Story = {
     expect(
       await overlay.findByRole("dialog", { name: "Top Up Points" }),
     ).toBeInTheDocument();
+    await waitFor(() => {
+      const body = document.body.querySelector<HTMLElement>(
+        '[data-slot="drawer-body"]',
+      );
+      expect(body).not.toBeNull();
+      expect(body?.scrollHeight ?? 0).toBeGreaterThan(body?.clientHeight ?? 0);
+    });
+    await userEvent.click(overlay.getByRole("radio", { name: /^10,000 pt/ }));
     await waitFor(() =>
-      expect(overlay.getByRole("button", { name: "Pay Now" })).toBeVisible(),
+      expect(
+        overlay.getByRole("button", { name: "Pay HK$9,500" }),
+      ).toBeVisible(),
     );
+    expect(overlay.queryByText("Balance after top-up")).not.toBeInTheDocument();
   },
 };

@@ -7,19 +7,22 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
+  DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import {
   Drawer,
   DrawerBody,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
+import { cn } from "@grade10/design-system/lib/utils";
 import { TopUpPackCard } from "@grade10/ui";
-import { ArrowRight, Lock } from "@phosphor-icons/react";
+import { ArrowRight, ShieldCheck } from "@phosphor-icons/react";
 import { useState } from "react";
 import { navigateToStory } from "../../workbench-story-nav";
 import {
@@ -54,10 +57,10 @@ type TopUpDialogState =
 const copy = TOP_UP_COPY;
 
 /**
- * The pack picker: a dialog from 640px up, a bottom drawer below, opening over
- * wherever buying points enters (today a stand-in for Membership). The member
- * picks a pack and continues to Stripe's checkout; a refusal on the way in is
- * a toast, never dialog content. A wireframe until the design lands.
+ * The pack picker (Figma `7530:6163` large, `7536:2248` small): a dialog from
+ * 640px up, a bottom drawer below, opening over wherever buying points enters
+ * (today a stand-in for Membership). The member picks a pack and continues to
+ * Stripe's checkout; a refusal on the way in is a toast, never dialog content.
  */
 function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
   const refused =
@@ -116,86 +119,70 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
   };
 
   const body = (
-    <>
-      <RadioList
-        aria-label={copy.packsLegend}
-        className="[&_[data-slot=radio-list-label]]:sr-only"
-        label={copy.packsLegend}
-        onValueChange={(value) => setSelectedId(String(value))}
-        value={selectedId ?? ""}
-      >
-        {TOP_UP_PACKS.map((pack) => (
-          <TopUpPackCard
-            bonusLabel={
-              pack.discountPercent > 0
-                ? copy.packBonus(pack.points - packPrice(pack))
-                : undefined
-            }
-            copy={{
-              unit: copy.packCardUnit,
-              unavailable: copy.packOverLimit,
-            }}
-            disabled={packDisabled(pack)}
-            key={pack.id}
-            paidPointsLabel={
-              pack.discountPercent > 0
-                ? copy.packPaidPoints(packPrice(pack))
-                : undefined
-            }
-            pointsLabel={copy.packPoints(pack.points)}
-            priceLabel={copy.packPrice(packPrice(pack))}
-            value={pack.id}
-          />
-        ))}
-      </RadioList>
-    </>
+    <RadioList
+      aria-label={copy.packsLegend}
+      className={cn(
+        "[&_[data-slot=radio-list-label]]:sr-only",
+        smUp &&
+          "[&_[data-slot=radio-list-items]]:grid [&_[data-slot=radio-list-items]]:grid-cols-3 [&_[data-slot=radio-list-items]]:items-stretch",
+      )}
+      label={copy.packsLegend}
+      onValueChange={(value) => setSelectedId(String(value))}
+      value={selectedId ?? ""}
+    >
+      {TOP_UP_PACKS.map((pack) => (
+        <TopUpPackCard
+          bonusLabel={
+            pack.discountPercent > 0
+              ? copy.packBonus(pack.points - packPrice(pack))
+              : undefined
+          }
+          copy={{
+            unit: copy.packCardUnit,
+            unavailable: copy.packOverLimit,
+          }}
+          disabled={packDisabled(pack)}
+          key={pack.id}
+          paidPointsLabel={
+            pack.discountPercent > 0
+              ? copy.packPoints(packPrice(pack))
+              : undefined
+          }
+          pointsLabel={copy.packPoints(pack.points)}
+          priceLabel={copy.packPrice(packPrice(pack))}
+          value={pack.id}
+          viewport={smUp ? "large" : "small"}
+        />
+      ))}
+    </RadioList>
   );
 
-  const footer = (
-    <>
-      {selectedPack ? (
-        <Text
-          as="p"
-          className="flex items-baseline gap-1.5"
-          size="sm"
-          tone="secondary"
-        >
-          {copy.selectedLabel}
-          <span className="tabular-nums text-foreground">
-            {copy.selectedBefore(MEMBER_BALANCE.total)}
-          </span>
-          <span className="self-center text-muted-foreground">
-            <ArrowRight aria-hidden size={12} />
-          </span>
-          <span className="sr-only">{copy.selectedTo}</span>
-          <span className="font-medium tabular-nums text-foreground">
-            {copy.selectedAfter(MEMBER_BALANCE.total + selectedPack.points)}
-          </span>
-        </Text>
-      ) : null}
-      <Button
-        className="w-full"
-        disabled={!selectedPack}
-        loading={busy}
-        onClick={onContinue}
-        size="md"
-      >
-        {busy
-          ? copy.opening
-          : selectedPack
-            ? `Pay ${copy.pay(packPrice(selectedPack))}`
-            : copy.continue}
-      </Button>
-      <Text
-        as="p"
-        className="flex items-center justify-center gap-1"
-        size="xs"
-        tone="muted"
-      >
-        <Lock aria-hidden size={12} />
-        {copy.paymentNote}
-      </Text>
-    </>
+  const payButton = (
+    <Button
+      className={smUp ? undefined : "w-full"}
+      disabled={!selectedPack}
+      loading={busy}
+      onClick={onContinue}
+      size="md"
+    >
+      {busy
+        ? copy.opening
+        : selectedPack
+          ? `Pay ${copy.pay(packPrice(selectedPack))}`
+          : copy.continue}
+    </Button>
+  );
+
+  const secureNote = (
+    <Text
+      as="p"
+      className={cn("flex items-center gap-1", !smUp && "justify-center")}
+      size="xs"
+      tone="secondary"
+    >
+      <ShieldCheck aria-hidden size={12} />
+      {copy.paymentNote}
+    </Text>
   );
 
   return (
@@ -206,13 +193,38 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
       <Toast position="bottom-right" />
       {smUp ? (
         <Dialog onOpenChange={setOpen} open={open}>
-          <DialogContent className="max-w-(--container-md)">
+          <DialogContent className="sm:max-w-136">
             <DialogHeader>
               <DialogTitle>{copy.title}</DialogTitle>
+              <DialogSubtext>{copy.subtitle}</DialogSubtext>
             </DialogHeader>
             <DialogBody className="gap-4">{body}</DialogBody>
-            <DialogFooter className="flex-col sm:flex-col sm:items-stretch">
-              {footer}
+            <DialogFooter className="sm:justify-between">
+              <span className="flex flex-col">
+                <Text as="span" size="xs" tone="secondary">
+                  {selectedPack ? copy.selectedLabel : copy.balanceLabel}
+                </Text>
+                <span className="flex items-center gap-1 text-sm font-medium text-foreground">
+                  <span className="tabular-nums">
+                    {copy.selectedBefore(MEMBER_BALANCE.total)}
+                  </span>
+                  {selectedPack ? (
+                    <>
+                      <ArrowRight aria-hidden size={14} />
+                      <span className="sr-only">{copy.selectedTo}</span>
+                      <span className="tabular-nums">
+                        {copy.selectedAfter(
+                          MEMBER_BALANCE.total + selectedPack.points,
+                        )}
+                      </span>
+                    </>
+                  ) : null}
+                </span>
+              </span>
+              <div className="ml-auto flex items-center gap-2">
+                {secureNote}
+                {payButton}
+              </div>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -220,10 +232,16 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
         <Drawer onOpenChange={setOpen} open={open} swipeDirection="down">
           <DrawerContent className="bg-popover backdrop-blur-none [--drawer-bleed-background:var(--popover)]">
             <DrawerHeader>
-              <DrawerTitle className="text-xl">{copy.title}</DrawerTitle>
+              <DrawerTitle className="text-lg leading-7">
+                {copy.title}
+              </DrawerTitle>
+              <DrawerDescription>{copy.subtitle}</DrawerDescription>
             </DrawerHeader>
             <DrawerBody className="gap-4">{body}</DrawerBody>
-            <DrawerFooter>{footer}</DrawerFooter>
+            <DrawerFooter>
+              {payButton}
+              {secureNote}
+            </DrawerFooter>
           </DrawerContent>
         </Drawer>
       )}
