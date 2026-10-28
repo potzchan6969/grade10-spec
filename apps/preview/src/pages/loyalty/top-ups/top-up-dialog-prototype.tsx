@@ -29,7 +29,7 @@ import {
   MEMBERSHIP_STORY_ID,
   navigateToStory,
   storyHref,
-} from "../../../pages/workbench-story-nav";
+} from "../../workbench-story-nav";
 import {
   LEFT_TODAY,
   MEMBER_BALANCE,
@@ -43,14 +43,11 @@ import {
 import { TopUpsPrototypeNote, useSmUp } from "./top-ups-shared";
 
 /** Result screens the member lands on once Stripe's checkout is done. */
-const POINTS_ADDED_STORY_ID =
-  "loyalty-top-ups-prototypes-top-up-result--points-added";
-const UNDER_REVIEW_STORY_ID =
-  "loyalty-top-ups-prototypes-top-up-result--under-review";
+const POINTS_ADDED_STORY_ID = "loyalty-top-ups-parts-topupresult--points-added";
+const UNDER_REVIEW_STORY_ID = "loyalty-top-ups-parts-topupresult--under-review";
 
 /** The history page the dialog's history link opens. */
-const TOP_UP_HISTORY_STORY_ID =
-  "loyalty-top-ups-prototypes-top-up-history--default";
+const TOP_UP_HISTORY_STORY_ID = "loyalty-top-ups-parts-topuphistory--default";
 
 /** Pack pre-selected in the states a member reaches after submitting. */
 const PRESET_PACK_ID = "pack-10k";

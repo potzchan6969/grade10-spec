@@ -12,7 +12,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { Coins } from "@phosphor-icons/react";
-import { storyHref } from "../../../pages/workbench-story-nav";
+import { storyHref } from "../../workbench-story-nav";
 import {
   TOP_UP_COPY,
   TOP_UP_HISTORY_COPY,
@@ -27,8 +27,7 @@ import {
 } from "./top-ups-shared";
 
 /** The pack picker the empty state opens. */
-const TOP_UP_DIALOG_STORY_ID =
-  "loyalty-top-ups-prototypes-top-up-dialog--default";
+const TOP_UP_DIALOG_STORY_ID = "loyalty-top-ups-parts-topupdialog--default";
 
 type TopUpHistoryState = "default" | "empty";
 

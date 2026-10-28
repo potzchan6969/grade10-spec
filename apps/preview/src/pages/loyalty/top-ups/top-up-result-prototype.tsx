@@ -12,7 +12,7 @@ import {
   MEMBERSHIP_STORY_ID,
   navigateToStory,
   storyHref,
-} from "../../../pages/workbench-story-nav";
+} from "../../workbench-story-nav";
 import {
   MEMBER_EMAIL,
   TOP_UP_COPY,
@@ -26,12 +26,10 @@ import {
 } from "./top-ups-shared";
 
 /** Back to the pack picker the member came from. */
-const TOP_UP_DIALOG_STORY_ID =
-  "loyalty-top-ups-prototypes-top-up-dialog--default";
+const TOP_UP_DIALOG_STORY_ID = "loyalty-top-ups-parts-topupdialog--default";
 
 /** Top-Up History, where a held top-up shows until a Grade10 email exists. */
-const TOP_UP_HISTORY_STORY_ID =
-  "loyalty-top-ups-prototypes-top-up-history--default";
+const TOP_UP_HISTORY_STORY_ID = "loyalty-top-ups-parts-topuphistory--default";
 
 type TopUpResultState =
   | "confirming"

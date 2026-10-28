@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { TopUpHistoryPrototype } from "./top-up-history-prototype";
 
 const meta = {
-  title: "Loyalty/Top Ups/Prototypes/Top Up History",
+  title: "Loyalty/Top Ups/Parts/TopUpHistory",
   component: TopUpHistoryPrototype,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -46,7 +46,7 @@ export const Empty: Story = {
     expect(action).not.toBeNull();
     expect(action).toHaveAttribute(
       "href",
-      "?path=/story/loyalty-top-ups-prototypes-top-up-dialog--default",
+      "?path=/story/loyalty-top-ups-parts-topupdialog--default",
     );
   },
 };

@@ -8,11 +8,8 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { SiteHeader } from "@grade10/ui";
 import { type ReactNode, useEffect, useState } from "react";
-import { STORE_FOOTER, STORE_SITE_HEADER } from "../../../pages/store-content";
-import {
-  MEMBERSHIP_STORY_ID,
-  storyHref,
-} from "../../../pages/workbench-story-nav";
+import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
+import { MEMBERSHIP_STORY_ID, storyHref } from "../../workbench-story-nav";
 import { TOP_UPS_BREADCRUMBS, TOP_UPS_MANUAL_PATH } from "./top-ups-content";
 
 /**

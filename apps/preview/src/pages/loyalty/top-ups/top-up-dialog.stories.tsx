@@ -3,7 +3,7 @@ import { expect, userEvent, waitFor, within } from "storybook/test";
 import { TopUpDialogPrototype } from "./top-up-dialog-prototype";
 
 const meta = {
-  title: "Loyalty/Top Ups/Prototypes/Top Up Dialog",
+  title: "Loyalty/Top Ups/Parts/TopUpDialog",
   component: TopUpDialogPrototype,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
