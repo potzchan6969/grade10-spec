@@ -44,11 +44,7 @@ export const PackSelected: Story = {
     await overlay.findByRole("dialog", { name: "Top Up Points" });
     await userEvent.click(overlay.getByRole("radio", { name: /10,000 pts/ }));
     await waitFor(() =>
-      expect(
-        overlay.getByText(
-          "10,000 points for HK$9,500. Balance after: 11,200 points",
-        ),
-      ).toBeVisible(),
+      expect(overlay.getByText("Balance: 1,200 → 11,200 points")).toBeVisible(),
     );
     expect(overlay.getByRole("button", { name: "Pay HK$9,500" })).toBeEnabled();
   },
@@ -82,10 +78,9 @@ export const LimitAlmostReached: Story = {
     for (const radio of refused) {
       expect(radio).toHaveAttribute("aria-disabled", "true");
     }
-    expect(overlay.getByRole("radio", { name: /5,000 pts/ })).not.toHaveAttribute(
-      "aria-disabled",
-      "true",
-    );
+    expect(
+      overlay.getByRole("radio", { name: /5,000 pts/ }),
+    ).not.toHaveAttribute("aria-disabled", "true");
   },
 };
 
@@ -109,7 +104,7 @@ export const CheckoutNotOpened: Story = {
       overlay.getByRole("dialog", { name: "Top Up Points" }),
     ).toBeInTheDocument();
     await waitFor(() =>
-      expect(overlay.getByText(/Balance after: 11,200 points/)).toBeVisible(),
+      expect(overlay.getByText(/Balance: 1,200 → 11,200 points/)).toBeVisible(),
     );
   },
 };

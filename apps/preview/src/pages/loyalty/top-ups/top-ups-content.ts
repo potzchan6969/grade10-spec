@@ -60,10 +60,10 @@ export const TOP_UP_COPY = {
     `+${value.toLocaleString("en-US")} bonus points`,
   packOverLimit: "Over today’s limit",
 
-  /** One line under the button once a pack is picked: what, what it costs,
-   *  where the balance lands. */
-  selectedLine: (pts: number, price: number, after: number) =>
-    `${points(pts)} for ${hkd(price)}. Balance after: ${points(after)}`,
+  /** One line under the button once a pack is picked: where the balance
+   *  lands. */
+  selectedLine: (before: number, after: number) =>
+    `Balance: ${before.toLocaleString("en-US")} → ${after.toLocaleString("en-US")} points`,
 
   continue: "Pay",
   pay: hkd,

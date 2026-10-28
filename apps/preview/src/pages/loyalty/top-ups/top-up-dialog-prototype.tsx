@@ -157,8 +157,7 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
       {selectedPack ? (
         <Text as="p" size="sm">
           {copy.selectedLine(
-            selectedPack.points,
-            packPrice(selectedPack),
+            MEMBER_BALANCE.total,
             MEMBER_BALANCE.total + selectedPack.points,
           )}
         </Text>
