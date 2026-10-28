@@ -7,18 +7,17 @@ order: 3
 A submission is one collector's cards, one grader, one level, one status; each
 card carries its own outcome, so an ungraded card leaves the rest ready.
 
-🚧 **The collector, or the link** — the page opens to the collector signed in
-under the booking email and to whoever holds the emailed link; anybody else
-reads not found.
-
-❓ **The submission page** — how the collector's page shows the status, the
-cards, the money, the uncollected ladder, the pickup and the named person is
-designed again from the backend — Design — [Grading](/p/grade10-site/grading)
+- 🚧 **The collector, or the link** — the page opens to the collector signed in
+  under the booking email and to whoever holds the emailed link; anybody else
+  reads not found.
+- ❓ **The submission page** — how the collector's page shows the status, the
+  cards, the money, the uncollected ladder, the pickup and the named person is
+  designed again from the backend — Design — [Grading](/p/grade10-site/grading)
 
 ## Statuses
 
-🚧 **Ten statuses** — the word is the badge, the chip says whose move it is,
-and the internal id never reaches the collector; `cancelled` is theirs until the visit starts or a card is checked or refused:
+- 🚧 **Ten statuses** — the word is the badge, the chip says whose move it is,
+  and the internal id never reaches the collector; `cancelled` is theirs until the visit starts or a card is checked or refused:
 
 | Status | Word | Whose move | Rail | Clock |
 | --- | --- | --- | --- | --- |
@@ -39,16 +38,16 @@ and the internal id never reaches the collector; `cancelled` is theirs until the
 
 ## A Card's Outcome
 
-🚧 **The set** — Listed · Handed in · Refused at the counter · the grade in the
-grader's words, `PSA 10 GEM MT` · Ungraded, with the grader's code such as N1
-· Minimum grade not met · Moved up a level · Withdrawn · Held by the grader ·
-Not returned · Damaged · Collected · Vaulted; each is a fact on the card,
-never a status of the submission.
+- 🚧 **The set** — Listed · Handed in · Refused at the counter · the grade in the
+  grader's words, `PSA 10 GEM MT` · Ungraded, with the grader's code such as N1
+  · Minimum grade not met · Moved up a level · Withdrawn · Held by the grader ·
+  Not returned · Damaged · Collected · Vaulted; each is a fact on the card,
+  never a status of the submission.
 
 ## Exceptions
 
-🚧 **Each a fact on one card** — told in the collector's words with the money
-it changes; the rest of the cards carry on:
+- 🚧 **Each a fact on one card** — told in the collector's words with the money
+  it changes; the rest of the cards carry on:
 
 | Exception | What the collector sees | Who records it |
 | --- | --- | --- |
@@ -68,7 +67,7 @@ it changes; the rest of the cards carry on:
 
 ## The Fee by Outcome
 
-🚧 **One rule per outcome** — the fee a card, and its cover line with it:
+- 🚧 **One rule per outcome** — the fee a card, and its cover line with it:
 
 | Outcome | The fee |
 | --- | --- |
@@ -164,7 +163,7 @@ it changes; the rest of the cards carry on:
 
 ## What a Collector Can Do
 
-🚧 **By status** — the page offers only what the status allows:
+- 🚧 **By status** — the page offers only what the status allows:
 
 | Status | The collector can |
 | --- | --- |
