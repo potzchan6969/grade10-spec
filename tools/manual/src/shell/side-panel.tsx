@@ -73,6 +73,53 @@ export function hasSide(rows: SectionRow[], cases: PageCases): boolean {
   return rows.some((row) => !isEmpty(shelfOf(row, cases)));
 }
 
+/** How many items each tab holds across the page. */
+function tabTotals(shelves: Shelf[]): Record<SideTab, number> {
+  const total = (tab: SideTab) =>
+    shelves.reduce((sum, shelf) => sum + shelf[tab].length, 0);
+  return { ui: total("ui"), tech: total("tech"), qa: total("qa") };
+}
+
+/**
+ * The side column while the rail is open: a tab at the right edge naming what
+ * sits beside the page. Choosing one folds the rail, which opens the column
+ * on it.
+ */
+export function SideHint({
+  rows,
+  cases,
+}: {
+  rows: SectionRow[];
+  cases: PageCases;
+}) {
+  const layout = useLayout();
+  const totals = tabTotals(rows.map((row) => shelfOf(row, cases)));
+
+  return (
+    <nav
+      aria-label="Beside this page"
+      className="-translate-y-1/2 fixed top-1/2 right-0 z-30 flex flex-col gap-0.5 rounded-l-(--radius-xl) border border-border border-r-0 bg-popover p-1 shadow-lg max-lg:hidden"
+    >
+      {SIDE_TABS.filter((tab) => totals[tab] > 0).map((tab) => (
+        <button
+          aria-label={`Open ${TAB_LABEL[tab]} beside the page, ${totals[tab]}`}
+          className="flex items-center gap-1.5 rounded-(--radius-md) px-2 py-1.5 text-secondary-foreground text-xs outline-none hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+          key={tab}
+          onClick={() => {
+            layout.setTab(tab);
+            layout.setNavCollapsed(true);
+          }}
+          type="button"
+        >
+          {TAB_ICON[tab]}
+          {TAB_LABEL[tab]}
+          <span className="ml-auto pl-1 tabular-nums">{totals[tab]}</span>
+        </button>
+      ))}
+    </nav>
+  );
+}
+
 /**
  * A page read in two columns, one row a section, in the one scroll the page
  * already has. Each section's side holds still beside it while the section
@@ -102,8 +149,7 @@ export function SplitPage({
   }, [setSideShown]);
 
   const shelves = rows.map((row) => shelfOf(row, cases));
-  const total = (tab: SideTab) =>
-    shelves.reduce((sum, shelf) => sum + shelf[tab].length, 0);
+  const totals = tabTotals(shelves);
 
   return (
     <div
@@ -125,9 +171,9 @@ export function SplitPage({
               <TabsTrigger className="gap-1.5 mb-2" key={tab} value={tab}>
                 {TAB_ICON[tab]}
                 {TAB_LABEL[tab]}
-                {total(tab) > 0 ? (
+                {totals[tab] > 0 ? (
                   <Badge size="sm" variant="outline">
-                    {total(tab)}
+                    {totals[tab]}
                   </Badge>
                 ) : null}
               </TabsTrigger>
