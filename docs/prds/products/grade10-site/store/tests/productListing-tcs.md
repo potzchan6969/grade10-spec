@@ -4,7 +4,6 @@ title: Store Product Listing Test Cases
 
 # grade10-site/store/product-listing Test Cases
 
-**Status:** pending-review · 0/36
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/product-listing, grade10-site/store/discounts
 
@@ -81,13 +80,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing
+* **Trace:** product-listing#sort/sort-options, product-listing#products-display/product-count
 
 **Pre-conditions:**
 
@@ -116,13 +114,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing
+* **Trace:** product-listing#products-display/product-grid, product-listing#products-display/product-count
 
 **Pre-conditions:**
 
@@ -147,13 +144,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing
+* **Trace:** product-listing#products-display/product-link
 
 **Pre-conditions:**
 
@@ -190,13 +186,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing
+* **Trace:** product-listing#sort/scope, product-listing#sort/sold-out, product-listing#sort/price
 
 **Pre-conditions:**
 
@@ -225,7 +220,126 @@ Runs once per row of **Test data**.
 
 ---
 
-## product-listing#adaptive-filter: Adaptive Filter
+## product-listing#products-display: Products Display
+
+<!-- trace:case id=g10.store-product-listing.TC-6x5 rev=1 -->
+### g10.store-product-listing.TC27: The cart control shows without hover on narrow and touch screens
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** product-listing#products-display/small-screens
+
+**Pre-conditions:**
+
+* customer is on `<listing url>` on the row's device; an available card shows on the first page.
+
+**Test data:**
+
+| Device |
+| --- |
+| a desktop browser below the wide breakpoint, with a mouse |
+| a phone browser with touch |
+
+**Steps:**
+
+1. Read the available card without hovering or tapping it.
+
+**Expected Results:**
+
+* Its Add to cart control is visible.
+
+<!-- trace:case id=g10.store-product-listing.TC-glr rev=2 -->
+### g10.store-product-listing.TC28: A guest's card controls add the card and change its quantity, kept across a reload
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** product-listing#products-display/signed-out
+
+**Pre-conditions:**
+
+* customer(signed out) is on `<listing url>`; `<cart product>` is available on the first page with at least 3 for sale; the cart holds the row's quantity.
+
+**Test data:**
+
+| Cart holds | Control | Card afterwards |
+| --- | --- | --- |
+| nothing | Add to cart | quantity 1, with increase, decrease and remove |
+| 2 | increase | quantity 3 |
+| 2 | decrease | quantity 1 |
+| 2 | remove | Add to cart, no quantity |
+
+**Steps:**
+
+1. Select the row's control on `<cart product>`'s card.
+2. Reload the page.
+
+**Expected Results:**
+
+* Step 1 asks for no sign-in and shows the row's card; step 2 shows it still.
+
+### g10.store-product-listing.TC36: A card's photo shows whole on every store surface
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** product-listing#products-display/product-grid
+
+**Pre-conditions:**
+
+* `<photo product>` is for sale with `<photo>` as its first photo, in the Main Page's merchandised row and a pick on `<another card>`, by the recipes "Put a card in the Main Page's merchandised row" and "Choose picks on a staging-shop card"; the pointer rests outside its card.
+
+**Test data:**
+
+| `<photo>` | `<surface>` |
+| --- | --- |
+| A graded slab, label to base, taller than wide, shot on white | `<listing url>` at 1440 pixels |
+| A graded slab, label to base, taller than wide, shot on white | `<listing url>` at 390 pixels |
+| A graded slab, label to base, taller than wide, shot on white | `<g10url>/store`, the merchandised row |
+| A graded slab, label to base, taller than wide, shot on white | `<another card>`'s page, You May Also Like |
+| A card wider than tall, on a white studio fill | `<listing url>` at 1440 pixels |
+| A small card photo, smaller than the well | `<listing url>` at 1440 pixels |
+| A square card photo | `<listing url>` at 1440 pixels |
+| A slab taller than wide, sold out by the recipe "Sell a card out" | `<listing url>` at 1440 pixels |
+
+**Steps:**
+
+1. Open `<surface>` and find `<photo product>`'s card.
+2. Compare the photo in the well with the photo file opened on its own.
+
+**Expected Results:**
+
+* The well is square and holds the whole photo, every edge of the file showing, scaled until its longer side meets the well and centred with the well's own ground equal on each side; only a square photo's corners round with the well's.
+* A white fill reads white, never blended into the grey well; a sold-out photo shows whole and faded.
+
+---
+
+## product-listing#filters: Filters
 
 <!-- trace:case id=g10.store-product-listing.TC-5u2 rev=1 -->
 ### g10.store-product-listing.TC11: Ticking a world and a type narrows the cards, the counts and the address
@@ -236,13 +350,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
+* **Trace:** product-listing#filters/combining-options, product-listing#filters/option-count, product-listing#links-and-back-button/address
 
 **Pre-conditions:**
 
@@ -254,6 +367,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<world A>` | `worlds=<world A handle>` |
 | `<world A>`, then `<type A>` | `worlds=<world A handle>` and `types=<type A handle>` |
+| `<world A>`, then `<world B>` | `worlds=<world A handle>,<world B handle>` |
 
 **Steps:**
 
@@ -263,8 +377,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Every card belongs to the choices; for one world the count equals step 1's.
-* A chip shows for each choice; `<world B>`'s count says what picking it instead would find.
+* Every card belongs to the choices: two worlds show the cards of either, and a world with a type only the cards of both; for one world the count equals step 1's.
+* A chip shows for each choice; while `<world B>` is unticked, its count says what picking it instead would find.
 * The address carries the row's.
 
 <!-- trace:case id=g10.store-product-listing.TC-uzx rev=1 -->
@@ -276,13 +390,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
+* **Trace:** product-listing#filters, product-listing#links-and-back-button/address
 
 **Pre-conditions:**
 
@@ -305,42 +418,9 @@ Runs once per row of **Test data**.
 
 * The row's narrowing, with its count, and the address carries only it.
 
-<!-- trace:case id=g10.store-product-listing.TC-gld rev=1 -->
-### g10.store-product-listing.TC13: A shared listing address opens the same narrowing at the top
+---
 
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
-
-**Pre-conditions:**
-
-* customer has `<listing url>` narrowed by `<world A>` and `<type A>`, scrolled past its first page.
-
-**Test data:**
-
-| Route |
-| --- |
-| copy the address and open it in a new private window |
-| open a card's product page, then go back |
-
-**Steps:**
-
-1. Follow the row's route.
-2. Read the chips, the count and the first cards.
-
-**Expected Results:**
-
-* Chips for `<world A>` and `<type A>`, the narrowing's count, and its first page at the top.
+## product-listing#small-screens: Small Screens
 
 <!-- trace:case id=g10.store-product-listing.TC-qa1 rev=1 -->
 ### g10.store-product-listing.TC14: [Mobile only] A small screen shows the count and pills, and no search
@@ -351,13 +431,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
+* **Trace:** product-listing#small-screens/pills, product-listing#search/search-box
 
 **Pre-conditions:**
 
@@ -389,13 +468,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
+* **Trace:** product-listing#small-screens/worlds-and-types
 
 **Pre-conditions:**
 
@@ -426,13 +504,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
+* **Trace:** product-listing#small-screens/sort
 
 **Pre-conditions:**
 
@@ -461,13 +538,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#search
+* **Trace:** product-listing#search/suggestions
 
 **Pre-conditions:**
 
@@ -498,13 +574,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#search
+* **Trace:** product-listing#search/enter
 
 **Pre-conditions:**
 
@@ -529,10 +604,10 @@ Runs once per row of **Test data**.
 
 ---
 
-## product-listing#product-tile: Product Tile
+## product-listing#links-and-back-button: Links and Back Button
 
-<!-- trace:case id=g10.store-product-listing.TC-6x5 rev=1 -->
-### g10.store-product-listing.TC27: The cart control shows without hover on narrow and touch screens
+<!-- trace:case id=g10.store-product-listing.TC-gld rev=1 -->
+### g10.store-product-listing.TC13: A shared listing address opens the same narrowing at the top
 
 Runs once per row of **Test data**.
 
@@ -540,116 +615,32 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
-* **Type:** usability
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#product-tile
+* **Trace:** product-listing#links-and-back-button/address, product-listing#links-and-back-button/scroll-position
 
 **Pre-conditions:**
 
-* customer is on `<listing url>` on the row's device; an available card shows on the first page.
+* customer has `<listing url>` narrowed by `<world A>` and `<type A>`, scrolled past its first page.
 
 **Test data:**
 
-| Device |
+| Route |
 | --- |
-| a desktop browser below the wide breakpoint, with a mouse |
-| a phone browser with touch |
+| copy the address and open it in a new private window |
+| open a card's product page, then go back |
 
 **Steps:**
 
-1. Read the available card without hovering or tapping it.
+1. Follow the row's route.
+2. Read the chips, the count and the first cards.
 
 **Expected Results:**
 
-* Its Add to cart control is visible.
-
-<!-- trace:case id=g10.store-product-listing.TC-glr rev=2 -->
-### g10.store-product-listing.TC28: A guest's card controls add the card and change its quantity, kept across a reload
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** product-listing#product-tile
-
-**Pre-conditions:**
-
-* customer(signed out) is on `<listing url>`; `<cart product>` is available on the first page with at least 3 for sale; the cart holds the row's quantity.
-
-**Test data:**
-
-| Cart holds | Control | Card afterwards |
-| --- | --- | --- |
-| nothing | Add to cart | quantity 1, with increase, decrease and remove |
-| 2 | increase | quantity 3 |
-| 2 | decrease | quantity 1 |
-| 2 | remove | Add to cart, no quantity |
-
-**Steps:**
-
-1. Select the row's control on `<cart product>`'s card.
-2. Reload the page.
-
-**Expected Results:**
-
-* Step 1 asks for no sign-in and shows the row's card; step 2 shows it still.
-
----
-
-### g10.store-product-listing.TC36: A card's photo shows whole on every store surface
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** product-listing#product-tile
-
-**Pre-conditions:**
-
-* `<photo product>` is for sale with `<photo>` as its first photo, in the Main Page's merchandised row and a pick on `<another card>`, by the recipes "Put a card in the Main Page's merchandised row" and "Choose picks on a staging-shop card"; the pointer rests outside its card.
-
-**Test data:**
-
-| `<photo>` | `<surface>` |
-| --- | --- |
-| A graded slab, label to base, taller than wide, shot on white | `<listing url>` at 1440 pixels |
-| A graded slab, label to base, taller than wide, shot on white | `<listing url>` at 390 pixels |
-| A graded slab, label to base, taller than wide, shot on white | `<g10url>/store`, the merchandised row |
-| A graded slab, label to base, taller than wide, shot on white | `<another card>`'s page, You May Also Like |
-| A card wider than tall, on a white studio fill | `<listing url>` at 1440 pixels |
-| A small card photo, smaller than the well | `<listing url>` at 1440 pixels |
-| A square card photo | `<listing url>` at 1440 pixels |
-| A slab taller than wide, sold out by the recipe "Sell a card out" | `<listing url>` at 1440 pixels |
-
-**Steps:**
-
-1. Open `<surface>` and find `<photo product>`'s card.
-2. Compare the photo in the well with the photo file opened on its own.
-
-**Expected Results:**
-
-* The well is square and holds the whole photo, every edge of the file showing, scaled until its longer side meets the well and centred with the well's own ground equal on each side; only a square photo's corners round with the well's.
-* A white fill reads white, never blended into the grey well; a sold-out photo shows whole and faded.
+* Chips for `<world A>` and `<type A>`, the narrowing's count, and its first page at the top.
 
 
 ## Ungrouped
@@ -663,7 +654,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -690,13 +680,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing
+* **Trace:** product-listing#collection-page/entry
 
 **Pre-conditions:**
 
@@ -721,13 +710,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing
+* **Trace:** product-listing#collection-page/leaving
 
 **Pre-conditions:**
 
@@ -755,13 +743,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing
+* **Trace:** product-listing#collection-page/leaving
 
 **Pre-conditions:**
 
@@ -777,7 +764,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### product-listing#product-tile: Product Tile
+### product-listing#products-display: Products Display
 
 <!-- trace:case id=g10.store-product-listing.TC-mvj rev=2 -->
 #### g10.store-product-listing.TC5: A card reads available while any of its variants is for sale
@@ -788,13 +775,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#product-tile
+* **Trace:** product-listing#products-display/stock
 
 **Pre-conditions:**
 
@@ -822,13 +808,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#product-tile
+* **Trace:** product-listing#products-display/stock, product-listing#products-display/product-link
 
 **Pre-conditions:**
 
@@ -853,13 +838,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#product-tile
+* **Trace:** product-listing#products-display/cart-button
 
 **Pre-conditions:**
 
@@ -881,56 +865,37 @@ Runs once per row of **Test data**.
 
 * Step 2 shows `<cart product>` at 2.
 
----
-
-### discounts#where-each-shows: Where Each Shows
-
-<!-- trace:case id=g10.store-product-listing.TC-zpe rev=1 -->
-#### g10.store-product-listing.TC30: A card's price shows sales and basket-free discounts only
-
-Runs once per row of **Test data**.
+<!-- trace:case id=g10.store-product-listing.TC-klx rev=1 -->
+#### g10.store-product-listing.TC21: The count moves with the narrowing, not the scroll
 
 **Classification:**
 
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
+* **Severity:** minor
+* **Priority:** medium
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#where-each-shows
+* **Trace:** product-listing#products-display/product-count
 
 **Pre-conditions:**
 
-* `<discount product>` is for sale at HKD880 (any price above HKD100), on the first page; the shop holds only the row's discount for it, saved at least a minute ago.
-
-**Test data:**
-
-| Discount | Price | Struck |
-| --- | --- | --- |
-| compare-at HKD1,000 | HKD880 | HKD1,000 |
-| 10% off this product | HKD792 = HKD880 × 0.9 | HKD880 |
-| 10% off each item in the order | HKD792 = HKD880 × 0.9 | HKD880 |
-| 10% off after buying 2 units | HKD880 | none |
-| spend HKD1,000, save HKD100 | HKD880 | none |
-| HKD100 off the order | HKD880 | none |
-| buy 2, get 1 free | HKD880 | none |
-| 10% and 20% off this product, both no minimum | HKD704 = HKD880 × 0.8 | HKD880 |
-| a cut computed by a Shopify app | HKD880 | none |
+* customer is on `<listing url>` on a wide screen, with no narrowing; `<world A>` has more cards than one page.
 
 **Steps:**
 
-1. Open `<listing url>` and read `<discount product>`'s card.
+1. Tick `<world A>` and read the count while the first page loads, then once the cards show.
+2. Scroll to the end twice and read it again.
 
 **Expected Results:**
 
-* The row's price and strike; the card names no discount (❓ a conditional offer's name on the card waits on design).
+* While loading, no count shows, never `0 products`; then `<world A>`'s sidebar count.
+* Step 2: the same count.
 
 ---
 
-### product-listing#adaptive-filter: Adaptive Filter
+### product-listing#filters: Filters
 
 <!-- trace:case id=g10.store-product-listing.TC-m8o rev=1 -->
 #### g10.store-product-listing.TC17: Worlds show five and See all worlds; types show whole
@@ -939,13 +904,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
+* **Trace:** product-listing#filters/filter-groups, product-listing#filters/worlds, product-listing#filters/types
 
 **Pre-conditions:**
 
@@ -970,13 +934,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
+* **Trace:** product-listing#filters/empty-option
 
 **Pre-conditions:**
 
@@ -1006,13 +969,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
+* **Trace:** product-listing#filters/empty-option
 
 **Pre-conditions:**
 
@@ -1042,13 +1004,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
+* **Trace:** product-listing#filters
 
 **Pre-conditions:**
 
@@ -1064,35 +1025,6 @@ Runs once per row of **Test data**.
 * Step 1 says no product matches the filters, UI matching store-product-listing-screens-product-list--no-match.
 * Step 2 lists the whole catalogue with its count.
 
-<!-- trace:case id=g10.store-product-listing.TC-klx rev=1 -->
-#### g10.store-product-listing.TC21: The count moves with the narrowing, not the scroll
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
-
-**Pre-conditions:**
-
-* customer is on `<listing url>` on a wide screen, with no narrowing; `<world A>` has more cards than one page.
-
-**Steps:**
-
-1. Tick `<world A>` and read the count while the first page loads, then once the cards show.
-2. Scroll to the end twice and read it again.
-
-**Expected Results:**
-
-* While loading, no count shows, never `0 products`; then `<world A>`'s sidebar count.
-* Step 2: the same count.
-
 <!-- trace:case id=g10.store-product-listing.TC-39v rev=1 -->
 #### g10.store-product-listing.TC22: A shop with no facets shows no facet groups and no message
 
@@ -1100,13 +1032,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#adaptive-filter
+* **Trace:** product-listing#filters
+* **Retired:** 2026-10-27 - the product listing page no longer states what a shop with no filters shows
 
 **Pre-conditions:**
 
@@ -1133,13 +1065,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-listing#search
+* **Trace:** product-listing#search/suggestions
 
 **Pre-conditions:**
 
@@ -1171,13 +1102,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#search
+* **Trace:** product-listing#search/picking-a-suggestion
 
 **Pre-conditions:**
 
@@ -1200,7 +1130,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### product-listing#product-data: Product Data
+### product-listing#catalogue-source: Catalogue Source
 
 <!-- trace:case id=g10.store-product-listing.TC-zzi rev=1 -->
 #### g10.store-product-listing.TC31: A change the shop reports reaches the listing within seconds
@@ -1211,13 +1141,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#product-data
+* **Trace:** product-listing#catalogue-source
 
 **Pre-conditions:**
 
@@ -1250,13 +1179,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-listing#product-data
+* **Trace:** product-listing#catalogue-source
 
 **Pre-conditions:**
 
@@ -1278,13 +1206,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-listing#product-data
+* **Trace:** product-listing#catalogue-source/source
 
 **Pre-conditions:**
 
@@ -1306,13 +1233,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-listing#product-data
+* **Trace:** product-listing#catalogue-source/waits-for-shopify
 
 **Pre-conditions:**
 
@@ -1335,13 +1261,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#product-data
+* **Trace:** product-listing#products-display/draft-and-unpublished-products
 
 **Pre-conditions:**
 
@@ -1362,6 +1287,52 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Neither count includes `<draft product>`; it is not listed, suggested or found.
+
+---
+
+### discounts#where-each-shows: Where Each Shows
+
+<!-- trace:case id=g10.store-product-listing.TC-zpe rev=1 -->
+#### g10.store-product-listing.TC30: A card's price shows sales and basket-free discounts only
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** product-listing#products-display/sale-price, discounts#where-each-shows
+
+**Pre-conditions:**
+
+* `<discount product>` is for sale at HKD880 (any price above HKD100), on the first page; the shop holds only the row's discount for it, saved at least a minute ago.
+
+**Test data:**
+
+| Discount | Price | Struck |
+| --- | --- | --- |
+| compare-at HKD1,000 | HKD880 | HKD1,000 |
+| 10% off this product | HKD792 = HKD880 × 0.9 | HKD880 |
+| 10% off each item in the order | HKD792 = HKD880 × 0.9 | HKD880 |
+| 10% off after buying 2 units | HKD880 | none |
+| spend HKD1,000, save HKD100 | HKD880 | none |
+| HKD100 off the order | HKD880 | none |
+| buy 2, get 1 free | HKD880 | none |
+| 10% and 20% off this product, both no minimum | HKD704 = HKD880 × 0.8 | HKD880 |
+| a cut computed by a Shopify app | HKD880 | none |
+
+**Steps:**
+
+1. Open `<listing url>` and read `<discount product>`'s card.
+
+**Expected Results:**
+
+* The row's price and strike; the card names no discount (❓ a conditional offer's name on the card waits on design).
 
 ## Settled
 

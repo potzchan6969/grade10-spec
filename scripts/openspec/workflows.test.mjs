@@ -275,8 +275,6 @@ test("shared-planning-change-stages-SC-72 - the manual deploys on every push to 
   );
   assert.match(commit.run, /gh workflow run manual\.yml/);
   assert.equal(lint.jobs.biome.permissions.actions, "write");
-  const build = manual.jobs.deploy.steps.find((step) => step.name === "Build");
-  assert.equal(build.env.RELAY_URL, "${{ vars.RELAY_URL }}");
 });
 
 test("the channel post falls back to the store's own channel", () => {
@@ -465,7 +463,6 @@ test("Test's jobs skip only what they do not read", () => {
     "packages/i18n/messages/shared/en/a.json",
     "apps/preview/src/a.tsx",
     "apps/emails/src/a.tsx",
-    "tools/relay/src/a.ts",
   ])
     assert.equal(tooling.test(path), false, `${path} runs the manual's tools`);
   assert.match(step.run, /"\$EVENT" != pull_request/);

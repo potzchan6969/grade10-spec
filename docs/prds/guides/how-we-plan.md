@@ -32,10 +32,9 @@ deploys nothing, so archiving asks the application repository whether the code
 is live, not whether the branch is closed.
 
 A change passes through the hands
-[Change Stages](/p/shared/planning/change-stages) names, each landing their own
-artifacts on their word — [Working a change](/guides/working-a-change) walks one
-feature through them all. Each hand answers only what is theirs, in the
-change's thread — [Agent Rounds](/p/shared/planning/agent-rounds).
+[Change Stages](/p/shared/planning/change-stages) names, each writing their own
+artifacts — [Working a change](/guides/working-a-change) walks one
+feature through them all.
 
 ## The rules themselves
 

@@ -44,8 +44,10 @@ import { parseArgs } from "./lib/args.mjs";
 import { citesId } from "./lib/cites.mjs";
 import { applicationRoot, decidedByProblem } from "./lib/decided-by.mjs";
 import {
+  checkRuleCoverage,
   checkStoreSuite,
   STORE_IN_OPENSPEC,
+  STORE_PRD,
   storeSuites,
 } from "./lib/store-suites.mjs";
 import {
@@ -370,7 +372,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
     }
   }
 
-  // Q49 and Q69 (`run-a-round-on-every-artifact`): every automated case of an
+  // Every automated case of an
   // in-flight change names what decides it, whatever day the change opened.
   // A durable suite under `openspec/specs/` owes nothing yet - back-filling
   // those is a rules revision of its own (Q70) - and the archive is never
@@ -1098,6 +1100,7 @@ for (const p of suites) {
 
 {
   const anchors = new Map();
+  const traced = new Map();
   for (const p of storeSuites(ROOT)) {
     const rel = relative(ROOT, p);
     if (args.scope && !rel.includes(args.scope)) continue;
@@ -1106,8 +1109,16 @@ for (const p of suites) {
       p,
       (severity, line, message) => record(severity, rel, line, message),
       anchors,
+      traced,
     );
   }
+  checkRuleCoverage(
+    ROOT,
+    traced,
+    (page, line, message) =>
+      record("warning", join(STORE_PRD, `${page}.md`), line, message),
+    anchors,
+  );
 }
 
 // --- a walk saves a tester setup and time ---------------------------------

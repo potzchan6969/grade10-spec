@@ -1,0 +1,162 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "6e5e0cd6f518e7ec0197d87576327021a63477de591c8cb7478f0309e7e7a185"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "7ff2461382bba2d24a74fc1dde4b9812e6eff3a9",
+    "capturedAt": "2026-10-06T15:07:51.353Z",
+    "targets": [
+      {
+        "path": "openspec/specs/shared/dates-and-times/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/dates-and-times/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A deadline names its time zone",
+          "Requirement: A message the platform sends states one zone",
+          "Requirement: Each rendering states the zone its surface requires"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/dates-and-times/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Bid history components format activity time"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Dates render in Hong Kong as GMT+8"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@seankcw",
+    "reviewedAt": "2026-10-28T07:38:37Z",
+    "changes": [
+      {
+        "path": "openspec/specs/shared/dates-and-times/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Cases for this change's own amendment added at f816d74fe, then the suite folded into its feature (5cf880d4f) under tcs-rules r7; the cases restate the requirements and keep their ids"
+      },
+      {
+        "path": "openspec/specs/shared/dates-and-times/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Each rendering states the zone its surface requires"
+        ],
+        "classification": "semantic",
+        "reason": "This change's own amendment f816d74fe (decisions Q30, Q31), re-accepted as 9a7437bc after the claim: admin surfaces gain the shop-clock exception (SC-39, SC-40, carried for the vault console change) and the auction order operator exception (SC-41, built by group 6); collector, document and email zones are unchanged",
+        "evidence": [
+          "grade10 cf9d06130d packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/dialogs/deadlineZone.test.tsx (SC-41, send and reissue deadline in GMT+8)",
+          "grade10 cf9d06130d packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrdersWorklist.test.tsx and OrderDetail.test.tsx (worklist, timeline and invoice log in GMT+8)",
+          "Tasks 2.1 and 2.2 note SC-39 and SC-40 are built by the vault console change; this change moved no other operator table"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/dates-and-times/spec.md",
+        "anchors": [
+          "Requirement: A deadline names its time zone"
+        ],
+        "classification": "editorial",
+        "reason": "The vault timeline stamp that stays UTC is named as the collector's, matching the admin exception; the deadline rule is unchanged"
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated under tcs-rules r7 (fc550aa59) and folded into its feature (fd03b5e74); the cases restate the requirements"
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Gallery magnifier (gallery-lens-zoom), the bid ceiling and USD cap (currency ceiling, USD settlement) and the dropped card were added by their own accepted changes; no Feature set line this change wrote moved",
+        "evidence": [
+          "e1447fb3d, cfab23061, c52636820 and f4d0c99db accept those lines under their own changes",
+          "grade10 cf9d06130d apps/frontend/grade10/src/pages/auctions/AuctionsPage.test.tsx (catalogue tile reads HKT and EDT)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Requirement: Bid history components format activity time"
+        ],
+        "classification": "semantic",
+        "reason": "drop-auction-card (f4d0c99db) folds AuctionCard into the catalogue tile AuctionLotCard: an open tile keeps its countdown and reads its deadline to a screen reader, a closed tile draws the close line; the tile still requires locale and timeZone and names the viewer zone",
+        "evidence": [
+          "grade10-spec apps/preview/src/pages/auction/display/auction-catalogue-lot-card.stories.tsx asserts \"Ended 2 Oct 2026, 18:00 HKT\"",
+          "grade10 cf9d06130d apps/frontend/grade10/src/pages/auctions/AuctionsPage.test.tsx (Closed line ends in HKT for Hong Kong, EDT for New York)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "One line rewrapped with a hyphen for the em dash; no journey changed"
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Parameterized, restyled and later deleted under tcs-rules r7 (1d943096c); the cases restate the requirements"
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Multi-item item table, subtotal note, address lines, pagination and summary wording arrive from multi-item PDFs (302c4df2d), the borderless summary (0f42c0605) and convert-hkd-order-at-subtotal (419ccec2d); the GMT+8 date requirement is untouched",
+        "evidence": [
+          "grade10-spec packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-dates.test.ts (SC-43, US1-TC49-1: date rows end in GMT+8 across a Hong Kong midnight)"
+        ]
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "cf9d06130d0bcb70d0895b6644472243928091bf",
+      "components": [
+        "admin",
+        "auction-service",
+        "grading-service",
+        "vault-service",
+        "web"
+      ]
+    }
+  ]
+}

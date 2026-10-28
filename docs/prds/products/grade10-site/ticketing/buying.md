@@ -83,6 +83,10 @@ press opens the page.
   collector otherwise
 - **Pressed twice** — the same selection pressed again never holds a second
   set
+- **No sign-in to buy** — buying asks only an email, so the press stays
+  short; the order and the points it earns belong to that address, and join
+  the account a later sign-in proves -
+  [Points](/p/grade10-site/loyalty/points)
 
 ## Refusals
 

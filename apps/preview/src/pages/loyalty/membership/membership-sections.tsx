@@ -35,6 +35,9 @@ import {
   WALLET_PASS_COPY,
 } from "../loyalty-content";
 
+/** Buying points opens the pack picker over the page. */
+const TOP_UP_STORY_ID = "loyalty-top-ups-screens-top-up-dialog--default";
+
 /** The membership page's sections, keyed for the sidebar's swap. */
 type MembershipTab = "overview" | "rewards" | "coupons" | "points";
 
@@ -89,6 +92,7 @@ function OverviewPane({
         copy={TIER_CARD_COPY}
         earnLine={view.earnLine}
         href={TIERS_TAB_HREF}
+        onClick={scrollToTiers}
         qualifyingPoints={view.qualifyingPoints}
         qualifyingThreshold={view.qualifyingThreshold}
         retentionLine={view.retentionLine}
@@ -97,7 +101,11 @@ function OverviewPane({
         worth={view.worth}
       />
       <div className="flex">
-        <Button render={<a href="#top-up" />} size="sm" variant="outline">
+        <Button
+          render={<a href={storyHref(TOP_UP_STORY_ID)} />}
+          size="sm"
+          variant="outline"
+        >
           {MEMBERSHIP_PAGE_COPY.topUpAction}
         </Button>
       </div>
@@ -115,10 +123,21 @@ function OverviewPane({
   );
 }
 
-/** The tier card opens the Tiers & Benefits screen. */
-const TIERS_TAB_HREF = storyHref(
-  "loyalty-membership-screens-tiers-benefits--default",
-);
+/** The Benefits link scrolls to the Tiers & Benefits section on the pane. */
+const TIERS_TAB_HREF = "#membership-tiers-heading";
+
+/** Smooth-scrolls to the Tiers & Benefits section, instantly under reduced
+ * motion. A plain press reports here in place of the link's own jump. The
+ * workbench stubs `scrollIntoView`, so the window is scrolled itself. */
+const scrollToTiers = () => {
+  const target = document.getElementById("membership-tiers-heading");
+  if (!target) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({
+    top: target.getBoundingClientRect().top + window.scrollY,
+    behavior: reduce ? "auto" : "smooth",
+  });
+};
 
 /** Rewards — the catalog, with the second top-up entrance beside it. */
 function RewardsPane({
@@ -139,7 +158,11 @@ function RewardsPane({
         <PaneHeading id="membership-rewards-heading">
           {MEMBERSHIP_PAGE_COPY.rewardsHeading}
         </PaneHeading>
-        <Button render={<a href="#top-up" />} size="sm" variant="outline">
+        <Button
+          render={<a href={storyHref(TOP_UP_STORY_ID)} />}
+          size="sm"
+          variant="outline"
+        >
           {MEMBERSHIP_PAGE_COPY.topUpAction}
         </Button>
       </div>

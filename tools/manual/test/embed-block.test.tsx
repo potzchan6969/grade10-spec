@@ -68,6 +68,24 @@ describe("which frames load without a click", () => {
   });
 });
 
+describe("a story drawn at a phone's width", () => {
+  it("frames it at that width, centred", () => {
+    const html = render(
+      <StoryBlockView block={{ type: "story", id: STORY, width: 375 }} />,
+    );
+
+    expect(html).toContain("width:375px");
+    expect(html).toContain("justify-center");
+  });
+
+  it("spans the card when no width is given", () => {
+    const html = render(story);
+
+    expect(html).not.toContain("width:375px");
+    expect(html).toContain("w-full border-0");
+  });
+});
+
 describe("the drift badge on a story card", () => {
   it("badges a card whose component set the report marks warn", () => {
     const html = render(story, report({ "Cart Drawer": "warn" }));

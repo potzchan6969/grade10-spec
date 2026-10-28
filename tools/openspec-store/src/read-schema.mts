@@ -20,8 +20,8 @@ import {
  * suite is written without sight of the requirements it is reconciled against,
  * and the tech design is drawn beside the UI design rather than from it — so
  * an order alone would put every suite behind its own requirements. A key the
- * schema does not carry — `upstream`, or the readers a round classifies a diff
- * against — is read as absent rather than as a reason to drop the artifact.
+ * schema does not carry, such as `upstream`, is read as absent rather than as
+ * a reason to drop the artifact.
  *
  * Both lists name artifacts of this same schema, so an id it issues nowhere is
  * refused rather than read as absent: the worklists would leave the artifact
@@ -62,7 +62,6 @@ export function schemaArtifacts(
       ...(hand ? { hand } : {}),
       requires: strings(fields.requires),
       upstream: strings(fields.upstream),
-      perspectives: perspectives(fields.perspectives, fields.id),
       required: fields.required !== false,
     });
   }
@@ -98,22 +97,10 @@ function handOf(id: string, value: unknown): SchemaArtifact["hand"] {
   return named;
 }
 
-/** The readers a round on a task group may dispatch. A task group is no
- * artifact of the schema — it is a section of one artifact's checklist — so
- * its perspectives sit on the schema's `apply:` block, read through this one
- * reader rather than a second copy of the table. Empty where the schema
- * records none. */
-export function applyPerspectives(root: string, schema: string): Perspective[] {
-  const parsed = schemaOf(root, schema);
-  const apply = (parsed?.apply ?? {}) as Record<string, unknown>;
-  return perspectives(apply.perspectives, "apply");
-}
-
 /** The readers of a bug's two rounds, off the schema's `bug:` block: the
  * diagnosis, read before any code, and the fix, read once it lands. A bug is
- * no change and no artifact of the schema, so its readers sit beside the
- * `apply:` block rather than on an artifact. Empty where the schema records
- * none. */
+ * no change and no artifact of the schema, so its readers sit in their own
+ * block rather than on an artifact. Empty where the schema records none. */
 export function bugPerspectives(
   root: string,
   schema: string,
@@ -127,7 +114,7 @@ export function bugPerspectives(
   return { diagnosis: round("diagnosis"), fix: round("fix") };
 }
 
-type ParsedSchema = { artifacts?: unknown; apply?: unknown; bug?: unknown };
+type ParsedSchema = { artifacts?: unknown; bug?: unknown };
 
 function schemaOf(root: string, schema: string): ParsedSchema | undefined {
   const text = readTextIfExists(
@@ -142,12 +129,11 @@ function schemaOf(root: string, schema: string): ParsedSchema | undefined {
  * dispatches nothing a round could ever run, so it is refused the way a bad
  * `hand:` is — a schema with a hole in its data is worse than one that fails
  * loudly. A `when` written as one word is that one trigger, and one outside
- * `TRIGGERS` is refused the same way. `label` names the artifact id, or
- * `apply` for a task group's block, so the refusal says where to look. */
-const perspectives = (value: unknown, label: unknown): Perspective[] => {
+ * `TRIGGERS` is refused the same way. `label` names the round, so the
+ * refusal says where to look. */
+const perspectives = (value: unknown, label: string): Perspective[] => {
   if (!Array.isArray(value)) return [];
   const read: Perspective[] = [];
-  const named = typeof label === "string" ? label : String(label ?? "");
   for (const entry of value) {
     const fields = (entry ?? {}) as Record<string, unknown>;
     const name = typeof fields.name === "string" ? fields.name : undefined;
@@ -157,14 +143,14 @@ const perspectives = (value: unknown, label: unknown): Perspective[] => {
     if (!name || !agent || when.length === 0) {
       throw new StoreFileError(
         1,
-        `\`${named}\` carries a \`perspectives:\` entry missing \`name:\`, \`agent:\` or \`when:\``,
+        `\`${label}\` carries a \`perspectives:\` entry missing \`name:\`, \`agent:\` or \`when:\``,
       );
     }
     for (const trigger of when) {
       if (TRIGGERS.includes(trigger)) continue;
       throw new StoreFileError(
         1,
-        `\`${named}\`'s perspective \`${name}\` names \`${trigger}\` in \`when:\`, which is no trigger — name one of ${TRIGGERS.map((one) => `\`${one}\``).join(", ")}`,
+        `\`${label}\`'s perspective \`${name}\` names \`${trigger}\` in \`when:\`, which is no trigger — name one of ${TRIGGERS.map((one) => `\`${one}\``).join(", ")}`,
       );
     }
     read.push({ name, when, agent });

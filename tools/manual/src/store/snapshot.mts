@@ -12,6 +12,7 @@ import {
   readManualAssets,
   readManualConfig,
   readManualPages,
+  readManualSuites,
 } from "./read-manual.mts";
 import { readReferences, readReferencesReadme } from "./read-references.mts";
 import type { Roots } from "./roots.mts";
@@ -49,6 +50,7 @@ export function composeStore(
       taxonomy: deriveTaxonomy(roots, config),
       manualDir: roots.manual,
       pages,
+      suites: readManualSuites(roots),
       assets: readManualAssets(roots),
       references: references.map(({ text: _text, ...entry }) => entry),
       ...(referencesReadme === undefined ? {} : { referencesReadme }),

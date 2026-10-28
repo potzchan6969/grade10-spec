@@ -18,7 +18,6 @@ import type { DesignSyncReport } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
 import { designSyncOf, designSyncOfFrame } from "../blocks/design-drift";
 import { VerdictChip } from "../blocks/embed-block";
-import { ReadOnlyNotice } from "../editor/read-only-notice";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";
 
@@ -37,7 +36,6 @@ export function DesignPage() {
 
   return (
     <>
-      <ReadOnlyNotice className="mb-3 text-right" />
       <PageHeading
         summary="Every Figma frame and Storybook story the manual shows, and what the nightly check said about it."
         title="Design"
@@ -104,7 +102,7 @@ function Shelf({
     <section>
       <div className="mb-2 flex flex-wrap items-baseline gap-2">
         <h2
-          className="font-heading font-bold text-base"
+          className="font-bold font-heading text-manual-h3"
           id={slugify(shelf.route)}
         >
           <Link className="hover:underline" to={shelf.route}>

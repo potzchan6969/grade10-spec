@@ -257,13 +257,6 @@ export const ROLES = ["pm", "design", "qa", "dev", "release"] as const;
 /** A hand a change passes through. */
 export type Role = (typeof ROLES)[number];
 
-/** What a round row's Artifact cell reads for the one reader's pass over the
- * whole change, after its last task group: no artifact of the schema and no
- * group of the plan, so every reader that tells a group from an artifact
- * reads it as a group — the landing, the archive gate, the relay and the
- * button — and the word is written once, here. */
-export const WHOLE_CHANGE = "whole change";
-
 /** How far a change has got, derived from the files on the store's main and
  * never stored: the eight stages `shared/planning/change-stages` names, of
  * which `ChangeLane`'s four are a projection. */
@@ -302,96 +295,6 @@ export type OpenQuestion = {
   /** What the row's `Decided` cell says after `❓ <role> - ` — the
    * recommendation its hand is answering, where a row carries one. */
   recommended?: string;
-};
-
-/** One artifact whose upstream moved after it was drawn or last read again,
- * and what says so. Derived per read, never stored. */
-export type BehindArtifact = {
-  /** The schema artifact id. */
-  artifact: string;
-  /** The items before it that moved, each a linked page section as
-   * `<page>#<slug>` or an upstream artifact id, in reading order; with
-   * `whole`, everything before it. */
-  changed: string[];
-  /** Set where what moved could not be recovered — no `reviewed:` line, or no
-   * commit holding the before the line was read against — so the artifact is
-   * read again against all of it, and the move is major. */
-  whole?: true;
-  /** What moved, unit by unit, quoted before and after. */
-  moved: Moved[];
-  /** Whether it holds the next landing drawn from it: a major move does, a
-   * small one is told and holds only the fold. */
-  holds: boolean;
-  /** The day the artifact went behind — what the digest counts its seven days
-   * from: the newest commit among everything before it. Absent where no
-   * commit dates anything before it, which is what a depth-1 checkout gives. */
-  since?: string;
-};
-
-/**
- * One unit that moved before an artifact: a decision row keyed by its
- * `Q<n>`, a requirement, a case, a section, or the whole item where it could
- * not be split. `major` holds what is drawn from it; a small move is told.
- */
-export type Moved = {
-  /** The item it sits in: an upstream artifact id or `<page>#<slug>`. */
-  item: string;
-  /** The unit's key inside the item. */
-  key: string;
-  /** The unit as it was read, absent for a unit added. */
-  before?: string;
-  /** The unit as it stands, absent for a unit removed. */
-  after?: string;
-  major: boolean;
-};
-
-/**
- * What one artifact is drawn from, as the store read it off `main`.
- *
- * The reading is the store's, because hashing is `node:crypto`'s and the page
- * texts are the reader's; the verdict is not stored — `behindOf` is a pure
- * comparison over this, so no surface and no check has to be reordered to see
- * a freshness field.
- */
-export type UpstreamRead = {
-  /** The content id of everything before the artifact, in reading order. */
-  id: string;
-  /** Each thing before it, in that order: a linked page section as
-   * `<page>#<slug>`, or an upstream artifact id. */
-  items: string[];
-  /** The newest commit date among everything before the artifact, carried
-   * onto `BehindArtifact` as `since` where a recorded `reviewed:` id is what
-   * says it moved: an id cannot single out which item changed, so no older
-   * day than this one can be claimed. Absent only where no commit dates
-   * anything before the artifact. */
-  beforeOn?: string;
-  /** What moved since the `reviewed:` line was read, where the line and the
-   * before it was read against were both recovered; absent where they were
-   * not, which `behindOf` reads as a whole, major move. */
-  moved?: Moved[];
-};
-
-/**
- * One round of one artifact or one task group, as `rounds.md` records it.
- *
- * Every column is the cell as its author wrote it, an empty one included: the
- * `round` rule refuses a row that leaves a column blank, and a reader that
- * dropped the blank would leave it nothing to name. `round` is the round's
- * number in the change, from 1 in landing order, and 0 where the cell holds no
- * number.
- */
-export type RoundRow = {
-  round: number;
-  /** The artifact's id, or the task group's number. */
-  artifact: string;
-  /** The names of the perspectives run. */
-  perspectives: string;
-  /** The findings that stood, as short phrases. */
-  stood: string;
-  /** The `Q<n>` ids the round raised. */
-  asked: string;
-  /** Per scenario id, the tests that landed for a task group. */
-  tests: string;
 };
 
 /** One person the store knows, and who the store knows — the one map every
@@ -512,13 +415,6 @@ export type ChangeEntry = {
    * survives the read so the `hands` rule can refuse it, and a role the
    * change does not name is unnamed rather than an error. */
   hands?: Record<string, string>;
-  /** Whose word landed each artifact, from `.openspec.yaml` `landed_by:` — a
-   * schema artifact id against one handle, written by the landing. */
-  landedBy?: Record<string, string>;
-  /** What each artifact was last read again against, from `.openspec.yaml`
-   * `reviewed:` — a schema artifact id against the content id of what was
-   * before it. Written by the round; read here. */
-  reviewed?: Record<string, string>;
   /** Why each capability's durable Purpose no longer holds, from
    * `.openspec.yaml` `purpose_rewritten:` — a capability path against the
    * line that lets the change's delta replace that Purpose at acceptance. */
@@ -535,15 +431,6 @@ export type ChangeEntry = {
    * questions a linked page still carries — merged on here by `markQuestions`
    * when the snapshot is read, where the pages are at hand. */
   questions?: OpenQuestion[];
-  /** The rounds this change has run, from `rounds.md`, one row per round in
-   * landing order. Absent until the first round writes the file — a change
-   * opened this morning owes no row, and an empty list is a file with a header
-   * and no round under it. */
-  rounds?: RoundRow[];
-  /** What each written artifact was drawn from, keyed by schema artifact id —
-   * read where the pages and the history are, compared by `behindOf`. Absent
-   * for a change whose record could not be read and for an archived one. */
-  upstream?: Record<string, UpstreamRead>;
   /** How far the change has got, computed where the schema is — on every
    * entry, so no surface carries a second derivation for one that has none. */
   stage: Stage;
@@ -576,10 +463,6 @@ export type SchemaArtifact = {
    * without sight of the requirements, and the tech design is drawn beside
    * the UI design rather than from it. Empty where the schema says nothing. */
   upstream: string[];
-  /** The readers a round on this artifact may dispatch, in the order the
-   * schema records them. Empty where it records none: `spec.md` and
-   * `feature-tcs.md` are challenged by the two blind readings instead. */
-  perspectives: Perspective[];
   /** Whether a change owes this artifact by default. An artifact that is not
    * required is owed only when the change says so in `awaiting:`: what makes
    * it owed is a condition no worklist can see. */
@@ -587,9 +470,7 @@ export type SchemaArtifact = {
 };
 
 /** What in a draft summons a reader. `always` is every round; the others
- * answer to what the draft itself changed —
- * `openspec/specs/shared/planning/agent-rounds/spec.md`'s "A round's size is
- * read from the draft". Read by `scripts/openspec/lib/perspectives.mjs`,
+ * answer to what the draft itself changed. Read by `scripts/openspec/lib/perspectives.mjs`,
  * which classifies a diff against this same list, and by `read-schema.mts`,
  * which refuses a `when` outside it the way `handOf` refuses a role outside
  * `ROLES`. */
@@ -607,10 +488,9 @@ export const TRIGGERS: readonly string[] = [
   "code",
 ];
 
-/** One reader a round may dispatch: its perspective's name, what in a draft
- * summons it, and the definition under `.claude/agents/` the round runs. The
- * size of a round is the draft's own diff read against every `when`, so a
- * perspective no draft can summon is not an entry. */
+/** One reader a bug round may dispatch: its perspective's name, what in a
+ * diagnosis or a diff summons it, and the definition under `.claude/agents/`
+ * the round runs. A perspective nothing can summon is not an entry. */
 export type Perspective = {
   name: string;
   /** The triggers that summon it, each one of `TRIGGERS`. */

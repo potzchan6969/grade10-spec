@@ -1,0 +1,84 @@
+{
+  "version": 2,
+  "change": "add-site-press-article-page",
+  "baseline": "94b57b296f5ca2f5fc13cf16f861bbcc6296cbdf02acaccfd2a2c50646784fe1",
+  "fingerprint": "41aade967fbabec56e35afc3d2394c0d297878e90df0c9f4268439ef7e2b6e14",
+  "reviewedBy": "seankcw",
+  "acceptedAt": "2026-10-28T02:09:37.279Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/site/press.md#the-page",
+      "sha256": "464ec144eec925fe7322d6535a215b84c5934e0689d27056cbfdd8fbbd64b2b9",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-site-press-article-page/decisions.md",
+      "sha256": "6c573d18879835c546678707a80a7b004a81eed42df8cde60590b874a4b1a34a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-press-article-page/proposal.md",
+      "sha256": "89db804ecc7ca24e5ede6f0df4b9f7e710afad0df0b3bc5952102bc173721261",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-press-article-page/specs/grade10-site/site/press/feature-tcs.md",
+      "sha256": "ee654a42d2f0663943385e3253d2384ceaf5f870ba48055ceab73c206f58b6fb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-press-article-page/specs/grade10-site/site/press/spec.md",
+      "sha256": "ac66af42573dc8ddfdda13ebffd58b195e9a8efbb86d8d6fc86f24cde7345a8b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-press-article-page/specs/grade10-site/site/press/user-journeys.md",
+      "sha256": "3b48b0fa607ba3bf825ff2f40fe881b1470233f7b529391654efb94625258dc4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-press-article-page/ui-design.md",
+      "sha256": "a8ed9f2fcea43b541ec2dacb601b38e477d877e0addce9b3a2ea4df1bdf9ce40",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/press/feature-tcs.md",
+      "sha256": "596817de15d4224e6b14da142d87c6e6b3ab6f7c36c21929c3e41c8836627853",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/press/spec.md",
+      "sha256": "43394c1415159efc5c1dca9fb984b6657968ea22ac9f116f0559caa6d77909e6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/press/user-journeys.md",
+      "sha256": "261f0f9d7e870fc7d2cc419599de72534274d5ba6dee8abfa7399895c095af2b",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-site-press-article-page/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/press/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/press/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Every article carries the fixed sidebar",
+        "Requirement: The article presents the release",
+        "Requirement: The body draws what the editor composed",
+        "Requirement: The feature image leads the article"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/press/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

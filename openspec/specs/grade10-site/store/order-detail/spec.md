@@ -3,7 +3,10 @@
 ## Purpose
 
 The customer order detail gives a signed-in collector one private account of a
-Store order without revealing another customer's order or inventing absent facts.
+Store order without revealing another customer's order or inventing absent
+facts. It answers Store orders — online and counter purchases; a ticket order
+placed on the ticketing platform is answered by that platform's own order
+page, never this one.
 
 ## Feature set
 

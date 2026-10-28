@@ -16,7 +16,6 @@ import { STORE_CHANGED } from "../api/live.ts";
 import { GrammarError, parsePage, serializePage } from "../content/grammar.ts";
 import { confine, storePath } from "./disk.mts";
 import { git } from "./git.mts";
-import { liveBodies, type OriginMain, originMain } from "./main-moved.mts";
 import { type Roots, resolveRoots } from "./roots.mts";
 import {
   readHeads,
@@ -30,9 +29,6 @@ import {
  * Dev transport for the store. Both GETs are computed from the resolved roots
  * per request — memoized on git heads plus the newest mtime, so an editor can
  * poll them — and every write is confined to the content root's manual.
- *
- * One reading of `origin/main` per server, so the tabs a teammate has open
- * share one fetch rather than one each.
  */
 export function manualStorePlugin(): Plugin {
   const roots = resolveRoots();
@@ -42,15 +38,11 @@ export function manualStorePlugin(): Plugin {
     configureServer(server) {
       ensureAssetsDir(roots);
       watchStore(server, roots);
-      server.middlewares.use(
-        middleware(roots, live(roots), originMain(roots.store)),
-      );
+      server.middlewares.use(middleware(roots, live(roots)));
     },
     configurePreviewServer(server) {
       const built = join(server.config.root, server.config.build.outDir);
-      server.middlewares.use(
-        middleware(roots, fromDist(built), originMain(roots.store)),
-      );
+      server.middlewares.use(middleware(roots, fromDist(built)));
     },
   };
 }
@@ -137,10 +129,9 @@ export type StoreRequest = {
 export function storeEndpoints(
   roots: Roots,
   artifacts: Artifacts = live(roots),
-  origin: OriginMain = originMain(roots.store),
 ): (request: StoreRequest) => Promise<Reply> {
   return (request) =>
-    route(roots, artifacts, origin, {
+    route(roots, artifacts, {
       method: request.method ?? "GET",
       url: new URL(request.path, "http://manual.local"),
       header: (name) => request.headers?.[name],
@@ -148,7 +139,7 @@ export function storeEndpoints(
     });
 }
 
-function middleware(roots: Roots, artifacts: Artifacts, origin: OriginMain) {
+function middleware(roots: Roots, artifacts: Artifacts) {
   return (
     req: IncomingMessage,
     res: ServerResponse,
@@ -160,7 +151,7 @@ function middleware(roots: Roots, artifacts: Artifacts, origin: OriginMain) {
       next();
       return;
     }
-    route(roots, artifacts, origin, incoming(req, url))
+    route(roots, artifacts, incoming(req, url))
       .catch((cause) => {
         console.error(`manual-store: ${path} failed`, cause);
         return reply(500, { error: describe(cause) });
@@ -184,7 +175,6 @@ function incoming(req: IncomingMessage, url: URL): Incoming {
 async function route(
   roots: Roots,
   artifacts: Artifacts,
-  origin: OriginMain,
   req: Incoming,
 ): Promise<Reply> {
   const method = req.method;
@@ -220,14 +210,6 @@ async function route(
         : reply(404, { error: `no reference: ${slug}` });
     }
     if (path === "/api/dirty") return reply(200, await readDirty(roots));
-    // The three the live line adds. `/api/relay` and `/api/head` are what the
-    // build writes as files, answered here from the same reading, so a page
-    // listens the same way on both transports.
-    if (path === "/api/relay" || path === "/api/head") {
-      const live = liveBodies((await artifacts()).snapshot.storeHead);
-      return reply(200, path === "/api/relay" ? live.relay : live.head);
-    }
-    if (path === "/api/upstream") return reply(200, await origin.standing());
     if (path === "/api/page")
       return readPage(roots, url.searchParams.get("path"));
     return reply(404, { error: `no such endpoint: ${path}` });
@@ -237,11 +219,6 @@ async function route(
     return reply(404, { error: `no such endpoint: ${path}` });
   }
   if (method !== "POST") return notAllowed(method);
-
-  if (path === "/api/pull") {
-    const outcome = await origin.pull();
-    return reply("pulled" in outcome ? 200 : 409, outcome);
-  }
 
   const body = await req.json();
   if (path === "/api/page") return writePage(roots, body);

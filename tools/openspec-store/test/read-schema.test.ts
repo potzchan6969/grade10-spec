@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { findStoreRoot } from "../../manual/src/store/disk.mts";
 import { NO_GIT } from "../../manual/src/store/git.mts";
 import { readChanges } from "../src/read-changes.mts";
-import { applyPerspectives, schemaArtifacts } from "../src/read-schema.mts";
+import { bugPerspectives, schemaArtifacts } from "../src/read-schema.mts";
 import { TRIGGERS } from "../src/types.ts";
 import { writeStore } from "./tmp-store";
 
@@ -81,83 +81,20 @@ describe("what each artifact is drawn from", () => {
 });
 
 /**
- * The readers a round may dispatch are data beside each artifact's teammate,
- * and a task group's sit on the schema's `apply:` block. One reader answers
- * both, so no round carries a second copy of the table. `TRIGGERS` itself
- * lives once, in `../src/api/types.ts`.
+ * A bug's two rounds read their readers off the schema's `bug:` block, and
+ * nothing else in the schema dispatches one. `TRIGGERS` itself lives once, in
+ * `../src/types.ts`.
  */
-describe("the readers each artifact may summon", () => {
-  it("shared-planning-agent-rounds-SC-28 - reads the perspectives beside every artifact that has them", () => {
-    expect(byId.get("ui-design")?.perspectives).toEqual([
-      {
-        name: "journeys",
-        when: ["surface"],
-        agent: ".claude/agents/design.md",
-      },
-      {
-        name: "inventory",
-        when: ["surface", "export"],
-        agent: ".claude/agents/design.md",
-      },
-      { name: "reader", when: ["copy"], agent: ".claude/agents/reader.md" },
-      { name: "simpler", when: ["always"], agent: ".claude/agents/simpler.md" },
-    ]);
+describe("the readers a bug round may summon", () => {
+  const bug = bugPerspectives(storeRoot, "grade10-planning");
+
+  it("gives both rounds the simpler thing", () => {
+    for (const round of [bug.diagnosis, bug.fix])
+      expect(round.map(({ name }) => name)).toContain("simpler");
   });
 
-  it("gives the requirements and the cases the simpler thing alone, after the two blind readings", () => {
-    for (const id of ["specs", "test-cases"])
-      expect(byId.get(id)?.perspectives).toEqual([
-        {
-          name: "simpler",
-          when: ["always"],
-          agent: ".claude/agents/simpler.md",
-        },
-      ]);
-  });
-
-  it("reads a task group's readers off the apply block", () => {
-    expect(
-      applyPerspectives(storeRoot, "grade10-planning").map(({ name }) => name),
-    ).toEqual([
-      "missing-pieces",
-      "code-smell",
-      "conventions",
-      "reader",
-      "qa",
-      "operations",
-      "simpler",
-    ]);
-  });
-
-  it("shared-planning-agent-rounds-SC-92 - sizes a task group by what it lands: the build's three on `code`, the reader of words on `copy`, QA and the simpler thing always", () => {
-    expect(TRIGGERS).toContain("code");
-    const when = new Map(
-      applyPerspectives(storeRoot, "grade10-planning").map((one) => [
-        one.name,
-        one.when,
-      ]),
-    );
-    for (const name of ["missing-pieces", "code-smell", "conventions"])
-      expect(when.get(name), `${name} reads code`).toEqual(["code"]);
-    expect(when.get("reader")).toEqual(["copy"]);
-    expect(when.get("qa")).toEqual(["always"]);
-    expect(when.get("simpler")).toEqual(["always"]);
-  });
-
-  it("gives every artifact the reader of the simpler thing", () => {
-    for (const artifact of planning) {
-      expect(
-        artifact.perspectives.map(({ name }) => name),
-        `${artifact.id} is read for the simpler thing`,
-      ).toContain("simpler");
-    }
-  });
-
-  it("shared-planning-agent-rounds-SC-29 - dispatches a reader that exists, on a `when` a draft can summon", () => {
-    const entries = [
-      ...planning.flatMap(({ perspectives }) => perspectives),
-      ...applyPerspectives(storeRoot, "grade10-planning"),
-    ];
+  it("dispatches a reader that exists, on a `when` a bug can summon", () => {
+    const entries = [...bug.diagnosis, ...bug.fix];
     expect(entries.length).toBeGreaterThan(0);
     for (const { name, when, agent } of entries) {
       expect(when.length, `${name} carries a \`when\``).toBeGreaterThan(0);
@@ -258,32 +195,36 @@ describe("an entry the schema left half written", () => {
     );
   });
 
-  it("refuses a perspective missing `name:`, `agent:` or `when:`", () => {
-    const root = schemaWith(
-      "  - id: proposal",
-      "    generates: proposal.md",
-      "    perspectives:",
-      "      - name: backend",
-      "        when: always",
-    );
+  const bugWith = (...lines: string[]) =>
+    writeStore({
+      "openspec/schemas/holed/schema.yaml": [
+        "name: holed",
+        "artifacts: []",
+        "bug:",
+        "  diagnosis:",
+        "    perspectives:",
+        ...lines,
+        "",
+      ].join("\n"),
+    });
 
-    expect(() => schemaArtifacts(root, "holed")).toThrow(
-      /`proposal` carries a `perspectives:` entry missing `name:`, `agent:` or `when:`/,
+  it("refuses a perspective missing `name:`, `agent:` or `when:`", () => {
+    const root = bugWith("      - name: simpler", "        when: always");
+
+    expect(() => bugPerspectives(root, "holed")).toThrow(
+      /`bug\.diagnosis` carries a `perspectives:` entry missing `name:`, `agent:` or `when:`/,
     );
   });
 
   it("refuses a `when` outside the triggers", () => {
-    const root = schemaWith(
-      "  - id: proposal",
-      "    generates: proposal.md",
-      "    perspectives:",
-      "      - name: backend",
+    const root = bugWith(
+      "      - name: simpler",
       "        when: [pricing]",
-      "        agent: .claude/agents/backend.md",
+      "        agent: .claude/agents/simpler.md",
     );
 
-    expect(() => schemaArtifacts(root, "holed")).toThrow(
-      /`proposal`'s perspective `backend` names `pricing` in `when:`, which is no trigger/,
+    expect(() => bugPerspectives(root, "holed")).toThrow(
+      /`bug\.diagnosis`'s perspective `simpler` names `pricing` in `when:`, which is no trigger/,
     );
   });
 });
@@ -304,7 +245,7 @@ describe("a schema that says nothing about it", () => {
     expect(schemaArtifacts(root, "bare")?.[0].upstream).toEqual([]);
   });
 
-  it("reads an artifact with no readers as one a round reads for itself", () => {
+  it("reads a schema with no bug block as one whose rounds summon nobody", () => {
     const root = writeStore({
       "openspec/schemas/bare/schema.yaml": [
         "name: bare",
@@ -316,11 +257,10 @@ describe("a schema that says nothing about it", () => {
       ].join("\n"),
     });
 
-    expect(schemaArtifacts(root, "bare")?.[0].perspectives).toEqual([]);
-    expect(applyPerspectives(root, "bare")).toEqual([]);
+    expect(bugPerspectives(root, "bare")).toEqual({ diagnosis: [], fix: [] });
   });
 
-  it("keeps the teammate a schema names, and reads the readers beside it", () => {
+  it("keeps the teammate a schema names", () => {
     const root = writeStore({
       "openspec/schemas/read/schema.yaml": [
         "name: read",
@@ -330,10 +270,6 @@ describe("a schema that says nothing about it", () => {
         "    teammate: product-manager",
         "    requires: []",
         "    upstream: []",
-        "    perspectives:",
-        "      - name: backend",
-        "        when: always",
-        "        agent: backend",
         "",
       ].join("\n"),
     });
@@ -341,10 +277,5 @@ describe("a schema that says nothing about it", () => {
 
     expect(artifact.teammate).toBe("product-manager");
     expect(artifact.upstream).toEqual([]);
-    // One trigger written as one word is one trigger: a `when` is a list
-    // whatever the schema spells it as.
-    expect(artifact.perspectives).toEqual([
-      { name: "backend", when: ["always"], agent: "backend" },
-    ]);
   });
 });

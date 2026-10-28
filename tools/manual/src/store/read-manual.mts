@@ -1,6 +1,11 @@
 import { join } from "node:path";
 import YAML from "yaml";
-import type { ManualConfig, PageEntry, Taxonomy } from "../api/types.ts";
+import type {
+  ManualConfig,
+  PageEntry,
+  SuiteEntry,
+  Taxonomy,
+} from "../api/types.ts";
 import { GrammarError, type PageAst, parsePage } from "../content/grammar.ts";
 import { readText, readTextIfExists, walkAll, walkFiles } from "./disk.mts";
 import type { GitIndex } from "./git.mts";
@@ -40,6 +45,15 @@ export function readManualPages(
       return entry;
     });
   return { pages, asts };
+}
+
+/** The `*-tcs.md` suites the pages leave out, so a page can show the cases
+ * that trace it. */
+export function readManualSuites(roots: Roots): SuiteEntry[] {
+  const root = roots.content;
+  return walkFiles(root, join(root, roots.manual), ".md")
+    .filter((path) => path.endsWith("-tcs.md"))
+    .map((path) => ({ path, source: readText(join(root, path)) }));
 }
 
 /** `assets/<name>` — the path an `::image` block writes, not the store path,

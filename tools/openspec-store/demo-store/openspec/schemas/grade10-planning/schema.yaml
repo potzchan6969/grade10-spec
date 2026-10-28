@@ -17,31 +17,6 @@ artifacts:
     required: true
     teammate: product-manager
     hand: pm
-    perspectives:
-      - name: product
-        when: [surface, copy]
-        agent: .claude/agents/product.md
-      - name: reader
-        when: [copy]
-        agent: .claude/agents/reader.md
-      - name: design
-        when: [surface]
-        agent: .claude/agents/design.md
-      - name: backend
-        when: [schema, export]
-        agent: .claude/agents/backend.md
-      - name: integration
-        when: [system]
-        agent: .claude/agents/integration.md
-      - name: qa
-        when: [always]
-        agent: .claude/agents/qa.md
-      - name: operations
-        when: [migration, flag, money, deploy]
-        agent: .claude/agents/operations.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: proposal.md
     description: Why this change is needed, what changes, and what it will not do
     template: proposal.md
@@ -122,31 +97,6 @@ artifacts:
     required: true
     teammate: product-manager
     hand: pm
-    perspectives:
-      - name: product
-        when: [surface, copy]
-        agent: .claude/agents/product.md
-      - name: reader
-        when: [copy]
-        agent: .claude/agents/reader.md
-      - name: design
-        when: [surface]
-        agent: .claude/agents/design.md
-      - name: backend
-        when: [schema, export]
-        agent: .claude/agents/backend.md
-      - name: integration
-        when: [system]
-        agent: .claude/agents/integration.md
-      - name: qa
-        when: [always]
-        agent: .claude/agents/qa.md
-      - name: operations
-        when: [migration, flag, money, deploy]
-        agent: .claude/agents/operations.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: decisions.md
     description: The change's decided frontier - its goals, its edges, and what the interview settled
     template: decisions.md
@@ -277,31 +227,6 @@ artifacts:
     required: true
     teammate: product-manager
     hand: pm
-    perspectives:
-      - name: product
-        when: [surface, copy]
-        agent: .claude/agents/product.md
-      - name: reader
-        when: [copy]
-        agent: .claude/agents/reader.md
-      - name: design
-        when: [surface]
-        agent: .claude/agents/design.md
-      - name: backend
-        when: [schema, export]
-        agent: .claude/agents/backend.md
-      - name: integration
-        when: [system]
-        agent: .claude/agents/integration.md
-      - name: qa
-        when: [always]
-        agent: .claude/agents/qa.md
-      - name: operations
-        when: [migration, flag, money, deploy]
-        agent: .claude/agents/operations.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: specs/**/user-journeys.md
     description: The journeys this change adds, changes or retires, with the ones it leans on restated
     template: user-journeys.md
@@ -421,16 +346,6 @@ artifacts:
     required: false
     teammate: designer
     hand: design
-    perspectives:
-      - name: design
-        when: [surface]
-        agent: .claude/agents/design.md
-      - name: reader
-        when: [copy]
-        agent: .claude/agents/reader.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: ui-design.md
     description: The visual plan - screens, component exports, and states
     template: ui-design.md
@@ -497,13 +412,6 @@ artifacts:
     required: false
     teammate: engineer
     hand: dev
-    perspectives:
-      - name: tech
-        when: [always]
-        agent: .claude/agents/tech.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: tech-design.md
     description: The technical implementation's high-level design
     template: tech-design.md
@@ -962,16 +870,6 @@ artifacts:
     required: true
     teammate: engineer
     hand: dev
-    perspectives:
-      - name: operations
-        when: [always, migration, flag]
-        agent: .claude/agents/operations.md
-      - name: qa
-        when: [always]
-        agent: .claude/agents/qa.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: tasks.md
     description: The implementation plan, claimed group by group
     template: tasks.md
@@ -1026,7 +924,7 @@ artifacts:
       leaves the walks as the change's end-to-end suite, and its commit flips
       each case the walks decide to automated with `pnpm run tcs:automated
       <case…> --decided-by <walk path>`; the cases that stay manual are named
-      in the suite and named in the walk's `rounds.md` row.
+      in the suite.
 
       - End every group with its verification step - the checks that group
       runs - so an engineer ships and verifies one group at a time. Keep each
@@ -1054,19 +952,6 @@ apply:
   requires:
     - tasks
   tracks: tasks.md
-  perspectives:
-    - name: build
-      when: [always]
-      agent: .claude/agents/build.md
-    - name: qa
-      when: [always]
-      agent: .claude/agents/qa.md
-    - name: operations
-      when: [migration, flag]
-      agent: .claude/agents/operations.md
-    - name: simpler
-      when: [always]
-      agent: .claude/agents/simpler.md
   instruction: |
     Read context files, work through pending tasks, mark complete as you go.
     Pause if you hit blockers or need clarification.

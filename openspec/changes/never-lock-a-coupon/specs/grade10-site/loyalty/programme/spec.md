@@ -454,7 +454,8 @@ earn line. Where the tier names a qualifying threshold `TierCard` SHALL
 render the qualifying count apart from the balance, never summed into it,
 with the progress toward the threshold; where it names none it SHALL render
 neither count nor progress. Given an `href` to the tier-and-benefits surface,
-the whole card SHALL be the link to it. It SHALL NOT name a balance-expiry
+the Benefits affordance SHALL be the link to it, and the rest of the card
+SHALL NOT be interactive. It SHALL NOT name a balance-expiry
 day or count, nor derive any expiry wording from a clock or a balance of its
 own — the whole balance lapses on one shared inactivity date, never in
 parts.
@@ -635,12 +636,12 @@ SHALL require no export of its own.
 - **WHEN** `TierCard` is rendered for a tier that names no qualifying threshold
 - **THEN** neither the qualifying count nor its progress is rendered
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-257 - The whole card opens the tier-and-benefits surface
+<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=2 -->
+#### Scenario: grade10-site-loyalty-programme-SC-257 - The Benefits link opens the tier-and-benefits surface
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** `TierCard` is given an `href`
-- **THEN** the whole card is the link to it, the Benefits affordance included
+- **THEN** the Benefits affordance is the link to it, and the rest of the card is not interactive
 - **AND** a plain press reports `onClick` while a modified press keeps the link's behaviour
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-tzp rev=1 -->

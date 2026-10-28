@@ -30,6 +30,7 @@ a balance, a tier or a code. ZZZ has no programme.
 | [Membership](/p/grade10-site/loyalty/membership) | Membership with the account, the membership page, the member pass and the member's own histories |
 | [Shopify Integration](/p/grade10-site/loyalty/shopify-integration) | Customer pairing, the draft-order checkout, the POS extension, discounts and shipping |
 | [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card) | The card in Google Wallet and Apple Wallet — what each code can do, and how a pass stays current |
+| [Campaigns](/p/grade10-site/loyalty/campaigns) | Signup and submission campaigns, their quotas, and the gifts they hand out |
 | [Operator Console](/p/grade10-site/loyalty/operator-console) | Moving points by hand, and restarting a member's expiry |
 | [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders) | Who is owed a warning before their points lapse |
 
@@ -45,10 +46,10 @@ and giving the top tier to a named person with a reason.
 ## Not in Scope
 
 - **Paid membership** — every tier is free, and the top one is given
-- **Earning outside the store and the counter** — beyond operator-granted
-  campaign points; auction wins and credit top-ups are later-phase candidates
-  and earn nothing today, and a points pack earns nothing —
-  [Top-ups](/p/grade10-site/loyalty/top-ups)
+- **Earning outside the store, the counter and the ticket office** — beyond
+  operator-granted campaign points; auction wins and credit top-ups are
+  later-phase candidates and earn nothing today, and a points pack earns
+  nothing — [Top-ups](/p/grade10-site/loyalty/top-ups)
 - **Redeeming against an auction** — points and coupons buy nothing there, in
   any phase
 - **SMS verification**, and NFC tap in any wallet

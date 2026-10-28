@@ -1,7 +1,10 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { formatReport, runChecks } from "../check/check-manual.mjs";
 import { NO_GIT } from "../src/store/git.mts";
+import { resolveRoots } from "../src/store/roots.mts";
 import { writeStore } from "./tmp-store";
 
 type Finding = { rule: string; level: string; path: string; reason: string };
@@ -36,6 +39,17 @@ describe("a store that tells the truth", () => {
     const quiet = formatReport(root, outcome, { quiet: true }).text;
     expect(loud).toContain("note:");
     expect(quiet).not.toContain("note:");
+  });
+
+  /** The manual reads its pages and nothing of OpenSpec: a repository with
+   * `docs/prds` and no `openspec/` resolves as its own store and passes. */
+  it("needs no openspec/", async () => {
+    const root = fixture("clean");
+    expect(existsSync(join(root, "openspec"))).toBe(false);
+    const roots = resolveRoots({ MANUAL_ROOT: root });
+    expect(roots.own).toBe(true);
+    const result: Result = await runChecks(roots.store, NO_GIT);
+    expect(result.findings).toEqual([]);
   });
 
   it("exits 0 and counts nothing", async () => {

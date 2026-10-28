@@ -98,7 +98,7 @@ function RadioCard({
       {action != null ? (
         <div
           data-slot="radio-card-action"
-          className="flex h-6 shrink-0 items-center pr-3 pt-3"
+          className="mt-3 flex h-6 shrink-0 items-center pr-3"
         >
           {action}
         </div>

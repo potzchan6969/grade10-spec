@@ -13,7 +13,7 @@ order: 1
 | Base rate | **1 point / $10** (qualifying goods after discounts) |
 | Multiplier | **Silver** 1×, **Gold** 1.2×, **Black** 1.7× |
 | Rounding | **$139** at **1.2×** = **1.2×13** = **15 points** |
-| Timing | **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter |
+| Timing | **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter; a ticket order earns when it is confirmed - [Buying Tickets](/p/grade10-site/ticketing/buying) |
 
 ## Qualification Criteria
 
@@ -31,6 +31,7 @@ land on the part of a basket that earns nothing.
 | Points packs | **No** — a pack earns nothing, and neither do its points when they pay — [Top-ups](/p/grade10-site/loyalty/top-ups) |
 | Grading fees | **No**, excluded as a product |
 | Auction wins | **No** today, a later-phase candidate |
+| Event tickets | **Yes** — bought on grade10's own ticketing; an email alone buys them, and the earn lands on the account that proves the address - [Buying Tickets](/p/grade10-site/ticketing/buying) |
 
 A fully discounted order earns nothing and writes no ledger entry.
 
@@ -46,6 +47,10 @@ An order's earn is written once, the first time the order completes.
 - **Till sale** - earns at the counter
 - 🚧 **Guest order** - never earns, joined to an account or not -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+- 🚧 **Ticket order** - earns under the buyer's email alone: buying asks no
+  sign-in, and the earn reaches the member's ledger once a sign-in proves
+  that address, dated to the purchase -
+  [Buying Tickets](/p/grade10-site/ticketing/buying)
 - **Delivery** - retried until the programme takes it, and taken once, so
   a purchase during an outage still earns, and never twice
 
@@ -312,12 +317,12 @@ the 100 the slab's rate would price.
 The redeemable balance lapses after twelve months with no activity, and a
 lapse that has happened is never undone.
 
-🚧 Activity is only what brings money in: a purchase, online or in store —
-any amount, even one too small to earn a point, even one paid partly or
-fully with points, and it still counts if the order is later refunded in
-full — or a points pack on the day it is credited. Whether redeeming still
-keeps the balance alive is open: the proposal is that it stops counting —
-❓ PM to confirm.
+🚧 Activity is only what brings money in: a purchase — online, in store, or
+tickets to grade10's own events — any amount, even one too small to earn a
+point, even one paid partly or fully with points, and it still counts if the
+order is later refunded in full — or a points pack on the day it is
+credited. Whether redeeming still keeps the balance alive is open: the
+proposal is that it stops counting — ❓ PM to confirm.
 
 Every point a member holds lapses on the same day, whatever recorded it.
 
@@ -457,7 +462,8 @@ spend rather than lose a balance that was about to lapse.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| What counts as activity | Decided | A purchase, online or in store — any amount, however tendered, including one paid partly or fully with points and one later refunded in full — and a points top-up, counted on the day it is credited, since payment and credit sit a gateway instant apart. Decided 2026-10-27 — `define-activity-for-point-expiry`. | Product |
+| What counts as activity | Decided | A purchase — online, in store, or a ticket order — any amount, however tendered, including one paid partly or fully with points and one later refunded in full — and a points top-up, counted on the day it is credited, since payment and credit sit a gateway instant apart. Decided 2026-10-27 — `define-activity-for-point-expiry`; tickets added 2026-10-28. | Product |
+| Ticket orders earn | Decided | A ticket order earns on what was paid, like a store purchase, and counts as order activity for membership and the balance's date. Buying asks only an email — no sign-in — so the earn is recorded under the address and lands on the member's ledger once a sign-in proves it, dated to the purchase. Decided 2026-10-28. | Product |
 | Whether redeeming keeps the balance alive | ❓ Open | Proposal: it stops counting, so only money in extends the date; the running rule has it reset the window. PM to confirm — `define-activity-for-point-expiry`. | Product |
 | What a grant's points live for | Decided | On a balance with points still live, they take its date and push it no further. | Product |
 | A balance with nothing live | Decided | A grant or a correction lapses on the later of twelve months from its own day and the day still running, and moves that day out, never back (grade10 `packages/loyalty/backend/src/services/ledger/expiry.ts:74-83`, `packages/loyalty/backend/src/repositories/members.ts:27-45`); points a reversal gives back, or points paid at checkout that a refund or an operator returns, go back to the day still running (grade10 `packages/loyalty/backend/src/services/ledger/lots.ts:42`, `packages/loyalty/backend/src/services/ledger/expiry.ts:140`). | Product |

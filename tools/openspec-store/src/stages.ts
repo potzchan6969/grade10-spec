@@ -2,9 +2,7 @@
 // `scripts/openspec/` load this under plain node, which resolves no
 // extensionless path.
 
-import { holdsOf, whole } from "./moved.ts";
 import type {
-  BehindArtifact,
   ChangeEntry,
   ChangeLane,
   Role,
@@ -362,12 +360,12 @@ export type Drafted = {
 export const DRAFTED: Partial<Record<Stage, Drafted>> = {
   proposed: {
     draft: "the marks and the three files, from what the hand asks",
-    moves: { pm: { move: "answer", command: "/workflow-plan <id>" } },
+    moves: { pm: { move: "answer", command: "/planning-pm <id>" } },
   },
   designed: {
     draft: "the UI design, from the page and the journeys",
     moves: {
-      design: { move: "tweak", command: "/workflow-design <id>" },
+      design: { move: "tweak", command: "/planning-design <id>" },
     },
   },
   specified: {
@@ -375,7 +373,7 @@ export const DRAFTED: Partial<Record<Stage, Drafted>> = {
     moves: {
       pm: {
         move: "resolve the open Raised rows",
-        command: "/workflow-specify <id>",
+        command: "/planning-dev <id>",
       },
     },
   },
@@ -384,7 +382,7 @@ export const DRAFTED: Partial<Record<Stage, Drafted>> = {
     moves: {
       dev: {
         move: "read the plan and challenge the tech design",
-        command: "/workflow-tasks <id>",
+        command: "/planning-dev <id>",
       },
     },
   },
@@ -393,7 +391,7 @@ export const DRAFTED: Partial<Record<Stage, Drafted>> = {
     moves: {
       dev: {
         move: "read each landing",
-        command: "/workflow-build <id> <group>",
+        command: "/implement <id>",
       },
     },
   },
@@ -499,55 +497,3 @@ const ROLE_OF_CONFIRMER: Record<string, string> = {
   qa: "qa",
   operations: "ops",
 };
-
-/**
- * Which artifacts are behind what they were drawn from.
- *
- * A pure comparison over the store's reading — `entry.upstream`, which the
- * store computes where the pages and the history are. An artifact is fresh
- * because its hand landed or read it, which writes its `reviewed:` line, and
- * never because a later commit touched the file: with no line, or a line the
- * store could not read the before of, the artifact is behind everything
- * before it, whole and major. Where the store recovered what moved, the
- * artifact is behind only if something did, and it holds the next landing
- * only where a move is major.
- *
- * An artifact the change has not written and one a waiver stands for are
- * never read, because the store never reads an upstream for them. In the
- * schema's order, so the first answer is the earliest behind artifact.
- */
-export function behindOf(
-  change: ChangeEntry,
-  artifacts: SchemaArtifact[],
-): BehindArtifact[] {
-  const behind: BehindArtifact[] = [];
-  for (const { id } of artifacts) {
-    const read = change.upstream?.[id];
-    if (!read) continue;
-    const reviewed = change.reviewed?.[id];
-    if (reviewed === read.id) continue;
-    const since = read.beforeOn ? { since: read.beforeOn } : {};
-    if (reviewed !== undefined && read.moved !== undefined) {
-      if (read.moved.length === 0) continue;
-      behind.push({
-        artifact: id,
-        changed: read.items.filter((item) =>
-          read.moved?.some((one) => one.item === item),
-        ),
-        moved: read.moved,
-        holds: holdsOf(read.moved),
-        ...since,
-      });
-      continue;
-    }
-    behind.push({
-      artifact: id,
-      changed: read.items,
-      whole: true,
-      moved: read.items.map((item) => whole(item)),
-      holds: true,
-      ...since,
-    });
-  }
-  return behind;
-}

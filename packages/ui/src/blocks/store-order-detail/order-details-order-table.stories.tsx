@@ -63,7 +63,7 @@ export const Default: Story = {};
 export const LongProductNameWrapsWithinTheTable: Story = {
   decorators: [
     (Story) => (
-      <div style={{ width: "420px" }}>
+      <div style={{ width: "640px" }}>
         <Story />
       </div>
     ),
@@ -76,20 +76,41 @@ export const LongProductNameWrapsWithinTheTable: Story = {
     const table = canvasElement.querySelector<HTMLElement>(
       '[data-slot="order-details-order-table"]',
     );
-    const tableContainer = table?.parentElement;
+    const rail = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="order-details-order-table-rail"]',
+    );
     const product = canvas.getByText(LONG_PRODUCT_NAME);
 
     expect(table).not.toBeNull();
-    expect(tableContainer).not.toHaveAttribute(
-      "data-slot",
-      "order-details-order-table-rail",
-    );
+    expect(rail).not.toBeNull();
+    if (!rail)
+      throw new Error("order-details-order-table-rail is not rendered");
     expect(table).toHaveClass("w-full");
     expect(table).not.toHaveClass("w-max");
     expect(product.getBoundingClientRect().height).toBeGreaterThan(20);
-    expect(tableContainer?.scrollWidth).toBeLessThanOrEqual(
-      tableContainer?.clientWidth ?? -1,
+    expect(rail.scrollWidth).toBeLessThanOrEqual(rail.clientWidth);
+  },
+};
+
+/** Narrower than the table's smallest fitting width, the rail scrolls
+ * sideways instead of crushing the money columns. */
+export const ScrollsOnANarrowViewport: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ width: "300px" }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const rail = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="order-details-order-table-rail"]',
     );
+    expect(rail).not.toBeNull();
+    if (!rail)
+      throw new Error("order-details-order-table-rail is not rendered");
+    expect(rail).toHaveClass("overflow-x-auto");
+    expect(rail.scrollWidth).toBeGreaterThan(rail.clientWidth);
   },
 };
 

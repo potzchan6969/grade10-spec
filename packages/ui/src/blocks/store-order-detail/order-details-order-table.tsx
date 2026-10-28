@@ -33,43 +33,54 @@ function OrderDetailsOrderTable({
   statusLabels,
   className,
 }: OrderDetailsOrderTableProps) {
+  /* The money columns cannot share a narrow viewport with a readable
+   * product cell, so the table scrolls sideways inside a rail — the same
+   * rail as this block's delivery status. `min-w-min` holds the table at
+   * its smallest fitting width, so names still wrap before it scrolls. */
   return (
-    <Table
-      className={cn("w-full min-w-0", ORDER_TABLE_LAYOUT.table, className)}
-      data-slot="order-details-order-table"
+    <div
+      className="w-full overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      data-slot="order-details-order-table-rail"
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: the rail scrolls sideways on a narrow screen, and a scroll container takes focus so a keyboard can scroll it.
+      tabIndex={0}
     >
-      <TableHeader
-        className={ORDER_TABLE_LAYOUT.row}
-        data-slot="order-details-order-table-header"
+      <Table
+        className={cn("w-full min-w-min", ORDER_TABLE_LAYOUT.table, className)}
+        data-slot="order-details-order-table"
       >
-        <TableHead className="min-w-0">{copy.items}</TableHead>
-        <TableHead align="end">{copy.subtotal}</TableHead>
-        <TableHead align="end">{copy.quantity}</TableHead>
-        <TableHead align="end">{copy.total}</TableHead>
-      </TableHeader>
-      <TableBody className={ORDER_TABLE_LAYOUT.body}>
-        {lines.map((line) => (
-          <OrderDetailsOrderItem
-            key={line.id}
-            imageAlt={line.imageAlt}
-            imageSrc={line.imageSrc}
-            lineStatus={line.lineStatus}
-            product={line.product}
-            quantity={line.quantity}
-            statusLabel={
-              line.lineStatus != null
-                ? statusLabels[line.lineStatus]
-                : undefined
-            }
-            statusMessage={line.statusMessage}
-            struckThrough={line.struckThrough}
-            subtotal={line.subtotal}
-            total={line.total}
-            couponCode={line.couponCode}
-          />
-        ))}
-      </TableBody>
-    </Table>
+        <TableHeader
+          className={ORDER_TABLE_LAYOUT.row}
+          data-slot="order-details-order-table-header"
+        >
+          <TableHead className="min-w-0">{copy.items}</TableHead>
+          <TableHead align="end">{copy.subtotal}</TableHead>
+          <TableHead align="end">{copy.quantity}</TableHead>
+          <TableHead align="end">{copy.total}</TableHead>
+        </TableHeader>
+        <TableBody className={ORDER_TABLE_LAYOUT.body}>
+          {lines.map((line) => (
+            <OrderDetailsOrderItem
+              key={line.id}
+              imageAlt={line.imageAlt}
+              imageSrc={line.imageSrc}
+              lineStatus={line.lineStatus}
+              product={line.product}
+              quantity={line.quantity}
+              statusLabel={
+                line.lineStatus != null
+                  ? statusLabels[line.lineStatus]
+                  : undefined
+              }
+              statusMessage={line.statusMessage}
+              struckThrough={line.struckThrough}
+              subtotal={line.subtotal}
+              total={line.total}
+              couponCode={line.couponCode}
+            />
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 

@@ -48,13 +48,14 @@ type TierCardProps = {
   /** What the held tier earns, as the footer's one sentence the consumer words. */
   earnLine?: string;
   /**
-   * The Tiers & Benefits page's own address. Where it is given, the whole card
-   * is a link to it — the Benefits label included — so its address can be
-   * copied and a press with a modifier key opens it in a new tab. A plain
-   * press is still reported through `onClick` where one is supplied.
+   * The Tiers & Benefits surface's address. Where it is given, the Benefits
+   * affordance in the footer is a link to it — so its address can be copied
+   * and a press with a modifier key opens it in a new tab. A plain press is
+   * still reported through `onClick` where one is supplied. The rest of the
+   * card is inert.
    */
   href?: string;
-  /** Reported on a plain press, in place of the link's own navigation. */
+  /** Reported on a plain press of the Benefits affordance. */
   onClick?: () => void;
   className?: string;
 };
@@ -98,10 +99,10 @@ const SKIN: Record<
 /**
  * The member's tier card: the tier's skin and wordmark, the spendable balance
  * and what it pays at checkout, the qualifying-window progress where the tier
- * names a threshold, and the Benefits link — the whole card opens the Tiers &
- * Benefits page. The card carries no expiry line: the balance lapses on one
- * date after the inactivity window, and that is said where the member reads
- * their benefits.
+ * names a threshold, and the Benefits link — the footer alone opens the Tiers
+ * & Benefits surface, the rest of the card inert. The card carries no expiry
+ * line: the balance lapses on one date after the inactivity window, and that
+ * is said where the member reads their benefits.
  */
 function TierCard({
   copy,
@@ -126,15 +127,28 @@ function TierCard({
     showsProgress && qualifyingThreshold > 0
       ? (bounded / qualifyingThreshold) * 100
       : 0;
-  const opens = href != null || onClick != null;
 
-  const reportPlainPress = (event: MouseEvent<HTMLAnchorElement>) => {
+  const reportPlainPress = (
+    event: MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+  ) => {
     if (onClick == null || event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
       return;
     event.preventDefault();
     onClick();
   };
+
+  const benefits = (
+    <>
+      <Text data-slot="tier-card-benefits" size="xs" tone="muted">
+        {copy.benefits}
+      </Text>
+      <CaretRight aria-hidden color="var(--muted-foreground)" size={12} />
+    </>
+  );
+
+  const benefitsClass =
+    "ml-auto shrink-0 cursor-pointer items-center gap-1 rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
 
   const rings = (
     <>
@@ -256,54 +270,39 @@ function TierCard({
             {earnLine}
           </Text>
         ) : null}
-        <HStack align="center" className="ml-auto shrink-0" gap="xs">
-          <Text data-slot="tier-card-benefits" size="xs" tone="muted">
-            {copy.benefits}
-          </Text>
-          <CaretRight aria-hidden color="var(--muted-foreground)" size={12} />
-        </HStack>
+        {href != null ? (
+          <a
+            className={cn("inline-flex", benefitsClass)}
+            data-slot="tier-card-benefits-link"
+            href={href}
+            onClick={reportPlainPress}
+          >
+            {benefits}
+          </a>
+        ) : onClick != null ? (
+          <button
+            className={cn("inline-flex", benefitsClass)}
+            data-slot="tier-card-benefits-link"
+            onClick={reportPlainPress}
+            type="button"
+          >
+            {benefits}
+          </button>
+        ) : (
+          <HStack align="center" className="ml-auto shrink-0" gap="xs">
+            {benefits}
+          </HStack>
+        )}
       </HStack>
     </VStack>
   );
 
-  const cardClass = cn(
-    "relative block w-full max-w-(--container-sm) overflow-clip rounded-(--radius-3xl) p-5 shadow-[0px_24px_48px_-24px_rgb(0_0_0/0.5)]",
-    opens &&
-      "cursor-pointer outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-    className,
-  );
-
-  if (href != null) {
-    return (
-      <a
-        className={cardClass}
-        data-slot="tier-card"
-        href={href}
-        onClick={reportPlainPress}
-        style={{ backgroundImage: skin.background }}
-      >
-        {rings}
-        {body}
-      </a>
-    );
-  }
-  if (onClick != null) {
-    return (
-      <button
-        className={cn(cardClass, "text-left")}
-        data-slot="tier-card"
-        onClick={onClick}
-        style={{ backgroundImage: skin.background }}
-        type="button"
-      >
-        {rings}
-        {body}
-      </button>
-    );
-  }
   return (
     <div
-      className={cardClass}
+      className={cn(
+        "relative block w-full max-w-(--container-sm) overflow-clip rounded-(--radius-3xl) p-5 shadow-[0px_24px_48px_-24px_rgb(0_0_0/0.5)]",
+        className,
+      )}
       data-slot="tier-card"
       style={{ backgroundImage: skin.background }}
     >

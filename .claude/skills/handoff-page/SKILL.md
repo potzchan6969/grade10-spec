@@ -92,7 +92,7 @@ The same names in the same order on every handoff, so a reader who has seen one 
 
 - **What changed** - `git log --oneline origin/main...HEAD`, `git diff --stat origin/main...HEAD` and the PRs; for work already merged, each merge against its first parent (`git diff --stat <merge>^1 <merge>`)
 - **Store** - PRD pages, message catalogs, shared blocks (`packages/ui/src/blocks/`) and OpenSpec changes live in this repository; read them at `main` unless the work is on another branch
-- **Intent** - the PRD page with its open ❓ lines, and the OpenSpec change when there is one, read in `openspec/changes/<change-id>/`: proposal, `decisions.md`, journeys, `tasks.md`, `rounds.md`; merged work with no change reads the capability's spec under `openspec/specs/`
+- **Intent** - the PRD page with its open ❓ lines, and the OpenSpec change when there is one, read in `openspec/changes/<change-id>/`: proposal, `decisions.md`, journeys, `tasks.md`; merged work with no change reads the capability's spec under `openspec/specs/`
 - **Proof** - test runs, story tests, `pnpm check:manual`, CI checks and the consuming application's `implementation.json`, each with its revision
 - **Rules** - the code behind every rule the page states: a countdown, a refusal, an eligibility rule; one rule drawn from memory is how a page goes wrong
 - **Who reads** - ask only what cannot be inferred: who reads the page, and which decisions are theirs

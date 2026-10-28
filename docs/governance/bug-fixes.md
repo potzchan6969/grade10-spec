@@ -90,4 +90,4 @@ Commit: fix(<domain>): <outcome>
 
 ## Turning Into a Change
 
-Stop coding at the first sign the fix would move something settled. Write the open question as a ❓ line on the capability's page, start the change with `/workflow-plan`, and link the change from the report.
+Stop coding at the first sign the fix would move something settled. Write the open question as a ❓ line on the capability's page, start the change with `/planning-pm`, and link the change from the report.

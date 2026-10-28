@@ -395,6 +395,15 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     context: "Order #10514",
   },
   {
+    id: "entry-tickets",
+    kind: "Grade10 FEST Summer 2026",
+    track: "earned",
+    icon: "order",
+    delta: 60,
+    date: formatDay(Date.UTC(2026, 9, 20)),
+    month: formatMonthName(Date.UTC(2026, 9, 20)),
+  },
+  {
     id: "entry-sleeves",
     kind: "Redeemed reward",
     track: "used",
@@ -456,7 +465,7 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
 ];
 
 const POINTS_TOTALS: PointsTotals = {
-  earned: 440,
+  earned: 500,
   used: -820,
   pending: 128,
 };
@@ -534,7 +543,7 @@ const MEMBERSHIP_STATE_VIEWS = {
     balance: 0,
     worth: "HK$0",
     qualifyingPoints: 0,
-    retentionLine: undefined,
+    retentionLine: `Earn 500+ pts by ${RENEWS} to upgrade`,
     earnLine: "Silver earning 1x points",
     coupons: {
       status: "empty",
