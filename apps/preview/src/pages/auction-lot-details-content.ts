@@ -165,7 +165,7 @@ export const AUCTION_SITE_HEADER = {
   },
   session: "signed-in" as const,
   accountEmail: VIEWER_INITIALS,
-  promo: "PROMO UTILITY BAR",
+  promo: null,
   logo: NAV_LOGO,
   logoHref: "/",
   locales: [
