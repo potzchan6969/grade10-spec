@@ -1,8 +1,3 @@
-import {
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-  Breadcrumbs,
-} from "@grade10/design-system/components/display/breadcrumbs";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { NavigationLink } from "@grade10/design-system/components/layout/navigation-link";
@@ -185,17 +180,8 @@ function MembershipPage({
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...STORE_SITE_HEADER} />
       <main className="flex w-full flex-1 justify-center">
-        <div className="flex w-full max-w-5xl flex-col gap-8 px-4 py-10 sm:px-8">
-          <div className="flex flex-col gap-4">
-            <Breadcrumbs>
-              <BreadcrumbItem href="#account">
-                {MEMBERSHIP_PAGE_COPY.breadcrumbAccount}
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem current>
-                {MEMBERSHIP_PAGE_COPY.title}
-              </BreadcrumbItem>
-            </Breadcrumbs>
+        <div className="flex w-full max-w-6xl flex-col gap-10 px-4 py-10 sm:px-8">
+          <div className="flex flex-col gap-4 border-b border-border pb-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <h1 className="text-3xl font-semibold text-foreground">
                 {MEMBERSHIP_PAGE_COPY.title}
@@ -216,15 +202,15 @@ function MembershipPage({
             </div>
           </div>
 
-          <div className="flex flex-col gap-8 md:flex-row md:gap-10">
+          <div className="flex flex-col gap-8 md:flex-row md:gap-16">
             <nav
               aria-label="Membership"
-              className="flex gap-1 overflow-x-auto md:w-56 md:shrink-0 md:flex-col md:items-stretch md:overflow-visible lg:w-64"
+              className="flex gap-1 overflow-x-auto md:w-64 md:shrink-0 md:flex-col md:items-stretch md:overflow-visible"
             >
               {MEMBERSHIP_TABS.map((item) => (
                 <NavigationLink
                   active={active === item.id}
-                  className="md:w-full md:justify-start"
+                  className="md:w-40 md:justify-start"
                   key={item.id}
                   onClick={() => setActive(item.id)}
                   render={<button type="button" />}

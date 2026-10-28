@@ -204,7 +204,6 @@ const COUPON_PROMO_COPY = {
 };
 
 const MEMBERSHIP_PAGE_COPY = {
-  breadcrumbAccount: "Account",
   title: "Membership",
   cardHeading: "Your Member Pass",
   rewardsHeading: "Rewards",
