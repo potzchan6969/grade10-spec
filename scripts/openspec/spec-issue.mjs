@@ -2,7 +2,7 @@
 /**
  * Issue the next journey, scenario or case id, and move a branch's ids that
  * the published `main` already holds — so nobody counts "the next unused" by
- * hand (`allocate-ids-across-open-changes`).
+ * hand.
  *
  *   pnpm run spec:issue <prefix> US             # the next journey of a capability
  *   pnpm run spec:issue <prefix> SC             # the next scenario
