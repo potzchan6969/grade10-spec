@@ -83,10 +83,10 @@ function TopUpPackCard({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger
-            className="inline-flex size-5 shrink-0 items-center justify-center self-center text-warning"
+            className="inline-flex size-5 shrink-0 items-center justify-center self-center text-secondary-foreground"
             render={<span />}
           >
-            <Warning aria-hidden size={16} weight="fill" />
+            <Warning aria-hidden size={16} weight="regular" />
           </TooltipTrigger>
           <TooltipContent>{copy.unavailable}</TooltipContent>
         </Tooltip>
