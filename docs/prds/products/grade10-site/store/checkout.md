@@ -8,107 +8,54 @@ Checkout is Shopify's page, under `checkout.grade10.com`. The store hands it
 the cart, Shopify takes the address and the money, and the order comes back
 to Grade10.
 
-:::flow{title="From the cart to the order"}
-# Leaving the store
+## Proceed to Checkout
 
-## Collector — Press checkout
-In the cart drawer, signed in with Google or a magic link, or as a guest.
+- **Pay** — the cart drawer's Proceed to Checkout button, signed in with Google or a magic link, or as a guest; there is no checkout page of the store's own — [Cart Drawer](/p/grade10-site/store/cart)
+- **Live Read** — every line's current price and stock, from Shopify; a line that moved comes back named
+- **Price Check** — the promo code and the points chosen in the drawer, and the estimated total they leave; Pay sends them with the reviewed lines, and the drawer shows the store's answer — [Cart Drawer](/p/grade10-site/store/cart)
+- **One Pay at a Time** — while a Pay is starting, drawer actions wait — [Cart Drawer](/p/grade10-site/store/cart#pending-operations); an answer for an older cart, code and points, or member opens nothing
+  - **Closing During Pay** — the drawer can close while checkout starts, which doesn't cancel it; the reply still opens Shopify if the cart, code and points, and member it was sent for are current
 
-## Store — Read every line live
-Current price and stock, from Shopify. A line that moved comes back named.
+## Paying Again
 
-## Collector — Check the price
-The promo code and the points chosen in the drawer, and the estimated
-total they leave — [Cart Drawer](/p/grade10-site/store/cart). Pay sends
-them with the lines.
+- **Invoice** — fixes the purchase; later cart edits don't change it
+- **Another Pay** — an unchanged purchase returns its existing invoice or order state, after a reload, from a second tab or after a lost answer; a purchase already paid opens its order
+- **Changed Purchase** — a changed basket, code or points starts a new purchase and retires the older unpaid invoice
+  - **Shop's Review** — only the member's own edit retires it; the shop's stock or price review leaves it for the next Pay to replace
+- **After a Refusal** — a Pay after the purchase's order failed or was canceled starts the purchase again
+- **Lost Answer** — Pay keeps looking for the invoice Shopify made for about 6 seconds, then asks the collector to try again
+  - **Purchase With No Invoice** — closes once **2 minutes** have passed, or later while Shopify can't be read, returning its coupons and points; the next Pay starts it again. Until then it holds only its own coupon and points, and the collector's other purchases go ahead
+- **Recovery** — an uncertain payment handoff keeps the existing purchase visible and recoverable, without opening a second payable invoice
 
-# On Shopify's page
+## On Shopify's Page
 
-## Collector — Fill in shipping and pay
-Address, shipping option, discount code, payment. Shipping and tax are added
-here, so the cart's subtotal is not the charge.
+- **Shopify's Checkout** — address, shipping option, discount code, payment; shipping and tax are added here, so the cart's subtotal is not the charge
+  - **Shipping Rate** — Shopify asks the store's carrier rule; a served destination gets the same rate the store preview shows, and any other gets none
+- **Sold Out Meanwhile** — an item that sold out since the drawer's read is refused, with the item named
+- **The Cart** — kept while the collector is at Shopify
 
-## Shopify — Take the payment
-An item that sold out in the meantime is refused, with the item named.
-
-# Back at Grade10
-
-## Shopify — Tell the store
-The order moves from pending to paid within seconds.
-
-## Collector — Open Your Orders in Grade10
-The Shopify Thank You and Order status page offers a Grade10 Your Orders link.
-The matching purchase appears there. The native Continue shopping button is
-not the return path.
-
-## Collector — Find the order
-In Your Orders.
+:::callout{kind="note"}
+- ❓ **A Declined Card** — Shopify's page refuses it and places no order; the cart stays, and the next payment places exactly one order. Product confirms
 :::
 
-## Integration readiness
+## After Paying
 
-- **Checkout integration** — The drawer sends the reviewed lines, the accepted promo code and points through the store's checkout request, and shows its answer.
-- **One Pay at a time** — While a Pay is starting, drawer actions wait as the [Cart Drawer](/p/grade10-site/store/cart#pending-operations) describes. An answer for an older cart, tender or member opens nothing.
-- **Closing during Pay** — The collector can close the drawer while checkout starts. A successful reply still opens Shopify if the submitted cart, tender and member remain current. Closing does not cancel the request.
-- **Later cart** — Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
-
-- **Another Pay** - An unchanged purchase returns its existing invoice or order state, including after reload, from a second tab or after a lost answer; a purchase already paid opens its order
-- **After a refusal** - A Pay after the purchase's order failed or was canceled starts the purchase again
-- ❓ **A declined card** - Shopify's page refuses it and places no order; the cart stays, and the next payment places exactly one order. Product confirms
-- **Changed purchase** - A changed basket or tender starts a new purchase and retires the older unpaid invoice. Only the member's own edit retires it; the shop's stock or price review leaves it for the next Pay to replace
-- **Recovery** - An uncertain payment handoff keeps the existing purchase visible and recoverable without opening a second payable invoice
-- **Lost answer** - Pay keeps looking for the invoice Shopify made for about 6 seconds before asking the collector to try again. A purchase Shopify holds no invoice for closes once **2 minutes** have passed, or later while Shopify cannot be read, returning its coupons and points, and the next Pay starts it again. Until then it holds only its own coupon and points; the collector's other purchases go ahead
-
-- 🚧 **Return path** — Shopify's Thank You and Order status extension offers a
-  Grade10 Your Orders link, and the staging walk proves the matching purchase
-  appears after return.
-
-- **Where it starts** - the live review and the price check run in the
-  cart drawer; there is no `/checkout` page -
-  [Cart Drawer](/p/grade10-site/store/cart)
-
-- **Pay** - the drawer's Proceed to Checkout button
-- **The cart** - Kept while the collector is at Shopify
-- **Shipping rate** - Shopify asks the store's carrier rule; a served destination gets the same rate the store preview shows, and any other gets none
-
-- **The invoice** - Fixes the purchase; later cart edits do not change it
-- **Order labels** - Existing shared order-status labels; there is no separate unpaid badge
+- **Paid Order** — Shopify tells the store, and the order moves from pending to paid within seconds
+- 🚧 **Your Orders Link** — Shopify's Thank You and Order status page offers a link to Your Orders in Grade10, where the matching purchase appears; Shopify's own Continue shopping button is not the way back
+- **Cleared Cart** — payment clears the cart it bought, unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart
+- **Order Labels** — the shared order-status labels, with no unpaid badge of its own
 
 ## Guest Checkout
 
-A collector with no session checks out the cart this browser holds. Shopify's
-page asks for the email address, and the order belongs to no account until it
-joins one under that email.
-
-- **A public code** - the guest may type one or pick one in the drawer;
-  a member's own codes and rewards are never shown to a guest -
-  [Discounts](/p/grade10-site/store/discounts#public-codes)
-- **Gateway** - the signed-out drawer's primary button is Check out as
-  guest; under it a quiet Sign in link for points and rewards, and no
-  extra step -
-  [Cart Drawer](/p/grade10-site/store/cart#checkout)
-- **Email on Shopify's page** - the address the guest types there is kept
-  with the order once it is paid
-- **No account** - paying makes no account, now or later
-- **Joining an account** - a guest order joins the account whose proven
-  email it was placed under: at payment when that account exists, otherwise
-  at that account's next sign-in. Every other guest order under that email
-  joins with it
-- **No points** - a guest order never earns, joined or not; only an
-  order placed with an account earns -
-  [Points](/p/grade10-site/loyalty/points#rules)
-- **The cart** - this browser's cart keeps the basket until it reads the
-  order paid, so a guest who leaves Shopify's page unpaid comes back to a full
-  cart; a cart the guest changed after Pay is kept
-- **Post-checkout account** - the order page after payment asks the
-  buyer to sign in to add the order to an account; a sign-in that proves
-  the order's email adds it -
-  [Order Detail](/p/grade10-site/store/order-detail#back-from-checkout)
-- **Order link** - every web order's emails, guest and member, carry the
-  private link; Grade10 sends no store email of its own -
-  [Order Detail](/p/grade10-site/store/order-detail#order-link)
-
-## Designs
+- **Gateway** — the signed-out drawer's primary button, Check out as guest, checks out the cart this browser holds; under it a quiet Sign in link for points and rewards, and no extra step — [Cart Drawer](/p/grade10-site/store/cart#checkout)
+  - **A Public Code** — the guest may type one or pick one in the drawer; a member's own codes and rewards are never shown to a guest — [Discounts](/p/grade10-site/store/discounts#public-codes)
+  - **The Cart** — this browser's cart keeps the basket until it reads the order paid, so a guest who leaves Shopify's page unpaid comes back to a full cart; a cart the guest changed after Pay is kept
+- **Email on Shopify's Page** — Shopify's page asks for it, and it is kept with the order once paid; the order belongs to no account until it joins one under that email
+  - **No Account** — paying makes no account, now or later
+  - **Joining an Account** — a guest order joins the account whose proven email it was placed under: at payment when that account exists, otherwise at that account's next sign-in. Every other guest order under that email joins with it
+    - **Post-Checkout Account** — the order page after payment asks the buyer to sign in to add the order to an account; a sign-in that proves the order's email adds it — [Order Detail](/p/grade10-site/store/order-detail#back-from-checkout)
+    - **No Points** — a guest order never earns, joined or not; only an order placed with an account earns — [Points](/p/grade10-site/loyalty/points#rules)
+- **Order Link** — every web order's emails, guest and member, carry the private link; Grade10 sends no store email of its own — [Order Detail](/p/grade10-site/store/order-detail#order-link)
 
 ::story{id="store-cart-screens-cart-drawer-guest--guest" title="The signed-out drawer leads with guest checkout"}
 
