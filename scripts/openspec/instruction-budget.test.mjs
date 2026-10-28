@@ -177,14 +177,16 @@ const ROUTES = new Set([
 const HARNESS = new Set(["add-dir", "compact", "tc", "sc"]);
 // The application repository's own commands - `dev-help`'s restored router
 // names them in its `Invoke` column, its `Here` column names this store's
-// equivalent where one exists. They resolve to nothing under
-// `.claude/skills/` here because they never lived here.
+// equivalent where one exists; `teach-me` hands code questions to `teach`.
+// They resolve to nothing under `.claude/skills/` here because they never
+// lived here.
 const APP_SKILLS = new Set([
   "implement",
   "implement-then-review",
   "tdd",
   "review-changes",
   "archive-change",
+  "teach",
 ]);
 const SLASH_TREES = [".claude/skills", "docs/governance"];
 
