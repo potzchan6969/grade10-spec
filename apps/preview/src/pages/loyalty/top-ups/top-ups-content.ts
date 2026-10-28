@@ -64,7 +64,7 @@ export const TOP_UP_COPY = {
   selectedLine: (before: number, after: number) =>
     `Balance: ${before.toLocaleString("en-US")} → ${after.toLocaleString("en-US")} points`,
 
-  continue: "Pay",
+  continue: "Pay Now",
   pay: hkd,
   opening: "Opening checkout…",
   paymentNote: "Secure checkout by Stripe",

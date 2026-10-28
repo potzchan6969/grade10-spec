@@ -26,7 +26,7 @@ export const Default: Story = {
     ).toBeInTheDocument();
     expect(overlay.getAllByRole("radio")).toHaveLength(8);
     await waitFor(() =>
-      expect(overlay.getByRole("button", { name: "Pay" })).toBeDisabled(),
+      expect(overlay.getByRole("button", { name: "Pay Now" })).toBeDisabled(),
     );
     expect(overlay.getByText("Secure checkout by Stripe")).toBeVisible();
   },
@@ -180,7 +180,7 @@ export const Narrow: Story = {
       await overlay.findByRole("dialog", { name: "Top Up Points" }),
     ).toBeInTheDocument();
     await waitFor(() =>
-      expect(overlay.getByRole("button", { name: "Pay" })).toBeVisible(),
+      expect(overlay.getByRole("button", { name: "Pay Now" })).toBeVisible(),
     );
   },
 };

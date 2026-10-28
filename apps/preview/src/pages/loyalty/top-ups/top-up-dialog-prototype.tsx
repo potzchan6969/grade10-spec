@@ -173,7 +173,7 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
             ? `Pay ${copy.pay(packPrice(selectedPack))}`
             : copy.continue}
       </Button>
-      <Text as="p" className="text-center" size="sm" tone="muted">
+      <Text as="p" className="text-center" size="xs" tone="muted">
         {copy.paymentNote}
       </Text>
     </>
