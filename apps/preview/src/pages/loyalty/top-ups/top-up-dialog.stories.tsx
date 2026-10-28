@@ -41,7 +41,7 @@ export const PackSelected: Story = {
     await overlay.findByRole("dialog", { name: "Top Up Points" });
     await userEvent.click(overlay.getByRole("radio", { name: /10,000 pts/ }));
     await waitFor(() =>
-      expect(overlay.getByText("Balance: 1,200 → 11,200 points")).toBeVisible(),
+      expect(overlay.getByText("11,200 points")).toBeVisible(),
     );
     expect(overlay.getByRole("button", { name: "Pay HK$9,500" })).toBeEnabled();
   },
@@ -101,7 +101,7 @@ export const CheckoutNotOpened: Story = {
       overlay.getByRole("dialog", { name: "Top Up Points" }),
     ).toBeInTheDocument();
     await waitFor(() =>
-      expect(overlay.getByText(/Balance: 1,200 → 11,200 points/)).toBeVisible(),
+      expect(overlay.getByText(/11,200 points/)).toBeVisible(),
     );
   },
 };

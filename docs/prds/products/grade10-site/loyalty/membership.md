@@ -53,6 +53,10 @@ a Google account under it -
 
 🚧 **No points** - a site guest order earns nothing, joined or not.
 
+- 🚧 **A ticket bought on an email** — a ticket order asks no sign-in, so the
+  purchase earns under the buyer's address and lands on the member's ledger
+  once a sign-in proves it, dated to the purchase -
+  [Buying Tickets](/p/grade10-site/ticketing/buying)
 - **Customer on the sale** — a guest who gave the shop their email has a
   Shopify customer; when an account with that verified email is paired to
   it, the sale is attributed on the next pass and its points land
@@ -70,11 +74,11 @@ a Google account under it -
 
 | Section | Shows |
 | --- | --- |
-| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tiers & Benefits |
+| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. Its Benefits link scrolls to Tiers & Benefits — the rest of the card does nothing |
 | Your member pass | Behind the Member pass button beside the title, in a dialog: the tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
-| Point History | The member's own ledger — the earned, used and pending totals on top, tabs that filter the list to each, what is still on the way under Pending, and the settled entries grouped by month. Points land when an order completes — an online order once every item is fulfilled and paid, an in-store purchase at the till. Every line says where it came from — the counter, the online store, or the programme itself. Earned and topped-up points read apart, here and in the balance — [Top-ups](/p/grade10-site/loyalty/top-ups) |
+| Point History | The member's own ledger — the earned, used and pending totals on top, tabs that filter the list to each, what is still on the way under Pending, and the settled entries grouped by month. Points land when an order completes — an online order once every item is fulfilled and paid, an in-store purchase at the till, a ticket order when it is confirmed. Every line says where it came from — the counter, the online store, the ticket office, or the programme itself; a ticket purchase names the ticket or event it bought rather than an order number. Earned and topped-up points read apart, here and in the balance — [Top-ups](/p/grade10-site/loyalty/top-ups) |
 
 - 🚧 **A rail, not a scroll** — a wide viewport lays the page out as a
   sidebar naming its sections, the picked section drawing on the right; a
@@ -111,7 +115,7 @@ list 🚧
 | Tier cards | One card per rung — the tier name, its ask in the member's words, and its benefits behind checks. The held rung's card wears the primary border and its tint |
 | How Points Work | The mechanics as icon rows — earn, pending, spend, expiry — stacked on a narrow viewport and paired on a wide one. The preview states the programme's own values: a point redeems a Hong Kong dollar, points arrive when the order completes, and the whole balance lapses after twelve months with no activity |
 
-- **Reaches** — the `TierCard` on Membership links here whole, and the same
+- **Reaches** — the `TierCard`'s Benefits link lands here, and the same
   list is a section of its Overview
 - **The expiry date's home** — the mechanics card states the lapse rule;
   the Tiers & Benefits page draws no member-dated line; the Membership page's own
@@ -163,7 +167,7 @@ The same pass can be added to a phone wallet —
 
 | Entry | Meaning |
 | --- | --- |
-| Points earned | A purchase, or a campaign grant |
+| Points earned | A purchase — store, counter or tickets — or a campaign grant |
 | Points spent | A reward redeemed |
 | Points put toward a purchase | Points paid against a bill |
 | Points expired | The balance lapsed |

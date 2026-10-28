@@ -73,8 +73,11 @@ export const Default: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "Point History" }),
     ).toBeInTheDocument();
-    expect(canvas.getByText("440 pts")).toBeInTheDocument();
+    expect(canvas.getByText("500 pts")).toBeInTheDocument();
     expect(canvas.getByText("October 2026")).toBeInTheDocument();
+    expect(
+      canvas.getByText("Grade10 FEST Summer 2026"),
+    ).toBeInTheDocument();
   },
 };
 

@@ -966,7 +966,9 @@ that balance expires on. Their own activity list SHALL NOT disclose operator
 reasons, retry keys, or the internal pricing of an entry.
 
 Each activity entry SHALL name what it was for, and which channel it came
-from, in terms the member can read.
+from, in terms the member can read. An entry recorded for a ticket order
+SHALL name the ticket or the event it bought, and SHALL NOT carry a store
+order reference — no store order exists behind it.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-qmv rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-147 - The two counts are shown as two counts
@@ -1277,8 +1279,16 @@ Qualifying spend SHALL never be less than zero.
 
 ### Requirement: What earns points, and what does not
 
-Purchases in the online store and at the counter SHALL earn. Every other source
+Purchases in the online store, at the counter, and tickets to the product's
+own events bought on its ticketing platform SHALL earn. Every other source
 SHALL earn nothing until the programme is specified to accept it.
+
+A ticket order asks no sign-in — the buyer's email is enough. The purchase
+SHALL be recorded under that address and SHALL earn for the member that
+address proves: at once where an account already holds it, and on the first
+sign-in that proves it otherwise, dated to the purchase and never to the
+sign-in. A ticket purchase counts as activity for the inactivity window like
+any other qualifying spend.
 
 Shipping charges, grading service fees, the purchase of a gift card, a credit
 top-up, an auction win, and any line in a category the programme does not list
@@ -1338,6 +1348,21 @@ defaults: a writer that names no channel is refused.
 - **THEN** the entry carries the channel that sold, taken from the programme's closed set
 - **AND** a recording naming no channel, or one outside that set, is refused
 - **AND** a correction, an expiry or a campaign grant carries the non-sale value, never a selling channel
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-t4q rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-279 - A ticket order earns like any purchase
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
+
+- **WHEN** a member buys tickets to the product's own event on its ticketing platform
+- **THEN** the purchase earns on what they paid, as a store purchase does
+- **AND** it counts as activity for the inactivity window
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-w6e rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-280 - A ticket bought on an email earns once that email signs in
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
+
+- **WHEN** a ticket order placed under an email holding no account is followed by a sign-in that proves that address
+- **THEN** its earn reaches that member's ledger, dated to the purchase
 
 ### Requirement: The programme owns balances and tiers, whatever channel sells
 
@@ -1554,7 +1579,8 @@ earn line. Where the tier names a qualifying threshold `TierCard` SHALL
 render the qualifying count apart from the balance, never summed into it,
 with the progress toward the threshold; where it names none it SHALL render
 neither count nor progress. Given an `href` to the tier-and-benefits surface,
-the whole card SHALL be the link to it. It SHALL NOT name a balance-expiry
+the Benefits affordance SHALL be the link to it, and the rest of the card
+SHALL NOT be interactive. It SHALL NOT name a balance-expiry
 day or count, nor derive any expiry wording from a clock or a balance of its
 own — the whole balance lapses on one shared inactivity date, never in
 parts.
@@ -1735,12 +1761,12 @@ SHALL require no export of its own.
 - **WHEN** `TierCard` is rendered for a tier that names no qualifying threshold
 - **THEN** neither the qualifying count nor its progress is rendered
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-257 - The whole card opens the tier-and-benefits surface
+<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=2 -->
+#### Scenario: grade10-site-loyalty-programme-SC-257 - The Benefits link opens the tier-and-benefits surface
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** `TierCard` is given an `href`
-- **THEN** the whole card is the link to it, the Benefits affordance included
+- **THEN** the Benefits affordance is the link to it, and the rest of the card is not interactive
 - **AND** a plain press reports `onClick` while a modified press keeps the link's behaviour
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-tzp rev=1 -->

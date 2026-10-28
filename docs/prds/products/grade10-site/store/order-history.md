@@ -45,6 +45,11 @@ that account's next sign-in, and is listed from then on -
 
 🚧 **No points** - a joined guest order earns none
 
+🚧 **Store orders only** - a ticket order placed on
+[Tickets](/p/grade10-site/ticketing) never appears here; the ticketing
+platform's own order pages carry it -
+[Your Tickets](/p/grade10-site/ticketing/your-tickets)
+
 ## Product Pictures
 
 🚧 **Recognise a purchase** - order items show their current product pictures,
