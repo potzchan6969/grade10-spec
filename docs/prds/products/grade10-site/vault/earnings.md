@@ -60,15 +60,14 @@ prepared, and a later change reaches only the next card prepared.
 - 🚧 **The figures are kept** - each day records the price, the rate of
   exchange, the factor, the rate and the settings it was worked from, so a
   changed setting never changes an amount already credited
-- 🚧 **Price data runs late** - a day is worked from the newest price
-  published before it closed, so a day worked late reads exactly what an
-  on-time day would have; a card keeps its last price for 3 days when the
-  feed misses, then stops earning until the feed returns
-- 🚧 **Bad data waits for a person** - a market price or a rate of exchange
-  that jumps too far from the last accepted one is held until staff accept or
-  replace it, and a day whose total incentive moves too far from the day
-  before waits for staff to release it; releasing a held day takes a second
-  person
+- 🚧 **Price data runs late** - when a day's price or rate of exchange has
+  not arrived, the card waits and is paid for the day in full once it does;
+  a card whose market had no sales for 3 days earns nothing for those days
+- 🚧 **Unlikely data is flagged, not held** - a market price or a rate of
+  exchange that jumps too far from the day before is used all the same and
+  flagged for staff; a figure staff find wrong is corrected in Inventory's
+  market prices, and every day priced from it is worked again, the
+  difference credited or taken back on that day's unlock date
 - 🚧 **No price until the price worker is connected** - a deployed
   environment imports rates of exchange but prices no card, so no card earns
   there until the price worker that supplies the sales exists and is
@@ -173,12 +172,13 @@ and a year credits exactly HK$180.00, what the year earned.
 | The clock is the card's | Decided | Per card from its contract's effective start date, not per case, so cards in one case unlock on their own days | Owner |
 | Credited while locked | Decided | The incentive accrues from day one; the N days only stop it being cashed out. The held-then-posted reading is a way of showing it, never a second way of crediting it | Owner |
 | Two early fees | Decided | The vault and consignment each have their own, either may be 0; the vault's runs on a Y-day period of its own | Owner |
-| Prices in yen | Decided | Converted at the ECB's daily reference rate; a rate outside its bounds, or moving too far in a day, is held for staff - decided by the owner, 2026-10-27 | Owner |
+| Prices in yen | Decided | Converted at the ECB's daily reference rate; a rate outside its bounds, or moving too far in a day, is flagged for staff - decided by the owner, 2026-10-27, flagged rather than held on 2026-10-28 | Owner |
 | Where prices come from | Decided | A separate price worker, reached by a service binding; its answer's shape is assumed until it exists - decided by the owner, 2026-10-27 | Owner |
 | The fee at the till | Decided | A Shopify invoice paid by link or loaded at the till, so no amount is typed - decided under the owner's delegation, 2026-10-27 | Product |
 | KYC | ❓ | When identity is asked for is still being discussed; today's rule stands at deposit, and cash-out and sale proceeds ask always until it is | Owner |
 | A sale is not an early withdrawal | ❓ | A card sold through consignment forfeits nothing; its credited incentive unlocks on its own day - built so, 2026-10-27 | Owner |
 | The fee is paid by card | Decided | The early fee is paid on a Shopify invoice and recorded on the vault's money register, never taken from the earnings balance | Product |
-| Held days | Decided | Staff decide a held price, rate or accrual day; releasing an accrual day takes a second person | Product |
+| Nothing is held | Decided | An unlikely price or rate is used and flagged, never held, because a credit stays locked until day N and nothing is cashed out without a second treasurer; a wrong one is corrected in Inventory and the days it priced are worked again with no second approver - decided by the owner, 2026-10-28 | Owner |
+| A late fact waits | Decided | A day whose price or rate has not arrived waits and is paid in full, rather than earning nothing after 3 days - decided by the owner, 2026-10-28 | Owner |
 | Cash-out | ❓ | At least HKD 500, every 7 days, to an account in the owner's verified name, a debt blocking it, a batch approved by a second treasurer | Owner |
 :::
