@@ -4,78 +4,59 @@ spec: grade10-site/store/product-page
 order: 3
 ---
 
-The product details page shows one product, its price, and the one sellable
-item a collector can add.
+The product details page shows one product, its price, and the one item for
+sale a collector can add.
 
-- **Card** — name, description, images and the one sellable item's price;
-  badges where the catalogue provides them, and the site discounts named
-  among them; the sale strikes as on the listing —
-  [Discounts](/p/grade10-site/store/discounts#where-each-shows)
-- **One item to buy** — the page offers no size, option or variant choice.
-  Shopify's sale identifier stays internal to availability and cart handling
-- **Buy** — choose a quantity, add the product, and stay on the page; while
-  the add is pending the controls show Adding…; after it settles the cart
-  drawer opens, the quantity resets, and the cart total updates; adding it
-  again stays on one line
-- **Description** — a long description shows collapsed to three lines with a
-  button to read it in full, without leaving the page
-- ❓ **A short description** — one that fits in three lines shows whole, with
-  no button. Design confirms
-- 🚧 **Availability without stock pressure** — the page says whether its one
-  sellable item can be bought, with no remaining count or scarcity cue. A
-  requested quantity is not capped by the browse read; Cart explains a short
-  fill
-- **Sold out** — a sold-out product says so and cannot be added; its price
-  remains visible
-- **Shipping and pickup** — the same copy on every card: shipping calculated
-  at checkout, free pick-up at Hong Kong Grade10 Store
-- **Shared link** — unfurls with the card's first picture, fitted whole into
-  the wide box a preview fetcher lays out and padded white, and says it is the
-  wide card; a card the catalogue pictures no way unfurls without a picture,
-  and asks for the small one
+## Product Card
 
-## Unknown product address
+- **Card** — name, pictures, description and price of the one item for sale
+  - **One Item to Buy** — no size, option or variant to choose
+  - **Sale Price** — struck through as on the listing — [Discounts](/p/grade10-site/store/discounts#where-each-shows)
+  - **Badges** — where the catalogue gives them, with the site's discounts named among them — [Discounts](/p/grade10-site/store/discounts#where-each-shows)
+  - **Description** — a long one shows three lines, with a button to read it in full without leaving the page
 
-- 🚧 **Unknown product address** — `grade10.com/store/products/<handle>` still
-  answers 404 when the catalogue has no card for the handle, but the Store
-  product route shows its own localized not-found state inside the Store shell.
-  Its one action returns the collector to the product listing in the same
-  tab; an address outside an owned surface keeps the generic site not-found
-  page and its Home action.
-
-## Buy
-
-- **Signed-out Add to cart** — adds the line to the cart this browser holds,
-  with no sign-in; signing in later moves those lines into the member's cart -
-  [Cart Drawer](/p/grade10-site/store/cart#reviewing-the-cart)
-
-## Free Pick-up
-
-- **Opens Store Locator** — the store name in the free pick-up claim opens
-  Store Locator in the same tab, in the page's language
-- **No dead label** — Shipping fee has no page behind it, so it is plain
-  text, not a link
-
-## You May Also Like
-
-- **You may also like** — related cards under the card —
-  [You May Also Like](/p/grade10-site/store/cross-sell)
-
-## Designs
+:::callout{kind="note"}
+- ❓ **Short description** — one that fits in three lines shows whole, with no button. Design confirms
+:::
 
 ::story{id="store-product-page-screens-product-detail--docs" title="Product details"}
 
-::story{id="store-product-page-screens-product-detail--unknown-product-address" title="Unknown product address"}
+## Buy
 
-:::detail{title="Implementation map" for="engineer"}
-- [Product listing page](https://github.com/9gag/grade10/blob/main/apps/frontend/grade10/src/pages/store/ProductListingPage.tsx)
-- [Product page route](https://github.com/9gag/grade10/blob/main/apps/frontend/grade10/src/pages/store/ProductPage.tsx)
-- [Product view](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductView.tsx)
-- [Purchase view and internal sale identity](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductBuyBox.tsx)
-- [Product variant model and priced item selection](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/domain/models/Product.ts)
-- [Standalone product detail preview](https://github.com/9gag/grade10-spec/blob/main/apps/preview/src/pages/store/product-page/store-product-detail.tsx)
-- [Frontend feature layout](https://github.com/9gag/grade10/blob/main/docs/conventions/code-layout.md)
+- **Quantity** — how many to add
+- **Cart Button** — adds the product and stays on the page
+  - **Pending** — the controls show Adding… until the add settles
+  - **Added** — the cart drawer opens, the quantity resets and the cart total updates
+  - **Adding Again** — the same product stays one line in the cart
+  - **Signed Out** — adds to the cart this browser holds, with no sign-in; signing in later moves those lines into the member's cart — [Cart Drawer](/p/grade10-site/store/cart#reviewing-the-cart)
+- 🚧 **Stock** — whether the item can be bought, with no count left or scarcity cue; the quantity isn't capped by it, and the cart explains a short fill
+- **Sold Out** — says so and can't be added; its price stays
+
+:::detail{title="One item to buy" for="engineer"}
+- **Sale Identifier** — Shopify's identifier for the one item for sale never shows; only availability and the cart use it
 :::
+
+## Free Pick-up
+
+- **Shipping and Pick-up Lines** — the same on every card: shipping calculated at checkout, free pick-up at Hong Kong Grade10 Store
+  - **Store Name** — opens Store Locator in the same tab, in the page's language
+  - **Shipping Fee** — plain text, not a link: no page stands behind it
+
+## Shared Link
+
+- **Link Preview** — the card's first picture, fitted whole into the wide box a preview fetcher lays out and padded white; it asks for the wide card
+  - **No Picture** — a card the catalogue has no picture for unfurls without one, and asks for the small card
+
+## You May Also Like
+
+- **Related Cards** — under the card — [You May Also Like](/p/grade10-site/store/cross-sell)
+
+## Unknown Product Address
+
+- 🚧 **Not-Found State** — `grade10.com/store/products/<handle>` with no card for the handle shows the Store's own not-found state, in the page's language, still answering 404; its one action returns to the product listing in the same tab
+  - **Other Addresses** — one outside an owned surface keeps the site's generic not-found page and its Home action
+
+::story{id="store-product-page-screens-product-detail--unknown-product-address" title="Unknown product address"}
 
 :::detail{title="Product decisions" for="pm"}
 A card travels as a pasted address more often than it is found by search, and
