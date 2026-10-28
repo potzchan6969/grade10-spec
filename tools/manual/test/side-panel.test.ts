@@ -66,6 +66,15 @@ describe("a suite's cases", () => {
     expect(first.body).toBe("**Steps:**\n\n1. Tick two worlds.");
   });
 
+  it("leaves the rule closing a group out of its last case", () => {
+    const [last] = readSuite({
+      path: SUITE.path,
+      source:
+        "### g10.store-listing.TC9: Last\n\n**Steps:**\n\n1. Look.\n\n---\n\n### listing#links: Links\n",
+    });
+    expect(last.body).toBe("**Steps:**\n\n1. Look.");
+  });
+
   it("groups a page's cases by section, with the rules each checks", () => {
     const cases = casesOfPage([SUITE], `${STORE}/listing.md`);
     expect(

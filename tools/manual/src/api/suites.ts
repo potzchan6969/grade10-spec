@@ -50,6 +50,9 @@ function bodyOf(lines: string[]): string {
     }
     out.push(line);
   }
+  // The rule closing a group of cases is the suite's, not the last case's.
+  while (out.length > 0 && /^\s*(---\s*)?$/.test(out[out.length - 1]))
+    out.pop();
   return out.join("\n").trim();
 }
 
