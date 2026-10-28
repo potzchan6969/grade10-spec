@@ -85,7 +85,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#sorting/orders, product-listing#products-display/product-count
+* **Trace:** product-listing#sort/sort-options, product-listing#products-display/product-count
 
 **Pre-conditions:**
 
@@ -149,7 +149,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display/opening-a-product
+* **Trace:** product-listing#products-display/product-link
 
 **Pre-conditions:**
 
@@ -191,7 +191,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#sorting/scope, product-listing#sorting/sold-out, product-listing#sorting/price
+* **Trace:** product-listing#sort/scope, product-listing#sort/sold-out, product-listing#sort/price
 
 **Pre-conditions:**
 
@@ -355,7 +355,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#filters/combining-options, product-listing#filters/option-count, product-listing#links-and-back/address
+* **Trace:** product-listing#filters/several-options, product-listing#filters/option-count, product-listing#links-and-back/address
 
 **Pre-conditions:**
 
@@ -685,7 +685,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#listing-one-collection/entry
+* **Trace:** product-listing#collection-page/entry
 
 **Pre-conditions:**
 
@@ -715,7 +715,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#listing-one-collection/leaving
+* **Trace:** product-listing#collection-page/exit
 
 **Pre-conditions:**
 
@@ -748,7 +748,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#listing-one-collection/leaving
+* **Trace:** product-listing#collection-page/exit
 
 **Pre-conditions:**
 
@@ -813,7 +813,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display/stock, product-listing#products-display/opening-a-product
+* **Trace:** product-listing#products-display/stock, product-listing#products-display/product-link
 
 **Pre-conditions:**
 
@@ -1107,7 +1107,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#search/picking-a-suggestion
+* **Trace:** product-listing#search/chosen-suggestion
 
 **Pre-conditions:**
 
