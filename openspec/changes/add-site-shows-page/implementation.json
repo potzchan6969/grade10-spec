@@ -37,5 +37,15 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "a1f779653795048411ccc3795f2ff2010569d28e",
+      "components": [
+        "storybook"
+      ],
+      "verifiedBy": "seankcw",
+      "verification": "The Shows page block, its stories and the workbench route are on the store's main; the autoplay change landed at 493a518b6 and the story assertions at 3e6959c16 and 6835bcb7e. At this commit the shows story play pass passes (2 of 2) in vitest's storybook project, and lint, `pnpm storybook:check` and `pnpm check:manual` pass. `pnpm run typecheck` reports one error, in `apps/preview/src/pages/page-heading.tsx`, that `main` carries without this change. The site's own evidence is in grade10 at 2fbf33303c (`apps/frontend/grade10/src/routes/shows.test.ts`, 4 tests); the application's `/shows` loader and the admin's published shows are not part of this change. The walk rendered the story at 1440 and 390 wide in a browser and read it; its screenshots are not kept."
+    }
+  ]
 }
