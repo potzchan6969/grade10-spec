@@ -61,7 +61,7 @@ function OrderDetailsOrderItem({
       data-slot="order-details-order-item"
       data-struck-through={struckThrough || undefined}
     >
-      <TableCell className="min-w-0 flex-1">
+      <TableCell className="min-w-72 flex-1">
         <HStack className="min-w-0 flex-1" gap="md" vAlign="center">
           <div
             aria-hidden={imageSrc ? undefined : true}
@@ -108,8 +108,7 @@ function OrderDetailsOrderItem({
           </VStack>
         </HStack>
       </TableCell>
-      {/* biome-ignore lint/plugin: column width matches Figma Table Head 88px */}
-      <TableCell align="end" className="w-[88px] shrink-0">
+      <TableCell align="end" className="min-w-28 shrink-0">
         <p className={cn(priceClass, "whitespace-nowrap")}>{subtotal}</p>
       </TableCell>
       <TableCell align="end" className="w-14 shrink-0">
@@ -117,8 +116,7 @@ function OrderDetailsOrderItem({
           {quantity}
         </p>
       </TableCell>
-      {/* biome-ignore lint/plugin: column width matches Figma Table Head 83px */}
-      <TableCell align="end" className="w-[83px] shrink-0">
+      <TableCell align="end" className="min-w-28 shrink-0">
         <p className={cn(totalClass, "whitespace-nowrap")}>{total}</p>
       </TableCell>
     </TableRow>
