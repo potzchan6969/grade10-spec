@@ -118,6 +118,10 @@ and a year credits exactly HK$180.00, what the year earned.
   a payout account whose name matches the owner's verified identity
 - 🚧 **Held while it is paid** - the amount leaves what can be cashed out the
   moment it is asked for, and comes back if its batch is rejected
+- 🚧 **A bounced payment comes back** - staff can return one cash-out of a
+  batch after the batch is paid, and its amount is back on the balance
+- **The collector's page is not built yet** - the earnings page where a
+  collector sees the balance, saves a payout account and asks for a cash-out
 - 🚧 **A debt blocks it** - nothing is cashed out while the balance owes
 - 🚧 **Two treasurers** - cash-outs are gathered into a batch, and the batch is
   approved by a treasurer other than the one who gathered it
