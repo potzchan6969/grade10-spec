@@ -33,7 +33,6 @@ const TIER_CARD_COPY: TierCardCopy = {
   points: "pts",
   worthSuffix: "off at checkout",
   qualifying: "Keep Gold",
-  benefits: "Benefits",
 };
 
 const MEMBER_PASS_COPY: MemberPassCopy = {

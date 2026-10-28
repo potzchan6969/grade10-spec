@@ -74,7 +74,7 @@ a Google account under it -
 
 | Section | Shows |
 | --- | --- |
-| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. Its Benefits link scrolls to Tiers & Benefits — the rest of the card does nothing |
+| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. Nothing on it is a link or a button |
 | Your member pass | Behind the Member pass button beside the title, in a dialog: the tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
@@ -115,8 +115,7 @@ list 🚧
 | Tier cards | One card per rung — the tier name, its ask in the member's words, and its benefits behind checks. The held rung's card wears the primary border and its tint |
 | How Points Work | The mechanics as icon rows — earn, pending, spend, expiry — stacked on a narrow viewport and paired on a wide one. The preview states the programme's own values: a point redeems a Hong Kong dollar, points arrive when the order completes, and the whole balance lapses after twelve months with no activity |
 
-- **Reaches** — the `TierCard`'s Benefits link lands here, and the same
-  list is a section of its Overview
+- **Reaches** — the same list is a section of Membership's Overview
 - **The expiry date's home** — the mechanics card states the lapse rule;
   the Tiers & Benefits page draws no member-dated line; the Membership page's own
   line carries the date

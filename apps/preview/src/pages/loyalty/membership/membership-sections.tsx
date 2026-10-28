@@ -126,8 +126,6 @@ function OverviewPane({
         balance={balance.toLocaleString("en-HK")}
         copy={TIER_CARD_COPY}
         earnLine={view.earnLine}
-        href={TIERS_TAB_HREF}
-        onClick={scrollToTiers}
         qualifyingPoints={view.qualifyingPoints}
         qualifyingThreshold={view.qualifyingThreshold}
         retentionLine={view.retentionLine}
@@ -145,22 +143,6 @@ function OverviewPane({
     </div>
   );
 }
-
-/** The Benefits link scrolls to the Tiers & Benefits section on the pane. */
-const TIERS_TAB_HREF = "#membership-tiers-heading";
-
-/** Smooth-scrolls to the Tiers & Benefits section, instantly under reduced
- * motion. A plain press reports here in place of the link's own jump. The
- * workbench stubs `scrollIntoView`, so the window is scrolled itself. */
-const scrollToTiers = () => {
-  const target = document.getElementById("membership-tiers-heading");
-  if (!target) return;
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  window.scrollTo({
-    top: target.getBoundingClientRect().top + window.scrollY,
-    behavior: reduce ? "auto" : "smooth",
-  });
-};
 
 /** Rewards — the catalog the member redeems from. */
 function RewardsPane({
@@ -270,8 +252,7 @@ function TiersBenefitsPane({
         aria-label={TIER_BENEFITS_PAGE_COPY.title}
         className="flex flex-col gap-4"
       >
-        {qualifyingPoints !== undefined &&
-        qualifyingTarget !== undefined ? (
+        {qualifyingPoints !== undefined && qualifyingTarget !== undefined ? (
           <TierLadder
             copy={TIER_LADDER_COPY}
             currentTier={heldTier}
