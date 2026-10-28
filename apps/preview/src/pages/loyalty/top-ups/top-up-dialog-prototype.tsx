@@ -165,7 +165,7 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
         disabled={!selectedPack}
         loading={busy}
         onClick={onContinue}
-        size="lg"
+        size="md"
       >
         {busy
           ? copy.opening
