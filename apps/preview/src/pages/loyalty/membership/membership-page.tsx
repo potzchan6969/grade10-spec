@@ -217,7 +217,7 @@ function MembershipPage({
               {MEMBERSHIP_TABS.map((item) => (
                 <NavigationLink
                   active={active === item.id}
-                  className="md:w-40 md:justify-start"
+                  className="cursor-pointer md:w-40 md:justify-start"
                   key={item.id}
                   onClick={() => setActive(item.id)}
                   render={<button type="button" />}
