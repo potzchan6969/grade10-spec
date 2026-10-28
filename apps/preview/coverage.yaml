@@ -21,6 +21,7 @@ no-screen:
   loyalty/rewards: a section of Membership
   loyalty/shopify-integration: the Shopify link; its till panel is Shopify's
   loyalty/tiers: drawn in the Membership summary
+  loyalty/top-ups: drawn as Parts; the picker dialog over Membership, its result and its history
   loyalty/wallet-member-card: a section of Membership
   site/page-shell: the header and footer on every screen
   site/crawlable-pages: server responses, tags and the sitemap

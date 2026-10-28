@@ -1,6 +1,6 @@
 /* Draft words and stand-in figures for buying points, as the member reads
  * them. Pack sizes, discounts and limits are an operator's; these only look
- * the part. The terms line is a draft until Legal confirms it. */
+ * the part. */
 
 export const TOP_UPS_MANUAL_PATH = "loyalty/top-ups";
 
@@ -14,9 +14,13 @@ export type TopUpPack = {
 /** Packs on sale, in the operator's order. */
 export const TOP_UP_PACKS: readonly TopUpPack[] = [
   { id: "pack-1k", points: 1_000, discountPercent: 0 },
+  { id: "pack-2k", points: 2_000, discountPercent: 0 },
   { id: "pack-5k", points: 5_000, discountPercent: 3 },
   { id: "pack-10k", points: 10_000, discountPercent: 5 },
+  { id: "pack-20k", points: 20_000, discountPercent: 7 },
+  { id: "pack-30k", points: 30_000, discountPercent: 8 },
   { id: "pack-50k", points: 50_000, discountPercent: 10 },
+  { id: "pack-100k", points: 100_000, discountPercent: 12 },
 ];
 
 /** A pack strictly above this many points is reviewed before it is credited. */
@@ -25,11 +29,7 @@ export const REVIEW_THRESHOLD = 20_000;
 /** Points still allowed today in the over-limit state. */
 export const LEFT_TODAY = 8_000;
 
-/** The pack that goes off sale between the list and checkout. */
-export const OFF_SALE_PACK_ID = "pack-10k";
-
-export const MEMBER_BALANCE = { total: 1_200, earned: 200, toppedUp: 1_000 };
-export const MEMBER_EMAIL = "mei.lin@example.com";
+export const MEMBER_BALANCE = { total: 1_200 };
 
 /** The reference a held top-up reads back, on the result and its history row. */
 export const UNDER_REVIEW_REFERENCE = "TU-2026-0384";
@@ -45,15 +45,10 @@ const hkd = (value: number) => `HK$${value.toLocaleString("en-US")}`;
 
 export const packPrice = (pack: TopUpPack) =>
   Math.round(pack.points * (1 - pack.discountPercent / 100));
-export const packSaving = (pack: TopUpPack) => pack.points - packPrice(pack);
 
 export const TOP_UP_COPY = {
   title: "Top Up Points",
-  description:
-    "Buy points at a discount. Each point takes HK$1 off at checkout.",
-  balance: (total: number) => `Your balance: ${points(total)}`,
-  balanceEarned: "Earned",
-  balanceToppedUp: "Topped up",
+  balance: (total: number) => `Balance: ${points(total)}`,
 
   packsLegend: "Choose a pack",
   packPoints: (value: number) => value.toLocaleString("en-US"),
@@ -63,50 +58,33 @@ export const TOP_UP_COPY = {
   packSave: (percent: number) => `Save ${percent}%`,
   packOverLimit: "Over today’s limit",
   limitLeft: (left: number) => `${points(left)} left today`,
-  limitReached: {
-    title: "You’ve reached today’s top-up limit",
-    description: "You can buy again tomorrow.",
-  },
 
   /** One line under the button once a pack is picked: what, what it costs,
    *  where the balance lands. */
   selectedLine: (pts: number, price: number, after: number) =>
     `${points(pts)} for ${hkd(price)}. Balance after: ${points(after)}`,
-  reviewNote:
-    "Packs this size are reviewed before the points arrive. Your card is charged only if it’s approved.",
-
-  terms:
-    "I understand topped-up points can’t be refunded, cashed out or transferred, and I agree to the Top-Up Terms.",
-  termsLink: "Top-Up Terms",
-  choosePackError: "Choose a pack to continue.",
-  termsError: "Agree to the terms to continue.",
+  reviewNote: "Reviewed before the points arrive. Charged only if approved.",
 
   continue: "Continue to payment",
   opening: "Opening checkout…",
-  paymentNote:
-    "You’ll pay securely with Stripe. Card, Apple Pay and Google Pay accepted.",
-  smallPrint:
-    "Topped-up points expire with the rest of your balance and don’t count toward your tier.",
-  historyLink: "View top-up history",
+  paymentNote: "Secure checkout by Stripe",
 
-  offSale: {
-    title: "That pack is no longer available",
-    description: "Choose another pack to continue.",
-  },
-  notOpened: {
-    title: "We couldn’t open checkout",
-    description: "You haven’t been charged. Try again in a moment.",
+  /* Refusals are toasts on the way in, never dialog content. */
+  limitReached: {
+    title: "You’ve reached today’s top-up limit",
+    description: "You can top up again tomorrow.",
   },
   paused: {
     title: "Top-ups are paused on your account",
-    description:
-      "You can still spend the points you have. Contact us if you have questions.",
-    action: "Contact us",
+    description: "Contact us if you have questions.",
   },
   unavailable: {
     title: "Top-ups aren’t available right now",
-    description: "Check back soon. You can still spend the points you have.",
-    action: "Close",
+    description: "Please try again later.",
+  },
+  notOpened: {
+    title: "We couldn’t open checkout",
+    description: "You haven’t been charged. Please try again.",
   },
 } as const;
 
@@ -114,29 +92,22 @@ export const TOP_UP_RESULT_COPY = {
   backToMembership: "Back to Membership",
   confirming: {
     title: "Confirming your payment…",
-    description:
-      "This usually takes a few seconds. Please keep this page open.",
+    description: "Please keep this page open.",
   },
   added: {
     title: (added: number) => `${points(added)} added`,
-    balance: (total: number) => `Your balance is now ${points(total)}.`,
-    receipt: (email: string) => `Stripe has emailed your receipt to ${email}.`,
-    shop: "Start shopping",
+    balance: (total: number) => `New balance: ${points(total)}`,
   },
   underReview: {
-    title: "Your top-up is under review",
-    description: (price: number, added: number) =>
-      `We’ve placed a hold of ${hkd(price)} on your card. Once approved, we’ll charge it and add ${points(added)}. If it isn’t approved, the hold is released and you won’t be charged.`,
+    title: "Top-up under review",
+    description:
+      "Your card is charged only if it’s approved. You can close this page.",
     reference: (ref: string) => `Reference ${ref}`,
-    safeToLeave:
-      "You can close this page. You’ll see the result in your Top-Up History.",
     history: "View Top-Up History",
   },
   notApproved: {
-    title: "Your top-up wasn’t approved",
-    description:
-      "You haven’t been charged, and the hold on your card has been released.",
-    contact: "Contact us",
+    title: "Top-up not approved",
+    description: "You haven’t been charged.",
   },
   notCompleted: {
     title: "Payment not completed",

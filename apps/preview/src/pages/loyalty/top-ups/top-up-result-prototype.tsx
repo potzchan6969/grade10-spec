@@ -14,16 +14,11 @@ import {
   storyHref,
 } from "../../workbench-story-nav";
 import {
-  MEMBER_EMAIL,
   TOP_UP_COPY,
   TOP_UP_RESULT_COPY,
   UNDER_REVIEW_REFERENCE,
 } from "./top-ups-content";
-import {
-  TopUpsBreadcrumbs,
-  TopUpsPageShell,
-  TopUpsPrototypeNote,
-} from "./top-ups-shared";
+import { TopUpsBreadcrumbs, TopUpsPageShell } from "./top-ups-shared";
 
 /** Back to the pack picker the member came from. */
 const TOP_UP_DIALOG_STORY_ID = "loyalty-top-ups-parts-topupdialog--default";
@@ -50,29 +45,39 @@ function BackToMembership() {
   );
 }
 
-/** One centred result: icon well, title, description lines and actions. */
+/** One centred result: a tinted icon well, the title, one description line,
+ * an optional muted meta line and the actions. */
 function ResultPanel({
+  wellClass,
   icon,
   title,
   description,
+  meta,
   actions,
 }: {
+  wellClass: string;
   icon: ReactNode;
   title: string;
   description: ReactNode;
+  meta?: ReactNode;
   actions?: ReactNode;
 }) {
   return (
     <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-4 py-8 text-center">
-      <div className="inline-flex size-14 shrink-0 items-center justify-center rounded-full border border-border bg-background">
+      <div
+        className={`inline-flex size-14 shrink-0 items-center justify-center rounded-full ${wellClass}`}
+      >
         {icon}
       </div>
       <h1 className="font-heading text-3xl font-semibold tracking-tight">
         {title}
       </h1>
-      <div className="flex flex-col gap-1">
-        <Text className="text-secondary-foreground">{description}</Text>
-      </div>
+      <Text className="text-secondary-foreground">{description}</Text>
+      {meta ? (
+        <Text size="sm" tone="muted">
+          {meta}
+        </Text>
+      ) : null}
       {actions ? (
         <div className="flex flex-wrap justify-center gap-2">{actions}</div>
       ) : null}
@@ -92,6 +97,7 @@ function ResultBody({ state }: { state: TopUpResultState }) {
             </span>
           }
           title={copy.confirming.title}
+          wellClass="bg-muted"
         />
       </div>
     );
@@ -101,20 +107,11 @@ function ResultBody({ state }: { state: TopUpResultState }) {
     return (
       <ResultPanel
         actions={
-          <>
-            <Button render={<a href="#shop" />} size="md">
-              {copy.added.shop}
-            </Button>
-            <BackToMembership />
-          </>
+          <Button render={<a href={MEMBERSHIP_HREF} />} size="md">
+            {copy.backToMembership}
+          </Button>
         }
-        description={
-          <>
-            {copy.added.balance(2200)}
-            <br />
-            {copy.added.receipt(MEMBER_EMAIL)}
-          </>
-        }
+        description={copy.added.balance(2200)}
         icon={
           <CheckCircle
             aria-hidden
@@ -124,6 +121,7 @@ function ResultBody({ state }: { state: TopUpResultState }) {
           />
         }
         title={copy.added.title(1000)}
+        wellClass="bg-success/10"
       />
     );
   }
@@ -132,26 +130,14 @@ function ResultBody({ state }: { state: TopUpResultState }) {
     return (
       <ResultPanel
         actions={
-          <>
-            <Button
-              render={<a href={storyHref(TOP_UP_HISTORY_STORY_ID)} />}
-              size="md"
-            >
-              {copy.underReview.history}
-            </Button>
-            <BackToMembership />
-          </>
+          <Button
+            render={<a href={storyHref(TOP_UP_HISTORY_STORY_ID)} />}
+            size="md"
+          >
+            {copy.underReview.history}
+          </Button>
         }
-        description={
-          <>
-            {copy.underReview.description(45000, 50000)}
-            <br />
-            {copy.underReview.safeToLeave}
-            <Text as="span" className="mt-1 block" size="sm" tone="muted">
-              {copy.underReview.reference(UNDER_REVIEW_REFERENCE)}
-            </Text>
-          </>
-        }
+        description={copy.underReview.description}
         icon={
           <HourglassMedium
             aria-hidden
@@ -160,7 +146,9 @@ function ResultBody({ state }: { state: TopUpResultState }) {
             weight="regular"
           />
         }
+        meta={copy.underReview.reference(UNDER_REVIEW_REFERENCE)}
         title={copy.underReview.title}
+        wellClass="bg-muted"
       />
     );
   }
@@ -169,14 +157,9 @@ function ResultBody({ state }: { state: TopUpResultState }) {
     return (
       <ResultPanel
         actions={
-          <>
-            <Button render={<a href={MEMBERSHIP_HREF} />} size="md">
-              {copy.backToMembership}
-            </Button>
-            <Button render={<a href="#contact" />} size="md" variant="outline">
-              {copy.notApproved.contact}
-            </Button>
-          </>
+          <Button render={<a href={MEMBERSHIP_HREF} />} size="md">
+            {copy.backToMembership}
+          </Button>
         }
         description={copy.notApproved.description}
         icon={
@@ -188,6 +171,7 @@ function ResultBody({ state }: { state: TopUpResultState }) {
           />
         }
         title={copy.notApproved.title}
+        wellClass="bg-destructive/10"
       />
     );
   }
@@ -215,6 +199,7 @@ function ResultBody({ state }: { state: TopUpResultState }) {
         />
       }
       title={copy.notCompleted.title}
+      wellClass="bg-warning/10"
     />
   );
 }
@@ -226,7 +211,6 @@ function ResultBody({ state }: { state: TopUpResultState }) {
 function TopUpResultPrototype({ state }: { state: TopUpResultState }) {
   return (
     <TopUpsPageShell>
-      <TopUpsPrototypeNote settles="how a held top-up is surfaced until a Grade10 email exists, and where the receipt link lives." />
       <TopUpsBreadcrumbs current={TOP_UP_COPY.title} />
       <ResultBody state={state} />
     </TopUpsPageShell>

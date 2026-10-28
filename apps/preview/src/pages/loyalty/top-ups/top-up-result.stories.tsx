@@ -28,7 +28,7 @@ export const ConfirmingPayment: Story = {
   },
 };
 
-/** The pack credited: new balance, Stripe's receipt note, and ways onward. */
+/** The pack credited: the new balance and the way back. */
 export const PointsAdded: Story = {
   name: "Points Added",
   args: { state: "added" },
@@ -37,17 +37,14 @@ export const PointsAdded: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "1,000 points added" }),
     ).toBeInTheDocument();
-    expect(canvas.getByText(/Your balance is now 2,200 points/)).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Start shopping" }),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("New balance: 2,200 points")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Back to Membership" }),
     ).toBeInTheDocument();
   },
 };
 
-/** The pack held for an operator: the hold amount and where to watch. */
+/** The pack held for an operator: what happens next and where to watch. */
 export const UnderReview: Story = {
   name: "Under Review",
   args: { state: "under-review" },
@@ -56,19 +53,22 @@ export const UnderReview: Story = {
     expect(
       canvas.getByRole("heading", {
         level: 1,
-        name: "Your top-up is under review",
+        name: "Top-up under review",
       }),
     ).toBeInTheDocument();
-    expect(canvas.getByText(/hold of HK\$45,000 on your card/)).toBeVisible();
-    expect(canvas.getByText(/You can close this page/)).toBeVisible();
-    expect(canvas.getByText(/Reference TU-2026-0384/)).toBeVisible();
+    expect(
+      canvas.getByText(
+        "Your card is charged only if it’s approved. You can close this page.",
+      ),
+    ).toBeVisible();
+    expect(canvas.getByText("Reference TU-2026-0384")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "View Top-Up History" }),
     ).toBeInTheDocument();
   },
 };
 
-/** The review refused the pack: nothing charged, the hold released. */
+/** The review refused the pack: nothing charged. */
 export const NotApproved: Story = {
   name: "Not Approved",
   args: { state: "not-approved" },
@@ -77,11 +77,12 @@ export const NotApproved: Story = {
     expect(
       canvas.getByRole("heading", {
         level: 1,
-        name: "Your top-up wasn’t approved",
+        name: "Top-up not approved",
       }),
     ).toBeInTheDocument();
+    expect(canvas.getByText("You haven’t been charged.")).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "Contact us" }),
+      canvas.getByRole("button", { name: "Back to Membership" }),
     ).toBeInTheDocument();
   },
 };
