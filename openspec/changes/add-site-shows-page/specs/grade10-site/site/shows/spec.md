@@ -260,6 +260,8 @@ answer not found, not an empty page.
   published show has its words in that language
 - **THEN** that show's title and description, and its date, SHALL read in
   that language
+- **AND** the page's Press Releases button and any Press Release link SHALL
+  lead to that language's press address
 
 <!-- trace:scenario id=g10.site-shows.SC-dfo rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-18 - A show with no words in the reader's language reads in its base text
@@ -278,7 +280,7 @@ inside the same container without navigating away and start it playing,
 with sound, on that one activation. Where a browser will not start the
 embed from the activation, the embed SHALL show the player's own play
 control and a second activation there SHALL start it. Each video plays on
-its own: starting one SHALL NOT stop the other or return it to its poster.
+its own: starting one SHALL NOT stop another or return it to its poster.
 
 <!-- trace:scenario id=g10.site-shows.SC-59c rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-05 - A collector plays a chapter video
@@ -288,7 +290,7 @@ its own: starting one SHALL NOT stop the other or return it to its poster.
 - **THEN** the poster SHALL be replaced by the named YouTube embed inside
   the same container, the video SHALL start playing with sound on that one
   activation, and the page SHALL NOT navigate or open a tab
-- **AND** an embed already started in the other chapter SHALL stay in its
+- **AND** an embed already started in another chapter SHALL stay in its
   container, not returned to its poster
 
 ### Requirement: Carousels page the edition's photos

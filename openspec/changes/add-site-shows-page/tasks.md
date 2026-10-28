@@ -24,9 +24,9 @@
   workbench cannot show (`g10.site-shows.SC-08`, `SC-11`, `SC-12` and `SC-14`..`SC-18`: the
   Hong Kong month filter, the unpublished release and chapter link, nothing
   published, the reader's language, the base-text fallback): the site's
-  `showsPageOf` mapper tests, and route loader tests for the not-found answer
-  and the Hong Kong clock (`dayValue(new Date(), config.timeZone)`) where
-  none exists yet, linked from the pull request
+  `showsPageOf` mapper tests, and route loader tests for the not-found answer,
+  the Hong Kong clock (`dayValue(new Date(), config.timeZone)`) and the
+  links at the reader's language (`siteAddress`) where none exists yet, linked from the pull request
 
 ## 2. The walk (grade10-spec)
 

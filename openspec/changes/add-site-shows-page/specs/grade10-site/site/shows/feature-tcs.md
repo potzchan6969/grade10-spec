@@ -482,6 +482,8 @@ Runs once per row of **Test data**.
 * `<show>`'s record reads `<title>`, its description in
   `<reader language>`.
 * None of `<show>`'s words show in another language.
+* The Press Releases action in the hero leads to the press index at
+  `<reader language>`'s address.
 
 <!-- trace:case id=g10.site-shows.TC-nf4 rev=1 covers=g10.site-shows.SC-pub -->
 ### grade10-site-site-shows-US1-TC14-1: The page answers not found when nothing is published
@@ -749,7 +751,7 @@ opening a new tab.
 - Each chapter jump is a hash link: the address carries the chapter's fragment, and Back returns (Q14).
 - The chapter list stays sticky as the block draws it (Q15).
 - An edition carousel's arrows wrap round at the first and last photo; no arrow is unavailable (Q16).
-- Each chapter video plays on its own; starting one does not stop the other (Q17).
+- Each chapter video plays on its own; starting one does not stop another (Q17).
 - With nothing published, `/shows` answers not found, not an empty page (Q18).
 - One selection on a chapter video starts it playing; no second selection is needed (Q19).
 - The admin publishes the shows as one document: a chapter is always on the page with the editions it holds, and a show has no published state of its own (Q20).
@@ -785,6 +787,7 @@ opening a new tab.
 | `grade10-site-site-shows-US3-TC1-3` | Reached, adjusted | `grade10-site-site-shows-SC-05`. Q23 adds "with its sound on" to the one-selection start; `SC-05` states it |
 | `grade10-site-site-shows-SC-01` to `grade10-site-site-shows-SC-18` | Reached | each by the one case whose `covers` names it |
 
+- **Anchor edits after QA1** - the Feature set was reworded after QA1's blind pass in `53c65d74e`, `1839c1a9b`, `0a70c4f69` and `63d9c1c87`: records in the admin's order (Q21), a statistic card per published statistic, a chapter's presentation "when it has one" (Q25), Explore Shows to the section or a chapter (Q13), a chapter's edition cards "it holds" (Q20), and "every address at the reader's language". The first five restate decisions QA1 raised and the round closed, and QA2 folded them as it folded Q21. The last added a check, which `SC-16` and `US1-TC12-1` now carry. No second blind pass ran; the accepting human is told here.
 - **Raised** - QA1's five rows closed as Q20 to Q24, decided by the round; each answer, with Q9, Q10, Q18 and Q19 decided with the human, is in `## Settled`. Q20 went against QA1's recommendation and reframed it: there is no per-show published state, so a chapter is never removed. Q21 kept every published record but in the admin's order, not newest first. Q22 to Q24 took QA1's recommendation
 - **Folded into spec** - `grade10-site-site-shows-SC-17` and `grade10-site-site-shows-SC-18` are new; `SC-04`, `SC-05`, `SC-07`, `SC-10`, `SC-14`, `SC-15` and `SC-16` now state what their cases assert. "The page shows what is published" now carries Q20's one document and Q22's base-text fallback; "Videos play inside the page" carries Q23's sound and Q24's second tap; the records requirement carries Q21
 - **Contradicted** - `US1-TC13-1` against Q20, the author's decision; dropped above, and none is left open

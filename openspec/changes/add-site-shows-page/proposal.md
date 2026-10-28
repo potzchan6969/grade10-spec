@@ -18,7 +18,7 @@ system.
   Upcoming Shows card while a show is current or upcoming, an event-scale section with a card for each published statistic,
   the published event-format chapters under a sticky pill tab list — today
   Hong Kong, Overseas Partnership, Chinese Mainland — each carrying a video
-  or photo presentation when it has one, and edition cards, and an event-records timeline in the order
+  or photo presentation when it has one, and the edition cards it holds, and an event-records timeline in the order
   the admin gives.
 - **Edition cards with carousels.** Each edition pages through the live
   show's photo set with arrows and progress dots, and links to its
