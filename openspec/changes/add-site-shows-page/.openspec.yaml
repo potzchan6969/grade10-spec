@@ -12,7 +12,8 @@ reviewed:
   user-journeys: 0627c601
   ui-design: 77c400ef
   specs: a5118079
-  test-cases: 4c1af93a
+  test-cases: a5118079
   tasks: ab0a0abf
 landed_by:
   decisions: seankcw
+  test-cases: seankcw
