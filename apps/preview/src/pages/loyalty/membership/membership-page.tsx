@@ -205,7 +205,7 @@ function MembershipPage({
           <div className="flex flex-col gap-8 md:flex-row md:gap-16">
             <nav
               aria-label="Membership"
-              className="flex gap-1 overflow-x-auto md:w-64 md:shrink-0 md:flex-col md:items-stretch md:overflow-visible"
+              className="flex gap-1 overflow-x-auto md:w-64 md:sticky md:top-8 md:shrink-0 md:self-start md:flex-col md:items-stretch md:overflow-visible"
             >
               {MEMBERSHIP_TABS.map((item) => (
                 <NavigationLink
