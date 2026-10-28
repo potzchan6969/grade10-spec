@@ -57,7 +57,6 @@ export const TOP_UP_COPY = {
   packWasPrice: hkd,
   packSave: (percent: number) => `Save ${percent}%`,
   packOverLimit: "Over today’s limit",
-  limitLeft: (left: number) => `${points(left)} left today`,
 
   /** One line under the button once a pack is picked: what, what it costs,
    *  where the balance lands. */

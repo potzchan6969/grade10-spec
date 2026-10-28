@@ -72,21 +72,19 @@ export const OpeningCheckout: Story = {
   },
 };
 
-/** Near the daily cap the too-large packs are refused and say what is left. */
+/** Near the daily cap the too-large packs are refused and say why in a tooltip. */
 export const LimitAlmostReached: Story = {
   name: "Limit Almost Reached",
   args: { state: "limit-almost-reached" },
   play: async () => {
     const overlay = within(document.body);
     await overlay.findByRole("dialog", { name: "Top Up Points" });
-    await waitFor(() =>
-      expect(overlay.getByText("8,000 points left today")).toBeVisible(),
-    );
-    for (const name of [/^10,000/, /^20,000/, /^50,000/, /^100,000/]) {
-      expect(overlay.getByRole("radio", { name })).toHaveAttribute(
-        "aria-disabled",
-        "true",
-      );
+    const refused = overlay.getAllByRole("radio", {
+      name: /Over today’s limit/,
+    });
+    expect(refused).toHaveLength(5);
+    for (const radio of refused) {
+      expect(radio).toHaveAttribute("aria-disabled", "true");
     }
     expect(overlay.getByRole("radio", { name: /^5,000/ })).not.toHaveAttribute(
       "aria-disabled",

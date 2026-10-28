@@ -22,6 +22,13 @@ import {
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@grade10/design-system/components/overlays/tooltip";
+import { Warning } from "@phosphor-icons/react";
 import { useState } from "react";
 import { navigateToStory } from "../../workbench-story-nav";
 import {
@@ -67,6 +74,22 @@ function PackTile({ disabled, pack }: { disabled: boolean; pack: TopUpPack }) {
           <span className="font-normal text-secondary-foreground">
             {copy.packPointsSuffix}
           </span>
+          {disabled ? (
+            <span className="sr-only">{copy.packOverLimit}</span>
+          ) : null}
+          {disabled ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  className="ml-auto inline-flex size-5 shrink-0 items-center justify-center self-center text-warning"
+                  render={<span />}
+                >
+                  <Warning aria-hidden size={16} weight="fill" />
+                </TooltipTrigger>
+                <TooltipContent>{copy.packOverLimit}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : null}
         </span>
       }
       description={
@@ -81,9 +104,6 @@ function PackTile({ disabled, pack }: { disabled: boolean; pack: TopUpPack }) {
                 {copy.packSave(pack.discountPercent)}
               </Badge>
             </>
-          ) : null}
-          {disabled ? (
-            <span className="w-full">{copy.packOverLimit}</span>
           ) : null}
         </span>
       }
@@ -156,11 +176,6 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
 
   const body = (
     <>
-      {state === "limit-almost-reached" ? (
-        <Text as="p" size="sm" tone="muted">
-          {copy.limitLeft(LEFT_TODAY)}
-        </Text>
-      ) : null}
       <RadioList
         aria-label={copy.packsLegend}
         className="[&_[data-slot=radio-list-label]]:sr-only"
