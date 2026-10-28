@@ -26,6 +26,7 @@ Published from `main` at
 | Kind | Title | File |
 | --- | --- | --- |
 | **Screen** | `<Domain>/<Feature>/Screens/<Screen>[/<Aspect>]` | `apps/preview/src/pages/<domain>/<feature>/` |
+| **Flow** | `<Domain>/Flows`, one story per flow | `apps/preview/src/pages/<domain>/flows/` |
 | **Prototype** | `<Domain>/<Feature>/Prototypes/<Piece>` | `apps/preview/src/prototypes/<domain>/<feature>/` |
 | **Part** | `<Domain>/<Feature>/Parts/<Component>[/<Aspect>]` | beside the screens |
 | **Block** | `<Domain>/<Feature>/Blocks/<Component>[/<Aspect>]` | `packages/ui/src/blocks/<dir>/` |
@@ -54,7 +55,7 @@ Published from `main` at
   `Header`, `Body` and `Footer` inside `CartDrawer`. Retitle with
   `pnpm storybook:rename <map>` so every cited id is rewritten with the move
 - **Order** — Start Here, the domains in `docs/prds/manual.yaml` order, then
-  Design System; inside a domain, features in the manual's nav order, by each
+  Design System; inside a domain, its Flows, then features in the manual's nav order, by each
   page's `order:` then its title; inside a feature, Screens, Prototypes, Parts
   and Blocks
 
@@ -102,8 +103,23 @@ Storybook holds it.
   `navigateToStory` or a `storyHref` link from `pages/workbench-story-nav.ts`,
   so a journey is walked in the canvas the way a collector walks it
 - **Combinations** — a journey whose outcome turns on what staging is set to
-  is walked by the Screen's Scenario, below; there is no separate Flows folder
-- **Journeys cited** — a click-through screen or a Scenario names the journeys
+  is walked by the Screen's Scenario, below
+- **Flows** — a domain's critical journeys, each shown as its steps in
+  `FlowContainer` (`packages/ui/src/blocks/shared/flow-container.tsx`): one
+  story per flow in the domain's `<Domain>/Flows` file, each step an existing
+  screen story shown at desktop size through `flowStep()` in
+  `pages/flow-steps.tsx`, so no state is drawn twice and `pnpm storybook:check`
+  holds every step to a story that exists
+  - **Critical and MECE** — only what a collector must do (bid, pay, receive,
+    sign); no step's screen state appears in two flows, so a later flow starts
+    where an earlier one stops. Edge, error, copy and currency variants stay
+    screen stories
+  - **Served** — a flow is drawn only where the collector site serves every
+    step, because each flow carries a capture recipe that walks the site
+    through the same steps; a step the site cannot reach yet waits for its page
+  - **Verification** — the flow's `parameters.verification.caseId` names the
+    flow; each step is a capture point compared with its screen story
+- **Journeys cited** — a click-through screen, a flow or a Scenario names the journeys
   it walks, by their ids in the
   `user-journeys.md` beside the spec:
   `parameters: { journeys: ["grade10-site-store-cart-drawer-US-01"] }`, on
@@ -112,7 +128,7 @@ Storybook holds it.
 - **Collector journeys** — the workbench draws what a collector, member,
   bidder or winner walks; a journey only staff or operators walk is not drawn
   here
-- **Play** — a click-through's `play` steps through it, so
+- **Play** — a click-through's or a flow's `play` steps through it, so
   `pnpm test:stories` keeps it working
 
 ## Scenarios
@@ -193,10 +209,11 @@ story in place with `/animate`, `/transitions-polish` and `/ux-copy`.
 - **Title** — outside the grammar, or a domain or feature with no manual page
 - **Place** — a story outside its kind's folder, or a leaf that is not the
   component's name
-- **Imports** — one feature reaching into another's folder
+- **Imports** — one feature reaching into another's folder, or a flow
+  reaching outside its domain
 - **Order** — a workbench sidebar order that is not the manual's; run
   `pnpm storybook:sort`
-- **Journeys** — a journey id no
+- **Journeys** — a flow that names no journey, or a journey id no
   `user-journeys.md` holds; one only an active change holds warns
 - **Coverage** — a key in `coverage.yaml` that is no feature; a collector
   feature with no Screens or Prototypes warns

@@ -10,7 +10,13 @@ import { join, sep } from "node:path";
 import { promisify } from "node:util";
 import { caseIdErrors } from "./case-ids.mjs";
 import { COVERAGE_FILE, declared, featureCoverage } from "./coverage.mjs";
-import { DESIGN_SYSTEM, KINDS, START_HERE, titleCase } from "./grammar.mjs";
+import {
+  DESIGN_SYSTEM,
+  FLOWS,
+  KINDS,
+  START_HERE,
+  titleCase,
+} from "./grammar.mjs";
 import {
   citedJourneys,
   parseRule,
@@ -25,7 +31,7 @@ import {
 } from "./sidebar.mjs";
 import { rootDirectory, sanitize, storyIndex } from "./story-index.mjs";
 
-export { DESIGN_SYSTEM, KINDS, START_HERE, titleCase };
+export { DESIGN_SYSTEM, FLOWS, KINDS, START_HERE, titleCase };
 
 const exec = promisify(execFile);
 
@@ -46,6 +52,15 @@ export const pascalCase = (basename) =>
 export function manualPage(root, domain, feature) {
   for (const app of APPS) {
     const path = `docs/prds/products/${app}/${sanitize(domain)}/${sanitize(feature)}.md`;
+    if (existsSync(join(root, path))) return path;
+  }
+  return null;
+}
+
+/** The manual folder a domain title names, or null. */
+export function manualDomain(root, domain) {
+  for (const app of APPS) {
+    const path = `docs/prds/products/${app}/${sanitize(domain)}`;
     if (existsSync(join(root, path))) return path;
   }
   return null;
@@ -100,6 +115,20 @@ export function placementErrors(root, path, file) {
   }
 
   const [domain, feature, kind, fourth] = parts;
+  if (feature === FLOWS) {
+    const folder = `${PAGES}${sanitize(domain)}/flows/`;
+    if (!manualDomain(root, domain))
+      errors.push(
+        `"${title}" - "${domain}" is no manual domain; a domain's flows are titled "<Domain>/${FLOWS}"`,
+      );
+    if (parts.length !== 2)
+      errors.push(
+        `"${title}" - a domain's flows are one file titled "${domain}/${FLOWS}", one story per flow`,
+      );
+    if (!path.startsWith(folder))
+      errors.push(`"${title}" - a flow lives in ${folder}, not ${path}`);
+    return errors;
+  }
   if (parts.length < 3) {
     errors.push(
       `"${title}" - a title reads "<Domain>/<Feature>/Screens/<Screen>"`,
@@ -154,13 +183,18 @@ export async function siblingImports(root) {
   for (const path of paths) {
     const own = path.slice(PAGES.length).split("/");
     if (own.length < 3) continue;
+    const flow = own[1] === "flows";
     const text = await readFile(join(root, path), "utf8");
     for (const match of text.matchAll(/from\s+["'](\.[^"']+)["']/g)) {
       const target = join(path, "..", match[1]);
       if (!target.startsWith(PAGES)) continue;
       const parts = target.slice(PAGES.length).split("/");
       if (parts.length < 3) continue;
-      if (parts[0] !== own[0] || parts[1] !== own[1])
+      if (flow && parts[0] !== own[0])
+        errors.push(
+          `${path} - a flow walks its own domain's screens, not ${match[1]}`,
+        );
+      else if (!flow && (parts[0] !== own[0] || parts[1] !== own[1]))
         errors.push(
           `${path} - imports ${match[1]} from another feature; move what both use to the nearest folder above them`,
         );
@@ -175,6 +209,7 @@ const CITATIONS = [
   /iframe\.html\?id=([a-z0-9*-]+)/g,
   /_STORY_ID\s*=\s*["'`]([a-z0-9-]+)["'`]/g,
   /(?:storyHref|navigateToStory)\(\s*["'`]([a-z0-9-]+)["'`]/g,
+  /flowStep\(\s*["'`][^"'`]+["'`]\s*,\s*["'`][^"'`]+["'`]\s*,\s*["'`]([a-z0-9-]+)["'`]/g,
 ];
 const BACKTICKED =
   /`([a-z0-9]+(?:-[a-z0-9]+)*--(?:[a-z0-9]+(?:-[a-z0-9]+)*|\*))`/g;
@@ -225,7 +260,7 @@ export function resolves(id, entries) {
   return Boolean(entries[id]);
 }
 
-/** Every journey a story cites exists. */
+/** A flow names the journeys it walks, and every journey a story cites exists. */
 export function journeyErrors(root, parsed) {
   const errors = [];
   const warnings = [];
@@ -233,6 +268,10 @@ export function journeyErrors(root, parsed) {
   for (const [path, file] of Object.entries(parsed)) {
     if (!file.title) continue;
     const cited = citedJourneys(file);
+    if (file.title.split("/")[1] === FLOWS && !cited.length)
+      errors.push(
+        `"${file.title}" - a flow names the journeys it walks: parameters: { journeys: ["<id>-US-01"] }, from the user-journeys.md beside each spec`,
+      );
     for (const id of cited) {
       const journey = journeys.get(id);
       if (!journey)

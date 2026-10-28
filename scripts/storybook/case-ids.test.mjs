@@ -22,6 +22,7 @@ describe("which stories need a case id", () => {
       false,
     );
     assert.equal(needsCaseId("Store/Cart/Screens/Cart"), false);
+    assert.equal(needsCaseId("Store/Flows/Guest Buys A Card"), true);
   });
 });
 
