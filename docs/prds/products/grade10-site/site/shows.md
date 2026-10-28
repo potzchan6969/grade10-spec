@@ -17,10 +17,11 @@ answers without a session, like any public surface —
   Press Releases link to `/press-releases`, beside an Upcoming Shows card
   listing the upcoming dates — hidden when no show is current or upcoming
 - 🚧 **Event scale** — Real Trends. In the Room. over a show-floor photo
-  and three statistic cards: 25,000+ visitors at Grade10 FEST Summer 2026,
-  120+ exhibitors, millions in industry revenue
+  and a statistic card for each published statistic — today 25,000+
+  visitors at Grade10 FEST Summer 2026, 120+ exhibitors, millions in
+  industry revenue
 - 🚧 **Event formats** — Three Platforms. One Community. under a sticky
-  pill link list that scrolls to each chapter: Hong Kong (Grade10 FEST HK
+  pill link list that scrolls to each published chapter — today Hong Kong (Grade10 FEST HK
   with video and two editions), Overseas Partnership (Seoul Auction ×
   ZZZ with photo and caption), Chinese Mainland (CARDJOY × Grade10
   with video and two editions)
@@ -29,8 +30,8 @@ answers without a session, like any public surface —
   article once that release is published, otherwise to `/press-releases`;
   the Seoul Auction × ZZZ chapter carries its own Press Release link only
   while its release is published
-- 🚧 **Video presentations** — two chapters carry a poster-first YouTube
-  container: the poster and a play affordance, and on click the embed
+- 🚧 **Video presentations** — a chapter with a video carries a poster-first
+  YouTube container (today two chapters): the poster and a play affordance, and on click the embed
   plays inside the same container
 - 🚧 **Event records** — Every Show. A Milestone. lists every published
   record in the order the admin gives — today Seoul Auction, FEST Summer 2026, Shanghai, Hangzhou,

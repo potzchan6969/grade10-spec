@@ -2,19 +2,18 @@
 
 - [ ] 1.1 The `Site/Shows/Screens/Shows` stories' play pass asserts the
   sections, the link destinations, the video swap, the carousel paging and
-  both viewports (`g10.site-shows.SC-01`..`SC-13`) — ticked last, in its
+  both viewports (`g10.site-shows.SC-01`..`SC-07`, `SC-09`, `SC-10`, `SC-13`) — ticked last, in its
   own commit before the group's code
 - [ ] 1.2 Feed the shared `ShowsPageBody` block (`packages/ui/src/blocks/site-shows`) at
   `apps/preview/src/pages/site/shows/` with the hardcoded content and copy,
-  ZZZ and NOV 2025 settled, and the upcoming card's month filter run on
-  Hong Kong time (Q11), the block's embed started on one click (Q19; `autoplay=1` and
+  ZZZ and NOV 2025 settled, the block's embed started on one click (Q19; `autoplay=1` and
   `allow="autoplay"` in `shows-event-video.tsx`): the production chrome, the four sections in order, the upcoming-shows card,
   the statistic cards, the sticky chapter tab list as jump navigation, the
   poster-first video containers, the edition carousels, the
   press-release destinations table, the records in frame order, and the
   wide/narrow layouts (`g10.site-shows.SC-01`, `g10.site-shows.SC-02`,
   `g10.site-shows.SC-03`, `g10.site-shows.SC-04`, `g10.site-shows.SC-05`,
-  `g10.site-shows.SC-06`..`g10.site-shows.SC-13`)
+  `g10.site-shows.SC-06`, `SC-07`, `SC-09`, `SC-10` and `SC-13`)
 - [ ] 1.3 Update the capability PRD
   `docs/prds/products/grade10-site/site/shows.md` with the 🚧 lines this
   change delivers
@@ -22,10 +21,11 @@
   `pnpm run storybook:check`, `pnpm run check:manual`, and the shows-page
   story tests
 - [ ] 1.5 Name the evidence for the scenarios the site serves and the
-  workbench cannot show (`g10.site-shows.SC-14`..`SC-18`: the unpublished
-  release, nothing published, the reader's language, the base-text
-  fallback): the site's `showsPageOf` mapper tests and route loader tests,
-  linked from the group's landing summary
+  workbench cannot show (`g10.site-shows.SC-08`, `SC-11`, `SC-12` and `SC-14`..`SC-18`: the
+  Hong Kong month filter, the unpublished release and chapter link, nothing
+  published, the reader's language, the base-text fallback): the site's
+  `showsPageOf` mapper tests, a route loader test for the not-found answer
+  where none exists yet, linked from the group's landing summary
 
 ## 2. The walk (grade10-spec)
 

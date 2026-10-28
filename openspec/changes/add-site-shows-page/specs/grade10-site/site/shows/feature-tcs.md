@@ -128,7 +128,9 @@ None.
 * **Trace:** grade10-site-site-shows-US-01
 
 **Pre-conditions:**
-None.
+* The published shows are the workbench sample content; against other
+  published content the editions, chapters and ids named below are that
+  content's.
 
 **Test data:**
 
@@ -251,7 +253,9 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-site-site-shows-US-01
 
 **Pre-conditions:**
-None.
+* The published shows are the workbench sample content; against other
+  published content the editions, chapters and ids named below are that
+  content's.
 
 **Test data:**
 
@@ -295,7 +299,9 @@ None.
 * **Trace:** grade10-site-site-shows-US-01
 
 **Pre-conditions:**
-None.
+* The published shows are the workbench sample content; against other
+  published content the editions, chapters and ids named below are that
+  content's.
 
 **Steps:**
 
@@ -610,6 +616,10 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
+* The published shows are the workbench sample content; against other
+  published content the editions, chapters and ids named below are that
+  content's.
+
 * The published Shows content carries `<edition>`, and its press release
   is `<release state>`.
 
@@ -648,6 +658,10 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
+* The published shows are the workbench sample content; against other
+  published content the editions, chapters and ids named below are that
+  content's.
+
 * The Seoul Auction × ZZZ chapter's press release is not published.
 
 **Steps:**
@@ -684,7 +698,9 @@ opening a new tab.
 * **Trace:** grade10-site-site-shows-US-03
 
 **Pre-conditions:**
-None.
+* The published shows are the workbench sample content; against other
+  published content the editions, chapters and ids named below are that
+  content's.
 
 **Steps:**
 

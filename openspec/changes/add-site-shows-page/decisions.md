@@ -1,10 +1,10 @@
 ## Goals
 
 - A collector opening `/shows` reads the hero, the scale of the events,
-  the three format chapters and the record of past editions, on a page
+  the format chapters and the record of past editions, on a page
   rendered by the design system at any viewport.
 - The page's links lead somewhere real: Press Releases to
-  `/press-releases`, each edition's Press Release to its article.
+  `/press-releases`, each edition's Press Release to its article once published, otherwise to the press index.
 - Videos play inside the page — poster first, embed on click — without
   navigating away.
 - The workbench renders the page before the site consumes it, at a wide
@@ -46,6 +46,7 @@
 | Q16 | What do an edition carousel's arrows do at its first and last photo? | They wrap round to the other end - decided by the round, as the block draws it | Stopping with the end arrow unavailable |
 | Q18 | What does the page answer when nothing is published? | Not found, not an empty page - decided by the round, with the human, as the site ships it | An empty shell |
 | Q19 | What does one click on a chapter video do? | It starts the video playing - decided by the round, with the human | Showing only the player, needing a second click |
+| Q25 | What does a chapter with no video or photo show? | Its title, intro and editions, with no presentation, as the site draws it - decided by the round, as the site ships it | Refusing a chapter without media |
 | Q17 | Does starting one chapter video stop the other? | No, each plays on its own - decided by the round | Pausing the other |
 | Q20 | When a format chapter has no editions of its own, what does it show? | The admin publishes the shows as one document, so a published chapter shows with whatever editions it holds (the contract allows none) and the page has no per-show published state; "an unpublished show" is not a state the page has - decided by the round, as the site ships it | Hiding a chapter with no editions |
 | Q21 | Does Event Records list exactly five editions or every one published? | Every record the admin publishes, in the order it gives them; "five" describes the workbench's sample - decided by the round | A fixed five |

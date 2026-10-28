@@ -12,7 +12,7 @@ and the record of every show — and where each link on it leads.
     Upcoming Shows card listing the next dates — hidden when no show is
     current or upcoming
   - Event scale: a statement about physical proof over a show-floor photo
-    and three statistic cards
+    and a statistic card for each published statistic
   - Event formats: the published chapters — today Hong Kong, Overseas
     Partnership and Chinese Mainland — each with an intro, a video or photo presentation,
     and edition cards carrying a carousel and a press-release link
@@ -39,13 +39,13 @@ The Shows surface SHALL present, in order: Grade10 Shows as the eyebrow
 over the top-level heading "Asia’s card shows, at full scale." with an
 Explore Shows and a Press Releases action, beside an Upcoming Shows card;
 an Event Scale section headed "Real Trends. In the Room." with a
-show-floor photo and three statistic cards for the published statistics; an Event Formats section
+show-floor photo and a statistic card for each published statistic; an Event Formats section
 headed "Three Platforms. One Community." with its chapter list over the
 published chapters, stacked, one pill per chapter; and an Event Records section headed "Every
 Show. A Milestone.".
 
-Each published chapter SHALL present its title and intro over its video or
-captioned photo and its edition cards, and, while its release is
+Each published chapter SHALL present its title and intro, its video or
+captioned photo when it has one, and its edition cards, and, while its release is
 published, its Press Release link. Every edition card SHALL carry a photo
 carousel, a date, a description and a Press Release link. The workbench's
 sample content carries three chapters: Hong Kong, Grade10 FEST HK over its
@@ -67,12 +67,13 @@ when no show is current or upcoming.
 **Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
 
 - **WHEN** a collector opens `/shows` while at least one show is current
-  or upcoming
+  or upcoming, with the workbench's sample content published
 - **THEN** the page SHALL show, in this order: the hero, Grade10 Shows
   over the top-level heading with its Explore Shows and Press Releases
   actions beside the Upcoming Shows card; the Event Scale section with its
-  photo and three statistic cards; the Event Formats section with its
-  chapter list over all three chapters stacked; and the Event Records
+  photo and a card for each published statistic, three in the sample; the
+  Event Formats section with its chapter list over every published chapter
+  stacked, three in the sample; and the Event Records
   section, each under its heading
 - **AND** wherever the page names the Seoul partner it SHALL read ZZZ
 
@@ -80,8 +81,9 @@ when no show is current or upcoming.
 #### Scenario: grade10-site-site-shows-SC-10 - A collector reads the format chapters
 **Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
 
-- **WHEN** a collector scrolls through the Event Formats section while the
-  Seoul Auction × ZZZ chapter's press release is published
+- **WHEN** a collector scrolls through the Event Formats section with the
+  workbench's sample content published and the Seoul Auction × ZZZ
+  chapter's press release published
 - **THEN** Hong Kong SHALL present Grade10 FEST HK over a video poster and
   the Grade10 FEST Summer 2026 and Grade10 Festival 2025 edition cards,
   the latter reading NOV 2025; Overseas Partnership SHALL present Seoul
@@ -139,8 +141,8 @@ that one.
 - **WHEN** a collector activates Explore Shows or a pill in the chapter
   list
 - **THEN** the page SHALL scroll to the Event Formats section's top or to
-  that chapter, the address SHALL read `/shows` with its fragment, all
-  three chapters SHALL stay on the page, and the list SHALL mark the
+  that chapter, the address SHALL read `/shows` with its fragment, every
+  chapter SHALL stay on the page, and the list SHALL mark the
   chapter in view active
 - **AND** Back SHALL restore the previous address and return the page to
   where the collector was
@@ -149,7 +151,7 @@ that one.
 #### Scenario: grade10-site-site-shows-SC-13 - A collector scrolls through the chapters
 **Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
 
-- **WHEN** a collector scrolls down through the three chapters and back up
+- **WHEN** a collector scrolls down through the chapters and back up
 - **THEN** the chapter list SHALL stay pinned in view while the chapters
   scroll under it, and SHALL mark the chapter in view active, and only
   that one, at every point
@@ -223,7 +225,7 @@ SHALL show no link. The workbench's sample content links:
 - **WHEN** a collector reads a format chapter whose press release is not
   published
 - **THEN** the chapter SHALL show no Press Release link, and SHALL still
-  show its intro and its presentation
+  show its intro, its presentation if it has one, and its editions
 
 ### Requirement: The page shows what is published
 The Shows surface SHALL present the Shows content the admin publishes, as

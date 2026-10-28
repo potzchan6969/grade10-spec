@@ -19,7 +19,7 @@
   it marks Shows current on `/shows` (`page-shell`).
 - `Footer` from `@grade10/design-system/components/layout/footer`.
 - `Card` from `@grade10/design-system/components/display/card` — the
-  Upcoming Shows card and the three stat cards, with `padding={false}` where
+  Upcoming Shows card and the stat cards, with `padding={false}` where
   the frames hand the slot insets to the content.
 - The block's own pill link list — anchors styled as the pill track, the
   sticky chapter list driven as jump navigation over stacked sections
