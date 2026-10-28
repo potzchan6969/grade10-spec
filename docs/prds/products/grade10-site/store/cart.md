@@ -126,6 +126,8 @@ The refusals are the coupon's own —
   wallet; the guest's code moves to the member's cart unless that cart
   already holds one -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+- **No identity check** — a checkout of any value asks nothing about who the
+  buyer is — [KYC](/p/grade10-site/account/kyc)
 
 ::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
 

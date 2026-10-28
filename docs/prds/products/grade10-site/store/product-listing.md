@@ -31,6 +31,8 @@ order: 2
   - Pokémon + One Piece shows both worlds; adding Graded Cards keeps only the graded cards from either
 - **Option Count** — number of products picking the option would give, with the other filters
   - **Empty Option** — hidden when the store has nothing for it; shown at 0 when the current filters rule it out
+- **Narrowings in Force** — each ticked option, the search words and the collection, named above the grid; dismissing one widens the listing
+  - ❓ **Clearing Every Filter** — one control above the grid drops them all, offered where nothing matches. Product confirms
 
 ::story{id="store-product-listing-blocks-filterpanel--default" title="Filter panel"}
 

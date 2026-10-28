@@ -16,6 +16,8 @@ store shows other cards the collector may also like.
 - **One rail** — under the card, headed **You may also like**: the stock
   keeper's picks first, in their order, then similar cards to fill; nothing
   names a card as chosen or computed
+  - **One Row** — the cards side by side; on a narrow page the row scrolls,
+    part of the next card showing
 - **Opens the card** — a rail card is a
   [link](/p/shared/ui/store-product-listing#product-tile) to that card's own
   page; nothing in the rail adds to the cart
