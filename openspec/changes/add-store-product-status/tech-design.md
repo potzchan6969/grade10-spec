@@ -51,7 +51,9 @@ The [proposal](proposal.md) holds the scope. What grade10 runs today:
   title with bare names (`:745-758`); `catalog_unavailable` shows only the
   generic `checkoutFailed`. `checkoutReadiness`
   (`packages/grade10-store/frontend/src/features/orders/cart/domain/models/Cart.ts:186-199`)
-  already withholds checkout while a sold-out or withdrawn line stays
+  already withholds checkout while a sold-out or withdrawn line stays; task
+  4.5 lets checkout take the lines that still sell, holding it only when none
+  does
 
 ## Goals / Non-Goals
 
