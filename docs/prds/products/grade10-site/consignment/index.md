@@ -20,7 +20,7 @@ the value below is the default it starts on -
 | Minimum commission | per item; none |
 | Fees | listing, return and early take-back; none |
 | Incentive | **0**; a card from the vault earns the vault's daily incentive instead |
-| Where a person's proceeds go | the vault balance for cards from the vault, the bank otherwise; a partner always by bank |
+| Where a person's proceeds go | a bank account named at the counter that joins the consignor's list; a partner always by bank |
 | Term on sale | intended **90** days |
 | Return window | **14** days after a store sale is delivered; **7** days after an auction lot is delivered or collected |
 | When a consignor is paid | after the return window |
@@ -171,12 +171,20 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
   statement and a commission invoice, with the contact details for payment
 - **How** - a bank transfer a treasurer records with its reference; a
   correction takes a second holder of the payout grant
-- 🚧 **Into the vault balance** - a person's proceeds may go to their vault
-  balance instead of the bank, pinned at sealing, and need no bank details on
-  file; a partner is paid by bank
+- 🚧 **Where the proceeds go** - one setting for the brand picks the flow,
+  and the agreement pins it when it seals; a partner is always paid by bank
+  - **A bank account for the consignment** - the counter names the account
+    with the terms, before the agreement is prepared, and the agreement
+    prints it; it pays that consignment alone and stays off the consignor's
+    list
+  - **A bank account kept on their list** - the same, and the account joins
+    the consignor's list for the counter to pick on the next consignment
+  - **Into the vault balance** - a person's proceeds go to their vault
+    balance as each sale is credited, and need no bank details on file; a
+    refund after that takes them back off the balance
 - ❓ Owner - **Where proceeds go by default** - recommended the vault
-  balance; built as the balance when every item of the consignment is a card
-  from the vault, the bank otherwise
+  balance; built as a bank account kept on the consignor's list until the
+  owner decides
 - 🚧 **A refund after a balance payout** - is a negative entry on the
   balance; a balance below zero is a debt that blocks cash-out and that new
   credits pay down first
@@ -317,5 +325,5 @@ payouts made on their due day.
 | The figures | ❓ Open | Proposed: a consignment fee of **10–12%** of the sale price at sale; the exact figures, and whether a paid incentive is set against the payout | Product |
 | The term's figure | ❓ Open | The running default is **90** days; **30** or **60** are asked for; the figure is unset | Product |
 | An unsold item at term's end | ❓ Open | Proposed actions a consignor may take: reduce the listed price, save it to the vault for long-term custody, or book an appointment to collect it at the shop | Product |
-| The payout flow | ❓ Open | A bank transfer the treasurer records, or the person's vault balance, pinned at sealing; a partner is always paid by bank. Which is a person's default is open - owner, 2026-10-27; built as the balance when every item is a vault card, the bank otherwise | Owner |
+| The payout flow | ❓ Open | One brand setting, pinned at sealing: a bank account named for the consignment alone, the same account kept on the consignor's list, or the person's vault balance; a partner is always paid by bank. Which is the default is open - owner, 2026-10-27; built as the account kept on the consignor's list until the owner decides, 2026-10-29 | Owner |
 :::
