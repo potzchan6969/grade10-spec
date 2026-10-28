@@ -4,7 +4,7 @@ import { casesOfPage } from "../api/suites";
 import { BlockList } from "../blocks/block-list";
 import { BlockScopeProvider } from "../blocks/block-scope";
 import { BrokenCard } from "../blocks/broken-card";
-import { sectionRows } from "../blocks/side-blocks";
+import { sectionRows, sideTabOf } from "../blocks/side-blocks";
 import { useEditMode } from "../editor/edit-mode";
 import { PageEditor } from "../editor/page-editor";
 import { useLayoutMaybe } from "../shell/layout";
@@ -42,6 +42,9 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
   const cases = useMemo(() => casesOfPage(suites ?? [], path), [suites, path]);
   const side = hasSide(rows, cases);
   const split = (layout?.split ?? false) && side;
+  // The hint beside a wide page holds its stories and engineering detail, so
+  // the reading leaves them out; a narrow screen has no hint and keeps them.
+  const hinted = (layout?.wide ?? false) && side;
 
   if (!page) return <NotFoundPage index={index} path={path} />;
   // A page that does not parse is exactly the page you want to open.
@@ -70,9 +73,15 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
       ) : (
         <>
           {head}
-          <BlockList blocks={page.ast.blocks} />
+          <BlockList
+            blocks={
+              hinted
+                ? page.ast.blocks.filter((block) => sideTabOf(block) === null)
+                : page.ast.blocks
+            }
+          />
           {children}
-          {layout && side ? <SideHint cases={cases} rows={rows} /> : null}
+          {hinted ? <SideHint cases={cases} rows={rows} /> : null}
         </>
       )}
       {layout && side ? <ReadingRunout /> : null}
