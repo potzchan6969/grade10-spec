@@ -35,7 +35,7 @@ title: Store Test Cases
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-listing, product-page
+* **Trace:** home, product-listing#collection-page/entry, product-listing#links-and-back-button/address, product-listing#filters/narrowings-in-force, product-page
 
 **Pre-conditions:**
 
