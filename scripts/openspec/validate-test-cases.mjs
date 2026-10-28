@@ -46,8 +46,8 @@ import { applicationRoot, decidedByProblem } from "./lib/decided-by.mjs";
 import {
   checkRuleCoverage,
   checkStoreSuite,
-  STORE_PRD,
   STORE_IN_OPENSPEC,
+  STORE_PRD,
   storeSuites,
 } from "./lib/store-suites.mjs";
 import {
