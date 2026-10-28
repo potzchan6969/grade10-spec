@@ -24,9 +24,6 @@ export const Default: Story = {
     expect(
       await overlay.findByRole("dialog", { name: "Top Up Points" }),
     ).toBeInTheDocument();
-    await waitFor(() =>
-      expect(overlay.getByText("Balance: 1,200 points")).toBeVisible(),
-    );
     expect(overlay.getAllByRole("radio")).toHaveLength(8);
     await waitFor(() =>
       expect(overlay.getByRole("button", { name: "Pay" })).toBeDisabled(),

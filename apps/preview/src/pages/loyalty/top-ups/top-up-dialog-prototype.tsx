@@ -7,14 +7,12 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import {
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -175,7 +173,7 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
             ? `Pay ${copy.pay(packPrice(selectedPack))}`
             : copy.continue}
       </Button>
-      <Text as="p" size="sm" tone="muted">
+      <Text as="p" className="text-center" size="sm" tone="muted">
         {copy.paymentNote}
       </Text>
     </>
@@ -192,9 +190,6 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
           <DialogContent className="max-w-(--container-md)">
             <DialogHeader>
               <DialogTitle>{copy.title}</DialogTitle>
-              <DialogSubtext>
-                {copy.balance(MEMBER_BALANCE.total)}
-              </DialogSubtext>
             </DialogHeader>
             <DialogBody className="gap-4">{body}</DialogBody>
             <DialogFooter className="flex-col sm:flex-col sm:items-stretch">
@@ -207,9 +202,6 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
           <DrawerContent className="bg-popover backdrop-blur-none [--drawer-bleed-background:var(--popover)]">
             <DrawerHeader>
               <DrawerTitle className="text-xl">{copy.title}</DrawerTitle>
-              <DrawerDescription>
-                {copy.balance(MEMBER_BALANCE.total)}
-              </DrawerDescription>
             </DrawerHeader>
             <DrawerBody className="gap-4">{body}</DrawerBody>
             <DrawerFooter>{footer}</DrawerFooter>

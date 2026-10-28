@@ -48,7 +48,6 @@ export const packPrice = (pack: TopUpPack) =>
 
 export const TOP_UP_COPY = {
   title: "Top Up Points",
-  balance: (total: number) => `Balance: ${points(total)}`,
 
   packsLegend: "Choose a pack",
   packPoints: (value: number) => value.toLocaleString("en-US"),
