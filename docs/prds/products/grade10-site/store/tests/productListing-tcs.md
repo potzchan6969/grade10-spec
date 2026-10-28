@@ -355,7 +355,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#filters/combining-options, product-listing#filters/option-count, product-listing#links-and-back/address
+* **Trace:** product-listing#filters/combining-options, product-listing#filters/option-count, product-listing#links-and-back-button/address
 
 **Pre-conditions:**
 
@@ -395,7 +395,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#filters, product-listing#links-and-back/address
+* **Trace:** product-listing#filters, product-listing#links-and-back-button/address
 
 **Pre-conditions:**
 
@@ -604,7 +604,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## product-listing#links-and-back: Links and Back
+## product-listing#links-and-back-button: Links and Back Button
 
 <!-- trace:case id=g10.store-product-listing.TC-gld rev=1 -->
 ### g10.store-product-listing.TC13: A shared listing address opens the same narrowing at the top
@@ -620,7 +620,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#links-and-back/address, product-listing#links-and-back/scroll-position
+* **Trace:** product-listing#links-and-back-button/address, product-listing#links-and-back-button/scroll-position
 
 **Pre-conditions:**
 
@@ -1130,7 +1130,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### product-listing#product-data: Product Data
+### product-listing#catalogue-source: Catalogue Source
 
 <!-- trace:case id=g10.store-product-listing.TC-zzi rev=1 -->
 #### g10.store-product-listing.TC31: A change the shop reports reaches the listing within seconds
@@ -1146,7 +1146,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#product-data
+* **Trace:** product-listing#catalogue-source
 
 **Pre-conditions:**
 
@@ -1184,7 +1184,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-listing#product-data
+* **Trace:** product-listing#catalogue-source
 
 **Pre-conditions:**
 
@@ -1211,7 +1211,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-listing#product-data/source
+* **Trace:** product-listing#catalogue-source/source
 
 **Pre-conditions:**
 
@@ -1238,7 +1238,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-listing#product-data/waits-for-shopify
+* **Trace:** product-listing#catalogue-source/waits-for-shopify
 
 **Pre-conditions:**
 

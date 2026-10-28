@@ -73,7 +73,7 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
 - **Entry** — a home page tile opens the listing as its collection's page: only the products the shop groups together in Shopify, the collection named above the grid, with a way out to the whole store
 - **Leaving** — a filter or a search leaves the collection; a sort keeps it
 
-## Links and Back
+## Links and Back Button
 
 - **Address** — holds the collection, filters, search and sort, so a link opens the same view and Back undoes the last change
   - **Scroll Position** — a link, or Back from a product, starts at the top
@@ -92,7 +92,7 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
 - **Commerce architecture** — [docs/architecture/commerce.md](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 :::
 
-## Product Data
+## Catalogue Source
 
 | Rule | Value |
 | --- | --- |
