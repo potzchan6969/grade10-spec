@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { caseParts, casesOfPage, readSuite } from "../src/api/suites";
-import { sectionRows } from "../src/blocks/side-blocks";
+import { rulesOf, sectionRows } from "../src/blocks/side-blocks";
 import { parsePage } from "../src/content/grammar";
 import { readStored } from "../src/shell/layout";
 
@@ -209,6 +209,33 @@ describe("a case read as a tester walks it", () => {
     expect(parts.steps).toEqual([]);
     expect(parts.other).toEqual([
       { label: "Steps", text: "Open it, then:\n\n1. Look." },
+    ]);
+  });
+});
+
+describe("a section's rules", () => {
+  it("names them as the page does, in its order, anchored as a trace writes them", () => {
+    const [row] = sectionRows([
+      {
+        type: "prose",
+        markdown: [
+          "## Promo Code",
+          "",
+          "- **Typed** — a code",
+          "  - 🚧 **Refusals in the reader's language** — in its words",
+          "",
+          "```",
+          "- **Not a rule**",
+          "```",
+        ].join("\n"),
+      },
+    ]);
+    expect(rulesOf(row.main)).toEqual([
+      { anchor: "typed", name: "Typed" },
+      {
+        anchor: "refusals-in-the-readers-language",
+        name: "Refusals in the reader's language",
+      },
     ]);
   });
 });

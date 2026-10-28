@@ -79,3 +79,34 @@ export function sectionRows(blocks: Block[]): SectionRow[] {
     (row) => row.section !== "" || row.main.length > 0 || row.side.length > 0,
   );
 }
+
+/** A rule a section names: a bullet's bold name, at any depth. */
+export type SectionRule = { anchor: string; name: string };
+
+const RULE = /^\s*[-*]\s+(?:(?:🚧|❓)\s*)?\*\*([^*]+?)\*\*/u;
+
+/** A rule's anchor as a case's trace writes it, `tcs:validate`'s
+ * `headingAnchor`: punctuation dropped, not turned into a dash. */
+export function ruleAnchor(name: string): string {
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/[`*_~]/g, "")
+    .replace(/[^\p{L}\p{N}\s-]/gu, "")
+    .replace(/\s/g, "-");
+}
+
+/** The rules a section's reading names, in the order it names them. */
+export function rulesOf(blocks: Block[]): SectionRule[] {
+  const rules: SectionRule[] = [];
+  for (const block of blocks) {
+    if (block.type !== "prose") continue;
+    let fenced = false;
+    for (const line of block.markdown.split("\n")) {
+      if (FENCE.test(line)) fenced = !fenced;
+      const rule = !fenced && RULE.exec(line);
+      if (rule) rules.push({ anchor: ruleAnchor(rule[1]), name: rule[1] });
+    }
+  }
+  return rules;
+}

@@ -6,6 +6,7 @@ import { caseParts, type TestCase } from "../api/suites";
 import { AnchorLink, useHashTarget } from "../blocks/anchor";
 import { useBlockScope } from "../blocks/block-scope";
 import { MarkdownView } from "../blocks/markdown";
+import type { SectionRule } from "../blocks/side-blocks";
 
 export type CaseRow = { testCase: TestCase; rules: string[] };
 
@@ -16,16 +17,31 @@ const SEVERITY_DOT: Record<string, string> = {
   minor: "bg-muted-foreground/40",
 };
 
-/** One section's cases: a line each, under the rule it checks. */
-export function CaseList({ rows }: { rows: CaseRow[] }) {
+/** One section's cases: a line each, under the rule it proves, the rules in
+ * the order the section names them. */
+export function CaseList({
+  rows,
+  rules,
+}: {
+  rows: CaseRow[];
+  rules: SectionRule[];
+}) {
+  const nameOf = (anchor: string) =>
+    rules.find((rule) => rule.anchor === anchor)?.name ?? humanize(anchor);
+  // Unnamed rules, then the whole section, after the section's own.
+  const place = (anchor: string) => {
+    const at = rules.findIndex((rule) => rule.anchor === anchor);
+    return at >= 0 ? at : anchor === "" ? rules.length + 1 : rules.length;
+  };
   const groups = new Map<string, CaseRow[]>();
   for (const row of rows) {
     const rule = row.rules[0] ?? "";
     groups.set(rule, [...(groups.get(rule) ?? []), row]);
   }
+  const ordered = [...groups].sort(([a], [b]) => place(a) - place(b));
   return (
     <div className="flex flex-col gap-4">
-      {[...groups].map(([rule, cases]) => (
+      {ordered.map(([rule, cases]) => (
         <section className="flex flex-col gap-1.5" key={rule || "section"}>
           <Text
             as="h3"
@@ -34,12 +50,12 @@ export function CaseList({ rows }: { rows: CaseRow[] }) {
             tone="secondary"
             weight="bold"
           >
-            {rule ? humanize(rule) : "Whole section"}
+            {rule ? nameOf(rule) : "Whole section"}
           </Text>
           <ul className="divide-y divide-border-subtle overflow-hidden rounded-(--radius-xl) border border-border bg-background-subtle">
-            {cases.map(({ testCase, rules }) => (
+            {cases.map(({ testCase, rules: traced }) => (
               <CaseLine
-                also={rules.slice(1)}
+                also={traced.slice(1).map(nameOf)}
                 key={testCase.id}
                 testCase={testCase}
               />
@@ -80,7 +96,7 @@ function CaseLine({ testCase, also }: { testCase: TestCase; also: string[] }) {
             {also.length > 0 ? (
               <Text as="span" size="xs" tone="muted">
                 {" · also "}
-                {also.map(humanize).join(", ")}
+                {also.join(", ")}
               </Text>
             ) : null}
           </Text>

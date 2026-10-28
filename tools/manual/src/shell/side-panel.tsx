@@ -20,7 +20,9 @@ import { BlockList } from "../blocks/block-list";
 import { BlockView } from "../blocks/block-view";
 import { BareEmbedContext } from "../blocks/embed-block";
 import {
+  rulesOf,
   type SectionRow,
+  type SectionRule,
   SIDE_TABS,
   type SideItem,
   type SideTab,
@@ -47,12 +49,17 @@ const TAB_ICON: Record<SideTab, ReactNode> = {
 const GAP = 40;
 
 /** What one section shows beside it, tab by tab. */
-type Shelf = Record<"ui" | "tech", SideItem[]> & { qa: CaseRow[] };
+type Shelf = Record<"ui" | "tech", SideItem[]> & {
+  qa: CaseRow[];
+  /** The rules the section names, which its cases are filed under. */
+  rules: SectionRule[];
+};
 
 function shelfOf(row: SectionRow, cases: PageCases): Shelf {
   return {
     ui: row.side.filter((item) => item.tab === "ui"),
     tech: row.side.filter((item) => item.tab === "tech"),
+    rules: rulesOf(row.main),
     qa: [
       ...(cases.bySection.get(row.section) ?? []),
       // The cases that trace the page as a whole sit by its opening.
@@ -340,7 +347,7 @@ function SideList({ shelf, tab }: { shelf: Shelf; tab: SideTab }) {
   return (
     <div className="flex flex-col gap-3">
       {tab === "qa" ? (
-        <CaseList rows={shelf.qa} />
+        <CaseList rows={shelf.qa} rules={shelf.rules} />
       ) : (
         shelf[tab].map((item, position) =>
           item.block.type === "detail" ? (
