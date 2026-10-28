@@ -61,8 +61,10 @@ export const TOP_UP_COPY = {
 
   /** One line under the button once a pack is picked: where the balance
    *  lands. */
-  selectedLine: (before: number, after: number) =>
-    `Balance: ${before.toLocaleString("en-US")} → ${after.toLocaleString("en-US")} points`,
+  selectedLabel: "Balance",
+  selectedTo: "to",
+  selectedBefore: (value: number) => value.toLocaleString("en-US"),
+  selectedAfter: (value: number) => `${value.toLocaleString("en-US")} points`,
 
   continue: "Pay Now",
   pay: hkd,

@@ -19,6 +19,7 @@ import {
 } from "@grade10/design-system/components/overlays/drawer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import { TopUpPackCard } from "@grade10/ui";
+import { ArrowRight } from "@phosphor-icons/react";
 import { useState } from "react";
 import { navigateToStory } from "../../workbench-story-nav";
 import {
@@ -153,11 +154,23 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
   const footer = (
     <>
       {selectedPack ? (
-        <Text as="p" size="sm">
-          {copy.selectedLine(
-            MEMBER_BALANCE.total,
-            MEMBER_BALANCE.total + selectedPack.points,
-          )}
+        <Text
+          as="p"
+          className="flex items-baseline gap-1.5"
+          size="sm"
+          tone="secondary"
+        >
+          {copy.selectedLabel}
+          <span className="tabular-nums text-foreground">
+            {copy.selectedBefore(MEMBER_BALANCE.total)}
+          </span>
+          <span className="self-center text-muted-foreground">
+            <ArrowRight aria-hidden size={12} />
+          </span>
+          <span className="sr-only">{copy.selectedTo}</span>
+          <span className="font-medium tabular-nums text-foreground">
+            {copy.selectedAfter(MEMBER_BALANCE.total + selectedPack.points)}
+          </span>
         </Text>
       ) : null}
       <Button
