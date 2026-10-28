@@ -208,14 +208,19 @@ function versionLabel(version: VersionOption): string {
   return `${version.appRef} ${version.appCommit.slice(0, 12)} / ${version.referenceRef} ${version.referenceCommit.slice(0, 12)}`;
 }
 
+// A run that retried other cases records this one as not selected; it holds
+// no evidence for it, so an older run that captured it is shown instead.
 function runHasIdentity(
   run: VerificationManifest,
   identity: VerificationIdentity,
 ): boolean {
-  return run.catalogue.some((entry) => {
-    const entryId = entryIdentity(entry);
-    return entryId !== null && sameIdentity(entryId, identity);
-  });
+  return run.captures.some(
+    (capture) =>
+      capture.status !== "not-selected" &&
+      capture.caseId === identity.caseId &&
+      capture.targetId === identity.targetId &&
+      capture.capturePointId === identity.capturePointId,
+  );
 }
 
 function isCaseOnlyVerification(value: unknown, caseId: string): boolean {
@@ -1126,7 +1131,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
         <FlowOverview
           caseId={caseIdHint}
           onSelect={(id) => updateStoryArgs({ screen: id })}
-          run={flowScores.run}
+          runOf={flowScores.runOf}
           scores={flowScores.scores}
           screens={flow.screens}
           thumbnails={flowScores.thumbnails}

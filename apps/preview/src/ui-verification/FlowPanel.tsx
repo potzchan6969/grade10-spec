@@ -53,8 +53,9 @@ function capturesOf(
 }
 
 /**
- * Every screen of the flow from the newest run that holds it, its desktop
- * pair compared in the browser. Nothing is stored.
+ * Each screen from the newest run that captured it, its desktop pair
+ * compared in the browser. A run that retried other screens records this
+ * one as not selected, so it is passed over. Nothing is stored.
  */
 export function useFlowScores({
   active,
@@ -69,13 +70,18 @@ export function useFlowScores({
   runs: readonly VerificationManifest[];
   screens: readonly FlowScreenRef[] | undefined;
 }) {
-  const run = useMemo(
+  const runOf = useMemo(
     () =>
-      screens
-        ? runs.find((item) =>
-            item.captures.some((capture) => capture.caseId === caseId),
-          )
-        : undefined,
+      Object.fromEntries(
+        (screens ?? []).flatMap((screen) => {
+          const run = runs.find((item) =>
+            capturesOf(item, caseId, screen).some(
+              (capture) => capture.status !== "not-selected",
+            ),
+          );
+          return run ? [[screen.id, run]] : [];
+        }),
+      ) as Record<string, VerificationManifest>,
     [caseId, runs, screens],
   );
   const [scores, setScores] = useState<Record<string, ScreenScore>>({});
@@ -84,7 +90,7 @@ export function useFlowScores({
   useEffect(() => {
     setScores({});
     setThumbnails({});
-    if (!active || !run || !screens) return;
+    if (!active || !screens) return;
     const controller = new AbortController();
     const urls: string[] = [];
     const score = (id: string, value: ScreenScore) => {
@@ -92,7 +98,7 @@ export function useFlowScores({
         setScores((previous) => ({ ...previous, [id]: value }));
     };
     for (const screen of screens) {
-      const desktop = capturesOf(run, caseId, screen).find(
+      const desktop = capturesOf(runOf[screen.id], caseId, screen).find(
         (capture) => capture.profileId === "desktop",
       );
       if (desktop?.status !== "captured" || !desktop.reference) {
@@ -141,9 +147,9 @@ export function useFlowScores({
       controller.abort();
       for (const url of urls) URL.revokeObjectURL(url);
     };
-  }, [active, archiveBase, caseId, run, screens]);
+  }, [active, archiveBase, caseId, runOf, screens]);
 
-  return { run, scores, thumbnails };
+  return { runOf, scores, thumbnails };
 }
 
 function scoreText(score: ScreenScore | undefined): string {
@@ -254,20 +260,25 @@ export function FlowScreenControl({
 /** The Canvas's verification: every screen as a row, scored and counted. */
 export function FlowOverview({
   caseId,
-  run,
+  runOf,
   scores,
   thumbnails,
   screens,
   onSelect,
 }: {
   caseId: string;
-  run: VerificationManifest | undefined;
+  runOf: Record<string, VerificationManifest>;
   scores: Record<string, ScreenScore>;
   thumbnails: Record<string, string>;
   screens: readonly FlowScreenRef[];
   onSelect: (id: string) => void;
 }) {
-  if (!run) {
+  const used = [
+    ...new Map(
+      Object.values(runOf).map((run) => [run.runId, run] as const),
+    ).values(),
+  ].sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+  if (used.length === 0) {
     return (
       <p className="verification-empty">
         No run holds this flow yet. Capture it with pnpm ui:verify capture, then
@@ -308,13 +319,18 @@ export function FlowOverview({
         </div>
       </dl>
       <p className="verification-metadata">
-        Run {run.runId.slice(0, 8)} · app{" "}
-        {run.checkpoint.app.commit.slice(0, 7)} · reference{" "}
-        {run.checkpoint.reference.commit.slice(0, 7)}
+        {used.length === 1 ? "Run" : "Runs"}{" "}
+        {used
+          .map(
+            (run) =>
+              `${run.runId.slice(0, 8)} (app ${run.checkpoint.app.commit.slice(0, 7)}, reference ${run.checkpoint.reference.commit.slice(0, 7)})`,
+          )
+          .join(" · ")}
       </p>
       <ul className="verification-flow-list">
         {screens.map((screen, index) => {
           const score = scores[screen.id];
+          const run = runOf[screen.id];
           const captured = capturesOf(run, caseId, screen).filter(
             (capture) => capture.status === "captured",
           ).length;
@@ -341,6 +357,9 @@ export function FlowOverview({
                   </span>
                   <span className="verification-metadata">
                     {captured} of {Object.keys(PROFILES).length} sizes captured
+                    {run && used.length > 1
+                      ? ` · run ${run.runId.slice(0, 8)}`
+                      : ""}
                   </span>
                 </span>
                 <span aria-hidden="true">›</span>
