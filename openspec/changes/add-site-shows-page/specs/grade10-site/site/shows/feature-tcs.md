@@ -175,6 +175,10 @@ None.
 
 **Pre-conditions:**
 
+* The published shows are the workbench sample content; against other
+  published content the editions, chapters and ids named below are that
+  content's.
+
 * The Shows content the admin published carries `<records>`.
 
 **Test data:**
@@ -573,6 +577,10 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
+* The published shows are the workbench sample content; against other
+  published content the editions, chapters and ids named below are that
+  content's.
+
 * Each edition's press release, and the Seoul Auction × ZZZ chapter's,
   is published.
 
@@ -726,6 +734,7 @@ opening a new tab.
 
 ## Settled
 
+- A chapter with no video or photo shows its title, intro and editions with no presentation (Q25).
 - The Festival 2025 card reads NOV 2025, the live page's date (Q7).
 - The chapter tabs are jump navigation over stacked chapters (Q1).
 - The Shows chrome entry belongs to `navigation`, not to this page (Q6).
@@ -757,7 +766,7 @@ opening a new tab.
 | `grade10-site-site-shows-US1-TC2-1` | Reached | `grade10-site-site-shows-SC-02` |
 | `grade10-site-site-shows-US1-TC3-2` | Reached | `grade10-site-site-shows-SC-03` |
 | `grade10-site-site-shows-US1-TC4-2` | Reached | `grade10-site-site-shows-SC-06` |
-| `grade10-site-site-shows-US1-TC5-2` | Reached, adjusted | `grade10-site-site-shows-SC-07`. Q21: the records are every record the admin publishes, in its order, and five is the workbench's sample. The case named five fixed editions; it now takes `<records>` as the published list, today the same five, and checks every one and no other in that order. The requirement is renamed "The records read in the published order" and keeps the sample's five as its example; the Feature set's frozen "the five editions newest first" is left as it stands |
+| `grade10-site-site-shows-US1-TC5-2` | Reached, adjusted | `grade10-site-site-shows-SC-07`. Q21: the records are every record the admin publishes, in its order, and five is the workbench's sample. The case named five fixed editions; it now takes `<records>` as the published list, today the same five, and checks every one and no other in that order. The requirement is renamed "The records read in the published order" and keeps the sample's five as its example; the Feature set now reads "every published record, in the order it gives them" |
 | `grade10-site-site-shows-US1-TC6-1` | Reached, adjusted in spec | `grade10-site-site-shows-SC-10`. QA1's new pre-condition, the chapter's release published, is Q10's: the chapter link shows only then. The requirement's Overseas Partnership line and `SC-10`'s WHEN now carry the same condition |
 | `grade10-site-site-shows-US1-TC7-1` | Reached | `grade10-site-site-shows-SC-09` |
 | `grade10-site-site-shows-US1-TC8-1` | Reached | `grade10-site-site-shows-SC-13` |
@@ -778,7 +787,7 @@ opening a new tab.
 - **Folded into spec** - `grade10-site-site-shows-SC-17` and `grade10-site-site-shows-SC-18` are new; `SC-04`, `SC-05`, `SC-07`, `SC-10`, `SC-14`, `SC-15` and `SC-16` now state what their cases assert. "The page shows what is published" now carries Q20's one document and Q22's base-text fallback; "Videos play inside the page" carries Q23's sound and Q24's second tap; the records requirement carries Q21
 - **Contradicted** - `US1-TC13-1` against Q20, the author's decision; dropped above, and none is left open
 - **Uncovered scenarios** - none: each of the eighteen scenarios is named in exactly one case's `covers`
-- **Over-claimed cases** - none: each case fully asserts the THEN of the scenario it covers. Three rules stay in their requirement alone: Q12's order, which shows only as the list itself; Q20's chapter with no editions, which the Overseas Partnership chapter already shows as `US1-TC6-1` walks it; and Q24's second tap, since no anchor names a browser a tester can set up to refuse the embed's start
+- **Over-claimed cases** - none: each case fully asserts the THEN of the scenario it covers. Four rules stay in their requirement alone: Q25's chapter with no video or photo, which no sample chapter shows; Q12's order, which shows only as the list itself; Q20's chapter with no editions, which the Overseas Partnership chapter already shows as `US1-TC6-1` walks it; and Q24's second tap, since no anchor names a browser a tester can set up to refuse the embed's start
 - **New, not an extension** - `grade10-site-site-shows-US1-TC6-1` - `US1-TC1-2` reads the sections' order and headings as the smoke case; what each chapter carries is a different purpose at a lower severity
 - **New, not an extension** - `grade10-site-site-shows-US1-TC7-1` - no live case selects a jump control or reads the address
 - **New, not an extension** - `grade10-site-site-shows-US1-TC8-1` - no live case scrolls through the chapters checking the list

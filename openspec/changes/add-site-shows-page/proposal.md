@@ -24,8 +24,8 @@ system.
   show's photo set with arrows and progress dots, and links to its
   press-release article at `/press-releases/{slug}` once it is published,
   and to `/press-releases` until then.
-- **Poster-first video containers.** Two chapters carry a YouTube
-  presentation that shows the event poster and a play affordance; clicking
+- **Poster-first video containers.** A chapter with a video carries a YouTube
+  presentation, two today, that shows the event poster and a play affordance; clicking
   swaps the embed into the same container.
 - **Links out of the page.** The hero Press Releases button opens
   `/press-releases`; every Press Release link opens the edition's article once published.

@@ -28,8 +28,8 @@ answers without a session, like any public surface —
 - 🚧 **Edition cards** — each edition carries a photo carousel, a date, a
   description, and a Press Release link to its `/press-releases/{slug}`
   article once that release is published, otherwise to `/press-releases`;
-  the Seoul Auction × ZZZ chapter carries its own Press Release link only
-  while its release is published
+  a chapter carries its own Press Release link only while its release is
+  published — today Seoul Auction × ZZZ
 - 🚧 **Video presentations** — a chapter with a video carries a poster-first
   YouTube container (today two chapters): the poster and a play affordance, and on click the embed
   plays inside the same container

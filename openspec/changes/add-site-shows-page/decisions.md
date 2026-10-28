@@ -28,7 +28,7 @@
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | What does the pill tab list over the chapters do? | Jump navigation — all three chapters render stacked; a tab click scrolls to its chapter and a scroll-spy moves the active tab - decided by the round | Exclusive `Tabs`/`TabsContent` panels — the frame draws all three chapters below the list at once |
+| Q1 | What does the pill tab list over the chapters do? | Jump navigation — every published chapter renders stacked; a tab click scrolls to its chapter and a scroll-spy moves the active tab - decided by the round | Exclusive `Tabs`/`TabsContent` panels — the frame draws all three chapters below the list at once |
 | Q2 | Where do the story's images come from? | Hotlinked `grade10.com` asset paths in the content module - decided by the round | Downloaded `.fixture.webp` files — ~40 images of repo weight; the live paths are the source the task names |
 | Q3 | Which copy wins where the frame and the live page disagree? | The code's section copy, tightened after a copywriting review, over the frame's text - decided by the round | The Figma frame verbatim — the redesign; mismatches (the Seoul partner's name, the card date) are settled on the PRD and by Q7 and Q8 — the hero card label since settled on Upcoming Shows. ZZZ is the real Seoul partner name, confirmed by the product owner |
 | Q4 | How does the page reveal? | Mount-enter reveal like About above the fold, plus IntersectionObserver-driven reveals when below-fold sections scroll into view - decided by the round | Mount-only — a 7267px page reveals everything at once and nothing greets the scroll |
@@ -46,13 +46,13 @@
 | Q16 | What do an edition carousel's arrows do at its first and last photo? | They wrap round to the other end - decided by the round, as the block draws it | Stopping with the end arrow unavailable |
 | Q18 | What does the page answer when nothing is published? | Not found, not an empty page - decided by the round, with the human, as the site ships it | An empty shell |
 | Q19 | What does one click on a chapter video do? | It starts the video playing - decided by the round, with the human | Showing only the player, needing a second click |
-| Q25 | What does a chapter with no video or photo show? | Its title, intro and editions, with no presentation, as the site draws it - decided by the round, as the site ships it | Refusing a chapter without media |
 | Q17 | Does starting one chapter video stop the other? | No, each plays on its own - decided by the round | Pausing the other |
 | Q20 | When a format chapter has no editions of its own, what does it show? | The admin publishes the shows as one document, so a published chapter shows with whatever editions it holds (the contract allows none) and the page has no per-show published state; "an unpublished show" is not a state the page has - decided by the round, as the site ships it | Hiding a chapter with no editions |
 | Q21 | Does Event Records list exactly five editions or every one published? | Every record the admin publishes, in the order it gives them; "five" describes the workbench's sample - decided by the round | A fixed five |
 | Q22 | What does a reader see for a show with no words in their language? | The base text, as the site's reading of a translated value falls back - decided by the round | Not found, or an empty field |
 | Q23 | Does the one-click start play with sound or muted? | With sound; the click is the reader's own gesture - decided by the round | Muted autoplay |
 | Q24 | What if a browser will not start the embed from the click? | The player's own play control appears and a second tap starts it - decided by the round | Treating it as a failure |
+| Q25 | What does a chapter with no video or photo show? | Its title, intro and editions, with no presentation, as the site draws it - decided by the round, as the site ships it | Refusing a chapter without media |
 
 ## Raised
 

@@ -14,7 +14,7 @@ and the record of every show — and where each link on it leads.
   - Event scale: a statement about physical proof over a show-floor photo
     and a statistic card for each published statistic
   - Event formats: the published chapters — today Hong Kong, Overseas
-    Partnership and Chinese Mainland — each with an intro, a video or photo presentation,
+    Partnership and Chinese Mainland — each with an intro, a video or photo presentation when it has one,
     and edition cards carrying a carousel and a press-release link
   - Event records: every published record, in the order it gives them
   - Published content: the shows the admin has published, in the reader's
@@ -186,8 +186,8 @@ sideways.
 ### Requirement: Every link leads to its named surface
 The hero Press Releases button SHALL lead to `/press-releases`. A Press
 Release link on an edition or a chapter SHALL lead to that release's
-`/press-releases/{slug}` article only when the release is published on the
-site; an edition whose release is not published SHALL lead to
+`/press-releases/{slug}` article, at the address of the reader's language,
+only when the release is published on the site; an edition whose release is not published SHALL lead to
 `/press-releases` instead, and a chapter whose release is not published
 SHALL show no link. The workbench's sample content links:
 
@@ -205,7 +205,8 @@ SHALL show no link. The workbench's sample content links:
 **Serves:** grade10-site-site-shows-US-02 - Collector follows a link from Shows to a press surface
 
 - **WHEN** a collector opens the hero Press Releases button, or a Press
-  Release link whose release is published
+  Release link whose release is published, with the workbench's sample
+  content
 - **THEN** the site SHALL open that link's destination address from the
   table
 
@@ -304,17 +305,19 @@ last. A carousel SHALL NOT advance on its own.
 
 ### Requirement: The records read in the published order
 The Event Records section SHALL list every record the admin publishes, in
-the order it gives them, each with its year, title, description and image,
-the Seoul Auction record naming its partner Seoul Auction × ZZZ. The
-workbench's sample content carries five, in this order: Seoul Auction
-Private Sale & Exhibition, Grade10 FEST Summer 2026, CARDJOY × Grade10
-Shanghai, CARDJOY × Grade10 Hangzhou, Grade10 Festival 2025 (Nov 2025).
+the order it gives them, each with its year, title, description and image. The workbench's sample
+content carries five, in this order: Seoul Auction Private Sale &
+Exhibition, naming its partner Seoul Auction × ZZZ, Grade10 FEST Summer
+2026, CARDJOY × Grade10 Shanghai, CARDJOY × Grade10 Hangzhou, Grade10
+Festival 2025 (Nov 2025).
 
 <!-- trace:scenario id=g10.site-shows.SC-aa1 rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-07 - A collector reads the records
 **Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
 
-- **WHEN** a collector reads the event records
+- **WHEN** a collector reads the event records, with the workbench's
+  sample content published
 - **THEN** every record the admin published SHALL appear, in the order it
   gives them, with its year, title, description and image
-- **AND** the Seoul Auction record SHALL name Seoul Auction × ZZZ
+- **AND** the Seoul Auction record SHALL name Seoul Auction × ZZZ, in the
+  sample
