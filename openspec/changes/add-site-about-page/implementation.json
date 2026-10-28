@@ -34,5 +34,15 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "0fce6e280b0c7f1b3ed503863c041a749af8fe18",
+      "components": [
+        "storybook"
+      ],
+      "verifiedBy": "seankcw",
+      "verification": "The About page body block, its stories and the workbench page are on the store's main. At this commit the About story play pass passes (2 of 2) in apps/preview's vitest storybook project, lint (warnings only), `pnpm storybook:check` and `pnpm check:manual` (0 failures) pass. `pnpm run typecheck` reports one error, in `apps/preview/src/pages/page-heading.tsx`, that `main` carries without this change. The browser walks (tasks 2.1-2.4) were waived by the owner; the site's own consumption of `AboutPageBody` is not part of this change."
+    }
+  ]
 }
