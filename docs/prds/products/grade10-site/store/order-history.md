@@ -50,7 +50,7 @@ because loading and acting on orders is a job of its own.
 - **Joined Guest Orders** — a paid guest order is listed from the moment it
   joins the account its email proves —
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
-  - 🚧 **No Points** — a joined guest order earns none
+  - **No Points** — a joined guest order earns none
 
 ::story{id="store-order-history-screens-order-history--with-guest-orders" title="Guest orders under the member's email, listed"}
 

@@ -104,7 +104,7 @@ back to that page.
   page to reopen or re-read them
   - 🚧 **Sent** — the order is promised with the same code and points the
     drawer shows — [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
-  - 🚧 **After Paying** — paying the invoice clears the cart, the code and the
+  - **After Paying** — paying the invoice clears the cart, the code and the
     points with it — [Checkout](/p/grade10-site/store/checkout#after-paying)
 - **Guest** — checks out as a guest, with a way to sign in for points and
   rewards — [Checkout](/p/grade10-site/store/checkout#guest-checkout)
