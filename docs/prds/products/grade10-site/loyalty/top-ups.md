@@ -37,6 +37,7 @@ A member buys points in packs an operator sets.
   charged; a payment that lands after is flagged for an operator to refund
 - **Told before paying** — checkout says a pack is never refunded, cashed
   out or moved, and the member accepts the terms before paying
+  ❓ the wireframe shows no accept step before Stripe, so whether Stripe's page carries the acceptance is open (Product, Legal)
 - ❓ **The words** — a draft until Legal confirms them. Legal
 - ❓ **A Grade10 email** — on credit, hold, approval and rejection; it waits
   on a way to reach members, chosen with the
@@ -234,7 +235,7 @@ chargeback rate on top-ups.
 | Refund in Stripe's dashboard | ❓ Open | Shipped: takes back the refunded share of the points, as a chargeback does. | Product |
 | Launch | ❓ Open | Shipped off; switched on once Stripe is set up and Legal confirms the words. | Product and Legal |
 | Part returns | Decided | A part return gives no points back; an operator handles each case by hand. | Product |
-| Told before paying | Decided | Checkout states no refund, no cash-out and no transfer, and the member accepts the terms: the proof a disputed charge is fought with. | Product |
+| Told before paying | ❓ Open | Checkout states no refund, no cash-out and no transfer, and the member accepts the terms: the proof a disputed charge is fought with. | Product |
 | The words | ❓ Open | What checkout says, a draft until confirmed. | Legal |
 | Paid value lapsing | Decided | Topped-up points lapse with the balance, and end with it when an account is deleted. | Product |
 | Stored value licence | Decided | Grade10 qualifies for the single-issuer exemption under the Payment Systems and Stored Value Facilities Ordinance (Cap. 584). | Legal |
