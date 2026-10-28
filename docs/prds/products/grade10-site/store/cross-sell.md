@@ -38,19 +38,18 @@ store shows other cards the collector may also like.
 
 ## Picks
 
-**Chosen in Shopify** — a stock keeper picks the cards shown with a card
-in the Shopify dashboard, on the card itself; a change reaches the card's page
-within a minute, and a card the store has just taken in joins another card's
-picks once the store holds it; a pick the catalogue no longer holds is left out
+- **Chosen in Shopify** — a stock keeper picks the cards shown with a card
+  in the Shopify dashboard, on the card itself; a change reaches the card's page
+  within a minute, and a card the store has just taken in joins another card's
+  picks once the store holds it; a pick the catalogue no longer holds is left out
 
 ## Similar Cards
 
-**Shared facts** — a similar card shares this card's world, its language or
-its collectible type, weighed in that order, newest first among equals; a card
-the catalogue names none of them for draws no similar cards
-
-**Just taken in** — a card the store has just taken in shows its picks until
-the similar cards follow
+- **Shared facts** — a similar card shares this card's world, its language or
+  its collectible type, weighed in that order, newest first among equals; a card
+  the catalogue names none of them for draws no similar cards
+- **Just taken in** — a card the store has just taken in shows its picks until
+  the similar cards follow
 
 ## Designs
 

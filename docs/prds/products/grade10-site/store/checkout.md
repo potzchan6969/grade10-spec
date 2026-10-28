@@ -47,13 +47,10 @@ In Your Orders.
 
 ## Integration readiness
 
-**Checkout integration** - The drawer sends the reviewed lines, the accepted promo code and points through the store's checkout request, and shows its answer.
-
-**One Pay at a time** - While a Pay is starting, drawer actions wait as the [Cart Drawer](/p/grade10-site/store/cart#pending-operations) describes. An answer for an older cart, tender or member opens nothing.
-
-**Closing during Pay** - The collector can close the drawer while checkout starts. A successful reply still opens Shopify if the submitted cart, tender and member remain current. Closing does not cancel the request.
-
-**Later cart** - Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
+- **Checkout integration** — The drawer sends the reviewed lines, the accepted promo code and points through the store's checkout request, and shows its answer.
+- **One Pay at a time** — While a Pay is starting, drawer actions wait as the [Cart Drawer](/p/grade10-site/store/cart#pending-operations) describes. An answer for an older cart, tender or member opens nothing.
+- **Closing during Pay** — The collector can close the drawer while checkout starts. A successful reply still opens Shopify if the submitted cart, tender and member remain current. Closing does not cancel the request.
+- **Later cart** — Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
 
 - **Another Pay** - An unchanged purchase returns its existing invoice or order state, including after reload, from a second tab or after a lost answer; a purchase already paid opens its order
 - **After a refusal** - A Pay after the purchase's order failed or was canceled starts the purchase again
@@ -62,9 +59,9 @@ In Your Orders.
 - **Recovery** - An uncertain payment handoff keeps the existing purchase visible and recoverable without opening a second payable invoice
 - **Lost answer** - Pay keeps looking for the invoice Shopify made for about 6 seconds before asking the collector to try again. A purchase Shopify holds no invoice for closes once **2 minutes** have passed, or later while Shopify cannot be read, returning its coupons and points, and the next Pay starts it again. Until then it holds only its own coupon and points; the collector's other purchases go ahead
 
-🚧 **Return path** - Shopify's Thank You and Order status extension offers a
-Grade10 Your Orders link, and the staging walk proves the matching purchase
-appears after return.
+- 🚧 **Return path** — Shopify's Thank You and Order status extension offers a
+  Grade10 Your Orders link, and the staging walk proves the matching purchase
+  appears after return.
 
 - **Where it starts** - the live review and the price check run in the
   cart drawer; there is no `/checkout` page -

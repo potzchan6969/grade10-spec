@@ -83,13 +83,12 @@ order: 2
 
 ## Catalogue Source
 
-| Rule | Value |
-| --- | --- |
-| A product change with a Shopify webhook | On every listing within 10 s |
-| A stock change | At the next full read, at most 30 s after the last one |
-| A change whose webhook was lost | Within 5 minutes |
-
 - **Source** — the store's own copy of the catalogue, so browsing works while Shopify is down
+  - **Product changes** — a change Shopify reports by webhook is on every
+    listing within 10 s
+  - **Stock changes** — at the next full read, at most 30 s after the last one
+  - **Lost changes** — a change whose webhook was lost is on every listing
+    within 5 minutes
 - **Read from Shopify** — what never reads the mirror
   - **Waits for Shopify** — opening a product, reviewing the cart
   - **Up to a Minute Behind** — a product page, a collection's listing, behind a 60 s cache; the cart checks Shopify live and has the final word on price and stock — [Commerce](/p/grade10-site/commerce/commerce)

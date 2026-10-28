@@ -55,7 +55,7 @@ back to that page.
 
 ## Pending Operations
 
-**Wait before another action** - the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
+- **Wait before another action** — the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
 
 ::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
 
