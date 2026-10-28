@@ -17,6 +17,7 @@ title: Store Test Cases
 | `<listing url>` | `<g10url>/store/collections` |
 | `<product A>` | a booster box for sale at HKD880, no site discount, at least 3 for sale |
 | `<product B>` | an elite trainer box for sale at HKD420, no site discount, at least 3 for sale |
+| `<product B handle>` | `<product B>`'s handle in the shop |
 
 ## Ungrouped
 
@@ -40,6 +41,16 @@ title: Store Test Cases
 
 * customer(guest) has no Grade10 session.
 * The shop publishes `<chosen collection>`, holding `<collection product>` and not `<outside product>`, which is newer; both are for sale.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| chosen collection | A collection the shop publishes, shown as a tile on the Main Page |
+| collection product | A product for sale in `<chosen collection>` |
+| outside product | A product for sale outside `<chosen collection>`, added to the shop after `<collection product>` |
+| chosen collection handle | `<chosen collection>`'s handle in the shop |
+| collection product handle | `<collection product>`'s handle in the shop |
 
 **Steps:**
 
@@ -71,13 +82,22 @@ title: Store Test Cases
 
 * customer(guest) has an empty cart in this browser; `<row product>` is in the merchandised row, by the recipe "Put a card in the Main Page's merchandised row"; no account holds `<order email>`, a test mailbox.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| row product | A product for sale in the Main Page's merchandised row |
+| row product handle | `<row product>`'s handle in the shop |
+| order email | A test mailbox no Grade10 account holds |
+| test card | The payment provider's published test card that succeeds |
+
 **Steps:**
 
 1. Open `<store url>`, select `<row product>`'s card, then Add to cart.
-2. Select Check out as guest, enter `<order email>` on Shopify's page, and pay with the payment provider's published test card that succeeds.
+2. Select Check out as guest, enter `<order email>` on Shopify's page, and pay with `<test card>`.
 3. Select Continue on Shopify's thank-you page.
 4. Select Sign in on the toast and sign in by the link sent to `<order email>`.
-5. Open `/profile/orders`.
+5. Open `<g10url>/profile/orders`.
 
 **Expected Results:**
 
@@ -113,6 +133,10 @@ Runs once per row of **Test data**.
 | compare-at HKD1,000 | HKD880 | HKD1,000 |
 | 10% off this product | HKD792 = HKD880 × 0.9 | HKD880 |
 
+| Field | Value |
+| --- | --- |
+| priced product | A product for sale at HKD880 (fixed: the rows derive from it), in the merchandised row and in the cart |
+
 **Steps:**
 
 1. Read `<priced product>`'s card on `<store url>`, then on `<listing url>`.
@@ -141,10 +165,17 @@ Runs once per row of **Test data**.
 
 * customer(guest) has `<gone product>` in the cart; it was put in the merchandised row, by the recipe "Put a card in the Main Page's merchandised row", then sold out, by the recipe "Sell a card out".
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| gone product | A product put in the merchandised row, then sold out, held in the guest's cart |
+| gone product handle | `<gone product>`'s handle in the shop |
+
 **Steps:**
 
 1. Read `<gone product>`'s card on `<store url>`, then on `<listing url>`.
-2. Open `/store/products/<gone product handle>` and read the page and its purchase controls.
+2. Open `<g10url>/store/products/<gone product handle>` and read the page and its purchase controls.
 3. Open Cart, wait for the read, and read its line and the checkout control.
 
 **Expected Results:**
@@ -175,11 +206,18 @@ Runs once per row of **Test data**.
 
 * customer(member) holds 600 points and `<member code>`, HKD50 off any order, combining with order discounts, with an empty cart; `<product A>` is for sale at HKD880, no site discount.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| member code | A code the member holds: HKD50 off any order (fixed), combining with order discounts |
+| test card | The payment provider's published test card that succeeds |
+
 **Steps:**
 
 1. On `<listing url>`, select Add to cart on `<product A>`'s card.
 2. Open Cart, wait for the read, apply `<member code>`, then type 100 in the points field and Apply.
-3. Select Proceed to Checkout, read Shopify's page, and pay with the published test card that succeeds.
+3. Select Proceed to Checkout, read Shopify's page, and pay with `<test card>`.
 4. Select the Grade10 Your Orders link on the thank-you page, then View Details on the new order.
 
 **Expected Results:**
@@ -206,10 +244,16 @@ Runs once per row of **Test data**.
 
 * customer(guest) has an empty cart in this browser; `<member>`, in the loyalty programme with points, holds `<product A>` at 2 in the store-kept cart.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| member | A loyalty member with points, whose store-kept cart holds `<product A>` at 2 |
+
 **Steps:**
 
 1. On `<listing url>`, select Add to cart on `<product A>`'s card.
-2. Open `/store/products/<product B handle>` and select Add to cart.
+2. Open `<g10url>/store/products/<product B handle>` and select Add to cart.
 3. Select the Sign in link under Check out as guest, and sign in as `<member>`.
 
 **Expected Results:**
@@ -239,11 +283,18 @@ Runs once per row of **Test data**.
 
 * customer(member) is signed out, holding the View order link for `<member order>`, which they paid for.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| member order | An order the member paid for, whose Shopify email carries a View order link |
+| member order id | `<member order>`'s id |
+
 **Steps:**
 
 1. Open View order in Shopify's order email.
 2. Select Sign in on the toast and sign in as the member.
-3. Open `/profile/orders`.
+3. Open `<g10url>/profile/orders`.
 
 **Expected Results:**
 
