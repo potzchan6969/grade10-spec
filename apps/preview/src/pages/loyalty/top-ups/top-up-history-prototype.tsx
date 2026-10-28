@@ -19,12 +19,7 @@ import {
   TOP_UP_HISTORY_ENTRIES,
   type TopUpHistoryEntry,
 } from "./top-ups-content";
-import {
-  TopUpsBreadcrumbs,
-  TopUpsPageShell,
-  TopUpsPrototypeNote,
-  useSmUp,
-} from "./top-ups-shared";
+import { TopUpsBreadcrumbs, TopUpsPageShell, useSmUp } from "./top-ups-shared";
 
 /** The pack picker the empty state opens. */
 const TOP_UP_DIALOG_STORY_ID = "loyalty-top-ups-screens-top-up-dialog--default";
@@ -150,7 +145,6 @@ function TopUpHistoryPrototype({ state }: { state: TopUpHistoryState }) {
   const smUp = useSmUp();
   return (
     <TopUpsPageShell>
-      <TopUpsPrototypeNote settles="where Top-Up History is reached from — the dialog link and a Points History link — and whether it earns a rail item." />
       <TopUpsBreadcrumbs current={copy.title} />
       <div className="flex flex-col gap-2">
         <h1 className="font-heading text-3xl font-semibold tracking-tight md:text-4xl">
