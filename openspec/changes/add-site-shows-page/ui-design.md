@@ -21,10 +21,10 @@
 - `Card` from `@grade10/design-system/components/display/card` — the
   Upcoming Shows card and the three stat cards, with `padding={false}` where
   the frames hand the slot insets to the content.
-- `Tabs`/`TabsList`/`TabsTrigger` (`variant="pill"`) — the sticky chapter
-  list, driven as jump navigation over stacked sections rather than as
-  panels.
-- `IconButton` (`secondary`, `lg`) — carousel arrows and the video play
+- The block's own pill link list — anchors styled as the pill track, the
+  sticky chapter list driven as jump navigation over stacked sections
+  rather than as panels.
+- `IconButton` (`secondary`) — carousel arrows and the video play
   affordance.
 - `Badge` — the edition label on each video poster.
 - `Button` — hero actions (`default`, `outline`), chapter press release

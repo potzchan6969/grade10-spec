@@ -17,17 +17,20 @@ and the record of every show — and where each link on it leads.
     Chinese Mainland — each with an intro, a video or photo presentation,
     and edition cards carrying a carousel and a press-release link
   - Event records: the five editions newest first
+  - Published content: the shows the admin has published, in the reader's
+    language; nothing published answers not found
   - Jump navigation: the hero's Explore Shows and the sticky chapter list
     scroll to their chapter, and the list marks the chapter in view
 - What plays in place
   - Chapter videos show a poster and play affordance, then embed the
-    YouTube video in the same container
+    YouTube video in the same container and start it playing
   - Edition carousels page through the edition's photos with arrows and
     progress dots
 - Where the links lead
   - Press Releases opens `/press-releases`
-  - Each edition's Press Release, and the Seoul Auction × ZZZ
-    chapter's, opens `/press-releases/{slug}`
+  - Each edition's Press Release, and a chapter's, opens
+    `/press-releases/{slug}` once that release is published; an edition
+    without one leads to `/press-releases` and a chapter shows no link
 
 ## ADDED Requirements
 
@@ -176,10 +179,12 @@ sideways.
   SHALL be reachable, and the page SHALL NOT scroll sideways
 
 ### Requirement: Every link leads to its named surface
-Each link on the Shows surface SHALL lead to the destination the table
-below names. The links ship with the page and open their
-addresses before the press index and articles land in their follow-on
-change; what an address shows is the press surfaces' own:
+The hero Press Releases button SHALL lead to `/press-releases`. A Press
+Release link on an edition or a chapter SHALL lead to that release's
+`/press-releases/{slug}` article only when the release is published on the
+site; an edition whose release is not published SHALL lead to
+`/press-releases` instead, and a chapter whose release is not published
+SHALL show no link. The workbench's sample content links:
 
 | Link | Destination |
 | --- | --- |
@@ -199,6 +204,34 @@ change; what an address shows is the press surfaces' own:
 - **THEN** the site SHALL open that link's destination address from the
   table
 
+<!-- trace:scenario id=g10.site-shows.SC-rel rev=1 -->
+#### Scenario: grade10-site-site-shows-SC-14 - A release that is not published is not linked
+**Serves:** grade10-site-site-shows-US-02 - Collector follows a link from Shows to a press surface
+
+- **WHEN** an edition's or a chapter's press release is not published
+- **THEN** the edition's Press Release link SHALL lead to `/press-releases`
+  and the chapter SHALL show no Press Release link
+
+### Requirement: The page shows what is published
+The Shows surface SHALL present the shows the admin has published, in the
+language the address names, and SHALL answer not found, not an empty page,
+when none is published.
+
+<!-- trace:scenario id=g10.site-shows.SC-pub rev=1 -->
+#### Scenario: grade10-site-site-shows-SC-15 - A collector opens the page with nothing published
+**Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
+
+- **WHEN** a collector opens `/shows` and no show is published
+- **THEN** the site SHALL answer not found and SHALL NOT draw an empty page
+
+<!-- trace:scenario id=g10.site-shows.SC-lng rev=1 -->
+#### Scenario: grade10-site-site-shows-SC-16 - A collector reads the page in their language
+**Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
+
+- **WHEN** a collector opens `/shows` at a language's address
+- **THEN** the published shows' titles, descriptions and dates SHALL read in
+  that language
+
 ### Requirement: Videos play inside the page
 Each chapter video SHALL show the event poster with a play affordance and,
 when the collector activates it, SHALL embed the named YouTube video
@@ -211,7 +244,7 @@ own: starting one SHALL NOT stop the other or return it to its poster.
 
 - **WHEN** a collector activates the play affordance on a chapter video
 - **THEN** the poster SHALL be replaced by the named YouTube embed inside
-  the same container, and the page SHALL NOT navigate or open a tab
+  the same container, the video SHALL start playing, and the page SHALL NOT navigate or open a tab
 - **AND** an embed already started in the other chapter SHALL stay in its
   container, not returned to its poster
 

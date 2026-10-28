@@ -141,7 +141,7 @@ const SHOWS_PAGE = {
         tab: "Hong Kong",
         label: "Hong Kong",
         title: "Grade10 FEST HK",
-        dek: "Asia’s largest card show — five editions and counting, drawing 25,000+ collectors each time.",
+        dek: "Asia’s largest card show — five editions and counting.",
         video: {
           poster: photos("grade10-fest-summer-2026", "photo-01.webp"),
           posterAlt: "Grade10 FEST Summer 2026 show floor",
