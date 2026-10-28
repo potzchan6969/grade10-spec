@@ -17,6 +17,7 @@ import {
   HandCoins,
   Truck,
 } from "@phosphor-icons/react";
+import { useEffect, useRef } from "react";
 import {
   COUPON_LIST_COPY,
   HOW_POINTS_WORK,
@@ -51,6 +52,44 @@ const HOW_POINTS_WORK_ICONS = {
   expiry: <ClockCountdown size={20} weight="regular" />,
 } as const;
 
+/**
+ * The pane enter — the same staggered rise PointHistory gives its cards:
+ * direct children, then the children of any `[data-enter-group]`, 50ms
+ * apart. Reduced motion keeps the fade, drops the rise. Panes remount on
+ * tab switch, so the mount effect is the whole trigger.
+ */
+function usePaneEnter<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const targets = [
+      ...root.children,
+      ...[...root.querySelectorAll("[data-enter-group]")].flatMap((el) => [
+        ...el.children,
+      ]),
+    ];
+    for (const [i, el] of targets.entries()) {
+      el.animate(
+        [
+          { opacity: 0, transform: reduce ? "none" : "translateY(8px)" },
+          { opacity: 1, transform: "none" },
+        ],
+        {
+          delay: i * 50,
+          duration: 220,
+          easing: "cubic-bezier(0.23, 1, 0.32, 1)",
+          fill: "backwards",
+        },
+      );
+    }
+  }, []);
+  return ref;
+}
+
 /** A pane's heading — the section name the nav item names. */
 function PaneHeading({ id, children }: { id: string; children: string }) {
   return (
@@ -80,8 +119,9 @@ function OverviewPane({
   view: MembershipView;
   balance: number;
 }) {
+  const ref = usePaneEnter<HTMLDivElement>();
   return (
-    <>
+    <div className="contents" ref={ref}>
       <TierCard
         balance={balance.toLocaleString("en-HK")}
         copy={TIER_CARD_COPY}
@@ -95,13 +135,14 @@ function OverviewPane({
         variant={view.tierVariant}
         worth={view.worth}
       />
-      <div className="flex flex-col gap-4">
+      {/* The heading and the benefits join the card's rise one level down. */}
+      <div className="flex flex-col gap-4" data-enter-group>
         <PaneHeading id="membership-tiers-heading">
           {TIER_BENEFITS_PAGE_COPY.title}
         </PaneHeading>
         <TiersBenefitsPane heldTier={view.tier} />
       </div>
-    </>
+    </div>
   );
 }
 
@@ -131,10 +172,12 @@ function RewardsPane({
   balance: number;
   onSelect: (rewardId: string) => void;
 }) {
+  const ref = usePaneEnter<HTMLElement>();
   return (
     <section
       aria-labelledby="membership-rewards-heading"
       className="flex flex-col gap-4"
+      ref={ref}
     >
       <PaneHeading id="membership-rewards-heading">
         {MEMBERSHIP_PAGE_COPY.rewardsHeading}
@@ -155,10 +198,12 @@ function CouponsPane({
 }: {
   coupons: AsyncState<readonly CouponItem[]>;
 }) {
+  const ref = usePaneEnter<HTMLElement>();
   return (
     <section
       aria-labelledby="membership-coupons-heading"
       className="flex flex-col gap-4"
+      ref={ref}
     >
       <PaneHeading id="membership-coupons-heading">
         {MEMBERSHIP_PAGE_COPY.couponsHeading}
@@ -184,10 +229,12 @@ function CouponsPane({
 
 /** Points history — the member's own ledger with its totals. */
 function PointHistoryPane({ view }: { view: MembershipView }) {
+  const ref = usePaneEnter<HTMLElement>();
   return (
     <section
       aria-labelledby="membership-point-history-heading"
       className="flex flex-col gap-4"
+      ref={ref}
     >
       <PaneHeading id="membership-point-history-heading">
         {MEMBERSHIP_PAGE_COPY.pointHistoryHeading}
