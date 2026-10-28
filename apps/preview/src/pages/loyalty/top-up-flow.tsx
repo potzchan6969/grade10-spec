@@ -19,17 +19,10 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
+import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { TopUpPackCard } from "@grade10/ui";
-import {
-  ArrowRight,
-  CheckCircle,
-  CircleNotch,
-  HourglassMedium,
-  ShieldCheck,
-  WarningCircle,
-  XCircle,
-} from "@phosphor-icons/react";
+import { ArrowRight, CircleNotch, ShieldCheck } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { storyHref } from "../workbench-story-nav";
 import {
@@ -228,225 +221,111 @@ type TopUpResultState =
   | "not-approved"
   | "not-completed";
 
-type ResultContent = {
-  wellClass: string;
-  icon: ReactNode;
-  /** The outcome line; also the modal's accessible name. */
-  title: string;
-  description: ReactNode;
-  meta?: ReactNode;
-  actions?: ReactNode;
-  /** Still settling — the modal cannot be dismissed while it runs. */
-  live?: boolean;
-};
-
-type TopUpResultProps = {
-  state: TopUpResultState;
+type TopUpConfirmingProps = {
   open: boolean;
-  /** The member closed the modal. */
-  onDismiss: () => void;
-  /** "Back to Membership". */
-  onBack: () => void;
-  /** "Try again" on a top-up that never reached Stripe. */
-  onRetry: () => void;
-  /** Where a held top-up's history lives. */
-  historyHref: string;
-  /** The credited pack size and the balance it lands on, for "added". */
-  addedPoints?: number;
-  balanceAfter?: number;
 };
 
-/** Everything a result says, before the surface it says it on. */
-function resultContent(
-  state: TopUpResultState,
-  props: TopUpResultProps,
-): ResultContent {
-  if (state === "confirming") {
-    return {
-      description: resultCopy.confirming.description,
-      icon: (
-        <span aria-hidden className="inline-flex animate-spin">
-          <CircleNotch size={24} weight="regular" />
-        </span>
-      ),
-      live: true,
-      title: resultCopy.confirming.title,
-      wellClass: "bg-muted",
-    };
-  }
-
-  if (state === "added") {
-    return {
-      actions: (
-        <Button onClick={props.onBack} size="md">
-          {resultCopy.backToMembership}
-        </Button>
-      ),
-      description: resultCopy.added.balance(props.balanceAfter ?? 0),
-      icon: (
-        <CheckCircle
-          aria-hidden
-          color="var(--success)"
-          size={24}
-          weight="regular"
-        />
-      ),
-      title: resultCopy.added.title(props.addedPoints ?? 0),
-      wellClass: "bg-success/10",
-    };
-  }
-
-  if (state === "under-review") {
-    return {
-      actions: (
-        <Button render={<a href={props.historyHref} />} size="md">
-          {resultCopy.underReview.history}
-        </Button>
-      ),
-      description: resultCopy.underReview.description,
-      icon: (
-        <HourglassMedium
-          aria-hidden
-          color="var(--secondary-foreground)"
-          size={24}
-          weight="regular"
-        />
-      ),
-      meta: resultCopy.underReview.reference(UNDER_REVIEW_REFERENCE),
-      title: resultCopy.underReview.title,
-      wellClass: "bg-muted",
-    };
-  }
-
-  if (state === "not-approved") {
-    return {
-      actions: (
-        <Button onClick={props.onBack} size="md">
-          {resultCopy.backToMembership}
-        </Button>
-      ),
-      description: resultCopy.notApproved.description,
-      icon: (
-        <XCircle
-          aria-hidden
-          color="var(--destructive)"
-          size={24}
-          weight="regular"
-        />
-      ),
-      title: resultCopy.notApproved.title,
-      wellClass: "bg-destructive/10",
-    };
-  }
-
-  return {
-    actions: (
-      <>
-        <Button onClick={props.onRetry} size="md">
-          {resultCopy.notCompleted.retry}
-        </Button>
-        <Button onClick={props.onBack} size="md" variant="outline">
-          {resultCopy.backToMembership}
-        </Button>
-      </>
-    ),
-    description: resultCopy.notCompleted.description,
-    icon: (
-      <WarningCircle
-        aria-hidden
-        color="var(--warning)"
-        size={24}
-        weight="regular"
-      />
-    ),
-    title: resultCopy.notCompleted.title,
-    wellClass: "bg-warning/10",
-  };
-}
-
-/** One centred result: a tinted icon well, the title (the modal's own title
- * element, so it names the surface), one description line, an optional muted
- * meta line and the actions. */
-function ResultPanel({
-  wellClass,
-  icon,
-  title,
-  description,
-  meta,
-  actions,
-}: Omit<ResultContent, "title" | "live"> & { title: ReactNode }) {
-  return (
-    <div className="mx-auto flex w-full flex-col items-center gap-1.5 py-2 text-center">
-      <div
-        className={`mb-2.5 inline-flex size-12 shrink-0 items-center justify-center rounded-full ${wellClass}`}
-      >
-        {icon}
-      </div>
-      {title}
-      <Text className="text-balance text-secondary-foreground" size="sm">
-        {description}
-      </Text>
-      {meta ? (
-        <Text size="xs" tone="muted">
-          {meta}
-        </Text>
-      ) : null}
-      {actions ? (
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
-          {actions}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-/**
- * Where the member lands back from Stripe's hosted checkout — confirmed,
- * credited, held for review, rejected or abandoned — as a modal over the
- * page they left: a dialog from 640px up, a bottom drawer below.
- */
-function TopUpResult(props: TopUpResultProps) {
+/** The wait while Stripe's hosted checkout answers — a modal that cannot
+ * be dismissed while it runs: a dialog from 640px up, a bottom drawer
+ * below. Every settled outcome leaves it and answers as a toast instead. */
+function TopUpConfirming({ open }: TopUpConfirmingProps) {
   const smUp = useSmUp();
-  const content = resultContent(props.state, props);
-
-  const onOpenChange = (open: boolean) => {
-    if (!open && !content.live) props.onDismiss();
-  };
-
   const titleClass =
     "w-full text-center font-heading text-xl font-semibold tracking-tight text-balance";
-  const panel = (title: ReactNode) => {
-    const body = <ResultPanel {...content} title={title} />;
-    return content.live ? (
-      <div aria-live="polite" role="status">
-        {body}
+  const panel = (title: ReactNode) => (
+    <div aria-live="polite" role="status">
+      <div className="mx-auto flex w-full flex-col items-center gap-1.5 py-2 text-center">
+        <div className="mb-2.5 inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-muted">
+          <span aria-hidden className="inline-flex animate-spin">
+            <CircleNotch size={24} weight="regular" />
+          </span>
+        </div>
+        {title}
+        <Text className="text-balance text-secondary-foreground" size="sm">
+          {resultCopy.confirming.description}
+        </Text>
       </div>
-    ) : (
-      body
-    );
-  };
+    </div>
+  );
 
   return smUp ? (
-    <Dialog onOpenChange={onOpenChange} open={props.open}>
-      <DialogContent className="sm:max-w-md" showCloseButton={!content.live}>
+    <Dialog open={open}>
+      <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <DialogBody className="items-center">
           {panel(
-            <DialogTitle className={titleClass}>{content.title}</DialogTitle>,
+            <DialogTitle className={titleClass}>
+              {resultCopy.confirming.title}
+            </DialogTitle>,
           )}
         </DialogBody>
       </DialogContent>
     </Dialog>
   ) : (
-    <Drawer onOpenChange={onOpenChange} open={props.open} swipeDirection="down">
+    <Drawer open={open} swipeDirection="down">
       <DrawerContent className="bg-popover backdrop-blur-none [--drawer-bleed-background:var(--popover)]">
         <DrawerBody className="items-center">
           {panel(
-            <DrawerTitle className={titleClass}>{content.title}</DrawerTitle>,
+            <DrawerTitle className={titleClass}>
+              {resultCopy.confirming.title}
+            </DrawerTitle>,
           )}
         </DrawerBody>
       </DrawerContent>
     </Drawer>
   );
+}
+
+type TopUpResultToastOptions = {
+  /** The credited pack size and the balance it lands on, for "added". */
+  addedPoints?: number;
+  balanceAfter?: number;
+  /** Where a held top-up's history lives. */
+  historyHref?: string;
+  /** "Try again" on a top-up that never reached Stripe. */
+  onRetry?: () => void;
+};
+
+/**
+ * The settled outcome the member meets back on the page, as a toast:
+ * credited under the review threshold, held for an operator above it,
+ * refused by the review, or abandoned before paying.
+ */
+function topUpResultToast(
+  state: Exclude<TopUpResultState, "confirming">,
+  options: TopUpResultToastOptions = {},
+) {
+  if (state === "added") {
+    toast.success(resultCopy.added.title(options.addedPoints ?? 0), {
+      description: resultCopy.added.balance(options.balanceAfter ?? 0),
+    });
+    return;
+  }
+  if (state === "under-review") {
+    toast.info(resultCopy.underReview.title, {
+      action: options.historyHref
+        ? {
+            label: resultCopy.underReview.history,
+            onClick: () => {
+              window.location.href = options.historyHref as string;
+            },
+          }
+        : undefined,
+      description: `${resultCopy.underReview.description} ${resultCopy.underReview.reference(UNDER_REVIEW_REFERENCE)}`,
+    });
+    return;
+  }
+  if (state === "not-approved") {
+    toast.error(resultCopy.notApproved.title, {
+      description: resultCopy.notApproved.description,
+    });
+    return;
+  }
+  toast.warning(resultCopy.notCompleted.title, {
+    action: options.onRetry
+      ? { label: resultCopy.notCompleted.retry, onClick: options.onRetry }
+      : undefined,
+    description: resultCopy.notCompleted.description,
+  });
 }
 
 type TopUpFlowProps = {
@@ -459,9 +338,9 @@ type TopUpFlowProps = {
 
 /**
  * The whole buy-a-pack journey in place over the screen that opened it: the
- * pack picker, the wait while Stripe's hosted checkout stands in, then the
- * result modal — credited under the review threshold, held for an operator
- * above it. Dismissing the result returns to the screen.
+ * pack picker, the confirming wait while Stripe's hosted checkout stands
+ * in, then the result as a toast — credited under the review threshold,
+ * held for an operator above it. The toast lands on the page itself.
  */
 function TopUpFlow({
   open,
@@ -470,12 +349,10 @@ function TopUpFlow({
   onCredited,
 }: TopUpFlowProps) {
   const [hasOpened, setHasOpened] = useState(open);
-  const [phase, setPhase] = useState<"picker" | "result">("picker");
-  const [result, setResult] = useState<"confirming" | "added" | "under-review">(
-    "confirming",
+  const [phase, setPhase] = useState<"picker" | "confirming" | "done">(
+    "picker",
   );
   const [busy, setBusy] = useState(false);
-  const [bought, setBought] = useState<TopUpPack | null>(null);
 
   /* Reopening restarts the pick; the surfaces stay mounted once opened so
    * the dialog and drawer can play their exit transitions. */
@@ -483,9 +360,7 @@ function TopUpFlow({
     if (open) {
       setHasOpened(true);
       setPhase("picker");
-      setResult("confirming");
       setBusy(false);
-      setBought(null);
     }
   }, [open]);
 
@@ -496,15 +371,20 @@ function TopUpFlow({
      * "Redirecting…", the confirming wait, then the result Stripe sends the
      * member back to. */
     window.setTimeout(() => {
-      setBought(pack);
-      setPhase("result");
-      setResult("confirming");
+      setPhase("confirming");
       setBusy(false);
       window.setTimeout(() => {
+        setPhase("done");
+        onOpenChange(false);
         if (pack.points > REVIEW_THRESHOLD) {
-          setResult("under-review");
+          topUpResultToast("under-review", {
+            historyHref: storyHref(TOP_UP_HISTORY_STORY_ID),
+          });
         } else {
-          setResult("added");
+          topUpResultToast("added", {
+            addedPoints: pack.points,
+            balanceAfter: balance + pack.points,
+          });
           onCredited(pack.points);
         }
       }, 1200);
@@ -515,34 +395,28 @@ function TopUpFlow({
 
   const close = () => onOpenChange(false);
 
-  /* Only the active phase's surface mounts: the picker and result backdrops
-   * each pin document scroll for their lifetime, so mounting both at once
-   * lets the second capture "hidden" as the scroll it restores — leaving the
-   * page locked after the result closes. Swapping surfaces releases the
-   * picker's lock before the result's is taken. */
-  return phase === "picker" ? (
-    <TopUpPicker
-      balance={balance}
-      busy={busy}
-      onOpenChange={(next) => {
-        if (!next) close();
-      }}
-      onPay={pay}
-      open={open}
-    />
-  ) : (
-    <TopUpResult
-      addedPoints={bought?.points}
-      balanceAfter={balance}
-      historyHref={storyHref(TOP_UP_HISTORY_STORY_ID)}
-      onBack={close}
-      onDismiss={close}
-      onRetry={() => setPhase("picker")}
-      open={open}
-      state={result}
-    />
-  );
+  /* Only the active phase's surface mounts: each backdrop pins document
+   * scroll for its lifetime, so mounting two at once lets the second capture
+   * "hidden" as the scroll it restores — leaving the page locked after it
+   * closes. Swapping surfaces releases one lock before the next is taken. */
+  if (phase === "picker") {
+    return (
+      <TopUpPicker
+        balance={balance}
+        busy={busy}
+        onOpenChange={(next) => {
+          if (!next) close();
+        }}
+        onPay={pay}
+        open={open}
+      />
+    );
+  }
+  if (phase === "confirming") {
+    return <TopUpConfirming open={open} />;
+  }
+  return null;
 }
 
 export type { TopUpResultState };
-export { TopUpFlow, TopUpPicker, TopUpResult };
+export { TopUpConfirming, TopUpFlow, TopUpPicker, topUpResultToast };

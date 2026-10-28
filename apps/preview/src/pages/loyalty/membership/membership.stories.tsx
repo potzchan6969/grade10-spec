@@ -61,17 +61,11 @@ export const TopUp: Story = {
         name: "Confirming your payment…",
       }),
     ).toBeInTheDocument();
-    expect(
-      await overlay.findByRole(
-        "dialog",
-        { name: "10,000 points added" },
-        { timeout: 3000 },
-      ),
-    ).toBeInTheDocument();
-    expect(overlay.getByText("New balance: 11,250 points")).toBeInTheDocument();
-    await userEvent.click(
-      overlay.getByRole("button", { name: "Back to Membership" }),
+    await waitFor(
+      () => expect(overlay.getByText("10,000 points added")).toBeVisible(),
+      { timeout: 3000 },
     );
+    expect(overlay.getByText("New balance: 11,250 points")).toBeVisible();
     await waitFor(() =>
       expect(overlay.queryByRole("dialog")).not.toBeInTheDocument(),
     );

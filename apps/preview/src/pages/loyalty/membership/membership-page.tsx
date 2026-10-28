@@ -22,7 +22,6 @@ import {
 import { QrCode } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
-import { TopUpFlow } from "../top-up-flow";
 import { storyHref } from "../../workbench-story-nav";
 import {
   ISSUED_COUPON,
@@ -32,6 +31,7 @@ import {
   SOLD_OUT_COPY,
   SOLD_OUT_REWARDS,
 } from "../loyalty-content";
+import { TopUpFlow } from "../top-up-flow";
 import {
   CouponsPane,
   MEMBERSHIP_TABS,

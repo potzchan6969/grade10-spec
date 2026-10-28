@@ -103,8 +103,7 @@ export const TOP_UP_RESULT_COPY = {
   },
   underReview: {
     title: "Top-up under review",
-    description:
-      "Your card is charged only if it’s approved. You can close this page.",
+    description: "Your card is charged only if it’s approved.",
     reference: (ref: string) => `Reference ${ref}`,
     history: "View Top-Up History",
   },
