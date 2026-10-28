@@ -126,9 +126,6 @@ That is how the work reaches an engineer. The application repository has no plan
 | `ui_waived: "<why>"` | The designer, or the author | A change nothing a reader sees moves on, so it draws no `ui-design.md` | The stage ladder, which reads it as the UI design |
 | `purpose_rewritten:` with `<capability>: "<why>"` | The author | A delta whose Purpose replaces a durable Purpose the change makes untrue; `<capability>` is its path under `openspec/specs/` | `pnpm accept:preflight` and `pnpm spec:accept`, check `fold:purpose`, which warns with the line instead of refusing |
 | `hands:` with `<role>: @handle` | The product manager at the interview's end, or `pnpm plan hand` | From the interview's end; one handle for each of `pm`, `design`, `qa`, `dev`, `release` | The notify workflow and the digest, for who is told and whose turn it is |
-| `landed_by:` with `<artifact>: @handle` | The landing — `pnpm run plan:land`, or the person's own push through it | In the same commit as the artifact it names | `pnpm run plan:land` and the relay, for whose word landed it |
-| `reviewed:` with `<artifact>: <content id>` | The round's re-read | When an artifact is read again against what is before it | The freshness read, which shows an artifact behind until the id matches; `archive:preflight`'s behind gate, which refuses the fold while one still does not |
-| `thread: <channel>/<ts>` | The round, from the first planning-channel message about the change | Once, and never rewritten | Every message, which links the thread |
 | `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
 | `target`, `owner`, `owners`, `depends_on` | ❓ No document says who writes them | ❓ | `depends_on`: the digest and the review's clusters; the others nothing since the boards left the manual |
 
@@ -153,7 +150,7 @@ A question the record cannot answer belongs in `decisions.md`, whose `Decided` c
 
 The blind pass is skipped only where the spec diff adds no scenario id and modifies no `**GIVEN**` / `**WHEN**` / `**THEN**` line. It is nothing the manifest records - a key would go stale the moment behaviour moved under it, and the verdict is cheap to recompute by reading the diff. Behaviour lives entirely in those lines, so the only way to take the shortcut is to genuinely not change behaviour. Where the author and QA disagree, that is a question for the interview, not a self-service waiver.
 
-The strongest control is one clear route. `/workflow-plan` writes the PM's artifacts; `/planning-dev` runs QA1, Dev, QA2, human clarification, acceptance and publication together. A slower or noisy run increases `skip_specs` use, so the integrated route must remain usable.
+The strongest control is one clear route. `/planning-pm` writes the PM's artifacts; `/planning-dev` runs QA1, Dev, QA2, human clarification, acceptance and publication together. A slower or noisy run increases `skip_specs` use, so the integrated route must remain usable.
 
 
 A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so the store's reader in `tools/openspec-store` refuses a record key holding anything but text. `skip_specs` is the one exception, and not a waiver of the rule but the switch beneath it: the OpenSpec CLI owns that key and reads it as a boolean, so a reason written there invalidates the manifest and the marker stops being honoured at all. The switch stays `true`, and `skip_specs_why` carries the line.
@@ -199,7 +196,7 @@ After implementation is verified, whether or not it is deployed yet:
 2. confirm the first task claim recorded `contractBaseline` in `implementation.json`; record the verified repository commits and concrete deploy components;
 3. run `pnpm run archive:preflight <change>`. It compares the claimed paths and anchors with the current durable contract. Add a compatibility acknowledgement for each difference; semantic entries name their evidence;
 4. preserve any decision that outlives the change in the PRD's `Product decisions` block and record what moved, or `none`, for archive preflight; take the 🚧 marks off outcomes this implementation verified. Deployment availability is recorded separately. Run `pnpm check:manual` after page changes;
-5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`, keeping the accepted snapshot, acceptance and implementation records, tasks and `rounds.md`. Archive preserves planning and implementation history and does not fold requirements again;
+5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`, keeping the accepted snapshot, acceptance and implementation records and tasks. Archive preserves planning and implementation history and does not fold requirements again;
 6. deploy independently of archive. After deployment makes the implementation available, human QA discovers `pending-review` and `reopened` suites through `/tcs-review` and uses `/tcs-run-sheet` for any manual execution. Review is not a task and does not gate acceptance, the fold, implementation or archive; case classification is not a pass/fail result;
 7. leave links between the durable spec, the page and the archive where they aid discovery.
 

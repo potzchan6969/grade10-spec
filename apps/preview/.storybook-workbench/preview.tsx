@@ -29,7 +29,7 @@ const preview: Preview = {
           "Start Here": [],
           "Account": ["Profile", "Sign In", "KYC", "Business Verification", "Kyc Service", "Roles", "Users", "Sessions", "Audit", "Accounts"],
           "Store": ["Home", "Product Listing", "Product Page", "Cart", "Cart Validation", "Store Locator", "Cross Sell", "Checkout", "Order History", "Order Detail", "Shelf Scanning", "Discounts", "Refunds", "Shipping"],
-          "Loyalty": ["Points", "Tiers", "Rewards", "Paying With Points", "Coupons", "Membership", "Shopify Integration", "Wallet Member Card", "Operator Console", "Expiry Reminders", "Top Ups"],
+          "Loyalty": ["Points", "Tiers", "Rewards", "Paying With Points", "Coupons", "Membership", "Shopify Integration", "Campaigns", "Wallet Member Card", "Operator Console", "Expiry Reminders", "Top Ups"],
           "Auction": ["Account", "Display", "Bidding", "Post Bidding"],
           "Vault": ["Collector Pages", "Case Lifecycle", "Portfolio", "Loan And Money", "Documents And Signing", "Identity Check", "Operator Console", "Compliance And Readiness"],
           "Submissions": ["Intake Tracker"],

@@ -3,9 +3,7 @@
 What every mechanism in this store and the application repository is held
 to, and what the readers of a tech design and of a build argue for. The
 owner's brief is
-[`docs/references/delivery-workflow-blueprint.md`](../references/delivery-workflow-blueprint.md);
-the round that applies these is the manual's
-[Agent Rounds](../prds/products/shared/planning/agent-rounds.md).
+[`docs/references/delivery-workflow-blueprint.md`](../references/delivery-workflow-blueprint.md).
 
 ## The Principles
 
@@ -25,14 +23,13 @@ the round that applies these is the manual's
 - **Conscientious** — a wrong thing already there is named, and its
   structure is fixed rather than its symptom; one fix per category of
   problem, applied wherever the category shows
-- **The simpler thing** — one reader on every round argues for the smaller
-  design with the same or a better result, and is the floor when a round has
-  one reader
+- **The simpler thing** — a reader argues for the smaller design with the
+  same or a better result
 - **Nitpick** — the quality of the system is argued in every aspect, and a
   finding is a claim with its scenario, never a preference
 
 ## Where a Reader Applies It
 
-Which reader argues which of these on which artifact is a row of the planning
-schema, `openspec/schemas/grade10-planning/schema.yaml`, beside the artifact it
-reads; the round dispatches from there.
+Which reader argues which of these on a bug fix is a row of the planning
+schema's `bug:` block, `openspec/schemas/grade10-planning/schema.yaml`;
+[`/fix-bug`](bug-fixes.md) dispatches from there.

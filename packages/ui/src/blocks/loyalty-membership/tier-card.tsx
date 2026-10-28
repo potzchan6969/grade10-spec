@@ -17,7 +17,7 @@ type TierCardCopy = {
   worthSuffix: string;
   /** Names the qualifying-window progress, and the progress bar itself. */
   qualifying: string;
-  /** Names the Benefits destination its affordance opens. */
+  /** Names the Benefits destination the whole card opens. */
   benefits: string;
 };
 
@@ -48,15 +48,14 @@ type TierCardProps = {
   /** What the held tier earns, as the footer's one sentence the consumer words. */
   earnLine?: string;
   /**
-   * The Tiers & Benefits page's own address. Where it is given, the Benefits
-   * affordance is the link to it — its address can be copied and a press
-   * with a modifier key opens it in a new tab. A plain press is still
-   * reported through `onClick` where one is supplied. The rest of the card
-   * is not interactive.
+   * The Tiers & Benefits surface's address. Where it is given, the Benefits
+   * affordance in the footer is a link to it — so its address can be copied
+   * and a press with a modifier key opens it in a new tab. A plain press is
+   * still reported through `onClick` where one is supplied. The rest of the
+   * card is inert.
    */
   href?: string;
-  /** Reported on a plain press of the Benefits affordance, in place of the
-   *  link's own navigation. */
+  /** Reported on a plain press of the Benefits affordance. */
   onClick?: () => void;
   className?: string;
 };
@@ -100,10 +99,10 @@ const SKIN: Record<
 /**
  * The member's tier card: the tier's skin and wordmark, the spendable balance
  * and what it pays at checkout, the qualifying-window progress where the tier
- * names a threshold, and the Benefits link — the affordance alone opens the
- * Tiers & Benefits page; the rest of the card is inert. The card carries no
- * expiry line: the balance lapses on one date after the inactivity window,
- * and that is said where the member reads their benefits.
+ * names a threshold, and the Benefits link — the footer alone opens the Tiers
+ * & Benefits surface, the rest of the card inert. The card carries no expiry
+ * line: the balance lapses on one date after the inactivity window, and that
+ * is said where the member reads their benefits.
  */
 function TierCard({
   copy,
@@ -129,13 +128,27 @@ function TierCard({
       ? (bounded / qualifyingThreshold) * 100
       : 0;
 
-  const reportPlainPress = (event: MouseEvent<HTMLAnchorElement>) => {
+  const reportPlainPress = (
+    event: MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+  ) => {
     if (onClick == null || event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
       return;
     event.preventDefault();
     onClick();
   };
+
+  const benefits = (
+    <>
+      <Text data-slot="tier-card-benefits" size="xs" tone="muted">
+        {copy.benefits}
+      </Text>
+      <CaretRight aria-hidden color="var(--muted-foreground)" size={12} />
+    </>
+  );
+
+  const benefitsClass =
+    "ml-auto shrink-0 cursor-pointer items-center gap-1 rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
 
   const rings = (
     <>
@@ -156,15 +169,6 @@ function TierCard({
         data-slot="tier-card-ring"
       />
     </>
-  );
-
-  const benefits = (
-    <HStack align="center" gap="xs">
-      <Text data-slot="tier-card-benefits" size="xs" tone="muted">
-        {copy.benefits}
-      </Text>
-      <CaretRight aria-hidden color="var(--muted-foreground)" size={12} />
-    </HStack>
   );
 
   const body = (
@@ -268,7 +272,7 @@ function TierCard({
         ) : null}
         {href != null ? (
           <a
-            className="ml-auto inline-flex shrink-0 rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className={cn("inline-flex", benefitsClass)}
             data-slot="tier-card-benefits-link"
             href={href}
             onClick={reportPlainPress}
@@ -277,15 +281,17 @@ function TierCard({
           </a>
         ) : onClick != null ? (
           <button
-            className="ml-auto inline-flex shrink-0 rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className={cn("inline-flex", benefitsClass)}
             data-slot="tier-card-benefits-link"
-            onClick={onClick}
+            onClick={reportPlainPress}
             type="button"
           >
             {benefits}
           </button>
         ) : (
-          <div className="ml-auto shrink-0">{benefits}</div>
+          <HStack align="center" className="ml-auto shrink-0" gap="xs">
+            {benefits}
+          </HStack>
         )}
       </HStack>
     </VStack>

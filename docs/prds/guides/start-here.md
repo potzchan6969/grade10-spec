@@ -47,8 +47,8 @@ screens, states and flows sit under the same words as its page here.
   survive.
 - [Dates and times](/platform/shared/dates-and-times) — the four shapes a date takes
   on screen, before you invent a fifth.
-- [Working a change](/guides/working-a-change) — `/workflow-design`, the screen the
-  journeys ask for, and the word that lands it.
+- [Working a change](/guides/working-a-change) — `/planning-design`, the screen the
+  journeys ask for.
 
 ## If you are in QA
 

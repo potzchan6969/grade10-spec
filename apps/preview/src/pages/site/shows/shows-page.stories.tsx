@@ -163,13 +163,21 @@ export const Default: Story = {
     expect(embed.src).toContain(
       `youtube.com/embed/${SHOWS_PAGE.formats.chapters[0].video?.youtubeId}`,
     );
-    // The embed loads paused — the visitor presses play in the player.
-    expect(embed.src).not.toContain("autoplay=1");
+    // One click starts the video (Q19): the embed autoplays.
+    expect(embed.src).toContain("autoplay=1");
+    expect(embed.allow).toContain("autoplay");
     expect(
       canvas.queryByRole("button", {
         name: `Play ${SHOWS_PAGE.formats.chapters[0].video?.badge} video`,
       }),
     ).toBeNull();
+
+    // Each video plays on its own (Q17): starting the second leaves the
+    // first embed in place.
+    await userEvent.click(canvas.getAllByRole("button", { name: /^Play / })[0]);
+    await waitFor(() =>
+      expect(canvasElement.querySelectorAll("iframe")).toHaveLength(2),
+    );
 
     // Carousel: next arrow advances the image and the active dot.
     const firstEdition = SHOWS_PAGE.formats.chapters[0].editions[0];
@@ -194,6 +202,19 @@ export const Default: Story = {
         name: `${firstEdition.title} — 2 of ${firstEdition.photos.length}`,
       }),
     ).toHaveAttribute("src", firstEdition.photos[1]);
+
+    // Previous at the first photo wraps round to the last (Q16).
+    const previous = canvas.getAllByRole("button", {
+      name: `Previous ${firstEdition.title} photo`,
+    })[0];
+    await userEvent.click(previous);
+    await userEvent.click(previous);
+    await waitFor(() =>
+      expect(dots[firstEdition.photos.length - 1]).toHaveAttribute(
+        "aria-current",
+        "true",
+      ),
+    );
   },
 };
 

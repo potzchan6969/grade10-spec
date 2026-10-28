@@ -1,5 +1,5 @@
 import { ArrowSquareOut } from "@phosphor-icons/react";
-import { type ComponentProps, type ReactNode, useMemo } from "react";
+import { type ComponentProps, memo, type ReactNode, useMemo } from "react";
 import Markdown, { type Components } from "react-markdown";
 import { Link as RouterLink } from "react-router";
 import remarkGfm from "remark-gfm";
@@ -224,8 +224,10 @@ type MarkdownViewProps = {
 /**
  * GitHub markdown, raw HTML off. Off is load-bearing: pages are editable in the
  * browser, so the renderer is the line that keeps an edit from becoming script.
+ * Memoized: a parse is pure in its props, and every location change re-renders
+ * the page, so an unmemoized view re-parses all of it on a section click.
  */
-export function MarkdownView({
+export const MarkdownView = memo(function MarkdownView({
   text,
   baseDir,
   index,
@@ -340,7 +342,7 @@ export function MarkdownView({
       </Markdown>
     </div>
   );
-}
+});
 
 function Heading({
   level,

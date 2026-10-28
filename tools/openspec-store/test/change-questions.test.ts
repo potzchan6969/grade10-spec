@@ -75,16 +75,6 @@ function withPages(entry: ChangeEntry, pages: PageEntry[]): ChangeEntry {
   return entry;
 }
 
-const ROUNDS = [
-  "# Rounds",
-  "",
-  "| Round | Artifact | Perspectives | Stood | Asked | Tests |",
-  "| --- | --- | --- | --- | --- | --- |",
-  "| 1 | ui-design | design; simpler | one state named | `Q2` | - |",
-  "| 2 | group 3 | missing-pieces; simpler | nothing stood | `Q3` | - |",
-  "",
-].join("\n");
-
 function changeWith(record: string, extra: Record<string, string> = {}) {
   const root = writeStore({
     "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
@@ -99,22 +89,8 @@ function changeWith(record: string, extra: Record<string, string> = {}) {
 
 const HANDS = ["hands:", "  pm: ecchochan", ""].join("\n");
 
-describe("the artifact a round raised a question against", () => {
-  it("is the round's own Artifact cell, read through `readChanges`", () => {
-    // `decisions.md`'s row always names the file it lives in, so the record
-    // is the only thing that says which draft was under challenge. Nothing
-    // read the two together before this.
-    const entry = changeWith(HANDS, { [`${DIR}/rounds.md`]: ROUNDS });
-    const against = new Map(
-      (entry.questions ?? []).map((one) => [one.id, one.artifact]),
-    );
-
-    expect(against.get("Q2")).toBe("ui-design");
-    // A task group's number, however the row spelled it.
-    expect(against.get("Q3")).toBe("3");
-  });
-
-  it("is `decisions` for every row where the change carries no record", () => {
+describe("the artifact a question is raised against", () => {
+  it("is `decisions` for every row", () => {
     const entry = changeWith(HANDS);
 
     for (const one of entry.questions ?? [])

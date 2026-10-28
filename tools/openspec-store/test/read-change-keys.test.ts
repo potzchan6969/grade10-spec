@@ -231,65 +231,16 @@ describe("an id a record answers with nothing", () => {
   // One sentence for all three keys: a blank entry claims the id is answered
   // and answers it with nobody, which no rule downstream could tell from a
   // typo. Which line was owed is the rule's to say, not the reader's.
-  it.each([
-    "hands: pm",
-    "landed_by: decisions",
-    "reviewed: specs",
-    "purpose_rewritten: shared/ui/store-cart",
-  ])("refuses `%s` written blank", (entry) => {
-    const [key, id] = entry.split(": ");
+  it.each(["hands: pm", "purpose_rewritten: shared/ui/store-cart"])(
+    "refuses `%s` written blank",
+    (entry) => {
+      const [key, id] = entry.split(": ");
 
-    expect(refusalOf([`${key}:`, `  ${id}: ''`, ""].join("\n"))).toBe(
-      `\`${key}.${id}\` must be a line of text`,
-    );
-  });
-});
-
-describe("who landed each artifact", () => {
-  it("reads one handle per artifact id", () => {
-    const { entry } = changeWith(
-      ["landed_by:", "  decisions: ecchochan", "  ui-design: '@Dana'", ""].join(
-        "\n",
-      ),
-    );
-
-    expect(entry.error).toBeUndefined();
-    expect(entry.landedBy).toEqual({
-      decisions: "ecchochan",
-      "ui-design": "dana",
-    });
-  });
-
-  it("says nothing where the key is absent", () => {
-    expect(changeWith("").entry.landedBy).toBeUndefined();
-  });
-
-  it("refuses a record whose landings are not a mapping", () => {
-    expect(refusalOf("landed_by: dana\n")).toMatch(
-      /`landed_by` must be a mapping/,
-    );
-  });
-});
-
-describe("what was read again", () => {
-  it("reads one content id per artifact id", () => {
-    const { entry } = changeWith(
-      ["reviewed:", "  specs: 1a2b3c4d", ""].join("\n"),
-    );
-
-    expect(entry.error).toBeUndefined();
-    expect(entry.reviewed).toEqual({ specs: "1a2b3c4d" });
-  });
-
-  it("says nothing where the key is absent", () => {
-    expect(changeWith("").entry.reviewed).toBeUndefined();
-  });
-
-  it("refuses a record whose read marks are not a mapping", () => {
-    expect(refusalOf("reviewed: 1a2b3c4d\n")).toMatch(
-      /`reviewed` must be a mapping/,
-    );
-  });
+      expect(refusalOf([`${key}:`, `  ${id}: ''`, ""].join("\n"))).toBe(
+        `\`${key}.${id}\` must be a line of text`,
+      );
+    },
+  );
 });
 
 describe("a Purpose the change says no longer holds", () => {

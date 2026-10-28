@@ -81,8 +81,8 @@ whole loop once, end to end, in agent terms.
 
 ## Editing
 
-Every page is editable in the browser when the manual is running locally, and
-every edit lands in git as a commit — git is the only state this app has. The
+Every page is editable in the browser when the manual is running locally, by
+adding `?edit=1` to its address, and every edit lands in git as a commit — git is the only state this app has. The
 hosted site is a static build of the store and is always read-only.
 [Writing the manual](/guides/writing-the-manual) covers the page grammar and
 the block palette.

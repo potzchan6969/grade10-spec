@@ -96,11 +96,7 @@ jobs:
       - name: Check the manual
         run: pnpm run check:manual
 
-      # The banner on an open page listens to the relay this names; with the
-      # variable unset the build writes no relay and the banner stays dark.
       - name: Build
-        env:
-          RELAY_URL: ${{ vars.RELAY_URL }}
         run: pnpm run manual:build
 
       - name: Deploy

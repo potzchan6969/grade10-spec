@@ -1,8 +1,9 @@
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { Text } from "@grade10/design-system/components/display/text";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
-import { List, X } from "@phosphor-icons/react";
+import { List, SidebarSimple, X } from "@phosphor-icons/react";
 import { Link } from "react-router";
+import { useLayout } from "./layout";
 import { RecentBell } from "./recent-bell";
 import { ManualSearch } from "./search";
 import { ThemeToggle } from "./theme-toggle";
@@ -14,6 +15,7 @@ type HeaderProps = {
 };
 
 export function Header({ navOpen, onToggleNav, onNavigate }: HeaderProps) {
+  const layout = useLayout();
   return (
     <header className="sticky top-0 z-50 h-16 border-border border-b bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-full w-full max-w-[100rem] items-center gap-3 px-4 lg:px-6">
@@ -27,6 +29,17 @@ export function Header({ navOpen, onToggleNav, onNavigate }: HeaderProps) {
         >
           {navOpen ? <X aria-hidden /> : <List aria-hidden />}
         </IconButton>
+        {layout.navCollapsed ? (
+          <IconButton
+            aria-label="Show navigation"
+            className="max-lg:hidden"
+            onClick={() => layout.setNavCollapsed(false)}
+            size="md"
+            variant="ghost"
+          >
+            <SidebarSimple aria-hidden />
+          </IconButton>
+        ) : null}
 
         <Link
           aria-label="Grade10 Manual"

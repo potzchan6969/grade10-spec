@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "bc97437d2554b56038131610d05831006f61255ca031a2e2ad60b39d3f3209fa"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "1246609bf7066c0ab7cc28f94a8c2816ba32fd2c",
+    "capturedAt": "2026-10-28T02:36:10.221Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-site-press-page/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/press/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/press/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Every release leads to its article",
+          "Requirement: The filter narrows the record by year",
+          "Requirement: The page fits the viewport",
+          "Requirement: The page presents the record"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/press/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "9707380ddccc7e2d78429d2fed31335810ea8318",
+      "components": [
+        "storybook"
+      ],
+      "verifiedBy": "seankcw",
+      "verification": "The Press page, its content, its stories and the workbench route are on the store's main; the page files last changed at 7d0de2051. At this commit `tsc -b` on apps/preview, `tsc` on @grade10/ui and `pnpm storybook:check` pass in a clean install. The workbench play pass was not re-run locally. No grade10 application source is part of this change."
+    }
+  ]
+}

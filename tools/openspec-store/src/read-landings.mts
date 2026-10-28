@@ -33,8 +33,8 @@ const OWNER = /\(owner:\s*@?[A-Za-z0-9][A-Za-z0-9._-]*\)/;
  * read by the same pattern as one at the root. */
 const CHANGE_OF = /(?:^|\/)openspec\/changes\/([^/]+)\//;
 
-/** The record is not an artifact: `thread:`, `reviewed:` and `landed_by:` are
- * what a round writes about a change, never a thing it landed. */
+/** The record is not an artifact: it says who takes the change, never a thing
+ * it landed. */
 const RECORD = ".openspec.yaml";
 
 /** The archive is not in flight, and nothing dates a finished change. */

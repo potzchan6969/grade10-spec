@@ -1,15 +1,11 @@
 /*
- * The readers check refuses two things, and nothing proved either.
+ * The readers check refuses three things, and the real schema takes none.
  *
  * `scripts/agent-platform/check-agent-readers.mjs` is what `agent:check-parity`
- * runs over the schema's `perspectives:` blocks. It reads the schema through
+ * runs over the schema's `bug:` block. It reads the schema through
  * `lib/perspectives.mjs`, so its cases live beside that module's and run with
- * `pnpm run test:openspec`.
- *
- * Both cases are a store of their own: the real schema resolves every reader
- * it names, which is exactly why neither refusal was ever taken. The model
- * each reader runs on is the third: `opus` where a task group's or the tech
- * design's round dispatches it, `sonnet` everywhere else.
+ * `pnpm run test:openspec`. Each case is a store of its own: no readers, a
+ * reader that resolves to nothing, and a reader that names no model.
  */
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -24,7 +20,8 @@ const CHECK = join(HERE, "..", "agent-platform", "check-agent-readers.mjs");
 const SCHEMA = "openspec/schemas/grade10-planning/schema.yaml";
 
 /** A store holding one schema and whatever reader files the case writes, each
- * running on the model the case names: `sonnet` unless it says otherwise. */
+ * running on the model the case names: `sonnet` unless it says otherwise, and
+ * none where it says `null`. */
 const fixture = (schema, readers = [], models = {}) => {
   const root = mkdtempSync(join(tmpdir(), "agent-readers-"));
   const write = (rel, text) => {
@@ -36,7 +33,9 @@ const fixture = (schema, readers = [], models = {}) => {
   for (const reader of readers)
     write(
       reader,
-      `---\nname: reader\nmodel: ${models[reader] ?? "sonnet"}\n---\n\n# a reader\n`,
+      models[reader] === null
+        ? "---\nname: reader\n---\n\n# a reader\n"
+        : `---\nname: reader\nmodel: ${models[reader] ?? "sonnet"}\n---\n\n# a reader\n`,
     );
   return root;
 };
@@ -63,22 +62,35 @@ const WITH_READER = [
   "artifacts:",
   "  - id: proposal",
   "    generates: proposal.md",
+  "bug:",
+  "  diagnosis:",
   "    perspectives:",
   "      - name: simpler",
-  "        when: always",
+  "        when: [always]",
+  "        agent: .claude/agents/simpler.md",
+  "  fix:",
+  "    perspectives:",
+  "      - name: simpler",
+  "        when: [always]",
   "        agent: .claude/agents/simpler.md",
   "",
 ].join("\n");
 
-test("refuses a schema that declares no perspectives", () => {
+test("refuses a schema that declares no bug readers", () => {
   const root = fixture(
-    ["name: grade10-planning", "artifacts: []", ""].join("\n"),
+    [
+      "name: grade10-planning",
+      "artifacts:",
+      "  - id: proposal",
+      "    generates: proposal.md",
+      "",
+    ].join("\n"),
   );
 
   const { code, said } = run(root);
 
   assert.equal(code, 1);
-  assert.match(said, /declares no perspectives/);
+  assert.match(said, /declares no bug readers/);
 });
 
 test("refuses an `agent` path that resolves to nothing", () => {
@@ -93,70 +105,25 @@ test("refuses an `agent` path that resolves to nothing", () => {
   );
 });
 
-test("passes a schema whose every reader resolves", () => {
-  const root = fixture(WITH_READER, [".claude/agents/simpler.md"]);
-
-  const { code, said } = run(root);
-
-  assert.equal(code, 0);
-  assert.match(said, /\[PASS\].*\.claude\/agents\/simpler\.md resolves/);
-});
-
-/** A schema whose task groups' round dispatches the reader of words. */
-const ON_A_GROUP = [
-  "name: grade10-planning",
-  "artifacts:",
-  "  - id: proposal",
-  "    generates: proposal.md",
-  "    perspectives:",
-  "      - name: product",
-  "        when: [surface]",
-  "        agent: .claude/agents/product.md",
-  "apply:",
-  "  perspectives:",
-  "    - name: reader",
-  "      when: [copy]",
-  "      agent: .claude/agents/reader.md",
-  "",
-].join("\n");
-
-test("refuses a reader a task group's round dispatches that runs on sonnet", () => {
-  const root = fixture(ON_A_GROUP, [
-    ".claude/agents/product.md",
-    ".claude/agents/reader.md",
-  ]);
+test("refuses a reader that names no model", () => {
+  const root = fixture(WITH_READER, [".claude/agents/simpler.md"], {
+    ".claude/agents/simpler.md": null,
+  });
 
   const { code, said } = run(root);
 
   assert.equal(code, 1);
-  assert.match(said, /\.claude\/agents\/reader\.md runs on sonnet[^\n]*opus/);
+  assert.match(said, /\.claude\/agents\/simpler\.md names no model/);
 });
 
-test("refuses a reader no task group's or tech design's round dispatches that runs on opus", () => {
-  const root = fixture(
-    ON_A_GROUP,
-    [".claude/agents/product.md", ".claude/agents/reader.md"],
-    {
-      ".claude/agents/product.md": "opus",
-      ".claude/agents/reader.md": "opus",
-    },
-  );
-
-  const { code, said } = run(root);
-
-  assert.equal(code, 1);
-  assert.match(said, /\.claude\/agents\/product\.md runs on opus[^\n]*sonnet/);
-});
-
-test("passes readers on the model their rounds call for", () => {
-  const root = fixture(
-    ON_A_GROUP,
-    [".claude/agents/product.md", ".claude/agents/reader.md"],
-    { ".claude/agents/reader.md": "opus" },
-  );
+test("passes a schema whose every reader resolves and names its model", () => {
+  const root = fixture(WITH_READER, [".claude/agents/simpler.md"], {
+    ".claude/agents/simpler.md": "opus",
+  });
 
   const { code, said } = run(root);
 
   assert.equal(code, 0, said);
-  assert.match(said, /\[PASS\].*\.claude\/agents\/reader\.md runs on opus/);
+  assert.match(said, /\[PASS\].*\.claude\/agents\/simpler\.md resolves/);
+  assert.match(said, /\[PASS\].*\.claude\/agents\/simpler\.md runs on opus/);
 });

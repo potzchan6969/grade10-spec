@@ -67,6 +67,7 @@
       "source": "---\ntitle: Page-only product\nsummary: A product the manual documents in pages alone.\nicon: package\n---\n\nA product with a landing page and nothing else.\n"
     }
   ],
+  "suites": [],
   "assets": [],
   "references": [
     {

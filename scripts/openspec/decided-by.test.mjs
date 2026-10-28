@@ -1,5 +1,5 @@
 /*
- * Q49 of `run-a-round-on-every-artifact`: a case a store unit or script test
+ * A case a store unit or script test
  * decides flips to `automated` in the commit that lands the test, with the
  * suite naming what decides it. Nothing named it before this - so this file
  * pins the line's grammar (`lib/suites.mjs`) and the validator's verdicts over

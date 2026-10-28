@@ -68,7 +68,7 @@ const SUITE = (...cases) =>
 
 const SUITE_PATH = "openspec/specs/demo/thing/widget/feature-tcs.md";
 /** The same suite under a change still in flight, whose automated cases owe
- *  the line (Q69 of `run-a-round-on-every-artifact`). */
+ *  the line. */
 const CHANGE_PATH =
   "openspec/changes/demo-change/specs/demo/thing/widget/feature-tcs.md";
 const DECIDER = "scripts/openspec/demo.test.mjs";

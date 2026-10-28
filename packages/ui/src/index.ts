@@ -425,6 +425,15 @@ export {
   type ConsignmentSellerLineCopy,
   type ConsignmentSellerLineProps,
 } from "./blocks/consignment-mine/consignment-seller-line";
+// shared-ui/loyalty-campaign - prototype blocks, not yet designed
+export {
+  CampaignBanner,
+  type CampaignBannerProps,
+} from "./blocks/loyalty-campaign/campaign-banner";
+export {
+  CampaignMechanicCard,
+  type CampaignMechanicCardProps,
+} from "./blocks/loyalty-campaign/campaign-mechanic-card";
 export {
   CouponList,
   type CouponListCopy,

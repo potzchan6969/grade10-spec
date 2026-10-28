@@ -1,17 +1,29 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import {
   AmericanExpress,
+  DinersClub,
+  Discover,
+  Generic,
+  JCB,
   Mastercard,
+  UnionPay,
   Visa,
 } from "react-svg-credit-card-payment-icons/icons/logo";
 import applePayLogo from "./order-details-apple-pay.logo.png";
 import googlePayLogo from "./order-details-google-pay.logo.png";
 import type { OrderDetailsPaymentBrand } from "./types";
 
-const PAYMENT_BRAND_LABEL: Record<OrderDetailsPaymentBrand, string> = {
+const PAYMENT_BRAND_LABEL: Record<
+  Exclude<OrderDetailsPaymentBrand, "card">,
+  string
+> = {
   visa: "Visa",
   mastercard: "Mastercard",
   amex: "American Express",
+  jcb: "JCB",
+  unionpay: "UnionPay",
+  discover: "Discover",
+  diners: "Diners Club",
   "apple-pay": "Apple Pay",
   "google-pay": "Google Pay",
 };
@@ -31,15 +43,18 @@ type OrderDetailsPaymentLogoProps = {
  *
  * Card brands use `react-svg-credit-card-payment-icons` (`logo` format),
  * imported from that format's subpath: the package root keeps every brand in
- * every format, over 500 KB, for these three.
+ * every format, over 500 KB, for the few drawn here.
  * Wallet brands use bundled brand marks from SVGRepo assets.
  */
 function OrderDetailsPaymentLogo({
   brand,
   className,
 }: OrderDetailsPaymentLogoProps) {
-  const label = PAYMENT_BRAND_LABEL[brand];
   const shared = cn("h-5 w-auto shrink-0", className);
+  if (brand === "card") {
+    return <Generic aria-hidden className={shared} height={LOGO_HEIGHT} />;
+  }
+  const label = PAYMENT_BRAND_LABEL[brand];
 
   switch (brand) {
     case "visa":
@@ -63,6 +78,42 @@ function OrderDetailsPaymentLogo({
     case "amex":
       return (
         <AmericanExpress
+          aria-label={label}
+          className={shared}
+          height={LOGO_HEIGHT}
+          role="img"
+        />
+      );
+    case "jcb":
+      return (
+        <JCB
+          aria-label={label}
+          className={shared}
+          height={LOGO_HEIGHT}
+          role="img"
+        />
+      );
+    case "unionpay":
+      return (
+        <UnionPay
+          aria-label={label}
+          className={shared}
+          height={LOGO_HEIGHT}
+          role="img"
+        />
+      );
+    case "discover":
+      return (
+        <Discover
+          aria-label={label}
+          className={shared}
+          height={LOGO_HEIGHT}
+          role="img"
+        />
+      );
+    case "diners":
+      return (
+        <DinersClub
           aria-label={label}
           className={shared}
           height={LOGO_HEIGHT}

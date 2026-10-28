@@ -1,8 +1,8 @@
 /**
- * Types for `team-parse.mjs`. Three readers: `team.mjs`, the store's own
- * reader of the map, which re-exports it; `tools/relay` and `tools/manual`,
- * both of which import it under `allowJs: false` and so read the map through
- * these declarations alone — the manual re-exports `TeamMember` and `TeamMap`
+ * Types for `team-parse.mjs`. Two readers: `team.mjs`, the store's own
+ * reader of the map, which re-exports it; and `tools/manual`, which imports
+ * it under `allowJs: false` and so reads the map through these declarations
+ * alone — the manual re-exports `TeamMember` and `TeamMap`
  * from its own `api/types.ts` rather than declaring the shape a second time.
  * `team-parse.mjs` itself stays untyped JavaScript, held to this by nothing
  * but its own tests, the way every other file under `scripts/openspec/lib/`

@@ -28,7 +28,7 @@ on the scanner: card, slab, sealed box, comic and merch alike
 🚧 **In step with the store's mirror** — a product the shop publishes,
 reprices, sells out, brings back or changes the photos of reaches the scanner
 as the store's own copy of the catalogue moves —
-[Product Data](/p/grade10-site/store/product-listing#product-data)
+[Catalogue Source](/p/grade10-site/store/product-listing#catalogue-source)
 
 🚧 **Gone when the store drops it** — a product the store unpublishes or
 deletes leaves the scanner with the next copy
@@ -50,7 +50,7 @@ the store page appears only where the store is carried —
 :::flow{title="From the shop's catalogue to the shelf" diagram="assets/diagrams/store-shelf-scan.svg"}
 ## A product is published
 A stock keeper publishes a product on the shop, or changes its price,
-availability or photos — [Product Data](/p/grade10-site/store/product-listing#product-data).
+availability or photos — [Catalogue Source](/p/grade10-site/store/product-listing#catalogue-source).
 ## The store keeps the scanner in step
 When its copy of the catalogue moves, the store adds what is new to the
 scanner, rewrites what changed, removes what it no longer publishes, and

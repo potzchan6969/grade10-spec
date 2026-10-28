@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { cn } from "@grade10/design-system/lib/utils";
+import { type CSSProperties, useState } from "react";
 import { Outlet } from "react-router";
 import { useSnapshot } from "../api/snapshot-provider";
 import { useHashFlash } from "../blocks/anchor";
 import { SnapshotFooter } from "./footer";
 import { Header } from "./header";
-import { MainMoved } from "./main-moved";
+import {
+  clamp,
+  LayoutProvider,
+  NAV_FOLD_AT,
+  NAV_WIDTH,
+  useLayout,
+} from "./layout";
 import { PageSectionsProvider } from "./page-sections";
+import { ResizeHandle } from "./resize-handle";
 import { useScrollMemory } from "./scroll-memory";
+import { SectionPeek } from "./section-peek";
 import { Sidebar } from "./sidebar";
 import {
   FixtureNotice,
@@ -15,7 +24,17 @@ import {
 } from "./snapshot-state";
 
 export function AppShell() {
+  return (
+    <LayoutProvider>
+      <Shell />
+    </LayoutProvider>
+  );
+}
+
+function Shell() {
   const snapshot = useSnapshot();
+  const layout = useLayout();
+  const [navDraft, setNavDraft] = useState<number | null>(null);
   const [navOpen, setNavOpen] = useState(false);
   const closeNav = () => setNavOpen(false);
   const ready = snapshot.status === "ready";
@@ -25,7 +44,18 @@ export function AppShell() {
   useHashFlash(ready);
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
+    <div
+      className="group/shell min-h-dvh bg-background text-foreground"
+      data-nav={layout.navCollapsed ? "collapsed" : undefined}
+      data-nav-folding={
+        navDraft !== null && navDraft < NAV_FOLD_AT ? "" : undefined
+      }
+      style={
+        {
+          "--manual-nav-width": `${clamp(navDraft ?? layout.navWidth, NAV_FOLD_AT, NAV_WIDTH.max)}px`,
+        } as CSSProperties
+      }
+    >
       <Header
         navOpen={navOpen}
         onNavigate={closeNav}
@@ -48,12 +78,38 @@ export function AppShell() {
       ) : null}
 
       <PageSectionsProvider ready={ready}>
+        {layout.navCollapsed ? <SectionPeek /> : null}
         <div className="mx-auto flex w-full max-w-[100rem]">
           <Sidebar onNavigate={closeNav} open={navOpen} />
+          {layout.navCollapsed ? null : (
+            <ResizeHandle
+              className="max-lg:hidden"
+              grows={1}
+              label="Resize the navigation; drag to the left to fold it away"
+              max={NAV_WIDTH.max}
+              min={NAV_WIDTH.min}
+              onCommit={(next) => {
+                setNavDraft(null);
+                if (next < NAV_FOLD_AT) layout.setNavCollapsed(true);
+                else
+                  layout.setNavWidth(clamp(next, NAV_WIDTH.min, NAV_WIDTH.max));
+              }}
+              onMove={setNavDraft}
+              onToggle={() => layout.setNavCollapsed(true)}
+              width={layout.navWidth}
+            />
+          )}
 
           <div className="flex min-w-0 flex-1 flex-col">
-            <main className="min-w-0 flex-1 px-5 py-10 lg:px-12">
-              <div className="mx-auto w-full min-w-0 max-w-4xl">
+            <main className="min-w-0 flex-1 px-5 lg:px-12">
+              {/* A page read beside its side takes the whole width; its
+                    reading column keeps its own measure. */}
+              <div
+                className={cn(
+                  "mx-auto w-full min-w-0",
+                  layout.split && layout.sideShown ? "max-w-none" : "max-w-4xl",
+                )}
+              >
                 {snapshot.status === "loading" ? <SnapshotLoading /> : null}
                 {snapshot.status === "error" ? (
                   <SnapshotUnavailable message={snapshot.message} />
@@ -63,9 +119,6 @@ export function AppShell() {
                     {snapshot.source === "fixture" ? (
                       <FixtureNotice reason={snapshot.reason} />
                     ) : null}
-                    {/* Above the page, inside the column it reads in: what
-                        the banner says is about the reading, not the route. */}
-                    <MainMoved />
                     <Outlet />
                   </>
                 ) : null}

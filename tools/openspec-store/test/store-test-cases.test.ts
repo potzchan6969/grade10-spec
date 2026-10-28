@@ -147,7 +147,7 @@ describe("a suite in an older shape", () => {
   });
 });
 
-/** Q49 of `run-a-round-on-every-artifact`: a case a store unit or script test
+/** A case a store unit or script test
  * decides names the test that decides it, directly after the classification
  * block and before `**Pre-conditions:**`. The reader has no use for the line
  * yet - it does not export it - so it only has to read past it rather than

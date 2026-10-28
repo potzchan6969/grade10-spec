@@ -59,16 +59,17 @@ export const Silver: Story = {
   },
 };
 
-/** Gold: the retention ask is keeping the tier already held. With a Tiers & Benefits address the Benefits link carries it — the rest of the card is inert. */
+/** Gold: the retention ask is keeping the tier already held. With a Tiers & Benefits address the Benefits affordance is the link to it; the rest of the card is inert. */
 export const Gold: Story = {
   args: { href: "#tier-and-benefits" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const card = canvasElement.querySelector('[data-slot="tier-card"]');
     expect(card?.tagName).toBe("DIV");
-    expect(
-      canvas.getByRole("link", { name: "Benefits" }),
-    ).toHaveAttribute("href", "#tier-and-benefits");
+    expect(canvas.getByRole("link", { name: "Benefits" })).toHaveAttribute(
+      "href",
+      "#tier-and-benefits",
+    );
     expect(canvas.getByText("750")).toBeInTheDocument();
     expect(canvas.getByText("250 / 500 pts")).toBeInTheDocument();
     expect(
@@ -137,14 +138,15 @@ export const NoPoints: Story = {
   },
 };
 
-/** With only a press handler the Benefits affordance is a button that reports the press; the card stays inert. */
+/** With only a press handler the Benefits affordance is a button that reports the press. */
 export const Pressed: Story = {
   args: { onClick: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const card = canvasElement.querySelector('[data-slot="tier-card"]');
     expect(card?.tagName).toBe("DIV");
-    canvas.getByRole("button", { name: "Benefits" }).click();
+    const affordance = canvas.getByRole("button", { name: "Benefits" });
+    affordance.click();
     expect(args.onClick).toHaveBeenCalledOnce();
   },
 };

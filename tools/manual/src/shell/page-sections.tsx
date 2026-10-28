@@ -1,6 +1,7 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import { createContext, type ReactNode, useEffect, useState } from "react";
 import { useLocation } from "react-router";
+import { useSnapshot } from "../api/snapshot-provider";
 import { seekFrames } from "../blocks/seek";
 
 /** A page's own sections, read from what it actually rendered: H2s, and the
@@ -50,13 +51,15 @@ function scan(): PageSection[] {
  * The page's headings, once they exist. The snapshot lands after first paint, so
  * the first look finds an empty page — this keeps looking until it does not.
  * The search is a trigger too: a change page keeps its open tab there, and
- * each tab is a different set of headings.
+ * each tab is a different set of headings. So is a new snapshot: an edited
+ * page renames its headings without leaving the route.
  */
 function useSections(ready: boolean): PageSection[] {
   const { pathname, search } = useLocation();
+  const snapshot = useSnapshot();
   const [sections, setSections] = useState<PageSection[]>([]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname and search are triggers, not reads — a new page or tab has new headings to find.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname, search and the snapshot are triggers, not reads — a new page, tab or edit has new headings to find.
   useEffect(() => {
     setSections([]);
     if (!ready) return;
@@ -64,7 +67,7 @@ function useSections(ready: boolean): PageSection[] {
       const found = scan();
       return found.length > 0 ? found : null;
     }, setSections);
-  }, [pathname, search, ready]);
+  }, [pathname, search, snapshot, ready]);
 
   return sections;
 }

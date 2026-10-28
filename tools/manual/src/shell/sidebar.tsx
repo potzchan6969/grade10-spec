@@ -8,7 +8,6 @@ import { buildIndex, REFERENCES_ROUTE, soleProduct } from "../api/derive";
 import { useSnapshot } from "../api/snapshot-provider";
 import { PageIcon } from "../blocks/page-icon";
 import { browserKeyStore, STORAGE } from "../editor/config";
-import { NewPageAction } from "../editor/edit-actions";
 import {
   navSections,
   PageSectionsContext,
@@ -123,11 +122,13 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
         open
           ? "max-lg:translate-x-0"
           : "max-lg:invisible max-lg:-translate-x-full",
-        "lg:visible lg:sticky lg:w-76 lg:translate-x-0 motion-reduce:transition-none",
+        "lg:visible lg:sticky lg:w-(--manual-nav-width) lg:translate-x-0 motion-reduce:transition-none",
+        // Folded away from the shell's handle; dimmed while a drag would fold it.
+        "lg:group-data-[nav=collapsed]/shell:hidden lg:group-data-nav-folding/shell:opacity-50",
       )}
       data-slot="manual-sidebar"
     >
-      <div className="flex flex-col gap-5 px-3 py-6">
+      <div className="flex flex-col gap-5 px-3 py-2">
         {/* One landmark: the fixed views and the store's contents are two
          * lists of the same rail, and two `nav`s named alike gave a screen
          * reader's landmark list two entries a reader could not tell apart.
@@ -138,7 +139,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
               Navigation appears once the snapshot is in hand.
             </Text>
           ) : (
-            <div className="flex flex-col gap-5 pt-4">
+            <div className="flex flex-col gap-5 pt-2">
               {index.groups.map((group) => (
                 <GroupSection
                   group={group}
@@ -172,8 +173,6 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
             </div>
           )}
         </nav>
-
-        <NewPageAction />
       </div>
     </aside>
   );

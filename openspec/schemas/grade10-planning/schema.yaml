@@ -18,34 +18,6 @@ artifacts:
     required: true
     teammate: product-manager
     hand: pm
-    # The page's marks, `proposal.md`, `decisions.md` and the journeys share
-    # one reader list — `agent-rounds/spec.md`'s table names the same six
-    # for all four — so it is written once here and aliased on the other
-    # two, never repeated by hand. QA is on none of them: it reads the plan
-    # and the build, so a words-only draft of these three reaches the reader
-    # of the words and the floor and nobody else.
-    perspectives: &pm-readers
-      - name: product
-        when: [surface]
-        agent: .claude/agents/product.md
-      - name: reader
-        when: [copy]
-        agent: .claude/agents/reader.md
-      - name: design
-        when: [surface]
-        agent: .claude/agents/design.md
-      - name: backend
-        when: [schema, export]
-        agent: .claude/agents/backend.md
-      - name: integration
-        when: [system]
-        agent: .claude/agents/integration.md
-      - name: operations
-        when: [migration, flag, money, deploy]
-        agent: .claude/agents/operations.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: proposal.md
     description: Why this change is needed, what changes, and what it will not do
     template: proposal.md
@@ -126,14 +98,12 @@ artifacts:
     required: true
     teammate: product-manager
     hand: pm
-    perspectives: *pm-readers
     generates: decisions.md
     description: The change's decided frontier - its goals, its edges, and what the interview settled
     template: decisions.md
     instruction: >
       Written by the product manager, with the `planning-pm` skill, out of the
-      interview that produced the proposal
-      (`docs/governance/round-summary.md#interview`). It lands before the
+      interview that produced the proposal. It lands before the
       journeys, the design and the requirements, because all three are drawn
       from what it settles.
 
@@ -258,7 +228,6 @@ artifacts:
     required: true
     teammate: product-manager
     hand: pm
-    perspectives: *pm-readers
     generates: specs/**/user-journeys.md
     description: The journeys this change adds, changes or retires, with the ones it leans on restated
     template: user-journeys.md
@@ -387,26 +356,6 @@ artifacts:
     required: false
     teammate: designer
     hand: design
-    # `agent-rounds/spec.md`'s table names three readings for `ui-design.md`:
-    # the journeys walked and the design system's inventory and parity, both
-    # `design.md`'s, then the words as `reader.md` reads them. Neither design
-    # reading is `always`: a words-only draft never touches a screen, a state
-    # or a story, and `design.md`'s own "Summoned by" stays trigger-based.
-    # The inventory also reads `export`, because a `## Components` table names
-    # the exports the design composes and raises that trigger alone.
-    perspectives:
-      - name: journeys
-        when: [surface]
-        agent: .claude/agents/design.md
-      - name: inventory
-        when: [surface, export]
-        agent: .claude/agents/design.md
-      - name: reader
-        when: [copy]
-        agent: .claude/agents/reader.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: ui-design.md
     description: The visual plan - screens, component exports, and states
     template: ui-design.md
@@ -511,25 +460,6 @@ artifacts:
     required: false
     teammate: engineer
     hand: dev
-    # `tech-design.md` is `.claude/agents/tech.md`'s own subject, so its four
-    # readings (`system-design.md`'s "Where a Reader Applies It" row) run
-    # every round, whatever the draft touched.
-    perspectives:
-      - name: deterministic
-        when: [always]
-        agent: .claude/agents/tech.md
-      - name: simple
-        when: [always]
-        agent: .claude/agents/tech.md
-      - name: consistent
-        when: [always]
-        agent: .claude/agents/tech.md
-      - name: testable
-        when: [always]
-        agent: .claude/agents/tech.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: tech-design.md
     description: The technical implementation's high-level design
     template: tech-design.md
@@ -609,10 +539,6 @@ artifacts:
     hand: pm
     # The internal reads happen inside planning-dev. The invoking human accepts
     # the complete planning result once; this is not a per-artifact QA approval.
-    perspectives:
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: specs/**/spec.md
     description: The capability's purpose, the feature set, and the requirement deltas
     template: spec.md
@@ -865,10 +791,6 @@ artifacts:
     hand: pm
     # QA1 and QA2 are internal planning reviews. Human QA reviews and classifies
     # newly generated draft cases after deployment; tcs-run-sheet supports manual execution.
-    perspectives:
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: specs/**/feature-tcs.md
     description: An independent blind reading of the anchors, written without sight of the scenarios
     template: feature-tcs.md
@@ -1018,29 +940,6 @@ artifacts:
     required: true
     teammate: engineer
     hand: dev
-    # `agent-rounds/spec.md`'s table names five readings for `tasks.md`: order
-    # and dependencies and migration and flag, both `operations.md`'s; tests
-    # first and the end-to-end group, both `qa.md`'s; the simpler thing,
-    # `simpler.md`'s.
-    # `tasks.md` is squarely qa's and operations' subject too, so their order,
-    # tests-first and end-to-end readings run every round; migration and flag
-    # stay conditional, as `operations.md`'s own "Summoned by" says.
-    perspectives:
-      - name: order
-        when: [always]
-        agent: .claude/agents/operations.md
-      - name: tests-first
-        when: [always]
-        agent: .claude/agents/qa.md
-      - name: end-to-end
-        when: [always]
-        agent: .claude/agents/qa.md
-      - name: migration-flag
-        when: [migration, flag]
-        agent: .claude/agents/operations.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
     generates: tasks.md
     description: The implementation plan, claimed group by group
     template: tasks.md
@@ -1100,8 +999,7 @@ artifacts:
       the walks decide to automated with `pnpm run tcs:automated <case…>
       --decided-by <walk path>`, a walk in grade10 named `grade10:<path>`;
       the cases that stay manual remain draft for human QA after deployment
-      makes implementation available and are named in the walk's `rounds.md`
-      row. Human review is downstream work discovered from the suite; it is
+      makes implementation available. Human review is downstream work discovered from the suite; it is
       never a task, walk input, acceptance gate or archive gate. The walk
       runs on the local or isolated stack: deployed evidence - a walk on
       staging, UAT or production, an observation on a live shop or a real
@@ -1142,36 +1040,6 @@ apply:
   requires:
     - tasks
   tracks: tasks.md
-  # `agent-rounds/spec.md`'s "A task group" row sizes a group by what it
-  # lands: missing pieces, code smell and the repository's conventions, all `.claude/agents/build.md`'s, where the group lands code
-  # (a changed line in any file that is neither markdown nor a message
-  # catalog); the reader of words where it lands copy (a page under
-  # docs/prds/, a sentence in any markdown file, or a catalog's line); QA
-  # every round, since a group's tests are its subject; operations on a migration or a flag; the simpler thing
-  # always. A group that lands prose alone is read by the reader of words, QA
-  # and the simpler thing.
-  perspectives:
-    - name: missing-pieces
-      when: [code]
-      agent: .claude/agents/build.md
-    - name: code-smell
-      when: [code]
-      agent: .claude/agents/build.md
-    - name: conventions
-      when: [code]
-      agent: .claude/agents/build.md
-    - name: reader
-      when: [copy]
-      agent: .claude/agents/reader.md
-    - name: qa
-      when: [always]
-      agent: .claude/agents/qa.md
-    - name: operations
-      when: [migration, flag]
-      agent: .claude/agents/operations.md
-    - name: simpler
-      when: [always]
-      agent: .claude/agents/simpler.md
   instruction: |
     Read context files, work through pending tasks, mark complete as you go.
     Pause if you hit blockers or need clarification.

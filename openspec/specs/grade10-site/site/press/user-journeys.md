@@ -1,0 +1,35 @@
+## User journeys
+
+### grade10-site-site-press-US-01: Collector scans the press record
+
+**As a** collector,
+**I want** the Press page to read as one official record — the releases
+grouped by year, newest first,
+**so that** I can size up what Grade10 has announced and when.
+
+### grade10-site-site-press-US-02: Collector opens a press release
+
+**As a** collector,
+**I want** each release on the Press page to take me to the article it
+names,
+**so that** a headline is a door to the report rather than dead text.
+
+### grade10-site-site-press-US-03: Collector narrows the record by year
+
+**As a** collector,
+**I want** the All Time filter to show me one year's releases,
+**so that** I can read a single year's record without scrolling the rest.
+
+### grade10-site-site-press-US-04: Collector reads a press release
+
+**As a** collector,
+**I want** each release to open as a real article — its date, place,
+feature image and body laid out to read, with the about-the-company
+cards at hand,
+**so that** a headline becomes the report it promised.
+
+### grade10-site-site-press-US-05: Collector returns to the record
+
+**As a** collector,
+**I want** the breadcrumb's Press crumb to take me back to the releases,
+**so that** I can leave one article and keep scanning the record.
