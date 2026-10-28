@@ -1,10 +1,10 @@
 ## 1. The Shows page in the workbench (grade10-spec) (owner: @seankcw)
 
-- [ ] 1.1 The `Site/Shows/Screens/Shows` stories' play pass asserts the
+- [x] 1.1 The `Site/Shows/Screens/Shows` stories' play pass asserts the
   sections, the link destinations, the video swap, the carousel paging and
   both viewports (`g10.site-shows.SC-01`..`SC-07`, `SC-09`, `SC-10`, `SC-13`) — ticked last, in its
   own commit before the group's code
-- [ ] 1.2 Feed the shared `ShowsPageBody` block (`packages/ui/src/blocks/site-shows`) at
+- [x] 1.2 Feed the shared `ShowsPageBody` block (`packages/ui/src/blocks/site-shows`) at
   `apps/preview/src/pages/site/shows/` with the hardcoded content and copy,
   ZZZ and NOV 2025 settled, the block's embed started on one click (Q19; `autoplay=1` and
   `allow="autoplay"` in `shows-event-video.tsx`): the production chrome, the four sections in order, the upcoming-shows card,
@@ -14,10 +14,10 @@
   wide/narrow layouts (`g10.site-shows.SC-01`, `g10.site-shows.SC-02`,
   `g10.site-shows.SC-03`, `g10.site-shows.SC-04`, `g10.site-shows.SC-05`,
   `g10.site-shows.SC-06`, `SC-07`, `SC-09`, `SC-10` and `SC-13`)
-- [ ] 1.3 Update the capability PRD
+- [x] 1.3 Update the capability PRD
   `docs/prds/products/grade10-site/site/shows.md` with the 🚧 lines this
   change delivers
-- [ ] 1.4 Verify: `pnpm run typecheck`, `pnpm run lint`,
+- [x] 1.4 Verify: `pnpm run typecheck`, `pnpm run lint`,
   `pnpm run storybook:check`, `pnpm run check:manual`, and the shows-page
   story tests
 - [ ] 1.5 Name the evidence for the scenarios the site serves and the
