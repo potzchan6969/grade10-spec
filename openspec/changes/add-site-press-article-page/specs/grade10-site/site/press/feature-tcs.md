@@ -39,8 +39,8 @@ None.
 * A breadcrumb opens the page — a Press crumb back to the record and the
   current crumb "Press Release".
 * The release's title is the page's top-level heading.
-* The release's publish date and location show as badges under the
-  title.
+* The release's publish date, written `Sep 15, 2026`, and location show
+  as badges under the title.
 
 <!-- trace:case id=g10.site-press.TC-9hd rev=1 covers=g10.site-press.SC-t9w -->
 ### grade10-site-site-press-US4-TC2-1: The feature image holds its ratio

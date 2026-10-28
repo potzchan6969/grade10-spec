@@ -21,7 +21,7 @@
 The article surface SHALL present, in order: a breadcrumb — the Press
 crumb back to `/press-releases` and the current crumb "Press Release" —
 the release's title as the page's top-level heading, and its publish
-date and location badges.
+date, written `Sep 15, 2026`, and location badges.
 
 <!-- trace:scenario id=g10.site-press.SC-v6k rev=1 -->
 #### Scenario: grade10-site-site-press-SC-06 - A collector opens an article
@@ -29,7 +29,8 @@ date and location badges.
 
 - **WHEN** a collector opens `/press-releases/{slug}`
 - **THEN** the page SHALL show the breadcrumb, the release's title as the
-  top-level heading, and its publish date and location badges
+  top-level heading, and its publish date, written `Sep 15, 2026`, and
+  location badges
 
 <!-- trace:scenario id=g10.site-press.SC-r4d rev=1 -->
 #### Scenario: grade10-site-site-press-SC-07 - A collector goes back to the record
@@ -73,9 +74,9 @@ with or without captions.
 
 ### Requirement: Every article carries the fixed sidebar
 The article SHALL carry the fixed cards — About Grade10, About
-MemeStrategy, Media Enquiries — shared across articles and editable from
-the admin panel; on a wide viewport they SHALL sit sticky beside the
-body, and on a narrow viewport they SHALL stack after it.
+MemeStrategy, Media Enquiries — shared across articles; on a wide
+viewport they SHALL sit sticky beside the body, and on a narrow viewport
+they SHALL stack after it.
 
 <!-- trace:scenario id=g10.site-press.SC-k2p rev=1 -->
 #### Scenario: grade10-site-site-press-SC-11 - The sidebar sits beside the body

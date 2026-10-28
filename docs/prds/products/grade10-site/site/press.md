@@ -34,7 +34,7 @@ answers without a session, like any public surface —
   and numbered lists, blockquotes, and images with or without captions,
   each drawn in the template's own styles
 - 🚧 **Sidebar** — About Grade10, About MemeStrategy and Media
-  Enquiries, fixed editable cards every article shares; sticky beside
+  Enquiries, fixed cards every article shares; sticky beside
   the body on a wide viewport, after it on a narrow one
 
 - **Copy - Date style** - the page writes `Sep 15, 2026`: the live
