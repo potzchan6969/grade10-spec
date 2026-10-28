@@ -65,7 +65,7 @@ title: Store Test Cases
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-page#buy/signed-out-add-to-cart, cart#checkout/guest, order-detail#back-from-checkout/added, order-detail#back-from-checkout/order-confirmed, order-detail#back-from-checkout/create-an-account, checkout#guest-checkout/joining-an-account, checkout#guest-checkout/post-checkout-account, checkout#guest-checkout/no-points
+* **Trace:** home, product-page#buy/signed-out, cart#checkout/guest, order-detail#order-link/added, order-detail#order-link/receipt-line, order-detail#order-link/account-toast, checkout#guest-checkout/joining-an-account, checkout#guest-checkout/post-checkout-account, checkout#guest-checkout/no-points
 
 **Pre-conditions:**
 
@@ -200,7 +200,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display/signed-out, product-page#buy/signed-out-add-to-cart, cart#checkout/guest, cart#reviewing-the-cart/whose-cart, cart#reviewing-the-cart/a-product-in-both-carts
+* **Trace:** product-listing#products-display/signed-out, product-page#buy/signed-out, cart#checkout/guest, cart#reviewing-the-cart/whose-cart, cart#reviewing-the-cart/a-product-in-both-carts
 
 **Pre-conditions:**
 
