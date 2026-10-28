@@ -99,11 +99,7 @@ function OverviewPane({
         <PaneHeading id="membership-tiers-heading">
           {TIER_BENEFITS_PAGE_COPY.title}
         </PaneHeading>
-        <TiersBenefitsPane
-          heldTier={view.tier}
-          qualifyingPoints={view.qualifyingPoints}
-          qualifyingTarget={view.qualifyingThreshold}
-        />
+        <TiersBenefitsPane heldTier={view.tier} />
       </div>
     </>
   );
@@ -215,8 +211,11 @@ function TiersBenefitsPane({
   qualifyingTarget,
 }: {
   heldTier: string;
-  qualifyingPoints: number;
-  qualifyingTarget: number;
+  /** The ladder draws only on the standalone Tiers & Benefits screen; on
+   * Membership the tier card already carries the member's standing, so the
+   * pane drops the rungs and keeps the per-tier benefit cards. */
+  qualifyingPoints?: number;
+  qualifyingTarget?: number;
 }) {
   return (
     <div className="flex flex-col gap-8">
@@ -224,17 +223,20 @@ function TiersBenefitsPane({
         aria-label={TIER_BENEFITS_PAGE_COPY.title}
         className="flex flex-col gap-4"
       >
-        <TierLadder
-          copy={TIER_LADDER_COPY}
-          currentTier={heldTier}
-          qualifyingPoints={qualifyingPoints}
-          qualifyingTarget={qualifyingTarget}
-          rungs={TIER_BENEFITS.map((row) => ({
-            tier: row.tier,
-            caption: row.ladderCaption,
-            invitationOnly: row.invitationOnly,
-          }))}
-        />
+        {qualifyingPoints !== undefined &&
+        qualifyingTarget !== undefined ? (
+          <TierLadder
+            copy={TIER_LADDER_COPY}
+            currentTier={heldTier}
+            qualifyingPoints={qualifyingPoints}
+            qualifyingTarget={qualifyingTarget}
+            rungs={TIER_BENEFITS.map((row) => ({
+              tier: row.tier,
+              caption: row.ladderCaption,
+              invitationOnly: row.invitationOnly,
+            }))}
+          />
+        ) : null}
         <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
           {TIER_BENEFITS.map((row) => (
             <TierInfoCard
