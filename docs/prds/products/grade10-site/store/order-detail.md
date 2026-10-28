@@ -20,6 +20,10 @@ page with claims the frontend cannot prove.
 `grade10.com/profile/orders/<order-id>`; sign-in keeps the collector at that
 address; an unknown order and another collector's order look the same
 
+🚧 **Store orders only** — a ticket order placed on
+[Tickets](/p/grade10-site/ticketing) is answered by the ticketing platform's
+own order page, never this one - [Your Tickets](/p/grade10-site/ticketing/your-tickets)
+
 **Known facts** — the page shows the supplied order identity, items, money,
 address, payment and refund facts, and leaves each missing fact absent
 
