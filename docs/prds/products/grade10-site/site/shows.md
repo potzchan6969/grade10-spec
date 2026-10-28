@@ -62,5 +62,5 @@ it sends to `/press-releases` and its press articles.
 | Grade10 Festival 2025 date | Decided | Grade10 Festival 2025 is published as NOV 2025 (today), the live page's date and the record's year; the frame's NOV 2026 is design's to sync back. Rejected NOV 2026: it dates a 2025 show in the future. | Product |
 | Hero card label | Decided | "Upcoming Shows" — the live page's label; the frame's LATEST SHOWS described the row, not its rule. | Product |
 | Video and poster provenance | Decided | The YouTube ids, posters, editions and statistics are what the admin publishes; the headings and button words are code. Both reach the shared `ShowsPageBody` block as `content` and `copy`. | Product |
-| Navigation entry | Decided | Shows joins the primary navigation ahead of Help — after Store Locator when that item is present, after Auction on auction-first — and the footer's Company column; the header marks it current on `/shows`. Rejected a footer-only entry: of the company pages, Shows is the one a collector comes looking for. | Product (@tangconst) |
+| Navigation entry | Decided | Shows joins the primary navigation and the footer's Company column as [Page Shell](/p/grade10-site/site/page-shell) places it. Rejected a footer-only entry: of the company pages, Shows is the one a collector comes looking for. | Product (@tangconst) |
 :::

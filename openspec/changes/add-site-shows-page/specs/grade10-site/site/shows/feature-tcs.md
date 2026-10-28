@@ -591,11 +591,11 @@ Runs once per row of **Test data**.
 | `<link>` | `<destination>` |
 | --- | --- |
 | the Press Releases action in the hero | `/press-releases` |
-| the Press Release link on the Grade10 FEST Summer 2026 edition card | `/press-releases/` and its published release's slug, today `grade10-fest-summer-2026-concludes-successfully` |
-| the Press Release link on the Grade10 Festival 2025 edition card | `/press-releases/` and its published release's slug, today `psa-10-pikachu-wall-grade10-card-fest` |
-| the Press Release link in the Seoul Auction × ZZZ chapter | `/press-releases/` and its published release's slug, today `grade10-south-korea-seoul-auction` |
-| the Press Release link on the Shanghai edition card | `/press-releases/` and its published release's slug, today `cardjoy-grade10-shanghai-expansion` |
-| the Press Release link on the Hangzhou edition card | `/press-releases/` and its published release's slug, today `cardjoy-grade10-hangzhou-show` |
+| the Press Release link on the Grade10 FEST Summer 2026 edition card | `/press-releases/` and its published release's slug, in the sample `grade10-fest-summer-2026-concludes-successfully` |
+| the Press Release link on the Grade10 Festival 2025 edition card | `/press-releases/` and its published release's slug, in the sample `psa-10-pikachu-wall-grade10-card-fest` |
+| the Press Release link in the Seoul Auction × ZZZ chapter | `/press-releases/` and its published release's slug, in the sample `grade10-south-korea-seoul-auction` |
+| the Press Release link on the Shanghai edition card | `/press-releases/` and its published release's slug, in the sample `cardjoy-grade10-shanghai-expansion` |
+| the Press Release link on the Hangzhou edition card | `/press-releases/` and its published release's slug, in the sample `cardjoy-grade10-hangzhou-show` |
 
 **Steps:**
 

@@ -13,14 +13,16 @@ and the record of every show — and where each link on it leads.
     current or upcoming
   - Event scale: a statement about physical proof over a show-floor photo
     and a statistic card for each published statistic
-  - Event formats: the published chapters — today Hong Kong, Overseas
+  - Event formats: the published chapters — in the sample Hong Kong, Overseas
     Partnership and Chinese Mainland — each with an intro, a video or photo presentation when it has one,
-    and edition cards carrying a carousel and a press-release link
+    and the edition cards it holds, carrying a carousel and a press-release
+    link
   - Event records: every published record, in the order it gives them
   - Published content: the shows the admin has published, in the reader's
     language; nothing published answers not found
   - Jump navigation: the hero's Explore Shows and the sticky chapter list
-    scroll to their chapter, and the list marks the chapter in view
+    scroll to the Event Formats section or to their chapter, and the list
+    marks the chapter in view
 - What plays in place
   - Chapter videos show a poster and play affordance, then embed the
     YouTube video in the same container and start it playing
@@ -38,7 +40,8 @@ and the record of every show — and where each link on it leads.
 ### Requirement: The page presents the events
 The Shows surface SHALL present, in order: Grade10 Shows as the eyebrow
 over the top-level heading "Asia’s card shows, at full scale." with an
-Explore Shows and a Press Releases action, beside an Upcoming Shows card;
+Explore Shows and a Press Releases action, beside an Upcoming Shows card
+while a show is current or upcoming;
 an Event Scale section headed "Real Trends. In the Room." with a
 show-floor photo and a statistic card for each published statistic; an Event Formats section
 headed "Three Platforms. One Community." with its chapter list over the
@@ -313,7 +316,7 @@ the order it gives them, each with its year, title, description and image. The w
 content carries five, in this order: Seoul Auction Private Sale &
 Exhibition, naming its partner Seoul Auction × ZZZ, Grade10 FEST Summer
 2026, CARDJOY × Grade10 Shanghai, CARDJOY × Grade10 Hangzhou, Grade10
-Festival 2025 (Nov 2025).
+Festival 2025 (2025).
 
 <!-- trace:scenario id=g10.site-shows.SC-aa1 rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-07 - A collector reads the records

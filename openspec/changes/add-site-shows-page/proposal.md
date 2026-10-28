@@ -14,8 +14,8 @@ system.
 ## What Changes
 
 - **The Shows surface on the design system.** `/shows` renders inside the
-  same shell as every surface and reads as one page: the hero beside a
-  Upcoming Shows card, an event-scale section with a card for each published statistic,
+  same shell as every surface and reads as one page: the hero beside an
+  Upcoming Shows card while a show is current or upcoming, an event-scale section with a card for each published statistic,
   the published event-format chapters under a sticky pill tab list — today
   Hong Kong, Overseas Partnership, Chinese Mainland — each carrying a video
   or photo presentation when it has one, and edition cards, and an event-records timeline in the order
@@ -28,7 +28,9 @@ system.
   presentation, two today, that shows the event poster and a play affordance; clicking
   swaps the embed into the same container.
 - **Links out of the page.** The hero Press Releases button opens
-  `/press-releases`; every Press Release link opens the edition's article once published.
+  `/press-releases`; an edition's Press Release link opens its article once published and
+  otherwise `/press-releases`, and a chapter's own link shows only once
+  published.
   Both surfaces are still work in progress — this change ships the
   destinations, not the articles.
 - **A composed page in the workbench.** `apps/preview` carries the page
