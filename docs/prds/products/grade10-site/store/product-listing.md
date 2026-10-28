@@ -99,23 +99,26 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
 | A product change with a Shopify webhook | On every listing within 10 s |
 | A stock change | At the next full read, at most 30 s after the last one |
 | A change whose webhook was lost | Within 5 minutes |
-| Each worker's check for a newer copy | Every 3 s, while the listing is in use |
 
-- **Catalogue Mirror** — the store's own copy of every product the sales channel publishes, one Cloudflare Durable Object per shop; the listing, its filters and its counts read only this copy, so browsing works while Shopify is down
-  - **Shopify Webhook** — `products/create` and `products/update` mark the product pending; the mirror then reads it back from the Storefront API, never from the webhook's payload, which carries no metafields and so no worlds or types
-    - **Burst** — webhooks within 1 s of the first are read back together and published once
-    - **Read-Back** — retried every 2 s until Shopify answers the new version, for 60 s at most, then left to the full read
-  - **Deleted Product** — `products/delete` takes it off at once
-  - **Stock Change** — `inventory_levels/update` names a stock item, not a product, so it starts a full read, at most one every 30 s
-  - **Full Read** — every product read from Shopify every 5 minutes on the store's cron, which catches a change whose webhook never arrived
-  - **Worker Copy** — each worker holds the copy in memory and asks the mirror for a newer version every 3 s while the listing is in use, waiting 500 ms at most before answering from what it holds
+- **Source** — the store's own copy of the catalogue, so browsing works while Shopify is down
 - **Read from Shopify** — what never reads the mirror
   - **Waits for Shopify** — opening a product, reviewing the cart
   - **Up to a Minute Behind** — a product page, a collection's listing, behind a 60 s cache; the cart checks Shopify live and has the final word on price and stock — [Commerce](/p/grade10-site/commerce/commerce)
 
+:::detail{title="Catalogue mirror" for="engineer"}
+- **Catalogue Mirror** — every product the sales channel publishes, held in one Cloudflare Durable Object per shop, `CatalogKeeper`; the listing, its filters and its counts read only this copy
+- **Shopify Webhook** — `products/create` and `products/update` mark the product pending; the mirror then reads it back from the Storefront API, never from the webhook's payload, which carries no metafields and so no worlds or types
+  - **Burst** — webhooks within 1 s of the first are read back together and published once
+  - **Read-Back** — retried every 2 s until Shopify answers the new version, for 60 s at most, then left to the full read
+- **Deleted Product** — `products/delete` takes it off at once
+- **Stock Change** — `inventory_levels/update` names a stock item, not a product, so it starts a full read, at most one every 30 s
+- **Full Read** — every product read from Shopify every 5 minutes on the store's cron, which catches a change whose webhook never arrived
+- **Worker Copy** — each worker holds the copy in memory and asks the mirror for a newer version every 3 s while the listing is in use, waiting 500 ms at most before answering from what it holds
+
 ::image{src="assets/diagrams/store-catalogue-change.svg" alt="A product saved in Shopify reaches the listing: the webhook marks it pending in the catalogue mirror, the mirror reads it back from the Storefront API and publishes a new version, and each worker picks it up on its next 3-second check"}
 
 - **Measurements and failure cases** — [the design note](/references/store-catalogue-index)
+:::
 
 :::detail{title="Product decisions" for="pm"}
 Collectors arrive knowing what they collect, usually a world or a kind of
