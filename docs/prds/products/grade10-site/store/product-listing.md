@@ -81,15 +81,6 @@ order: 2
 3. `grade10.com/store/collections?worlds=<a>,<b>&types=<c>&q=<words>&sort=<order>` — filtered, searched or sorted
 4. `grade10.com/store/products/<handle>` — a product page
 
-:::detail{title="Code map" for="engineer"}
-- **Reads** — `catalog.products`, `catalog.filters`, `catalog.collections`, `catalog.collection` and `catalog.product` in `packages/grade10-store/backend/src/trpc/routers/catalog.ts`, mounted ahead of the session tier by `trpc/publicCatalog.ts`
-- **The mirror** — one Durable Object a shop, `durables/CatalogKeeper/`; the entries it publishes — `services/catalog/projection.ts`; narrowing, ordering and the counts — `services/catalog/browse.ts`; the query's bounds — `services/catalog/query.ts`
-- **Shopify client** — `packages/shopify/backend/src/catalog/`
-- **Frontend page** — [ProductListingPage](https://github.com/9gag/grade10/blob/main/apps/frontend/grade10/src/pages/store/ProductListingPage.tsx); catalogue reads and product mapping live in `packages/grade10-store/frontend/src/features/products/catalog/`
-- **Design note** — [the catalogue index](/references/store-catalogue-index)
-- **Commerce architecture** — [docs/architecture/commerce.md](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
-:::
-
 ## Catalogue Source
 
 | Rule | Value |
@@ -104,7 +95,7 @@ order: 2
   - **Up to a Minute Behind** — a product page, a collection's listing, behind a 60 s cache; the cart checks Shopify live and has the final word on price and stock — [Commerce](/p/grade10-site/commerce/commerce)
 
 :::detail{title="Catalogue mirror" for="engineer"}
-- **Catalogue Mirror** — every product the sales channel publishes, held in one Cloudflare Durable Object per shop, `CatalogKeeper`; the listing, its filters and its counts read only this copy
+- **Catalogue Mirror** — every product the sales channel publishes, held in one Cloudflare Durable Object per shop; the listing, its filters and its counts read only this copy
 - **Shopify Webhook** — `products/create` and `products/update` mark the product pending; the mirror then reads it back from the Storefront API, never from the webhook's payload, which carries no metafields and so no worlds or types
   - **Burst** — webhooks within 1 s of the first are read back together and published once
   - **Read-Back** — retried every 2 s until Shopify answers the new version, for 60 s at most, then left to the full read
@@ -116,6 +107,7 @@ order: 2
 ::image{src="assets/diagrams/store-catalogue-change.svg" alt="A product saved in Shopify reaches the listing: the webhook marks it pending in the catalogue mirror, the mirror reads it back from the Storefront API and publishes a new version, and each worker picks it up on its next 3-second check"}
 
 - **Measurements and failure cases** — [the design note](/references/store-catalogue-index)
+- **Commerce architecture** — [docs/architecture/commerce.md](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 :::
 
 :::detail{title="Product decisions" for="pm"}
