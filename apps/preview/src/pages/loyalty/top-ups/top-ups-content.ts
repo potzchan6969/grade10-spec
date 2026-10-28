@@ -103,10 +103,9 @@ export const TOP_UP_RESULT_COPY = {
   },
   underReview: {
     title: "Top-up under review",
-    description:
-      "Your card is charged only if it’s approved. You can close this page.",
+    description: "Your card is charged only if it’s approved.",
     reference: (ref: string) => `Reference ${ref}`,
-    history: "View Top-Up History",
+    history: "View in Points History",
   },
   notApproved: {
     title: "Top-up not approved",
@@ -117,71 +116,4 @@ export const TOP_UP_RESULT_COPY = {
     description: "You haven’t been charged.",
     retry: "Try again",
   },
-} as const;
-
-export type TopUpHistoryEntry = {
-  id: string;
-  date: string;
-  points: number;
-  paid: number;
-  status: "credited" | "under-review" | "not-approved" | "charged-back";
-  /** Stripe receipt; only a completed charge has one. */
-  receipt?: boolean;
-};
-
-export const TOP_UP_HISTORY_ENTRIES: readonly TopUpHistoryEntry[] = [
-  {
-    id: "tu-1",
-    date: "24 Oct 2026",
-    points: 50_000,
-    paid: 45_000,
-    status: "under-review",
-  },
-  {
-    id: "tu-2",
-    date: "15 Sep 2026",
-    points: 1_000,
-    paid: 1_000,
-    status: "credited",
-    receipt: true,
-  },
-  {
-    id: "tu-3",
-    date: "2 Sep 2026",
-    points: 5_000,
-    paid: 4_850,
-    status: "charged-back",
-    receipt: true,
-  },
-  {
-    id: "tu-4",
-    date: "20 Aug 2026",
-    points: 10_000,
-    paid: 9_500,
-    status: "not-approved",
-  },
-];
-
-export const TOP_UP_HISTORY_COPY = {
-  title: "Top-Up History",
-  description: "Every pack you’ve bought or tried to buy.",
-  colDate: "Date",
-  colPack: "Points",
-  colPaid: "Paid",
-  colStatus: "Status",
-  colReceipt: "Receipt",
-  receipt: "View",
-  status: {
-    credited: "Added",
-    "under-review": "Under review",
-    "not-approved": "Not approved",
-    "charged-back": "Charged back",
-  },
-  underReviewHint: "Your card is charged only if this is approved.",
-  empty: {
-    title: "No top-ups yet",
-    description: "Points packs you buy will show here.",
-    action: "Top up points",
-  },
-  backToMembership: "Back to Membership",
 } as const;

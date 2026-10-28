@@ -12,8 +12,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* The result is a modal over the page the member returns to, so it renders in
- * a portal on document.body: plays query the body for the dialog or drawer. */
+/* Only "Confirming Payment" is a modal; every settled outcome is a toast,
+ * which sonner renders on document.body, so plays query the body. */
 
 /** Back from Stripe, still confirming the payment. */
 export const ConfirmingPayment: Story = {
@@ -30,21 +30,17 @@ export const ConfirmingPayment: Story = {
   },
 };
 
-/** The pack credited: the new balance and the way back. */
+/** The pack credited: the new balance, as a toast. */
 export const PointsAdded: Story = {
   name: "Points Added",
   args: { state: "added" },
   play: async () => {
     const overlay = within(document.body);
-    expect(
-      await overlay.findByRole("dialog", { name: "1,000 points added" }),
-    ).toBeInTheDocument();
     await waitFor(() =>
-      expect(overlay.getByText("New balance: 2,200 points")).toBeVisible(),
+      expect(overlay.getByText("1,000 points added")).toBeVisible(),
     );
-    expect(
-      overlay.getByRole("button", { name: "Back to Membership" }),
-    ).toBeInTheDocument();
+    expect(overlay.getByText("New balance: 2,200 points")).toBeVisible();
+    expect(overlay.queryByRole("dialog")).not.toBeInTheDocument();
   },
 };
 
@@ -54,20 +50,15 @@ export const UnderReview: Story = {
   args: { state: "under-review" },
   play: async () => {
     const overlay = within(document.body);
+    await waitFor(() =>
+      expect(overlay.getByText("Top-up under review")).toBeVisible(),
+    );
     expect(
-      await overlay.findByRole("dialog", { name: "Top-up under review" }),
-    ).toBeInTheDocument();
-    await waitFor(() => {
-      expect(
-        overlay.getByText(
-          "Your card is charged only if it’s approved. You can close this page.",
-        ),
-      ).toBeVisible();
-      expect(overlay.getByText("Reference TU-2026-0384")).toBeVisible();
-    });
+      overlay.getByText(/charged only if it’s approved.*TU-2026-0384/),
+    ).toBeVisible();
     expect(
-      overlay.getByRole("button", { name: "View Top-Up History" }),
-    ).toBeInTheDocument();
+      overlay.getByRole("button", { name: "View in Points History" }),
+    ).toBeVisible();
   },
 };
 
@@ -77,15 +68,10 @@ export const NotApproved: Story = {
   args: { state: "not-approved" },
   play: async () => {
     const overlay = within(document.body);
-    expect(
-      await overlay.findByRole("dialog", { name: "Top-up not approved" }),
-    ).toBeInTheDocument();
     await waitFor(() =>
-      expect(overlay.getByText("You haven’t been charged.")).toBeVisible(),
+      expect(overlay.getByText("Top-up not approved")).toBeVisible(),
     );
-    expect(
-      overlay.getByRole("button", { name: "Back to Membership" }),
-    ).toBeInTheDocument();
+    expect(overlay.getByText("You haven’t been charged.")).toBeVisible();
   },
 };
 
@@ -95,31 +81,24 @@ export const PaymentNotCompleted: Story = {
   args: { state: "not-completed" },
   play: async () => {
     const overlay = within(document.body);
-    expect(
-      await overlay.findByRole("dialog", { name: "Payment not completed" }),
-    ).toBeInTheDocument();
     await waitFor(() =>
-      expect(overlay.getByRole("button", { name: "Try again" })).toBeVisible(),
+      expect(overlay.getByText("Payment not completed")).toBeVisible(),
     );
-    expect(
-      overlay.getByRole("button", { name: "Back to Membership" }),
-    ).toBeInTheDocument();
+    expect(overlay.getByText("You haven’t been charged.")).toBeVisible();
+    expect(overlay.getByRole("button", { name: "Try again" })).toBeVisible();
   },
 };
 
-/** Points added at a phone width — the result is a bottom drawer. */
+/** The toast reads the same at a phone width — only the confirming wait
+ * is a drawer. */
 export const Narrow: Story = {
   args: { state: "added" },
   globals: { viewport: { value: "mobile1" } },
   play: async () => {
     const overlay = within(document.body);
-    const drawer = await overlay.findByRole("dialog", {
-      name: "1,000 points added",
-    });
-    expect(drawer).toBeInTheDocument();
-    expect(
-      drawer.closest('[data-slot="drawer-popup"]') ??
-        drawer.querySelector('[data-slot="drawer-popup"]'),
-    ).not.toBeNull();
+    await waitFor(() =>
+      expect(overlay.getByText("1,000 points added")).toBeVisible(),
+    );
+    expect(overlay.getByText("New balance: 2,200 points")).toBeVisible();
   },
 };

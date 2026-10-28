@@ -1,8 +1,3 @@
-import {
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-  Breadcrumbs,
-} from "@grade10/design-system/components/display/breadcrumbs";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { NavigationLink } from "@grade10/design-system/components/layout/navigation-link";
@@ -36,6 +31,7 @@ import {
   SOLD_OUT_COPY,
   SOLD_OUT_REWARDS,
 } from "../loyalty-content";
+import { TopUpFlow } from "../top-up-flow";
 import {
   CouponsPane,
   MEMBERSHIP_TABS,
@@ -81,7 +77,14 @@ function MembershipPage({
   view: MembershipView;
   tab: MembershipTab;
 }) {
-  const [active, setActive] = useState<MembershipTab>(tab);
+  const [active, setActive] = useState<MembershipTab>(() => {
+    /* `?tab=` deep-links a section — the toast's "View in Points History"
+     * lands on the points pane rather than the overview. */
+    const q = new URLSearchParams(window.location.search).get("tab");
+    return MEMBERSHIP_TABS.some((item) => item.id === q)
+      ? (q as MembershipTab)
+      : tab;
+  });
   const [balance, setBalance] = useState(view.balance);
   const [coupons, setCoupons] = useState(view.coupons);
   const [issued, setIssued] = useState(0);
@@ -93,6 +96,7 @@ function MembershipPage({
   const [failure, setFailure] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [passOpen, setPassOpen] = useState(false);
+  const [topUpOpen, setTopUpOpen] = useState(false);
   const smUp = useSmUp();
 
   /* The surface stays mounted once opened — only `open` flips — so the
@@ -183,37 +187,37 @@ function MembershipPage({
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...STORE_SITE_HEADER} />
       <main className="flex w-full flex-1 justify-center">
-        <div className="flex w-full max-w-5xl flex-col gap-8 px-4 py-10 sm:px-8">
-          <div className="flex flex-col gap-4">
-            <Breadcrumbs>
-              <BreadcrumbItem href="#account">
-                {MEMBERSHIP_PAGE_COPY.breadcrumbAccount}
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem current>
-                {MEMBERSHIP_PAGE_COPY.title}
-              </BreadcrumbItem>
-            </Breadcrumbs>
+        <div className="flex w-full max-w-6xl flex-col gap-10 px-4 py-10 sm:px-8">
+          <div className="flex flex-col gap-4 border-b border-border pb-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <h1 className="text-3xl font-semibold text-foreground">
                 {MEMBERSHIP_PAGE_COPY.title}
               </h1>
-              <Button onClick={() => setPassOpen(true)} size="lg">
-                <QrCode aria-hidden size={16} weight="regular" />
-                Member Pass
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button onClick={() => setPassOpen(true)} size="lg">
+                  <QrCode aria-hidden size={16} weight="regular" />
+                  Member Pass
+                </Button>
+                <Button
+                  onClick={() => setTopUpOpen(true)}
+                  size="lg"
+                  variant="secondary"
+                >
+                  {MEMBERSHIP_PAGE_COPY.topUpAction}
+                </Button>
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-8 md:flex-row md:gap-10">
+          <div className="flex flex-col gap-8 md:flex-row md:gap-16">
             <nav
               aria-label="Membership"
-              className="flex gap-1 overflow-x-auto md:w-56 md:shrink-0 md:flex-col md:items-stretch md:overflow-visible lg:w-64"
+              className="flex gap-1 overflow-x-auto md:w-64 md:sticky md:top-8 md:shrink-0 md:self-start md:flex-col md:items-stretch md:overflow-visible"
             >
               {MEMBERSHIP_TABS.map((item) => (
                 <NavigationLink
                   active={active === item.id}
-                  className="md:w-full md:justify-start"
+                  className="cursor-pointer md:w-40 md:justify-start"
                   key={item.id}
                   onClick={() => setActive(item.id)}
                   render={<button type="button" />}
@@ -238,6 +242,15 @@ function MembershipPage({
       </main>
       <Footer {...STORE_FOOTER} />
       <Toast position="bottom-right" />
+      {/* The pack picker and its result modal open over the page — the
+       * member never leaves Membership; a credited pack lands on the
+       * balance straight away. */}
+      <TopUpFlow
+        balance={balance}
+        onCredited={(points) => setBalance((value) => value + points)}
+        onOpenChange={setTopUpOpen}
+        open={topUpOpen}
+      />
       {smUp ? (
         <Dialog onOpenChange={setPassOpen} open={passOpen}>
           {/* No dialog chrome: the pass itself is the surface, floating over

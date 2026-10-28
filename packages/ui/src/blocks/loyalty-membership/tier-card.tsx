@@ -3,8 +3,6 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { CaretRight } from "@phosphor-icons/react";
-import type { MouseEvent } from "react";
 import { TierBadge } from "./tier-badge";
 
 /** The words the card says, whoever's membership is in it. */
@@ -17,8 +15,6 @@ type TierCardCopy = {
   worthSuffix: string;
   /** Names the qualifying-window progress, and the progress bar itself. */
   qualifying: string;
-  /** Names the Benefits destination the whole card opens. */
-  benefits: string;
 };
 
 type TierCardVariant = "silver" | "gold" | "black";
@@ -47,16 +43,6 @@ type TierCardProps = {
   retentionLine?: string;
   /** What the held tier earns, as the footer's one sentence the consumer words. */
   earnLine?: string;
-  /**
-   * The Tiers & Benefits surface's address. Where it is given, the Benefits
-   * affordance in the footer is a link to it — so its address can be copied
-   * and a press with a modifier key opens it in a new tab. A plain press is
-   * still reported through `onClick` where one is supplied. The rest of the
-   * card is inert.
-   */
-  href?: string;
-  /** Reported on a plain press of the Benefits affordance. */
-  onClick?: () => void;
   className?: string;
 };
 
@@ -99,8 +85,7 @@ const SKIN: Record<
 /**
  * The member's tier card: the tier's skin and wordmark, the spendable balance
  * and what it pays at checkout, the qualifying-window progress where the tier
- * names a threshold, and the Benefits link — the footer alone opens the Tiers
- * & Benefits surface, the rest of the card inert. The card carries no expiry
+ * names a threshold, and the tier's earn line. The card carries no expiry
  * line: the balance lapses on one date after the inactivity window, and that
  * is said where the member reads their benefits.
  */
@@ -114,8 +99,6 @@ function TierCard({
   qualifyingThreshold,
   retentionLine,
   earnLine,
-  href,
-  onClick,
   className,
 }: TierCardProps) {
   const skin = SKIN[variant];
@@ -127,28 +110,6 @@ function TierCard({
     showsProgress && qualifyingThreshold > 0
       ? (bounded / qualifyingThreshold) * 100
       : 0;
-
-  const reportPlainPress = (
-    event: MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
-  ) => {
-    if (onClick == null || event.defaultPrevented || event.button !== 0) return;
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
-      return;
-    event.preventDefault();
-    onClick();
-  };
-
-  const benefits = (
-    <>
-      <Text data-slot="tier-card-benefits" size="xs" tone="muted">
-        {copy.benefits}
-      </Text>
-      <CaretRight aria-hidden color="var(--muted-foreground)" size={12} />
-    </>
-  );
-
-  const benefitsClass =
-    "ml-auto shrink-0 cursor-pointer items-center gap-1 rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
 
   const rings = (
     <>
@@ -258,7 +219,6 @@ function TierCard({
         align="center"
         className="w-full border-t border-(--gray-200)/10 pt-4"
         gap="sm"
-        justify="space-between"
       >
         {earnLine ? (
           <Text
@@ -270,29 +230,6 @@ function TierCard({
             {earnLine}
           </Text>
         ) : null}
-        {href != null ? (
-          <a
-            className={cn("inline-flex", benefitsClass)}
-            data-slot="tier-card-benefits-link"
-            href={href}
-            onClick={reportPlainPress}
-          >
-            {benefits}
-          </a>
-        ) : onClick != null ? (
-          <button
-            className={cn("inline-flex", benefitsClass)}
-            data-slot="tier-card-benefits-link"
-            onClick={reportPlainPress}
-            type="button"
-          >
-            {benefits}
-          </button>
-        ) : (
-          <HStack align="center" className="ml-auto shrink-0" gap="xs">
-            {benefits}
-          </HStack>
-        )}
       </HStack>
     </VStack>
   );
