@@ -166,8 +166,12 @@ function scoreTone(score: ScreenScore | undefined): DiffTone | "idle" {
   return score?.kind === "failed" || score?.kind === "error" ? "warn" : "idle";
 }
 
-/** The panel's own Screen control, so a viewer never leaves Verification. */
-export function FlowScreenSelect({
+/**
+ * The panel's own Screen control, so a viewer never leaves Verification: one
+ * button per screen, wrapping onto more lines when the flow is long, each
+ * coloured by its score.
+ */
+export function FlowScreenControl({
   screens,
   scores,
   current,
@@ -190,42 +194,59 @@ export function FlowScreenSelect({
   };
   return (
     <div className="verification-flow-select">
-      <button
-        aria-label={
-          index > 0 ? `Previous: ${nameOf(ids[index - 1])}` : "Previous"
+      <div className="verification-flow-strip">
+        <button
+          aria-label={
+            index > 0 ? `Previous: ${nameOf(ids[index - 1])}` : "Previous"
+          }
+          className="verification-icon-button"
+          disabled={index === 0}
+          onClick={() => onSelect(ids[index - 1])}
+          type="button"
+        >
+          ‹
+        </button>
+        <fieldset className="verification-flow-screens">
+          <legend className="verification-visually-hidden">Screen</legend>
+          {ids.map((id) => (
+            <label
+              className="verification-flow-screen"
+              data-checked={id === current}
+              data-tone={id === CANVAS ? undefined : scoreTone(scores[id])}
+              key={id}
+              title={nameOf(id)}
+            >
+              <input
+                checked={id === current}
+                name="verification-flow-screen"
+                onChange={() => onSelect(id)}
+                type="radio"
+                value={id}
+              />
+              {id === CANVAS ? "Canvas" : id}
+            </label>
+          ))}
+        </fieldset>
+        <button
+          aria-label={
+            index < ids.length - 1 ? `Next: ${nameOf(ids[index + 1])}` : "Next"
+          }
+          className="verification-icon-button"
+          disabled={index === ids.length - 1}
+          onClick={() => onSelect(ids[index + 1])}
+          type="button"
+        >
+          ›
+        </button>
+      </div>
+      <p
+        className="verification-flow-current"
+        data-tone={
+          ids[index] === CANVAS ? undefined : scoreTone(scores[ids[index]])
         }
-        className="verification-icon-button"
-        disabled={index === 0}
-        onClick={() => onSelect(ids[index - 1])}
-        type="button"
       >
-        ‹
-      </button>
-      <label className="verification-visually-hidden" htmlFor="flow-screen">
-        Screen
-      </label>
-      <select
-        id="flow-screen"
-        onChange={(event) => onSelect(event.currentTarget.value)}
-        value={ids[index]}
-      >
-        {ids.map((id) => (
-          <option key={id} value={id}>
-            {nameOf(id)}
-          </option>
-        ))}
-      </select>
-      <button
-        aria-label={
-          index < ids.length - 1 ? `Next: ${nameOf(ids[index + 1])}` : "Next"
-        }
-        className="verification-icon-button"
-        disabled={index === ids.length - 1}
-        onClick={() => onSelect(ids[index + 1])}
-        type="button"
-      >
-        ›
-      </button>
+        {nameOf(ids[index])}
+      </p>
     </div>
   );
 }

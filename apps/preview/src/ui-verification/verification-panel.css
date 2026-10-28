@@ -637,20 +637,63 @@
 /* Flows: the panel's own Screen control and the Canvas overview */
 .verification-flow-select {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 6px;
 }
 
-.verification-flow-select select {
+.verification-flow-strip {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.verification-flow-screens {
+  display: flex;
   flex: 1;
+  flex-wrap: wrap;
+  gap: 4px;
   min-width: 0;
-  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.verification-flow-screen input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.verification-flow-screen:focus-within {
+  outline: 2px solid var(--vp-accent, #1f6feb);
+  outline-offset: 2px;
+}
+
+.verification-panel .verification-flow-screen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 32px;
   padding: 0 10px;
-  border: 1px solid var(--vp-accent, #1f6feb);
-  border-radius: 8px;
-  color: var(--vp-fg, #20232a);
+  border: 1px solid var(--vp-score, var(--vp-border, #c5c8cf));
+  border-radius: 6px;
+  color: var(--vp-score, var(--vp-fg, #20232a));
   background: var(--vp-surface, #f0f2f5);
-  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.verification-panel .verification-flow-screen[data-checked="true"] {
+  border-color: var(--vp-accent, #1f6feb);
+  color: var(--vp-on-accent, #fff);
+  background: var(--vp-accent, #1f6feb);
+  font-weight: 700;
+}
+
+.verification-flow-current {
+  margin: 0;
+  color: var(--vp-score, var(--vp-fg, #20232a));
   font-weight: 600;
 }
 
@@ -764,4 +807,65 @@
   .verification-flow-thumb {
     width: 80px;
   }
+}
+
+.verification-panel .verification-link {
+  padding: 0;
+  border: 0;
+  color: var(--vp-accent, #1f6feb);
+  background: none;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Full size: the dialog sits in the top layer over the whole manager */
+.verification-full-size {
+  width: calc(100vw - 32px);
+  max-width: none;
+  height: calc(100vh - 32px);
+  max-height: none;
+  padding: 0;
+  border: 1px solid var(--vp-border, #c5c8cf);
+  border-radius: 10px;
+  color: var(--vp-fg, #20232a);
+  background: var(--vp-bg, #fff);
+  font-family: var(--vp-font, system-ui, sans-serif);
+}
+
+.verification-full-size::backdrop {
+  background: rgb(0 0 0 / 60%);
+}
+
+.verification-full-size[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.verification-full-size-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--vp-border, #c5c8cf);
+}
+
+.verification-full-size-bar h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 14px;
+}
+
+.verification-full-size-bar a {
+  color: var(--vp-accent, #1f6feb);
+}
+
+.verification-full-size-body {
+  flex: 1;
+  overflow: auto;
+}
+
+.verification-full-size-body img {
+  display: block;
+  max-width: none;
 }

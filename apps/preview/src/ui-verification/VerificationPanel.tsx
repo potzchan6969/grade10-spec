@@ -30,7 +30,7 @@ import {
   diffLabel,
   diffTone,
   FlowOverview,
-  FlowScreenSelect,
+  FlowScreenControl,
   useFlowScores,
 } from "./FlowPanel";
 import { CANVAS, type FlowParameter } from "./flow-tree";
@@ -54,6 +54,12 @@ const PROFILE_TABS: readonly {
   { id: "mobile", shortLabel: "Mobile", size: "390 × 844" },
 ];
 const GRADE10_LOCALES = localesOf("grade10");
+const LOCALE_SHORT_LABELS: Readonly<Record<string, string>> = {
+  en: "English",
+  "zh-hant": "繁中",
+  "zh-hans": "简中",
+  ko: "한국어",
+};
 const LOCALE_LABELS: Readonly<Record<string, string>> = {
   en: "English",
   "zh-hant": "Traditional Chinese",
@@ -97,6 +103,10 @@ function localeKey(value: string): string {
 function localeLabel(value: string): string {
   const language = LOCALE_LABELS[localeKey(value)];
   return language ? `${language} (${value})` : value;
+}
+
+function localeShortLabel(value: string): string {
+  return LOCALE_SHORT_LABELS[localeKey(value)] ?? value;
 }
 
 function localeOptions(
@@ -308,16 +318,59 @@ function profileStatus(
   };
 }
 
+interface FullSizeImage {
+  title: string;
+  url: string;
+}
+
+// A blob URL opened in a new tab does not load from the Storybook manager,
+// so the full-size image opens in a modal dialog over the whole window.
+function FullSizeViewer({
+  image,
+  onClose,
+}: {
+  image: FullSizeImage;
+  onClose: () => void;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    dialog.current?.showModal();
+  }, []);
+  return (
+    <dialog
+      aria-label={`${image.title}, full size`}
+      className="verification-full-size"
+      onClose={onClose}
+      ref={dialog}
+    >
+      <div className="verification-full-size-bar">
+        <h3>{image.title}</h3>
+        <a download={`${image.title.toLocaleLowerCase()}.png`} href={image.url}>
+          Download PNG
+        </a>
+        <button onClick={onClose} type="button">
+          Close
+        </button>
+      </div>
+      <div className="verification-full-size-body">
+        <img alt={`${image.title}, full size`} src={image.url} />
+      </div>
+    </dialog>
+  );
+}
+
 function ImageEvidence({
   title,
   artifact,
   imageUrl,
   cropRegion,
+  onOpen,
 }: {
   title: string;
   artifact: ImageArtifact;
   imageUrl: string | undefined;
   cropRegion?: ImageRegion;
+  onOpen: (image: FullSizeImage) => void;
 }) {
   const imageStyle = cropRegion
     ? {
@@ -363,9 +416,13 @@ function ImageEvidence({
           sha256 {shortHash(artifact.sha256)}
         </code>
         {imageUrl ? (
-          <a href={imageUrl} rel="noreferrer" target="_blank">
+          <button
+            className="verification-link"
+            onClick={() => onOpen({ title, url: imageUrl })}
+            type="button"
+          >
             Open full size
-          </a>
+          </button>
         ) : null}
         {imageUrl ? (
           <a
@@ -390,10 +447,12 @@ function DiffEvidence({
   comparison,
   aspect,
   canCompare,
+  onOpen,
 }: {
   comparison: ComparisonState | undefined;
   aspect: string;
   canCompare: boolean;
+  onOpen: (image: FullSizeImage) => void;
 }) {
   let body: React.ReactNode;
   let note = "";
@@ -452,9 +511,15 @@ function DiffEvidence({
         <h4>Pixel diff</h4>
         <span>{note}</span>
         {framed ? (
-          <a href={comparison.diffUrl} rel="noreferrer" target="_blank">
+          <button
+            className="verification-link"
+            onClick={() =>
+              onOpen({ title: "Pixel diff", url: comparison.diffUrl })
+            }
+            type="button"
+          >
             Open full size
-          </a>
+          </button>
         ) : null}
       </div>
       <div
@@ -546,6 +611,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
   const [manifest, setManifest] = useState<VerificationManifest | null>(null);
   const [localeId, setLocaleId] = useState<string>("en");
   const [selectedProfile, setSelectedProfile] = useState<ProfileId>("desktop");
+  const [fullSize, setFullSize] = useState<FullSizeImage | null>(null);
   const [imageUrls, setImageUrls] = useState<
     Partial<Record<ProfileId, ImageUrls>>
   >({});
@@ -1048,7 +1114,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
       </header>
 
       {flow && !storyListOpen ? (
-        <FlowScreenSelect
+        <FlowScreenControl
           current={flowScreenId}
           onSelect={(id) => updateStoryArgs({ screen: id })}
           scores={flowScores.scores}
@@ -1316,7 +1382,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
                       aria-controls="verification-evidence"
                       onClick={() => setLocaleId(locale)}
                     >
-                      {localeLabel(locale)}
+                      {localeShortLabel(locale)}
                     </button>
                   ))}
                 </div>
@@ -1337,7 +1403,9 @@ export function VerificationPanel({ active }: { active: boolean }) {
               ) : null}
               {provenanceCapture?.provenance.verified === false ? (
                 <p className="verification-notice">
-                  Capture provenance is unverified
+                  Unverified capture: the app or reference checkout had
+                  uncommitted changes, or was not at the commit this run
+                  records, so the commits below may not reproduce it.
                 </p>
               ) : null}
               {provenanceCapture?.provenance.reusedFrom ? (
@@ -1488,6 +1556,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
                                   artifact={capture.reference}
                                   imageUrl={urls?.reference}
                                   cropRegion={capture.referenceRegion}
+                                  onOpen={setFullSize}
                                 />
                               ) : (
                                 <p className="verification-notice">
@@ -1499,11 +1568,13 @@ export function VerificationPanel({ active }: { active: boolean }) {
                                 title="Site"
                                 artifact={capture.site}
                                 imageUrl={urls?.site}
+                                onOpen={setFullSize}
                               />
                               {capture.reference ? (
                                 <DiffEvidence
                                   comparison={comparisons[item.id]}
                                   canCompare={comparable(item.id)}
+                                  onOpen={setFullSize}
                                   aspect={`${anchorOf(capture.siteRegion, capture.site).width} / ${anchorOf(capture.siteRegion, capture.site).height}`}
                                 />
                               ) : null}
@@ -1581,6 +1652,9 @@ export function VerificationPanel({ active }: { active: boolean }) {
           ) : null}
         </>
       )}
+      {fullSize ? (
+        <FullSizeViewer image={fullSize} onClose={() => setFullSize(null)} />
+      ) : null}
     </div>
   );
 }
