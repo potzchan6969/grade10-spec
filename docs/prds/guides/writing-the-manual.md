@@ -25,6 +25,11 @@ Write for a teammate who joined this week and has never seen the code.
 - **Names are plain** — "Sale Price", "Search Box", in the words a customer
   or a shopkeeper would use. Not slogans, riddles or the system's internal
   names; a term of our own is defined the first time
+- **One meaning everywhere** — a name never borrows a word the product
+  already uses for something else, so it reads the same on any page, out of
+  context: "Sort Options", not "Orders", where an order is what a customer
+  pays for. Choose the word that carries the meaning alone, rather than
+  rely on the section around it
 - **Define what it is, not what it isn't** — "number of products given the
   filters" already rules out counting the loaded cards. Say what doesn't
   happen only when the block can do it and the product doesn't, such as a

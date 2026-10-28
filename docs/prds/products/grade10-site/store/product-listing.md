@@ -63,9 +63,9 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
 
 ## Sorting
 
-- **Orders** — Latest (default), lowest price, highest price
+- **Sort Options** — Latest (default), lowest price, highest price
   - **Scope** — the whole store
-  - **Sold Out** — last, in every order
+  - **Sold Out** — last, whichever the sort
   - **Price** — a product's cheapest variant, which can differ from its card's price
 
 ## Collections
