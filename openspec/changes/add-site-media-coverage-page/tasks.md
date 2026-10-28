@@ -22,7 +22,7 @@ this group owes is the tests that cite the scenarios.
   `pnpm run storybook:check`, `pnpm run check:manual`, and the
   media-coverage story tests
 
-## 2. The Media Coverage page on the site (grade10)
+## 2. The Media Coverage page on the site (grade10) (owner: @seankcw)
 
 The route, loader, page and copy landed in `cbf7c212c4`; the tests below
 come first and the implementation is only repaired if they fail.
