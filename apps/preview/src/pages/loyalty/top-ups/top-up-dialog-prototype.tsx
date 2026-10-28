@@ -221,7 +221,7 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
       <Button className="w-fit" onClick={onTrigger} variant="secondary">
         {copy.title}
       </Button>
-      <Toast position="bottom-center" />
+      <Toast position="bottom-right" />
       {smUp ? (
         <Dialog onOpenChange={setOpen} open={open}>
           <DialogContent className="max-w-(--container-md)">
