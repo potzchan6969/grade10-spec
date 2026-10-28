@@ -63,7 +63,7 @@ export const TOP_UP_COPY = {
   selectedLine: (pts: number, price: number, after: number) =>
     `${points(pts)} for ${hkd(price)}. Balance after: ${points(after)}`,
 
-  continue: "Continue to payment",
+  continue: "Pay",
   pay: hkd,
   opening: "Opening checkout…",
   paymentNote: "Secure checkout by Stripe",
