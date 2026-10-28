@@ -29,7 +29,7 @@ function TopUpResultPrototype({ state }: { state: TopUpResultState }) {
     topUpResultToast(state, {
       addedPoints: 1000,
       balanceAfter: 2200,
-      historyHref: storyHref(MEMBERSHIP_STORY_ID),
+      historyHref: `${storyHref(MEMBERSHIP_STORY_ID)}&tab=points`,
       onRetry: () => navigateToStory(TOP_UP_DIALOG_STORY_ID),
     });
   }, [state]);

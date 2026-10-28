@@ -374,7 +374,7 @@ function TopUpFlow({
         onOpenChange(false);
         if (pack.points > REVIEW_THRESHOLD) {
           topUpResultToast("under-review", {
-            historyHref: storyHref(MEMBERSHIP_STORY_ID),
+            historyHref: `${storyHref(MEMBERSHIP_STORY_ID)}&tab=points`,
           });
         } else {
           topUpResultToast("added", {

@@ -77,7 +77,14 @@ function MembershipPage({
   view: MembershipView;
   tab: MembershipTab;
 }) {
-  const [active, setActive] = useState<MembershipTab>(tab);
+  const [active, setActive] = useState<MembershipTab>(() => {
+    /* `?tab=` deep-links a section — the toast's "View in Points History"
+     * lands on the points pane rather than the overview. */
+    const q = new URLSearchParams(window.location.search).get("tab");
+    return MEMBERSHIP_TABS.some((item) => item.id === q)
+      ? (q as MembershipTab)
+      : tab;
+  });
   const [balance, setBalance] = useState(view.balance);
   const [coupons, setCoupons] = useState(view.coupons);
   const [issued, setIssued] = useState(0);
