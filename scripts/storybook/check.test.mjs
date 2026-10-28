@@ -119,6 +119,43 @@ describe("placementErrors", () => {
     );
   });
 
+  it("places a domain's flows in one file under its domain", () => {
+    assert.deepEqual(
+      place(
+        "apps/preview/src/pages/store/flows/store-flows.stories.tsx",
+        "Store/Flows",
+      ),
+      [],
+    );
+    assert.deepEqual(
+      place(
+        "apps/preview/src/pages/store/cart/checkout.stories.tsx",
+        "Store/Flows",
+      ),
+      [
+        '"Store/Flows" - a flow lives in apps/preview/src/pages/store/flows/, not apps/preview/src/pages/store/cart/checkout.stories.tsx',
+      ],
+    );
+    assert.deepEqual(
+      place(
+        "apps/preview/src/pages/garden/flows/x.stories.tsx",
+        "Garden/Flows",
+      ),
+      [
+        `"Garden/Flows" - "Garden" is no manual domain; a domain's flows are titled "<Domain>/Flows"`,
+      ],
+    );
+    assert.deepEqual(
+      place(
+        "apps/preview/src/pages/store/flows/x.stories.tsx",
+        "Store/Flows/Guest",
+      ),
+      [
+        `"Store/Flows/Guest" - a domain's flows are one file titled "Store/Flows", one story per flow`,
+      ],
+    );
+  });
+
   it("refuses a screen outside Screens", () => {
     assert.deepEqual(
       place(
@@ -193,10 +230,14 @@ describe("cited ids", () => {
       ],
     );
     const code =
-      'const CART_STORY_ID =\n  "store-cart-screens-cart--empty";\nstoryHref("store-cart-screens-cart--filled");\nclassName="bid--fade"';
+      'const CART_STORY_ID =\n  "store-cart-screens-cart--empty";\nstoryHref("store-cart-screens-cart--filled");\nflowScreen("3", "Pay", "pay",\n  "store-cart-screens-cart--paying");\nclassName="bid--fade"';
     assert.deepEqual(
       citedIds("apps/preview/src/pages/nav.ts", code).map(({ id }) => id),
-      ["store-cart-screens-cart--empty", "store-cart-screens-cart--filled"],
+      [
+        "store-cart-screens-cart--empty",
+        "store-cart-screens-cart--filled",
+        "store-cart-screens-cart--paying",
+      ],
     );
   });
 
@@ -276,6 +317,53 @@ describe("checkStories", () => {
       "apps/preview/.storybook-workbench/preview.tsx - storySort's sidebar is not the manual's; run pnpm storybook:sort",
     ]);
     rmSync(stale, { recursive: true, force: true });
+  });
+});
+
+describe("flows in checkStories", () => {
+  it("refuses a flow that names no journey or walks another domain's screens", async () => {
+    const root = repository({
+      ...MANUAL,
+      "apps/preview/src/pages/store/flows/store-flows.stories.tsx": `import { Cart } from "../cart/cart-page.stories";
+import { Lot } from "../../auction/display/lot.stories";
+${story("Store/Flows")}`,
+      "apps/preview/src/pages/store/cart/cart-page.stories.tsx": story(
+        "Store/Cart/Screens/Cart",
+      ),
+      "apps/preview/.storybook-workbench/preview.tsx": `storySort: (a, b) => {\n${renderSidebar(
+        {
+          "Start Here": [],
+          Store: ["Cart"],
+          "Post Bidding": [],
+          "Design System": [],
+        },
+        "  ",
+      )}\n}`,
+    });
+    const { errors } = await checkStories({ root });
+    rmSync(root, { recursive: true, force: true });
+    assert.ok(
+      errors.includes(
+        "apps/preview/src/pages/store/flows/store-flows.stories.tsx - a flow walks its own domain's screens, not ../../auction/display/lot.stories",
+      ),
+      errors.join("\n"),
+    );
+    assert.ok(
+      errors.some((error) =>
+        error.startsWith('"Store/Flows" - a flow names the journeys it walks'),
+      ),
+      errors.join("\n"),
+    );
+    assert.ok(
+      !errors.some((error) => error.includes("../cart/cart-page.stories")),
+      errors.join("\n"),
+    );
+    assert.ok(
+      errors.includes(
+        'apps/preview/src/pages/store/flows/store-flows.stories.tsx - "Default" has no verification caseId; run pnpm storybook:case-ids --write',
+      ),
+      errors.join("\n"),
+    );
   });
 });
 

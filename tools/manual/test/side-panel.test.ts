@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { casesOfPage, readSuite } from "../src/api/suites";
-import { sectionRows } from "../src/blocks/side-blocks";
+import { caseParts, casesOfPage, readSuite } from "../src/api/suites";
+import { rulesOf, sectionRows } from "../src/blocks/side-blocks";
 import { parsePage } from "../src/content/grammar";
 import { readStored } from "../src/shell/layout";
 
@@ -64,6 +64,15 @@ describe("a suite's cases", () => {
   it("leaves the classification out of the body a tester reads", () => {
     const [first] = readSuite(SUITE);
     expect(first.body).toBe("**Steps:**\n\n1. Tick two worlds.");
+  });
+
+  it("leaves the rule closing a group out of its last case", () => {
+    const [last] = readSuite({
+      path: SUITE.path,
+      source:
+        "### g10.store-listing.TC9: Last\n\n**Steps:**\n\n1. Look.\n\n---\n\n### listing#links: Links\n",
+    });
+    expect(last.body).toBe("**Steps:**\n\n1. Look.");
   });
 
   it("groups a page's cases by section, with the rules each checks", () => {
@@ -154,5 +163,86 @@ describe("the stored layout", () => {
     });
     expect(readStored('{"navWidth":9000,"tab":"x"}').navWidth).toBe(480);
     expect(readStored('{"navWidth":9000,"tab":"x"}').tab).toBe("ui");
+  });
+});
+
+describe("a case read as a tester walks it", () => {
+  it("splits it into where it starts, what to do and what to see", () => {
+    const parts = caseParts(`Runs once per row of **Test data**.
+
+**Pre-conditions:**
+
+* \`<collection>\` is published
+  with products.
+
+**Test data:**
+
+| Action |
+| --- |
+| tick a world |
+
+**Steps:**
+
+1. Open it.
+2. Dismiss the name.
+
+**Expected Results:**
+
+* Step 2 lists the whole catalogue.
+* Nothing else moves.`);
+    expect(parts).toEqual({
+      lead: "Runs once per row of **Test data**.",
+      given: ["`<collection>` is published with products."],
+      steps: ["Open it.", "Dismiss the name."],
+      expect: [
+        { step: 2, text: "lists the whole catalogue." },
+        { text: "Nothing else moves." },
+      ],
+      other: [
+        { label: "Test data", text: "| Action |\n| --- |\n| tick a world |" },
+      ],
+    });
+  });
+
+  it("keeps a part that is not a plain list as written", () => {
+    const parts = caseParts("**Steps:**\n\nOpen it, then:\n\n1. Look.");
+    expect(parts.steps).toEqual([]);
+    expect(parts.other).toEqual([
+      { label: "Steps", text: "Open it, then:\n\n1. Look." },
+    ]);
+  });
+});
+
+describe("a section's rules", () => {
+  it("names them as the page does, in its order, anchored as a trace writes them", () => {
+    const [row] = sectionRows([
+      {
+        type: "prose",
+        markdown: [
+          "## Promo Code",
+          "",
+          "- **Typed** — a code",
+          "  - 🚧 **Refusals in the reader's language** — in its words",
+          "1. **Repriced** — first, where it applies",
+          "",
+          "| Rule | Value |",
+          "| --- | --- |",
+          "| Shop's answer | Within **2.5 s** |",
+          "",
+          "```",
+          "- **Not a rule**",
+          "```",
+        ].join("\n"),
+      },
+    ]);
+    expect(rulesOf(row.main)).toEqual([
+      { anchor: "typed", name: "Typed" },
+      {
+        anchor: "refusals-in-the-readers-language",
+        name: "Refusals in the reader's language",
+      },
+      { anchor: "repriced", name: "Repriced" },
+      { anchor: "shops-answer", name: "Shop's answer" },
+    ]);
   });
 });

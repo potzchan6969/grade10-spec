@@ -71,10 +71,10 @@ own, and closes at its end.
 
 ## Design
 
-❓ **Not yet designed** — the membership banner and the campaign page ship on
-two prototype blocks, the card's own look standing in, until the designer
-draws the banner, the page's hero and the way-of-taking-part card in each
-state it holds. Design's call.
+- ❓ **Not yet designed** — the membership banner and the campaign page ship on
+  two prototype blocks, the card's own look standing in, until the designer
+  draws the banner, the page's hero and the way-of-taking-part card in each
+  state it holds. Design's call.
 
 ::story{id="loyalty-campaigns-prototypes-campaign-page--default" title="The campaign page, prototype" height="900"}
 

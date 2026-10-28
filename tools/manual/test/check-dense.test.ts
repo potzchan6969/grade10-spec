@@ -7,7 +7,7 @@ import { writeStore } from "./tmp-store";
 /**
  * A page is the essence a reader expands from. The `dense` rule warns where
  * it has become the expansion: prose past the ceiling, a section opening on
- * an essay, an engineer block written as a design note, a 🚧 buried in a
+ * an essay, an engineer block that maps the code, a 🚧 buried in a
  * flow step or mid-line. Every finding is a warning.
  */
 const PAGE = "docs/prds/products/demo/alpha.md";
@@ -129,34 +129,32 @@ describe("a section that opens on an essay", () => {
   });
 });
 
-describe("an engineer block written as a design note", () => {
+describe("an engineer block that maps the code", () => {
   const block = (body: string) =>
-    `:::detail{title="Service design" for="engineer"}\n${body}\n:::`;
+    `:::detail{title="Catalogue mirror" for="engineer"}\n${body}\n:::`;
 
-  it("counts its paragraphs", async () => {
+  it("names the first path and counts the rest", async () => {
     const body = [
-      "The service is deployed once per brand and holds the record.",
-      "",
-      "- **Config** — `KYC_SERVICE`",
-      "",
-      "Capture keys are content-addressed, so no folder scheme exists.",
-      "Two mechanisms move bytes out.",
+      "- **The mirror** — one Durable Object a shop, `durables/CatalogKeeper/`",
+      "- **Browse** — `services/catalog/browse.ts`",
+      "- **Page** — [ProductListingPage](https://github.com/9gag/grade10/blob/main/apps/page.tsx)",
     ].join("\n");
     expect(await denseLines(block(body))).toEqual([
       [
         "warn",
-        "engineer block `Service design` holds 2 paragraphs — a code map is names and links",
+        "engineer block `Catalogue mirror` maps code — `durables/CatalogKeeper/` and 2 more; explain how it works instead",
       ],
     ]);
   });
 
-  it("names one paragraph as one", async () => {
-    expect(await denseLines(block("One sentence of prose."))).toEqual([
-      [
-        "warn",
-        "engineer block `Service design` holds a paragraph — a code map is names and links",
-      ],
-    ]);
+  it("allows an explanation, in items or prose", async () => {
+    const body = [
+      "The mirror reads a product back from Shopify after its webhook.",
+      "",
+      "- **Shopify Webhook** — `products/update` marks the product pending",
+      "- **Design record** — [commerce](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)",
+    ].join("\n");
+    expect(await denseLines(block(body))).toEqual([]);
   });
 
   it("leaves another audience's block alone", async () => {

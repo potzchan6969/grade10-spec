@@ -7,8 +7,8 @@ import { ManualDocsContainer } from "./manual-link";
 /* Themes, frames, and decorators come from the base preview. The sidebar reads
  * like the manual (`docs/governance/storybook.md`): Start Here, the manual's
  * domains in `docs/prds/manual.yaml` order with their features in the manual's
- * nav order, then the design system; inside a feature, Screens, Prototypes,
- * Parts and Blocks.
+ * nav order after the domain's Flows, then the design system; inside a
+ * feature, Screens, Prototypes, Parts and Blocks.
  *
  * Storybook evaluates this comparator on its own, so it imports nothing and
  * carries no types; `pnpm storybook:sort` writes `sidebar` from the manual and
@@ -59,6 +59,8 @@ const preview: Preview = {
           if (left[i] === undefined) return -1;
           if (right[i] === undefined) return 1;
           if (i === 1) {
+            if (left[i] === "Flows") return -1;
+            if (right[i] === "Flows") return 1;
             const features = sidebar[left[0]] ?? [];
             const order = rank(features, left[i]) - rank(features, right[i]);
             if (order) return order;

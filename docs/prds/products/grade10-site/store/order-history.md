@@ -13,48 +13,42 @@ order, or return to the Store when the account is empty.
 
 ## Orders
 
-**Private address** - a signed-in collector reaches their Store purchases at
-`grade10.com/profile/orders`; sign-in keeps the collector at that address
+- **Private address** — a signed-in collector reaches their Store purchases at
+  `grade10.com/profile/orders`; sign-in keeps the collector at that address
+- **Active and Past** — the page keeps active orders above past ones, with
+  the newest order first in each group. An order is past once nothing is left
+  to happen on it: Completed, Canceled, or Refunded. A partly refunded order
+  reads its progress and stays active until it completes, and a held or
+  scheduled order whatever its refund stays active
+- **Status badge** — each order shows the badge its Order Details shows —
+  [Order Status](/p/grade10-site/commerce/order-status#badges)
+- **Recorded orders** — a web checkout appears once the shop records the
+  order; one that fails or expires before then never appears -
+  [Order Status](/p/grade10-site/commerce/order-status)
+- **Order actions** — a collector opens one order or follows a Store-supplied
+  carrier address when it is safe to open
+- ❓ **A safe carrier address** — an `https` address opens; any other scheme,
+  such as `javascript:`, offers no Track Order. Engineering confirms
+- **Read states** — loading stays distinct from empty, and a failed read offers
+  localized Retry without replacing the address
+- **Empty account** — a collector with no purchases gets a shopping path back
+  to the Store
+- **Guest orders** — a paid guest order joins the account whose proven email
+  it was placed under, at payment when that account exists and otherwise at
+  that account's next sign-in, and is listed from then on -
+  [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+- 🚧 **No points** — a joined guest order earns none
 
-**Active and Past** - the page keeps active orders above past ones, with
-the newest order first in each group. An order is past once nothing is left
-to happen on it: Completed, Canceled, or Refunded. A partly refunded order
-reads its progress and stays active until it completes, and a held or
-scheduled order whatever its refund stays active
-
-**Recorded orders** - a web checkout appears once the shop records the
-order; one that fails or expires before then never appears -
-[Order Status](/p/grade10-site/commerce/order-status)
-
-**Order actions** - a collector opens one order or follows a Store-supplied
-carrier address when it is safe to open
-
-❓ **A safe carrier address** - an `https` address opens; any other scheme,
-such as `javascript:`, offers no Track Order. Engineering confirms
-
-**Read states** - loading stays distinct from empty, and a failed read offers
-localized Retry without replacing the address
-
-**Empty account** - a collector with no purchases gets a shopping path back
-to the Store
-
-**Guest orders** - a paid guest order joins the account whose proven email
-it was placed under, at payment when that account exists and otherwise at
-that account's next sign-in, and is listed from then on -
-[Checkout](/p/grade10-site/store/checkout#guest-checkout)
-
-🚧 **No points** - a joined guest order earns none
-
-🚧 **Store orders only** - a ticket order placed on
-[Tickets](/p/grade10-site/ticketing) never appears here; the ticketing
-platform's own order pages carry it -
-[Your Tickets](/p/grade10-site/ticketing/your-tickets)
+- 🚧 **Store orders only** — a ticket order placed on
+  [Tickets](/p/grade10-site/ticketing) never appears here; the ticketing
+  platform's own order pages carry it -
+  [Your Tickets](/p/grade10-site/ticketing/your-tickets)
 
 ## Product Pictures
 
-🚧 **Recognise a purchase** - order items show their current product pictures,
-as the cart does, including earlier purchases. When a picture cannot be supplied,
-the order remains readable with its existing placeholder.
+- 🚧 **Recognise a purchase** — order items show their current product pictures,
+  as the cart does, including earlier purchases. When a picture cannot be supplied,
+  the order remains readable with its existing placeholder.
 
 ## Designs
 

@@ -38,6 +38,10 @@ Write for a teammate who joined this week and has never seen the code.
   filters" already rules out counting the loaded cards. Say what doesn't
   happen only when the block can do it and the product doesn't, such as a
   stock count the card can show
+- **A rule is a list item** — `- **Name** — definition`, a numbered item
+  where the order is the rule, or a row of a table headed `Rule`. A bold name
+  opening a paragraph names no rule, so no case can trace it; `check:manual`
+  warns on one
 - **Nest what belongs to something** — a part sits under its whole: how a
   card opens sits under the grid, not beside it. Siblings are things of the
   same kind. The heading is the top parent, so an item that only names its
@@ -47,6 +51,10 @@ Write for a teammate who joined this week and has never seen the code.
 - **Leave out what belongs elsewhere** — every edge case is in the test
   cases, how it works is in `docs/architecture`, and small UI choices are in
   the design record. Link to them instead
+- **A rename moves its cases** — a case traces a heading and a rule by their
+  anchors, so renaming either strands it. Rename on the page, then
+  `pnpm tcs:retrace <old> <new>`, as `product-listing#links` to
+  `product-listing#links-and-back-button`
 - **Decisions are product judgments** — the `Product decisions` block at the
   end records why we chose something, for whom, and what we ruled out. It is
   not a log of every detail or of which change decided it

@@ -28,10 +28,10 @@ brand's events, so another brand sells with the same screens.
 
 ## Where It Is Open
 
-**Not open to the public yet** — the ticketing service and the site's data
-for it are carried in development and the two staging lanes, and on no lane
-the public reaches; the pages a collector buys on are not built yet —
-[Carried Surfaces](/p/grade10-site/site/carried-surfaces)
+- **Not open to the public yet** — the ticketing service and the site's data
+  for it are carried in development and the two staging lanes, and on no lane
+  the public reaches; the pages a collector buys on are not built yet —
+  [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
 ## Users
 

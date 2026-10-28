@@ -378,9 +378,9 @@ enforced on the next request. An operator flips them from the admin console.
 QR and a wallet pass have no switch of their own; the terminal
 switch is what stops them.
 
-❓ **Phone lookup** — ships off until mobile numbers on the
-[account profile](/p/grade10-site/account/profile) are verified; when it turns
-on is the owner's call.
+- ❓ **Phone lookup** — ships off until mobile numbers on the
+  [account profile](/p/grade10-site/account/profile) are verified; when it turns
+  on is the owner's call.
 
 ## Discounts and Shipping
 

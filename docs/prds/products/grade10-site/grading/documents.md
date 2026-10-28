@@ -13,7 +13,7 @@ withdrawn early.
 
 ## The Documents
 
-🚧 **Four papers** — two signed, two issued:
+- 🚧 **Four papers** — two signed, two issued:
 
 | Document | When | Signed by | Emailed |
 | --- | --- | --- | --- |

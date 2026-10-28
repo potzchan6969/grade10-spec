@@ -49,7 +49,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/active-and-past
 
 **Pre-conditions:**
 
@@ -90,7 +90,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/order-actions, order-history#orders/a-safe-carrier-address
 
 **Pre-conditions:**
 
@@ -123,7 +123,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/order-actions
 
 **Pre-conditions:**
 
@@ -149,7 +149,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/private-address
 
 **Pre-conditions:**
 
@@ -177,7 +177,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/recorded-orders
 
 **Pre-conditions:**
 
@@ -205,7 +205,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/recorded-orders
 
 **Pre-conditions:**
 
@@ -239,7 +239,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/read-states
 
 **Pre-conditions:**
 
@@ -264,7 +264,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/read-states
 
 **Pre-conditions:**
 
@@ -292,7 +292,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/empty-account
 
 **Pre-conditions:**
 
@@ -322,7 +322,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/status-badge
 
 **Pre-conditions:**
 
@@ -368,7 +368,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#product-pictures
+* **Trace:** order-history#product-pictures/recognise-a-purchase
 
 **Pre-conditions:**
 
@@ -408,7 +408,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** checkout#guest-checkout/joining-an-account, checkout#guest-checkout/no-points
 
 **Pre-conditions:**
 
@@ -447,7 +447,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** checkout#guest-checkout/joining-an-account
 
 **Pre-conditions:**
 

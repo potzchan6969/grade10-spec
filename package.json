@@ -75,6 +75,7 @@
     "lint": "biome check .",
     "tcs:stale": "node scripts/openspec/validate-test-cases.mjs --stale-report",
     "tcs:validate": "node scripts/openspec/validate-test-cases.mjs",
+    "tcs:retrace": "node scripts/openspec/tcs-retrace.mjs",
     "tcs:rules-owner": "node scripts/openspec/tcs-rules-owner.mjs",
     "tcs:run-sheet": "node scripts/openspec/run-sheet.mjs",
     "tcs:run-record": "node scripts/openspec/run-sheet-record.mjs",

@@ -10,10 +10,10 @@ A build of the site carries a surface or it does not, and there is no third
 answer. What a build carries is fixed when it is made, so a lane cannot be
 told to show a surface the build it runs has no page for.
 
-**Each waiting product waits for its own launch** — the store, the vault,
-booking a visit, the account profile, membership and grading are carried in
-development and the two staging lanes, and nowhere else. The auction has
-already opened and is carried everywhere.
+- **Each waiting product waits for its own launch** — the store, the vault,
+  booking a visit, the account profile, membership and grading are carried in
+  development and the two staging lanes, and nowhere else. The auction has
+  already opened and is carried everywhere.
 
 | Lane | Front door | Store | Vault | Booking | Profile | Membership | Grading | Labs |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -44,9 +44,9 @@ already opened and is carried everywhere.
 - **Labs** — the demonstration surfaces, and the refund and shipping drafts
   nobody has approved
 
-**Store Locator** — the shop's location and hours page joins the store's
-set, so it waits for the store's launch —
-[Store Locator](/p/grade10-site/store/store-locator)
+- **Store Locator** — the shop's location and hours page joins the store's
+  set, so it waits for the store's launch —
+  [Store Locator](/p/grade10-site/store/store-locator)
 
 The auction, the terms, the privacy page and sign-in are carried in every
 lane.

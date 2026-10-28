@@ -186,3 +186,21 @@ export async function getImageObject(
   }
   return response.blob();
 }
+
+/** An archived PNG as an object URL, once its bytes match the sealed hash. */
+export async function verifiedPngUrl(
+  base: string,
+  artifact: ImageArtifact,
+  signal: AbortSignal,
+): Promise<string> {
+  const blob = await getImageObject(base, artifact, signal);
+  const bytes = await blob.arrayBuffer();
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  const actual = Array.from(new Uint8Array(digest), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
+  if (actual.toLowerCase() !== artifact.sha256.toLowerCase()) {
+    throw new Error(`Archived image hash mismatch for ${artifact.key}.`);
+  }
+  return URL.createObjectURL(new Blob([bytes], { type: "image/png" }));
+}

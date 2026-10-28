@@ -12,7 +12,8 @@
  *        a product or topic has no landing page. Exits 1.
  * WARN = hygiene with no broken pointer behind it: a `[[ref]]` in prose that
  *        names nothing, a `::figma` link off figma.com, a page past the
- *        budget in docs/prds/guides/writing-the-manual.md, a mark read as words.
+ *        budget in docs/prds/guides/writing-the-manual.md, a mark read as words,
+ *        a rule written as a paragraph.
  *        Exits 0.
  *
  * The readers in ../src are the only parser — this script never grows a second
@@ -42,6 +43,7 @@ import { checkCopy } from "./copy.mjs";
 import { checkDense } from "./dense.mjs";
 import { checkMarkInProse } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
+import { checkLooseRules } from "./rules.mjs";
 import { checkTaxonomy } from "./shape.mjs";
 
 const EMPTY_CONFIG = {
@@ -86,6 +88,7 @@ export async function runChecks(target, git, { fix = false } = {}) {
   checkPages(ctx, pages);
   checkMarkInProse(ctx, pages);
   checkDense(ctx, pages);
+  checkLooseRules(ctx, pages);
 
   if (!ctx.stories && ctx.storyIds.size > 0) {
     notes.push(

@@ -9,19 +9,31 @@ import type {
 import { captureLocale } from "@grade10/ui-verification/model";
 import * as React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useStorybookApi, useStorybookState } from "storybook/manager-api";
+import {
+  useArgs,
+  useStorybookApi,
+  useStorybookState,
+} from "storybook/manager-api";
 import { useTheme } from "storybook/theming";
 import type { VerificationIdentity } from "./archive-client";
 import {
-  getImageObject,
   getRun,
   identityKey,
   isRecord,
   listRuns,
   sameIdentity,
   verificationIdentity,
+  verifiedPngUrl,
 } from "./archive-client";
 
+import {
+  diffLabel,
+  diffTone,
+  FlowOverview,
+  FlowScreenControl,
+  useFlowScores,
+} from "./FlowPanel";
+import { CANVAS, type FlowParameter } from "./flow-tree";
 import type { PixelComparison } from "./pixel-compare";
 import { anchorOf, comparePixels, describeAnchor } from "./pixel-compare";
 
@@ -42,6 +54,12 @@ const PROFILE_TABS: readonly {
   { id: "mobile", shortLabel: "Mobile", size: "390 × 844" },
 ];
 const GRADE10_LOCALES = localesOf("grade10");
+const LOCALE_SHORT_LABELS: Readonly<Record<string, string>> = {
+  en: "English",
+  "zh-hant": "繁中",
+  "zh-hans": "简中",
+  ko: "한국어",
+};
 const LOCALE_LABELS: Readonly<Record<string, string>> = {
   en: "English",
   "zh-hant": "Traditional Chinese",
@@ -85,6 +103,10 @@ function localeKey(value: string): string {
 function localeLabel(value: string): string {
   const language = LOCALE_LABELS[localeKey(value)];
   return language ? `${language} (${value})` : value;
+}
+
+function localeShortLabel(value: string): string {
+  return LOCALE_SHORT_LABELS[localeKey(value)] ?? value;
 }
 
 function localeOptions(
@@ -186,14 +208,19 @@ function versionLabel(version: VersionOption): string {
   return `${version.appRef} ${version.appCommit.slice(0, 12)} / ${version.referenceRef} ${version.referenceCommit.slice(0, 12)}`;
 }
 
+// A run that retried other cases records this one as not selected; it holds
+// no evidence for it, so an older run that captured it is shown instead.
 function runHasIdentity(
   run: VerificationManifest,
   identity: VerificationIdentity,
 ): boolean {
-  return run.catalogue.some((entry) => {
-    const entryId = entryIdentity(entry);
-    return entryId !== null && sameIdentity(entryId, identity);
-  });
+  return run.captures.some(
+    (capture) =>
+      capture.status !== "not-selected" &&
+      capture.caseId === identity.caseId &&
+      capture.targetId === identity.targetId &&
+      capture.capturePointId === identity.capturePointId,
+  );
 }
 
 function isCaseOnlyVerification(value: unknown, caseId: string): boolean {
@@ -232,23 +259,6 @@ async function listAllRuns(
 
 function formatIdentity(identity: VerificationIdentity): string {
   return `${identity.caseId} · ${identity.targetId} · ${identity.capturePointId}`;
-}
-
-async function verifiedPngUrl(
-  base: string,
-  artifact: ImageArtifact,
-  signal: AbortSignal,
-): Promise<string> {
-  const blob = await getImageObject(base, artifact, signal);
-  const bytes = await blob.arrayBuffer();
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
-  const actual = Array.from(new Uint8Array(digest), (byte) =>
-    byte.toString(16).padStart(2, "0"),
-  ).join("");
-  if (actual.toLowerCase() !== artifact.sha256.toLowerCase()) {
-    throw new Error(`Archived image hash mismatch for ${artifact.key}.`);
-  }
-  return URL.createObjectURL(new Blob([bytes], { type: "image/png" }));
 }
 
 function captureFor(
@@ -313,11 +323,44 @@ function profileStatus(
   };
 }
 
-function Chip({ tone = "idle", children }: { tone?: Tone; children: string }) {
+interface FullSizeImage {
+  title: string;
+  url: string;
+}
+
+// A blob URL opened in a new tab does not load from the Storybook manager,
+// so the full-size image opens in a modal dialog over the whole window.
+function FullSizeViewer({
+  image,
+  onClose,
+}: {
+  image: FullSizeImage;
+  onClose: () => void;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    dialog.current?.showModal();
+  }, []);
   return (
-    <span className={`verification-chip verification-chip--${tone}`}>
-      {children}
-    </span>
+    <dialog
+      aria-label={`${image.title}, full size`}
+      className="verification-full-size"
+      onClose={onClose}
+      ref={dialog}
+    >
+      <div className="verification-full-size-bar">
+        <h3>{image.title}</h3>
+        <a download={`${image.title.toLocaleLowerCase()}.png`} href={image.url}>
+          Download PNG
+        </a>
+        <button onClick={onClose} type="button">
+          Close
+        </button>
+      </div>
+      <div className="verification-full-size-body">
+        <img alt={`${image.title}, full size`} src={image.url} />
+      </div>
+    </dialog>
   );
 }
 
@@ -326,11 +369,13 @@ function ImageEvidence({
   artifact,
   imageUrl,
   cropRegion,
+  onOpen,
 }: {
   title: string;
   artifact: ImageArtifact;
   imageUrl: string | undefined;
   cropRegion?: ImageRegion;
+  onOpen: (image: FullSizeImage) => void;
 }) {
   const imageStyle = cropRegion
     ? {
@@ -376,6 +421,15 @@ function ImageEvidence({
           sha256 {shortHash(artifact.sha256)}
         </code>
         {imageUrl ? (
+          <button
+            className="verification-link"
+            onClick={() => onOpen({ title, url: imageUrl })}
+            type="button"
+          >
+            Open full size
+          </button>
+        ) : null}
+        {imageUrl ? (
           <a
             href={imageUrl}
             download={`${title.toLocaleLowerCase()}.png`}
@@ -398,10 +452,12 @@ function DiffEvidence({
   comparison,
   aspect,
   canCompare,
+  onOpen,
 }: {
   comparison: ComparisonState | undefined;
   aspect: string;
   canCompare: boolean;
+  onOpen: (image: FullSizeImage) => void;
 }) {
   let body: React.ReactNode;
   let note = "";
@@ -459,6 +515,17 @@ function DiffEvidence({
       <div className="verification-image-heading">
         <h4>Pixel diff</h4>
         <span>{note}</span>
+        {framed ? (
+          <button
+            className="verification-link"
+            onClick={() =>
+              onOpen({ title: "Pixel diff", url: comparison.diffUrl })
+            }
+            type="button"
+          >
+            Open full size
+          </button>
+        ) : null}
       </div>
       <div
         className={`verification-image-frame${framed ? "" : " verification-image-frame--empty"}`}
@@ -494,6 +561,9 @@ function themeVariables(theme: ReturnType<typeof useTheme>) {
     "--vp-error-border": dark ? "#9b3b3b" : "#d65a5a",
     "--vp-error-fg": dark ? "#ffc9c9" : "#7d1818",
     "--vp-diff": dark ? "#ff6b6b" : "#d92d2d",
+    "--vp-score-ok": dark ? "#a9ccff" : "#1f5fbf",
+    "--vp-score-warn": dark ? "#f6c78e" : "#8a5300",
+    "--vp-score-high": dark ? "#ff9b9b" : "#b42318",
   } as React.CSSProperties;
 }
 
@@ -517,6 +587,18 @@ export function VerificationPanel({ active }: { active: boolean }) {
     ? managerApi.getParameters(currentStoryId, "verification")
     : undefined;
   const caseIdHint = caseIdOf(verificationParameter);
+  // A flow story names its screens; its Screen arg says which one is focused,
+  // and that screen's capture point is the target this panel shows.
+  const flow = (
+    currentStoryId
+      ? managerApi.getParameters(currentStoryId, "flow")
+      : undefined
+  ) as FlowParameter | undefined;
+  const [storyArgs, updateStoryArgs] = useArgs();
+  const flowScreenId = flow ? String(storyArgs.screen ?? CANVAS) : "";
+  const flowCapturePointId =
+    flow?.screens.find((screen) => screen.id === flowScreenId)
+      ?.capturePointId ?? "";
   const exactIdentityHint = useMemo(
     () => verificationIdentity(verificationParameter),
     [verificationParameter],
@@ -533,6 +615,8 @@ export function VerificationPanel({ active }: { active: boolean }) {
   const [runs, setRuns] = useState<VerificationManifest[]>([]);
   const [manifest, setManifest] = useState<VerificationManifest | null>(null);
   const [localeId, setLocaleId] = useState<string>("en");
+  const [selectedProfile, setSelectedProfile] = useState<ProfileId>("desktop");
+  const [fullSize, setFullSize] = useState<FullSizeImage | null>(null);
   const [imageUrls, setImageUrls] = useState<
     Partial<Record<ProfileId, ImageUrls>>
   >({});
@@ -599,17 +683,25 @@ export function VerificationPanel({ active }: { active: boolean }) {
   const currentTargetKeys = currentTargetChoices.map((choice) =>
     identityKey(choice.identity),
   );
-  const effectiveCurrentIdentityKey =
-    (currentTargetKeys.includes(selectedCurrentIdentityKey)
-      ? selectedCurrentIdentityKey
-      : "") ||
-    (exactIdentityHint &&
-    currentTargetKeys.includes(identityKey(exactIdentityHint))
-      ? identityKey(exactIdentityHint)
-      : "") ||
-    (currentTargetChoices.length === 1
-      ? identityKey(currentTargetChoices[0].identity)
-      : "");
+  const flowIdentityKey = flowCapturePointId
+    ? (currentTargetChoices
+        .filter(
+          (choice) => choice.identity.capturePointId === flowCapturePointId,
+        )
+        .map((choice) => identityKey(choice.identity))[0] ?? "")
+    : "";
+  const effectiveCurrentIdentityKey = flow
+    ? flowIdentityKey
+    : (currentTargetKeys.includes(selectedCurrentIdentityKey)
+        ? selectedCurrentIdentityKey
+        : "") ||
+      (exactIdentityHint &&
+      currentTargetKeys.includes(identityKey(exactIdentityHint))
+        ? identityKey(exactIdentityHint)
+        : "") ||
+      (currentTargetChoices.length === 1
+        ? identityKey(currentTargetChoices[0].identity)
+        : "");
   const currentIdentity =
     currentTargetChoices.find(
       (choice) => identityKey(choice.identity) === effectiveCurrentIdentityKey,
@@ -851,6 +943,10 @@ export function VerificationPanel({ active }: { active: boolean }) {
 
   async function runComparison(ids: ProfileId[]) {
     const generation = comparisonGeneration.current;
+    setComparisons((previous) => ({
+      ...previous,
+      ...Object.fromEntries(ids.map((id) => [id, "running"])),
+    }));
     for (const id of ids) {
       const capture = captures[id];
       const urls = imageUrls[id];
@@ -862,7 +958,6 @@ export function VerificationPanel({ active }: { active: boolean }) {
       ) {
         continue;
       }
-      setComparisons((previous) => ({ ...previous, [id]: "running" }));
       const result = await comparePixels({
         referenceUrl: urls.reference,
         siteUrl: urls.site,
@@ -882,6 +977,19 @@ export function VerificationPanel({ active }: { active: boolean }) {
   const comparing = PROFILE_TABS.some(
     (item) => comparisons[item.id] === "running",
   );
+  const uncompared = comparableIds.filter((id) => !comparisons[id]).join(",");
+  // biome-ignore lint/correctness/useExhaustiveDependencies: each pair is compared once its two images arrive
+  useEffect(() => {
+    if (active && uncompared)
+      void runComparison(uncompared.split(",") as ProfileId[]);
+  }, [active, uncompared]);
+  const flowScores = useFlowScores({
+    active,
+    archiveBase,
+    caseId: caseIdHint,
+    runs,
+    screens: flow?.screens,
+  });
 
   const selectedDeclaration = manifest?.catalogue.find(
     (entry) =>
@@ -1010,469 +1118,547 @@ export function VerificationPanel({ active }: { active: boolean }) {
         </div>
       </header>
 
-      <section
-        className="verification-context"
-        aria-labelledby="verification-story-heading"
-      >
-        <div className="verification-context-grid">
-          <div className="verification-story-block">
-            <h3 id="verification-story-heading" className="verification-label">
-              Expected layout (Story)
-            </h3>
-            <p className="verification-readonly">
-              {currentStoryId || "No story is selected"}
-            </p>
-          </div>
-          {!storyListOpen && currentTargetChoices.length > 1 ? (
-            <label className="verification-field">
-              Verification target
-              <select
-                value={effectiveCurrentIdentityKey}
-                onChange={(event) =>
-                  setSelectedCurrentIdentityKey(event.currentTarget.value)
-                }
-              >
-                <option value="">Choose a target</option>
-                {currentTargetChoices.map((choice) => (
-                  <option
-                    key={identityKey(choice.identity)}
-                    value={identityKey(choice.identity)}
-                  >
-                    {choice.label} · {choice.identity.targetId} ·{" "}
-                    {choice.identity.capturePointId}
-                  </option>
-                ))}
-              </select>
-            </label>
-          ) : null}
-          {!storyListOpen && currentCaseIds.length > 1 ? (
-            <label className="verification-field">
-              Current verification case
-              <select
-                value={effectiveCurrentCaseId}
-                onChange={(event) => {
-                  setSelectedCurrentCaseId(event.currentTarget.value);
-                  setSelectedCurrentIdentityKey("");
-                }}
-              >
-                <option value="">Choose a case</option>
-                {currentCaseIds.map((caseId) => (
-                  <option key={caseId} value={caseId}>
-                    {caseId}
-                  </option>
-                ))}
-              </select>
-            </label>
-          ) : null}
-          {availableVersions.length > 0 ? (
-            <label className="verification-field">
-              Compared version
-              <select
-                value={effectiveVersionKey}
-                onChange={(event) => {
-                  setSelectedVersionKey(event.currentTarget.value);
-                  setSelectedIdentityKey("");
-                }}
-              >
-                {availableVersions.map((version) => (
-                  <option key={version.key} value={version.key}>
-                    {versionLabel(version)}
-                  </option>
-                ))}
-              </select>
-            </label>
-          ) : null}
-          {selectedManifestSummary ? (
-            <div className="verification-story-block">
-              <p className="verification-label">Captured</p>
-              <p className="verification-readonly">
-                {selectedManifestSummary.createdAt}
-              </p>
-            </div>
-          ) : null}
-        </div>
-        {caseIdHint ? (
-          <p className="verification-metadata">
-            {storyListOpen ? "Current live case: " : "Mapped case: "}
-            {caseIdHint}
-          </p>
-        ) : currentIdentityChoices.length > 0 ? (
-          <p className="verification-metadata">
-            {storyListOpen
-              ? "The current live story matches an archived entry."
-              : "Archived entries match this story ID or its reference story ID."}
-          </p>
-        ) : currentStoryId ? (
-          <p className="verification-muted">
-            No archived verification entries match this story.
-          </p>
-        ) : null}
-        {currentIdentity ? (
-          <p className="verification-metadata">
-            {storyListOpen ? "Current live identity: " : "Mapped identity: "}
-            {formatIdentity(currentIdentity)}
-          </p>
-        ) : null}
-        {storyListOpen ? (
-          <>
-            <label className="verification-field">
-              Search archived stories
-              <input
-                type="search"
-                value={identitySearch}
-                onChange={(event) =>
-                  setIdentitySearch(event.currentTarget.value)
-                }
-                placeholder="Label, case ID, target, capture point, or story ID"
-              />
-            </label>
-            <fieldset className="verification-story-field">
-              <legend>Archived stories</legend>
-              <div className="verification-story-list">
-                {filteredVersionIdentityChoices.length > 0 ? (
-                  filteredVersionIdentityChoices.map((choice) => {
-                    const key = identityKey(choice.identity);
-                    const isSelected = key === effectiveIdentityKey;
-                    return (
-                      <button
-                        key={key}
-                        type="button"
-                        aria-pressed={isSelected}
-                        className="verification-story-choice"
-                        onClick={() => selectArchivedStory(choice)}
-                      >
-                        <span>{choice.label}</span>
-                        <span className="verification-metadata">
-                          {choice.identity.targetId} ·{" "}
-                          {choice.identity.capturePointId} · {choice.status} ·{" "}
-                          {choice.storyId}
-                        </span>
-                      </button>
-                    );
-                  })
-                ) : (
-                  <p className="verification-muted">
-                    No archived stories in this version.
-                  </p>
-                )}
+      {flow && !storyListOpen ? (
+        <FlowScreenControl
+          current={flowScreenId}
+          onSelect={(id) => updateStoryArgs({ screen: id })}
+          scores={flowScores.scores}
+          screens={flow.screens}
+        />
+      ) : null}
+
+      {flow && !storyListOpen && flowScreenId === CANVAS ? (
+        <FlowOverview
+          caseId={caseIdHint}
+          onSelect={(id) => updateStoryArgs({ screen: id })}
+          runOf={flowScores.runOf}
+          scores={flowScores.scores}
+          screens={flow.screens}
+          thumbnails={flowScores.thumbnails}
+        />
+      ) : (
+        <>
+          <details
+            className="verification-context"
+            aria-labelledby="verification-story-heading"
+            open={!flow || storyListOpen}
+          >
+            <summary className="verification-label">
+              Details: story, version and run
+            </summary>
+            <div className="verification-context-grid">
+              <div className="verification-story-block">
+                <h3
+                  id="verification-story-heading"
+                  className="verification-label"
+                >
+                  Expected layout (Story)
+                </h3>
+                <p className="verification-readonly">
+                  {currentStoryId || "No story is selected"}
+                </p>
               </div>
-            </fieldset>
-            {selectedStoryNavigation?.notice ? (
-              <p className="verification-notice">
-                {selectedStoryNavigation.notice}
+              {!storyListOpen && !flow && currentTargetChoices.length > 1 ? (
+                <label className="verification-field">
+                  Verification target
+                  <select
+                    value={effectiveCurrentIdentityKey}
+                    onChange={(event) =>
+                      setSelectedCurrentIdentityKey(event.currentTarget.value)
+                    }
+                  >
+                    <option value="">Choose a target</option>
+                    {currentTargetChoices.map((choice) => (
+                      <option
+                        key={identityKey(choice.identity)}
+                        value={identityKey(choice.identity)}
+                      >
+                        {choice.label} · {choice.identity.targetId} ·{" "}
+                        {choice.identity.capturePointId}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+              {!storyListOpen && currentCaseIds.length > 1 ? (
+                <label className="verification-field">
+                  Current verification case
+                  <select
+                    value={effectiveCurrentCaseId}
+                    onChange={(event) => {
+                      setSelectedCurrentCaseId(event.currentTarget.value);
+                      setSelectedCurrentIdentityKey("");
+                    }}
+                  >
+                    <option value="">Choose a case</option>
+                    {currentCaseIds.map((caseId) => (
+                      <option key={caseId} value={caseId}>
+                        {caseId}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+              {availableVersions.length > 0 ? (
+                <label className="verification-field">
+                  Compared version
+                  <select
+                    value={effectiveVersionKey}
+                    onChange={(event) => {
+                      setSelectedVersionKey(event.currentTarget.value);
+                      setSelectedIdentityKey("");
+                    }}
+                  >
+                    {availableVersions.map((version) => (
+                      <option key={version.key} value={version.key}>
+                        {versionLabel(version)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+              {selectedManifestSummary ? (
+                <div className="verification-story-block">
+                  <p className="verification-label">Captured</p>
+                  <p className="verification-readonly">
+                    {selectedManifestSummary.createdAt}
+                  </p>
+                </div>
+              ) : null}
+            </div>
+            {caseIdHint ? (
+              <p className="verification-metadata">
+                {storyListOpen ? "Current live case: " : "Mapped case: "}
+                {caseIdHint}
+              </p>
+            ) : currentIdentityChoices.length > 0 ? (
+              <p className="verification-metadata">
+                {storyListOpen
+                  ? "The current live story matches an archived entry."
+                  : "Archived entries match this story ID or its reference story ID."}
+              </p>
+            ) : currentStoryId ? (
+              <p className="verification-muted">
+                No archived verification entries match this story.
               </p>
             ) : null}
-          </>
-        ) : null}
-      </section>
-
-      {!storyListOpen && !currentStoryId ? (
-        <p className="verification-empty">
-          Select a story with a verification mapping or open a story list for a
-          selected version.
-        </p>
-      ) : null}
-      {!storyListOpen &&
-      currentStoryId &&
-      currentIdentityChoices.length > 0 &&
-      !currentIdentity ? (
-        <p className="verification-empty">
-          Choose a verification case and target to view its archived history.
-        </p>
-      ) : null}
-      {!storyListOpen &&
-      currentStoryId &&
-      caseIdHint &&
-      currentIdentityChoices.length === 0 &&
-      !loadingRuns &&
-      !historyError ? (
-        <p className="verification-empty">
-          No archived entries match this verification case.
-        </p>
-      ) : null}
-
-      {historyError ? (
-        <p role="alert" className="verification-error">
-          Run history: {historyError}
-          <span className="verification-hint">
-            {" "}
-            Refresh to retry; if it persists, restart Storybook with pnpm
-            storybook:workbench.
-          </span>
-        </p>
-      ) : null}
-      {loadingRuns ? (
-        <p role="status" className="verification-muted">
-          Loading archived runs…
-        </p>
-      ) : null}
-      {archiveBase &&
-      selectedIdentity &&
-      !loadingRuns &&
-      !effectiveRunId &&
-      !historyError ? (
-        <p className="verification-empty">
-          No archived runs match this verification identity.
-        </p>
-      ) : null}
-
-      {manifestError ? (
-        <p role="alert" className="verification-error">
-          Selected run: {manifestError}
-          <span className="verification-hint">
-            {" "}
-            Refresh to retry; if it persists, restart Storybook with pnpm
-            storybook:workbench.
-          </span>
-        </p>
-      ) : null}
-      {loadingRun ? (
-        <p role="status" className="verification-muted">
-          Loading archived evidence…
-        </p>
-      ) : null}
-
-      {manifest && selectedIdentity ? (
-        <>
-          <div className="verification-controls">
-            <div
-              className="verification-locale-tabs"
-              role="tablist"
-              aria-label="Capture locale"
-            >
-              {localeChoices.map((locale) => (
-                <button
-                  key={locale}
-                  type="button"
-                  role="tab"
-                  aria-selected={localeKey(localeId) === localeKey(locale)}
-                  aria-controls="verification-evidence"
-                  onClick={() => setLocaleId(locale)}
-                >
-                  {localeLabel(locale)}
-                </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              className="verification-primary"
-              disabled={
-                loadingImages || comparableIds.length === 0 || comparing
-              }
-              onClick={() => void runComparison(comparableIds)}
-            >
-              {comparing ? "Comparing…" : "Compare pixels"}
-            </button>
-          </div>
-
-          {selectedDeclaration?.status === "retired" ? (
-            <p className="verification-notice">Retired at capture</p>
-          ) : null}
-          {provenanceCapture?.provenance.verified === false ? (
-            <p className="verification-notice">
-              Capture provenance is unverified
-            </p>
-          ) : null}
-          {provenanceCapture?.provenance.reusedFrom ? (
-            <p className="verification-metadata">
-              Reused from {provenanceCapture.provenance.reusedFrom.runId},
-              captured {provenanceCapture.provenance.reusedFrom.capturedAt}, app{" "}
-              {provenanceCapture.provenance.reusedFrom.appCommit}, reference{" "}
-              {provenanceCapture.provenance.reusedFrom.referenceCommit}
-            </p>
-          ) : null}
-
-          <div id="verification-evidence" role="tabpanel">
-            {!selectedLocaleHasEvidence ? (
-              <p className="verification-notice">
-                No archived evidence for {localeLabel(localeId)} in this run.
-                The panel does not substitute another locale.
+            {currentIdentity ? (
+              <p className="verification-metadata">
+                {storyListOpen
+                  ? "Current live identity: "
+                  : "Mapped identity: "}
+                {formatIdentity(currentIdentity)}
               </p>
-            ) : (
+            ) : null}
+            {storyListOpen ? (
               <>
-                <section className="verification-section" aria-label="Status">
-                  <div className="verification-section-heading">
-                    <h3>Status</h3>
-                    <p className="verification-metadata">
-                      Selected locale: {localeLabel(localeId)}
-                    </p>
+                <label className="verification-field">
+                  Search archived stories
+                  <input
+                    type="search"
+                    value={identitySearch}
+                    onChange={(event) =>
+                      setIdentitySearch(event.currentTarget.value)
+                    }
+                    placeholder="Label, case ID, target, capture point, or story ID"
+                  />
+                </label>
+                <fieldset className="verification-story-field">
+                  <legend>Archived stories</legend>
+                  <div className="verification-story-list">
+                    {filteredVersionIdentityChoices.length > 0 ? (
+                      filteredVersionIdentityChoices.map((choice) => {
+                        const key = identityKey(choice.identity);
+                        const isSelected = key === effectiveIdentityKey;
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            aria-pressed={isSelected}
+                            className="verification-story-choice"
+                            onClick={() => selectArchivedStory(choice)}
+                          >
+                            <span>{choice.label}</span>
+                            <span className="verification-metadata">
+                              {choice.identity.targetId} ·{" "}
+                              {choice.identity.capturePointId} · {choice.status}{" "}
+                              · {choice.storyId}
+                            </span>
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <p className="verification-muted">
+                        No archived stories in this version.
+                      </p>
+                    )}
                   </div>
-                  <div className="verification-status-grid">
-                    {PROFILE_TABS.map((item) => {
-                      const status = profileStatus(
-                        captures[item.id],
-                        comparisons[item.id],
-                      );
+                </fieldset>
+                {selectedStoryNavigation?.notice ? (
+                  <p className="verification-notice">
+                    {selectedStoryNavigation.notice}
+                  </p>
+                ) : null}
+              </>
+            ) : null}
+          </details>
+
+          {!storyListOpen && !currentStoryId ? (
+            <p className="verification-empty">
+              Select a story with a verification mapping or open a story list
+              for a selected version.
+            </p>
+          ) : null}
+          {!storyListOpen &&
+          currentStoryId &&
+          currentIdentityChoices.length > 0 &&
+          !currentIdentity ? (
+            <p className="verification-empty">
+              Choose a verification case and target to view its archived
+              history.
+            </p>
+          ) : null}
+          {!storyListOpen &&
+          currentStoryId &&
+          caseIdHint &&
+          currentIdentityChoices.length === 0 &&
+          !loadingRuns &&
+          !historyError ? (
+            <p className="verification-empty">
+              No archived entries match this verification case.
+            </p>
+          ) : null}
+
+          {historyError ? (
+            <p role="alert" className="verification-error">
+              Run history: {historyError}
+              <span className="verification-hint">
+                {" "}
+                Refresh to retry; if it persists, restart Storybook with pnpm
+                storybook:workbench.
+              </span>
+            </p>
+          ) : null}
+          {loadingRuns ? (
+            <p role="status" className="verification-muted">
+              Loading archived runs…
+            </p>
+          ) : null}
+          {archiveBase &&
+          selectedIdentity &&
+          !loadingRuns &&
+          !effectiveRunId &&
+          !historyError ? (
+            <p className="verification-empty">
+              No archived runs match this verification identity.
+            </p>
+          ) : null}
+
+          {manifestError ? (
+            <p role="alert" className="verification-error">
+              Selected run: {manifestError}
+              <span className="verification-hint">
+                {" "}
+                Refresh to retry; if it persists, restart Storybook with pnpm
+                storybook:workbench.
+              </span>
+            </p>
+          ) : null}
+          {loadingRun ? (
+            <p role="status" className="verification-muted">
+              Loading archived evidence…
+            </p>
+          ) : null}
+
+          {manifest && selectedIdentity ? (
+            <>
+              <div className="verification-controls">
+                <div
+                  className="verification-locale-tabs"
+                  role="tablist"
+                  aria-label="Capture locale"
+                >
+                  {localeChoices.map((locale) => (
+                    <button
+                      key={locale}
+                      type="button"
+                      role="tab"
+                      aria-selected={localeKey(localeId) === localeKey(locale)}
+                      aria-controls="verification-evidence"
+                      onClick={() => setLocaleId(locale)}
+                    >
+                      {localeShortLabel(locale)}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  className="verification-primary"
+                  disabled={
+                    loadingImages || comparableIds.length === 0 || comparing
+                  }
+                  onClick={() => void runComparison(comparableIds)}
+                >
+                  {comparing ? "Comparing…" : "Compare pixels"}
+                </button>
+              </div>
+
+              {selectedDeclaration?.status === "retired" ? (
+                <p className="verification-notice">Retired at capture</p>
+              ) : null}
+              {provenanceCapture?.provenance.verified === false ? (
+                <p className="verification-notice">
+                  Unverified capture: the app or reference checkout had
+                  uncommitted changes, or was not at the commit this run
+                  records, so the commits below may not reproduce it.
+                </p>
+              ) : null}
+              {provenanceCapture?.provenance.reusedFrom ? (
+                <p className="verification-metadata">
+                  Reused from {provenanceCapture.provenance.reusedFrom.runId},
+                  captured {provenanceCapture.provenance.reusedFrom.capturedAt},
+                  app {provenanceCapture.provenance.reusedFrom.appCommit},
+                  reference{" "}
+                  {provenanceCapture.provenance.reusedFrom.referenceCommit}
+                </p>
+              ) : null}
+
+              <div id="verification-evidence" role="tabpanel">
+                {!selectedLocaleHasEvidence ? (
+                  <p className="verification-notice">
+                    No archived evidence for {localeLabel(localeId)} in this
+                    run. The panel does not substitute another locale.
+                  </p>
+                ) : (
+                  <>
+                    <section
+                      className="verification-section"
+                      aria-label="Status"
+                    >
+                      <div className="verification-section-heading">
+                        <h3>Status</h3>
+                        <p className="verification-metadata">
+                          Selected locale: {localeLabel(localeId)}
+                        </p>
+                      </div>
+                      <fieldset className="verification-size-tabs">
+                        <legend className="verification-visually-hidden">
+                          Size, with how far the site differs from the design
+                        </legend>
+                        {PROFILE_TABS.map((item) => {
+                          const comparison = comparisons[item.id];
+                          const scored =
+                            comparison !== undefined &&
+                            comparison !== "running" &&
+                            comparison.kind === "compared"
+                              ? comparison.ratio
+                              : null;
+                          const status =
+                            scored === null
+                              ? profileStatus(captures[item.id], comparison)
+                              : {
+                                  text: diffLabel(scored),
+                                  tone: diffTone(scored),
+                                };
+                          return (
+                            <label
+                              key={item.id}
+                              className="verification-size-tab"
+                              data-checked={item.id === selectedProfile}
+                              data-tone={status.tone}
+                              title={item.size}
+                            >
+                              <input
+                                checked={item.id === selectedProfile}
+                                name="verification-size"
+                                onChange={() => setSelectedProfile(item.id)}
+                                type="radio"
+                                value={item.id}
+                              />
+                              <span>{item.shortLabel}</span>
+                              <strong>{status.text}</strong>
+                            </label>
+                          );
+                        })}
+                      </fieldset>
+                    </section>
+
+                    {loadingImages ? (
+                      <p role="status" className="verification-muted">
+                        Loading original screenshots…
+                      </p>
+                    ) : null}
+                    {imageError ? (
+                      <p role="alert" className="verification-error">
+                        Images: {imageError}
+                      </p>
+                    ) : null}
+
+                    {PROFILE_TABS.filter(
+                      (item) => item.id === selectedProfile,
+                    ).map((item) => {
+                      const capture = captures[item.id];
+                      const urls = imageUrls[item.id];
                       return (
-                        <div key={item.id} className="verification-status-card">
-                          <h4>{item.shortLabel}</h4>
-                          <span className="verification-metadata">
-                            {item.size}
-                          </span>
-                          <Chip tone={status.tone}>{status.text}</Chip>
-                        </div>
+                        <section
+                          key={item.id}
+                          className="verification-profile"
+                          data-profile={item.id}
+                          aria-label={`${item.shortLabel} evidence`}
+                        >
+                          <div className="verification-profile-heading">
+                            <h3>{item.shortLabel}</h3>
+                            <span className="verification-metadata">
+                              {item.size}
+                            </span>
+                            {capture?.status === "captured" ? (
+                              <span
+                                className="verification-chip"
+                                title="Both images are cropped to the component box and aligned at its top-left corner before comparing."
+                              >
+                                Anchor{" "}
+                                {describeAnchor(
+                                  capture.siteRegion,
+                                  capture.site,
+                                )}
+                              </span>
+                            ) : null}
+                            {capture?.status === "captured" &&
+                            capture.reference ? (
+                              <button
+                                type="button"
+                                disabled={
+                                  !comparable(item.id) ||
+                                  comparisons[item.id] === "running"
+                                }
+                                onClick={() => void runComparison([item.id])}
+                              >
+                                {comparisons[item.id] &&
+                                comparisons[item.id] !== "running"
+                                  ? "Recompare"
+                                  : "Compare pixels"}
+                              </button>
+                            ) : null}
+                          </div>
+                          {!capture ? (
+                            <p role="alert">
+                              This run has no outcome for the selected identity
+                              and profile.
+                            </p>
+                          ) : capture.status === "failed" ? (
+                            <p role="alert">
+                              Capture failed: {capture.failure.message}
+                            </p>
+                          ) : capture.status === "not-selected" ? (
+                            <p className="verification-notice">
+                              This profile was not selected
+                            </p>
+                          ) : (
+                            <div className="verification-image-grid">
+                              {capture.reference ? (
+                                <ImageEvidence
+                                  title="Reference"
+                                  artifact={capture.reference}
+                                  imageUrl={urls?.reference}
+                                  cropRegion={capture.referenceRegion}
+                                  onOpen={setFullSize}
+                                />
+                              ) : (
+                                <p className="verification-notice">
+                                  No matching reference at this viewport. Not
+                                  scored at this profile.
+                                </p>
+                              )}
+                              <ImageEvidence
+                                title="Site"
+                                artifact={capture.site}
+                                imageUrl={urls?.site}
+                                onOpen={setFullSize}
+                              />
+                              {capture.reference ? (
+                                <DiffEvidence
+                                  comparison={comparisons[item.id]}
+                                  canCompare={comparable(item.id)}
+                                  onOpen={setFullSize}
+                                  aspect={`${anchorOf(capture.siteRegion, capture.site).width} / ${anchorOf(capture.siteRegion, capture.site).height}`}
+                                />
+                              ) : null}
+                            </div>
+                          )}
+                        </section>
                       );
                     })}
-                  </div>
-                </section>
+                  </>
+                )}
+              </div>
 
-                {loadingImages ? (
-                  <p role="status" className="verification-muted">
-                    Loading original screenshots…
+              <section
+                className="verification-section"
+                aria-label="Run provenance"
+              >
+                <details className="verification-details-toggle">
+                  <summary>
+                    <h3 className="verification-inline-heading">
+                      {manifest.runId}
+                    </h3>
+                  </summary>
+                  <p className="verification-metadata">
+                    Run created: {manifest.createdAt}
                   </p>
-                ) : null}
-                {imageError ? (
-                  <p role="alert" className="verification-error">
-                    Images: {imageError}
-                  </p>
-                ) : null}
-
-                {PROFILE_TABS.map((item) => {
-                  const capture = captures[item.id];
-                  const urls = imageUrls[item.id];
-                  return (
-                    <section
-                      key={item.id}
-                      className="verification-profile"
-                      data-profile={item.id}
-                      aria-label={`${item.shortLabel} evidence`}
-                    >
-                      <div className="verification-profile-heading">
-                        <h3>{item.shortLabel}</h3>
-                        <span className="verification-metadata">
-                          {item.size}
+                  <dl className="verification-provenance">
+                    <div>
+                      <dt>App checkpoint</dt>
+                      <dd>
+                        {manifest.checkpoint.app.ref} ·{" "}
+                        <span title={manifest.checkpoint.app.commit}>
+                          {shortCommit(manifest.checkpoint.app.commit)}
                         </span>
-                        {capture?.status === "captured" ? (
-                          <span
-                            className="verification-chip"
-                            title="Both images are cropped to the component box and aligned at its top-left corner before comparing."
-                          >
-                            Anchor{" "}
-                            {describeAnchor(capture.siteRegion, capture.site)}
-                          </span>
-                        ) : null}
-                        {capture?.status === "captured" && capture.reference ? (
-                          <button
-                            type="button"
-                            disabled={
-                              !comparable(item.id) ||
-                              comparisons[item.id] === "running"
-                            }
-                            onClick={() => void runComparison([item.id])}
-                          >
-                            {comparisons[item.id] &&
-                            comparisons[item.id] !== "running"
-                              ? "Recompare"
-                              : "Compare pixels"}
-                          </button>
-                        ) : null}
-                      </div>
-                      {!capture ? (
-                        <p role="alert">
-                          This run has no outcome for the selected identity and
-                          profile.
-                        </p>
-                      ) : capture.status === "failed" ? (
-                        <p role="alert">
-                          Capture failed: {capture.failure.message}
-                        </p>
-                      ) : capture.status === "not-selected" ? (
-                        <p className="verification-notice">
-                          This profile was not selected
-                        </p>
-                      ) : (
-                        <div className="verification-image-grid">
-                          {capture.reference ? (
-                            <ImageEvidence
-                              title="Reference"
-                              artifact={capture.reference}
-                              imageUrl={urls?.reference}
-                              cropRegion={capture.referenceRegion}
-                            />
-                          ) : (
-                            <p className="verification-notice">
-                              No matching reference at this viewport. Not scored
-                              at this profile.
-                            </p>
-                          )}
-                          <ImageEvidence
-                            title="Site"
-                            artifact={capture.site}
-                            imageUrl={urls?.site}
-                          />
-                          {capture.reference ? (
-                            <DiffEvidence
-                              comparison={comparisons[item.id]}
-                              canCompare={comparable(item.id)}
-                              aspect={`${anchorOf(capture.siteRegion, capture.site).width} / ${anchorOf(capture.siteRegion, capture.site).height}`}
-                            />
-                          ) : null}
-                        </div>
-                      )}
-                    </section>
-                  );
-                })}
-              </>
-            )}
-          </div>
-
-          <section className="verification-section" aria-label="Run provenance">
-            <details className="verification-details-toggle" open>
-              <summary>
-                <h3 className="verification-inline-heading">
-                  {manifest.runId}
-                </h3>
-              </summary>
-              <p className="verification-metadata">
-                Run created: {manifest.createdAt}
-              </p>
-              <dl className="verification-provenance">
-                <div>
-                  <dt>App checkpoint</dt>
-                  <dd>
-                    {manifest.checkpoint.app.ref} ·{" "}
-                    <span title={manifest.checkpoint.app.commit}>
-                      {shortCommit(manifest.checkpoint.app.commit)}
-                    </span>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Story reference</dt>
-                  <dd>
-                    {manifest.checkpoint.reference.ref} ·{" "}
-                    <span title={manifest.checkpoint.reference.commit}>
-                      {shortCommit(manifest.checkpoint.reference.commit)}
-                    </span>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Recorded story</dt>
-                  <dd>
-                    {selectedDeclaration?.storyId ?? "Not present in this run"}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Identity</dt>
-                  <dd>{formatIdentity(selectedIdentity)}</dd>
-                </div>
-                <div>
-                  <dt>Source capture time</dt>
-                  <dd>
-                    {provenanceCapture?.provenance.capturedAt ?? "Not recorded"}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Capture source commits</dt>
-                  <dd>
-                    {provenanceCapture
-                      ? `${shortCommit(provenanceCapture.provenance.appCommit)} · ${shortCommit(provenanceCapture.provenance.referenceCommit)}`
-                      : "Not recorded"}
-                  </dd>
-                </div>
-              </dl>
-            </details>
-          </section>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Story reference</dt>
+                      <dd>
+                        {manifest.checkpoint.reference.ref} ·{" "}
+                        <span title={manifest.checkpoint.reference.commit}>
+                          {shortCommit(manifest.checkpoint.reference.commit)}
+                        </span>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Recorded story</dt>
+                      <dd>
+                        {selectedDeclaration?.storyId ??
+                          "Not present in this run"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Identity</dt>
+                      <dd>{formatIdentity(selectedIdentity)}</dd>
+                    </div>
+                    <div>
+                      <dt>Source capture time</dt>
+                      <dd>
+                        {provenanceCapture?.provenance.capturedAt ??
+                          "Not recorded"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Capture source commits</dt>
+                      <dd>
+                        {provenanceCapture
+                          ? `${shortCommit(provenanceCapture.provenance.appCommit)} · ${shortCommit(provenanceCapture.provenance.referenceCommit)}`
+                          : "Not recorded"}
+                      </dd>
+                    </div>
+                  </dl>
+                </details>
+              </section>
+            </>
+          ) : null}
         </>
+      )}
+      {fullSize ? (
+        <FullSizeViewer image={fullSize} onClose={() => setFullSize(null)} />
       ) : null}
     </div>
   );

@@ -48,6 +48,11 @@ export const RULES = [
     title: "Marks inside a sentence, read as words",
   },
   {
+    key: "rule",
+    level: "warn",
+    title: "Rules written as a paragraph, not a list item",
+  },
+  {
     key: "ref",
     level: "warn",
     title: "Prose references naming nothing, or two things",

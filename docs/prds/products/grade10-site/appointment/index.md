@@ -25,9 +25,9 @@ books into its own shops with the same screens.
 
 ## Where It Is Open
 
-**Not open to the public yet** — booking a visit is carried in development
-and staging, and on no lane the public reaches —
-[Carried Surfaces](/p/grade10-site/site/carried-surfaces)
+- **Not open to the public yet** — booking a visit is carried in development
+  and staging, and on no lane the public reaches —
+  [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
 ## Users
 

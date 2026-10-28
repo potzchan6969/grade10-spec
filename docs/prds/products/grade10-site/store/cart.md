@@ -55,7 +55,7 @@ back to that page.
 
 ## Pending Operations
 
-**Wait before another action** - the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
+- **Wait before another action** — the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
 
 ::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
 
@@ -126,6 +126,8 @@ The refusals are the coupon's own —
   wallet; the guest's code moves to the member's cart unless that cart
   already holds one -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+- **No identity check** — a checkout of any value asks nothing about who the
+  buyer is — [KYC](/p/grade10-site/account/kyc)
 
 ::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
 

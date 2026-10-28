@@ -9,26 +9,28 @@ import { AppWindow, Code, ListChecks } from "@phosphor-icons/react";
 import {
   type CSSProperties,
   type ReactNode,
+  use,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
-import { dirOf, humanize } from "../api/paths";
-import type { PageCases, TestCase } from "../api/suites";
+import type { PageCases } from "../api/suites";
 import { BlockList } from "../blocks/block-list";
-import { useBlockScope } from "../blocks/block-scope";
 import { BlockView } from "../blocks/block-view";
-import { Collapsible } from "../blocks/collapsible";
 import { BareEmbedContext } from "../blocks/embed-block";
-import { MarkdownView } from "../blocks/markdown";
 import {
+  rulesOf,
   type SectionRow,
+  type SectionRule,
   SIDE_TABS,
   type SideItem,
   type SideTab,
 } from "../blocks/side-blocks";
 import type { DetailBlock } from "../content/grammar";
+import { CaseList, type CaseRow } from "./case-list";
 import { clamp, PAGE_MIN_WIDTH, PANEL_WIDTH, useLayout } from "./layout";
+import { PageSectionsContext } from "./page-sections";
 import { ResizeHandle } from "./resize-handle";
 
 const TAB_LABEL: Record<SideTab, string> = {
@@ -46,15 +48,18 @@ const TAB_ICON: Record<SideTab, ReactNode> = {
 /** The space between the two columns; the handle sits in its middle. */
 const GAP = 40;
 
-type CaseRow = { testCase: TestCase; rules: string[] };
-
 /** What one section shows beside it, tab by tab. */
-type Shelf = Record<"ui" | "tech", SideItem[]> & { qa: CaseRow[] };
+type Shelf = Record<"ui" | "tech", SideItem[]> & {
+  qa: CaseRow[];
+  /** The rules the section names, which its cases are filed under. */
+  rules: SectionRule[];
+};
 
 function shelfOf(row: SectionRow, cases: PageCases): Shelf {
   return {
     ui: row.side.filter((item) => item.tab === "ui"),
     tech: row.side.filter((item) => item.tab === "tech"),
+    rules: rulesOf(row.main),
     qa: [
       ...(cases.bySection.get(row.section) ?? []),
       // The cases that trace the page as a whole sit by its opening.
@@ -71,6 +76,153 @@ const isEmpty = (shelf: Shelf) =>
 /** Whether a page has anything to read beside it. */
 export function hasSide(rows: SectionRow[], cases: PageCases): boolean {
   return rows.some((row) => !isEmpty(shelfOf(row, cases)));
+}
+
+/** How many items each tab holds across the page. */
+function tabTotals(shelves: Shelf[]): Record<SideTab, number> {
+  const total = (tab: SideTab) =>
+    shelves.reduce((sum, shelf) => sum + shelf[tab].length, 0);
+  return { ui: total("ui"), tech: total("tech"), qa: total("qa") };
+}
+
+/**
+ * The side column while the rail is open: a tab at the right edge naming what
+ * sits beside the page. Hovering one shows it for the section being read;
+ * choosing one folds the rail, which opens the column on it.
+ */
+export function SideHint({
+  rows,
+  cases,
+}: {
+  rows: SectionRow[];
+  cases: PageCases;
+}) {
+  const layout = useLayout();
+  const { sections } = use(PageSectionsContext);
+  const [peek, setPeek] = useState<SideTab | null>(null);
+  const reading = useReadingSection(rows, peek !== null);
+  const shelves = rows.map((row) => shelfOf(row, cases));
+  const totals = tabTotals(shelves);
+  const at = Math.max(
+    0,
+    rows.findIndex((row) => row.section === reading),
+  );
+  const title =
+    sections.find((section) => section.id === rows[at]?.section)?.title ??
+    "Opening";
+
+  return (
+    <nav
+      aria-label="Beside this page"
+      className="-translate-y-1/2 fixed top-1/2 right-0 z-30 flex flex-col gap-0.5 rounded-l-(--radius-xl) border border-border border-r-0 bg-popover p-1 shadow-lg max-lg:hidden"
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setPeek(null);
+      }}
+      onMouseLeave={() => setPeek(null)}
+    >
+      {SIDE_TABS.filter((tab) => totals[tab] > 0).map((tab) => (
+        <button
+          aria-label={`Open ${TAB_LABEL[tab]} beside the page, ${totals[tab]}`}
+          className={`flex items-center gap-1.5 rounded-(--radius-md) px-2 py-1.5 text-xs outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 ${
+            peek === tab
+              ? "bg-muted text-foreground"
+              : "text-secondary-foreground"
+          }`}
+          key={tab}
+          onClick={() => {
+            layout.setTab(tab);
+            layout.setNavCollapsed(true);
+          }}
+          onFocus={() => setPeek(tab)}
+          onMouseEnter={() => setPeek(tab)}
+          type="button"
+        >
+          {TAB_ICON[tab]}
+          {TAB_LABEL[tab]}
+          <span className="ml-auto pl-1 tabular-nums">{totals[tab]}</span>
+        </button>
+      ))}
+      {/* Padded rather than spaced, so the pointer crosses onto it without
+          leaving the tab. */}
+      {peek ? (
+        <div className="-translate-y-1/2 absolute top-1/2 right-full pr-2">
+          <div className="flex max-h-[70vh] w-md flex-col overflow-y-auto overscroll-contain rounded-(--radius-xl) border border-border bg-popover p-3 shadow-lg [scrollbar-width:thin]">
+            <Text as="p" size="xs" tone="secondary" weight="medium">
+              {TAB_LABEL[peek]} · {title}
+            </Text>
+            {shelves[at][peek].length > 0 ? (
+              <BareEmbedContext value>
+                <SideList shelf={shelves[at]} tab={peek} />
+              </BareEmbedContext>
+            ) : (
+              <Text as="p" className="py-4" size="sm" tone="secondary">
+                Nothing under {TAB_LABEL[peek]} for this section.
+              </Text>
+            )}
+          </div>
+        </div>
+      ) : null}
+    </nav>
+  );
+}
+
+/** The site header's height. */
+const HEADER_HEIGHT = 64;
+/** How far down the screen below the header a section's heading has to pass
+ * to be the one being read. */
+const READING_LINE = 0.3;
+
+/** Room below a page's end, so its last section can scroll up to the
+ * reading line. */
+export function ReadingRunout() {
+  return (
+    <div
+      aria-hidden
+      style={{
+        height: `calc((100vh - ${HEADER_HEIGHT}px) * ${1 - READING_LINE})`,
+      }}
+    />
+  );
+}
+
+/** The anchor of the section being read: the last whose heading has passed
+ * the reading line, `""` before the first. Followed only while `watching`. */
+function useReadingSection(rows: SectionRow[], watching: boolean): string {
+  const [reading, setReading] = useState("");
+
+  useEffect(() => {
+    if (!watching) return;
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const line =
+        HEADER_HEIGHT + (window.innerHeight - HEADER_HEIGHT) * READING_LINE;
+      let found = "";
+      for (const row of rows) {
+        if (row.section === "") continue;
+        const top = document
+          .getElementById(row.section)
+          ?.getBoundingClientRect().top;
+        if (top === undefined) continue;
+        if (top > line) break;
+        found = row.section;
+      }
+      setReading(found);
+    };
+    const schedule = () => {
+      if (frame === 0) frame = window.requestAnimationFrame(measure);
+    };
+    measure();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, [rows, watching]);
+
+  return reading;
 }
 
 /**
@@ -102,8 +254,7 @@ export function SplitPage({
   }, [setSideShown]);
 
   const shelves = rows.map((row) => shelfOf(row, cases));
-  const total = (tab: SideTab) =>
-    shelves.reduce((sum, shelf) => sum + shelf[tab].length, 0);
+  const totals = tabTotals(shelves);
 
   return (
     <div
@@ -125,9 +276,9 @@ export function SplitPage({
               <TabsTrigger className="gap-1.5 mb-2" key={tab} value={tab}>
                 {TAB_ICON[tab]}
                 {TAB_LABEL[tab]}
-                {total(tab) > 0 ? (
+                {totals[tab] > 0 ? (
                   <Badge size="sm" variant="outline">
-                    {total(tab)}
+                    {totals[tab]}
                   </Badge>
                 ) : null}
               </TabsTrigger>
@@ -185,26 +336,35 @@ export function SplitPage({
  * never be reached while it is held. */
 function SideItems({ shelf, tab }: { shelf: Shelf; tab: SideTab }) {
   return (
-    <div className="sticky top-30 flex flex-col gap-3 overflow-y-auto overscroll-contain py-4 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]">
-      {tab === "qa"
-        ? shelf.qa.map(({ testCase, rules }) => (
-            <CaseCard key={testCase.id} rules={rules} testCase={testCase} />
-          ))
-        : shelf[tab].map((item, position) =>
-            item.block.type === "detail" ? (
-              <SideDetail
-                block={item.block}
-                // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-                key={`detail-${position}`}
-              />
-            ) : (
-              <BlockView
-                block={item.block}
-                // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-                key={`${item.block.type}-${position}`}
-              />
-            ),
-          )}
+    <div className="sticky top-30 overflow-y-auto overscroll-contain py-4 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]">
+      <SideList shelf={shelf} tab={tab} />
+    </div>
+  );
+}
+
+/** One section's items under one tab. */
+function SideList({ shelf, tab }: { shelf: Shelf; tab: SideTab }) {
+  return (
+    <div className="flex flex-col gap-3">
+      {tab === "qa" ? (
+        <CaseList rows={shelf.qa} rules={shelf.rules} />
+      ) : (
+        shelf[tab].map((item, position) =>
+          item.block.type === "detail" ? (
+            <SideDetail
+              block={item.block}
+              // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
+              key={`detail-${position}`}
+            />
+          ) : (
+            <BlockView
+              block={item.block}
+              // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
+              key={`${item.block.type}-${position}`}
+            />
+          ),
+        )
+      )}
     </div>
   );
 }
@@ -223,39 +383,5 @@ function SideDetail({ block }: { block: DetailBlock }) {
         ))}
       </div>
     </section>
-  );
-}
-
-/** One case: its title and the rules it checks, its steps a click away. */
-function CaseCard({ testCase, rules }: CaseRow) {
-  const { index } = useBlockScope();
-  return (
-    <Collapsible
-      badge={
-        <span className="flex flex-wrap items-center gap-1">
-          {rules.map((rule) => (
-            <Badge key={rule} size="sm" variant="outline">
-              {humanize(rule)}
-            </Badge>
-          ))}
-        </span>
-      }
-      id={`case-${testCase.id.replace(/\W+/g, "-").toLowerCase()}`}
-      linkLabel="Copy link to this case"
-      title={testCase.title}
-    >
-      <div className="flex flex-col gap-2 border-border-subtle border-t px-4 py-3">
-        <Text as="p" face="mono" size="xs" tone="secondary">
-          {testCase.id}
-          {testCase.severity ? ` · ${testCase.severity}` : ""}
-        </Text>
-        <MarkdownView
-          baseDir={dirOf(testCase.suite)}
-          className="text-sm"
-          index={index}
-          text={testCase.body}
-        />
-      </div>
-    </Collapsible>
   );
 }

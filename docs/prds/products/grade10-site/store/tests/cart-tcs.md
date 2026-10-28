@@ -59,7 +59,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/unresolved, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -101,7 +101,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/typed
 
 **Pre-conditions:**
 
@@ -136,7 +136,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/picked, cart#promo-code/public-codes
 
 **Pre-conditions:**
 
@@ -172,7 +172,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/running-out-reads-louder
 
 **Pre-conditions:**
 
@@ -207,7 +207,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/running-out-reads-louder, cart#promo-code/picked
 
 **Pre-conditions:**
 
@@ -241,7 +241,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/running-out-reads-louder
 
 **Pre-conditions:**
 
@@ -280,7 +280,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#points/applied, cart#points/offered
 
 **Pre-conditions:**
 
@@ -318,7 +318,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#reviewing-the-cart/the-choice-follows-the-cart, cart#points/applied
 
 **Pre-conditions:**
 
@@ -349,7 +349,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#checkout/created-from-the-drawer, cart#checkout/sent
 
 **Pre-conditions:**
 
@@ -385,7 +385,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#pending-operations/wait-before-another-action, cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
 
@@ -427,7 +427,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/edits
 
 **Pre-conditions:**
 
@@ -466,7 +466,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/product-pictures
 
 **Pre-conditions:**
 
@@ -500,7 +500,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/discounts-on-a-line-and-below-it
 
 **Pre-conditions:**
 
@@ -527,7 +527,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#rules/shops-answer, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -562,7 +562,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/when-the-session-ends
 
 **Pre-conditions:**
 
@@ -596,7 +596,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/when-the-session-ends
 
 **Pre-conditions:**
 
@@ -622,7 +622,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/whose-cart
 
 **Pre-conditions:**
 
@@ -648,7 +648,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/whose-cart
 
 **Pre-conditions:**
 
@@ -677,7 +677,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -712,7 +712,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/lines-whose-product-left-the-shop
 
 **Pre-conditions:**
 
@@ -742,7 +742,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/lines-whose-product-left-the-shop
 
 **Pre-conditions:**
 
@@ -779,7 +779,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
 
@@ -816,7 +816,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
 
@@ -850,7 +850,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/lines-whose-product-left-the-shop
 
 **Pre-conditions:**
 
@@ -875,7 +875,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/current-read, cart#reviewing-the-cart/edits
 
 **Pre-conditions:**
 
@@ -904,7 +904,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/current-read, cart#reviewing-the-cart/edits
 
 **Pre-conditions:**
 
@@ -940,7 +940,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#struck-price-on-a-cart-line
+* **Trace:** discounts#struck-price-on-a-cart-line/cut-by-the-shop, discounts#struck-price-on-a-cart-line/on-sale, discounts#cart-footer/order-discount
 
 **Pre-conditions:**
 
@@ -976,7 +976,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#struck-price-on-a-cart-line
+* **Trace:** discounts#struck-price-on-a-cart-line/cut-by-the-shop, discounts#order-of-application/larger-wins, discounts#cart-footer/code
 
 **Pre-conditions:**
 
@@ -1017,7 +1017,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#cart-footer
+* **Trace:** discounts#cart-footer/order-discount, discounts#cart-footer/code, discounts#cart-footer/points, discounts#cart-footer/estimated-total, discounts#order-of-application/minimum
 
 **Pre-conditions:**
 
@@ -1050,7 +1050,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#cart-footer
+* **Trace:** discounts#cart-footer/order-discount, discounts#cart-footer/estimated-total, discounts#order-of-application/minimum
 
 **Pre-conditions:**
 
@@ -1081,7 +1081,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/typed, cart#promo-code/refusals-in-the-readers-language, cart#promo-code/public-codes
 
 **Pre-conditions:**
 
@@ -1116,7 +1116,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** discounts#one-discount-at-a-time/in-the-count, cart#promo-code/typed
 
 **Pre-conditions:**
 
@@ -1142,7 +1142,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/refused-by-the-shop, cart#promo-code/picked
 
 **Pre-conditions:**
 
@@ -1170,7 +1170,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/removed
 
 **Pre-conditions:**
 
@@ -1205,7 +1205,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/wallet-not-answered
 
 **Pre-conditions:**
 
@@ -1233,7 +1233,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/gift
 
 **Pre-conditions:**
 
@@ -1267,7 +1267,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#one-discount-at-a-time
+* **Trace:** discounts#order-of-application/larger-wins, discounts#one-discount-at-a-time/set-aside, cart#promo-code/set-aside-for-a-site-discount
 
 **Pre-conditions:**
 
@@ -1308,7 +1308,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#order-of-application
+* **Trace:** discounts#order-of-application/minimum, discounts#order-of-application/larger-wins
 
 **Pre-conditions:**
 
@@ -1342,7 +1342,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#order-of-application
+* **Trace:** cart#promo-code/the-shops-figure, discounts#order-of-application
 
 **Pre-conditions:**
 
@@ -1375,7 +1375,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#points/not-offered
 
 **Pre-conditions:**
 
@@ -1409,7 +1409,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#points/nothing-left
 
 **Pre-conditions:**
 
@@ -1441,7 +1441,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/another-pay, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1476,7 +1476,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/changed-purchase, checkout#integration-readiness/after-a-refusal, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1514,7 +1514,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#rules/carried-to-checkout, checkout#integration-readiness/later-cart, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1549,7 +1549,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/later-cart, cart#rules/carried-to-checkout, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1583,7 +1583,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/recovery, checkout#integration-readiness/lost-answer, checkout#integration-readiness/another-pay, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1614,7 +1614,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#checkout/no-identity-check
 
 **Pre-conditions:**
 
@@ -1652,7 +1652,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** checkout#guest-checkout/gateway, checkout#guest-checkout/a-public-code
 
 **Pre-conditions:**
 
@@ -1681,7 +1681,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** cart#checkout/guest, checkout#guest-checkout/gateway, cart#reviewing-the-cart/whose-cart
 
 **Pre-conditions:**
 
@@ -1719,7 +1719,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#pending-operations
+* **Trace:** cart#pending-operations/wait-before-another-action, checkout#integration-readiness/closing-during-pay, checkout#integration-readiness/one-pay-at-a-time
 
 **Pre-conditions:**
 

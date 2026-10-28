@@ -16,6 +16,8 @@ store shows other cards the collector may also like.
 - **One rail** — under the card, headed **You may also like**: the stock
   keeper's picks first, in their order, then similar cards to fill; nothing
   names a card as chosen or computed
+  - **One Row** — the cards side by side; on a narrow page the row scrolls,
+    part of the next card showing
 - **Opens the card** — a rail card is a
   [link](/p/shared/ui/store-product-listing#product-tile) to that card's own
   page; nothing in the rail adds to the cart
@@ -38,19 +40,18 @@ store shows other cards the collector may also like.
 
 ## Picks
 
-**Chosen in Shopify** — a stock keeper picks the cards shown with a card
-in the Shopify dashboard, on the card itself; a change reaches the card's page
-within a minute, and a card the store has just taken in joins another card's
-picks once the store holds it; a pick the catalogue no longer holds is left out
+- **Chosen in Shopify** — a stock keeper picks the cards shown with a card
+  in the Shopify dashboard, on the card itself; a change reaches the card's page
+  within a minute, and a card the store has just taken in joins another card's
+  picks once the store holds it; a pick the catalogue no longer holds is left out
 
 ## Similar Cards
 
-**Shared facts** — a similar card shares this card's world, its language or
-its collectible type, weighed in that order, newest first among equals; a card
-the catalogue names none of them for draws no similar cards
-
-**Just taken in** — a card the store has just taken in shows its picks until
-the similar cards follow
+- **Shared facts** — a similar card shares this card's world, its language or
+  its collectible type, weighed in that order, newest first among equals; a card
+  the catalogue names none of them for draws no similar cards
+- **Just taken in** — a card the store has just taken in shows its picks until
+  the similar cards follow
 
 ## Designs
 

@@ -22,16 +22,16 @@ and state through props — it SHALL NOT fetch, subscribe to, or store
 product state.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-x4k rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-260 - A discounted pack shows its bonus
-**Serves:** grade10-site-loyalty-programme-US-09 - Member buys a points pack
+#### Scenario: grade10-site-loyalty-programme-SC-363 - A discounted pack shows its bonus
+**Serves:** grade10-site-loyalty-programme-US-14 - Member buys a points pack
 
 - **WHEN** a pack is discounted
 - **THEN** the card shows the paid points plus the bonus points under the
   count
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-9m2 rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-261 - A refused pack says why through its name and a tooltip
-**Serves:** grade10-site-loyalty-programme-US-09 - Member buys a points pack
+#### Scenario: grade10-site-loyalty-programme-SC-364 - A refused pack says why through its name and a tooltip
+**Serves:** grade10-site-loyalty-programme-US-14 - Member buys a points pack
 
 - **WHEN** a pack is disabled with a reason supplied
 - **THEN** the reason is in the card's accessible name and in a tooltip,

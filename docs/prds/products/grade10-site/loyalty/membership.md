@@ -17,8 +17,8 @@ collector's name, bio and email are shown on
 | Member | The programme | An opaque user id, the ledger, the tier | With the account |
 | Shopify customer | The shop | The same opaque key in a customer metafield, never the account id | Paired behind the account, once the email is verified |
 
-🚧 **Avatar** — the account profile also holds the avatar a collector chooses
-for the shop — [Profile](/p/grade10-site/account/profile)
+- 🚧 **Avatar** — the account profile also holds the avatar a collector chooses
+  for the shop — [Profile](/p/grade10-site/account/profile)
 
 :::flow{title="From registration to a paired member"}
 ## *Member* — **Registers**
@@ -51,7 +51,7 @@ exists, otherwise when a sign-in proves that email, by the magic link to it or
 a Google account under it -
 [Checkout](/p/grade10-site/store/checkout#guest-checkout).
 
-🚧 **No points** - a site guest order earns nothing, joined or not.
+- 🚧 **No points** — a site guest order earns nothing, joined or not.
 
 - 🚧 **A ticket bought on an email** — a ticket order asks no sign-in, so the
   purchase earns under the buyer's address and lands on the member's ledger
