@@ -16,7 +16,7 @@
   `pnpm run storybook:check`, `pnpm run check:manual`, and the about-page
   story tests
 
-## 2. The walk (grade10-spec)
+## 2. The walk (grade10-spec) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its planning input, and the groups it walks
 landed. The interface the collector uses is the page itself, walked in the
