@@ -45,14 +45,14 @@
   --shadow-color: var(--gray-950);
 }
 
-/* The reading type scale, each heading a multiple of the body: h1 2.357,
- * h2 1.429, h3 1.143, h4 1. A `text-manual-*` utility carries each step to
- * headings outside the prose. */
+/* The reading type scale over a 15px body: h1 2.357em, h2 26px, and the
+ * h1-to-h2 ratio (1.36) carried down to h3, with h4 at the body. A
+ * `text-manual-*` utility carries each step to headings outside the prose. */
 @theme {
   --text-manual-body: 0.9375rem;
   --text-manual-h1: calc(var(--text-manual-body) * 2.357);
-  --text-manual-h2: calc(var(--text-manual-body) * 1.429);
-  --text-manual-h3: calc(var(--text-manual-body) * 1.143);
+  --text-manual-h2: 1.625rem;
+  --text-manual-h3: 1.195rem;
   --text-manual-h4: var(--text-manual-body);
 }
 
