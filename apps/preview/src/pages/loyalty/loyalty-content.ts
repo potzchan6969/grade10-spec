@@ -534,7 +534,7 @@ const MEMBERSHIP_STATE_VIEWS = {
     balance: 0,
     worth: "HK$0",
     qualifyingPoints: 0,
-    retentionLine: undefined,
+    retentionLine: `Earn 500+ pts by ${RENEWS} to upgrade`,
     earnLine: "Silver earning 1x points",
     coupons: {
       status: "empty",
