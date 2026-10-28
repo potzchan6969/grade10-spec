@@ -19,7 +19,7 @@ import {
 } from "@grade10/design-system/components/overlays/drawer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import { TopUpPackCard } from "@grade10/ui";
-import { ArrowRight } from "@phosphor-icons/react";
+import { ArrowRight, Lock } from "@phosphor-icons/react";
 import { useState } from "react";
 import { navigateToStory } from "../../workbench-story-nav";
 import {
@@ -186,7 +186,13 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
             ? `Pay ${copy.pay(packPrice(selectedPack))}`
             : copy.continue}
       </Button>
-      <Text as="p" className="text-center" size="xs" tone="muted">
+      <Text
+        as="p"
+        className="flex items-center justify-center gap-1"
+        size="xs"
+        tone="muted"
+      >
+        <Lock aria-hidden size={12} />
         {copy.paymentNote}
       </Text>
     </>
