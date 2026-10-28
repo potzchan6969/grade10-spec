@@ -69,7 +69,7 @@ export const TOP_UP_COPY = {
 
   continue: "Pay Now",
   pay: hkd,
-  opening: "Opening checkout…",
+  opening: "Redirecting…",
   paymentNote: "Secured by Stripe",
 
   /* Refusals are toasts on the way in, never dialog content. */

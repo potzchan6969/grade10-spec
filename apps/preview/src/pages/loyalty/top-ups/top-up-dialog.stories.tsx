@@ -66,7 +66,7 @@ export const OpeningCheckout: Story = {
   play: async () => {
     const overlay = within(document.body);
     const button = await overlay.findByRole("button", {
-      name: /Opening checkout/,
+      name: /Redirecting/,
     });
     await waitFor(() => expect(button).toBeVisible());
     expect(button).toHaveAttribute("aria-disabled", "true");
