@@ -445,8 +445,8 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
      * paperwork, so the ledger carries no separate history surface. */
     context: createElement(
       Link,
-      { href: "#receipt-entry-topup", size: "sm" },
-      "Receipt",
+      { href: "#receipt-entry-topup", size: "sm", variant: "secondary" },
+      "View Receipt",
     ),
   },
   {
