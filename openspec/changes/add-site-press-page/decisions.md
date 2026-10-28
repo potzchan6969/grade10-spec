@@ -36,5 +36,5 @@
 | Capability | Raised | Landed |
 | --- | --- | --- |
 | `grade10-site/site/press` | Is the date style `SEP 15, 2026` or `Sep 15, 2026`? | Q3 |
-| `grade10-site/site/press` | Is the All Time dropdown a filter or jump navigation? | ❓ on [Press](/p/grade10-site/site/press) — a filter ships |
-| `grade10-site/site/press` | Where does the Press entry sit in the chrome? | ❓ on [Press](/p/grade10-site/site/press) — no item marked current today |
+| `grade10-site/site/press` | Is the All Time dropdown a filter or jump navigation? | Q2 |
+| `grade10-site/site/press` | Where does the Press entry sit in the chrome? | [Press · Navigation entry](/p/grade10-site/site/press) - the footer's Company column, no header item - decided by the round |
