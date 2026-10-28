@@ -85,8 +85,8 @@ a Google account under it -
   narrow viewport reads the same names as a scrollable row above the
   content. The rail reads Overview, Rewards, Coupons and Points History;
   Tiers & Benefits is an Overview section, and a Member pass button beside
-  the title opens the pass in a dialog. Buying points enters from Overview
-  and Rewards, never the rail —
+  the title opens the pass in a dialog. Buying points enters from a Top-up
+  Points button beside Member pass, never the rail —
   [Top-ups](/p/grade10-site/loyalty/top-ups)
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
