@@ -51,13 +51,16 @@ None.
 
 ## Impact
 
-- `apps/preview/src/pages/site/shows/` — the page assembly, its content
-  module, and its stories. Media hotlinks the live `grade10.com` assets;
+- `packages/ui/src/blocks/site-shows/` — the `ShowsPageBody` block the page
+  renders; its words and content are hardcoded in code and handed to it as
+  `copy` and `content`.
+- `apps/preview/src/pages/site/shows/` — the workbench page that feeds the
+  block its content, and its stories. Media hotlinks the live `grade10.com` assets;
   no fixture files are added.
 - `docs/prds/products/grade10-site/site/shows.md` — the capability's PRD
   page.
 - The implementing site repo consumes the page through the shared chrome;
-  no new component export, no routing, no data fetching.
+  no routing, no data fetching.
 
 ## Follow-on changes
 

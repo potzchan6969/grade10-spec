@@ -248,7 +248,7 @@ None.
 
 ## Settled
 
-- The Festival 2025 card reads NOV 2026, the frame's text, until design confirms (Q3).
+- The Festival 2025 card reads NOV 2025, the live page's date (Q7).
 - The chapter tabs are jump navigation over stacked chapters (Q1).
 - The Shows chrome entry belongs to `navigation`, not to this page (Q6).
 

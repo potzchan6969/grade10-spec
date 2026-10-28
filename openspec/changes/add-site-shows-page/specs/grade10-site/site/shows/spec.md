@@ -17,6 +17,8 @@ and the record of every show — and where each link on it leads.
     Chinese Mainland — each with an intro, a video or photo presentation,
     and edition cards carrying a carousel and a press-release link
   - Event records: the five editions newest first
+  - Jump navigation: the hero's Explore Shows and the sticky chapter list
+    scroll to their chapter, and the list marks the chapter in view
 - What plays in place
   - Chapter videos show a poster and play affordance, then embed the
     YouTube video in the same container
@@ -24,7 +26,8 @@ and the record of every show — and where each link on it leads.
     progress dots
 - Where the links lead
   - Press Releases opens `/press-releases`
-  - Each edition's Press Release opens `/press-releases/{slug}`
+  - Each edition's Press Release, and the Seoul Auction × Gana Art
+    chapter's, opens `/press-releases/{slug}`
 
 ## ADDED Requirements
 
@@ -47,6 +50,28 @@ is current or upcoming.
 - **THEN** the page SHALL show the hero, the event-scale statistics, the
   three event-format chapters, and the event-records timeline, in that
   order
+
+<!-- trace:scenario id=g10.site-shows.SC-up1 rev=1 -->
+#### Scenario: grade10-site-site-shows-SC-08 - The Upcoming Shows card lists only current and upcoming shows
+**Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
+
+- **WHEN** a collector opens `/shows` and some listed shows' months have
+  passed
+- **THEN** the Upcoming Shows card SHALL list only shows whose month has
+  not passed, and SHALL leave the hero when none remain
+
+### Requirement: The chapter list jumps to its chapter
+The Explore Shows button and each pill in the sticky chapter list SHALL
+scroll to the chapter it names without hiding the other chapters, and the
+list SHALL mark the chapter in view as active.
+
+<!-- trace:scenario id=g10.site-shows.SC-jn1 rev=1 -->
+#### Scenario: grade10-site-site-shows-SC-09 - A collector jumps to a chapter
+**Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
+
+- **WHEN** a collector activates a pill in the chapter list
+- **THEN** the page SHALL scroll to that chapter, all three chapters SHALL
+  stay on the page, and the pill SHALL read active
 
 ### Requirement: The page fits the viewport
 On a wide viewport the Shows surface SHALL lay the hero beside the
@@ -74,7 +99,8 @@ stack every section at the page inset.
 ### Requirement: Every link leads to its named surface
 Each link on the Shows surface SHALL lead to the surface it names: the
 hero Press Releases button to `/press-releases`, and each Press Release
-link to that edition's press-release article:
+link, the Seoul Auction × Gana Art chapter's included, to that
+press-release article:
 
 | Link | Destination |
 | --- | --- |
@@ -89,8 +115,9 @@ link to that edition's press-release article:
 #### Scenario: grade10-site-site-shows-SC-04 - A collector opens an edition's press release
 **Serves:** grade10-site-site-shows-US-02 - Collector follows a link from Shows to a press surface
 
-- **WHEN** a collector opens an edition's Press Release link
-- **THEN** the edition's press-release article SHALL open in place
+- **WHEN** a collector opens the hero Press Releases button or a Press
+  Release link
+- **THEN** `/press-releases` or the named article SHALL open
 
 ### Requirement: Videos play inside the page
 Each chapter video SHALL show the event poster with a play affordance and,
@@ -123,7 +150,7 @@ with the active dot marking the current one.
 The Event Records section SHALL list the five editions in the frame's
 order — Seoul Auction Private Sale & Exhibition, Grade10 FEST Summer 2026,
 CARDJOY × Grade10 Shanghai, CARDJOY × Grade10 Hangzhou, Grade10 Festival
-2025 — each with its year, title, description and image.
+2025 (Nov 2025) — each with its year, title, description and image.
 
 <!-- trace:scenario id=g10.site-shows.SC-aa1 rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-07 - A collector reads the records

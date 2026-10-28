@@ -159,7 +159,7 @@ const SHOWS_PAGE = {
               "/press-releases/grade10-fest-summer-2026-concludes-successfully",
           },
           {
-            date: "NOV 2026",
+            date: "NOV 2025",
             title: "Grade10 Festival 2025",
             description:
               "A record-setting Grade10 Festival anchored by the Van Gogh Pikachu showcase and Hong Kong’s collector community.",
@@ -225,7 +225,7 @@ const SHOWS_PAGE = {
         year: "2026",
         title: "Seoul Auction Private Sale & Exhibition",
         description:
-          "Seoul Auction × ZZZ × Grade10 — a trading card exhibition and private sales event hosted by Seoul Auction, ZZZ, and Grade10. The first-ever fine art presentation of trading cards in Asia.",
+          "Seoul Auction × Gana Art × Grade10 — a trading card exhibition and private sales event hosted by Seoul Auction, Gana Art, and Grade10. The first-ever fine art presentation of trading cards in Asia.",
         image: {
           src: events("seoul-auction.webp"),
           alt: "Trading cards presented as fine art at the Seoul Auction × Grade10 exhibition.",
