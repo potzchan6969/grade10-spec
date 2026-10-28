@@ -12,17 +12,17 @@ without a session, like any public surface —
 
 ## The Page
 
-- 🚧 **Heading and introduction** — About Us as the page's heading beside
+- **Heading and introduction** — About Us as the page's heading beside
   a paragraph naming MemeStrategy and 9GAG
-- 🚧 **What we do and where we're going** — two short statements, side by
+- **What we do and where we're going** — two short statements, side by
   side on a wide viewport and stacked on a narrow one
-- 🚧 **Market indexes** — a tabbed showcase of the four index pages ahead
+- **Market indexes** — a tabbed showcase of the four index pages ahead
   of the parent-company panel; each tab shows the live page and opens it
   in a new tab
-- 🚧 **Parent company** — a quiet panel with the MemeStrategy mark, a
+- **Parent company** — a quiet panel with the MemeStrategy mark, a
   paragraph on the company beside its milestones on a wide viewport, newest
   first, the upcoming one labelled Coming soon
-- 🚧 **Links out** — MemeStrategy, 9GAG and Grade10 AI open in a new tab;
+- **Links out** — MemeStrategy, 9GAG and Grade10 AI open in a new tab;
   Grade10 opens the front door; vaulting services and Grade10 Finance are
   plain text until they launch
 
