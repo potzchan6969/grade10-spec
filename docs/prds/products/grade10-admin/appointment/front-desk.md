@@ -66,7 +66,7 @@ A shop serves booked visitors at its counters, so the desk has to see who has ar
 | Check in | ❓ Open | Staff only; a collector's "I'm here" pings the desk and changes nothing. | Operations |
 | Walk-ins | Decided | Not offered: no collector joins a line at the door and staff add none. A visitor without a booking is booked by staff into a free time. The built walk-in path stays in the code, unused and shown to nobody. | Product |
 | Transfer | Decided | Completes the visit at once; an intake is independent of the visit and never keeps a counter busy, even past the slot. | Product |
-| Waiting order | Decided | Listed in the order people will be served. | Product |
+| Serving Queue | Decided | Listed in the order people will be served. | Product |
 | Close early | ❓ Open | One staff act cancels the remaining visits; a closure alone still cancels nothing. | Operations |
 | A visit inside a closure | ❓ Open | Closes as closed by the shop, never Missed, and sends nothing. | Operations |
 | Changing an outcome | ❓ Open | Within 7 days, with a reason; never on a visit sent to grading or the vault. | Operations |
