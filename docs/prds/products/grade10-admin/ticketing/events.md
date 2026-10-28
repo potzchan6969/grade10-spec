@@ -37,9 +37,9 @@ order: 1
 - **Capacity** — never under what is held and sold; raising it gives the new
   tickets to the line first
 
-**An edit that would strand the line is refused** — clearing its line,
-making it invited, cutting capacity under its largest place, or unpublishing
-the event while anyone waits.
+- **An edit that would strand the line is refused** — clearing its line,
+  making it invited, cutting capacity under its largest place, or unpublishing
+  the event while anyone waits.
 
 ## The Figures
 
