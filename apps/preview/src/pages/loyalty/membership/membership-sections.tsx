@@ -1,4 +1,3 @@
-import { Button } from "@grade10/design-system/components/forms/button";
 import {
   type AsyncState,
   type CouponItem,
@@ -18,7 +17,6 @@ import {
   HandCoins,
   Truck,
 } from "@phosphor-icons/react";
-import { storyHref } from "../../workbench-story-nav";
 import {
   COUPON_LIST_COPY,
   HOW_POINTS_WORK,
@@ -34,9 +32,6 @@ import {
   TIER_LADDER_COPY,
   WALLET_PASS_COPY,
 } from "../loyalty-content";
-
-/** Buying points opens the pack picker over the page. */
-const TOP_UP_STORY_ID = "loyalty-top-ups-screens-top-up-dialog--default";
 
 /** The membership page's sections, keyed for the sidebar's swap. */
 type MembershipTab = "overview" | "rewards" | "coupons" | "points";
@@ -100,15 +95,6 @@ function OverviewPane({
         variant={view.tierVariant}
         worth={view.worth}
       />
-      <div className="flex">
-        <Button
-          render={<a href={storyHref(TOP_UP_STORY_ID)} />}
-          size="sm"
-          variant="outline"
-        >
-          {MEMBERSHIP_PAGE_COPY.topUpAction}
-        </Button>
-      </div>
       <div className="flex flex-col gap-4">
         <PaneHeading id="membership-tiers-heading">
           {TIER_BENEFITS_PAGE_COPY.title}
@@ -139,7 +125,7 @@ const scrollToTiers = () => {
   });
 };
 
-/** Rewards — the catalog, with the second top-up entrance beside it. */
+/** Rewards — the catalog the member redeems from. */
 function RewardsPane({
   view,
   balance,
@@ -154,18 +140,9 @@ function RewardsPane({
       aria-labelledby="membership-rewards-heading"
       className="flex flex-col gap-4"
     >
-      <div className="flex items-center justify-between gap-4">
-        <PaneHeading id="membership-rewards-heading">
-          {MEMBERSHIP_PAGE_COPY.rewardsHeading}
-        </PaneHeading>
-        <Button
-          render={<a href={storyHref(TOP_UP_STORY_ID)} />}
-          size="sm"
-          variant="outline"
-        >
-          {MEMBERSHIP_PAGE_COPY.topUpAction}
-        </Button>
-      </div>
+      <PaneHeading id="membership-rewards-heading">
+        {MEMBERSHIP_PAGE_COPY.rewardsHeading}
+      </PaneHeading>
       <RewardMenu
         balance={balance}
         copy={REWARD_MENU_COPY}

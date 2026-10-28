@@ -27,6 +27,7 @@ import {
 import { QrCode } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
+import { TopUpFlow } from "../top-up-flow";
 import { storyHref } from "../../workbench-story-nav";
 import {
   ISSUED_COUPON,
@@ -93,6 +94,7 @@ function MembershipPage({
   const [failure, setFailure] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [passOpen, setPassOpen] = useState(false);
+  const [topUpOpen, setTopUpOpen] = useState(false);
   const smUp = useSmUp();
 
   /* The surface stays mounted once opened — only `open` flips — so the
@@ -198,10 +200,19 @@ function MembershipPage({
               <h1 className="text-3xl font-semibold text-foreground">
                 {MEMBERSHIP_PAGE_COPY.title}
               </h1>
-              <Button onClick={() => setPassOpen(true)} size="lg">
-                <QrCode aria-hidden size={16} weight="regular" />
-                Member Pass
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button onClick={() => setPassOpen(true)} size="lg">
+                  <QrCode aria-hidden size={16} weight="regular" />
+                  Member Pass
+                </Button>
+                <Button
+                  onClick={() => setTopUpOpen(true)}
+                  size="lg"
+                  variant="secondary"
+                >
+                  {MEMBERSHIP_PAGE_COPY.topUpAction}
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -238,6 +249,15 @@ function MembershipPage({
       </main>
       <Footer {...STORE_FOOTER} />
       <Toast position="bottom-right" />
+      {/* The pack picker and its result modal open over the page — the
+       * member never leaves Membership; a credited pack lands on the
+       * balance straight away. */}
+      <TopUpFlow
+        balance={balance}
+        onCredited={(points) => setBalance((value) => value + points)}
+        onOpenChange={setTopUpOpen}
+        open={topUpOpen}
+      />
       {smUp ? (
         <Dialog onOpenChange={setPassOpen} open={passOpen}>
           {/* No dialog chrome: the pass itself is the surface, floating over

@@ -209,7 +209,7 @@ const MEMBERSHIP_PAGE_COPY = {
   cardHeading: "Your Member Pass",
   rewardsHeading: "Rewards",
   couponsHeading: "Your Coupons",
-  topUpAction: "Top up points",
+  topUpAction: "Top-up Points",
   pointHistoryHeading: "Points History",
 };
 
