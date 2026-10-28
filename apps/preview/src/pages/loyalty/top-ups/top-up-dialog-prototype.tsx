@@ -36,7 +36,9 @@ import {
 } from "./top-ups-content";
 import { useSmUp } from "./top-ups-shared";
 
-/** Result screens the member lands on once Stripe's checkout is done. */
+/** Result modals the member returns to once Stripe's hosted checkout is done.
+ * These story navigations stand in for the external checkout round-trip:
+ * Pay leaves for Stripe, and these are where Stripe sends the member back. */
 const POINTS_ADDED_STORY_ID =
   "loyalty-top-ups-screens-top-up-result--points-added";
 const UNDER_REVIEW_STORY_ID =
