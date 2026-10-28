@@ -5,7 +5,12 @@ import {
   TabsTrigger,
 } from "@grade10/design-system/components/display/tabs";
 import { Text } from "@grade10/design-system/components/display/text";
-import { AppWindow, Code, ListChecks } from "@phosphor-icons/react";
+import {
+  AppWindow,
+  Code,
+  ListChecks,
+  SidebarSimple,
+} from "@phosphor-icons/react";
 import {
   type CSSProperties,
   type ReactNode,
@@ -117,6 +122,16 @@ function SectionHint({ section, shelf }: { section: string; shelf: Shelf }) {
   if (tabs.length === 0) return null;
   const title =
     sections.find((found) => found.id === section)?.title ?? "Opening";
+  const openBeside = (tab: SideTab) => {
+    layout.setTab(tab);
+    layout.setNavCollapsed(true);
+    // The page reflows into two columns; the section stays in view.
+    window.requestAnimationFrame(() =>
+      window.requestAnimationFrame(() =>
+        document.getElementById(section)?.scrollIntoView({ block: "start" }),
+      ),
+    );
+  };
 
   return (
     <div className="absolute inset-y-0 left-full z-10 ml-3 max-lg:hidden">
@@ -139,18 +154,7 @@ function SectionHint({ section, shelf }: { section: string; shelf: Shelf }) {
                 : "text-secondary-foreground"
             }`}
             key={tab}
-            onClick={() => {
-              layout.setTab(tab);
-              layout.setNavCollapsed(true);
-              // The page reflows into two columns; the section stays in view.
-              window.requestAnimationFrame(() =>
-                window.requestAnimationFrame(() =>
-                  document
-                    .getElementById(section)
-                    ?.scrollIntoView({ block: "start" }),
-                ),
-              );
-            }}
+            onClick={() => openBeside(tab)}
             onFocus={() => setPeek(tab)}
             onMouseEnter={() => setPeek(tab)}
             type="button"
@@ -166,9 +170,21 @@ function SectionHint({ section, shelf }: { section: string; shelf: Shelf }) {
         {peek ? (
           <div className="absolute top-0 right-full z-30 pr-2">
             <div className="flex max-h-[70vh] w-md flex-col overflow-y-auto overscroll-contain rounded-(--radius-xl) border border-border bg-popover p-3 shadow-lg [scrollbar-width:thin]">
-              <Text as="p" size="xs" tone="secondary" weight="medium">
-                {TAB_LABEL[peek]} · {title}
-              </Text>
+              <div className="flex items-center justify-between gap-2">
+                <Text as="p" size="xs" tone="secondary" weight="medium">
+                  {TAB_LABEL[peek]} · {title}
+                </Text>
+                <button
+                  className="flex shrink-0 cursor-pointer items-center gap-1 rounded-(--radius-md) px-1.5 py-1 text-secondary-foreground text-xs outline-none hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+                  onClick={() => openBeside(peek)}
+                  type="button"
+                >
+                  <span className="flex -scale-x-100">
+                    <SidebarSimple aria-hidden size={14} />
+                  </span>
+                  Open beside the page
+                </button>
+              </div>
               <BareEmbedContext value>
                 <SideList shelf={shelf} tab={peek} />
               </BareEmbedContext>
