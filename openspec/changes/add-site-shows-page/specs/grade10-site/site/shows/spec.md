@@ -16,7 +16,7 @@ and the record of every show — and where each link on it leads.
   - Event formats: three chapters — Hong Kong, Overseas Partnership,
     Chinese Mainland — each with an intro, a video or photo presentation,
     and edition cards carrying a carousel and a press-release link
-  - Event records: the five editions newest first
+  - Event records: every published record, newest first
   - Published content: the shows the admin has published, in the reader's
     language; nothing published answers not found
   - Jump navigation: the hero's Explore Shows and the sticky chapter list
@@ -49,7 +49,8 @@ Show. A Milestone.".
 Hong Kong SHALL present Grade10 FEST HK over its video and two edition
 cards, Grade10 FEST Summer 2026 and Grade10 Festival 2025, the latter
 dated NOV 2025. Overseas Partnership SHALL present Seoul Auction × ZZZ
-over a captioned photo and its Press Release link. Chinese Mainland SHALL
+over a captioned photo and, while its release is published, its Press
+Release link. Chinese Mainland SHALL
 present CARDJOY × Grade10 over its video and two edition cards, Shanghai
 and Hangzhou. Every edition card SHALL carry a photo carousel, a date, a
 description and a Press Release link. Wherever the page names the Seoul
@@ -78,7 +79,8 @@ when no show is current or upcoming.
 #### Scenario: grade10-site-site-shows-SC-10 - A collector reads the format chapters
 **Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
 
-- **WHEN** a collector scrolls through the Event Formats section
+- **WHEN** a collector scrolls through the Event Formats section while the
+  Seoul Auction × ZZZ chapter's press release is published
 - **THEN** Hong Kong SHALL present Grade10 FEST HK over a video poster and
   the Grade10 FEST Summer 2026 and Grade10 Festival 2025 edition cards,
   the latter reading NOV 2025; Overseas Partnership SHALL present Seoul
@@ -199,44 +201,73 @@ SHALL show no link. The workbench's sample content links:
 #### Scenario: grade10-site-site-shows-SC-04 - A collector opens an edition's press release
 **Serves:** grade10-site-site-shows-US-02 - Collector follows a link from Shows to a press surface
 
-- **WHEN** a collector opens the hero Press Releases button or a Press
-  Release link
+- **WHEN** a collector opens the hero Press Releases button, or a Press
+  Release link whose release is published
 - **THEN** the site SHALL open that link's destination address from the
   table
 
 <!-- trace:scenario id=g10.site-shows.SC-rel rev=1 -->
-#### Scenario: grade10-site-site-shows-SC-14 - A release that is not published is not linked
+#### Scenario: grade10-site-site-shows-SC-14 - An edition whose release is not published leads to the press index
 **Serves:** grade10-site-site-shows-US-02 - Collector follows a link from Shows to a press surface
 
-- **WHEN** an edition's or a chapter's press release is not published
-- **THEN** the edition's Press Release link SHALL lead to `/press-releases`
-  and the chapter SHALL show no Press Release link
+- **WHEN** a collector opens an edition's Press Release link while that
+  edition's press release is not written or not published
+- **THEN** the edition card SHALL still show its Press Release link, and
+  the site SHALL open `/press-releases`, not an article address
+
+<!-- trace:scenario id=g10.site-shows.SC-4qx rev=1 -->
+#### Scenario: grade10-site-site-shows-SC-17 - A chapter whose release is not published shows no link
+**Serves:** grade10-site-site-shows-US-02 - Collector follows a link from Shows to a press surface
+
+- **WHEN** a collector reads a format chapter whose press release is not
+  published
+- **THEN** the chapter SHALL show no Press Release link, and SHALL still
+  show its intro and its presentation
 
 ### Requirement: The page shows what is published
-The Shows surface SHALL present the shows the admin has published, in the
-language the address names, and SHALL answer not found, not an empty page,
-when none is published.
+The Shows surface SHALL present the Shows content the admin publishes, as
+one document, in the language the address names; a published value with no
+words in that language SHALL read in its base text. Each format chapter
+SHALL stay on the page with the editions the document gives it, and a
+chapter given none SHALL show no edition cards: a show has no published
+state of its own. When the Shows content is not published the surface SHALL
+answer not found, not an empty page.
 
 <!-- trace:scenario id=g10.site-shows.SC-pub rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-15 - A collector opens the page with nothing published
 **Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
 
-- **WHEN** a collector opens `/shows` and no show is published
+- **WHEN** a collector opens `/shows` while the admin has not published the
+  Shows content
 - **THEN** the site SHALL answer not found and SHALL NOT draw an empty page
 
 <!-- trace:scenario id=g10.site-shows.SC-lng rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-16 - A collector reads the page in their language
 **Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
 
-- **WHEN** a collector opens `/shows` at a language's address
-- **THEN** the published shows' titles, descriptions and dates SHALL read in
+- **WHEN** a collector opens `/shows` at a language's address, and a
+  published show has its words in that language
+- **THEN** that show's title and description, and its date, SHALL read in
   that language
+
+<!-- trace:scenario id=g10.site-shows.SC-dfo rev=1 -->
+#### Scenario: grade10-site-site-shows-SC-18 - A show with no words in the reader's language reads in its base text
+**Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
+
+- **WHEN** a collector opens `/shows` at a language's address, and a
+  published show has no words in that language
+- **THEN** that show's title and description SHALL read in its base text,
+  not empty
+- **AND** `/shows` SHALL still draw the page rather than answer not found
 
 ### Requirement: Videos play inside the page
 Each chapter video SHALL show the event poster with a play affordance and,
 when the collector activates it, SHALL embed the named YouTube video
-inside the same container without navigating away. Each video plays on its
-own: starting one SHALL NOT stop the other or return it to its poster.
+inside the same container without navigating away and start it playing,
+with sound, on that one activation. Where a browser will not start the
+embed from the activation, the embed SHALL show the player's own play
+control and a second activation there SHALL start it. Each video plays on
+its own: starting one SHALL NOT stop the other or return it to its poster.
 
 <!-- trace:scenario id=g10.site-shows.SC-59c rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-05 - A collector plays a chapter video
@@ -244,7 +275,8 @@ own: starting one SHALL NOT stop the other or return it to its poster.
 
 - **WHEN** a collector activates the play affordance on a chapter video
 - **THEN** the poster SHALL be replaced by the named YouTube embed inside
-  the same container, the video SHALL start playing, and the page SHALL NOT navigate or open a tab
+  the same container, the video SHALL start playing with sound on that one
+  activation, and the page SHALL NOT navigate or open a tab
 - **AND** an embed already started in the other chapter SHALL stay in its
   container, not returned to its poster
 
@@ -267,18 +299,19 @@ last. A carousel SHALL NOT advance on its own.
 - **AND** previous at the first photo SHALL wrap round to the last, and
   next at the last to the first
 
-### Requirement: The records read in frame order
-The Event Records section SHALL list the five editions in the frame's
-order — Seoul Auction Private Sale & Exhibition, Grade10 FEST Summer 2026,
-CARDJOY × Grade10 Shanghai, CARDJOY × Grade10 Hangzhou, Grade10 Festival
-2025 (Nov 2025) — each with its year, title, description and image, the
-Seoul Auction record naming its partner Seoul Auction × ZZZ.
+### Requirement: The records read in the published order
+The Event Records section SHALL list every record the admin publishes, in
+the order it gives them, each with its year, title, description and image,
+the Seoul Auction record naming its partner Seoul Auction × ZZZ. The
+workbench's sample content carries five, in this order: Seoul Auction
+Private Sale & Exhibition, Grade10 FEST Summer 2026, CARDJOY × Grade10
+Shanghai, CARDJOY × Grade10 Hangzhou, Grade10 Festival 2025 (Nov 2025).
 
 <!-- trace:scenario id=g10.site-shows.SC-aa1 rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-07 - A collector reads the records
 **Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
 
 - **WHEN** a collector reads the event records
-- **THEN** the five editions SHALL appear in the frame's order with their
-  years, titles, descriptions and images, and the Seoul Auction record
-  SHALL name Seoul Auction × ZZZ
+- **THEN** every record the admin published SHALL appear, in the order it
+  gives them, with its year, title, description and image
+- **AND** the Seoul Auction record SHALL name Seoul Auction × ZZZ

@@ -14,7 +14,7 @@
 
 - `ShowsPageBody` from `@grade10/ui` (`packages/ui/src/blocks/site-shows`)
   — the page body: hero, event scale, chapters, editions, records. It takes
-  the page's `content` and `copy`, both hardcoded in code.
+  the page's `content` (what the admin publishes) and `copy` (words in code).
 - `SiteHeader` from `@grade10/ui` — the production auction-first chrome;
   it marks Shows current on `/shows` (`page-shell`).
 - `Footer` from `@grade10/design-system/components/layout/footer`.

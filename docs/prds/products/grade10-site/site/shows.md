@@ -26,16 +26,18 @@ answers without a session, like any public surface —
   with video and two editions)
 - 🚧 **Edition cards** — each edition carries a photo carousel, a date, a
   description, and a Press Release link to its `/press-releases/{slug}`
-  article once that release is published, otherwise to `/press-releases`; the Seoul Auction × ZZZ chapter carries its own Press
-  Release link to `/press-releases/{slug}`
+  article once that release is published, otherwise to `/press-releases`;
+  the Seoul Auction × ZZZ chapter carries its own Press Release link only
+  while its release is published
 - 🚧 **Video presentations** — two chapters carry a poster-first YouTube
   container: the poster and a play affordance, and on click the embed
   plays inside the same container
-- 🚧 **Event records** — Every Show. A Milestone. lists the five editions
-  newest first: Seoul Auction, FEST Summer 2026, Shanghai, Hangzhou,
+- 🚧 **Event records** — Every Show. A Milestone. lists every published
+  edition newest first — today Seoul Auction, FEST Summer 2026, Shanghai, Hangzhou,
   Festival 2025
 - 🚧 **Published content** — the page shows the shows the admin has
-  published, in the reader's language; nothing published answers not
+  published, in the reader's language, falling back to the base text for what is not
+  translated; nothing published answers not
   found rather than an empty page
 - 🚧 **Responsive** — wide viewports draw the two-column hero, stats
   beside the photo, and editions side by side; narrow viewports stack

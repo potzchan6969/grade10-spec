@@ -154,7 +154,7 @@ None.
   marks the first dot current.
 
 <!-- trace:case id=g10.site-shows.TC-rec rev=2 covers=g10.site-shows.SC-aa1 -->
-### grade10-site-site-shows-US1-TC5-2: The records list the five editions newest first
+### grade10-site-site-shows-US1-TC5-2: The records list every published record in the order given
 
 **Classification:**
 
@@ -169,7 +169,14 @@ None.
 * **Trace:** grade10-site-site-shows-US-01
 
 **Pre-conditions:**
-None.
+
+* The Shows content the admin published carries `<records>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `records` | the records the admin published, in the order the admin gave them (range: one or more); today five: Seoul Auction Private Sale & Exhibition (2026), Grade10 FEST Summer 2026 (2026), CARDJOY × Grade10 Shanghai (2026), CARDJOY × Grade10 Hangzhou (2026), Grade10 Festival 2025 (2025) |
 
 **Steps:**
 
@@ -178,10 +185,9 @@ None.
 
 **Expected Results:**
 
-* The five editions appear in order: Seoul Auction Private Sale &
-  Exhibition (2026), Grade10 FEST Summer 2026 (2026), CARDJOY × Grade10
-  Shanghai (2026), CARDJOY × Grade10 Hangzhou (2026), Grade10 Festival
-  2025 (2025), each with title, description and image.
+* Every record in `<records>` appears, and no other, in the order
+  `<records>` gives them, each with its year, title, description and
+  image.
 * The Seoul Auction record names its partner Seoul Auction × ZZZ.
 
 <!-- trace:case id=g10.site-shows.TC-fmt rev=1 covers=g10.site-shows.SC-zdn -->
@@ -417,7 +423,7 @@ Runs once per row of **Test data**.
 * The hero's heading and its Explore Shows and Press Releases actions
   still show.
 
-<!-- trace:case id=g10.site-shows.TC-lng rev=1 -->
+<!-- trace:case id=g10.site-shows.TC-lng rev=1 covers=g10.site-shows.SC-lng -->
 ### grade10-site-site-shows-US1-TC12-1: Published shows read in the reader's language
 
 Runs once per row of **Test data**.
@@ -436,8 +442,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<show>` is published with its words in every language the rows name.
-* customer's site language is `<reader language>`.
+* The published Shows content carries `<show>` with its words in every
+  language the rows name.
 
 **Test data:**
 
@@ -448,59 +454,19 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open <grade10 shows url>.
+1. Open <grade10 shows url> at `<reader language>`'s address.
 2. Scroll to `<show>`'s edition card.
 3. Scroll to the Event Records section.
 
 **Expected Results:**
 
 * The edition card reads `<title>`, its description in `<reader language>`.
+* The edition card's date reads in `<reader language>`.
 * `<show>`'s record reads `<title>`, its description in
   `<reader language>`.
-* No published show's words show in another language.
+* None of `<show>`'s words show in another language.
 
-<!-- trace:case id=g10.site-shows.TC-unp rev=1 -->
-### grade10-site-site-shows-US1-TC13-1: A show the admin has not published stays off the page
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-site-shows-US-01
-
-**Pre-conditions:**
-
-* `<unpublished show>` is not published.
-* `<published show>` is published.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `unpublished show` | a show dated in the current month or later, in a chapter that keeps another published edition |
-| `published show` | a show in the same chapter as `<unpublished show>` |
-
-**Steps:**
-
-1. Open <grade10 shows url>.
-2. Read the Upcoming Shows card in the hero.
-3. Scroll to `<unpublished show>`'s chapter.
-4. Scroll to the Event Records section.
-
-**Expected Results:**
-
-* The Upcoming Shows card does not list `<unpublished show>`.
-* The chapter shows `<published show>`'s edition card and none for
-  `<unpublished show>`.
-* The records list `<published show>` and not `<unpublished show>`.
-
-<!-- trace:case id=g10.site-shows.TC-nf4 rev=1 -->
+<!-- trace:case id=g10.site-shows.TC-nf4 rev=1 covers=g10.site-shows.SC-pub -->
 ### grade10-site-site-shows-US1-TC14-1: The page answers not found when nothing is published
 
 **Classification:**
@@ -517,7 +483,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The admin has no show published.
+* The admin has not published the Shows content.
 
 **Steps:**
 
@@ -527,6 +493,47 @@ Runs once per row of **Test data**.
 
 * The site's not-found page shows.
 * No Shows hero, section or empty Shows frame shows.
+
+<!-- trace:case id=g10.site-shows.TC-o3j rev=1 covers=g10.site-shows.SC-dfo -->
+### grade10-site-site-shows-US1-TC15-1: A show with no words in the reader's language reads in its base text
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-shows-US-01
+
+**Pre-conditions:**
+
+* The published Shows content carries `<show>` with its words in English
+  only.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `reader language` | a language the site offers other than English (any) |
+| `show` | a published show with an edition card and a record (any) |
+| `base title` | the title the admin published for `<show>` in English |
+
+**Steps:**
+
+1. Open <grade10 shows url> at `<reader language>`'s address.
+2. Scroll to `<show>`'s edition card.
+3. Scroll to the Event Records section.
+
+**Expected Results:**
+
+* The Shows page shows, not the site's not-found page.
+* The edition card reads `<base title>` and its English description, with
+  no empty title or description.
+* `<show>`'s record reads `<base title>` and its English description.
 
 ## grade10-site-site-shows-US2: Collector follows a link from Shows to a press surface
 
@@ -579,7 +586,7 @@ Runs once per row of **Test data**.
 
 * The site opens `<destination>`.
 
-<!-- trace:case id=g10.site-shows.TC-idx rev=1 -->
+<!-- trace:case id=g10.site-shows.TC-idx rev=1 covers=g10.site-shows.SC-rel -->
 ### grade10-site-site-shows-US2-TC2-1: An edition without a published release leads to the press index
 
 Runs once per row of **Test data**.
@@ -598,7 +605,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<edition>` is published, and its press release is `<release state>`.
+* The published Shows content carries `<edition>`, and its press release
+  is `<release state>`.
 
 **Test data:**
 
@@ -618,7 +626,7 @@ Runs once per row of **Test data**.
 * `<edition>` shows its Press Release link.
 * The site opens `/press-releases`, not an article address.
 
-<!-- trace:case id=g10.site-shows.TC-nol rev=1 -->
+<!-- trace:case id=g10.site-shows.TC-nol rev=1 covers=g10.site-shows.SC-4qx -->
 ### grade10-site-site-shows-US2-TC3-1: A chapter without a published release shows no link
 
 **Classification:**
@@ -689,8 +697,8 @@ None.
 * On selection the YouTube embed replaces the poster inside the same
   container — Hong Kong embeds `Nf4UZyct5uM`, Chinese Mainland embeds
   `fy7AfZ8ZhQo`.
-* That one selection starts the video playing; its time advances with no
-  further selection on the embed.
+* That one selection starts the video playing, with its sound on; its time
+  advances with no further selection on the embed.
 * The page does not navigate and no new tab opens.
 * Starting the Chinese Mainland video leaves the Hong Kong container
   holding its embed; the page does not return it to its poster.
@@ -701,7 +709,8 @@ None.
 - The chapter tabs are jump navigation over stacked chapters (Q1).
 - The Shows chrome entry belongs to `navigation`, not to this page (Q6).
 - The Seoul partner is ZZZ wherever the page names it (Q8).
-- The Press Release links ship before the press index and articles; a case checks the address opened, not the article (Q10).
+- The page's content is what the admin publishes, in the reader's language; the section copy and button words are code (Q9).
+- A Press Release link opens its `/press-releases/{slug}` article only once that release is published; an edition without one leads to `/press-releases`, and a chapter without one shows no link (Q10).
 - The Upcoming Shows card judges a show's month by the date in Hong Kong, whatever the viewer's time zone (Q11).
 - The Upcoming Shows card lists its shows in the order the content gives; the block does not sort them (Q12).
 - Explore Shows lands on the Event Formats section's top, `#shows-formats`, not the Hong Kong chapter (Q13).
@@ -709,36 +718,54 @@ None.
 - The chapter list stays sticky as the block draws it (Q15).
 - An edition carousel's arrows wrap round at the first and last photo; no arrow is unavailable (Q16).
 - Each chapter video plays on its own; starting one does not stop the other (Q17).
+- With nothing published, `/shows` answers not found, not an empty page (Q18).
+- One selection on a chapter video starts it playing; no second selection is needed (Q19).
+- The admin publishes the shows as one document: a chapter is always on the page with the editions it holds, and a show has no published state of its own (Q20).
+- Event Records lists every record the admin publishes, in the order it gives them; five is the workbench's sample, not a limit (Q21).
+- A show with no words in the reader's language reads in its base text, not empty and not not found (Q22).
+- The one-selection start plays with sound; the selection is the reader's own gesture (Q23).
+- Where a browser will not start the embed from the selection, the player's own play control shows and a second tap starts it; this is not a failure (Q24).
 
 ## Reconciliation
 
-**Run:** 2026-10-28. QA1 ran a blind pass this round, in an isolated context, on the frozen anchors `grade10-site-site-shows-US-01` to `grade10-site-site-shows-US-03`: it read the isolated bundle `docs/governance/specs-to-test-cases.md` names and the existing suite without this section, was denied every `## Requirements` section and scenario, kept the seven live drafts, revising five of them, added `US1-TC6-1` to `US1-TC11-1`, and raised eight questions, closed as Q10 to Q17. QA2 reconciled in a fresh context, reading the delta `spec.md`, `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tasks.md`, the Shows PRD page and the `ShowsPageBody` block with the workbench page. This is the run's statement, not proof. No case has been accepted, so a draft reworded here keeps its `rev`.
+**Run:** 2026-10-28, round 3. QA1 ran a blind pass this round, in an isolated context, on the frozen anchors `grade10-site-site-shows-US-01` to `grade10-site-site-shows-US-03`, after the Feature set changed three anchors - Published content, a Press Release link opening its article only once published, and one click playing: it read the isolated bundle `docs/governance/specs-to-test-cases.md` names and the existing suite without this section, was denied every `## Requirements` section and scenario, gave `US1-TC6-1` a published-release pre-condition, revised `US2-TC1-1` to `US2-TC1-2` and `US3-TC1-2` to `US3-TC1-3`, added `US1-TC12-1`, `US1-TC13-1`, `US1-TC14-1`, `US2-TC2-1` and `US2-TC3-1`, and raised five questions, closed as Q20 to Q24. QA2 reconciled in a fresh context, reading the delta `spec.md`, `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tasks.md`, the Shows PRD page, the `ShowsPageBody` block, and the site's published-shows reading in the application repository (`showsPageOf`, `readIn`). This is the run's statement, not proof. No case has been accepted, so a draft reworded here keeps its `rev`.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `grade10-site-site-shows-US1-TC1-2` | Reached, adjusted | `grade10-site-site-shows-SC-01`. Its line "No text on the page names ZZZ as a partner" contradicted Q8 and the PRD's partner row; reversed to "Wherever the page names the Seoul partner, it reads ZZZ". The headings, actions, photo and the ZZZ clause it asserts are folded into the scenario |
+| `grade10-site-site-shows-US1-TC1-2` | Reached | `grade10-site-site-shows-SC-01` |
 | `grade10-site-site-shows-US1-TC2-1` | Reached | `grade10-site-site-shows-SC-02` |
-| `grade10-site-site-shows-US1-TC3-2` | Reached, adjusted | `grade10-site-site-shows-SC-03`. "The chapter list scrolls sideways within itself" named a mechanism the readings do not share: `ui-design.md` says the tabs scroll horizontally, the block shrinks the list to fit a narrow viewport. Reworded to the outcome both hold, every chapter reachable; that, records image over text and no sideways page scroll are folded into the scenario |
-| `grade10-site-site-shows-US1-TC4-2` | Reached, adjusted | `grade10-site-site-shows-SC-06`. Q16 adds the wrap at both ends as steps 6 and 7; the wrap and Q5's no timer are folded into the scenario |
-| `grade10-site-site-shows-US1-TC5-2` | Reached | `grade10-site-site-shows-SC-07`; its Seoul Auction × ZZZ line is folded into the scenario |
-| `grade10-site-site-shows-US1-TC6-1` | Folded | `grade10-site-site-shows-SC-10`, new: each chapter's presentation and editions and the NOV 2025 card (Q7), which the PRD states and no scenario did |
-| `grade10-site-site-shows-US1-TC7-1` | Reached, adjusted | `grade10-site-site-shows-SC-09`. QA1 asserted the page does not navigate away and lands its target below the chapter list; Q14 makes each jump a hash link, so the case gains a `<fragment>` column, an address result and a Back step, and Q13 lands Explore Shows on the section's top, its heading and list. The pill rows name the link by its chapter, as the pill reads "Overseas", a label no anchor gives. The scenario now carries Explore Shows, the fragment and Back |
-| `grade10-site-site-shows-US1-TC8-1` | Folded | `grade10-site-site-shows-SC-13`, new: the pinned list and the mark moving on scroll, which the requirement stated and no scenario did; Q15 keeps it sticky as built |
-| `grade10-site-site-shows-US1-TC9-1` | Folded, adjusted | `grade10-site-site-shows-SC-11`, new, the keep side of `SC-08`'s rule. Q11 gives the case a device-zone column and a row on a device ahead of Hong Kong |
-| `grade10-site-site-shows-US1-TC10-1` | Reached, adjusted | `grade10-site-site-shows-SC-08`, narrowed to the drop. Q11 puts the device behind Hong Kong, where the month has not yet ended |
-| `grade10-site-site-shows-US1-TC11-1` | Folded | `grade10-site-site-shows-SC-12`, new, split from `SC-08`'s last clause; its clock is read in Hong Kong (Q11) |
-| `grade10-site-site-shows-US2-TC1-1` | Reached | `grade10-site-site-shows-SC-04`, which now states Q10: the address opens, what it shows is the press surfaces' own |
-| `grade10-site-site-shows-US3-TC1-2` | Reached, adjusted | `grade10-site-site-shows-SC-05`. Q17 adds step 6 and the Hong Kong embed staying when the second video starts. Whether YouTube's own player pauses one embed when another plays is the provider's, and not asserted |
-| `grade10-site-site-shows-SC-01` to `grade10-site-site-shows-SC-13` | Reached | each by the case above whose `covers` names it |
+| `grade10-site-site-shows-US1-TC3-2` | Reached | `grade10-site-site-shows-SC-03` |
+| `grade10-site-site-shows-US1-TC4-2` | Reached | `grade10-site-site-shows-SC-06` |
+| `grade10-site-site-shows-US1-TC5-2` | Reached, adjusted | `grade10-site-site-shows-SC-07`. Q21: the records are every record the admin publishes, in its order, and five is the workbench's sample. The case named five fixed editions; it now takes `<records>` as the published list, today the same five, and checks every one and no other in that order. The requirement is renamed "The records read in the published order" and keeps the sample's five as its example; the Feature set's frozen "the five editions newest first" is left as it stands |
+| `grade10-site-site-shows-US1-TC6-1` | Reached, adjusted in spec | `grade10-site-site-shows-SC-10`. QA1's new pre-condition, the chapter's release published, is Q10's: the chapter link shows only then. The requirement's Overseas Partnership line and `SC-10`'s WHEN now carry the same condition |
+| `grade10-site-site-shows-US1-TC7-1` | Reached | `grade10-site-site-shows-SC-09` |
+| `grade10-site-site-shows-US1-TC8-1` | Reached | `grade10-site-site-shows-SC-13` |
+| `grade10-site-site-shows-US1-TC9-1` | Reached | `grade10-site-site-shows-SC-11` |
+| `grade10-site-site-shows-US1-TC10-1` | Reached | `grade10-site-site-shows-SC-08` |
+| `grade10-site-site-shows-US1-TC11-1` | Reached | `grade10-site-site-shows-SC-12` |
+| `grade10-site-site-shows-US1-TC12-1` | Reached, adjusted | `grade10-site-site-shows-SC-16`, narrowed to a show that has words in the reader's language. The case opens the language's address, as the requirement names it, rather than setting a site language; gains the edition date, which `SC-16` states; and its "no published show's words show in another language" is narrowed to `<show>`, since under Q22 another show without a translation reads in its base text |
+| `grade10-site-site-shows-US1-TC13-1` | Dropped, misreading | Q20: the admin publishes the shows as one document, so a show has no published state of its own, and "a show the admin has not published" is not a state the page has. Its three observations - off the Upcoming Shows card, off its chapter, off the records - have no starting state a tester can prepare. The number is not reused |
+| `grade10-site-site-shows-US1-TC14-1` | Reached, adjusted | `grade10-site-site-shows-SC-15`. Its pre-condition "no show published" reads, by Q20, the Shows content not published; `SC-15`'s WHEN says the same |
+| `grade10-site-site-shows-US1-TC15-1` | Added by QA2 | `grade10-site-site-shows-SC-18`, new. Q22 settles the fallback; a show read in its base text is the other direction of `US1-TC12-1`, so it is its own case. Base text is the English the admin wrote, as the site's `readIn` falls back |
+| `grade10-site-site-shows-US2-TC1-2` | Reached | `grade10-site-site-shows-SC-04`, whose WHEN now names a link whose release is published, matching the case's pre-condition and Q10 |
+| `grade10-site-site-shows-US2-TC2-1` | Reached | `grade10-site-site-shows-SC-14`, split to the edition: the link still shows and opens `/press-releases`. Its pre-condition reads the edition as part of the published content (Q20). The rows, a release not written and one written but not published, are both "not on the site" in the site's reading |
+| `grade10-site-site-shows-US2-TC3-1` | Folded | `grade10-site-site-shows-SC-17`, new, split from `SC-14`'s chapter clause so each case fully asserts the scenario it covers; it carries the intro and presentation staying, which the case asserts |
+| `grade10-site-site-shows-US3-TC1-3` | Reached, adjusted | `grade10-site-site-shows-SC-05`. Q23 adds "with its sound on" to the one-selection start; `SC-05` states it |
+| `grade10-site-site-shows-SC-01` to `grade10-site-site-shows-SC-18` | Reached | each by the one case whose `covers` names it |
 
-- **Raised** - QA1's eight rows closed as Q10 to Q17, decided by the round, Q11 with the human; each answer is in `## Settled`. Four went against QA1's recommendation, as the block draws them: Q12, the order as given; Q14, a hash link; Q15, sticky as built; Q16, wrap round
-- **Folded into spec** - `grade10-site-site-shows-SC-10` to `grade10-site-site-shows-SC-13` are new; `SC-01`, `SC-03`, `SC-05`, `SC-06`, `SC-07`, `SC-08` and `SC-09` now state what their cases assert; the requirements carry Q10 to Q17, NOV 2025, ZZZ and the fragments `#shows-formats`, `#hong-kong`, `#overseas` and `#chinese-mainland` the block links to
-- **Contradicted** - `US1-TC1-2`'s ZZZ line against Q8, and `US1-TC7-1`'s unchanged address against Q14. Both were already the author's decisions, Q8 confirmed by the product owner; the cases now follow them, and none is left open
-- **Uncovered scenarios** - none: every scenario is named in exactly one case's `covers`
-- **Over-claimed cases** - none: the `covers` the earlier hand draft gave `US1-TC1-2` to `US1-TC5-2`, `US2-TC1-1` and `US3-TC1-2` were checked against each scenario as it now reads, and each case fully asserts its THEN. Q12's order stays in the requirement alone: "the order the content gives" shows only as the list itself, so no scenario or case asserts it
+- **Raised** - QA1's five rows closed as Q20 to Q24, decided by the round; each answer, with Q9, Q10, Q18 and Q19 decided with the human, is in `## Settled`. Q20 went against QA1's recommendation and reframed it: there is no per-show published state, so a chapter is never removed. Q21 kept every published record but in the admin's order, not newest first. Q22 to Q24 took QA1's recommendation
+- **Folded into spec** - `grade10-site-site-shows-SC-17` and `grade10-site-site-shows-SC-18` are new; `SC-04`, `SC-05`, `SC-07`, `SC-10`, `SC-14`, `SC-15` and `SC-16` now state what their cases assert. "The page shows what is published" now carries Q20's one document and Q22's base-text fallback; "Videos play inside the page" carries Q23's sound and Q24's second tap; the records requirement carries Q21
+- **Contradicted** - `US1-TC13-1` against Q20, the author's decision; dropped above, and none is left open
+- **Uncovered scenarios** - none: each of the eighteen scenarios is named in exactly one case's `covers`
+- **Over-claimed cases** - none: each case fully asserts the THEN of the scenario it covers. Three rules stay in their requirement alone: Q12's order, which shows only as the list itself; Q20's chapter with no editions, which the Overseas Partnership chapter already shows as `US1-TC6-1` walks it; and Q24's second tap, since no anchor names a browser a tester can set up to refuse the embed's start
 - **New, not an extension** - `grade10-site-site-shows-US1-TC6-1` - `US1-TC1-2` reads the sections' order and headings as the smoke case; what each chapter carries is a different purpose at a lower severity
 - **New, not an extension** - `grade10-site-site-shows-US1-TC7-1` - no live case selects a jump control or reads the address
 - **New, not an extension** - `grade10-site-site-shows-US1-TC8-1` - no live case scrolls through the chapters checking the list
 - **New, not an extension** - `grade10-site-site-shows-US1-TC9-1` - no live case sets the clock; it keeps a show, the opposite direction of `US1-TC10-1`
 - **New, not an extension** - `grade10-site-site-shows-US1-TC10-1` - no live case sets the clock; it drops a show, the opposite of `US1-TC9-1`
 - **New, not an extension** - `grade10-site-site-shows-US1-TC11-1` - no live case sets the clock; the card leaves the hero, an outcome no other case reaches
+- **New, not an extension** - `grade10-site-site-shows-US1-TC12-1` - no live case opens a language's address or prepares translated content
+- **New, not an extension** - `grade10-site-site-shows-US1-TC14-1` - every other case starts with the content published; not found is an outcome no live case reaches
+- **New, not an extension** - `grade10-site-site-shows-US1-TC15-1` - it reads in the base text, the other direction of `US1-TC12-1`
+- **New, not an extension** - `grade10-site-site-shows-US2-TC2-1` - `US2-TC1-2` opens articles with every release published; leading to the index is the other direction
+- **New, not an extension** - `grade10-site-site-shows-US2-TC3-1` - the chapter link hidden is the other direction of `US2-TC1-2`'s chapter row
