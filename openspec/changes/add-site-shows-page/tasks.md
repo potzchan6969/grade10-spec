@@ -6,7 +6,7 @@
   own commit before the group's code
 - [ ] 1.2 Feed the shared `ShowsPageBody` block (`packages/ui/src/blocks/site-shows`) at
   `apps/preview/src/pages/site/shows/` with the hardcoded content and copy,
-  Gana Art and NOV 2025 settled: the production chrome, the four sections in order, the upcoming-shows card,
+  ZZZ and NOV 2025 settled: the production chrome, the four sections in order, the upcoming-shows card,
   the statistic cards, the sticky chapter tab list as jump navigation, the
   poster-first video containers, the edition carousels, the
   press-release destinations table, the records in frame order, and the

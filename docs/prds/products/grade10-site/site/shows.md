@@ -22,11 +22,11 @@ answers without a session, like any public surface —
 - 🚧 **Event formats** — Three Platforms. One Community. under a sticky
   pill link list that scrolls to each chapter: Hong Kong (Grade10 FEST HK
   with video and two editions), Overseas Partnership (Seoul Auction ×
-  Gana Art with photo and caption), Chinese Mainland (CARDJOY × Grade10
+  ZZZ with photo and caption), Chinese Mainland (CARDJOY × Grade10
   with video and two editions)
 - 🚧 **Edition cards** — each edition carries a photo carousel, a date, a
   description, and a Press Release link to its `/press-releases/{slug}`
-  article; the Seoul Auction × Gana Art chapter carries its own Press
+  article; the Seoul Auction × ZZZ chapter carries its own Press
   Release link to `/press-releases/{slug}`
 - 🚧 **Video presentations** — two chapters carry a poster-first YouTube
   container: the poster and a play affordance, and on click the embed
@@ -50,7 +50,7 @@ it sends to `/press-releases` and its press articles.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Chapter tab semantics | Decided | The pill list is jump navigation over stacked chapters — a click scrolls to the chapter, a scroll-spy moves the active link; it is not exclusive panels. | Product |
-| Seoul Auction partner name | Decided | Gana Art throughout — the chapter, the record and the upcoming card read Seoul Auction × Gana Art; ZZZ was a placeholder. | Product |
+| Seoul Auction partner name | Decided | ZZZ is the real partner name — the chapter, the record and the upcoming card read Seoul Auction × ZZZ. | Product |
 | Upcoming Shows entries | Decided | The card lists shows whose month has not passed; an entry that has run out drops off rather than reads as upcoming, and the card leaves the hero when none remain. | Product |
 | Grade10 Festival 2025 date | Decided | The edition card reads NOV 2025, the live page's date and the record's year; the frame's NOV 2026 is design's to sync back. Rejected NOV 2026: it dates a 2025 show in the future. | Product |
 | Hero card label | Decided | "Upcoming Shows" — the live page's label; the frame's LATEST SHOWS described the row, not its rule. | Product |

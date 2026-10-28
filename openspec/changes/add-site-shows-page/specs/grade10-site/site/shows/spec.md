@@ -26,7 +26,7 @@ and the record of every show — and where each link on it leads.
     progress dots
 - Where the links lead
   - Press Releases opens `/press-releases`
-  - Each edition's Press Release, and the Seoul Auction × Gana Art
+  - Each edition's Press Release, and the Seoul Auction × ZZZ
     chapter's, opens `/press-releases/{slug}`
 
 ## ADDED Requirements
@@ -99,7 +99,7 @@ stack every section at the page inset.
 ### Requirement: Every link leads to its named surface
 Each link on the Shows surface SHALL lead to the surface it names: the
 hero Press Releases button to `/press-releases`, and each Press Release
-link, the Seoul Auction × Gana Art chapter's included, to that
+link, the Seoul Auction × ZZZ chapter's included, to that
 press-release article:
 
 | Link | Destination |
@@ -107,7 +107,7 @@ press-release article:
 | Press Releases (hero) | `/press-releases` |
 | Grade10 FEST Summer 2026 | `/press-releases/grade10-fest-summer-2026-concludes-successfully` |
 | Grade10 Festival 2025 | `/press-releases/psa-10-pikachu-wall-grade10-card-fest` |
-| Seoul Auction × Gana Art (chapter) | `/press-releases/grade10-south-korea-seoul-auction` |
+| Seoul Auction × ZZZ (chapter) | `/press-releases/grade10-south-korea-seoul-auction` |
 | CARDJOY × Grade10 Shanghai | `/press-releases/cardjoy-grade10-shanghai-expansion` |
 | CARDJOY × Grade10 Hangzhou | `/press-releases/cardjoy-grade10-hangzhou-show` |
 

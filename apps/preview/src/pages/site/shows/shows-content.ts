@@ -100,7 +100,7 @@ const SHOWS_PAGE = {
       {
         month: "November",
         year: "2026",
-        title: "Seoul Auction × Gana Art Premium Private Sale",
+        title: "Seoul Auction × ZZZ Premium Private Sale",
         city: "Seoul",
       },
     ] satisfies readonly UpcomingShow[],
@@ -173,7 +173,7 @@ const SHOWS_PAGE = {
         id: "overseas",
         tab: "Overseas",
         label: "Overseas Partnership",
-        title: "Seoul Auction × Gana Art",
+        title: "Seoul Auction × ZZZ",
         dek: "Partnered with Korea’s premium auction house to position cards as fine art in Asia.",
         image: {
           src: events("seoul-auction.webp"),
@@ -225,7 +225,7 @@ const SHOWS_PAGE = {
         year: "2026",
         title: "Seoul Auction Private Sale & Exhibition",
         description:
-          "Seoul Auction × Gana Art × Grade10 — a trading card exhibition and private sales event hosted by Seoul Auction, Gana Art, and Grade10. The first-ever fine art presentation of trading cards in Asia.",
+          "Seoul Auction × ZZZ × Grade10 — a trading card exhibition and private sales event hosted by Seoul Auction, ZZZ, and Grade10. The first-ever fine art presentation of trading cards in Asia.",
         image: {
           src: events("seoul-auction.webp"),
           alt: "Trading cards presented as fine art at the Seoul Auction × Grade10 exhibition.",
