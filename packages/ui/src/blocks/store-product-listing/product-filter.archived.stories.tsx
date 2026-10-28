@@ -8,7 +8,7 @@ import { productFilterArgs } from "./product-filter.story-shared";
  * drawer per facet group - Store/Product Listing/Blocks/ProductBrowse → Narrow.
  */
 const meta = {
-  title: "Store/Product Listing/Blocks/ProductFilter Archived",
+  title: "Store/Product Listing/Blocks/ProductFilterArchived",
   component: ProductFilter,
   parameters: { layout: "padded" },
   decorators: [
