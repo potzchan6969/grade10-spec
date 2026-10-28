@@ -221,7 +221,7 @@ None.
 
 * Neither mention is a link; both render as plain text.
 
-<!-- trace:case id=g10.site-about.TC-cxl rev=1 covers=g10.site-about.SC-ozy -->
+<!-- trace:case id=g10.site-about.TC-cxl rev=1 covers=g10.site-about.SC-tb4 -->
 ### grade10-site-site-about-US2-TC4-1: Each index tab shows its live page and opens it in a new tab
 
 **Classification:**

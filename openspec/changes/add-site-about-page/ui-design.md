@@ -31,7 +31,7 @@ the frames' wording is stale until design syncs it back.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Wide viewport | Two-column hero and statements; timeline beside the company paragraph | `grade10-site-site-about-SC-02` |
+| Wide viewport | Two-column hero and statements; company paragraph beside the milestone timeline | `grade10-site-site-about-SC-02` |
 | Narrow viewport | All sections stacked at the 20px page inset | `grade10-site-site-about-SC-03` |
 | Entering | Sections reveal staggered on mount | **Out of suite:** the workbench stories' play pass, which waits on the reveal before asserting |
 | Reduced motion | All content visible immediately, no transition | **Out of suite:** the workbench's `data-storybook-pause-motion` harness, which the page's `motion-reduce` fallback answers |

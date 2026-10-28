@@ -20,19 +20,18 @@ without a session, like any public surface —
   of the parent-company panel; each tab shows the live page and opens it
   in a new tab
 - 🚧 **Parent company** — a quiet panel with the MemeStrategy mark, a
-  paragraph on the company, and its milestones newest first, the upcoming
-  one labelled Coming soon
+  paragraph on the company beside its milestones on a wide viewport, newest
+  first, the upcoming one labelled Coming soon
 - 🚧 **Links out** — MemeStrategy, 9GAG and Grade10 AI open in a new tab;
   Grade10 opens the front door; vaulting services and Grade10 Finance are
   plain text until they launch
 
 - **Navigation entry** — About sits in the footer's Company column; the
   header lists no item for the page and marks nothing current
-- ❓ Product - **Grade10 Finance destination** - the mention is plain text
-  until the service launches; what it links to then is unconfirmed
-- ❓ Copy - **Parent-company wording** - the paragraph was tightened after a
-  copywriting review; whether it must reproduce issuer boilerplate verbatim
-  is unconfirmed
+- **Grade10 Finance destination** — plain text until the service launches,
+  then `/finance`
+- **Parent-company wording** — the paragraph was tightened after a
+  copywriting review and need not reproduce issuer boilerplate verbatim
 
 ::story{id="site-about-screens-about--default" title="The about page, whole"}
 
