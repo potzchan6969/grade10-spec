@@ -8,7 +8,12 @@ import { sectionRows } from "../blocks/side-blocks";
 import { useEditMode } from "../editor/edit-mode";
 import { PageEditor } from "../editor/page-editor";
 import { useLayoutMaybe } from "../shell/layout";
-import { hasSide, SideHint, SplitPage } from "../shell/side-panel";
+import {
+  hasSide,
+  ReadingRunout,
+  SideHint,
+  SplitPage,
+} from "../shell/side-panel";
 import { PageWarnings, warningsForPage } from "./check-warnings";
 import { NotFoundPage } from "./not-found";
 import { PageHeading } from "./page-heading";
@@ -70,6 +75,7 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
           {layout && side ? <SideHint cases={cases} rows={rows} /> : null}
         </>
       )}
+      {layout && side ? <ReadingRunout /> : null}
     </BlockScopeProvider>
   );
 }

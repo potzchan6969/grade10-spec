@@ -170,6 +170,19 @@ const HEADER_HEIGHT = 64;
  * to be the one being read. */
 const READING_LINE = 0.3;
 
+/** Room below a page's end, so its last section can scroll up to the
+ * reading line. */
+export function ReadingRunout() {
+  return (
+    <div
+      aria-hidden
+      style={{
+        height: `calc((100vh - ${HEADER_HEIGHT}px) * ${1 - READING_LINE})`,
+      }}
+    />
+  );
+}
+
 /** The anchor of the section being read: the last whose heading has passed
  * the reading line, `""` before the first. Followed only while `watching`. */
 function useReadingSection(rows: SectionRow[], watching: boolean): string {
@@ -180,14 +193,8 @@ function useReadingSection(rows: SectionRow[], watching: boolean): string {
     let frame = 0;
     const measure = () => {
       frame = 0;
-      // At the page's end the last sections can never reach the line, so
-      // any heading on the screen has passed it.
-      const atEnd =
-        window.scrollY + window.innerHeight >=
-        document.documentElement.scrollHeight - 2;
-      const line = atEnd
-        ? window.innerHeight
-        : HEADER_HEIGHT + (window.innerHeight - HEADER_HEIGHT) * READING_LINE;
+      const line =
+        HEADER_HEIGHT + (window.innerHeight - HEADER_HEIGHT) * READING_LINE;
       let found = "";
       for (const row of rows) {
         if (row.section === "") continue;
