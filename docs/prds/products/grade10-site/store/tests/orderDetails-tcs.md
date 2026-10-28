@@ -378,6 +378,41 @@ Runs once per row of **Test data**.
 
 * The row's badge and steps, UI matching store-order-detail-blocks-orderdetailsdeliverystatus--shipped-delivery for the shipped row.
 
+<!-- trace:case id=g10.store-order-detail.TC-fbs rev=1 -->
+#### g10.store-order-detail.TC21: A refund shows its amount beside what was paid
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** order-detail#order/a-full-refund
+
+**Pre-conditions:**
+
+* customer(signed-in member) owns `<order>`: `<product A>` HKD780 and `<product B>` HKD105, paid HKD885; admin refunded the row's lines in the shop's admin.
+
+**Test data:**
+
+| Refunded | Summary |
+| --- | --- |
+| `<product B>`, HKD105 | Total HKD885; a Refund row of −HKD105, UI matching store-order-detail-screens-order-details--partial-refund |
+| ❓ both lines, HKD885 - design confirms | Total HKD885; a Refund row of −HKD885 |
+
+**Steps:**
+
+1. Open `/profile/orders/<order id>` and read the summary and the badge.
+
+**Expected Results:**
+
+* The row's summary, and the badge Refunded.
+
 ---
 
 ### order-detail#product-pictures: Product Pictures
@@ -723,41 +758,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The row's absence.
-
-<!-- trace:case id=g10.store-order-detail.TC-fbs rev=1 -->
-#### g10.store-order-detail.TC21: A refund shows its amount beside what was paid
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** order-detail#order/a-full-refund, order-detail#order-summary
-
-**Pre-conditions:**
-
-* customer(signed-in member) owns `<order>`: `<product A>` HKD780 and `<product B>` HKD105, paid HKD885; admin refunded the row's lines in the shop's admin.
-
-**Test data:**
-
-| Refunded | Summary |
-| --- | --- |
-| `<product B>`, HKD105 | Total HKD885; a Refund row of −HKD105, UI matching store-order-detail-screens-order-details--partial-refund |
-| ❓ both lines, HKD885 - design confirms | Total HKD885; a Refund row of −HKD885 |
-
-**Steps:**
-
-1. Open `/profile/orders/<order id>` and read the summary and the badge.
-
-**Expected Results:**
-
-* The row's summary, and the badge Refunded.
 
 <!-- trace:case id=g10.store-order-detail.TC-wxh rev=2 -->
 #### g10.store-order-detail.TC22: Refunded goods take back the points they earned

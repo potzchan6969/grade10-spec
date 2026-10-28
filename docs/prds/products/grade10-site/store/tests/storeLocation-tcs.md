@@ -246,10 +246,6 @@ Runs once per row of **Test data**.
 
 * The preview reads `Store Locator — Grade10` and `Where to find the Grade10 shop in Causeway Bay, Hong Kong, and when it is open.`, and no other page's title.
 
----
-
-### store-locator#from-elsewhere: From Elsewhere
-
 <!-- trace:case id=g10.store-store-locator.TC-36r rev=2 -->
 #### g10.store-store-locator.TC7: Where the store is not carried, there is no Store Locator
 
@@ -262,7 +258,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page/chrome-reaches-it, store-locator#from-elsewhere
+* **Trace:** store-locator#the-page/chrome-reaches-it
 
 **Pre-conditions:**
 

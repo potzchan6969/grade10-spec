@@ -322,7 +322,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-history#orders
+* **Trace:** order-history#orders/status-badge
 
 **Pre-conditions:**
 
