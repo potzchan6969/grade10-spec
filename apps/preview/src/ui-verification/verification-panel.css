@@ -573,3 +573,123 @@
   border: 0;
   padding: 0;
 }
+
+/* Flows: the panel's own Screen control and the Canvas overview */
+.verification-flow-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.verification-flow-screens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.verification-flow-screens legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.verification-flow-screen input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.verification-flow-screen:focus-within {
+  outline: 2px solid var(--vp-accent, #1f6feb);
+  outline-offset: 2px;
+}
+
+.verification-panel .verification-flow-screen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--vp-border, #c5c8cf);
+  border-radius: 6px;
+  color: var(--vp-fg, #20232a);
+  background: var(--vp-surface, #f0f2f5);
+  cursor: pointer;
+}
+
+.verification-panel .verification-flow-screen[data-checked="true"] {
+  border-color: var(--vp-accent, #1f6feb);
+  color: var(--vp-on-accent, #fff);
+  background: var(--vp-accent, #1f6feb);
+  font-weight: 700;
+}
+
+.verification-flow-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.verification-flow-counts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.verification-flow-counts > div {
+  border: 1px solid var(--vp-border, #c5c8cf);
+  border-radius: 6px;
+  padding: 8px 12px;
+  background: var(--vp-surface, #f0f2f5);
+}
+
+.verification-flow-counts dt {
+  color: var(--vp-muted, #626875);
+}
+
+.verification-flow-counts dd {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.verification-flow-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.verification-flow-table th,
+.verification-flow-table td {
+  padding: 6px 8px;
+  border-top: 1px solid var(--vp-border, #c5c8cf);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.verification-flow-table thead th {
+  border-top: 0;
+  color: var(--vp-muted, #626875);
+  font-weight: 500;
+}
+
+.verification-panel .verification-flow-table tbody th button {
+  border: 0;
+  padding: 0;
+  color: var(--vp-accent, #1f6feb);
+  background: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@container (max-width: 640px) {
+  .verification-flow-counts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

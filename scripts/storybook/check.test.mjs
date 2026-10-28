@@ -230,7 +230,7 @@ describe("cited ids", () => {
       ],
     );
     const code =
-      'const CART_STORY_ID =\n  "store-cart-screens-cart--empty";\nstoryHref("store-cart-screens-cart--filled");\nflowStep("Pay", "pay",\n  "store-cart-screens-cart--paying");\nclassName="bid--fade"';
+      'const CART_STORY_ID =\n  "store-cart-screens-cart--empty";\nstoryHref("store-cart-screens-cart--filled");\nflowScreen("3", "Pay", "pay",\n  "store-cart-screens-cart--paying");\nclassName="bid--fade"';
     assert.deepEqual(
       citedIds("apps/preview/src/pages/nav.ts", code).map(({ id }) => id),
       [

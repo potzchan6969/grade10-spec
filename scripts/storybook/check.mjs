@@ -209,7 +209,7 @@ const CITATIONS = [
   /iframe\.html\?id=([a-z0-9*-]+)/g,
   /_STORY_ID\s*=\s*["'`]([a-z0-9-]+)["'`]/g,
   /(?:storyHref|navigateToStory)\(\s*["'`]([a-z0-9-]+)["'`]/g,
-  /flowStep\(\s*["'`][^"'`]+["'`]\s*,\s*["'`][^"'`]+["'`]\s*,\s*["'`]([a-z0-9-]+)["'`]/g,
+  /flowScreen\(\s*(?:["'`][^"'`]+["'`]\s*,\s*){3}["'`]([a-z0-9-]+)["'`]/g,
 ];
 const BACKTICKED =
   /`([a-z0-9]+(?:-[a-z0-9]+)*--(?:[a-z0-9]+(?:-[a-z0-9]+)*|\*))`/g;

@@ -104,21 +104,28 @@ Storybook holds it.
   so a journey is walked in the canvas the way a collector walks it
 - **Combinations** — a journey whose outcome turns on what staging is set to
   is walked by the Screen's Scenario, below
-- **Flows** — a domain's critical journeys, each shown as its steps in
-  `FlowContainer` (`packages/ui/src/blocks/shared/flow-container.tsx`): one
-  story per flow in the domain's `<Domain>/Flows` file, each step an existing
-  screen story shown at desktop size through `flowStep()` in
-  `pages/flow-steps.tsx`, so no state is drawn twice and `pnpm storybook:check`
-  holds every step to a story that exists
+- **Flows** — a domain's critical journeys, one story per flow in the
+  domain's `<Domain>/Flows` file, each a tree of existing screen stories
+  declared with `flowScreen()` in `pages/flow-screens.tsx`, so no state is drawn
+  twice and `pnpm storybook:check` holds every screen to a story that exists
+  - **Tree** — a screen's id is its place: the number is the step, a trailing
+    letter another state of that step (`1`, `1a` Empty, `1b` Not logged in,
+    `2`). The Canvas lays the steps out left to right with each step's other
+    states under it; the Screen control lists Canvas, then every screen in
+    that order, and focuses one at desktop size
   - **Critical and MECE** — only what a collector must do (bid, pay, receive,
-    sign); no step's screen state appears in two flows, so a later flow starts
+    sign); no screen state appears in two flows, so a later flow starts
     where an earlier one stops. Edge, error, copy and currency variants stay
-    screen stories
+    screen stories unless a step needs them as its other states
   - **Served** — a flow is drawn only where the collector site serves every
-    step, because each flow carries a capture recipe that walks the site
-    through the same steps; a step the site cannot reach yet waits for its page
+    screen, because each flow carries a capture recipe that walks the site
+    through the same screens; a screen the site cannot reach yet waits for
+    its page
   - **Verification** — the flow's `parameters.verification.caseId` names the
-    flow; each step is a capture point compared with its screen story
+    flow and `parameters.flow` its screens; each screen is a capture point
+    compared with its screen story. The Verification panel follows the
+    focused screen, carries its own Screen control, and on Canvas shows every
+    screen's desktop comparison at once
 - **Journeys cited** — a click-through screen, a flow or a Scenario names the journeys
   it walks, by their ids in the
   `user-journeys.md` beside the spec:
