@@ -17,7 +17,7 @@ UI package, the way the membership surface's components did.
 - `@grade10/ui` gains `TopUpPackCard`, `TopUpPackCardCopy` and
   `TopUpPackCardProps` under a `shared-ui/loyalty-top-ups` group.
 - The card renders one pack inside a `RadioList`: its points, its price,
-  the struck list price and a save badge where a discount exists, and the
+  the paid-plus-bonus line where a discount exists, and the
   reason it cannot be picked where it cannot.
 - The pack picker's wireframe composes it in place of its local tile.
 
