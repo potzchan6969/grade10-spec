@@ -2,8 +2,11 @@
 
 ## Purpose
 
-The customer order history lets a signed-in collector find their Store orders,
-understand which still need attention, and open tracking or one order safely.
+The customer order history lets a signed-in collector find their Store orders —
+online and counter purchases — understand which still need attention, and open
+tracking or one order safely. A ticket order placed on the ticketing platform
+is not a Store order; it SHALL NOT be listed here and is served by the
+platform's own order pages.
 
 ## Feature set
 
