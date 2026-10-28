@@ -1,0 +1,89 @@
+{
+  "version": 2,
+  "change": "add-site-shows-page",
+  "baseline": "59724902b1296a10f601992eab3b8ba29f4d9fe7edf368e775e285dd23269e65",
+  "fingerprint": "d19bb302a10af9f1a7c871b7d6fb1a1833818952f4b7c12e5b227d6ae7a86e37",
+  "reviewedBy": "seankcw",
+  "acceptedAt": "2026-10-28T04:36:51.045Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/site/shows.md#the-page",
+      "sha256": "7b3401254de1da3155e5a16bc28155764e116778d4f90115050eaaf739bcb761",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-site-shows-page/decisions.md",
+      "sha256": "2feeb7971b1133e87ddd14239d57b25e92ab5b57965513f1862b8bd195bcddfc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-shows-page/proposal.md",
+      "sha256": "5111cbdf9cc5fed25986dba9d81cf47325794bceed0dbb76664708795a79455c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-shows-page/specs/grade10-site/site/shows/feature-tcs.md",
+      "sha256": "9529fea6547804214fd44e9e750eab37d6f2eb464e97aacdea2552e15ded018f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-shows-page/specs/grade10-site/site/shows/spec.md",
+      "sha256": "6af1ece829f79262b4d9b740863ea34149e58b77d26c8d809744fa9c6551a44f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-shows-page/specs/grade10-site/site/shows/user-journeys.md",
+      "sha256": "ea00f566c623f28dd48ff0e534c9981bf9d638ed39899b0d118951b62a627c25",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-shows-page/ui-design.md",
+      "sha256": "3f518a34b95aac00e40987d206867b1612dd73a5d4ec6fb4f34b22bb5751ee5a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/shows/feature-tcs.md",
+      "sha256": "9529fea6547804214fd44e9e750eab37d6f2eb464e97aacdea2552e15ded018f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/shows/spec.md",
+      "sha256": "f0a17854de9f5be0540e689d21b914b6a9fe11d783d7efd0c73bdbd43d97681f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/shows/user-journeys.md",
+      "sha256": "2fa2bb77b990998fa07d7827cdc40f92598b89c2421c373c15b07d1b66528855",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-site-shows-page/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/shows/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/shows/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Carousels page the edition's photos",
+        "Requirement: Every link leads to its named surface",
+        "Requirement: The chapter list jumps to its chapter",
+        "Requirement: The page fits the viewport",
+        "Requirement: The page presents the events",
+        "Requirement: The page shows what is published",
+        "Requirement: The records read in the published order",
+        "Requirement: Videos play inside the page"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/shows/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
