@@ -6,25 +6,26 @@ order: 20
 
 ## Kinds of Discount
 
-Site discounts are the shop's own automatics, with no code. Amounts are HKD.
+Amounts are HKD. Each kind has a class, product or order, that the
+[combine rules](#authoring-rules) read.
 
-| Kind | What it is | Authored by | Class |
-| --- | --- | --- | --- |
-| **Sale price** | The product's compare-at price, above its price | Merchandiser, on the product in Shopify Admin | The price itself |
-| **Product discount** | An automatic amount off named products, variants or collections, a % or a fixed amount off each item, with or without a minimum | Merchandiser, Shopify Admin automatic discounts | Product |
-| **Order discount** | An automatic amount off the whole order, a % or a fixed amount, with or without a spend minimum | Merchandiser, Shopify Admin automatic discounts | Order |
-| **Buy X get Y** | An automatic: a reward product discounted or free after a trigger purchase | Merchandiser, Shopify Admin automatic discounts | Product |
-| **Order coupon** | A code for a fixed amount off the whole order, or off named products or variants; single use, `PREFIX-XXXXXXXX`, one member, an expiry | Operator, the store admin console | Order, or product where it names products |
-| **Product coupon** | A reward: a fixed amount, or a % with a ceiling, off its scope — [Rewards](/p/grade10-site/loyalty/rewards#reward-types) | Operator defines the reward in the loyalty admin; the member redeems it | Product, or order where its scope is the whole order |
-| **Gift** | A reward or a store coupon: the gift product at 100% off once the goods pass a threshold, handed over at the till alone | As a product coupon, or an operator mints it | Product |
-| **Public code** | A Shopify discount code open to everyone, not minted to a member; shown in the drawer's picker to guests and members — [Public Codes](#public-codes) | Merchandiser, Shopify Admin | Order |
-| **Points** | **$1** per point, paid against the bill — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) | The member, in the cart drawer or at the till | Outside the count |
+- **Site Discounts** — the shop's own automatics, with no code, authored by the merchandiser in Shopify Admin
+  - **Sale Price** — the product's compare-at price, above its price, set on the product; it is the price itself
+  - **Product Discount** — an amount off named products, variants or collections, a % or a fixed amount off each item, with or without a minimum; product class
+  - **Order Discount** — an amount off the whole order, a % or a fixed amount, with or without a spend minimum; order class
+  - **Buy X Get Y** — a reward product discounted or free after a trigger purchase; product class
+- **Codes** — what the member applies to an order, online or at the till
+  - **Order Coupon** — a code the operator mints in the store admin console for a fixed amount off the whole order, or off named products or variants; single use, `PREFIX-XXXXXXXX`, one member, an expiry; order class, or product where it names products
+  - **Product Coupon** — a reward the member redeems: a fixed amount, or a % with a ceiling, off its scope — [Rewards](/p/grade10-site/loyalty/rewards#reward-types); product class, or order where its scope is the whole order
+  - **Gift** — a reward, or a coupon the operator mints: the gift product at 100% off once the goods pass a threshold, handed over at the till alone; product class
+  - **Public Code** — a Shopify discount code the merchandiser opens to everyone, not minted to a member; order class — [Public Codes](#public-codes)
+- **Points** — **$1** a point, paid against the bill in the cart drawer or at the till, outside the count — [Paying with Points](/p/grade10-site/loyalty/paying-with-points)
 
 ### Public Codes
 
-- **Shown in the drawer** - the picker lists public codes to guests and members - [Cart Drawer](/p/grade10-site/store/cart#promo-code)
-- **Source** - Shopify discounts tagged `public`, read by the store
-- **Order beside wallet codes** - those that fit first, soonest to expire first, across both
+- **Shown in the Drawer** — the picker lists public codes to guests and members — [Cart Drawer](/p/grade10-site/store/cart#promo-code)
+- **Source** — Shopify discounts tagged `public`
+- **Order Beside Wallet Codes** — those that fit first, soonest to expire first, across both
 
 ## Authoring Rules
 
@@ -34,61 +35,50 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 | Automatic amount off products, variants or collections | **Yes** | **Product and order discounts**, so a code stacks with it; one set not to combine refuses every product coupon in the cart |
 | Automatic amount off order | **Yes**, a spend threshold included | **Product and order discounts**, so a code stacks with it |
 | Automatic buy X get Y | **Yes** | **Order discounts and codes** — its order and product boxes |
-| Order coupon | **Yes** | What its mint states, else the store default: 🚧 product, order and shipping discounts |
+| Order coupon | **Yes** | What its mint states, else the store default |
 | Product coupon, gift | **Yes** | The reward's Combines with, else the store default |
 | Points | **Always** | Every discount — a payment, outside the count |
 
-- **Both sides decide** — two discounts stack only when each allows the
-  other's class, so an automatic's refusal beats a code's own setting
+- 🚧 **Store Default** — product, order and shipping discounts, for a coupon whose mint or reward states none
+- **Both Sides Decide** — two discounts stack only when each allows the other's class, so an automatic's refusal beats a code's own setting
+
+[Test cases · grade10-site/store/site-discounts](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/site-discounts)
 
 ### A Product Discount Beside a Sale Price
 
-- **The struck price** - the cut comes off the price, and the compare-at is
-  struck where it is above it: $880, compare-at $1,000, 10% off reads $792
-- **A code joins** - the shop keeps the combination that takes the most off,
-  so a product discount not set to combine can leave the cart above the card
-
-[Test cases · grade10-site/store/site-discounts](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/site-discounts)
+- **The Struck Price** — the cut comes off the price, and the compare-at is struck where it is above it: $880, compare-at $1,000, 10% off reads $792
+- **A Code Joins** — the shop keeps the combination that takes the most off, so a product discount not set to combine can leave the cart above the card
 
 ## Order of Application
 
 The shop prices every combination its combine rules allow, online and at the
-till, and keeps the one that takes the most off. Grade10 accepts its price.
+till, and Grade10 accepts its price. Each combination is priced in this order:
 
-```
-for each combination the combine rules allow
-  1  sale price      the price every step starts from
-  2  buy X get Y     the units it gives or buys take no other product cut
-  3  product cuts    one per line, the larger
-  4  order cuts      minimum read here · rates first, then fixed amounts
-keep the combination that takes the most off
-  5  points          what is left of qualifying goods, up to the balance
-  6  shipping        paid in money
-```
+1. **Sale Price** — the price every step starts from
+2. **Buy X Get Y** — the units it gives or buys take no other product cut
+3. **Product Cuts** — one per line, the larger
+4. **Order Cuts** — rates first, then fixed amounts
+   - **Minimum** — read on what the product cuts left, so a product coupon can take the basket under an order discount's minimum
 
-- **Minimum** — read on what the product cuts left, so a product coupon can
-  take the basket under an order discount's minimum
-- **Larger wins** — on a tie, the fewer discounts, then an automatic over a
-  code
-- **Points** — capped at the qualifying goods less the site discounts and
-  the code, and at the balance; an ask past it is trimmed —
-  [at the till](#the-sale-step-by-step) too
+- **Larger Wins** — the shop keeps the combination that takes the most off; on a tie, the fewer discounts, then an automatic over a code
+
+What it keeps is then paid:
+
+5. **Points** — up to the qualifying goods less the site discounts and the code, and up to the balance; an ask past it is trimmed — [at the till](#the-sale-step-by-step) too
+6. **Shipping** — paid in money
 
 ### One Discount at a Time
 
-- **In the count** — a discount code or a reward's coupon, one of them; a
-  second replaces the first in the [cart](/p/grade10-site/store/cart#promo-code)
-- **Outside the count** — points, free shipping and the site discounts
-- **Set aside** — a code the shop drops for a site discount that gives more
-  goes back to the member's wallet, the order goes through at the shop's
-  price, and the member is told
+- **In the Count** — a discount code or a reward's coupon, one of them; a second replaces the first in the [cart](/p/grade10-site/store/cart#promo-code)
+- **Outside the Count** — points, free shipping and the site discounts
+- **Set Aside** — a code the shop drops for a site discount that gives more goes back to the member's wallet, the order goes through at the shop's price, and the member is told
 - **Refused** — only a code the shop refuses outright stops the checkout
 
-:::detail{title="Pricing code map" for="engineer"}
-- **The shop's rules** — `priceDiscounts`, `packages/shopify/backend/src/money/discountPricing.ts`
-- **The cart's quote** — `packages/grade10-store/backend/src/services/orders/quote.ts`, `shopPricing.ts`, `tender.ts`
-- **The listing's read** — `packages/grade10-store/backend/src/services/catalog/siteDiscounts.ts`, `siteSaleOf` in `@grade10/store-frontend/catalog`
-- **Combine default** — `DEFAULT_COMBINES_WITH`, `@grade10/coupons-contracts`
+:::detail{title="Where the pricing runs" for="engineer"}
+- **The shop's rules** — the store's own model of how the shop's draft-order pricing combines and orders discounts, every rule read off the shop's answers to baskets priced on a dev shop; a basket no recorded answer covers is left to the shop to price
+- **Its readers** — the cart's quote and the listing's sale price
+- **Combine default** — the Combines with a coupon takes when its mint or reward states none, held once in the coupons contract
+- **Commerce architecture** — [docs/architecture/commerce.md](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 :::
 
 ## Where Each Shows
@@ -105,9 +95,7 @@ keep the combination that takes the most off
 | Gift | · | · | 🚧 A line at no charge | In the code's row | The code |
 | Points | · | · | · | `Points`, Remove | 🚧 `Deduction from Points` |
 
-- **Named** — among the product page's badges, by its title in the shop; the
-  listing card names none, and of two cuts on one card the larger shows —
-  [Product Listing](/p/grade10-site/store/product-listing)
+- **Named** — among the product page's badges, by its title in the shop; the listing card names none, and of two cuts on one card the larger shows — [Product Listing](/p/grade10-site/store/product-listing)
 
 ### Struck Price on a Cart Line
 
@@ -115,16 +103,13 @@ A line strikes one higher price, the first that applies:
 
 1. **Repriced** — the price the member saw before the shop repriced it
 2. 🚧 **On sale** — the compare-at price, where it is above the price
-3. **Cut by the shop** — the unit price before a product cut the shop
-   applied, such as a buy X get Y
+3. **Cut by the shop** — the unit price before a product cut the shop applied, such as a buy X get Y
 
 ### Cart Footer
 
 1. **Subtotal** · 小計 — the goods after the site discounts' product cuts
-2. **Order discount** — `Discount (<title>)` · `優惠 (<title>)`, one row
-   each, by its title in the shop, with no Remove
-3. **Code** — `Discount (<code>)` · `優惠 (<code>)`, the code or the
-   reward's title, with Remove
+2. **Order discount** — `Discount (<title>)` · `優惠 (<title>)`, one row each, by its title in the shop, with no Remove
+3. **Code** — `Discount (<code>)` · `優惠 (<code>)`, the code or the reward's title, with Remove
 4. **Points** · 積分 — with Remove
 5. **Shipping** · 運費 — calculated at checkout
 6. **Estimated Total** · 預計總額 — the subtotal less every row above it
@@ -217,37 +202,35 @@ With 2,000 points, an ask of 2,000 is trimmed to 1,250; the total is $0 and
 shipping is paid in money.
 :::
 
-## Online Draft Order Mechanism
+::story{id="store-cart-blocks-cartdrawerfooter-interactive--interactive-member" title="A code typed in the cart"}
 
-A Draft Order is created for each checkout, carrying at most one discount
-code, points and the site discounts it accepts:
-- **Discount code, order coupon, product coupon, or gift** (Shopify
-  Discount code) — whichever one the checkout carries, minted when it is
-  submitted; a percentage coupon keeps its own rate, which the shop takes
-- **Points** (order-wise discount)
-- **Shipping** ([Shipping](/p/grade10-site/store/shipping)) fee is determined by custom carrier service API, conditionally free
+## Online Checkout
 
-Nothing is held for a draft order: points and a discount code alike stay
-spendable until a paid order takes them.
+- **What a Checkout Carries** — at most one discount code, points, and the site discounts the shop applies
+  - **Discount Code** — whichever one the checkout carries, an order coupon, a product coupon or a gift, minted when the checkout is submitted; a percentage coupon keeps its own rate, which the shop takes
+  - **Points** — one discount off the order
+  - **Shipping** — the fee the store's own carrier rates set, free on some orders — [Shipping](/p/grade10-site/store/shipping)
+- **Nothing Held** — points and a discount code alike stay spendable until a paid order takes them
+- **The Newer Promise Retires the Older** — an online checkout, and a sale planned at a counter, each retire the member's earlier sales carrying points, a reward or one of the store's own coupons, whatever the newer one carries; a retired online order is cancelled, and the member's cart keeps its lines
+  - **A Retired Counter Sale Keeps Its Cart** — the shop owns that cart and it can still collect, so the sale is never cancelled; it takes no new plan
+  - **A Retired Counter Sale Gives Back Its Reward** — whatever reward it holds, the one the newer sale claims or another; its code is deactivated, and a gift's line stays on the cart — [Coupons](/p/grade10-site/loyalty/coupons)
 
-- **The newer promise retires the older** — an online checkout, and a sale planned at a counter,
-  each retire the member's earlier sales carrying points, a reward or one of the store's own
-  coupons, whatever the newer one carries; a retired online order is cancelled, and the
-  member's cart keeps its lines
-- **A retired counter sale keeps its cart** — the shop owns that cart and it
-  can still collect, so the sale is never cancelled; it takes no new plan
-- **A retired counter sale gives back its reward** — whatever reward it
-  holds, the one the newer sale claims or another; its code is deactivated,
-  and a gift's line stays on the cart — [Coupons](/p/grade10-site/loyalty/coupons)
+::story{id="store-order-detail-blocks-orderdetails--item-coupon" title="An order with a product coupon"}
 
+::story{id="store-order-detail-blocks-orderdetails--order-discount" title="An order with an order coupon"}
+
+:::detail{title="Draft order" for="engineer"}
+- **Draft Order** — the store opens one Shopify draft order for each
+  checkout and adds the code, the points and the site discounts it accepts;
+  the code is a Shopify discount code, the points an order-level discount
+- **Shipping Rates** — the shop asks the store's carrier service for the fee
+:::
 
 ## At the Till
 
-Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) puts the member's benefits on that cart, and the store records one order per till session. The cart decides what landed, never the plan.
-
-- **POS Pro only** — the shop's automatics are the POS cart's own, and one
-  reaches a counter only where its "Apply on POS Pro locations" switch is on,
-  off by default
+- **Till Cart** — Shopify POS rings the sale on its own cart; the store's POS extension, a home tile, puts the member's benefits on that cart
+- **One Order a Session** — the store records one order per till session, and the cart decides what landed, never the plan
+- **POS Pro Only** — the shop's automatics are the POS cart's own, and one reaches a counter only where its "Apply on POS Pro locations" switch is on, off by default
 
 ### The sale, step by step
 
@@ -287,6 +270,18 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
     - **Earning** is on the goods, as online
 :::
 
+:::callout{kind="note"}
+- ❓ **A sale that names no allocations** — settlement falls back to its
+  older reading: the variant alone corroborates a welded coupon, so a cut
+  staff took off still spends it, and the points capture is the applied total
+  less every other instrument, an adopted order code counting at the cut
+  recorded when its code was minted, and at its face value only for a code
+  minted before those records. A source that cannot name a cut cannot rule
+  one out either, so refusing there would free every coupon on every sale it
+  reports. Whether a POS sale ever reaches us that way: Engineering confirms
+  with Shopify POS
+:::
+
 ### Undo
 
 | Button | Where | What comes off | The shop's offer |
@@ -319,27 +314,10 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 - **A tender reaches stored value, and comes back only whole** — one discount over every line the shop sold, so a gift card on the sale is part-paid by points (`store.points_tender.gift_card_on_sale`) and nothing comes back while the card is kept; the member left short is counted (`store.points_tender.return_held`) and paid by hand
 :::
 
-- ❓ **A sale that names no allocations** — settlement falls back to what settlement read before the shop stated them — the variant alone corroborates a welded coupon, so a cut staff took off still spends it, and the points capture is the applied total less every other instrument, in which an adopted order code counts at the cut recorded when its code was minted, and at its face value only for a code minted before those records (grade10 `packages/grade10-store/backend/src/services/coupons/money.ts:92-98`). A source that cannot name a cut cannot rule one out either, so refusing there would free every coupon on every sale it reports; whether a POS sale ever reaches us that way is the open part, for engineering to confirm with Shopify POS.
-
 ### Switches
 
-Per shop, flipped from the admin console, enforced on the next request: terminal, email spend, phone identify, phone spend, cart identify, cart spend. The QR carries no switch of its own, so stopping the counter means the terminal switch.
-
-## Designs
-
-::story{id="store-cart-blocks-cartdrawerfooter-interactive--interactive-member" title="A code typed in the cart"}
-
-::story{id="store-order-detail-blocks-orderdetails--item-coupon" title="An order with a product coupon"}
-
-::story{id="store-order-detail-blocks-orderdetails--order-discount" title="An order with an order coupon"}
-
-:::detail{title="Draft order" for="engineer"}
-- **Where** — `packages/grade10-store/backend/src/services/coupons`,
-  `services/pointsTender.ts`, `adapters/shopify/shopifyProvider.ts`,
-  `services/shipping/rates.ts`, `worker/routes/carrier.ts`,
-  `packages/shopify/backend/src/admin/draftOrders.ts`,
-  `packages/shopify/backend/src/admin/discounts.ts`
-:::
+- **Per Shop** — flipped from the admin console, enforced on the next request: terminal, email spend, phone identify, phone spend, cart identify, cart spend
+- **Stopping the Counter** — the terminal switch; the QR carries no switch of its own
 
 :::detail{title="Product decisions" for="pm"}
 A draft order can now accept Shopify's own automatic discounts, added to
