@@ -1,8 +1,8 @@
 ## 1. The block (grade10-spec) (owner: @tangconst)
 
 - [x] 1.1 Create `packages/ui/src/blocks/loyalty-top-ups/top-up-pack-card.tsx`
-      composing `RadioCard`, `Badge` and the tooltip: points count, price,
-      struck list price and save badge where supplied, disabled reason in
+      composing `RadioCard` and the tooltip: points count, price, the
+      paid-plus-bonus line where supplied, disabled reason in
       the accessible name and a tooltip
       `grade10-site-loyalty-programme-SC-363`, `grade10-site-loyalty-programme-SC-364`
 - [x] 1.2 Re-export `TopUpPackCard`, `TopUpPackCardCopy` and

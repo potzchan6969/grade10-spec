@@ -48,28 +48,29 @@ export const packPrice = (pack: TopUpPack) =>
 
 export const TOP_UP_COPY = {
   title: "Top Up Points",
+  subtitle:
+    "1 point equals HK$1 off at checkout, or swap them for rewards and coupons.",
 
   packsLegend: "Choose a pack",
   packPoints: (value: number) => value.toLocaleString("en-US"),
   packPointsSuffix: "points",
-  packCardUnit: "pts",
+  packCardUnit: "pt",
   packPrice: hkd,
-  packPaidPoints: (value: number) => value.toLocaleString("en-US"),
-  packBonus: (value: number) =>
-    `+${value.toLocaleString("en-US")} bonus points`,
+  packBonus: (value: number) => value.toLocaleString("en-US"),
   packOverLimit: "Over today’s limit",
 
-  /** One line under the button once a pack is picked: where the balance
-   *  lands. */
-  selectedLabel: "Balance",
+  /** The member's current balance beside the button before a pack is
+   *  picked; once one is, where the balance lands. */
+  balanceLabel: "Balance",
+  selectedLabel: "Balance after top-up",
   selectedTo: "to",
-  selectedBefore: (value: number) => value.toLocaleString("en-US"),
-  selectedAfter: (value: number) => `${value.toLocaleString("en-US")} points`,
+  selectedBefore: (value: number) => `${value.toLocaleString("en-US")} pt`,
+  selectedAfter: (value: number) => `${value.toLocaleString("en-US")} pt`,
 
   continue: "Pay Now",
   pay: hkd,
-  opening: "Opening checkout…",
-  paymentNote: "Secure checkout by Stripe",
+  opening: "Redirecting…",
+  paymentNote: "Secured by Stripe",
 
   /* Refusals are toasts on the way in, never dialog content. */
   limitReached: {
