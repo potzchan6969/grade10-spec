@@ -502,3 +502,27 @@ test("a rename refuses a target the page does not hold yet", () => {
   assert.match(suite, /## order-detail#product-pictures: Pictures/);
   assert.match(suite, /\*\*Trace:\*\* order-detail#product-pictures$/m);
 });
+
+test("a section trace warns where the section names rules", () => {
+  const suite = (rule) =>
+    store({
+      "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
+      [`${PRD}/order-detail.md`]: `${PAGE}\n- ${rule}**Picture** — the item's photo\n`,
+      [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+        "**Capabilities:** grade10-site/store/order-detail",
+        "",
+        "## order-detail#product-pictures: Product Pictures",
+        "",
+        "### g10.store-order-detail.TC1: Each item shows its picture",
+        "",
+        ...STORE_PROPS("order-detail#product-pictures"),
+      ]),
+    });
+  const named = out(suite(""));
+  assert.equal(named.status, 0, named.text);
+  assert.match(
+    named.text,
+    /traces the section `order-detail#product-pictures`, which names rules/,
+  );
+  assert.doesNotMatch(out(suite("❓ ")).text, /which names rules/);
+});

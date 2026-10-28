@@ -249,6 +249,16 @@ export function checkStoreSuite(
         continue;
       }
       if (tc.props.has("Retired")) continue;
+      if (
+        anchor !== undefined &&
+        rule === undefined &&
+        [...sections.get(anchor).values()].some(({ open }) => !open)
+      )
+        report(
+          "warning",
+          trace.line,
+          `case \`${tc.id}\` traces the section \`${target}\`, which names rules — trace each rule it walks, the one it proves first`,
+        );
       if (!traced.has(page)) traced.set(page, new Set());
       traced
         .get(page)
