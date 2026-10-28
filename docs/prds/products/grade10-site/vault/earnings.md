@@ -144,8 +144,10 @@ and a year credits exactly HK$180.00, what the year earned.
   waived
 - 🚧 **Seen before it is owed** - the owner sees the fee, and what a withdrawal
   costs them in incentive, before they confirm
-- 🚧 **A refund after the card has left** - is recorded on the card and staff
-  are alerted; nothing is taken back from the owner on its own
+- 🚧 **A refund** - staff are alerted as soon as the shop hears of it. Before
+  the card leaves, the release reads the fee again and holds the card; after,
+  it is recorded on the card when staff check its payment, and nothing is
+  taken back from the owner on its own
 
 :::detail{title="Code map" for="engineer"}
 - **The case** - `vault.deposits` is the case; each card is a one-card vault
