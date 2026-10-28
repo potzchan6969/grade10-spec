@@ -13,16 +13,16 @@ answers without a session, like any public surface —
 
 ## The Page
 
-- 🚧 **Header** — a PRESS eyebrow over "Press Releases" and the
+- **Header** — a PRESS eyebrow over "Press Releases" and the
   official-record intro: the card festivals, the vault, the
   partnerships, and the growth of Asia's trading-card market
-- 🚧 **Year filter** — an All Time dropdown at the header's foot carries
+- **Year filter** — an All Time dropdown at the header's foot carries
   one option per year the record holds and narrows the list to the
   chosen year
-- 🚧 **The record** — the releases grouped under year headings, 2026
+- **The record** — the releases grouped under year headings, 2026
   before 2025, each newest first; every row — date, title, arrow — is
   the link to its `/press-releases/{slug}` article
-- 🚧 **Responsive** — wide viewports lay the filter beside the intro and
+- **Responsive** — wide viewports lay the filter beside the intro and
   each release as a date-title-arrow row; narrow viewports stack the
   filter under the header and each date over its title
 - **Article header** — a Press breadcrumb back to the record over the

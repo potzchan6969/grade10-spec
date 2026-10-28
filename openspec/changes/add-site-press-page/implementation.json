@@ -33,5 +33,15 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "9707380ddccc7e2d78429d2fed31335810ea8318",
+      "components": [
+        "storybook"
+      ],
+      "verifiedBy": "seankcw",
+      "verification": "The Press page, its content, its stories and the workbench route are on the store's main; the page files last changed at 7d0de2051. At this commit `tsc -b` on apps/preview, `tsc` on @grade10/ui and `pnpm storybook:check` pass in a clean install. The workbench play pass was not re-run locally. No grade10 application source is part of this change."
+    }
+  ]
 }
