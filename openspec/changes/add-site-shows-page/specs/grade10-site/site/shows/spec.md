@@ -176,10 +176,8 @@ sideways.
   SHALL be reachable, and the page SHALL NOT scroll sideways
 
 ### Requirement: Every link leads to its named surface
-Each link on the Shows surface SHALL lead to the surface it names: the
-hero Press Releases button to `/press-releases`, and each Press Release
-link, the Seoul Auction × ZZZ chapter's included, to that
-press-release article. The links ship with the page and open their
+Each link on the Shows surface SHALL lead to the destination the table
+below names. The links ship with the page and open their
 addresses before the press index and articles land in their follow-on
 change; what an address shows is the press surfaces' own:
 
