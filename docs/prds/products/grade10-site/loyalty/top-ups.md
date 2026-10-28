@@ -50,6 +50,8 @@ A member buys points in packs an operator sets.
 | Paused | This member's top-ups are paused; why is the operators' to read |
 | Off sale | The pack is no longer on sale |
 | Over today's cap | The pack would pass today's top-up cap; the member reads what is left today |
+
+❓ the wireframe's refused pack only says it is over today's limit; whether it also names the remaining allowance is open (Product, Designer)
 | Not opened | Stripe would not open a checkout; nothing was charged |
 
 :::example{title="A pack bought"}
