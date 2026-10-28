@@ -32,7 +32,7 @@ A member buys points in packs an operator sets.
 - **Came back without paying** — the checkout ends at once, and its share of
   the day is free again
 - **Receipt** — Stripe's own email, to the address the member is signed in
-  with; the member's top-up history links it
+  with; the member's points history links it on the entry
 - **Account deleted** — an open checkout or a held pack closes with nothing
   charged; a payment that lands after is flagged for an operator to refund
 - **Told before paying** — checkout says a pack is never refunded, cashed

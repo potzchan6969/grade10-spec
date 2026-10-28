@@ -24,7 +24,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { TopUpPackCard } from "@grade10/ui";
 import { ArrowRight, CircleNotch, ShieldCheck } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
-import { storyHref } from "../workbench-story-nav";
+import { MEMBERSHIP_STORY_ID, storyHref } from "../workbench-story-nav";
 import {
   packPrice,
   REVIEW_THRESHOLD,
@@ -34,10 +34,6 @@ import {
   type TopUpPack,
   UNDER_REVIEW_REFERENCE,
 } from "./top-ups/top-ups-content";
-
-/** Top-Up History, where a held top-up shows until a Grade10 email exists. */
-const TOP_UP_HISTORY_STORY_ID =
-  "loyalty-top-ups-screens-top-up-history--default";
 
 const copy = TOP_UP_COPY;
 const resultCopy = TOP_UP_RESULT_COPY;
@@ -378,7 +374,7 @@ function TopUpFlow({
         onOpenChange(false);
         if (pack.points > REVIEW_THRESHOLD) {
           topUpResultToast("under-review", {
-            historyHref: storyHref(TOP_UP_HISTORY_STORY_ID),
+            historyHref: storyHref(MEMBERSHIP_STORY_ID),
           });
         } else {
           topUpResultToast("added", {

@@ -1,6 +1,10 @@
 import { Toast } from "@grade10/design-system/components/overlays/toast";
 import { useEffect } from "react";
-import { navigateToStory, storyHref } from "../../workbench-story-nav";
+import {
+  MEMBERSHIP_STORY_ID,
+  navigateToStory,
+  storyHref,
+} from "../../workbench-story-nav";
 
 import {
   TopUpConfirming,
@@ -12,12 +16,6 @@ import { TopUpsBreadcrumbs, TopUpsPageShell } from "./top-ups-shared";
 
 /** Back to the pack picker the member came from. */
 const TOP_UP_DIALOG_STORY_ID = "loyalty-top-ups-screens-top-up-dialog--default";
-
-/** Top-Up History, where a held top-up shows until a Grade10 email exists. */
-const TOP_UP_HISTORY_STORY_ID =
-  "loyalty-top-ups-screens-top-up-history--default";
-
-const TOP_UP_HISTORY_HREF = storyHref(TOP_UP_HISTORY_STORY_ID);
 
 /**
  * Where the member lands back from Stripe's hosted checkout — the
@@ -31,7 +29,7 @@ function TopUpResultPrototype({ state }: { state: TopUpResultState }) {
     topUpResultToast(state, {
       addedPoints: 1000,
       balanceAfter: 2200,
-      historyHref: TOP_UP_HISTORY_HREF,
+      historyHref: storyHref(MEMBERSHIP_STORY_ID),
       onRetry: () => navigateToStory(TOP_UP_DIALOG_STORY_ID),
     });
   }, [state]);

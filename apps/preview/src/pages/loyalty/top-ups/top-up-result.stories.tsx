@@ -57,7 +57,7 @@ export const UnderReview: Story = {
       overlay.getByText(/charged only if it’s approved.*TU-2026-0384/),
     ).toBeVisible();
     expect(
-      overlay.getByRole("button", { name: "View Top-Up History" }),
+      overlay.getByRole("button", { name: "View in Points History" }),
     ).toBeVisible();
   },
 };
