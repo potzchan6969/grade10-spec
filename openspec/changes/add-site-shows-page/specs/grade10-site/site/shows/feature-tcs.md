@@ -502,9 +502,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-site-shows-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/src/routes/shows.test.ts`
 
 **Pre-conditions:**
 
@@ -630,9 +632,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-shows-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/src/routes/shows.test.ts`
 
 **Pre-conditions:**
 
