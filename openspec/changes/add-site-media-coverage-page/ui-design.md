@@ -18,7 +18,9 @@
   instance's bindings: `radius-3xl`, `gap-6` padding, `size-56` minimum
   height, and `border-strong` with a soft shadow and 4px lift on hover.
   The published set binds `radius-2xl`/`gap-4`; the override is recorded
-  in `decisions.md`.
+  in `decisions.md`. The hover shadow is a weakened house shadow,
+  `0 4px 16px -4px` of `--shadow-color`, and the publication label is
+  `secondary-foreground`.
 - `ArrowUpRight` from `@phosphor-icons/react` — the affordance's icon.
 - Plain anchors for the cards — the whole card is the link; no new
   primitive.
@@ -35,3 +37,4 @@
 | Long entry | The publication truncates to one line, the title clamps — three lines on small viewports, four at `sm`; every card holds one height | **Out of suite:** CSS truncation on the card the coverage requirement already binds |
 | Entering | Header and grid reveal on mount | **Out of suite:** the workbench stories' play pass waits on the reveal before asserting |
 | Reduced motion | All content visible immediately, no transition | **Out of suite:** the workbench's `data-storybook-pause-motion` harness, which the page's `motion-reduce` fallback answers |
+| Nothing published | The header block over an empty grid, no message | `grade10-site-site-media-coverage-SC-06` |

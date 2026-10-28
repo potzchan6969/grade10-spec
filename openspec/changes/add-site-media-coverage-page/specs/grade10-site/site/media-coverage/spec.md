@@ -64,3 +64,43 @@ destination.
 - **WHEN** a collector opens a media card
 - **THEN** that story's page on the publisher's site SHALL open in a new
   tab
+- **AND** the card's publication, title, and Read article affordance
+  SHALL each open that same destination
+
+### Requirement: The cards keep the published order
+The Media Coverage surface SHALL run the cards in the order the Admin
+Portal publishes them.
+
+<!-- trace:scenario id=g10.site-media-coverage.SC-h4k rev=1 -->
+#### Scenario: grade10-site-site-media-coverage-SC-05 - The cards follow the published order
+**Serves:** grade10-site-site-media-coverage-US-01 - Collector scans the media coverage
+
+- **GIVEN** the Admin Portal has published several stories in a set order
+- **WHEN** a collector opens `/media-coverage`
+- **THEN** the media cards SHALL run in that order
+
+### Requirement: A page with no coverage shows the header alone
+While the Admin Portal has published no coverage, the Media Coverage
+surface SHALL show the header block over an empty grid, with no
+message.
+
+<!-- trace:scenario id=g10.site-media-coverage.SC-q7m rev=1 -->
+#### Scenario: grade10-site-site-media-coverage-SC-06 - No coverage is published
+**Serves:** grade10-site-site-media-coverage-US-01 - Collector scans the media coverage
+
+- **GIVEN** the Admin Portal has published no coverage
+- **WHEN** a collector opens `/media-coverage`
+- **THEN** the page SHALL show the heading block and no media cards
+- **AND** the page SHALL show no empty-state message
+
+### Requirement: A card marks a story in another language
+A media card whose story is written in another language SHALL mark that
+language on the card's link.
+
+<!-- trace:scenario id=g10.site-media-coverage.SC-w2d rev=1 -->
+#### Scenario: grade10-site-site-media-coverage-SC-07 - A story in another language is marked
+**Serves:** grade10-site-site-media-coverage-US-02 - Collector opens a story
+
+- **GIVEN** a published story is written in another language
+- **WHEN** a collector views its media card
+- **THEN** the card's link SHALL mark the story's language
