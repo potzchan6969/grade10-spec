@@ -10,7 +10,7 @@
   `allow="autoplay"` in `shows-event-video.tsx`): the production chrome, the four sections in order, the upcoming-shows card,
   the statistic cards, the sticky chapter tab list as jump navigation, the
   poster-first video containers, the edition carousels, the
-  press-release destinations table, the records in frame order, and the
+  press-release destinations table, the records in the order the content gives, and the
   wide/narrow layouts (`g10.site-shows.SC-01`, `g10.site-shows.SC-02`,
   `g10.site-shows.SC-03`, `g10.site-shows.SC-04`, `g10.site-shows.SC-05`,
   `g10.site-shows.SC-06`, `SC-07`, `SC-09`, `SC-10` and `SC-13`)
@@ -26,7 +26,7 @@
   published, the reader's language, the base-text fallback): the site's
   `showsPageOf` mapper tests, and route loader tests for the not-found answer
   and the Hong Kong clock (`dayValue(new Date(), config.timeZone)`) where
-  none exists yet, linked from the group's landing summary
+  none exists yet, linked from the pull request
 
 ## 2. The walk (grade10-spec)
 
@@ -43,5 +43,5 @@ workbench stories.
 - [ ] 2.4 Flip the cases the walks decide with
   `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks'
   own commit; the ones that stay manual are named in the suite and in the
-  walk's `rounds.md` row
+  walk's record in the pull request
 - [ ] 2.5 Verify: `pnpm run tcs:validate`

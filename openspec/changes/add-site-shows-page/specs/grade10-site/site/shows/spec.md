@@ -27,7 +27,8 @@ and the record of every show — and where each link on it leads.
   - Edition carousels page through the edition's photos with arrows and
     progress dots
 - Where the links lead
-  - Press Releases opens `/press-releases`
+  - Press Releases opens `/press-releases` (every address here is at the
+    reader's language)
   - Each edition's Press Release, and a chapter's, opens
     `/press-releases/{slug}` once that release is published; an edition
     without one leads to `/press-releases` and a chapter shows no link
@@ -87,8 +88,8 @@ when no show is current or upcoming.
 - **THEN** Hong Kong SHALL present Grade10 FEST HK over a video poster and
   the Grade10 FEST Summer 2026 and Grade10 Festival 2025 edition cards,
   the latter reading NOV 2025; Overseas Partnership SHALL present Seoul
-  Auction × ZZZ over a captioned photo and a Press Release link; and
-  Chinese Mainland SHALL present CARDJOY × Grade10 over a video poster and
+  Auction × ZZZ over a captioned photo and a Press Release link, with no
+  edition cards; and Chinese Mainland SHALL present CARDJOY × Grade10 over a video poster and
   the Shanghai and Hangzhou edition cards
 - **AND** every edition card SHALL show a photo carousel, a date, a
   description and a Press Release link
@@ -158,7 +159,7 @@ that one.
 
 ### Requirement: The page fits the viewport
 On a wide viewport the Shows surface SHALL lay the hero beside the
-Upcoming Shows card, the statistics beside the photo, the editions side by
+Upcoming Shows card while it shows, the statistics beside the photo, the editions side by
 side,
 and each record's image beside its text; on a narrow viewport it SHALL
 stack every section at the page inset, each record's image over its text,
@@ -169,7 +170,8 @@ sideways.
 #### Scenario: grade10-site-site-shows-SC-02 - The page splits into columns on a wide viewport
 **Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
 
-- **WHEN** a collector opens `/shows` on a wide viewport
+- **WHEN** a collector opens `/shows` on a wide viewport while at least
+  one show is current or upcoming
 - **THEN** the hero SHALL sit beside the Upcoming Shows card, the
   statistics SHALL sit beside the photo, editions SHALL sit two per row,
   and records SHALL lay image beside text
@@ -184,9 +186,11 @@ sideways.
   SHALL be reachable, and the page SHALL NOT scroll sideways
 
 ### Requirement: Every link leads to its named surface
-The hero Press Releases button SHALL lead to `/press-releases`. A Press
+Every address on this surface, and the page's own, SHALL be at the
+address of the reader's language. The hero Press Releases button SHALL
+lead to `/press-releases`. A Press
 Release link on an edition or a chapter SHALL lead to that release's
-`/press-releases/{slug}` article, at the address of the reader's language,
+`/press-releases/{slug}` article,
 only when the release is published on the site; an edition whose release is not published SHALL lead to
 `/press-releases` instead, and a chapter whose release is not published
 SHALL show no link. The workbench's sample content links:

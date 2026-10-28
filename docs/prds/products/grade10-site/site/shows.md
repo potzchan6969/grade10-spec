@@ -40,7 +40,8 @@ answers without a session, like any public surface —
   published, in the reader's language, falling back to the base text for what is not
   translated; nothing published answers not
   found rather than an empty page
-- 🚧 **Responsive** — wide viewports draw the two-column hero, stats
+- 🚧 **Responsive** — wide viewports draw the two-column hero while the Upcoming Shows card
+  shows, stats
   beside the photo, and editions side by side; narrow viewports stack
   everything at the page inset
 
@@ -56,9 +57,9 @@ it sends to `/press-releases` and its press articles.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Chapter tab semantics | Decided | The pill list is jump navigation over stacked chapters — a click scrolls to the chapter, a scroll-spy moves the active link; it is not exclusive panels. | Product |
-| Seoul Auction partner name | Decided | ZZZ is the real partner name — the chapter, the record and the upcoming card read Seoul Auction × ZZZ. | Product |
+| Seoul Auction partner name | Decided | ZZZ is the real partner name — wherever the published content names the Seoul partner it reads ZZZ — today the chapter, the record and an upcoming entry. | Product |
 | Upcoming Shows entries | Decided | The card lists shows whose month has not passed; an entry that has run out drops off rather than reads as upcoming, and the card leaves the hero when none remain. | Product |
-| Grade10 Festival 2025 date | Decided | The edition card reads NOV 2025, the live page's date and the record's year; the frame's NOV 2026 is design's to sync back. Rejected NOV 2026: it dates a 2025 show in the future. | Product |
+| Grade10 Festival 2025 date | Decided | Grade10 Festival 2025 is published as NOV 2025 (today), the live page's date and the record's year; the frame's NOV 2026 is design's to sync back. Rejected NOV 2026: it dates a 2025 show in the future. | Product |
 | Hero card label | Decided | "Upcoming Shows" — the live page's label; the frame's LATEST SHOWS described the row, not its rule. | Product |
 | Video and poster provenance | Decided | The YouTube ids, posters, editions and statistics are what the admin publishes; the headings and button words are code. Both reach the shared `ShowsPageBody` block as `content` and `copy`. | Product |
 | Navigation entry | Decided | Shows joins the primary navigation ahead of Help — after Store Locator when that item is present, after Auction on auction-first — and the footer's Company column; the header marks it current on `/shows`. Rejected a footer-only entry: of the company pages, Shows is the one a collector comes looking for. | Product (@tangconst) |

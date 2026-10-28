@@ -70,7 +70,9 @@ are, the formats they run in, and the record of past editions,
 * **Trace:** grade10-site-site-shows-US-01
 
 **Pre-conditions:**
-None.
+
+* At least one show the Upcoming Shows card carries falls in the current
+  month or later.
 
 **Steps:**
 
@@ -185,7 +187,7 @@ None.
 
 | Field | Value |
 | --- | --- |
-| `records` | the records the admin published, in the order the admin gave them (range: one or more); today five: Seoul Auction Private Sale & Exhibition (2026), Grade10 FEST Summer 2026 (2026), CARDJOY × Grade10 Shanghai (2026), CARDJOY × Grade10 Hangzhou (2026), Grade10 Festival 2025 (2025) |
+| `records` | the records the admin published, in the order the admin gave them (range: one or more); in the sample, five: Seoul Auction Private Sale & Exhibition (2026), Grade10 FEST Summer 2026 (2026), CARDJOY × Grade10 Shanghai (2026), CARDJOY × Grade10 Hangzhou (2026), Grade10 Festival 2025 (2025) |
 
 **Steps:**
 
@@ -233,7 +235,7 @@ None.
   edition cards: Grade10 FEST Summer 2026 and Grade10 Festival 2025.
 * The Grade10 Festival 2025 card reads NOV 2025.
 * Overseas Partnership introduces Seoul Auction × ZZZ over a photo
-  with its caption and a Press Release link.
+  with its caption and a Press Release link, and no edition cards.
 * Chinese Mainland introduces CARDJOY × Grade10 over a video poster and
   two edition cards: Shanghai and Hangzhou.
 * Every edition card shows a photo carousel, a date, a description and a
@@ -735,10 +737,10 @@ opening a new tab.
 ## Settled
 
 - A chapter with no video or photo shows its title, intro and editions with no presentation (Q25).
-- The Festival 2025 card reads NOV 2025, the live page's date (Q7).
+- Grade10 Festival 2025 is published as NOV 2025 in the sample, the live page's date (Q7).
 - The chapter tabs are jump navigation over stacked chapters (Q1).
 - The Shows chrome entry belongs to `navigation`, not to this page (Q6).
-- The Seoul partner is ZZZ wherever the page names it (Q8).
+- The Seoul partner is ZZZ wherever the published content names it (Q8).
 - The page's content is what the admin publishes, in the reader's language; the section copy and button words are code (Q9).
 - A Press Release link opens its `/press-releases/{slug}` article only once that release is published; an edition without one leads to `/press-releases`, and a chapter without one shows no link (Q10).
 - The Upcoming Shows card judges a show's month by the date in Hong Kong, whatever the viewer's time zone (Q11).
