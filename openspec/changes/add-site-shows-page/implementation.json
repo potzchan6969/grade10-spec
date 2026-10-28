@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "d19bb302a10af9f1a7c871b7d6fb1a1833818952f4b7c12e5b227d6ae7a86e37"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "fe9da3c433b3f93ba2b91bb65675734bb6ef5ebb",
+    "capturedAt": "2026-10-28T05:21:28.514Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-site-shows-page/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/shows/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/shows/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Carousels page the edition's photos",
+          "Requirement: Every link leads to its named surface",
+          "Requirement: The chapter list jumps to its chapter",
+          "Requirement: The page fits the viewport",
+          "Requirement: The page presents the events",
+          "Requirement: The page shows what is published",
+          "Requirement: The records read in the published order",
+          "Requirement: Videos play inside the page"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/shows/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

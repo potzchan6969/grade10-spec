@@ -1,4 +1,4 @@
-## 1. The Shows page in the workbench (grade10-spec)
+## 1. The Shows page in the workbench (grade10-spec) (owner: @seankcw)
 
 - [ ] 1.1 The `Site/Shows/Screens/Shows` stories' play pass asserts the
   sections, the link destinations, the video swap, the carousel paging and
