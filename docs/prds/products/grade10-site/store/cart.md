@@ -164,50 +164,15 @@ The drawer serves a collector who wants to check the cart, and what a code
 and points do to it, without leaving the product or collection they are
 considering. Its value is a total they can trust before they go to pay.
 
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Signed-in collector | Opens Cart from the header on any surface | Sees what a code and points take off, and carries the choice to checkout. |
-| Signed-out collector | Presses Add to cart, then Cart | Builds a cart in this browser and checks out as a guest. |
-| Collector whose cart moved | Opens Cart before checkout | Sees current facts or a clear unresolved state, never a stale claim. |
-
-**Not in scope.** A dedicated cart page. Variant-specific pictures. Shipping
-and tax before the invoice. A second code on one cart.
-
-**Measurement.**
-
-| Signal | Definition | Owner |
-| --- | --- | --- |
-| Drawer-to-checkout sessions | Share of sessions that open Cart and proceed to checkout without first navigating there. | Product |
-| Failed open reviews | Share of drawer opens whose current-cart read cannot complete. | Engineering |
-| Refused tender | Share of quotes whose code or points were refused, by reason. | Engineering |
-
-**Decisions.**
-
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Overlay, not page | Decided | Cart stays attached to the browsing moment; a new route would make the collector leave before the drawer solves anything. | Product |
-| Global cart | Decided | Once Store answers the cart drawer, Cart stays in the header on every surface (including Auction), not only Store and checkout — so checkout stays one tap away. Absent only on auction-first while that drawer does not answer. Page-shell owns the control; this page owns the drawer. | Product |
-| Pending actions | Decided | The drawer waits for its reads and writes before accepting another action, rather than disabling Checkout alone. | @kinisworking |
-| Pending dismissal | Decided | Close, backdrop click and Escape remain available while an operation is pending, so a slow request does not trap the collector. Chosen over disabling dismissal. | @kinisworking |
-| Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
-| Product pictures | Decided | Use the product's first picture, as the collection card does, from the current cart read. Chosen over variant-specific pictures or pictures held with the cart, which can differ from the catalogue. | Product |
-| Guest cart | Decided | A signed-out collector's cart is kept in this browser and checked out as a guest; signing in moves its lines into the member's cart. Supersedes one session scope. | Product |
-| Session ends with the drawer open | Decided | The drawer closes by itself, with no message, when the member's session ends in another tab of this site or expires. Chosen over leaving it open and empty, which reads as a cart with nothing in it beside a header that says Sign In. Decided 2026-10-09. | Product |
-| A guest's open drawer | Decided | A guest's drawer stays open when the session reads as signed out; only a member's session ending closes the drawer. Decided by the round. | Product |
-| A direct member switch | Decided | A switch the tab reads directly from one member to another keeps the drawer open on the new member's cart; a signed-out reading between them closes it. Decided by the round. | Product |
-| Checkout after session expiry | Decided | An expired member session closes the drawer; what checkout asks next remains Checkout's decision. Confirmed by @seankcw, 2026-10-16. | Product |
-| Sign-out and sign-in in another tab | Decided | A member's drawer closes when this tab reads the signed-out step between the two members and stays closed until Cart is opened again. Confirmed by @seankcw, 2026-10-16. | Product |
-| Sign-in from the guest drawer | Decided | A sign-in started from the guest drawer's Sign in link reopens that drawer; a sign-in started elsewhere does not. Decided by the round. | Product |
-| One quote | Decided | The drawer reads one store quote - the lines, the one code or reward, points after it - using the same arithmetic the server rechecks at Pay. | Product |
-| Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. Promo editing stays: typed, picked and removed codes cut the total. Display-only promo is not this drawer. | Product |
-| Held list | Decided | The member's own store codes and reward coupons, plus public codes, answered before they are picked; a guest's list holds the public codes only. | Product |
-| Expiring promo detail | Decided | The cart picker emphasises only the “Use by” detail for a live promo within its last 14 days; the discount title and detail copy remain separate. Confirmed by the designer and PM, 2026-10-27. | Product |
-| Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
-| Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
-| Shipping | Decided | Unknown until the invoice; the estimated total is the goods after the site discounts and this store's own tender. | Product |
-| Priced by the shop | Decided | The drawer asks the shop to price the basket the way its checkout will, site discounts and the chosen code together, so a code the drawer shows as applied is applied at checkout. The held list is still answered by the store's own rules, because asking the shop once per held code on every edit is too many calls; the chosen code is the one the shop answers. | Product |
-| Checkout creation | 🚧 In flight | The drawer creates checkout directly and redirects to Shopify's hosted invoice; there is no separate `/checkout` page. | Engineering |
-| Verification before a session | Decided | Dropped 2026-10-13. Grade10 never required a sign-in or a verified identity for a checkout at HKD 120,000; Proceed to Checkout runs at any value. | Product |
-| Public codes | Decided | Public codes — codes open to everyone — are listed to guests and members alike — [Discounts](/p/grade10-site/store/discounts#public-codes). Decided 2026-10-13; supersedes the rule that the store mints every code to one member and the cart neither lists nor takes a public code (2026-10-12). | Product |
-| The choice on a second visit | Decided | The cart holds which code and how many points the member means to use, so a choice survives a reload and reaches another device. The cart holds the choice, never the figures: those stay the store's, read against the cart as it stands. | Product |
+- **Overlay, not page** — the cart stays attached to the browsing moment; a new route would make the collector leave before the drawer solves anything
+- **Cart in the header everywhere** — on every surface the drawer answers, Auction included, so checkout stays one tap away
+- **Wait, rather than disable Checkout alone** — the drawer waits for its reads and writes before accepting another action
+- **Dismissible while pending** — close, backdrop and Escape stay available, so a slow request does not trap the collector; chosen over disabling dismissal
+- **The product's first picture** — as the collection card shows it, from the current read; variant pictures, or pictures held with the cart, can differ from the catalogue
+- **Closes when the session ends** — chosen over leaving it open and empty, which reads as a cart with nothing in it beside a header that says Sign In
+- **Another member's code** — answered as a code nobody minted, so a typed code tells nobody whose wallet it is in
+- **Priced by the shop** — the shop prices the basket as its checkout will, so a code shown as applied is applied at checkout; the held list stays on the store's own rules, because asking the shop once per held code on every edit is too many calls
+- **Not in scope** — a dedicated cart page; variant-specific pictures; shipping and tax before the invoice; a second code on one cart
+- **Measured by** — drawer-to-checkout sessions, as Cart Opened then Checkout Started — [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events)
+  - ❓ **Unmeasured** — failed open reviews, and refused codes and points by reason; nothing records them yet. Engineering confirms
 :::

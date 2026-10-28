@@ -342,43 +342,22 @@ Per shop, flipped from the admin console, enforced on the next request: terminal
 :::
 
 :::detail{title="Product decisions" for="pm"}
-A draft order can now accept Shopify's own automatic discounts
-(`acceptAutomaticDiscounts`), added to Shopify's API after this store's
-original discount design; that removes the reason site discounts and reward
-coupons needed a discount engine of grade10's own.
+A draft order can now accept Shopify's own automatic discounts, added to
+Shopify's API after this store's original discount design; that removes the
+reason site discounts and reward coupons needed a discount engine of
+grade10's own.
 
-Non-goals: an admin screen in grade10 for authoring site discounts —
-merchandisers author them in Shopify Admin directly, the same place Sale
-price already lives.
-
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Mechanism | Decided | Site discounts are Shopify's own automatic discounts, authored in Shopify Admin; grade10 only accepts them on the draft order. | Product |
-| Reward coupon transport | Decided | Online, a product coupon rides as a Shopify Discount too, minted when the checkout is submitted, the same as an order coupon. At the till a gift is its own line discounted to nothing: a code as well would take the benefit twice and use the order's one code slot. | Product |
-| Gift channel | Decided | A gift, a reward's or the store's own, is handed over at the till alone, whatever channels it names; online refuses it as the wrong channel. Its line comes back off a sale rung below its minimum spend. | Product |
-| Coupon precedence | Decided | A checkout eligible for more than one coupon has the collector pick the one to apply — the order's one discount-code slot takes only one. | Product |
-| One code slot | Decided | One coupon per order, by choice, to keep the sale simple — a free reward and a money-off coupon are two sales. The picker isolates the rule, so a later change can widen it without deleting the one-slot logic. | Product |
-| Site discount beside a coupon | Decided | Shopify's own combine rules decide; grade10 accepts what the shop priced. A coupon the shop sets aside for a larger site discount goes back to the wallet and the order completes, never fails. | Product |
-| Combine setting | Decided | Each coupon's definition states what it stacks with — a reward's definition, or the operator's mint of a store coupon — with a store default where none is stated. | Product |
-| Nothing is held | Decided | Points and coupons alike stay spendable until a paid order takes them. A claim takes the instrument off every earlier sale first, so a member is never locked out of their own coupon by a draft or a sale they walked away from. The one refusal left is a sale that cannot let go: an online checkout the provider reports collected or will not close, which can still collect and still carries the cut, or a sale still being submitted with the coupon. | Product |
-| A retired counter sale | Decided | The shop owns that cart and it can still collect, so a newer promise retires the sale and never cancels it. Whatever reward it holds comes off and its code is deactivated, so no coupon is ever locked to a counter. The shop goes on honouring a code a cart already carries, so what keeps that honest is the settlement: a sale is spent against what it actually carried. A cut it gave for a coupon the order had given up spends the coupon where no other sale claims it, and is reported either way rather than taken twice. | Product |
-| Price preview | Decided | The cart drawer reads one store quote that the shop prices — its site discounts and the chosen code beside them — with points after both. The code is a preview code: minted at the coupon's own value, scoped to the member, standing under half an hour, its text derived under the shop's secret so nobody can type it, and never sent to a draft anyone can pay. The checkout's own code is minted once the checkout is submitted. | Engineering |
-| Preview against the shop | ❓ Open | Whether the shop's price preview answers each code and each site discount line by line, as the store reads it; to be confirmed on a dev shop. Engineering confirms. | Engineering |
-| Coupon value | Decided | A percentage coupon is a percentage code online, so 10% off is 10% as the shop rounds it — never a fixed amount the store worked out. A ceiling it would pass is minted as that ceiling, in money. | Product |
-| A site discount for some customers only | ❓ Open | One the shop authors for a customer segment is shown on the listing to everyone; whether the listing hides it from the rest. | Product |
-| A free item alone online | ❓ Open | A 100%-off reward with nothing else in the basket is an HKD 0 order plus shipping — whether it ships free, or is collection only. | Product |
-| A product's sale | Decided | The compare-at price, or a product discount in the shop on the products, variants or collections it names. The card and the product page show the price after it, so a merchandiser can run a sale on some items without editing each price. Shopify drops a product discount when a code that does not combine with it joins, and the cart shows what the shop priced. 2026-10-15, replacing the compare-at-only rule of 2026-10-12. | Product |
-| Order discount authoring | Decided | An automatic amount off the order is authored to combine with product and order discounts, so a code stacks with it; a buy X get Y is authored to combine with order discounts and codes. A Shopify order discount cannot exclude products, so one that does not combine leaves the shop keeping the larger. Owner, 2026-10-12. | Product |
-| A product discount on the card | Decided | Shown like a site-wide one: an unconditional one prices the card and the product page, with the higher of the compare-at and the price struck; one with a minimum is named on the product page alone. Of two on one card the larger shows. 2026-10-15. | Product |
-| Struck price on a cart line | Decided | A line strikes one higher price: the price before a reprice, else its compare-at above the price, else the unit price before a product cut the shop applied. The line strikes what the listing struck. An order discount strikes no line: it is a row of its own after the subtotal, named by its title in the shop, with no Remove, because Shopify's checkout prints it on the order, not the lines. | Design |
-| Points beside a site discount | Decided | Points always redeem — points is a payment method, not a merchandising discount. | Product |
-| Points beside an automatic at the till | Settled | Points are the sale's one custom order discount, which the shop's offer never takes, so the two stack. A spend is capped at what the offers leave, because POS cuts a fixed order discount to fit. | Engineering |
-| A code beside an order discount | Decided, 2026-10-12 | 🚧 A member's coupon combines with order discounts by default, so a code stacks with an automatic order discount authored to combine. A coupon set otherwise competes with it, and the shop keeps the larger, as in example (d). | Product |
-| A tier ladder | ❓ Open | Shopify holds a ladder as one order discount per tier, and tiers authored to combine with order discounts add up on a basket that clears two. Whether a ladder combines with order discounts at all. | Product |
-| A public code beside the cart's code | ❓ Open | Whether the invoice takes a second code beside the cart's, or replaces it. | Product |
-| Combining is two-sided | Settled | A site discount authored not to combine excludes at the whole cart. Both sides have to allow the other, so the automatic alone decides it and a minted code's own combine setting cannot get past one. | Engineering |
-| Order of application | Settled | The shop prices every combination its rules allow and keeps the one that takes the most off, product cuts before order cuts. The rules are read off the shop's own answers on a dev shop, never off its docs. | Engineering |
-| Public codes | Decided | A public code is a code open to everyone, listed in the drawer's picker to guests and members; a guest never sees a member's codes. Decided 2026-10-13; supersedes the cart's no-public-codes row. | Product |
-| Public code source | Decided | Shopify discounts tagged `public`, read by the store. Decided 2026-10-13. | Product |
-| Public code order | Decided | Those that fit first, soonest to expire first, across public and wallet codes. Decided 2026-10-13. | Product |
+- **A gift at the till is its own line** — discounted to nothing, with no code: a code as well would take the benefit twice and use the order's one code slot
+- **One code slot** — one coupon per order, by choice, to keep the sale simple: a free reward and a money-off coupon are two sales, and a collector eligible for more picks one. The picker isolates the rule, so a later change can widen it
+- **Nothing is held** — points and coupons stay spendable until a paid order takes them, so a member is never locked out of their own coupon by a draft or a sale they walked away from
+- **A product's sale** — a product discount in the shop as well as the compare-at price, so a merchandiser can run a sale on some items without editing each price
+- **Order discounts authored to combine** — a Shopify order discount cannot exclude products, so one that does not combine leaves the shop keeping the larger instead of stacking a code
+- **An order discount strikes no line** — it is a row of its own after the subtotal, because Shopify's checkout prints it on the order, not the lines
+- **The shop's rules, read off its answers** — the order of application is read off the shop's own answers on a dev shop, never off its docs
+- **Not in scope** — an admin screen in grade10 for authoring site discounts; merchandisers author them in Shopify Admin, where the sale price already lives
+- ❓ **Preview against the shop** — whether the shop's price preview answers each code and each site discount line by line, as the store reads it; to be confirmed on a dev shop. Engineering confirms
+- ❓ **A site discount for some customers only** — one the shop authors for a customer segment shows on the listing to everyone; whether the listing hides it from the rest. Product confirms
+- ❓ **A free item alone online** — a 100%-off reward with nothing else in the basket is an HKD 0 order plus shipping; whether it ships free, or is collection only. Product confirms
+- ❓ **A tier ladder** — Shopify holds one order discount per tier, and tiers authored to combine add up on a basket that clears two; whether a ladder combines with order discounts at all. Product confirms
+- ❓ **A public code beside the cart's code** — whether the invoice takes a second code beside the cart's, or replaces it. Product confirms
 :::
