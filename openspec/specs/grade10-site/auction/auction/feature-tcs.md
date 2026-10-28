@@ -596,7 +596,7 @@ Ends in to follow the recorded close with the same freshness (including when
 extended bidding moves that close), without an Extended label on the banner,
 **so that** the lead band matches the live sale without lot-page chrome.
 
-<!-- trace:case id=g10.auction-auction.TC-s8h rev=1 -->
+<!-- trace:case id=g10.auction-auction.TC-s8h rev=2 -->
 ### g10.auction-auction.US10-TC1: A Featured slide shows a new bid and its moved close without a reload
 
 **Classification:**
@@ -613,7 +613,7 @@ extended bidding moves that close), without an Extended label on the banner,
 
 **Pre-conditions:**
 
-* Featured shows Active `<listing>` at USD4,960 in its last minute; customer is on `<g10url>/auction`; customer B is on its page.
+* Featured shows Active `<listing>` at USD4,960, past its scheduled close and in extended bidding with no cap, a few minutes left; customer is on `<g10url>/auction`; customer B is on its page.
 
 **Steps:**
 
