@@ -20,7 +20,7 @@
 - [x] 1.4 Verify: `pnpm run typecheck`, `pnpm run lint`,
   `pnpm run storybook:check`, `pnpm run check:manual`, and the shows-page
   story tests
-- [ ] 1.5 Name the evidence for the scenarios the site serves and the
+- [x] 1.5 Name the evidence for the scenarios the site serves and the
   workbench cannot show (`g10.site-shows.SC-08`, `SC-11`, `SC-12` and `SC-14`..`SC-18`: the
   Hong Kong month filter, the unpublished release and chapter link, nothing
   published, the reader's language, the base-text fallback): the site's
