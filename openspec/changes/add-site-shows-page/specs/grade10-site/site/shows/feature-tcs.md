@@ -1,6 +1,6 @@
 # grade10-site/site/shows Test Cases
 
-**Status:** pending-review · 0/13
+**Status:** pending-review · 0/18
 **Drafts styled:** 2026-10-18, tcs-rules r4
 
 ## grade10-site-site-shows-US1: Collector sizes up the shows
@@ -200,7 +200,8 @@ None.
 * **Trace:** grade10-site-site-shows-US-01
 
 **Pre-conditions:**
-None.
+
+* The Seoul Auction × ZZZ chapter's press release is published.
 
 **Steps:**
 
@@ -416,6 +417,117 @@ Runs once per row of **Test data**.
 * The hero's heading and its Explore Shows and Press Releases actions
   still show.
 
+<!-- trace:case id=g10.site-shows.TC-lng rev=1 -->
+### grade10-site-site-shows-US1-TC12-1: Published shows read in the reader's language
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-shows-US-01
+
+**Pre-conditions:**
+
+* `<show>` is published with its words in every language the rows name.
+* customer's site language is `<reader language>`.
+
+**Test data:**
+
+| `<reader language>` | `<show>` | `<title>` |
+| --- | --- | --- |
+| English | a published show with an edition card and a record (any) | the title the admin published for `<show>` in English |
+| a language the site offers other than English (any) | the same show | the title the admin published for `<show>` in `<reader language>` |
+
+**Steps:**
+
+1. Open <grade10 shows url>.
+2. Scroll to `<show>`'s edition card.
+3. Scroll to the Event Records section.
+
+**Expected Results:**
+
+* The edition card reads `<title>`, its description in `<reader language>`.
+* `<show>`'s record reads `<title>`, its description in
+  `<reader language>`.
+* No published show's words show in another language.
+
+<!-- trace:case id=g10.site-shows.TC-unp rev=1 -->
+### grade10-site-site-shows-US1-TC13-1: A show the admin has not published stays off the page
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-shows-US-01
+
+**Pre-conditions:**
+
+* `<unpublished show>` is not published.
+* `<published show>` is published.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `unpublished show` | a show dated in the current month or later, in a chapter that keeps another published edition |
+| `published show` | a show in the same chapter as `<unpublished show>` |
+
+**Steps:**
+
+1. Open <grade10 shows url>.
+2. Read the Upcoming Shows card in the hero.
+3. Scroll to `<unpublished show>`'s chapter.
+4. Scroll to the Event Records section.
+
+**Expected Results:**
+
+* The Upcoming Shows card does not list `<unpublished show>`.
+* The chapter shows `<published show>`'s edition card and none for
+  `<unpublished show>`.
+* The records list `<published show>` and not `<unpublished show>`.
+
+<!-- trace:case id=g10.site-shows.TC-nf4 rev=1 -->
+### grade10-site-site-shows-US1-TC14-1: The page answers not found when nothing is published
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-shows-US-01
+
+**Pre-conditions:**
+
+* The admin has no show published.
+
+**Steps:**
+
+1. Open <grade10 shows url>.
+
+**Expected Results:**
+
+* The site's not-found page shows.
+* No Shows hero, section or empty Shows frame shows.
+
 ## grade10-site-site-shows-US2: Collector follows a link from Shows to a press surface
 
 **As a** collector,
@@ -424,8 +536,8 @@ article it names,
 **so that** a show's coverage is a door to the report rather than dead
 text.
 
-<!-- trace:case id=g10.site-shows.TC-hli rev=1 covers=g10.site-shows.SC-e1r -->
-### grade10-site-site-shows-US2-TC1-1: Press-release links open their articles
+<!-- trace:case id=g10.site-shows.TC-hli rev=2 covers=g10.site-shows.SC-e1r -->
+### grade10-site-site-shows-US2-TC1-2: Press-release links open their articles once published
 
 Runs once per row of **Test data**.
 
@@ -442,18 +554,20 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-site-site-shows-US-02
 
 **Pre-conditions:**
-None.
+
+* Each edition's press release, and the Seoul Auction × ZZZ chapter's,
+  is published.
 
 **Test data:**
 
 | `<link>` | `<destination>` |
 | --- | --- |
 | the Press Releases action in the hero | `/press-releases` |
-| the Press Release link on the Grade10 FEST Summer 2026 edition card | `/press-releases/grade10-fest-summer-2026-concludes-successfully` |
-| the Press Release link on the Grade10 Festival 2025 edition card | `/press-releases/psa-10-pikachu-wall-grade10-card-fest` |
-| the Press Release link in the Seoul Auction × ZZZ chapter | `/press-releases/grade10-south-korea-seoul-auction` |
-| the Press Release link on the Shanghai edition card | `/press-releases/cardjoy-grade10-shanghai-expansion` |
-| the Press Release link on the Hangzhou edition card | `/press-releases/cardjoy-grade10-hangzhou-show` |
+| the Press Release link on the Grade10 FEST Summer 2026 edition card | `/press-releases/` and its published release's slug, today `grade10-fest-summer-2026-concludes-successfully` |
+| the Press Release link on the Grade10 Festival 2025 edition card | `/press-releases/` and its published release's slug, today `psa-10-pikachu-wall-grade10-card-fest` |
+| the Press Release link in the Seoul Auction × ZZZ chapter | `/press-releases/` and its published release's slug, today `grade10-south-korea-seoul-auction` |
+| the Press Release link on the Shanghai edition card | `/press-releases/` and its published release's slug, today `cardjoy-grade10-shanghai-expansion` |
+| the Press Release link on the Hangzhou edition card | `/press-releases/` and its published release's slug, today `cardjoy-grade10-hangzhou-show` |
 
 **Steps:**
 
@@ -465,6 +579,74 @@ None.
 
 * The site opens `<destination>`.
 
+<!-- trace:case id=g10.site-shows.TC-idx rev=1 -->
+### grade10-site-site-shows-US2-TC2-1: An edition without a published release leads to the press index
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-shows-US-02
+
+**Pre-conditions:**
+
+* `<edition>` is published, and its press release is `<release state>`.
+
+**Test data:**
+
+| `<edition>` | `<release state>` |
+| --- | --- |
+| an edition card in the Hong Kong chapter (any) | not written |
+| an edition card in the Chinese Mainland chapter (any) | written and not published |
+
+**Steps:**
+
+1. Open <grade10 shows url>.
+2. Scroll to `<edition>`.
+3. Select the Press Release link on `<edition>`.
+
+**Expected Results:**
+
+* `<edition>` shows its Press Release link.
+* The site opens `/press-releases`, not an article address.
+
+<!-- trace:case id=g10.site-shows.TC-nol rev=1 -->
+### grade10-site-site-shows-US2-TC3-1: A chapter without a published release shows no link
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-shows-US-02
+
+**Pre-conditions:**
+
+* The Seoul Auction × ZZZ chapter's press release is not published.
+
+**Steps:**
+
+1. Open <grade10 shows url>.
+2. Scroll to the Overseas Partnership chapter.
+
+**Expected Results:**
+
+* The chapter shows its intro, photo and caption.
+* No Press Release link or control shows in the chapter.
+
 ## grade10-site-site-shows-US3: Collector watches a show video in place
 
 **As a** collector,
@@ -473,8 +655,8 @@ poster,
 **so that** I can see a show's atmosphere without leaving the page or
 opening a new tab.
 
-<!-- trace:case id=g10.site-shows.TC-vid rev=2 covers=g10.site-shows.SC-59c -->
-### grade10-site-site-shows-US3-TC1-2: A chapter video plays in its container
+<!-- trace:case id=g10.site-shows.TC-vid rev=3 covers=g10.site-shows.SC-59c -->
+### grade10-site-site-shows-US3-TC1-3: One selection plays a chapter video in its container
 
 **Classification:**
 
@@ -505,8 +687,10 @@ None.
 * Each container first shows the event poster with its badge and a play
   control.
 * On selection the YouTube embed replaces the poster inside the same
-  container and plays — Hong Kong plays `Nf4UZyct5uM`, Chinese Mainland
-  plays `fy7AfZ8ZhQo`.
+  container — Hong Kong embeds `Nf4UZyct5uM`, Chinese Mainland embeds
+  `fy7AfZ8ZhQo`.
+* That one selection starts the video playing; its time advances with no
+  further selection on the embed.
 * The page does not navigate and no new tab opens.
 * Starting the Chinese Mainland video leaves the Hong Kong container
   holding its embed; the page does not return it to its poster.
