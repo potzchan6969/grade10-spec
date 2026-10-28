@@ -18,7 +18,6 @@ import {
   HandCoins,
   Truck,
 } from "@phosphor-icons/react";
-import { storyHref } from "../../workbench-story-nav";
 import {
   COUPON_LIST_COPY,
   HOW_POINTS_WORK,
@@ -115,10 +114,8 @@ function OverviewPane({
   );
 }
 
-/** The tier card opens the Tiers & Benefits screen. */
-const TIERS_TAB_HREF = storyHref(
-  "loyalty-membership-screens-tiers-benefits--default",
-);
+/** The card's Benefits affordance scrolls to the Tiers & Benefits section. */
+const TIERS_TAB_HREF = "#membership-tiers-heading";
 
 /** Rewards — the catalog, with the second top-up entrance beside it. */
 function RewardsPane({
