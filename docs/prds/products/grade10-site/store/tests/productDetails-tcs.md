@@ -150,7 +150,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#free-pick-up
+* **Trace:** product-page#free-pick-up/opens-store-locator, product-page#free-pick-up/no-dead-label, product-page
 
 **Pre-conditions:**
 
@@ -190,7 +190,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#buy
+* **Trace:** product-page, product-page#buy/signed-out-add-to-cart
 
 **Pre-conditions:**
 
@@ -398,7 +398,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#buy
+* **Trace:** product-page, product-page#buy/signed-out-add-to-cart
 
 **Pre-conditions:**
 
@@ -428,7 +428,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#buy
+* **Trace:** product-page#buy/signed-out-add-to-cart
 
 **Pre-conditions:**
 
@@ -575,7 +575,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail
+* **Trace:** cross-sell#rail/one-row
 
 **Pre-conditions:**
 
@@ -632,7 +632,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#picks
+* **Trace:** cross-sell#rail/sold-out, cross-sell#picks/chosen-in-shopify
 
 **Pre-conditions:**
 
@@ -662,7 +662,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#picks
+* **Trace:** cross-sell#picks/chosen-in-shopify, cross-sell#rail/picks-the-store-cannot-read
 
 **Pre-conditions:**
 
@@ -701,7 +701,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#similar-cards
+* **Trace:** cross-sell#similar-cards/shared-facts
 
 **Pre-conditions:**
 

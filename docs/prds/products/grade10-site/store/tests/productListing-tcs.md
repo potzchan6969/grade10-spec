@@ -395,7 +395,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#filters, product-listing#links-and-back-button/address
+* **Trace:** product-listing#filters/narrowings-in-force, product-listing#filters/clearing-every-filter, product-listing#links-and-back-button/address
 
 **Pre-conditions:**
 
@@ -1045,7 +1045,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#filters
+* **Trace:** product-listing#filters/clearing-every-filter, product-listing#filters/narrowings-in-force
 
 **Pre-conditions:**
 
@@ -1182,7 +1182,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#catalogue-source
+* **Trace:** product-listing#catalogue-source/product-changes, product-listing#catalogue-source/stock-changes, product-listing#catalogue-source/up-to-a-minute-behind
 
 **Pre-conditions:**
 
@@ -1220,7 +1220,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-listing#catalogue-source
+* **Trace:** product-listing#catalogue-source/lost-changes
 
 **Pre-conditions:**
 

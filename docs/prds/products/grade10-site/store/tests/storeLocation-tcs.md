@@ -40,7 +40,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#shop
+* **Trace:** store-locator#shop/in-each-language, store-locator#shop/no-phone-no-holiday-hours, store-locator#the-page/location--hours
 
 **Pre-conditions:**
 
@@ -84,7 +84,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page
+* **Trace:** store-locator#the-page/map-opens-maps
 
 **Pre-conditions:**
 
@@ -122,7 +122,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page
+* **Trace:** store-locator#the-page/url, store-locator#the-page/chrome-reaches-it
 
 **Pre-conditions:**
 
@@ -163,7 +163,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#from-elsewhere
+* **Trace:** store-locator#the-page/chrome-reaches-it, store-locator#from-elsewhere/free-pick-up-on-product-details
 
 **Pre-conditions:**
 
@@ -205,7 +205,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page
+* **Trace:** store-locator#the-page/narrow-screens
 
 **Pre-conditions:**
 
@@ -232,7 +232,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page
+* **Trace:** store-locator#the-page/document-identity
 
 **Pre-conditions:**
 
@@ -262,7 +262,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#from-elsewhere
+* **Trace:** store-locator#the-page/chrome-reaches-it, store-locator#from-elsewhere
 
 **Pre-conditions:**
 

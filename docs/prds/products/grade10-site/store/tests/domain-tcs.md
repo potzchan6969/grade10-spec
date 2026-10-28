@@ -65,7 +65,7 @@ title: Store Test Cases
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-page#buy, cart#checkout/guest, order-detail#back-from-checkout/added, order-detail#back-from-checkout/order-confirmed, order-detail#back-from-checkout/create-an-account, checkout#guest-checkout/joining-an-account, checkout#guest-checkout/post-checkout-account, checkout#guest-checkout/no-points
+* **Trace:** home, product-page#buy/signed-out-add-to-cart, cart#checkout/guest, order-detail#back-from-checkout/added, order-detail#back-from-checkout/order-confirmed, order-detail#back-from-checkout/create-an-account, checkout#guest-checkout/joining-an-account, checkout#guest-checkout/post-checkout-account, checkout#guest-checkout/no-points
 
 **Pre-conditions:**
 
@@ -169,7 +169,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display/cart-button, cart#promo-code/picked, cart#points/applied, cart#checkout/sent, cart#checkout/created-from-the-drawer, order-history#orders, order-detail#order
+* **Trace:** product-listing#products-display/cart-button, cart#promo-code/picked, cart#points/applied, cart#checkout/sent, cart#checkout/created-from-the-drawer, order-history#orders/active-and-past, order-history#orders/recorded-orders, order-history#orders/order-actions, order-detail#order/known-facts
 
 **Pre-conditions:**
 
@@ -200,7 +200,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display/signed-out, product-page#buy, cart#checkout/guest
+* **Trace:** product-listing#products-display/signed-out, product-page#buy/signed-out-add-to-cart, cart#checkout/guest, cart#reviewing-the-cart/whose-cart, cart#reviewing-the-cart/a-product-in-both-carts
 
 **Pre-conditions:**
 
@@ -233,7 +233,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link/owner-signed-in, order-detail#order-link/signed-out, order-detail#order-link/no-account-facts, order-detail#order, order-history#orders
+* **Trace:** order-detail#order-link/owner-signed-in, order-detail#order-link/signed-out, order-detail#order-link/no-account-facts, order-detail#order/owner-only-address, order-history#orders/private-address
 
 **Pre-conditions:**
 

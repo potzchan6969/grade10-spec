@@ -385,7 +385,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#pending-operations, cart#reviewing-the-cart/unresolved
+* **Trace:** cart#pending-operations/wait-before-another-action, cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
 
@@ -527,7 +527,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#rules/shops-answer, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -940,7 +940,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#struck-price-on-a-cart-line
+* **Trace:** discounts#struck-price-on-a-cart-line/cut-by-the-shop, discounts#struck-price-on-a-cart-line/on-sale, discounts#cart-footer/order-discount
 
 **Pre-conditions:**
 
@@ -976,7 +976,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#struck-price-on-a-cart-line
+* **Trace:** discounts#struck-price-on-a-cart-line/cut-by-the-shop, discounts#order-of-application/larger-wins, discounts#cart-footer/code
 
 **Pre-conditions:**
 
@@ -1017,7 +1017,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#cart-footer
+* **Trace:** discounts#cart-footer/order-discount, discounts#cart-footer/code, discounts#cart-footer/points, discounts#cart-footer/estimated-total, discounts#order-of-application/minimum
 
 **Pre-conditions:**
 
@@ -1050,7 +1050,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#cart-footer, discounts#order-of-application/minimum
+* **Trace:** discounts#cart-footer/order-discount, discounts#cart-footer/estimated-total, discounts#order-of-application/minimum
 
 **Pre-conditions:**
 
@@ -1441,7 +1441,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/another-pay, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1476,7 +1476,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/changed-purchase, checkout#integration-readiness/after-a-refusal, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1514,7 +1514,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#rules/carried-to-checkout, checkout#integration-readiness/later-cart, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1549,7 +1549,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/later-cart, cart#rules/carried-to-checkout, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1583,7 +1583,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** cart#checkout
+* **Trace:** checkout#integration-readiness/recovery, checkout#integration-readiness/lost-answer, checkout#integration-readiness/another-pay, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1614,7 +1614,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#checkout/no-identity-check
 
 **Pre-conditions:**
 
@@ -1719,7 +1719,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#pending-operations
+* **Trace:** cart#pending-operations/wait-before-another-action, checkout#integration-readiness/closing-during-pay, checkout#integration-readiness/one-pay-at-a-time
 
 **Pre-conditions:**
 

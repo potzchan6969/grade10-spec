@@ -206,7 +206,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/known-facts
 
 **Pre-conditions:**
 
@@ -241,7 +241,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/owner-only-address
 
 **Pre-conditions:**
 
@@ -274,7 +274,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/owner-only-address
 
 **Pre-conditions:**
 
@@ -300,7 +300,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/read-states
 
 **Pre-conditions:**
 
@@ -325,7 +325,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/read-states
 
 **Pre-conditions:**
 
@@ -355,7 +355,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/where-the-parcel-is, order-detail#order/badge-beside-the-steps, order-detail#order/steps-not-reached, order-detail#order/progress-and-tracking, order-detail#order/a-safe-carrier-address
 
 **Pre-conditions:**
 
@@ -395,7 +395,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#product-pictures
+* **Trace:** order-detail#product-pictures/recognise-an-item
 
 **Pre-conditions:**
 
@@ -505,7 +505,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** checkout#guest-checkout/order-link, order-detail#order-link/signed-out
 
 **Pre-conditions:**
 
@@ -639,7 +639,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/amount-marks
 
 **Pre-conditions:**
 
@@ -667,7 +667,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/points, order-detail#order-summary/points-to-earn
 
 **Pre-conditions:**
 
@@ -701,7 +701,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/no-points-row, order-detail#order-summary/no-points-section
 
 **Pre-conditions:**
 
@@ -738,7 +738,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order/a-full-refund, order-detail#order-summary
 
 **Pre-conditions:**
 
@@ -771,7 +771,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/points-to-earn
 
 **Pre-conditions:**
 
@@ -797,7 +797,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/points-to-earn
 
 **Pre-conditions:**
 
