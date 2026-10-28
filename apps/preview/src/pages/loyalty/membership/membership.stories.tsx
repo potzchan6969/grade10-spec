@@ -55,6 +55,9 @@ export const NoPoints: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getAllByText("0").length).toBeGreaterThan(0);
+    expect(
+      canvas.getByText(/Earn 500\+ pts by .+ to upgrade/),
+    ).toBeInTheDocument();
   },
 };
 
