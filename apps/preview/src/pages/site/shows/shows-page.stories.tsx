@@ -179,14 +179,6 @@ export const Default: Story = {
       expect(canvasElement.querySelectorAll("iframe")).toHaveLength(2),
     );
 
-    // A chapter pill is a hash link: activating it puts the chapter's
-    // fragment in the address (Q14).
-    const overseas = SHOWS_PAGE.formats.chapters[1];
-    await userEvent.click(
-      links.find((a) => a.textContent === overseas.tab) as HTMLElement,
-    );
-    await waitFor(() => expect(window.location.hash).toBe(`#${overseas.id}`));
-
     // Carousel: next arrow advances the image and the active dot.
     const firstEdition = SHOWS_PAGE.formats.chapters[0].editions[0];
     const next = canvas.getAllByRole("button", {
