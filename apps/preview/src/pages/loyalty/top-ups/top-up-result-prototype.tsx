@@ -77,7 +77,7 @@ function resultContent(state: TopUpResultState): ResultContent {
       description: copy.confirming.description,
       icon: (
         <span aria-hidden className="inline-flex animate-spin">
-          <CircleNotch size={28} weight="bold" />
+          <CircleNotch size={24} weight="regular" />
         </span>
       ),
       live: true,
@@ -98,7 +98,7 @@ function resultContent(state: TopUpResultState): ResultContent {
         <CheckCircle
           aria-hidden
           color="var(--success)"
-          size={28}
+          size={24}
           weight="regular"
         />
       ),
@@ -122,7 +122,7 @@ function resultContent(state: TopUpResultState): ResultContent {
         <HourglassMedium
           aria-hidden
           color="var(--secondary-foreground)"
-          size={28}
+          size={24}
           weight="regular"
         />
       ),
@@ -144,7 +144,7 @@ function resultContent(state: TopUpResultState): ResultContent {
         <XCircle
           aria-hidden
           color="var(--destructive)"
-          size={28}
+          size={24}
           weight="regular"
         />
       ),
@@ -170,7 +170,7 @@ function resultContent(state: TopUpResultState): ResultContent {
       <WarningCircle
         aria-hidden
         color="var(--warning)"
-        size={28}
+        size={24}
         weight="regular"
       />
     ),
@@ -191,21 +191,25 @@ function ResultPanel({
   actions,
 }: Omit<ResultContent, "title" | "live"> & { title: ReactNode }) {
   return (
-    <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-4 py-4 text-center">
+    <div className="mx-auto flex w-full flex-col items-center gap-1.5 py-2 text-center">
       <div
-        className={`inline-flex size-14 shrink-0 items-center justify-center rounded-full ${wellClass}`}
+        className={`mb-2.5 inline-flex size-12 shrink-0 items-center justify-center rounded-full ${wellClass}`}
       >
         {icon}
       </div>
       {title}
-      <Text className="text-secondary-foreground">{description}</Text>
+      <Text className="text-balance text-secondary-foreground" size="sm">
+        {description}
+      </Text>
       {meta ? (
-        <Text size="sm" tone="muted">
+        <Text size="xs" tone="muted">
           {meta}
         </Text>
       ) : null}
       {actions ? (
-        <div className="flex flex-wrap justify-center gap-2">{actions}</div>
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {actions}
+        </div>
       ) : null}
     </div>
   );
@@ -226,7 +230,7 @@ function TopUpResultPrototype({ state }: { state: TopUpResultState }) {
   };
 
   const titleClass =
-    "w-full text-center font-heading text-3xl font-semibold tracking-tight text-balance";
+    "w-full text-center font-heading text-xl font-semibold tracking-tight text-balance";
   const panel = (title: ReactNode) => {
     const body = <ResultPanel {...content} title={title} />;
     return content.live ? (
