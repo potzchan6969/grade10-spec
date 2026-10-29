@@ -91,7 +91,7 @@ built later.
 4. 🚧 **Approved to Earn** — passed incentive approval, or approved at intake where staff skipped it; earning from the next day - [Incentive](/p/grade10-site/vault/incentive#earning)
 
 - 🚧 **Failed** — returned to the collector; it never earns
-- 🚧 **Afterwards** — an earning card is consigned, sold or retrieved; a consignment ended or unsold comes back earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
+- 🚧 **Afterwards** — an earning card is consigned, sold or retrieved; a consignment ended or unsold comes back earning - [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval)
 
 ::image{src="assets/diagrams/vault-card-life.svg" alt="A card in the vault: Received, Authenticating, In the Vault, Approved to Earn and Consigned; a card that fails authentication is Failed and returned; an earning card is Retrieved, collected at the shop; a consigned card is Sold, or comes back earning when the consignment ends or it goes unsold"}
 

@@ -38,7 +38,7 @@ Sale price less commission reaches the wallet 3 business days after the buyer pa
 | Page | What it holds |
 | --- | --- |
 | [Consigning](/p/grade10-site/consignment/consigning) | The two ways in, the consign form, the terms, the price check, approval, the store and the auction, notifications |
-| [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment) | Taking a card off sale before it sells |
+| [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval) | Taking a card off sale before it sells |
 | [Consignment Dashboard](/p/grade10-site/consignment/dashboard) | The staff view that turns vaulted cards into sales |
 | [Consignment Console](/p/grade10-site/consignment/operator-console) | The admin section's queue, one consignment, payouts and settings |
 | [Earnings Wallet](/p/grade10-site/account/earnings-wallet#sale-proceeds) | Sale proceeds, statements and cash-out |

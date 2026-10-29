@@ -35,7 +35,7 @@ Incentive, after the identity check.
 
 - **Off the Main Path**
   - **Consign Later** — the collector consigns a card already in the vault from the dashboard - [Consigning](/p/grade10-site/consignment/consigning#consign-form)
-  - **Ending a Consignment** — the card comes off sale and stays in the vault, earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
+  - **Consignment Retrieval** — the card comes off sale and stays in the vault, earning - [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval)
   - **Vault Retrieval** — the card goes back to the collector - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval)
 - **A Loan Against a Card** — not the vault's; it is a case - [Finance](/p/grade10-site/finance)
 

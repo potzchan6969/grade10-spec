@@ -32,7 +32,7 @@ The ID checked against the one recorded at intake, the condition against the int
 ## Request
 
 - 🚧 **Who** — the collector from their dashboard, or staff for them
-- 🚧 **Which Cards** — in the vault and not consigned; a consigned card ends its consignment first - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
+- 🚧 **Which Cards** — in the vault and not consigned; a consigned card ends its consignment first - [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval)
 - 🚧 **No Identity Check First** — the ID was recorded at intake, and staff check it at the handover
 - 🚧 **What Is Forfeited** — shown before the collector confirms
   - **Before Release** — everything vesting on the card
