@@ -13,6 +13,7 @@ import {
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
+import { cn } from "@grade10/design-system/lib/utils";
 import {
   RewardCheckout,
   type RewardMenuItem,
@@ -242,9 +243,34 @@ function MembershipPage({
           </div>
 
           <div className="flex flex-col gap-8 md:flex-row md:gap-16">
+            {/* Narrow: the rail's names as an underline tab row — pills stay
+             * for the header's action buttons, so actions and navigation
+             * never share a shape. */}
             <nav
               aria-label="Membership"
-              className="flex gap-1 overflow-x-auto md:w-64 md:sticky md:top-8 md:shrink-0 md:self-start md:flex-col md:items-stretch md:overflow-visible"
+              className="flex gap-5 overflow-x-auto border-b border-border md:hidden"
+            >
+              {MEMBERSHIP_TABS.map((item) => (
+                <button
+                  aria-current={active === item.id ? "page" : undefined}
+                  className={cn(
+                    "-mb-px shrink-0 cursor-pointer border-b-2 px-1 pt-1 pb-3 text-sm whitespace-nowrap outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
+                    active === item.id
+                      ? "border-foreground font-medium text-foreground"
+                      : "border-transparent text-secondary-foreground hover:text-foreground",
+                  )}
+                  key={item.id}
+                  onClick={() => setActive(item.id)}
+                  type="button"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+            {/* Wide: the pill rail. */}
+            <nav
+              aria-label="Membership"
+              className="hidden gap-1 md:sticky md:top-8 md:flex md:w-64 md:shrink-0 md:flex-col md:items-stretch md:self-start"
             >
               {MEMBERSHIP_TABS.map((item) => (
                 <NavigationLink
