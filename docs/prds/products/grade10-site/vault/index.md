@@ -55,11 +55,11 @@ Each phase goes live before the first moment the business needs it, and is
 done when its last line works with a real collector and a real card.
 
 1. **Vault and Incentive** — mid November 2026
-   - **Delivers** — the deposit at the shop or an event, authentication, custody and moves; the daily price feed, eligibility and the daily amount; the collector's dashboard and the staff's
+   - **Delivers** — the deposit at the shop or an event, with a confirmed email, a phone number and the ownership declaration; authentication, custody and moves; the daily price feed, eligibility and the daily amount; the collector's dashboard and the staff's
    - **Until Phase 2** — nothing cashes out, so incentive builds up; staff run withdrawals by hand
    - **Done When** — a card deposited at an event is authenticated, approved, earns from the next day, and the collector sees it and its daily amount in the dashboard
 2. **Consign and Sell** — 6 December 2026 for the store
-   - **Delivers** — consigning from the vault with the agreement signed in the app; the shop's tills and auction lots from vault stock; statements and commission invoices; cash-out after the identity check; the consignment dashboard
+   - **Delivers** — consigning at deposit or later from the dashboard, with the agreement signed in the app; the shop's tills and auction lots from vault stock; statements and commission invoices; incentive stopping when a card sells; cash-out after the identity check, at least HKD 500 once every 7 days, to an account in the verified name; the consignment dashboard
    - **Until a Later Phase** — staff enter store price changes
    - **Done When** — a vaulted card is consigned and signed, sold in the store and at auction, its proceeds and incentive reach the wallet, and the collector passes the identity check and cashes out
 3. **Withdrawal** — taking a card home through the product

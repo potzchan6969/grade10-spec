@@ -67,12 +67,13 @@ deposit, so a deposit never waits for it.
 - **Shipping** — Kerry Logistics comes to the shop to take what ships; it is never a location - [Inventory and Sales Channels](/p/grade10-site/store/inventory-and-channels#inventory-location)
 - **Moves** — recorded when the card leaves and when it arrives, both confirmed by hand by staff - [Vault Operations](/p/grade10-site/vault/operations#moves)
 - 🚧 **Storage Fee** — an admin setting, nothing for now; every change logged
+  - **Pinned to the Vault Terms** — the fee in force when the collector signs; a change reaches only Vault Terms signed after it, so a collector already in the vault pays a new fee only once they sign new terms
 
 :::detail{title="Product decisions" for="pm"}
 The deposit is the top of the funnel, so it asks for as little as it safely
 can: an account, a phone number and a declaration.
 
-- **Storage at nothing for now, as a setting** — a fee would turn away the deposits the incentive is paying for, and a setting leaves room to charge one later without a rebuild
+- **Storage at nothing for now, as a setting** — a fee would turn away the deposits the incentive is paying for, and a setting leaves room to charge one later without a rebuild; pinned to the Vault Terms, so a fee is never added to terms a collector already signed
 - **Checked at the counter, or later** — the counter check is the usual way, but a deposit shouldn't wait for a professional to be free; a card kept unchecked earns and sells nothing until it passes, so taking it early costs nothing
 - **A phone number captured, not confirmed** — it serves contact and abuse checks; identity rests on the identity check alone
 :::
