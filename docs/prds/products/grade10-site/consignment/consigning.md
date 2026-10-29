@@ -1,6 +1,6 @@
 ---
 title: Consigning
-order: 4
+order: 1
 ---
 
 ## Consign Form
@@ -8,37 +8,40 @@ order: 4
 The collector consigns cards already in the vault from their dashboard; there
 is no counter or paper consignment.
 
-1. **Cards** — chosen from the collector's vaulted cards
-2. **Terms** — per card, the store, the auction or both, and the lowest acceptable price; the commission shown at Grade10's rate for each channel chosen
-3. **Review and Sign** — the estimated payout, then the Consignment Agreement signed in the app
+1. 🚧 **Cards** — chosen from the collector's vaulted cards
+2. 🚧 **Terms** — per card, the store, the auction or both, and the lowest acceptable price; the commission shown at Grade10's rate for each channel chosen
+3. 🚧 **Review and Sign** — the estimated payout, then the Consignment Agreement signed in the app
 
-- **Pending Review** — what the collector sees until staff approve the listing
-- **Staff Help** — staff may help a collector use the dashboard; the collector submits and signs
-- **Consign Button** — on each card in the dashboard, beside its market price and what it earns a day
+- 🚧 **Pending Review** — what the collector sees until staff approve the listing
+- 🚧 **Staff Help** — staff may help a collector use the dashboard; the collector submits and signs
+- 🚧 **Consign Button** — on each card in the dashboard, beside its market price and what it earns a day
 
 ## Terms
 
-- **Channel** — the store, the auction or both
+- 🚧 **Channel** — the store, the auction or both
   - **Both** — the card is on sale in one channel at a time, never on the shelf and in an auction together; one agreement and one lowest price cover both - [Both Channels](/p/grade10-site/consignment/consigning#both-channels)
-- **Lowest Acceptable Price** — the only price the collector sets; a hard limit no sale goes below
+- 🚧 **Lowest Acceptable Price** — the only price the collector sets; a hard limit no sale goes below
   - **In the Store** — required: the lowest the collector will sell for in the store; staff may price higher at their will, which helps both sides
   - **At Auction** — optional: with none there is no reserve and the lot sells at the winning bid; with one, it is the reserve
   - **Both** — required, and it covers both channels
   - **Price Check** — compared with the card's market price - [Price Check](/p/grade10-site/consignment/consigning#price-check)
-- **Commission** — Grade10's rate; in the store it may differ between the shop and online
+- **Commission** — Grade10's rate: in the store a share of the sale price by price band, at auction a share of the hammer price
   - **Minimum Charge** — optional, per card
-- **Consignment Period** — 1 year from signing
+  - 🚧 **By Store Channel** — in the store, the rate may differ between the shop and online
+  - **Pinned to the Agreement** — the rates in force when the agreement is prepared; a later change reaches only the next agreement
+  - **Outside the Schedule** — a rate negotiated for a partner is set by someone who may approve it - [Consignment Console](/p/grade10-site/consignment/operator-console#grants)
+- 🚧 **Consignment Period** — 1 year from signing
 - **Agreement** — one Consignment Agreement a consignment; a change makes a new version, never an edit
 
 ## Price Check
 
 On the consign form, and whenever the lowest price is changed.
 
-- **Market Price** — the card's 30-day SNKRDUNK median; a card with no market price has no check
-- **Too Low** — more than 20% below the market price: a warning that suggests raising it; the collector confirms a second time to keep it, and isn't forced to raise it
-- **Too High** — more than 50% above the market price: rejected, since a price that far above would hurt the chance of a sale; the collector lowers it to continue
-- **Settings** — the 20% and 50% limits are admin settings
-- **At Approval** — staff see the market price and whether the collector confirmed a low price, so there is less back-and-forth
+- 🚧 **Market Price** — the card's 30-day SNKRDUNK median; a card with no market price has no check
+- 🚧 **Too Low** — more than 20% below the market price: a warning that suggests raising it; the collector confirms a second time to keep it, and isn't forced to raise it
+- 🚧 **Too High** — more than 50% above the market price: rejected, since a price that far above would hurt the chance of a sale; the collector lowers it to continue
+- 🚧 **Settings** — the 20% and 50% limits are admin settings
+- 🚧 **At Approval** — staff see the market price and whether the collector confirmed a low price, so there is less back-and-forth
 
 :::callout{kind="note"}
 - ❓ **Limits** — 20% below and 50% above are proposed. Product confirms
@@ -46,62 +49,84 @@ On the consign form, and whenever the lowest price is changed.
 
 ## Listing Approval
 
-- **Staff Approval** — every consignment, before it goes on sale
+- 🚧 **Staff Approval** — every consignment, before it goes on sale
   - **List or Starting Price** — set by Grade10; a store price is never below the lowest acceptable price, and staff may raise it at their will
   - **Starting Channel** — for a card consigned to both, staff decide which channel it starts in; the collector doesn't choose the order
   - **Approved** — listed: a store product, or the card added to an auction lot
   - **Rejected** — the collector is told why and can edit and resubmit
-- **Changing the Lowest Price** — from the dashboard; approved like a new listing
+- 🚧 **Changing the Lowest Price** — from the dashboard; approved like a new listing
   - **In the Store** — a new lowest price above the list price raises the list price to match
   - **At Auction** — until the catalogue is published, then locked
 
 ## Both Channels
 
-- **One at a Time** — a card consigned to both is never on the store shelf and in an auction together
-- **Moving** — if it doesn't sell, staff move it to the other channel without the collector signing again; the commission is the rate of the channel it sells in
+- 🚧 **One at a Time** — a card consigned to both is never on the store shelf and in an auction together
+- 🚧 **Moving** — if it doesn't sell, staff move it to the other channel without the collector signing again; the commission is the rate of the channel it sells in
   - **From an Auction** — only before the catalogue is published, or after the auction ends unsold
-- **Dashboard** — shows which channel the card is in now
+- 🚧 **Dashboard** — shows which channel the card is in now
 
 ## In the Store
 
-- **Both Channels at Once** — the shop's tills at Causeway Bay and events, and the online store once it launches
-  - **First Sale Wins** — the card comes off the other channel at once
-- **Price Changes** — entered by staff; they may raise the price at their will, never below the lowest acceptable price
-- **Handover** — at the counter in the shop; online orders ship from the vault, and a card held elsewhere moves first
+- **One Product, Every Store Channel** — the card is one store product, on the shop's tills at Causeway Bay and events and in the online store
+  - **First Sale Wins** — the card comes off the other channels at once; a second sale of the same card is refunded
+  - 🚧 **Marketplace** — once it launches, a channel like the others
+- **Sales Report Themselves** — the store and the auction report each sale, delivery and refund; staff record one by hand only where a channel didn't
+- 🚧 **Price Changes** — entered by staff; they may raise the price at their will, never below the lowest acceptable price
+- 🚧 **Handover** — at the counter in the shop; online orders ship from the vault, and a card held elsewhere moves first
 
 ## At Auction
 
-- **Lot** — listed from the vault; the reserve is the lowest acceptable price where the collector set one, otherwise there is no reserve
-- **Commission** — on the hammer price only
-- **Winner Doesn't Pay** — the card is relisted
-- **Handover** — shipped from the vault, or collected at Causeway Bay
+- 🚧 **Lot** — listed from the vault; the reserve is the lowest acceptable price where the collector set one, otherwise there is no reserve
+- **Commission** — on the hammer price only; the buyer's premium is Grade10's
+- 🚧 **Winner Doesn't Pay** — the card is relisted
+- 🚧 **Handover** — shipped from the vault, or collected at Causeway Bay
+
+## The Sale Price
+
+- **Paid on the Listed Price** — a discount the buyer gets at checkout is Grade10's, and so is a refund where the buyer keeps the card
+- **The Collector's Until Sold** — ownership passes to the buyer only when the card is delivered or collected
+
+:::callout{kind="note"}
+- ❓ **Points and discounts** — whether points, coupons and the shop's discounts reach a consigned card. Product confirms
+:::
+
+## Seller Name
+
+- **Off by Default** — the store and the lot name no consignor
+- **Turned On** — by an admin for one consignment, only where the collector agreed to be named in its agreement
+- **Display Name** — the name the collector gave to be shown, never their legal name
+- **Agreement Withdrawn** — the name comes off the store and the lot at once
+
+## Messages
+
+By email, in the collector's language.
+
+| Message | When |
+| --- | --- |
+| Agreement signed | the sealed agreement, with its terms |
+| On sale | listed in the shop or at auction, with its link |
+| Price changed | staff changed the price |
+| Off sale | taken off sale, with the reason |
+| Sold | the sale price, and when the proceeds reach the wallet |
+| Ended unsold | the period ended without a sale |
+
+- 🚧 **Pending Approval** — a message when staff approve or reject a consignment the collector submitted
+- 🚧 **Ended Unsold** — says the card is back in the vault and earning
+- 🚧 **Sold** — names the day the proceeds reach the wallet, 3 business days after the buyer pays
 
 ## End of the Period
 
-- **Unsold After a Year** — the card goes back to vault-only and keeps earning; the collector consigns it again or withdraws it
+- 🚧 **Unsold After a Year** — the card goes back to vault-only and keeps earning; the collector consigns it again or withdraws it
 
 :::detail{title="Product decisions" for="pm"}
 A vaulted card is already authenticated and photographed, so consigning it is a
-few taps with no intake. Asking the collector for a list price invites
-back-and-forth; asking only for the lowest price they accept lets Grade10 price
-the listing while the collector keeps a hard limit.
+few taps with no intake. Asking only for the lowest price the collector accepts
+lets Grade10 price the listing while the collector keeps a hard limit.
 
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Collector | Sees a good market price on a vaulted card | Consigns it in a minute, from their phone |
-| Consignment staff | A new consignment | Prices it and lists it in one review |
-
-**Not in scope.** A consignment at the counter or on paper; one card in the
-store and at auction at once; the collector setting the list price.
-
-**Decisions.**
-
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Fully online | Decided | The collector consigns and signs from the dashboard | Product |
-| Lowest acceptable price only | Decided | Grade10 sets the list or starting price at review | Product |
-| Reserve at auction | Decided | The lowest acceptable price is optional at auction: set, it is the reserve; not set, the lot sells at the winning bid | Product |
-| Price check | Decided | A low price warns and is confirmed twice, a price far above market is rejected, so a fully online form needs less back-and-forth; staff still approve | Product |
-| Limits of the check | ❓ Open | 20% below and 50% above the market price are proposed | Product |
-| One year | Decided | The consignment period runs a year from signing | Product |
+- **Fully online** — the collector consigns and signs from the dashboard; staff may help but never submit, so the agreement is the collector's own act
+- **A reserve only where the collector sets one** — at auction the lowest price is optional, so a collector who wants the hammer to decide isn't made to guess a floor
+- **The price check warns low and refuses high** — a low price may be the collector's reason and is confirmed twice; a price far above market would only stall the sale
+- **Both channels, one at a time** — a card is never on the shelf and in an auction together, so it can't sell twice; moving it needs no second signature
+- **A year's period** — long enough for an auction cycle and a slow card, and an unsold card simply goes back to earning
+- **Not in scope** — a counter or paper consignment; the collector setting the list price
 :::
