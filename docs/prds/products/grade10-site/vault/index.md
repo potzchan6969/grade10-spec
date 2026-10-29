@@ -15,7 +15,7 @@ commission is the revenue - [Consignment](/p/grade10-site/consignment).
 At the shop in Causeway Bay or an event; staff record and photograph each card, and the collector signs the Vault Terms.
 
 ## Staff — Authenticate and store
-The card is checked at deposit and put away.
+The card is checked at the counter, or stored first and checked later.
 
 ## Staff — Approve it to earn
 The card's market price and how easily it sells are checked.

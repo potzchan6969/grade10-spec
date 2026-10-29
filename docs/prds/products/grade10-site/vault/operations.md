@@ -11,7 +11,7 @@ management tracks. Turning vaulted cards into consignments has its own view -
 
 ## Queues
 
-- 🚧 **Deposit Queue** — cards waiting for authentication
+- 🚧 **Deposit Queue** — cards waiting for authentication, kept unchecked at deposit - [Authentication](/p/grade10-site/vault/deposit#authentication)
   - **Pass** — the card enters the vault and waits for incentive approval, unless staff skipped it at deposit; it earns nothing until approved - [Incentive](/p/grade10-site/vault/incentive#earning)
   - **Fail** — the collector is told and the card is returned; it never earns
 - 🚧 **Incentive Approval** — cards waiting to be approved to earn - [Incentive](/p/grade10-site/vault/incentive#earning)

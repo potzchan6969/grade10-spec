@@ -19,7 +19,7 @@ At the shop or an event; on the deposit form staff tick Consign Now for the card
 The Vault Terms and the Consignment Agreement together, on the shop's tablet or by an emailed link.
 
 ## Staff — Vault it first
-The card is authenticated and stored; it earns once approved, like any vaulted card.
+The card is authenticated, at the counter or later, and stored; it goes on sale only once it passes, and earns once approved, like any vaulted card.
 
 # Selling
 

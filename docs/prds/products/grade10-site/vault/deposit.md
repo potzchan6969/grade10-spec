@@ -20,11 +20,26 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
    - **Sales and Liquidity** — the card's sales count and liquidity, in the staff's detail view
    - **Estimated Daily Incentive** — or Not Eligible, for a card that earns nothing
    - **Skip Incentive Approval** — a checkbox on each card, unticked by default; staff tick it when they have already authenticated the card and verified its value on the spot, so it needn't wait for approval - [Incentive](/p/grade10-site/vault/incentive#earning)
-4. 🚧 **Consign Now** — optional, per card; the card is registered into the vault first, then consigned in the same visit: the store, the auction or both, the lowest acceptable price (required for the store or both, optional for the auction) and the commission; Grade10 sets the list or starting price at approval - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
+4. 🚧 **Consign Now** — optional, per card; the card is registered into the vault first, then consigned in the same visit: the store, the auction or both, the lowest acceptable price (required for the store or both, optional for the auction), price-checked as on the consign form, and the commission; Grade10 sets the list or starting price at approval - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
 5. 🚧 **Sign** — on the shop's tablet, or by a link emailed to the collector
    - **Vault Terms** — signed
    - **Consignment Agreement** — signed only where a card is consigned now
    - **Custody Receipt** — confirmed
+
+## Authentication
+
+Professional staff check that each card is genuine. The check fits around the
+deposit, so a deposit never waits for it.
+
+- 🚧 **At the Counter** — the usual way: staff check the card before the collector signs, and a card that fails comes off the form
+- 🚧 **Checked Later** — the card is photographed and kept unchecked, the collector agrees the terms and signs the same visit, and staff check it afterwards
+  - **Progress** — staff record each step, and the collector is told when the card passes or fails
+  - **Until It Passes** — held in the vault as Authenticating; it neither earns nor goes on sale, and its incentive approval can't be skipped
+  - **Fails Later** — returned to the collector; a consignment signed for it is cancelled, never having been listed
+
+:::callout{kind="note"}
+- ❓ **Terms for a card checked later** — whether it signs special terms. Product confirms before Phase 1, mid November
+:::
 
 ## What a Deposit Needs
 
@@ -36,7 +51,7 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
 ## Card States
 
 1. 🚧 **Received** — recorded and photographed at deposit
-2. 🚧 **Authenticating** — checked at deposit
+2. 🚧 **Authenticating** — at the counter, or later for a card kept unchecked - [Authentication](/p/grade10-site/vault/deposit#authentication)
 3. 🚧 **In the Vault** — passed and stored; not earning yet
 4. 🚧 **Approved to Earn** — passed incentive approval, or approved at deposit where staff skipped it; earning from the next day - [Incentive](/p/grade10-site/vault/incentive#earning)
 
@@ -58,6 +73,6 @@ The deposit is the top of the funnel, so it asks for as little as it safely
 can: an account, a phone number and a declaration.
 
 - **Storage at nothing for now, as a setting** — a fee would turn away the deposits the incentive is paying for, and a setting leaves room to charge one later without a rebuild
-- **Authenticated at deposit** — the card is checked at the counter before it is stored, so a card that fails never enters the vault
+- **Checked at the counter, or later** — the counter check is the usual way, but a deposit shouldn't wait for a professional to be free; a card kept unchecked earns and sells nothing until it passes, so taking it early costs nothing
 - **A phone number captured, not confirmed** — it serves contact and abuse checks; identity rests on the identity check alone
 :::

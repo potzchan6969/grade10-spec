@@ -19,7 +19,6 @@ From the dashboard, for cards already in the vault.
 
 - 🚧 **Pending Approval** — what the collector sees until staff approve the listing
 - 🚧 **Staff Help** — staff may help a collector use the dashboard; the collector submits and signs
-- 🚧 **Consign Button** — on each card in the dashboard, beside its market price and what it earns a day
 
 ## Terms
 
@@ -46,7 +45,7 @@ goes below. Grade10 prices the listing at approval.
 
 ## Price Check
 
-On the consign form, and whenever the lowest price is changed.
+On the deposit form's Consign Now, on the consign form, and whenever the lowest price is changed.
 
 - 🚧 **Market Price** — the card's 30-day SNKRDUNK median; a card with no market price has no check
 - 🚧 **The Check** — how far the lowest acceptable price sits from the market price:
@@ -79,6 +78,7 @@ For a card with a market price of HKD 10,000:
 ## Listing Approval
 
 - 🚧 **Staff Approval** — every consignment, before it goes on sale
+  - **Authenticated First** — a card checked later waits until it passes - [Authentication](/p/grade10-site/vault/deposit#authentication)
   - **List or Starting Price** — set by Grade10, as the terms say
   - **Starting Channel** — for a card consigned to both, staff decide which channel it starts in; the collector doesn't choose the order
   - **Approved** — listed: a store product, or the card added to an auction lot

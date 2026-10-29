@@ -36,7 +36,7 @@
       "id": "authenticating",
       "type": "decision",
       "label": "Authenticating",
-      "sublabel": "checked at deposit",
+      "sublabel": "at the counter, or later",
       "lane": "main",
       "col": 1
     },
