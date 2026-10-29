@@ -443,11 +443,52 @@ const VAULT_LIVE_AUCTION_ASSET_DETAIL: VaultAsset = {
   ],
 };
 
+const PAYOUT_METHOD = {
+  bankName: "HSBC",
+  accountHolder: "Chan Tai Man",
+  maskedAccount: "••• 8304",
+};
+
+const WITHDRAWAL_PROCESSING_DAYS = "3–5 working days";
+
+type VaultPayoutStatus = "Pending review" | "Processing" | "Paid" | "Rejected";
+
+type VaultPayoutRequest = {
+  id: string;
+  requestedAt: string;
+  amountHkd: number;
+  status: VaultPayoutStatus;
+};
+
+const PAYOUT_REQUESTS: VaultPayoutRequest[] = [
+  {
+    id: "po-3",
+    requestedAt: "28 Oct 2026",
+    amountHkd: 150,
+    status: "Pending review",
+  },
+  {
+    id: "po-2",
+    requestedAt: "20 Oct 2026",
+    amountHkd: 500,
+    status: "Processing",
+  },
+  {
+    id: "po-1",
+    requestedAt: "3 Oct 2026",
+    amountHkd: 320,
+    status: "Paid",
+  },
+];
+
 const PORTFOLIO_SUMMARY = {
   itemCount: PORTFOLIO_ASSETS.length,
   totalEstimateHkd: PORTFOLIO_ASSETS.reduce((sum, a) => sum + a.estimateHkd, 0),
-  feeLabel: "Complimentary",
-  feeHint: "Launch offer. Free until 31 Dec 2026",
+  rewardsAvailableHkd: 1240,
+  earnedAllTimeHkd: 1560,
+  withdrawnHkd: 320,
+  minWithdrawalHkd: 100,
+  hasPayoutMethod: true,
 };
 
 const VAULT_SITE_HEADER = {
@@ -1038,6 +1079,8 @@ export {
   isPortfolioHolding,
   MANAGE_CARD_COPY,
   NEXT_AVAILABLE_VISIT_DATE,
+  PAYOUT_METHOD,
+  PAYOUT_REQUESTS,
   PORTFOLIO_ASSETS,
   PORTFOLIO_HOLDING_STATUSES,
   PORTFOLIO_SUMMARY,
@@ -1053,6 +1096,8 @@ export {
   SUMMARY_COPY,
   slotsForVisitDay,
   statusBadgeVariant,
+  type VaultPayoutRequest,
+  type VaultPayoutStatus,
   VAULT_ASSET_CARD_IN_VAULT_HREF,
   VAULT_ASSET_CARD_IN_VAULT_STORY_ID,
   VAULT_ASSET_CARD_LISTED_STORY_ID,
@@ -1060,6 +1105,7 @@ export {
   VAULT_ASSET_CARD_RETRIEVAL_STORY_ID,
   VAULT_ASSET_DETAILS,
   VAULT_ASSETS,
+  WITHDRAWAL_PROCESSING_DAYS,
   VAULT_BOOK_VISIT_HREF,
   VAULT_BOOK_VISIT_STORY_ID,
   VAULT_CONFIRMATION_HREF,

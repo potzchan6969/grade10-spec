@@ -2,10 +2,12 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
-import { expect, waitFor, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { activeIntakeSubmissionCount } from "../../intake-content";
 import {
   INTAKE_TRACKER_STORY_ID,
+  PAYOUT_METHOD,
+  PAYOUT_REQUESTS,
   PORTFOLIO_ASSETS,
   PORTFOLIO_SUMMARY,
   VAULT_BOOK_VISIT_STORY_ID,
@@ -20,7 +22,9 @@ import {
 import { navigateToStory } from "../../workbench-story-nav";
 import { ActiveIntakeAlert } from "./active-intake-alert";
 import { VaultAssetList } from "./vault-asset-list";
-import { VaultPortfolioStats } from "./vault-portfolio-stats";
+import { VaultPayoutList } from "./vault-payout-list";
+import { VaultWalletSummary } from "./vault-wallet-summary";
+import { VaultWithdrawDialog } from "./vault-withdraw-dialog";
 
 /** Simulated holdings fetch — the workbench recipe's ready beat. */
 const HOLDINGS_LOAD_MS = 350;
@@ -49,6 +53,7 @@ function VaultPortfolioPage({
   }, [empty]);
 
   const holdingsLoading = loading || fetching;
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   return (
     <VaultPageShell wide>
@@ -71,11 +76,21 @@ function VaultPortfolioPage({
       <div className="flex flex-col gap-8">
         {!empty && (
           <div className={cn(PAGE_ENTER_CLASS, "delay-[30ms]")}>
-            <VaultPortfolioStats
-              feeHint={PORTFOLIO_SUMMARY.feeHint}
-              feeLabel={PORTFOLIO_SUMMARY.feeLabel}
+            <VaultWalletSummary
+              earnedAllTimeHkd={PORTFOLIO_SUMMARY.earnedAllTimeHkd}
+              hasPayoutMethod={PORTFOLIO_SUMMARY.hasPayoutMethod}
+              minWithdrawalHkd={PORTFOLIO_SUMMARY.minWithdrawalHkd}
+              rewardsAvailableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
               totalEstimateHkd={PORTFOLIO_SUMMARY.totalEstimateHkd}
+              withdrawnHkd={PORTFOLIO_SUMMARY.withdrawnHkd}
+              onWithdraw={() => setWithdrawOpen(true)}
             />
+          </div>
+        )}
+
+        {!empty && (
+          <div className={cn(PAGE_ENTER_CLASS, "delay-[70ms]")}>
+            <VaultPayoutList requests={PAYOUT_REQUESTS} />
           </div>
         )}
 
@@ -103,6 +118,13 @@ function VaultPortfolioPage({
           />
         )}
       </div>
+      <VaultWithdrawDialog
+        availableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
+        minWithdrawalHkd={PORTFOLIO_SUMMARY.minWithdrawalHkd}
+        payoutMethod={PAYOUT_METHOD}
+        open={withdrawOpen}
+        onOpenChange={setWithdrawOpen}
+      />
     </VaultPageShell>
   );
 }
@@ -128,9 +150,12 @@ export const Filled: Story = {
       expect(
         canvas.getByRole("button", { name: "Submit to Vault" }),
       ).toBeVisible();
+      expect(canvas.getByText("Rewards available")).toBeVisible();
+      expect(canvas.getByText("Earned all-time")).toBeVisible();
       expect(canvas.getByText("Total estimated value")).toBeVisible();
-      expect(canvas.getByText("Storage fees")).toBeVisible();
-      expect(canvas.getByText("Complimentary")).toBeVisible();
+      expect(canvas.getByText("Withdrawn to date")).toBeVisible();
+      expect(canvas.getByText("Payout requests")).toBeVisible();
+      expect(canvas.getByText("Pending review")).toBeVisible();
       expect(
         canvas.getByText("2 submissions currently in intake"),
       ).toBeVisible();
@@ -147,6 +172,16 @@ export const Filled: Story = {
     ).toBe(6);
     // Intake-stage assets never appear in holdings.
     expect(canvas.queryByText("Pre-check")).toBeNull();
+    // Withdraw opens the payout dialog from the wallet card.
+    const page = within(canvasElement.ownerDocument.body);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Withdraw" }),
+    );
+    await waitFor(() =>
+      expect(
+        page.getByRole("dialog", { name: "Withdraw Rewards" }),
+      ).toBeVisible(),
+    );
   },
 };
 
@@ -171,8 +206,7 @@ export const Empty: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("No items in your vault")).toBeVisible();
     expect(canvas.queryByText(/currently in intake/)).toBeNull();
-    expect(canvas.queryByText("Total estimated value")).toBeNull();
-    expect(canvas.queryByText("Storage fees")).toBeNull();
+    expect(canvas.queryByText("Rewards available")).toBeNull();
   },
 };
 
@@ -187,7 +221,6 @@ export const EmptyWithIntake: Story = {
         canvas.getByText("2 submissions currently in intake"),
       ).toBeVisible(),
     );
-    expect(canvas.queryByText("Total estimated value")).toBeNull();
-    expect(canvas.queryByText("Storage fees")).toBeNull();
+    expect(canvas.queryByText("Rewards available")).toBeNull();
   },
 };
