@@ -14,8 +14,8 @@ function Stat({
   children: ReactNode;
 }) {
   return (
-    <div className={cn("flex min-w-0 flex-col gap-1 p-5 sm:p-6", className)}>
-      <dt className="font-heading text-sm leading-5 font-medium uppercase text-secondary-foreground">
+    <div className={cn("flex min-w-0 flex-col gap-1.5 p-6 sm:p-8", className)}>
+      <dt className="font-heading text-sm leading-5 font-medium tracking-wider uppercase text-secondary-foreground">
         {label}
       </dt>
       <dd className="font-heading font-medium tracking-tight tabular-nums text-card-foreground">

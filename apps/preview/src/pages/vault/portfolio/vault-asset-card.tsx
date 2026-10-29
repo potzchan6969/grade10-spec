@@ -29,7 +29,6 @@ function VaultAssetCardBody({ asset }: { asset: VaultAsset }) {
   return (
     <>
       <div className="relative aspect-square w-full overflow-hidden rounded-(--radius-3xl) border border-border bg-background-subtle">
-        <div className="pointer-events-none absolute inset-0 rounded-(--radius-3xl)" />
         <img
           alt=""
           aria-hidden
@@ -51,10 +50,8 @@ function VaultAssetCardBody({ asset }: { asset: VaultAsset }) {
           </p>
         </div>
 
-        <div aria-hidden className="border-t border-border" />
-
         <div className="flex w-full flex-col items-start gap-1">
-          <p className="w-full text-xs font-medium uppercase text-secondary-foreground">
+          <p className="w-full text-xs font-medium uppercase tracking-wider text-secondary-foreground">
             {price.label}
           </p>
           <p className="w-full text-lg leading-7 font-medium tabular-nums text-card-foreground">
