@@ -223,13 +223,16 @@ function MembershipPage({
                 {MEMBERSHIP_PAGE_COPY.title}
               </h1>
               <div className="flex items-center gap-2">
-                <Button onClick={() => setPassOpen(true)} size="lg">
+                <Button
+                  onClick={() => setPassOpen(true)}
+                  size={smUp ? "lg" : "md"}
+                >
                   <QrCode aria-hidden size={16} weight="regular" />
                   Member Pass
                 </Button>
                 <Button
                   onClick={() => setTopUpOpen(true)}
-                  size="lg"
+                  size={smUp ? "lg" : "md"}
                   variant="secondary"
                 >
                   {MEMBERSHIP_PAGE_COPY.topUpAction}
