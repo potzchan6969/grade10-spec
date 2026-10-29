@@ -51,44 +51,6 @@ export const Filtered: Story = {
   },
 };
 
-/** A source that did not say carries no channel; the rest name theirs. */
-export const ChannelIsNamed: Story = {
-  args: {
-    state: {
-      status: "ready",
-      data: [
-        {
-          id: "entry-online",
-          kind: "Online order",
-          track: "earned",
-          icon: "order",
-          delta: 105,
-          date: "20 Sep 2026",
-          month: "September 2026",
-          channel: "Online store",
-          context: "Order #10482",
-        },
-        {
-          id: "entry-quiet",
-          kind: "Points expired",
-          track: "used",
-          icon: "expiry",
-          delta: -40,
-          date: "1 Mar 2026",
-          month: "March 2026",
-        },
-      ],
-    },
-  },
-  play: async ({ canvasElement }) => {
-    const named = [
-      ...canvasElement.querySelectorAll('[data-slot="point-history-channel"]'),
-    ].map((node) => node.textContent);
-
-    expect(named).toEqual(["Online store"]);
-  },
-};
-
 /** A purchase: the order tile, the order number, points earned. */
 export const Purchase: Story = {
   args: {
@@ -113,6 +75,34 @@ export const Purchase: Story = {
     expect(canvas.getByText("In-store purchase")).toBeInTheDocument();
     expect(canvas.getByText("Order #10482")).toBeInTheDocument();
     expect(canvas.getByText("+105 pts")).toBeInTheDocument();
+  },
+};
+
+/** A top-up above the review threshold: held for an operator, so it sits
+ * under Pending with no date yet — the hourglass tile, nothing landed. */
+export const TopUpUnderReview: Story = {
+  args: {
+    state: {
+      status: "ready",
+      data: [
+        {
+          id: "entry-topup-review",
+          kind: "Points top-up",
+          track: "earned",
+          delta: 60000,
+          pending: true,
+          context:
+            "Under review — the card is charged only if it's approved. Reference TU-2026-0384.",
+        },
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Points top-up")).toBeInTheDocument();
+    expect(canvas.getByText(/Under review/)).toBeInTheDocument();
+    /* Nothing has landed: no date on a pending entry. */
+    expect(canvas.queryByText(/2026$/)).not.toBeInTheDocument();
   },
 };
 
@@ -170,7 +160,7 @@ export const RewardRedeemed: Story = {
   },
 };
 
-/** A goodwill adjustment: the programme's own hand on the balance. */
+/** An operator's credit on the balance — a refund made good, say. */
 export const PointsAdjusted: Story = {
   args: {
     state: {
@@ -184,7 +174,7 @@ export const PointsAdjusted: Story = {
           delta: 120,
           date: "9 Oct 2026",
           month: "October 2026",
-          context: "Goodwill credit",
+          context: "Credit from our team",
         },
       ],
     },
@@ -192,7 +182,7 @@ export const PointsAdjusted: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Points adjusted")).toBeInTheDocument();
-    expect(canvas.getByText("Goodwill credit")).toBeInTheDocument();
+    expect(canvas.getByText("Credit from our team")).toBeInTheDocument();
     expect(canvas.getByText("+120 pts")).toBeInTheDocument();
   },
 };

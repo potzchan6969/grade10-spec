@@ -414,7 +414,7 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     delta: 120,
     date: formatDay(Date.UTC(2026, 9, 9)),
     month: formatMonthName(Date.UTC(2026, 9, 9)),
-    context: "Goodwill credit",
+    context: "Credit from our team",
   },
   {
     id: "entry-redeem",
