@@ -288,7 +288,9 @@ function MembershipPage({
               {active === "overview" ? (
                 <OverviewPane
                   actions={
-                    <div className="flex flex-col gap-2 md:hidden">
+                    /* The pane's gap-10 would float the buttons off the
+                     * card — pull them up to a section gap. */
+                    <div className="-mt-6 flex flex-col gap-2 md:hidden">
                       <Button
                         className="w-full"
                         onClick={() => setPassOpen(true)}
