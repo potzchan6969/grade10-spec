@@ -173,7 +173,7 @@ export const PointsAdjusted: Story = {
           delta: 120,
           date: "9 Oct 2026",
           month: "October 2026",
-          context: "Credit from our team",
+          context: "Credit from Grade10",
         },
       ],
     },
@@ -181,7 +181,7 @@ export const PointsAdjusted: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Points adjusted")).toBeInTheDocument();
-    expect(canvas.getByText("Credit from our team")).toBeInTheDocument();
+    expect(canvas.getByText("Credit from Grade10")).toBeInTheDocument();
     expect(canvas.getByText("+120 pts")).toBeInTheDocument();
   },
 };

@@ -205,7 +205,7 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     delta: 120,
     date: formatDay(FIXTURE_LOYALTY_ADJUST_AT_MS),
     month: formatMonthName(FIXTURE_LOYALTY_ADJUST_AT_MS),
-    context: "Credit from our team",
+    context: "Credit from Grade10",
   },
 ];
 
