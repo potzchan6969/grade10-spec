@@ -3,116 +3,101 @@ title: Vault
 icon: vault
 ---
 
-The vault is physical custody with a loan attached: a collector submits an
-item online, books a shop visit, staff value it and sign with them on an
-iPad, and the item sits in a locker until whatever it owes is settled. The
-item is really in a locker and the money is really a bank transfer somebody
-made.
+The vault is where a collector keeps cards with Grade10 for free. Eligible
+cards earn a small daily amount, and any card is one step from being sold in
+the store or at auction. The vault is the top of the funnel; consignment
+commission is the revenue - [Consignment](/p/grade10-site/consignment).
 
-- **Two lanes, one case** — custody is the product and financing is an
-  attachment, decided at intake by whether the collector asked for a loan;
-  storage is free. The financed lane is Grade10 Finance
-  ([Finance](/p/grade10-site/finance))
-- ❓ **Vault-first deposit** — the storage lane is to become a free deposit whose eligible cards earn a daily incentive, and from which a collector consigns - [Vault Deposit](/p/grade10-site/vault/deposit), [Incentive](/p/grade10-site/vault/incentive), [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal). Product confirms
-- **Two entities** — the custodian holds the item and the lender lends
-  against it; each prints on its own paper, and only the lender's carries a
-  licence
-- **Where** — `admin.grade10.com/vault` for the shop and
-  `grade10.com/vault/sign#<token>` for the iPad; one host and a path per
-  surface, and a vanity domain redirects to it
-- **The collector's address** - mailed links keep `grade10.com/vault/cases/<id>`,
-  which lands on the not-found surface
-  until the collector's screens ship —
-  [Collector Pages](/p/grade10-site/finance/collector-pages#messages)
-- **Money** — the brand's currency in whole cents, recorded by a person
-  after the bank moved it and against the date it moved; a payout takes two
-  people, and a correction takes a second holder of the money grant
-- **Paper** — three one-page English documents sealed in-house, anchored in
-  a hash chain, naming the shop and the entity whose paper it is
-- **Dates** — an instant is UTC everywhere; a calendar day is the brand's
-  own zone, `Asia/Hong_Kong`, so a due date, a dated page and the day's
-  queue are the day the shop is standing on ([[shared/dates-and-times]])
-- **Specs** — the capability requirements are this store's
-  `openspec/specs/grade10-site/vault` and, for the operator's surfaces,
-  `openspec/specs/grade10-admin/vault`; each page names the ones it documents
+:::flow{title="One card, from deposit to sale"}
+# In the vault
+
+## Collector — Deposit
+At the shop in Causeway Bay or an event, for free; staff record and photograph each card.
+
+## Staff — Authenticate and store
+The card is checked at deposit and put away.
+
+## Staff — Approve it to earn
+The card's market price and how easily it sells are checked.
+
+## Collector — Earn daily
+An approved card earns a daily amount into the earnings wallet.
+
+# On sale
+
+## Collector — Consign
+From the dashboard: the store, the auction or both, and the lowest price they accept.
+
+## Staff — Approve the listing
+Grade10 sets the list or starting price.
+
+## Buyer — Buy it
+In the shop, online or at auction; the card ships from the vault and stops earning.
+
+# Paid
+
+## Collector — Cash out
+Incentive and sale proceeds, after the identity check.
+:::
+
+- **Off the Main Path**
+  - **Ending a Consignment** — the card comes off sale and stays in the vault, earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
+  - **Vault Withdrawal** — the card goes back to the collector - [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal)
+- **A Loan Against a Card** — not the vault's; it is a case - [Finance](/p/grade10-site/finance)
 
 | Page | What it holds |
 | --- | --- |
-| [Collector Pages](/p/grade10-site/finance/collector-pages) | What a collector does on their own case, and what they hear |
-| [Portfolio](/p/grade10-site/vault/portfolio) | What a collector holds in the vault, and the acts on one item |
-| [Case Lifecycle](/p/grade10-site/finance/case-lifecycle) | The fourteen statuses, the two lanes, the timers, the exits |
-| [Loan and Money](/p/grade10-site/finance/loan-and-money) | The arithmetic, the policy the brand lends under, the money records and corrections, the ledger |
-| [Documents and Signing](/p/grade10-site/finance/documents-and-signing) | The three documents, the ceremony, consent, copies, verification |
-| [Operator Console](/p/grade10-site/finance/operator-console) | The queue and its views, one case's tabs, grants, the physical vault |
-| [Compliance and Readiness](/p/grade10-site/finance/compliance-and-readiness) | Identity, retention, evidence, the checklist before the first production case, what counsel supplies |
+| [Vault Deposit](/p/grade10-site/vault/deposit) | The deposit form, what a deposit needs, card states, custody |
+| [Incentive](/p/grade10-site/vault/incentive) | The daily amount, price tiers, approval, eligibility, vesting |
+| [Portfolio](/p/grade10-site/vault/portfolio) | What the collector sees of their cards in the vault |
+| [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal) | Taking a card home |
+| [Vault Documents](/p/grade10-site/vault/documents) | The papers a card collects, from deposit to withdrawal |
+| [Vault Operations](/p/grade10-site/vault/operations) | The staff side: queues, moves, roles, the daily run, reports |
+| [Earnings Wallet](/p/grade10-site/account/earnings-wallet) | Where incentive and sale proceeds collect, and cash-out |
+
+## Phases
+
+Each phase goes live before the first moment the business needs it, and is
+done when its last line works with a real collector and a real card.
+
+1. **Vault and Incentive** — mid November 2026
+   - **Delivers** — the deposit at the shop or an event, authentication, custody and moves; the daily price feed, eligibility and the daily amount; the collector's dashboard and the staff's
+   - **Until Phase B** — nothing cashes out, so incentive builds up; staff run withdrawals by hand
+   - **Done When** — a card deposited at an event is authenticated, approved, earns from the next day, and the collector sees it and its daily amount in the dashboard
+2. **Consign and Sell** — 6 December 2026 for the store
+   - **Delivers** — consigning from the vault with the agreement signed in the app; the shop's tills and auction lots from vault stock; statements and commission invoices; cash-out after the identity check; the consignment dashboard
+   - **Until a Later Phase** — staff enter store price changes
+   - **Done When** — a vaulted card is consigned and signed, sold in the store and at auction, its proceeds and incentive reach the wallet, and the collector passes the identity check and cashes out
+3. **Withdrawal** — taking a card home through the product
+   - ❓ **Date** — not set. Product confirms
+   - **Delivers** — withdrawal by appointment, with the identity check if not done already
+   - **On Go-Live** — withdrawals staff ran by hand are entered
+   - **Done When** — a collector withdraws a card, and the incentive already in the wallet stays cashable
+
+- **After Launch** — the online marketplace, with no date yet; stocktake
+- **Not Planned** — business verification for company owners
 
 ## Where It Is Open
 
-- **Not open to the public yet** — the vault's one site page, the signing
-  ceremony, is carried in development and staging, and on no lane the public
-  reaches —
-  [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
-
-## Users
-
-- **Collectors** — open a request, photograph the item, book the visit,
-  accept or decline the offer, sign on the shop's iPad, watch the case, ask
-  for the item back, cancel before the item is in custody
-- **Shop staff** — work the queue at the counter: value, offer, record that
-  the terms were explained, record or reuse the identity check, prepare and
-  hand over documents, vault, move, release, cancel, send the forfeiture
-  notice and forfeit
-- **Treasurers** — record money and nothing else: the payout, each
-  repayment, and with an approver's grant a correction
-- **Admins** — everything, including both sides of the money split
-
-:::detail{title="Design record" for="engineer"}
-- [Vault architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/vault.md)
-  — the case machine, the lanes, the vocabulary and the decisions
-- [Document-handling compliance audit](https://github.com/9gag/grade10/blob/main/docs/qa/vault.md)
-  — read as of its date; the checklist is current
-- [Production-readiness review](https://github.com/9gag/grade10/blob/main/docs/qa/vault-production-review.md)
-  — vault, doc-sign and auth together
-- [Account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
-  — who owns the verified identity the case only references
-- **Code** — `packages/vault/{contracts,backend,admin-frontend}` with
-  `packages/appointment`, `packages/doc-sign` and `packages/e-kyc` beside it;
-  the signing page in the grade10 SPA, the console pages in the grade10
-  admin panel; deployed as `grade10-vault-service`
-- **Platform pages** — [Vault Custody](/platform/vault-custody),
-  [Admin Access Control](/platform/admin-access),
-  [Account Data](/platform/account-data)
-:::
+- 🚧 **Not open yet** — nothing of the vault-first deposit runs; the first phase opens it at the shop and events
 
 :::detail{title="Product decisions" for="pm"}
-The vault turns a collector's graded card into cash without a sale, and gives
-the shop a lending product secured on an item it already holds and has
-valued. The owner's brief is [Grade10 Finance](/references/grade10-finance).
+Collectors hold cards they might sell some day but won't list today, and
+asking them to consign up front loses most of them. A free vault with a small
+daily return wins the deposit first; once the card is in Grade10's vault,
+consigning it is one step from the dashboard. Three collectors it is for:
 
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Collector | Wants cash against a card without selling it | Knows the offer, the total and the cost of lateness before the visit, is told the due date in writing when the money reaches them, and gets the card back on repayment |
-| Collector | Wants a card kept safely | One visit, one signature, a record of what is held |
-| Shop staff | A customer at the counter | Finds the person, values the item, agrees terms, signs and vaults in one visit |
-| Treasurer | Money moved at the bank | Writes it down once, against the right case and the right date, and can take a wrong row back |
-| Controller | Month end | Lists every payout, repayment and correction in the period and ties them to the statement |
-| Compliance | An inspection or a dispute | Produces the paper, the consent, the identity and the chain for one case by its id |
+- **The Shop Owner** — a small card shop with 40 graded cards to sell without running listings: deposits at an event, consigns at once, and earns until each sells
+- **The Earner** — a collector not ready to sell their PSA 10s who wants them to earn, and might consign if prices rise
+- **The Keeper** — a long-time collector who wants a binder kept safe, rarely opens the app, and would sell the cards they no longer look at
 
-**Not in scope.** Automated payments in either direction; an external
-e-signature vendor; online identity verification; a second custodian; storage
-fees; multi-item cases; renewing a live loan.
+Decisions:
 
-**Measurement.** On [Analytics](/p/grade10-site/analytics#vault).
+- **Vault first** — consignment starts from a vaulted card, never a new intake, so the second step costs the collector a tap, not a visit
+- **The incentive is an acquisition cost** — paid on cards Grade10 can sell, and recovered from commission; a storage fee would turn the deposit away
+- **Identity at the exit, not the door** — a deposit needs an account, a phone number and a declaration; the full identity check waits until money or a card leaves
+- **Keeping without a loan is a deposit** — it replaces a case's storage lane, so a card kept for free can earn and be consigned; the loan stays a case - [Finance](/p/grade10-site/finance)
+- **Not in scope** — spending the wallet on Grade10, a storage fee, scanning labels to record moves, a price staff type in by hand
 
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Custody is the product, financing an attachment | Decided | One case, two lanes, decided by the financing amount at intake | Product |
-| One case is one item | Decided | A unique index; siblings are separate cases booked on the lead case | Product |
-| A payout takes two people; a correction takes a second one | Decided | Staff and treasurer share no money grant, and nobody may take back a row they recorded | Product |
-| Entity, retention and lending policy are data | Decided | Three per-brand tables on one mechanism, every undecided field null and named by the checks with its owner and its cost. A set bound refuses; a null one allows outside production and, where a loan cannot be written without it, refuses the offer in production; a field marked blocking refuses a production deploy | Engineering |
-| Storage is free | Decided | The obligations seam is where a fee schedule lands | Owner |
-| Grade10 Finance is the vault's financed lane | Decided | The owner's notes describe the vault's flow step for step, so the loan runs on the case that holds the collateral rather than on a second product | Owner |
-| Two legal identities, one table | Decided | The custodian holds and the lender lends; the custodian's name blocks a production deploy and the lender's refuses an offer, so custody opens while the lender is still being registered | Legal |
-| Lending policy is seeded from the owner's numbers | Decided | Loan to value, the rate band per 30 days, term presets and offer validity in one per-brand table; in production a null bound refuses the offer, never the deploy | Owner |
-| A day is the brand's, an instant is UTC | Decided | `Asia/Hong_Kong` decides every calendar judgement — the due date, a dated page, the day's queue, an age, an expiry — and the wire, the database and every comparison stay UTC | Product |
+- ❓ **Measured by** — deposit to consignment (the share consigned and the days before it), incentive paid against commission earned, and cards earning past an age without being consigned; nothing records them yet. Product confirms
 :::
