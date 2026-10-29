@@ -9,7 +9,7 @@ for (const [component, story, alt, soldOut] of [
   ["cartdrawerbody", "pictures", "  ", false],
   ["cartdrawer", "pictures", "Card front", true],
 ] as const) {
-  test(`supplied picture and callbacks - ${component}/${story}`, async ({
+  test(`${story.includes("alt") ? "shared-ui-store-cart-SC-65 - " : ""}supplied picture and callbacks - ${component}/${story}`, async ({
     page,
   }) => {
     await page.goto(
