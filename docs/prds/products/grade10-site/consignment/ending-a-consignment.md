@@ -14,7 +14,7 @@ vault and keeps earning.
 - 🚧 **Early Fee** — where one is charged, it comes from the wallet; a short wallet is paid at the counter or becomes a debt
 
 :::callout{kind="note"}
-- ❓ **Fee for ending early** — none, a fixed fee a card, or a fee only once an auction lot is prepared. Product confirms
+- ❓ **Fee for ending early** — none, a fixed fee a card, or a fee only once an auction lot is prepared. Product confirms before Phase 2, 6 December
 :::
 
 ## What Happens

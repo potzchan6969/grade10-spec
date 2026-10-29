@@ -12,7 +12,7 @@ is no counter or paper consignment.
 2. 🚧 **Terms** — per card, the store, the auction or both, and the lowest acceptable price; the commission shown at Grade10's rate for each channel chosen
 3. 🚧 **Review and Sign** — the estimated payout, then the Consignment Agreement signed in the app
 
-- 🚧 **Pending Review** — what the collector sees until staff approve the listing
+- 🚧 **Pending Approval** — what the collector sees until staff approve the listing
 - 🚧 **Staff Help** — staff may help a collector use the dashboard; the collector submits and signs
 - 🚧 **Consign Button** — on each card in the dashboard, beside its market price and what it earns a day
 
@@ -46,8 +46,17 @@ On the consign form, and whenever the lowest price is changed.
 - 🚧 **Settings** — the 20% and 50% limits are admin settings
 - 🚧 **At Approval** — staff see the market price and whether the collector confirmed a low price, so there is less back-and-forth
 
+For a card with a market price of HKD 10,000:
+
+| Lowest acceptable price | Against the market | Outcome |
+| --- | --- | --- |
+| HKD 7,500 | 25% below | warned; kept if the collector confirms again |
+| HKD 9,000 | 10% below | accepted |
+| HKD 14,000 | 40% above | accepted |
+| HKD 16,000 | 60% above | refused; the collector lowers it |
+
 :::callout{kind="note"}
-- ❓ **Limits** — 20% below and 50% above are proposed. Product confirms
+- ❓ **Limits** — 20% below and 50% above are proposed. Product confirms before Phase 2, 6 December
 :::
 
 ## Listing Approval
@@ -64,7 +73,7 @@ On the consign form, and whenever the lowest price is changed.
 ## Both Channels
 
 - 🚧 **One at a Time** — a card consigned to both is never on the store shelf and in an auction together
-- 🚧 **Moving** — if it doesn't sell, staff move it to the other channel without the collector signing again; the commission is the rate of the channel it sells in
+- 🚧 **Moving** — if it doesn't sell, staff move it to the other channel without the collector signing again, taking it off the first channel at once; the commission is the rate of the channel it sells in
   - **From an Auction** — only before the catalogue is published, or after the auction ends unsold
 - 🚧 **Dashboard** — shows which channel the card is in now
 

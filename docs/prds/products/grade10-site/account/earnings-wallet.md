@@ -39,11 +39,11 @@ vault's daily incentive and consignment sale proceeds -
 - 🚧 **Paid** — within 3 business days, by FPS or bank transfer
   - **Built** — by bank transfer, to a payout account whose name matches the verified identity
 - 🚧 **Held While It Is Paid** — the amount leaves what can be cashed out the moment it is asked for, and comes back if its batch is rejected
-- **Account** — entered on the first request, saved to the profile and filled in next time; in the verified collector's name
+- **Account** — entered on the first request, saved to the profile and filled in next time, and the collector may change it; in the verified collector's name
 - **Held** — while the collector has a debt
 
 :::callout{kind="note"}
-- ❓ **Cash-out maximum** — HKD 50,000 a request, or no maximum with a manual review above a threshold. Finance confirms
+- ❓ **Cash-out maximum** — HKD 50,000 a request, or no maximum with a manual review above a threshold. Finance confirms before Phase 2, 6 December
 - ❓ **Where proceeds go by default** — recommended the wallet; built as a bank account kept on the consignor's list. Owner confirms
 :::
 
@@ -65,7 +65,7 @@ What finance does with the requests.
 - 🚧 **Review** — finance approves or rejects, with a reason shown to the collector
 
 :::callout{kind="note"}
-- ❓ **Vault value threshold** — HKD 50,000 or HKD 100,000. Product confirms
+- ❓ **Vault value threshold** — HKD 50,000 or HKD 100,000. Product confirms before Phase 2, 6 December
 :::
 
 ## Abuse Checks

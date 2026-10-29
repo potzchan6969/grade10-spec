@@ -9,7 +9,7 @@ platform's own entry, read in the collector's dashboard.
 
 ## Papers
 
-- 🚧 **Vault Terms** — signed by the collector at the first deposit: free storage, the incentive rules (the rate, eligibility, the daily drip, the day forfeited on withdrawal) and the withdrawal terms - [Vault Deposit](/p/grade10-site/vault/deposit#deposit-form)
+- 🚧 **Vault Terms** — signed by the collector at the first deposit: the storage fee, the incentive rules (the rate, eligibility, the daily drip, the day forfeited on withdrawal) and the withdrawal terms - [Vault Deposit](/p/grade10-site/vault/deposit#deposit-form)
 - 🚧 **Custody Receipt** — each deposit: the cards, where they are held, their condition against the photos; confirmed by the collector and recorded by staff
 - 🚧 **Incentive Ledger** — daily, per card: the price used, the liquidity factor, the rate, the amount earned and the amount cashed out - [Incentive](/p/grade10-site/vault/incentive)
 - 🚧 **Consignment Agreement** — on consigning, signed by the collector and Grade10: the cards, the channel, the commission, the lowest acceptable price, the prices and the period - [Consigning](/p/grade10-site/consignment/consigning#terms)

@@ -3,8 +3,8 @@ title: Vault Deposit
 order: 1
 ---
 
-The vault-first deposit: a collector leaves cards in the vault for free, and
-eligible cards earn a daily incentive. It replaces the storage lane of a case;
+The vault-first deposit: a collector leaves cards in the vault, at no charge for
+now, and eligible cards earn a daily incentive. It replaces the storage lane of a case;
 the financed lane is unchanged - [Case Lifecycle](/p/grade10-site/finance/case-lifecycle).
 
 ## Deposit Form
@@ -17,6 +17,7 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
    - **Ownership Declaration** — the collector declares they own every card
 3. 🚧 **Cards** — card, condition or certificate, front and back photos; a label printed for each
    - **Market Price** — the card's 30-day price, shown to the collector
+   - **Sales and Liquidity** — the card's sales count and liquidity, in the staff's detail view
    - **Estimated Daily Incentive** — or Not Eligible, for a card that earns nothing
    - **Skip Incentive Approval** — a checkbox on each card, unticked by default; staff tick it when they have already authenticated the card and verified its value on the spot, so it needn't wait for approval - [Incentive](/p/grade10-site/vault/incentive#incentive-approval)
 4. 🚧 **Consign Now** — optional, per card: the store, the auction or both, the lowest acceptable price (required for the store or both, optional for the auction) and the commission; Grade10 sets the list or starting price at approval - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
@@ -24,10 +25,6 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
    - **Vault Terms** — signed
    - **Consignment Agreement** — signed only where a card is consigned now
    - **Custody Receipt** — confirmed
-
-:::callout{kind="note"}
-- ❓ **Warehouse location** — whether the Kowloon warehouse takes deposits. Product confirms
-:::
 
 ## What a Deposit Needs
 
@@ -44,19 +41,23 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
 4. 🚧 **Approved to Earn** — passed incentive approval, or approved at deposit where staff skipped it; earning from the next day - [Incentive](/p/grade10-site/vault/incentive#incentive-approval)
 
 - 🚧 **Failed** — returned to the collector; it never earns
+- 🚧 **Afterwards** — an earning card is consigned, sold or withdrawn; a consignment ended or unsold comes back earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
+
+::image{src="assets/diagrams/vault-card-life.svg" alt="A card in the vault: Received, Authenticating, In the Vault, Approved to Earn and Consigned; a card that fails authentication is Failed and returned; an earning card is Withdrawn, collected at the shop; a consigned card is Sold, or comes back earning when the consignment ends or it goes unsold"}
 
 ## Custody
 
-- 🚧 **Locations** — the shop in Causeway Bay and an event location until the card moves; the Kowloon warehouse is open, as the note above says
+- 🚧 **Locations** — the shop in Causeway Bay, and an event location until the card moves
   - **In Transit** — a card between two locations; not a location itself
+- **Kerry Logistics** — the shipping partner: it takes stock from the shop to fill online orders, and is never a vault location
 - **Moves** — recorded when the card leaves and when it arrives, both confirmed by hand by staff - [Vault Operations](/p/grade10-site/vault/operations#moves)
-- **Storage** — free
+- 🚧 **Storage Fee** — an admin setting, nothing for now; every change logged
 
 :::detail{title="Product decisions" for="pm"}
 The deposit is the top of the funnel, so it asks for as little as it safely
 can: an account, a phone number and a declaration.
 
-- **Free deposit and storage** — a fee would turn away the deposits the incentive is paying for
+- **Storage at nothing for now, as a setting** — a fee would turn away the deposits the incentive is paying for, and a setting leaves room to charge one later without a rebuild
 - **Authenticated at deposit** — the card is checked at the counter before it is stored, so a card that fails never enters the vault
 - **A phone number captured, not confirmed** — it serves contact and abuse checks; identity rests on the identity check alone
 :::

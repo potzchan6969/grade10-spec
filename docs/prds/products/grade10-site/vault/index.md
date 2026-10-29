@@ -3,8 +3,8 @@ title: Vault
 icon: vault
 ---
 
-The vault is where a collector keeps cards with Grade10 for free. Eligible
-cards earn a small daily amount, and any card is one step from being sold in
+The vault is where a collector keeps cards with Grade10, at no charge for
+now. Eligible cards earn a small daily amount, and any card is one step from being sold in
 the store or at auction. The vault is the top of the funnel; consignment
 commission is the revenue - [Consignment](/p/grade10-site/consignment).
 
@@ -12,7 +12,7 @@ commission is the revenue - [Consignment](/p/grade10-site/consignment).
 # In the vault
 
 ## Collector — Deposit
-At the shop in Causeway Bay or an event, for free; staff record and photograph each card.
+At the shop in Causeway Bay or an event; staff record and photograph each card.
 
 ## Staff — Authenticate and store
 The card is checked at deposit and put away.
@@ -32,13 +32,18 @@ From the dashboard: the store, the auction or both, and the lowest price they ac
 Grade10 sets the list or starting price.
 
 ## Buyer — Buy it
-In the shop, online or at auction; the card ships from the vault and stops earning.
+At the shop's counter, online or at auction; a card that ships leaves from the shop. It stops earning.
 
 # Paid
+
+## Grade10 — Settle
+Sale price less commission reaches the wallet 3 business days after the buyer pays.
 
 ## Collector — Cash out
 Incentive and sale proceeds, after the identity check.
 :::
+
+::image{src="assets/diagrams/vault-card-routes.svg" alt="Where a vaulted card can go: deposited at the shop or an event into the vault; consigned to the store, on the shop's tills and online with the marketplace later, or to an auction lot; sold at the counter, or shipped by Kerry Logistics from the shop or collected; or withdrawn and collected at the shop"}
 
 - **Off the Main Path**
   - **Ending a Consignment** — the card comes off sale and stays in the vault, earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
@@ -83,7 +88,7 @@ done when its last line works with a real collector and a real card.
 
 :::detail{title="Product decisions" for="pm"}
 Collectors hold cards they might sell some day but won't list today, and
-asking them to consign up front loses most of them. A free vault with a small
+asking them to consign up front loses most of them. A vault that charges nothing with a small
 daily return wins the deposit first; once the card is in Grade10's vault,
 consigning it is one step from the dashboard. Three collectors it is for:
 
@@ -94,10 +99,10 @@ consigning it is one step from the dashboard. Three collectors it is for:
 Decisions:
 
 - **Vault first** — consignment starts from a vaulted card, never a new intake, so the second step costs the collector a tap, not a visit
-- **The incentive is an acquisition cost** — paid on cards Grade10 can sell, and recovered from commission; a storage fee would turn the deposit away
+- **The incentive is an acquisition cost** — paid on cards Grade10 can sell, and recovered from commission; a storage fee would turn the deposit away, so it is a setting at nothing for now - [Vault Deposit](/p/grade10-site/vault/deposit#custody)
 - **Identity at the exit, not the door** — a deposit needs an account, a phone number and a declaration; the full identity check waits until money or a card leaves
-- **Keeping without a loan is a deposit** — it replaces a case's storage lane, so a card kept for free can earn and be consigned; the loan stays a case - [Finance](/p/grade10-site/finance)
-- **Not in scope** — spending the wallet on Grade10, a storage fee, scanning labels to record moves, a price staff type in by hand
+- **Keeping without a loan is a deposit** — it replaces a case's storage lane, so the card can earn and be consigned; the loan stays a case - [Finance](/p/grade10-site/finance)
+- **Not in scope** — spending the wallet on Grade10, scanning labels to record moves, a price staff type in by hand
 
 - ❓ **Measured by** — deposit to consignment (the share consigned and the days before it), incentive paid against commission earned, and cards earning past an age without being consigned; nothing records them yet. Product confirms
 :::
