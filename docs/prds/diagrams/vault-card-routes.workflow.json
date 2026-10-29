@@ -31,12 +31,7 @@
       "label": "Buyer"
     }
   ],
-  "mainPath": [
-    "intake",
-    "vault",
-    "store",
-    "counter"
-  ],
+  "mainPath": ["intake", "vault", "store", "counter"],
   "nodes": [
     {
       "id": "intake",

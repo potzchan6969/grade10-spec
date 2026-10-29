@@ -8,10 +8,7 @@
     "legend": {
       "mode": "hidden"
     },
-    "viewBox": [
-      930,
-      640
-    ]
+    "viewBox": [930, 640]
   },
   "lanes": [
     {
@@ -121,12 +118,7 @@
       "variant": "security",
       "fromSide": "bottom",
       "toSide": "left",
-      "via": [
-        [
-          248,
-          479
-        ]
-      ],
+      "via": [[248, 479]],
       "label": "fails"
     },
     {
@@ -135,10 +127,7 @@
       "to": "sold",
       "variant": "emphasis",
       "label": "sold",
-      "labelAt": [
-        710,
-        320
-      ]
+      "labelAt": [710, 320]
     },
     {
       "id": "withdraw",
@@ -146,10 +135,7 @@
       "to": "withdrawn",
       "variant": "dashed",
       "label": "retrieved",
-      "labelAt": [
-        556,
-        320
-      ]
+      "labelAt": [556, 320]
     },
     {
       "id": "ended",
@@ -161,10 +147,7 @@
       "toSide": "top",
       "channelY": 96,
       "label": "ended or unsold",
-      "labelAt": [
-        633,
-        96
-      ]
+      "labelAt": [633, 96]
     }
   ]
 }
