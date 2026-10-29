@@ -6,7 +6,7 @@ The owner's product specification for the vault-first consignment model as of 20
 
 1. **Deposit** — Owner drops cards at CWB or an event. Free; staff record and photograph each card.
 2. **Enter the vault** — Card is authenticated and stored in the vault.
-3. **Incentive approval** (internal) — Staff check the card's price match and liquidity, then approve it to earn.
+3. **Incentive approval** (internal) — Staff check the card's price match and liquidity, then approve it to earn. Staff can skip it at deposit if they already verified the card.
 4. **Daily incentive** — Approved, eligible cards earn a daily amount into the earnings wallet.
 5. **Consign** — Owner chooses store, auction or both, and sets the lowest acceptable price.
 6. **Consignment approval** (internal) — Staff check the listing, set the list or starting price, and approve it for sale.
@@ -49,10 +49,11 @@ Owners consign cards from the vault; Grade10 sells them in store or at auction, 
 - **Money** — Settlement statements and commission invoices; Incentive stops when the card is sold
 - **Wallet** — Basic cash-out: minimum HKD 500, once every 7 days; Payout by FPS or bank transfer to an account in the verified name, saved to the profile
 - **Identity** — KYC at the first cash-out or sale payout
+- **Staff tools** — Internal consignment dashboard: conversion list, approval queues, on-sale monitor, funnel
 
 Guardrails:
 
-- Price changes are agreed offline and entered by staff
+- Price changes are entered by staff
 
 Done when:
 
@@ -95,7 +96,7 @@ States: Card: Deposited → Authenticated → In vault → Approved to earn (ear
   - Received: staff record and photograph it at deposit (Custody Receipt PR1)
   - Authenticating: checked at deposit in this phase
   - In vault: passed and stored; not earning yet
-  - Approved to earn: staff approve it in incentive approval (OP6); incentive counts from the day after approval (IC11)
+  - Approved to earn: staff approve it in incentive approval (OP6), or it is approved at deposit when staff tick Skip incentive approval (IN3); incentive counts from the day after approval (IC11)
   - Failed: returned to the owner; it never earns
 - **VA3** — No storage fee for now.
 
@@ -127,12 +128,13 @@ How staff register cards entering the vault, get the owner's e-signature, and op
   - SKU label generated
   - 30-day SNKRDUNK price shown to the owner; sales count and liquidity in the staff detail view
   - Estimated daily incentive, or 'Not eligible'
+  - A Skip incentive approval checkbox on each card (OP6): ticked when staff have authenticated the card and verified its value on the spot; unticked by default, so the card waits for approval
 - **IN4** — Step 4, consign now (optional), per card:
   - Consign now: yes or no
-  - Service: Store or Auction
-  - Lowest acceptable price (a hard limit)
+  - Service: Store, Auction or Both
+  - Lowest acceptable price (a hard limit): required for Store or Both, optional for Auction (none means no reserve)
   - Commission %
-  - Grade10 sets the list or starting price at review (OP3)
+  - Grade10 sets the list or starting price at approval (OP3)
 - **IN5** — Step 5, sign and confirm:
   - Vault Terms (DC1): e-signed by the owner
   - Consignment Agreement (DC2): e-signed, only if any card is consigned now
@@ -222,7 +224,7 @@ A daily amount paid on eligible vaulted cards, treated as an acquisition cost. R
 - **IC11** — Daily drip into the wallet:
   - Once a day, after midnight Hong Kong time, each eligible card's incentive for the previous day is posted to the wallet
   - Once posted, it can be cashed out
-  - Counting starts the day after staff approve the card in incentive approval (OP6), not at authentication; days waiting for approval are not paid later
+  - Counting starts the day after approval: staff approve the card in incentive approval (OP6), or approval is skipped at deposit (IN3). It does not start at authentication, and days waiting for approval are not paid later
   - The day's price and liquidity factor are fixed at the start of the day
   - Fractions of a cent carry over to the next day, so rounding never gains or loses money
 - **IC12** — One-time vesting period, held on the card (not in the wallet): ❓ T4
@@ -231,6 +233,9 @@ A daily amount paid on eligible vaulted cards, treated as an acquisition cost. R
   - Vesting happens once per deposit, not on a rolling basis
   - Withdrawing the card before day N forfeits what's vesting; nothing already in the wallet is ever taken back
   - Sale proceeds aren't affected
+- **IC16** — A card sold before its vesting period ends (IC12), for example sold on day 60 of a 90-day period: ❓ T9
+  - Sale proceeds are paid as usual (SE1)
+  - What happens to the incentive still vesting is a business decision: only the vested days, or the full period
 - **IC7** — Incentive can be cashed out whether or not the card is consigned, under the cash-out rules (WL4).
 - **IC8** — Vault-only and consigned cards earn the same rate.
 - **IC9** — Incentive on a card stops when the card is sold. ❓ T5
@@ -283,19 +288,23 @@ Turning vaulted cards into consignments, the core revenue. Owners consign from t
   - Store: commission can differ by channel (in store and marketplace)
   - Auction: one commission %
   - Optional minimum charge
-  - Lowest acceptable price (a hard limit); for auction it is also the reserve. With Both, one price covers both channels
-  - The owner sets only the lowest acceptable price. Grade10 sets the list price (store) or starting price (auction) at review, never below it
+  - Lowest acceptable price, checked by CS9:
+  - Store: required. It is the lowest the owner will sell for in store; staff may price higher at their will, which helps both sides
+  - Auction: optional. Without one there is no reserve and the lot sells at the winning bid; with one, it is the reserve
+  - Both: required, and it covers both channels
+  - Grade10 sets the list price (store, never below the lowest acceptable price) or the starting price (auction) at approval
   - Consignment period: 1 year from signing
 - **CS3** — One Consignment Agreement per consignment, signed in the app.
 - **CS6** — Consign form in the owner dashboard:
   - Step 1: choose cards already in the vault
-  - Step 2: per card, sell via Store, Auction or Both, lowest acceptable price; commission shown at Grade10's rate for each channel chosen
+  - Step 2: per card, sell via Store, Auction or Both, lowest acceptable price (required for Store or Both, optional for Auction) checked as in CS9; commission shown at Grade10's rate for each channel chosen
   - Step 3: review estimated payout and e-sign the Consignment Agreement
   - Staff approve every online request before it goes on sale (OP3); the owner sees Pending approval until then
 - **CS7** — Changing the lowest acceptable price after consigning:
   - The owner changes it from their dashboard; staff approve it like a new listing (OP3)
   - Store: if the new lowest price is above the current list price, Grade10 raises the list price to match
   - Auction: allowed until the catalogue is published; after that it's locked
+  - The price check in CS9 applies to the new price
   - The Consignment Agreement gets a new version (DC-R1)
 - **CS8** — A card consigned to Both is on sale in one channel at a time:
   - It is never on the store shelf and in an auction at once
@@ -304,6 +313,13 @@ Turning vaulted cards into consignments, the core revenue. Owners consign from t
   - If it doesn't sell there, staff move it to the other channel without the owner signing again
   - Moving it takes it off the first channel at once; an auction lot can only move before the catalogue is published (WA1), or after the auction ends unsold
   - The owner dashboard shows which channel it is in now
+- **CS9** — Price check on the lowest acceptable price, on the consign form and when it is changed (CS7): ❓ T10
+  - It is compared with the card's market price, the 30-day SNKRDUNK median (IC2)
+  - More than 20% below market: a warning that suggests raising it; the owner must confirm a second time to keep it, and isn't forced to raise it
+  - More than 50% above market: rejected, because a price that far above market would hurt the chance of a sale; the owner must lower it
+  - The 20% and 50% limits are proposed and are admin settings (IO3)
+  - A card with no market price has no check
+  - Staff see the market price and whether the owner confirmed a low price when they approve the listing (OP3), so there is less back-and-forth
 
 **Encouraging consignment**
 
@@ -332,7 +348,7 @@ Selling consigned cards in store and, once it launches, on the marketplace.
 
 **Price**
 
-- **ST2** — Price changes are agreed offline and entered by staff. A new price can never go below the lowest acceptable price.
+- **ST2** — Price changes are entered by staff. Staff may raise the price at their will, which helps owner and house alike. A price can never go below the lowest acceptable price.
 
 **Fulfilment**
 
@@ -347,7 +363,7 @@ Selling consigned cards as auction lots, shipped from the vault.
 
 - **AU1** — Auction listing from vault stock.
   - A card consigned to Both is not on the store shelf while its lot is open (CS8)
-  - The reserve is the lowest acceptable price
+  - The reserve is the lowest acceptable price, if the owner set one; without it there is no reserve and the lot sells at the winning bid
   - Commission on the hammer price only
   - If the winner doesn't pay, the card is relisted
 
@@ -496,7 +512,7 @@ Staff tools in the internal portal for running the vault day to day.
 
 - **OP1** — Deposit queue:
   - Cards waiting for authentication
-  - Pass: the card enters the vault and joins the incentive approval queue (OP6); it doesn't earn until approved
+  - Pass: the card enters the vault and joins the incentive approval queue (OP6), unless approval was skipped at deposit (IN3); it doesn't earn until approved
   - Fail: the owner is told and the card is returned; it never earns
 
 **Incentive approval**
@@ -505,7 +521,8 @@ Staff tools in the internal portal for running the vault day to day.
   - Staff check the card's SNKRDUNK match, price and liquidity factor (IC2, IC3)
   - Approve: the card starts earning from the next day (IC11)
   - Reject or hold: the card stays in the vault without earning; the owner sees the reason
-  - A second staff member approves cards above a value threshold (TBC)
+  - Skipped at deposit: staff who already authenticated the card and verified its value at the counter or an event tick Skip incentive approval on the deposit form (IN3); the card is approved when the deposit is submitted, and the skip is recorded with the staff member
+  - A second staff member approves cards above a value threshold, skipped or not (TBC)
 
 **Custody**
 
@@ -517,8 +534,9 @@ Staff tools in the internal portal for running the vault day to day.
 
 - **OP3** — Consignment approval, between consign and sale:
   - Check each listing the owner submitted before it goes on sale
+  - See the market price against the lowest acceptable price, and whether the owner confirmed a low price (CS9)
   - For a card consigned to Both, choose which channel it starts in (CS8)
-  - Set the list price (store) or starting price (auction), never below the lowest acceptable price
+  - Set the list price (store), never below the lowest acceptable price, or the starting price (auction); staff may price a store card higher at their will
   - Create the Shopify product (store) or add the card to an auction lot
   - Approve: the listing goes on sale; reject: the owner is told why and can edit and resubmit
 
@@ -561,12 +579,61 @@ Running and controlling the daily incentive.
   - Liquidity factor settings (T1)
   - Eligible products (T2)
   - Caps (T3)
+  - Price check limits for the lowest acceptable price (CS9)
 
 **Controls**
 
 - **IO4** — Review flags from abuse checks (ID4):
   - Staff can pause incentive on a card or an account
   - Paused incentive doesn't accrue until staff release it
+
+### Consignment dashboard (Phase B)
+
+One internal view for consignment staff to turn vaulted cards into consignments, and consignments into sales, faster. The measure is conversion: the share of vaulted cards that get consigned, and the time it takes.
+
+
+**Find cards to convert**
+
+- **CD1** — Conversion list: vaulted cards that are earning and not consigned:
+  - One row a card: owner, market price (IC2), liquidity, days in the vault, incentive paid so far, last contact
+  - Ranked by how likely the card is to sell: liquidity and market price first, then days in the vault
+  - Filters: price tier (IC14), liquidity, days in the vault, owner type, contact status
+  - Cards that have earned for a long time without being consigned are flagged (RP2)
+- **CD2** — Owner outreach, from the same row:
+  - Send the owner an email with the card's market price and a link to the consign form
+  - Log a call or message by hand, with its outcome: interested, not now, declined
+  - Each card shows when the owner was last contacted, so nobody is contacted twice in a short time (limit TBC)
+  - A declined card leaves the list until staff bring it back
+
+**Speed up approval**
+
+- **CD3** — Consignment approval queue (OP3), oldest first:
+  - Consignments waiting for approval, with how long each has waited
+  - Each row shows the owner's lowest acceptable price against the market price, and any low-price warning the owner confirmed (CS9)
+  - Approve, reject with a reason, and set the list or starting price and the starting channel (CS8), all in the row
+  - Bulk approve for rows with nothing flagged
+  - Target time to approve: TBC
+- **CD4** — Incentive approval queue (OP6), oldest first:
+  - Cards waiting to be approved to earn, with the SNKRDUNK match and liquidity beside each
+  - Cards approved at deposit (IN3) don't appear
+
+**Keep sales moving**
+
+- **CD5** — On-sale monitor:
+  - Cards on sale, by channel and days on sale
+  - A card with no sale after a set number of days is flagged, so staff can lower the list price (never below the lowest acceptable price) or move a Both card to the other channel (CS8); the number of days is TBC
+  - Auction lots that ended unsold are listed to move or relist (WA5)
+
+**Measure conversion**
+
+- **CD6** — Conversion funnel, for any date range:
+  - Deposited, approved to earn, consigned, approved for sale, sold
+  - Median time between steps, and where cards wait longest
+  - By price tier, owner type and channel
+  - Incentive paid per consigned card, against commission earned (RP2)
+- **CD7** — Who sees it:
+  - Consignment staff
+  - No ID or bank details; those stay with finance (OP5)
 
 ### Finance operations (Phase A → C)
 
@@ -651,6 +718,14 @@ What management and staff track.
   - Blocks: WL4
   - Option: HKD 50,000 per request — Covers most sellers; larger amounts split over weeks
   - Option: No maximum, manual review above a threshold — No friction for big sellers; finance checks large amounts
+- ❓ **T9 · Incentive when a card sells during vesting** (P1) — A card vests for N days (say 90) and sells on day 60: does the owner get only the 60 days vested, or the full 90 days including the remaining 30?
+  - Why: Paying the full period rewards consigning early but pays for days the card wasn't in the vault. Decide together with when incentive stops on a sale (T5).
+  - Blocks: IC16, IC12
+  - Option: Only the vested days (60) — Recommended: pays what the card earned; cost stays tied to time in the vault
+  - Option: The full period (90) — Pays the remaining 30 days as well; removes any reason to wait out vesting before consigning, at a higher cost
+- ❓ **T10 · Price check limits** (P1) — Are 20% below and 50% above the market price the right limits for the lowest acceptable price?
+  - Why: Too tight blocks owners who have a reason for their price; too loose lets through prices that won't sell.
+  - Blocks: CS9
 
 ## Incentive calculator
 

@@ -41,6 +41,7 @@ In the shop, online or at auction; the card ships from the vault and stops earni
 Sale proceeds reach the wallet 3 business days after the buyer pays; the collector cashes out after the identity check - [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 :::
 
+- **Staff Tools** — one internal view to convert vaulted cards and speed approvals - [Consignment Dashboard](/p/grade10-site/consignment/dashboard)
 - **Off the Main Path**
   - **Ending a Consignment** — the card comes off sale and stays in the vault, earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
   - **Vault Withdrawal** — the card goes back to the collector - [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal)
@@ -105,7 +106,7 @@ to record moves; a price staff type in by hand.
 | Vault first | Decided | The vault is the top of the funnel; consignment starts from a vaulted card, never a new intake | Product |
 | A daily incentive, not one at consignment | Decided | Replaces the 5% incentive paid at consignment: a daily amount on eligible vaulted cards, paid whether or not the card is consigned | Product |
 | Consign fully online | Decided | The collector consigns and signs from their dashboard; staff may help but do not submit | Product |
-| Lowest acceptable price only | Decided | Replaces a list price and floor agreed at signing: the collector sets only the lowest price they accept; Grade10 sets the list or starting price at review | Product |
+| Lowest acceptable price only | Decided | Replaces a list price and floor agreed at signing: the collector sets only the lowest price they accept, optional at auction; Grade10 sets the list or starting price at approval | Product |
 | Paid T+3 after the buyer pays | Decided | Replaces payout after the return window: proceeds reach the wallet 3 business days after payment; a later refund is reversed from the wallet | Product |
 | Vesting on the card | Decided | For a card's first days in the vault its incentive vests on the card and reaches the wallet in one go, once per deposit; nothing in the wallet is ever taken back | Product |
 | Two internal reviews | Decided | Staff approve a card before it earns and a listing before it sells | Product |

@@ -22,7 +22,8 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
 3. **Cards** — card, condition or certificate, front and back photos; a label printed for each
    - **Market Price** — the card's 30-day price, shown to the collector
    - **Estimated Daily Incentive** — or Not Eligible, for a card that earns nothing
-4. **Consign Now** — optional, per card: the store, the auction or both, the lowest acceptable price and the commission; Grade10 sets the list or starting price at review - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
+   - **Skip Incentive Approval** — a checkbox on each card, unticked by default; staff tick it when they have already authenticated the card and verified its value on the spot, so it needn't wait for approval - [Incentive](/p/grade10-site/vault/incentive#incentive-approval)
+4. **Consign Now** — optional, per card: the store, the auction or both, the lowest acceptable price (required for the store or both, optional for the auction) and the commission; Grade10 sets the list or starting price at approval - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
 5. **Sign** — on the shop's tablet, or by a link emailed to the collector
    - **Vault Terms** — signed
    - **Consignment Agreement** — signed only where a card is consigned now
@@ -44,7 +45,7 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
 1. **Received** — recorded and photographed at deposit
 2. **Authenticating** — checked at deposit
 3. **In the Vault** — passed and stored; not earning yet
-4. **Approved to Earn** — passed incentive approval; earning from the next day - [Incentive](/p/grade10-site/vault/incentive#incentive-approval)
+4. **Approved to Earn** — passed incentive approval, or approved at deposit where staff skipped it; earning from the next day - [Incentive](/p/grade10-site/vault/incentive#incentive-approval)
 
 - **Failed** — returned to the collector; it never earns
 
