@@ -17,8 +17,8 @@ const MEMBERSHIP_STORY_ID = "loyalty-membership-screens-membership--default";
 /**
  * Tiers & Benefits as its own page — what a small viewport navigates to from
  * the tier card. The same list becomes a Membership section on wide
- * viewports. The page reads the member's held tier and marks it on the
- * ladder and its card; the blocks only receive them as props.
+ * viewports. The page reads the member's held tier and marks it on its
+ * card; the blocks only receive it as a prop.
  */
 function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
   return (
@@ -42,11 +42,7 @@ function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
           <h1 className="text-xl font-semibold text-foreground sm:text-3xl">
             {TIER_BENEFITS_PAGE_COPY.title}
           </h1>
-          <TiersBenefitsPane
-            heldTier={heldTier}
-            qualifyingPoints={MEMBERSHIP_VIEW.qualifyingPoints}
-            qualifyingTarget={MEMBERSHIP_VIEW.qualifyingThreshold}
-          />
+          <TiersBenefitsPane heldTier={heldTier} />
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
@@ -65,7 +61,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** All three rungs; the member's Gold card and rung wear the highlight. */
+/** All three rungs; the member's Gold card wears the highlight. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -87,7 +83,6 @@ export const Default: Story = {
     expect(
       canvas.getByText("1.7 pt for every HK$10 spent"),
     ).toBeInTheDocument();
-    expect(canvas.getByText("320")).toBeInTheDocument();
     expect(
       canvas.getByRole("heading", { level: 2, name: /how points work/i }),
     ).toBeInTheDocument();
@@ -114,19 +109,10 @@ export const SilverHeld: Story = {
   },
 };
 
-/** A Black member: invitation-held — Silver and Gold read upcoming, the
- * qualifying pill and footnote stay away, and Black wears the highlight. */
+/** A Black member: invitation-held — Black wears the highlight. */
 export const BlackHeld: Story = {
   args: { heldTier: "Black" },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const steps = canvasElement.querySelectorAll('[data-slot="step"]');
-    expect(steps[0]).toHaveAttribute("data-state", "upcoming");
-    expect(steps[1]).toHaveAttribute("data-state", "upcoming");
-    expect(steps[2]).toHaveAttribute("data-state", "progress");
-    expect(
-      canvas.queryByText("Qualifying pts this year"),
-    ).not.toBeInTheDocument();
     const cards = canvasElement.querySelectorAll(
       '[data-slot="tier-info-card"]',
     );
@@ -134,7 +120,7 @@ export const BlackHeld: Story = {
   },
 };
 
-/** The standalone page at a phone width: the rungs stack. */
+/** The standalone page at a phone width: the cards stack. */
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {

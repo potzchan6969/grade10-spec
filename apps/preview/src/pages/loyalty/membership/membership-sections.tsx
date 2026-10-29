@@ -10,7 +10,6 @@ import {
   RewardMenu,
   TierCard,
   TierInfoCard,
-  TierLadder,
   WalletPassLinks,
 } from "@grade10/ui";
 import {
@@ -37,7 +36,6 @@ import {
   TIER_BENEFITS,
   TIER_BENEFITS_PAGE_COPY,
   TIER_CARD_COPY,
-  TIER_LADDER_COPY,
   WALLET_PASS_COPY,
 } from "../loyalty-content";
 
@@ -274,40 +272,17 @@ function PointHistoryPane({ view }: { view: MembershipView }) {
 }
 
 /**
- * Tiers & benefits — the ladder, one card per rung and How Points Work. The
- * same composition the standalone Tiers & Benefits screen draws.
+ * Tiers & benefits — one card per rung and How Points Work. The same
+ * composition the standalone Tiers & Benefits screen draws; the member's
+ * standing lives on the tier card, not a ladder.
  */
-function TiersBenefitsPane({
-  heldTier,
-  qualifyingPoints,
-  qualifyingTarget,
-}: {
-  heldTier: string;
-  /** The ladder draws only on the standalone Tiers & Benefits screen; on
-   * Membership the tier card already carries the member's standing, so the
-   * pane drops the rungs and keeps the per-tier benefit cards. */
-  qualifyingPoints?: number;
-  qualifyingTarget?: number;
-}) {
+function TiersBenefitsPane({ heldTier }: { heldTier: string }) {
   return (
     <div className="flex flex-col gap-8">
       <section
         aria-label={TIER_BENEFITS_PAGE_COPY.title}
         className="flex flex-col gap-4"
       >
-        {qualifyingPoints !== undefined && qualifyingTarget !== undefined ? (
-          <TierLadder
-            copy={TIER_LADDER_COPY}
-            currentTier={heldTier}
-            qualifyingPoints={qualifyingPoints}
-            qualifyingTarget={qualifyingTarget}
-            rungs={TIER_BENEFITS.map((row) => ({
-              tier: row.tier,
-              caption: row.ladderCaption,
-              invitationOnly: row.invitationOnly,
-            }))}
-          />
-        ) : null}
         <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
           {TIER_BENEFITS.map((row) => (
             <TierInfoCard
