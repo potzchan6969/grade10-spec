@@ -9,13 +9,13 @@ title: Store Order History Test Cases
 
 ## Background
 
-* `<your orders url>` is `<g10url>/profile/orders`.
+* `<my orders url>` is `<g10url>/profile/orders`.
 
-## Walk 1: Read Your Orders
+## Walk 1: Read My Orders
 
 **Starting state:**
 
-- customer(signed-in member) on `<your orders url>`, with `<shipped order>`, `<processing order>`, `<completed order>` and `<canceled order>`, placed on known dates
+- customer(signed-in member) on `<my orders url>`, with `<shipped order>`, `<processing order>`, `<completed order>` and `<canceled order>`, placed on known dates
 
 **Shared test data:**
 
@@ -70,7 +70,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `<your orders url>`.
+1. Open `<my orders url>`.
 2. Read Active Orders, then Past Orders.
 
 **Expected Results:**
@@ -98,12 +98,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. On `<your orders url>`, select View Details on `<shipped order>`, then go back.
+1. On `<my orders url>`, select View Details on `<shipped order>`, then go back.
 2. Select Track Order on `<shipped order>`.
 
 **Expected Results:**
 
-* Step 1 opens `/profile/orders/<order id>`, and Back returns to `<your orders url>`.
+* Step 1 opens `/profile/orders/<order id>`, and Back returns to `<my orders url>`.
 * Step 2 opens the carrier's tracking page, UI matching store-order-history-blocks-orderhistorycardheader--with-track-order.
 
 ---
@@ -131,14 +131,14 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. On `<your orders url>`, read `<completed order>`'s actions.
+1. On `<my orders url>`, read `<completed order>`'s actions.
 
 **Expected Results:**
 
 * View Details only, and no Track Order, UI matching store-order-history-blocks-orderhistorycard--completed-without-track.
 
 <!-- trace:case id=g10.store-order-history.TC-xzr rev=1 -->
-#### g10.store-order-history.TC4: Signing in from Your Orders comes back to it
+#### g10.store-order-history.TC4: Signing in from My Orders comes back to it
 
 **Classification:**
 
@@ -157,13 +157,13 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `<your orders url>`.
+1. Open `<my orders url>`.
 2. Sign in.
 
 **Expected Results:**
 
 * Step 1 asks the customer to sign in.
-* Step 2 returns to `<your orders url>`, listing the member's orders.
+* Step 2 returns to `<my orders url>`, listing the member's orders.
 
 <!-- trace:case id=g10.store-order-history.TC-ykc rev=2 -->
 #### g10.store-order-history.TC5: A paid web checkout lists once the shop records the order
@@ -186,7 +186,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Pay with the payment provider's published test card that succeeds.
-2. Open `<your orders url>`.
+2. Open `<my orders url>`.
 
 **Expected Results:**
 
@@ -221,7 +221,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. End the checkout as the row says.
-2. Open `<your orders url>`.
+2. Open `<my orders url>`.
 
 **Expected Results:**
 
@@ -247,7 +247,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `<your orders url>`.
+1. Open `<my orders url>`.
 
 **Expected Results:**
 
@@ -272,13 +272,13 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `<your orders url>`.
+1. Open `<my orders url>`.
 2. Select Retry.
 
 **Expected Results:**
 
 * Step 1: a failure message in the site's language, with Retry, UI matching store-order-history-screens-order-history--recoverable-failure.
-* Step 2 lists the orders, and the address is still `<your orders url>`.
+* Step 2 lists the orders, and the address is still `<my orders url>`.
 
 <!-- trace:case id=g10.store-order-history.TC-cbg rev=1 -->
 #### g10.store-order-history.TC9: An account with no orders offers a way back to the Store
@@ -300,7 +300,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `<your orders url>`.
+1. Open `<my orders url>`.
 2. Select Shop Now.
 
 **Expected Results:**
@@ -344,7 +344,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. On `<your orders url>`, read `<order>`'s badge.
+1. On `<my orders url>`, read `<order>`'s badge.
 2. Select View Details and read the badge there.
 
 **Expected Results:**
@@ -384,7 +384,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. On `<your orders url>`, read the order's items.
+1. On `<my orders url>`, read the order's items.
 
 **Expected Results:**
 
@@ -425,7 +425,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Sign in as the row says.
-2. Open `<your orders url>`.
+2. Open `<my orders url>`.
 3. Complete `<guest order A>` in the shop's admin, then read the points balance and open the order.
 
 **Expected Results:**
@@ -463,7 +463,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Sign in as the row says.
-2. Open `<your orders url>`.
+2. Open `<my orders url>`.
 
 **Expected Results:**
 

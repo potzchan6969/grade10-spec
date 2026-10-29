@@ -23,7 +23,7 @@ repairs its payment lifecycle.
   - Changed lines named before a stale basket can be paid
 - Order settlement and return
   - Pending orders settle through webhook, reconcile and order reads
-  - Paid orders appear in Your Orders and release the member cart
+  - Paid orders appear in My Orders and release the member cart
   - Shopify confirmation returns the collector to the Grade10 order
 - Guest checkout
   - The basket and at most one public code: no member's code, no reward
@@ -32,7 +32,7 @@ repairs its payment lifecycle.
   - A guest order earns nothing: no account made, no points, no claim
   - A private order link, and Continue back to the order just sent
   - A guest order joins the account that proves its address, and is listed
-    in that member's Your Orders
+    in that member's My Orders
 - Carrier rates
   - Shopify asks a token-gated stateless carrier rule for served destinations
   - The callback and store preview use the same configured rate
@@ -165,7 +165,7 @@ claim of it SHALL be refused.
 
 **Joining** - A paid guest order SHALL join the account whose sign-in proved
 the address it was paid under: on that account's sign-in, or at payment when
-the account already proved it. A member's Your Orders SHALL list the guest
+the account already proved it. A member's My Orders SHALL list the guest
 orders paid under the address their sign-in proved.
 
 **The cart** - This browser's cart SHALL keep the basket while the guest's
@@ -225,11 +225,11 @@ order paid, unless the guest changed the cart's lines or code after Pay.
 - **AND** no guest order is made
 
 <!-- trace:scenario id=g10.store-checkout.SC-pxw rev=2 -->
-#### Scenario: grade10-site-store-checkout-SC-71 - A member's Your Orders lists guest orders under their address
+#### Scenario: grade10-site-store-checkout-SC-71 - A member's My Orders lists guest orders under their address
 **Serves:** grade10-site-store-checkout-US-09 - A buyer finds a guest order again
 
 - **GIVEN** a guest order paid under the address a member signs in with
-- **WHEN** that member opens Your Orders
+- **WHEN** that member opens My Orders
 - **THEN** the guest order is listed
 - **AND** it names that member as its owner and has earned no points
 
@@ -280,7 +280,7 @@ The page SHALL tell search engines not to index it.
 Shopify's Thank you Continue SHALL reach `/orders/latest`. That page SHALL open
 the order this browser last sent to Shopify, once, and only within a day of
 that checkout: a guest's private page, or a member's own order. With no such
-order remembered, it SHALL send a signed-in member to Your Orders and anyone
+order remembered, it SHALL send a signed-in member to My Orders and anyone
 else to the store, deciding only once the session has resolved. The page SHALL
 tell search engines not to index it.
 
@@ -300,7 +300,7 @@ tell search engines not to index it.
 - **GIVEN** a browser that remembers no checkout, one that already used it, or
   one whose checkout is more than a day old
 - **WHEN** `/orders/latest` opens
-- **THEN** a signed-in member lands on Your Orders
+- **THEN** a signed-in member lands on My Orders
 - **AND** anyone else lands on the store
 
 ### Requirement: A checkout intent is safe to repeat
@@ -403,7 +403,7 @@ retain the provider's paid total, goods, shipping, tax and order identity when
 Shopify supplies them. Duplicate or cross-shop events SHALL not settle another
 order.
 
-**Visibility** - Your Orders SHALL show a newly placed pending order as
+**Visibility** - My Orders SHALL show a newly placed pending order as
 settling, poll while it can move, and show the paid order and its paid total
 after settlement.
 
@@ -411,7 +411,7 @@ after settlement.
 Shopify and SHALL release the paid lines only after the order is `paid`.
 
 **Return** - A Shopify Thank You and Order status checkout UI extension SHALL
-offer a static link to Grade10 Your Orders, where the matching purchase is
+offer a static link to Grade10 My Orders, where the matching purchase is
 visible after the member returns. The extension SHALL not promise a
 purchase-specific deep link. The native Continue shopping button and Shopify
 account path SHALL not be the required return destination.
@@ -421,7 +421,7 @@ account path SHALL not be the required return destination.
 **Serves:** grade10-site-store-checkout-US-03 - The collector can see that a returned purchase is still settling
 
 - **GIVEN** a member has returned from Shopify with a new pending order
-- **WHEN** they open Your Orders before payment settlement
+- **WHEN** they open My Orders before payment settlement
 - **THEN** the order appears in the active orders section
 - **AND** pending is shown as a settling state, not an empty result or an error
 - **AND** the page polls while the order can still move
@@ -451,7 +451,7 @@ account path SHALL not be the required return destination.
 **Serves:** grade10-site-store-checkout-US-03 - The collector continues from Shopify to the purchase in Grade10
 
 - **GIVEN** a member has completed payment on a Shopify invoice
-- **WHEN** the member activates the Grade10 Your Orders link on the Shopify
+- **WHEN** the member activates the Grade10 My Orders link on the Shopify
   confirmation page
 - **THEN** the Grade10 orders surface opens and shows the matching purchase
 - **AND** it does not require the native Continue shopping button or send the

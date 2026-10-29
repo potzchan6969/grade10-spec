@@ -3,7 +3,7 @@
 ## Why
 
 Collectors need a trustworthy account of their Store purchases, with enough
-product information to recognise each item. Your Orders and Order Details now
+product information to recognise each item. My Orders and Order Details now
 exist, but their image frames remain empty because the typed order items and
 page projections carry no picture.
 
@@ -20,14 +20,14 @@ the first baseline without adding production instrumentation.
 
 ## What Changes
 
-- Add a signed-in Your Orders surface at `/profile/orders`, with Active orders
+- Add a signed-in My Orders surface at `/profile/orders`, with Active orders
   above Past orders, the designed empty state, loading and recoverable error
   states, and links to one order.
 - Add an owner-only order detail surface at `/profile/orders/<order-id>`, composed
   from the existing shared Order Details block and the current Store order read.
 - Integrate both pages through `@grade10/store-frontend`; the Grade10
   application does not call the Store transport or Shopify directly.
-- Show each item's first current product picture on Your Orders and Order
+- Show each item's first current product picture on My Orders and Order
   Details, including existing purchases, private order links and the console's
   customer preview. Missing picture facts preserve the existing placeholder;
   a failed picture lookup does not fail the order read.
@@ -131,11 +131,11 @@ planning gates; draft cases claim no execution or human approval.
 
 ## References
 
-- [Your Orders · Product Pictures](../../../docs/prds/products/grade10-site/store/order-history.md#product-pictures)
+- [My Orders · Product Pictures](../../../docs/prds/products/grade10-site/store/order-history.md#product-pictures)
   - current product pictures on earlier and new purchases.
 - [Order Details · Product Pictures](../../../docs/prds/products/grade10-site/store/order-detail.md#product-pictures)
   - pictures on owned details and private order links.
-- [Your Orders · Orders](../../../docs/prds/products/grade10-site/store/order-history.md#orders)
+- [My Orders · Orders](../../../docs/prds/products/grade10-site/store/order-history.md#orders)
   — the private address, Active and Past groups, order actions and empty account.
 - [Order Details · Order](../../../docs/prds/products/grade10-site/store/order-detail.md#order)
   — the owner-only address, supplied facts and fulfilment actions.

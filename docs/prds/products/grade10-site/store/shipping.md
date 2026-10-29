@@ -9,7 +9,7 @@ order: 22
 - **Order badge** - the one [Order Status](/p/grade10-site/commerce/order-status)
   gives the order; no badge says a parcel arrived
 - **Tracking** - the carrier link on an order -
-  [Your Orders](/p/grade10-site/store/order-history)
+  [My Orders](/p/grade10-site/store/order-history)
 
 ## Intended shape
 

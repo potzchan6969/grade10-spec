@@ -20,4 +20,4 @@
 
 ## 4. The walk (grade10)
 
-- [ ] 4.1 Walk a guest from the drawer through Shopify's page back to the order link, then sign in under the receipt's address and find the order in Your Orders — blocked: needs a running store worker against a Shopify shop and a mailbox for the magic link
+- [ ] 4.1 Walk a guest from the drawer through Shopify's page back to the order link, then sign in under the receipt's address and find the order in My Orders — blocked: needs a running store worker against a Shopify shop and a mailbox for the magic link

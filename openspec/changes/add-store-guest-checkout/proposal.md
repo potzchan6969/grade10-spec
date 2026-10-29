@@ -37,7 +37,7 @@ secondary: share of guest orders linked to an account.
   it. The email note and the ask show on any signed-out view of the
   order — this return or a link opened later; signed in, neither shows
 - **Guest orders join the account** — every paid guest order placed under an
-  email is listed in Your Orders automatically once a sign-in proves that
+  email is listed in My Orders automatically once a sign-in proves that
   email, on any sign-in; the order gets an owner
 - **No points for a guest order** — a guest order never earns, linked or
   not; only an order placed with an account earns
@@ -96,7 +96,7 @@ See [Non-Goals](decisions.md#non-goals).
 - [Cart Drawer · Promo Code](../../../docs/prds/products/grade10-site/store/cart.md#promo-code)
 - [Order Details · Order Link](../../../docs/prds/products/grade10-site/store/order-detail.md#order-link)
 - [Order Details · Back From Checkout](../../../docs/prds/products/grade10-site/store/order-detail.md#back-from-checkout)
-- [Your Orders · Orders](../../../docs/prds/products/grade10-site/store/order-history.md#orders)
+- [My Orders · Orders](../../../docs/prds/products/grade10-site/store/order-history.md#orders)
 - [Membership · Purchases Before the Account](../../../docs/prds/products/grade10-site/loyalty/membership.md#purchases-before-the-account)
 - [Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)
 - [Discounts · Public Codes](../../../docs/prds/products/grade10-site/store/discounts.md#public-codes)

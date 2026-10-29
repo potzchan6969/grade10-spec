@@ -180,7 +180,7 @@ Runs once per row of **Test data**.
 1. On `<listing url>`, select Add to cart on `<product A>`'s card.
 2. Open Cart, wait for the read, apply `<member code>`, then type 100 in the points field and Apply.
 3. Select Proceed to Checkout, read Shopify's page, and pay with the published test card that succeeds.
-4. Select the Grade10 Your Orders link on the thank-you page, then View Details on the new order.
+4. Select the Grade10 My Orders link on the thank-you page, then View Details on the new order.
 
 **Expected Results:**
 
@@ -222,7 +222,7 @@ Runs once per row of **Test data**.
 ### order-detail#order-link: Order Link
 
 <!-- trace:case id=g10.store-dmn.TC-hbl rev=1 -->
-#### g10.store-dmn.TC7: A member's order link, opened signed out, leads into Your Orders
+#### g10.store-dmn.TC7: A member's order link, opened signed out, leads into My Orders
 
 **Classification:**
 

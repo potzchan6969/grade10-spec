@@ -8,7 +8,7 @@
 
 ## Background
 
-* A collector signed in on the staging storefront reads their orders on Your Orders, `<site>/profile/orders`, and one order on Order Details, `<site>/profile/orders/<order id>`. Each order is set to its state in the staging shop's admin, or its point of sale for a counter sale.
+* A collector signed in on the staging storefront reads their orders on My Orders, `<site>/profile/orders`, and one order on Order Details, `<site>/profile/orders/<order id>`. Each order is set to its state in the staging shop's admin, or its point of sale for a counter sale.
 
 ## g10.commerce-order-status.US1: Collector reads where an order stands
 
@@ -62,7 +62,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read its badge on Your Orders, then open Order Details and read it there.
+1. Read its badge on My Orders, then open Order Details and read it there.
 
 **Expected Results:**
 
@@ -125,7 +125,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Reload Your Orders every 10 seconds until the order is listed, and read its badge.
+1. Reload My Orders every 10 seconds until the order is listed, and read its badge.
 2. Click View Details, and read the badge.
 
 **Expected Results:**
@@ -177,7 +177,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the order's card on Your Orders, then Order Details, around the badge.
+1. Read the order's card on My Orders, then Order Details, around the badge.
 
 **Expected Results:**
 
@@ -228,8 +228,8 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read its badge on Your Orders.
-2. Make `<change>` in the staging shop's admin, or in the store admin for a delivery staff mark, noting the time; reload Your Orders until the badge changes.
+1. Read its badge on My Orders.
+2. Make `<change>` in the staging shop's admin, or in the store admin for a delivery staff mark, noting the time; reload My Orders until the badge changes.
 3. Open Order Details, and read the badge.
 
 **Expected Results:**
@@ -247,8 +247,8 @@ Runs once per row of **Test data**.
 - A held order refunded in full carries `on-hold`, and a scheduled order carrying a refund carries `scheduled`; a note naming both exists only for a combination the source rows confirm.
 - No surface shows the note in this delivery, so no catalog holds its words yet.
 - A change to an order Shopify has archived reaches the badge on its next payment, refund, cancellation or shipment, not within the hour.
-- An order staff delete in Shopify stays in Your Orders with the badge it last read.
+- An order staff delete in Shopify stays in My Orders with the badge it last read.
 - Whether Shopify archived an order never decides its badge: the shop does not archive orders, and Completed is every item fulfilled, paid in full and arrived.
 - An order partly fulfilled and paid reads Shipped: Completed needs every item fulfilled.
 - A fulfilled order paid only in part, or not yet paid, reads Shipped with no note: Completed needs it paid in full.
-- Your Orders and Order Details derive the badge from one stored row, so they differ only until Your Orders loads again. An order paid in full, refunded or canceled reaches the row within 5 minutes; any other change to an order not canceled and placed in the last 90 days, a fulfilment or a payment voided or expired included, within the hour, archived in Shopify or not.
+- My Orders and Order Details derive the badge from one stored row, so they differ only until My Orders loads again. An order paid in full, refunded or canceled reaches the row within 5 minutes; any other change to an order not canceled and placed in the last 90 days, a fulfilment or a payment voided or expired included, within the hour, archived in Shopify or not.
