@@ -35,7 +35,10 @@
     "join": "加入计划",
     "coupons": "你的优惠券",
     "noCoupons": "你没有持有优惠券。",
-    "pointHistory": "积分记录"
+    "pointHistory": "积分记录",
+    "overview": "概览",
+    "couponsTab": "优惠券",
+    "memberPass": "会员通行证"
   },
   "collectWithin": "须在 {days} 天内到门店领取",
   "outcome": {
@@ -52,7 +55,11 @@
     "renewal": "等级续期",
     "balanceExpiry": "{points} 积分将于 {date} 到期",
     "balanceExpirySoon": "{points} 积分将于 {date} 到期，在此之前购物或使用积分即可延长到期日。",
-    "balanceExpiryToday": "{points} 积分将于今天到期，今天购物或使用积分即可延长到期日。"
+    "balanceExpiryToday": "{points} 积分将于今天到期，今天购物或使用积分即可延长到期日。",
+    "worthSuffix": "可于结账时抵扣",
+    "keepTier": "保持{tier}",
+    "upgradeTo": "升级至{tier}",
+    "earnLine": "{tier}会员可赚取 {multiplier} 倍积分"
   },
   "rewards": {
     "label": "奖励",
@@ -142,7 +149,7 @@
   },
   "join": {
     "title": "加入计划",
-    "lead": "所有消费都可赚取积分，并可在门店或结算时使用。",
+    "lead": "按实付金额赚取积分，并可在门店或结算时使用。",
     "action": "加入",
     "joined": "已为你登记。你的会员卡与奖励清单都在会员页面。",
     "already": "你已经是会员。",
@@ -221,5 +228,25 @@
     "refusedEntered": "你已提交过链接。",
     "refusedClosed": "此活动目前未在进行。",
     "refusedOther": "未能完成，请再试一次。"
+  },
+  "tiers": {
+    "title": "等级与礼遇",
+    "ask": {
+      "base": "免费加入",
+      "pointsInWindow": "{months, plural, =12 {每年} other {每 # 个月}} {points} 分",
+      "invitation": "只限邀请"
+    },
+    "earnRate": "每消费 {spend} 赚取 {points} 分",
+    "howPointsWork": {
+      "heading": "积分如何运作",
+      "earnTitle": "赚取",
+      "earnBody": "每消费 {spend} 赚取 1 分。",
+      "pendingTitle": "待入账",
+      "pendingBody": "订单完成后积分才会入账。",
+      "spendTitle": "使用",
+      "spendBody": "1 分 = 结账时减 {worth}，亦可兑换奖励和优惠券。",
+      "expiryTitle": "到期",
+      "expiryBody": "连续 {months} 个月没有活动，积分便会到期。我们会在到期前 {days} 天提醒你。"
+    }
   }
 }

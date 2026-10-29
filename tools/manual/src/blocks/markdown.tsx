@@ -356,7 +356,7 @@ function Heading({
   const id = anchors ? slugify(textOf(children)) : undefined;
   const Tag = level === 2 ? "h2" : "h3";
   return (
-    <Tag className="group/anchor flex scroll-mt-24 items-center gap-1" id={id}>
+    <Tag className="group/anchor flex items-center gap-1" id={id}>
       <span>{children}</span>
       {id ? <AnchorLink id={id} label="Copy link to this heading" /> : null}
     </Tag>

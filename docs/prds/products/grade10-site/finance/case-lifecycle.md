@@ -14,6 +14,7 @@ against it.
      accepted → signing → vaulted → active → repaid → released`
   2. **Storage** — `draft → submitted → under_valuation → accepted → signing
      → vaulted → released`
+- ❓ **Storage lane replaced** — the owner's vault-first deposit is to replace it: a free deposit at the counter, incentive approval, daily incentive and withdrawal by appointment; the financed lane stays. Product confirms the change that carries it - [Vault Deposit](/p/grade10-site/vault/deposit)
 - **Exits that are not a release** — `declined`, `cancelled`, `expired`,
   `forfeited`
 - **Two moves back** — a reversed payout returns `active → vaulted` while no
@@ -25,12 +26,12 @@ against it.
   in on one visit; each card in it runs the statuses on its own, with its own
   start date, incentive rate and, on a financed card, its own loan, while
   staff open, prepare, vault and authenticate the case in one act each —
-  [Earnings](/p/grade10-site/vault/earnings)
+  [Incentive](/p/grade10-site/vault/incentive)
 - 🚧 **An early withdrawal pays its fee** — a card taken back inside the
   vault's early-withdrawal period is released only once its fee is paid by
   card on its Shopify invoice, online or at the shop's till; the refusal names
   the fee outstanding, and a withdrawn request voids the invoice —
-  [Earnings](/p/grade10-site/vault/earnings#taking-a-card-back-early)
+  [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal#early-withdrawal-fee)
 - 🚧 **Released to its buyer** — a storage card sold through consignment is
   released to its buyer on delivery under the consignment agreement, with no
   release paper and no early withdrawal fee —
@@ -148,7 +149,7 @@ released`, guarded on nothing outstanding and no packet open.
   cancel with no email
 - **A lapsed offer reads as one** — the offer's own expiry is read at the
   read, and the case stays `offer_made`, open for another —
-  [Collector Pages](/p/grade10-site/vault/collector-pages#case-page)
+  [Collector Pages](/p/grade10-site/finance/collector-pages#case-page)
 
 ## Exits
 

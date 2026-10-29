@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { VerifyPrototype } from "./verify-prototype";
 
 const meta = {
-  title: "Vault/Identity Check/Prototypes/Verify",
+  title: "Finance/Identity Check/Prototypes/Verify",
   component: VerifyPrototype,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

@@ -8,6 +8,6 @@
 
 - [x] 2.1 Supply the words from `store.salePriceLabel` and `store.listPriceLabel` to the cart drawer, the product page and its rail, the listing tiles and the home tiles
 
-## 3. The walk
+## 3. The walk (owner: @kinisworking)
 
-- [ ] 3.1 With a screen reader on the Grade10 site, read a struck price in the cart drawer, on a product tile and on the product page in English and Traditional Chinese, and hear the Sale price and Was words before the right amounts — blocked: needs a person with a screen reader against a running site
+- [x] 3.1 With a screen reader on the Grade10 site, read a struck price in the cart drawer, on a product tile and on the product page in English and Traditional Chinese, and hear the Sale price and Was words before the right amounts — blocked: needs a person with a screen reader against a running site

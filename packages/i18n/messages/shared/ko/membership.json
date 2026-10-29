@@ -35,7 +35,10 @@
     "join": "프로그램 가입",
     "coupons": "내 쿠폰",
     "noCoupons": "보유한 쿠폰이 없습니다.",
-    "pointHistory": "포인트 내역"
+    "pointHistory": "포인트 내역",
+    "overview": "개요",
+    "couponsTab": "쿠폰",
+    "memberPass": "회원 패스"
   },
   "collectWithin": "{days}일 이내에 매장에서 수령",
   "outcome": {
@@ -52,7 +55,11 @@
     "renewal": "등급 갱신",
     "balanceExpiry": "{date}에 {points}P가 소멸됩니다",
     "balanceExpirySoon": "{date}에 {points}P가 소멸됩니다. 그 전에 구매하거나 사용하면 소멸일이 연장됩니다.",
-    "balanceExpiryToday": "오늘 {points}P가 소멸됩니다. 오늘 구매하거나 사용하면 소멸일이 연장됩니다."
+    "balanceExpiryToday": "오늘 {points}P가 소멸됩니다. 오늘 구매하거나 사용하면 소멸일이 연장됩니다.",
+    "worthSuffix": "결제 시 할인",
+    "keepTier": "{tier} 유지",
+    "upgradeTo": "{tier} 등급으로 승급",
+    "earnLine": "{tier} 등급 {multiplier}배 포인트 적립"
   },
   "rewards": {
     "label": "리워드",
@@ -142,7 +149,7 @@
   },
   "join": {
     "title": "프로그램 가입",
-    "lead": "모든 구매에서 포인트를 적립하고, 매장이나 결제 시에 사용하세요.",
+    "lead": "결제한 금액만큼 포인트를 적립하고, 매장이나 결제 시에 사용하세요.",
     "action": "가입",
     "joined": "가입되었습니다. 회원 카드와 리워드 목록은 멤버십 페이지에 있습니다.",
     "already": "이미 회원입니다.",
@@ -221,5 +228,25 @@
     "refusedEntered": "이미 링크를 보내셨습니다.",
     "refusedClosed": "지금은 진행 중인 캠페인이 아닙니다.",
     "refusedOther": "처리하지 못했습니다. 다시 시도해 주세요."
+  },
+  "tiers": {
+    "title": "등급 및 혜택",
+    "ask": {
+      "base": "무료 가입",
+      "pointsInWindow": "{months, plural, =12 {연간} other {#개월}} {points}P",
+      "invitation": "초대 전용"
+    },
+    "earnRate": "{spend} 결제당 {points}P 적립",
+    "howPointsWork": {
+      "heading": "포인트 이용 방법",
+      "earnTitle": "적립",
+      "earnBody": "{spend} 결제할 때마다 1P가 적립됩니다.",
+      "pendingTitle": "적립 예정",
+      "pendingBody": "주문이 완료된 후 포인트가 지급됩니다.",
+      "spendTitle": "사용",
+      "spendBody": "1P = 결제 시 {worth} 할인. 리워드와 쿠폰으로 교환할 수도 있습니다.",
+      "expiryTitle": "소멸",
+      "expiryBody": "{months}개월 동안 활동이 없으면 포인트가 소멸됩니다. 소멸 {days}일 전에 알려 드립니다."
+    }
   }
 }

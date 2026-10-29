@@ -76,6 +76,17 @@ export const Default: Story = {
     expect(canvas.getByText("500 pts")).toBeInTheDocument();
     expect(canvas.getByText("October 2026")).toBeInTheDocument();
     expect(canvas.getByText("Grade10 FEST Summer 2026")).toBeInTheDocument();
+
+    /* A month's rows run newest first — 20, 15, 10, 5 Sep. */
+    const september = canvas.getByRole("list", { name: "September 2026" });
+    const rows = [
+      ...september.querySelectorAll('[data-slot="point-history-item"]'),
+    ].map((row) => row.textContent ?? "");
+    expect(rows).toHaveLength(4);
+    expect(rows[0]).toContain("In-store purchase");
+    expect(rows[1]).toContain("Points top-up");
+    expect(rows[2]).toContain("Use at checkout");
+    expect(rows[3]).toContain("Top-up charged back");
   },
 };
 
@@ -102,7 +113,7 @@ export const Empty: Story = {
       ledger: {
         status: "empty",
         message: "No points yet",
-        description: "Earn points with every purchase — online or at the till.",
+        description: "Earn points on what you pay — online or at the till.",
         action: { label: "Start shopping", onAction: () => {} },
       },
       summary: { earned: 0, used: 0, pending: 0 },

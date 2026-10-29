@@ -91,8 +91,8 @@ export const NoPoints: Story = {
   },
 };
 
-/** The default content at a phone width: the rail reads as a scrollable row
- * and the page never scrolls sideways. */
+/** The default content at a phone width: the rail reads as a scrollable
+ * line-tab row and the page never scrolls sideways. */
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
@@ -101,7 +101,7 @@ export const Narrow: Story = {
       canvas.getByRole("heading", { level: 1, name: "Membership" }),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("navigation", { name: "Membership" }),
+      canvas.getByRole("tab", { name: "Overview", selected: true }),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: "Top-up Points" }),

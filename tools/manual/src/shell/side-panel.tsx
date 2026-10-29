@@ -5,12 +5,16 @@ import {
   TabsTrigger,
 } from "@grade10/design-system/components/display/tabs";
 import { Text } from "@grade10/design-system/components/display/text";
-import { AppWindow, Code, ListChecks } from "@phosphor-icons/react";
+import {
+  AppWindow,
+  Code,
+  ListChecks,
+  SidebarSimple,
+} from "@phosphor-icons/react";
 import {
   type CSSProperties,
   type ReactNode,
   use,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -86,83 +90,109 @@ function tabTotals(shelves: Shelf[]): Record<SideTab, number> {
 }
 
 /**
- * The side column while the rail is open: a tab at the right edge naming what
- * sits beside the page. Hovering one shows it for the section being read;
- * choosing one folds the rail, which opens the column on it.
+ * A page read in one column while the rail is open. Hovering a section shows,
+ * at its right, a button for each tab it has something under; hovering one
+ * peeks at it, and choosing one folds the rail, which opens the column on it.
  */
-export function SideHint({
+export function HintedPage({
   rows,
   cases,
 }: {
   rows: SectionRow[];
   cases: PageCases;
 }) {
+  return rows.map((row) => (
+    <div
+      className="group/section relative mt-6"
+      data-section={row.section || undefined}
+      key={row.section || "opening"}
+    >
+      <BlockList blocks={row.main} />
+      <SectionHint section={row.section} shelf={shelfOf(row, cases)} />
+    </div>
+  ));
+}
+
+/** One section's tabs, held beside it while it is read. */
+function SectionHint({ section, shelf }: { section: string; shelf: Shelf }) {
   const layout = useLayout();
   const { sections } = use(PageSectionsContext);
   const [peek, setPeek] = useState<SideTab | null>(null);
-  const reading = useReadingSection(rows, peek !== null);
-  const shelves = rows.map((row) => shelfOf(row, cases));
-  const totals = tabTotals(shelves);
-  const at = Math.max(
-    0,
-    rows.findIndex((row) => row.section === reading),
-  );
+  const tabs = SIDE_TABS.filter((tab) => shelf[tab].length > 0);
+  if (tabs.length === 0) return null;
   const title =
-    sections.find((section) => section.id === rows[at]?.section)?.title ??
-    "Opening";
+    sections.find((found) => found.id === section)?.title ?? "Opening";
+  const openBeside = (tab: SideTab) => {
+    layout.setTab(tab);
+    layout.setNavCollapsed(true);
+    // The page reflows into two columns; the section stays in view.
+    window.requestAnimationFrame(() =>
+      window.requestAnimationFrame(() =>
+        document.getElementById(section)?.scrollIntoView({ block: "start" }),
+      ),
+    );
+  };
 
   return (
-    <nav
-      aria-label="Beside this page"
-      className="-translate-y-1/2 fixed top-1/2 right-0 z-30 flex flex-col gap-0.5 rounded-l-(--radius-xl) border border-border border-r-0 bg-popover p-1 shadow-lg max-lg:hidden"
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setPeek(null);
-      }}
-      onMouseLeave={() => setPeek(null)}
-    >
-      {SIDE_TABS.filter((tab) => totals[tab] > 0).map((tab) => (
-        <button
-          aria-label={`Open ${TAB_LABEL[tab]} beside the page, ${totals[tab]}`}
-          className={`flex items-center gap-1.5 rounded-(--radius-md) px-2 py-1.5 text-xs outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 ${
-            peek === tab
-              ? "bg-muted text-foreground"
-              : "text-secondary-foreground"
-          }`}
-          key={tab}
-          onClick={() => {
-            layout.setTab(tab);
-            layout.setNavCollapsed(true);
-          }}
-          onFocus={() => setPeek(tab)}
-          onMouseEnter={() => setPeek(tab)}
-          type="button"
-        >
-          {TAB_ICON[tab]}
-          {TAB_LABEL[tab]}
-          <span className="ml-auto pl-1 tabular-nums">{totals[tab]}</span>
-        </button>
-      ))}
-      {/* Padded rather than spaced, so the pointer crosses onto it without
-          leaving the tab. */}
-      {peek ? (
-        <div className="-translate-y-1/2 absolute top-1/2 right-full pr-2">
-          <div className="flex max-h-[70vh] w-md flex-col overflow-y-auto overscroll-contain rounded-(--radius-xl) border border-border bg-popover p-3 shadow-lg [scrollbar-width:thin]">
-            <Text as="p" size="xs" tone="secondary" weight="medium">
-              {TAB_LABEL[peek]} · {title}
-            </Text>
-            {shelves[at][peek].length > 0 ? (
+    <div className="absolute inset-y-0 left-full z-10 ml-3 max-lg:hidden">
+      <nav
+        aria-label={`Beside ${title}`}
+        className={`sticky top-32 flex flex-col gap-0.5 rounded-(--radius-xl) border border-border bg-popover p-1 shadow-sm transition-opacity duration-150 group-hover/section:opacity-100 focus-within:opacity-100 motion-reduce:transition-none ${
+          peek ? "opacity-100" : "opacity-0"
+        }`}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) setPeek(null);
+        }}
+        onMouseLeave={() => setPeek(null)}
+      >
+        {tabs.map((tab) => (
+          <button
+            aria-label={`Open ${TAB_LABEL[tab]} beside the page, ${shelf[tab].length}`}
+            className={`relative flex size-7 cursor-pointer items-center justify-center rounded-(--radius-md) outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 ${
+              peek === tab
+                ? "bg-muted text-foreground"
+                : "text-secondary-foreground"
+            }`}
+            key={tab}
+            onClick={() => openBeside(tab)}
+            onFocus={() => setPeek(tab)}
+            onMouseEnter={() => setPeek(tab)}
+            type="button"
+          >
+            {TAB_ICON[tab]}
+            <span className="-top-1 -right-1 absolute min-w-3.5 rounded-full bg-muted px-0.5 text-center text-[9px] tabular-nums leading-3.5">
+              {shelf[tab].length}
+            </span>
+          </button>
+        ))}
+        {/* Padded rather than spaced, so the pointer crosses onto it without
+            leaving the tab. */}
+        {peek ? (
+          <div className="absolute top-0 right-full z-30 pr-2">
+            <div className="flex max-h-[70vh] w-md flex-col overflow-y-auto overscroll-contain rounded-(--radius-xl) border border-border bg-popover p-3 shadow-lg [scrollbar-width:thin]">
+              <div className="flex items-center justify-between gap-2">
+                <Text as="p" size="xs" tone="secondary" weight="medium">
+                  {TAB_LABEL[peek]} · {title}
+                </Text>
+                <button
+                  className="flex shrink-0 cursor-pointer items-center gap-1 rounded-(--radius-md) px-1.5 py-1 text-secondary-foreground text-xs outline-none hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+                  onClick={() => openBeside(peek)}
+                  type="button"
+                >
+                  <span className="flex -scale-x-100">
+                    <SidebarSimple aria-hidden size={14} />
+                  </span>
+                  Open beside the page
+                </button>
+              </div>
               <BareEmbedContext value>
-                <SideList shelf={shelves[at]} tab={peek} />
+                <SideList shelf={shelf} tab={peek} />
               </BareEmbedContext>
-            ) : (
-              <Text as="p" className="py-4" size="sm" tone="secondary">
-                Nothing under {TAB_LABEL[peek]} for this section.
-              </Text>
-            )}
+            </div>
           </div>
-        </div>
-      ) : null}
-    </nav>
+        ) : null}
+      </nav>
+    </div>
   );
 }
 
@@ -183,46 +213,6 @@ export function ReadingRunout() {
       }}
     />
   );
-}
-
-/** The anchor of the section being read: the last whose heading has passed
- * the reading line, `""` before the first. Followed only while `watching`. */
-function useReadingSection(rows: SectionRow[], watching: boolean): string {
-  const [reading, setReading] = useState("");
-
-  useEffect(() => {
-    if (!watching) return;
-    let frame = 0;
-    const measure = () => {
-      frame = 0;
-      const line =
-        HEADER_HEIGHT + (window.innerHeight - HEADER_HEIGHT) * READING_LINE;
-      let found = "";
-      for (const row of rows) {
-        if (row.section === "") continue;
-        const top = document
-          .getElementById(row.section)
-          ?.getBoundingClientRect().top;
-        if (top === undefined) continue;
-        if (top > line) break;
-        found = row.section;
-      }
-      setReading(found);
-    };
-    const schedule = () => {
-      if (frame === 0) frame = window.requestAnimationFrame(measure);
-    };
-    measure();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-    };
-  }, [rows, watching]);
-
-  return reading;
 }
 
 /**
@@ -296,9 +286,9 @@ export function SplitPage({
             key={row.section || "opening"}
             style={{ columnGap: GAP }}
           >
-            <div className="min-w-0">
+            <HeldReading>
               <BlockList blocks={row.main} />
-            </div>
+            </HeldReading>
             <div className="min-w-0">
               {/* Blank where the section has nothing under the tab. */}
               {shelf[layout.tab].length > 0 ? (
@@ -327,6 +317,43 @@ export function SplitPage({
         style={{ right: width + GAP / 2 }}
         width={width}
       />
+    </div>
+  );
+}
+
+/** Where a held column's top sits: below the header and the compact heading,
+ * on the line a jump lands a section's heading. */
+const HELD_TOP = 124;
+
+/** A section's reading, held still beside its side while the side is read,
+ * as long as it fits on the screen; a longer one scrolls, or its end could
+ * never be reached while it is held. */
+function HeldReading({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [fits, setFits] = useState(false);
+
+  useLayoutEffect(() => {
+    const reading = ref.current;
+    if (!reading) return;
+    const measure = () =>
+      setFits(reading.offsetHeight <= window.innerHeight - HELD_TOP);
+    const resize = new ResizeObserver(measure);
+    resize.observe(reading);
+    window.addEventListener("resize", measure);
+    measure();
+    return () => {
+      resize.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  return (
+    <div
+      className={`min-w-0 self-start ${fits ? "sticky" : ""}`}
+      ref={ref}
+      style={fits ? { top: HELD_TOP } : undefined}
+    >
+      {children}
     </div>
   );
 }

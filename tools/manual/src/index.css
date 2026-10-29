@@ -73,9 +73,10 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* The header is sticky, so every deep-link target clears it. */
+  /* A deep-link target clears the sticky header and the compact page
+     heading held under it, with a breath to spare. */
   main [id] {
-    scroll-margin-top: 5.5rem;
+    scroll-margin-top: 7.75rem;
   }
 
   /* A border being dragged owns the pointer: a story's frame would take the

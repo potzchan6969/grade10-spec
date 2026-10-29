@@ -10,7 +10,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { type PageSection, PageSectionsContext } from "../shell/page-sections";
+import {
+  jumpLine,
+  type PageSection,
+  PageSectionsContext,
+} from "../shell/page-sections";
 
 /** The site header's height: the line the heading passes under. */
 const HEADER_HEIGHT = 64;
@@ -52,10 +56,6 @@ export function PageHeading({
   );
 }
 
-/** The site header's and the compact heading's heights together: the line a
- * section heading passes under to become the one being read. */
-const BAR_LINE = HEADER_HEIGHT + 44;
-
 type Place = {
   left: number;
   width: number;
@@ -70,17 +70,17 @@ const same = (a: Place, b: Place) =>
   a.width === b.width &&
   a.section.join("\n") === b.section.join("\n");
 
-/** The section headings that have scrolled under the bar: the last H2, and
- * the last H3 after it. */
+/** The section headings that have reached the line a jump to them lands on:
+ * the last H2, and the last H3 after it. */
 function passedSection(sections: PageSection[]): string[] {
   let h2 = "";
   let h3 = "";
+  let line: number | undefined;
   for (const section of sections) {
-    const top = document
-      .getElementById(section.id)
-      ?.getBoundingClientRect().top;
-    if (top === undefined) continue;
-    if (top > BAR_LINE) break;
+    const target = document.getElementById(section.id);
+    if (!target) continue;
+    line ??= jumpLine(target);
+    if (target.getBoundingClientRect().top - line > 1) break;
     if (section.level === 2) {
       h2 = section.title;
       h3 = "";

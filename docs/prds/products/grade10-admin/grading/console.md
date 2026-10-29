@@ -193,7 +193,7 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 - 🚧 **Two people for money** — a waiver, a payout and a money setting take a reason; one `grading:approve` holder asks
   and a second, never the recorder, approves on their own console; a settings write is filed under `settings`
 - 🚧 **Second factor and audit** — as the vault's: required in production, and every action filed under its
-  submission on the audit chain, or under its batch where it acts on the batch — [Operator Console](/p/grade10-site/vault/operator-console#permissions)
+  submission on the audit chain, or under its batch where it acts on the batch — [Operator Console](/p/grade10-site/finance/operator-console#permissions)
 - 🚧 **Staff hear nothing** — no email to staff; the badges, the tiles and the day's strip are the signal
 
 <!-- story: the queue with its tiles, the hand-in runbook, the receive table -->

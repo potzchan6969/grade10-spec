@@ -2,10 +2,12 @@
 
 The owner's draft PRD for a vault that pays collectors to keep cards in it and
 a consignment that sells them, as of 2026-10-27, with the owner's answers to
-the first gap review on the same day. The vault side is carried by the
-[Earnings](../prds/products/grade10-site/vault/earnings.md)
-page; the consignment side is marked on
-[Consignment](../prds/products/grade10-site/consignment/index.md). Read this
+the first gap review on the same day. The vault side is carried by
+[Incentive](../prds/products/grade10-site/vault/incentive.md),
+[Earnings Wallet](../prds/products/grade10-site/account/earnings-wallet.md) and
+[Vault Withdrawal](../prds/products/grade10-site/vault/vault-withdrawal.md);
+the consignment side by
+[Consigning](../prds/products/grade10-site/consignment/consigning.md). Read this
 as the shape the product starts from, not as its requirements. The draft
 itself is still moving.
 

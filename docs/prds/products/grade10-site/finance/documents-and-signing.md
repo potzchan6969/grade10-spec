@@ -62,7 +62,7 @@ vendor is involved.
   reference where there is one
 - **Every document, in one download** — the collector takes every signed
   document from every case of their own, each with its fingerprint —
-  [Your data](/p/grade10-site/vault/compliance-and-readiness#retention-and-erasure);
+  [Your data](/p/grade10-site/finance/compliance-and-readiness#retention-and-erasure);
   the download is written on the audit chain like a search — who, when, how
   many
 - **Signature** — the customer's alone; no staff countersignature or witness

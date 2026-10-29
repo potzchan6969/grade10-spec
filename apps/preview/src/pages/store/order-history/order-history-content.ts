@@ -4,7 +4,7 @@ import { FIXTURE_PLACED_ON } from "../../../../../../packages/ui/src/lib/datetim
 const IMAGE = new URL("../../product.fixture.png", import.meta.url).href;
 
 const ORDER_HISTORY_COPY: OrderHistoryCopy = {
-  title: "Your Orders",
+  title: "My Orders",
   activeHeading: "Active Orders",
   pastHeading: "Past Orders",
   emptyTitle: "No orders yet",

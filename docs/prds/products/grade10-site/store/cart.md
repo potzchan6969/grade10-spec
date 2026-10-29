@@ -8,155 +8,134 @@ The Cart Drawer opens over the page the collector is on: they check what is in
 the cart, put a promo code and points against it, and go on to checkout or
 back to that page.
 
-## Rules
-
-| Rule | Value |
-| --- | --- |
-| Who | A signed-in member, at the store; a guest, in this browser |
-| Promo codes | **1 per cart** — a second replaces the first |
-| Points | **After the code**, at **$1** a point, on qualifying goods only; an ask past the ceiling is trimmed to it — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
-| Estimated total | **Goods − site discounts − code − points**, as the shop's checkout prices them — before shipping and tax |
-| Shop's answer | Within **2.5 s**; past it, or where the shop does not answer, the drawer shows the store's own figures, with no site discount in them |
-| Held codes | The member's own store codes and reward coupons, plus codes open to everyone; a guest sees the public codes only. The ones that fit first, the soonest to expire first |
-| Carried to checkout | 🚧 The code and the points, held with the cart; Proceed to Checkout sends them straight to Shopify; paying the invoice clears the cart, them included — [Checkout](/p/grade10-site/store/checkout#integration-readiness) |
-
 ## Reviewing the Cart
 
-- 🚧 **Product pictures** - the cart shows each product's current picture so the collector can recognise what they are buying
-- **Current read** — every line is read against the shop on open; the
-  price and the stock are the shop's own —
-  [Cart Validation](/p/grade10-site/store/cart-validation)
-- **Unresolved** — while the read is pending or failed the lines, the
-  totals and Checkout wait; nothing held is shown as current
-- **Lines whose product left the shop** — leave the cart on open, with one
-  notice; a sold-out line stays, marked, until the collector removes it —
-  [Cart Validation](/p/grade10-site/store/cart-validation)
-- **Whose cart** - a signed-in member's cart is kept at the store; a guest's
-  is kept in this browser. Signing in moves the browser's lines into the
-  member's cart
-- ❓ **A product in both carts** — signing in combines the two lines into
-  one, its quantity the sum of both. Product confirms it runs
-- **When the session ends** - an open drawer closes by itself, with no
+- **Current Read** — every line read against the shop on open; the price and
+  the stock are the shop's own — [Cart Validation](/p/grade10-site/store/cart-validation)
+  - **Unresolved** — while the read is pending or failed, the lines, the
+    totals and Checkout wait; nothing held is shown as current
+  - **Lines Whose Product Left the Shop** — leave the cart on open, with one
+    notice; a sold-out line stays, marked, until the collector removes it
+- 🚧 **Product Pictures** — each product's current picture, so the collector
+  recognises what they are buying
+- **Edits** — quantity and removal, written to the same cart the page holds
+- **Whose Cart** — a signed-in member's, kept at the store; a guest's, kept
+  in this browser. Signing in moves the browser's lines into the member's cart
+  - ❓ **A Product in Both Carts** — signing in combines the two lines into
+    one, its quantity the sum of both. Product confirms it runs
+- **The Choice Follows the Cart** — the code and the points chosen, held with
+  the lines, so both are still there after a reload and on another device;
+  the figures are read again either way
+- **When the Session Ends** — an open drawer closes by itself, with no
   message, when the member signs out in another tab of this site or the
-  session expires. A guest's drawer stays open, and so does a member's
-  through a session read that is still pending or fails. A member who
-  switches by signing out and in elsewhere finds it closed, while a switch
-  the tab reads directly leaves it open on the new member's cart. Signing
-  in again does not reopen it unless the collector has opened the cart
-  since, whether the end came from another tab or from checkout meeting an
-  expired session
-- **Edits** — quantity and removal write to the same cart the page holds
-- **The choice follows the cart** — the code and the points the member
-  chose are held with the lines, so both are still there after a reload and
-  on another device; the figures are read again either way
-- **Discounts on a line and below it** — which price a line strikes, and
-  the footer's rows in order, are on
-  [Discounts](/p/grade10-site/store/discounts#where-each-shows)
-
-## Pending Operations
-
-- **Wait before another action** — the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
-
-::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
-
-## Promo Code
-
-One code rides the cart, typed or picked; every figure is the store's,
-read against the cart as it stands and held nowhere.
-
-- **Typed** — a code the store knows takes its cut off the total at
-  once; one it refuses stays in the field with the refusal's own sentence,
-  and the total does not move
-- **Picked** — a held code applies the same way from the list; one that
-  cannot ride this cart is listed apart with its reason
-- **Public codes** — codes open to everyone are listed to guests and
-  members alike; a member-only code typed by a guest gets the same refusal
-  as a code nobody minted —
-  [Discounts](/p/grade10-site/store/discounts#public-codes)
-- 🚧 **Running out reads louder** — in the cart picker, a live promo code
-  whose expiry is within its last 14 days keeps its discount title and its
-  expiry/conditions detail slot; only the “Use by” detail is emphasised. The
-  picker does not change the text or replace the title with the expiry.
-- **Set aside for a site discount** — where the code and a site discount
-  cannot both apply and the site discount takes more, the drawer says so and
-  the total shows the site discount, the answer the shop's checkout gives;
-  the code stays in the wallet —
-  [Discounts](/p/grade10-site/store/discounts#order-of-application)
-- **Refused by the shop** — a code the store holds but the shop would not
-  apply to this basket is listed with that reason, and the total does not move
-- **The shop's figure** — a code's cut is what the shop takes, so a 10% code
-  takes 10% as the shop rounds it
-- 🚧 **Removed** — Remove puts the code back; a cart edit that makes it
-  stop fitting takes it off with a notice
-- 🚧 **Wallet not answered** — the codes the store minted are still listed
-  and a typed code still applies; the drawer says the programme's rewards
-  could not be read
-- 🚧 **Gift** — a code that gives an item adds it as a line at no charge;
-  taking that line out puts the code back
-- 🚧 **Refusals in the reader's language** — every reason a code or the
-  points are refused is said in the site's own words, by its cause
-
-The refusals are the coupon's own —
-[Coupons](/p/grade10-site/loyalty/coupons#refusals).
-
-## Points
-
-- **Offered** — to a member the programme knows, with the balance, the
-  rate and the most this cart can take after the code
-- **Applied** — Apply or Use max carries the accepted points choice to
-  checkout and shows the store-quoted saving. Remove clears points and keeps
-  the existing code; a failed change keeps the last accepted choice. An ask
-  past the ceiling is trimmed to it
-- **Nothing left** — a code that took the whole of the goods leaves
-  points nothing to pay, and the field says so
-- **Not offered** — to a guest, a member outside the programme, or
-  while the programme has not answered
-
-## Checkout
-
-- **Created from the drawer** — Proceed to Checkout sends the reviewed
-  lines, the code and the points straight to Shopify; there is no separate
-  checkout page to reopen or re-read them
-- 🚧 **Sent** — the order is promised with the same code and points the
-  drawer shows —
-  [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
-- **Guest** - the signed-out drawer's primary button is Check out as
-  guest; under it a quiet Sign in link for points and rewards. Signing in
-  merges the browser cart and reopens the drawer with points and the
-  wallet; the guest's code moves to the member's cart unless that cart
-  already holds one -
-  [Checkout](/p/grade10-site/store/checkout#guest-checkout)
-- **No identity check** — a checkout of any value asks nothing about who the
-  buyer is — [KYC](/p/grade10-site/account/kyc)
-
-::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
-
-## Designs
+  session expires; a guest's drawer stays open
 
 ::story{id="store-cart-blocks-cartdrawer--default" title="The cart drawer"}
 
-::story{id="store-cart-blocks-cartdrawerfooter-interactive--interactive-member" title="A code and points on the cart"}
-
 ::story{id="store-cart-blocks-cartdrawer--unavailable-items-removed" title="Lines whose product left the shop, leaving"}
 
-::story{id="store-cart-blocks-cartdrawer--empty-state" title="An empty cart"}
+## Promo Code
+
+- **One Code** — one per cart, typed or picked; a second replaces the first
+- **Typed** — a code the store knows takes its cut off the total at once; one
+  it refuses stays in the field with the refusal's own sentence, and the total
+  does not move — [Coupons](/p/grade10-site/loyalty/coupons#refusals)
+- **Picked** — a held code, applied the same way from the list; one that
+  cannot ride this cart is listed apart with its reason
+  - **Held Codes** — the member's own store codes and reward coupons, plus the
+    public codes; the ones that fit first, the soonest to expire first
+  - **Public Codes** — codes open to everyone, listed to guests and members
+    alike; a guest sees these only, and a member-only code typed by a guest
+    gets the same refusal as a code nobody minted —
+    [Discounts](/p/grade10-site/store/discounts#public-codes)
+  - **Refused by the Shop** — a code the store holds but the shop would not
+    apply to this basket, listed with that reason; the total does not move
+  - 🚧 **Running Out Reads Louder** — a live code in its last 14 days keeps
+    its title and detail, with only its use-by date emphasised
+  - 🚧 **Wallet Not Answered** — the codes the store minted still listed and
+    a typed code still applies; the drawer says the programme's rewards could
+    not be read
+- **The Shop's Figure** — a code's cut is what the shop takes, so a 10% code
+  takes 10% as the shop rounds it
+- **Set Aside for a Site Discount** — where the code and a site discount
+  cannot both apply and the site discount takes more, the drawer says so and
+  the total shows the site discount, as the shop's checkout does; the code
+  stays in the wallet — [Discounts](/p/grade10-site/store/discounts#order-of-application)
+- 🚧 **Removed** — removing the code puts it back in the list; a cart edit
+  that makes it stop fitting takes it off with a notice
+- 🚧 **Gift** — a code that gives an item adds it as a line at no charge;
+  taking that line out puts the code back
+- 🚧 **Refusals in the Reader's Language** — every reason a code or the
+  points are refused, said in the site's own words, by its cause
+
+::story{id="store-cart-blocks-cartdrawerfooter-guest--member-with-public-codes" title="A member's codes beside the public ones"}
+
+## Points
+
+- **Offered** — to a member the programme knows, with the balance, the rate
+  and the most this cart can take after the code
+  - **Rate** — $1 a point, after the code, on qualifying goods only —
+    [Paying with Points](/p/grade10-site/loyalty/paying-with-points)
+- **Applied** — a chosen number of points, or the most the cart can take,
+  carried to checkout with the saving the store quotes; an ask past the
+  ceiling is trimmed to it, and a change that fails keeps the last one
+  accepted
+  - **Removing Points** — clears them and keeps the code
+- **Nothing Left** — a code that took the whole of the goods leaves points
+  nothing to pay, and the field says so
+- **Not Offered** — to a guest, a member outside the programme, or while the
+  programme has not answered
+
+::story{id="store-cart-blocks-cartdrawerfooter-interactive--interactive-member" title="A code and points on the cart"}
+
+## Estimated Total
+
+- **Estimated Total** — goods − site discounts − code − points, as the shop's
+  checkout prices them; before shipping and tax
+  - **Shop's Answer** — within 2.5 s; past it, or where the shop does not
+    answer, the store's own figures, with no site discount in them
+- **Discounts on a Line and Below It** — which price a line strikes, and the
+  footer's rows in order — [Discounts](/p/grade10-site/store/discounts#where-each-shows)
+
+## Checkout
+
+- **Created from the Drawer** — Proceed to Checkout sends the reviewed lines,
+  the code and the points straight to Shopify; there is no separate checkout
+  page to reopen or re-read them
+  - 🚧 **Sent** — the order is promised with the same code and points the
+    drawer shows — [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
+  - **After Paying** — paying the invoice clears the cart, the code and the
+    points with it — [Checkout](/p/grade10-site/store/checkout#after-paying)
+- **Guest** — checks out as a guest, with a way to sign in for points and
+  rewards — [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+  - **Signing In** — reopens the drawer on the member's cart, with points and
+    the wallet; the guest's code moves to it unless it already holds one
+- **No Identity Check** — a checkout of any value asks nothing about who the
+  buyer is — [KYC](/p/grade10-site/account/kyc)
 
 ::story{id="store-cart-screens-cart-drawer-guest--guest" title="The drawer's guest checkout"}
 
-::story{id="store-cart-blocks-cartdrawerfooter-guest--guest-with-public-code" title="A guest's codes, public only"}
+## Pending Operations
 
-::story{id="store-cart-blocks-cartdrawerfooter-guest--member-with-public-codes" title="A member's codes beside the public ones"}
+- **Wait Before Another Action** — while the drawer reads, saves or starts
+  checkout, it takes no cart edit, code or points action, product link or
+  checkout; closing it still works
+
+::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
 
 :::detail{title="Test cases" for="qa"}
 [Test cases · grade10-site/store/cart-drawer](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/cart-drawer)
 :::
 
-:::detail{title="Code map" for="engineer"}
-- **The quote** - `quote.basket`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
-- **The held choice** — `cart.tender` and `cart.setTender`, `packages/grade10-store/backend/src/services/cart/tender.ts`
-- **The wallet read** — `quoteCouponsFor`, `packages/loyalty/backend/src/services/rewards/coupons.ts`
-- **The drawer** — `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`, over the `cart` and `checkout` slices of `@grade10/store-frontend`
-- **Design record** — [commerce architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
+:::detail{title="How the total is priced" for="engineer"}
+- **The Quote** — the store asks the shop to price the basket the same way the checkout's promise is priced, so the drawer and the checkout agree
+- **The Held Choice** — the code and the points are stored with the cart and changed together, as one choice
+- **The Wallet Read** — the loyalty programme lists the member's coupons that fit the cart, on the store's own rules rather than the shop's
+- **The Drawer** — one drawer in the site's shell, over the store's shared cart and checkout state
+
+::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
+
+- **Commerce architecture** — [docs/architecture/commerce.md](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -164,50 +143,15 @@ The drawer serves a collector who wants to check the cart, and what a code
 and points do to it, without leaving the product or collection they are
 considering. Its value is a total they can trust before they go to pay.
 
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Signed-in collector | Opens Cart from the header on any surface | Sees what a code and points take off, and carries the choice to checkout. |
-| Signed-out collector | Presses Add to cart, then Cart | Builds a cart in this browser and checks out as a guest. |
-| Collector whose cart moved | Opens Cart before checkout | Sees current facts or a clear unresolved state, never a stale claim. |
-
-**Not in scope.** A dedicated cart page. Variant-specific pictures. Shipping
-and tax before the invoice. A second code on one cart.
-
-**Measurement.**
-
-| Signal | Definition | Owner |
-| --- | --- | --- |
-| Drawer-to-checkout sessions | Share of sessions that open Cart and proceed to checkout without first navigating there. | Product |
-| Failed open reviews | Share of drawer opens whose current-cart read cannot complete. | Engineering |
-| Refused tender | Share of quotes whose code or points were refused, by reason. | Engineering |
-
-**Decisions.**
-
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Overlay, not page | Decided | Cart stays attached to the browsing moment; a new route would make the collector leave before the drawer solves anything. | Product |
-| Global cart | Decided | Once Store answers the cart drawer, Cart stays in the header on every surface (including Auction), not only Store and checkout — so checkout stays one tap away. Absent only on auction-first while that drawer does not answer. Page-shell owns the control; this page owns the drawer. | Product |
-| Pending actions | Decided | The drawer waits for its reads and writes before accepting another action, rather than disabling Checkout alone. | @kinisworking |
-| Pending dismissal | Decided | Close, backdrop click and Escape remain available while an operation is pending, so a slow request does not trap the collector. Chosen over disabling dismissal. | @kinisworking |
-| Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
-| Product pictures | Decided | Use the product's first picture, as the collection card does, from the current cart read. Chosen over variant-specific pictures or pictures held with the cart, which can differ from the catalogue. | Product |
-| Guest cart | Decided | A signed-out collector's cart is kept in this browser and checked out as a guest; signing in moves its lines into the member's cart. Supersedes one session scope. | Product |
-| Session ends with the drawer open | Decided | The drawer closes by itself, with no message, when the member's session ends in another tab of this site or expires. Chosen over leaving it open and empty, which reads as a cart with nothing in it beside a header that says Sign In. Decided 2026-10-09. | Product |
-| A guest's open drawer | Decided | A guest's drawer stays open when the session reads as signed out; only a member's session ending closes the drawer. Decided by the round. | Product |
-| A direct member switch | Decided | A switch the tab reads directly from one member to another keeps the drawer open on the new member's cart; a signed-out reading between them closes it. Decided by the round. | Product |
-| Checkout after session expiry | Decided | An expired member session closes the drawer; what checkout asks next remains Checkout's decision. Confirmed by @seankcw, 2026-10-16. | Product |
-| Sign-out and sign-in in another tab | Decided | A member's drawer closes when this tab reads the signed-out step between the two members and stays closed until Cart is opened again. Confirmed by @seankcw, 2026-10-16. | Product |
-| Sign-in from the guest drawer | Decided | A sign-in started from the guest drawer's Sign in link reopens that drawer; a sign-in started elsewhere does not. Decided by the round. | Product |
-| One quote | Decided | The drawer reads one store quote - the lines, the one code or reward, points after it - using the same arithmetic the server rechecks at Pay. | Product |
-| Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. Promo editing stays: typed, picked and removed codes cut the total. Display-only promo is not this drawer. | Product |
-| Held list | Decided | The member's own store codes and reward coupons, plus public codes, answered before they are picked; a guest's list holds the public codes only. | Product |
-| Expiring promo detail | Decided | The cart picker emphasises only the “Use by” detail for a live promo within its last 14 days; the discount title and detail copy remain separate. Confirmed by the designer and PM, 2026-10-27. | Product |
-| Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
-| Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
-| Shipping | Decided | Unknown until the invoice; the estimated total is the goods after the site discounts and this store's own tender. | Product |
-| Priced by the shop | Decided | The drawer asks the shop to price the basket the way its checkout will, site discounts and the chosen code together, so a code the drawer shows as applied is applied at checkout. The held list is still answered by the store's own rules, because asking the shop once per held code on every edit is too many calls; the chosen code is the one the shop answers. | Product |
-| Checkout creation | 🚧 In flight | The drawer creates checkout directly and redirects to Shopify's hosted invoice; there is no separate `/checkout` page. | Engineering |
-| Verification before a session | Decided | Dropped 2026-10-13. Grade10 never required a sign-in or a verified identity for a checkout at HKD 120,000; Proceed to Checkout runs at any value. | Product |
-| Public codes | Decided | Public codes — codes open to everyone — are listed to guests and members alike — [Discounts](/p/grade10-site/store/discounts#public-codes). Decided 2026-10-13; supersedes the rule that the store mints every code to one member and the cart neither lists nor takes a public code (2026-10-12). | Product |
-| The choice on a second visit | Decided | The cart holds which code and how many points the member means to use, so a choice survives a reload and reaches another device. The cart holds the choice, never the figures: those stay the store's, read against the cart as it stands. | Product |
+- **Overlay, not page** — the cart stays attached to the browsing moment; a new route would make the collector leave before the drawer solves anything
+- **Cart in the header everywhere** — on every surface the drawer answers, Auction included, so checkout stays one tap away
+- **Wait, rather than disable Checkout alone** — the drawer waits for its reads and writes before accepting another action
+- **Dismissible while pending** — close, backdrop and Escape stay available, so a slow request does not trap the collector; chosen over disabling dismissal
+- **The product's first picture** — as the collection card shows it, from the current read; variant pictures, or pictures held with the cart, can differ from the catalogue
+- **Closes when the session ends** — chosen over leaving it open and empty, which reads as a cart with nothing in it beside a header that says Sign In
+- **Another member's code** — answered as a code nobody minted, so a typed code tells nobody whose wallet it is in
+- **Priced by the shop** — the shop prices the basket as its checkout will, so a code shown as applied is applied at checkout; the held list stays on the store's own rules, because asking the shop once per held code on every edit is too many calls
+- **Not in scope** — a dedicated cart page; variant-specific pictures; shipping and tax before the invoice; a second code on one cart
+- **Measured by** — drawer-to-checkout sessions, as Cart Opened then Checkout Started — [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events)
+  - ❓ **Unmeasured** — failed open reviews, and refused codes and points by reason; nothing records them yet. Engineering confirms
 :::

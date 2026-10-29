@@ -47,3 +47,7 @@ export const RewardsLoading: Story = {
     ).not.toBeNull();
   },
 };
+
+/* The refusal states — sold out, retryable failure, dropped balance — are
+ * the checkout's own states, drawn under Loyalty/Rewards; the pane shares
+ * the same redeem path, so they are not re-drawn here. */

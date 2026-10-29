@@ -15,7 +15,7 @@ handles for them, one section per product.
   any `vault:read` holder sees
 - **Who** - `vault:read` opens it: staff, treasurers and admins
 - **Header** - the account's name and email for staff and admins, under
-  the grant [Operator Console](/p/grade10-site/vault/operator-console#permissions)
+  the grant [Operator Console](/p/grade10-site/finance/operator-console#permissions)
   names; a treasurer reads the collector's short id and no name, and the
   contact stays on each case
 - **Vault cases** - every case the collector holds, with its reference,

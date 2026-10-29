@@ -15,8 +15,8 @@ specs because they are held by separate people.
 
 | Capability | What it governs | Where it is written up |
 | --- | --- | --- |
-| `grade10-admin/vault/operator-queue` | The queue's views and badges, search, one case's tabs, the grants behind every act, and the physical vault | [Operator Console](/p/grade10-site/vault/operator-console) |
-| `grade10-admin/vault/money-book` | The register of every money record in a period, the position the loan book stands at, and the loans in arrears | [Operator Console](/p/grade10-site/vault/operator-console) and [Loan and Money](/p/grade10-site/vault/loan-and-money) |
+| `grade10-admin/vault/operator-queue` | The queue's views and badges, search, one case's tabs, the grants behind every act, and the physical vault | [Operator Console](/p/grade10-site/finance/operator-console) |
+| `grade10-admin/vault/money-book` | The register of every money record in a period, the position the loan book stands at, and the loans in arrears | [Operator Console](/p/grade10-site/finance/operator-console) and [Loan and Money](/p/grade10-site/finance/loan-and-money) |
 
 :::callout{kind="note"}
 Both pages sit with the vault's own, because a shop reads the console beside

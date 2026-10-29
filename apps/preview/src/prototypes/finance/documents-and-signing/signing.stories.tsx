@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { SigningPrototype } from "./signing-prototype";
 
 const meta = {
-  title: "Vault/Documents And Signing/Prototypes/Signing",
+  title: "Finance/Documents And Signing/Prototypes/Signing",
   component: SigningPrototype,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

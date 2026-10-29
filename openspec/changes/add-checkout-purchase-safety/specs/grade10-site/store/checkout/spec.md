@@ -23,7 +23,7 @@ payment lifecycle.
   - Changed lines named before a stale basket can be paid
 - Order settlement and return
   - Pending orders settle through webhook, reconcile and order reads
-  - Paid orders appear in Your Orders and release the member cart
+  - Paid orders appear in My Orders and release the member cart
   - Shopify confirmation returns the collector to the Grade10 order
 - Carrier rates
   - Shopify asks a token-gated stateless carrier rule for served destinations

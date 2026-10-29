@@ -19,12 +19,12 @@ title: Store Location Test Cases
    - The link sits before Help and opens the page `g10.store-store-locator.TC6`
 2. Read the address bar and the header.
    - A top-level address, Store Locator alone marked `g10.store-store-locator.TC3`
-3. Read the page under Location & Hours.
+3. Read the page under Location and Hours.
    - The map, name, address and hours `g10.store-store-locator.TC1`
 4. Select the map.
    - Google Maps opens in a new tab `g10.store-store-locator.TC2`
 
-## store-locator#shop: Shop
+## store-locator#location-and-hours: Location and Hours
 
 <!-- trace:case id=g10.store-store-locator.TC-mgx rev=2 -->
 ### g10.store-store-locator.TC1: The page shows the shop's map, name, address and hours in the page's language
@@ -40,7 +40,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#shop/in-each-language, store-locator#shop/no-phone-no-holiday-hours, store-locator#the-page/location--hours
+* **Trace:** store-locator#location-and-hours/store-name, store-locator#location-and-hours/street-address, store-locator#location-and-hours/hours, store-locator#location-and-hours/in-each-language, store-locator#location-and-hours/no-phone-no-holiday-hours, store-locator#location-and-hours/without-scripts
 
 **Pre-conditions:**
 
@@ -58,17 +58,13 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open the row's address.
-2. Read the page under Location & Hours.
+2. Read the page under Location and Hours.
 
 **Expected Results:**
 
 * Step 2: a map of the shop, Hong Kong Grade10 Store, 13 Pak Sha Road, Causeway Bay, Hong Kong, and 11am – 9pm for every day, UI matching store-store-locator-screens-store-locator--default.
 * The name, address and hours read in the row's language, the hours in that language's own time format.
 * No phone number and no holiday hours.
-
----
-
-## store-locator#the-page: The Page
 
 <!-- trace:case id=g10.store-store-locator.TC-nee rev=1 -->
 ### g10.store-store-locator.TC2: The map opens Google Maps for the shop in a new tab
@@ -84,7 +80,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page/map-opens-maps
+* **Trace:** store-locator#location-and-hours/map
 
 **Pre-conditions:**
 
@@ -108,6 +104,10 @@ Runs once per row of **Test data**.
 * Step 1 shows no separate Get directions control.
 * Step 2 opens Google Maps at 13 Pak Sha Road, Causeway Bay, Hong Kong, in a new tab, and the page stays open.
 
+---
+
+## store-locator#links-to-the-page: Links to the Page
+
 <!-- trace:case id=g10.store-store-locator.TC-pnx rev=1 -->
 ### g10.store-store-locator.TC3: The address is top level, and the header marks Store Locator alone
 
@@ -122,7 +122,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page/url, store-locator#the-page/chrome-reaches-it
+* **Trace:** store-locator#sharing-the-page/web-address, store-locator#links-to-the-page/current-page
 
 **Pre-conditions:**
 
@@ -145,10 +145,6 @@ Runs once per row of **Test data**.
 * The address stays the row's, outside `/store`.
 * The header marks Store Locator as current; Store is not marked.
 
----
-
-## store-locator#from-elsewhere: From Elsewhere
-
 <!-- trace:case id=g10.store-store-locator.TC-j4m rev=2 -->
 ### g10.store-store-locator.TC6: The header, the footer and free pick-up lead to Store Locator
 
@@ -163,7 +159,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page/chrome-reaches-it, store-locator#from-elsewhere/free-pick-up-on-product-details
+* **Trace:** store-locator#links-to-the-page/header, store-locator#links-to-the-page/footer, store-locator#links-to-the-page/free-pick-up-on-product-details
 
 **Pre-conditions:**
 
@@ -191,7 +187,7 @@ Runs once per row of **Test data**.
 
 ## Ungrouped
 
-### store-locator#the-page: The Page
+### store-locator#location-and-hours: Location and Hours
 
 <!-- trace:case id=g10.store-store-locator.TC-x9i rev=1 -->
 #### g10.store-store-locator.TC4: At 375px wide the page scrolls only vertically
@@ -205,7 +201,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page/narrow-screens
+* **Trace:** store-locator#location-and-hours/small-screens
 
 **Pre-conditions:**
 
@@ -221,6 +217,8 @@ Runs once per row of **Test data**.
 * The page moves down only, never sideways, UI matching store-store-locator-screens-store-locator--narrow.
 * The map, name, address and hours all show.
 
+### store-locator#sharing-the-page: Sharing the Page
+
 #### g10.store-store-locator.TC5: A shared link to Store Locator previews with the page's own title and description
 
 **Classification:**
@@ -232,7 +230,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page/document-identity
+* **Trace:** store-locator#sharing-the-page/link-preview, store-locator#sharing-the-page/title, store-locator#sharing-the-page/description
 
 **Pre-conditions:**
 
@@ -246,6 +244,8 @@ Runs once per row of **Test data**.
 
 * The preview reads `Store Locator — Grade10` and `Where to find the Grade10 shop in Causeway Bay, Hong Kong, and when it is open.`, and no other page's title.
 
+### store-locator#links-to-the-page: Links to the Page
+
 <!-- trace:case id=g10.store-store-locator.TC-36r rev=2 -->
 #### g10.store-store-locator.TC7: Where the store is not carried, there is no Store Locator
 
@@ -258,7 +258,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** store-locator#the-page/chrome-reaches-it
+* **Trace:** store-locator#links-to-the-page/waits-with-the-store
 
 **Pre-conditions:**
 

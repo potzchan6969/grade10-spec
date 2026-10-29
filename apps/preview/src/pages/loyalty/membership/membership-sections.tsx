@@ -1,3 +1,5 @@
+import { Alert } from "@grade10/design-system/components/display/alert";
+import { Button } from "@grade10/design-system/components/forms/button";
 import {
   type AsyncState,
   type CouponItem,
@@ -8,18 +10,21 @@ import {
   RewardMenu,
   TierCard,
   TierInfoCard,
-  TierLadder,
   WalletPassLinks,
 } from "@grade10/ui";
 import {
   Basket,
   ClockCountdown,
+  Gift,
   HandCoins,
   Truck,
 } from "@phosphor-icons/react";
-import { useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
+import { CouponTabs } from "../coupon-tabs";
 import {
   COUPON_LIST_COPY,
+  COUPON_PROMO_COPY,
+  COUPONS_PAGE_COPY,
   HOW_POINTS_WORK,
   MEMBER,
   MEMBER_PASS_COPY,
@@ -27,10 +32,10 @@ import {
   type MembershipView,
   POINT_HISTORY_COPY,
   REWARD_MENU_COPY,
+  REWARDS_PAGE_COPY,
   TIER_BENEFITS,
   TIER_BENEFITS_PAGE_COPY,
   TIER_CARD_COPY,
-  TIER_LADDER_COPY,
   WALLET_PASS_COPY,
 } from "../loyalty-content";
 
@@ -115,9 +120,13 @@ const CODE_SECONDS = 480;
 function OverviewPane({
   view,
   balance,
+  actions,
 }: {
   view: MembershipView;
   balance: number;
+  /** The member pass and top-up entrances on a narrow viewport; on a wide
+   * one the page header carries them. */
+  actions?: ReactNode;
 }) {
   const ref = usePaneEnter<HTMLDivElement>();
   return (
@@ -133,6 +142,7 @@ function OverviewPane({
         variant={view.tierVariant}
         worth={view.worth}
       />
+      {actions}
       {/* The heading and the benefits join the card's rise one level down. */}
       <div className="flex flex-col gap-4" data-enter-group>
         <PaneHeading id="membership-tiers-heading">
@@ -161,9 +171,14 @@ function RewardsPane({
       className="flex flex-col gap-4"
       ref={ref}
     >
-      <PaneHeading id="membership-rewards-heading">
-        {MEMBERSHIP_PAGE_COPY.rewardsHeading}
-      </PaneHeading>
+      <div className="flex flex-col gap-2">
+        <PaneHeading id="membership-rewards-heading">
+          {MEMBERSHIP_PAGE_COPY.rewardsHeading}
+        </PaneHeading>
+        <p className="text-sm text-secondary-foreground">
+          {REWARDS_PAGE_COPY.subtitle}
+        </p>
+      </div>
       <RewardMenu
         balance={balance}
         copy={REWARD_MENU_COPY}
@@ -174,11 +189,15 @@ function RewardsPane({
   );
 }
 
-/** Coupons — every coupon the member holds; spent ones leave the list. */
+/** Coupons — the same Available / Used & Expired ledger the Coupons
+ * screen draws; the upsell's Browse Rewards press switches the sidebar to
+ * the Rewards pane instead of leaving the page. */
 function CouponsPane({
   coupons,
+  onBrowseRewards,
 }: {
   coupons: AsyncState<readonly CouponItem[]>;
+  onBrowseRewards: () => void;
 }) {
   const ref = usePaneEnter<HTMLElement>();
   return (
@@ -190,21 +209,43 @@ function CouponsPane({
       <PaneHeading id="membership-coupons-heading">
         {MEMBERSHIP_PAGE_COPY.couponsHeading}
       </PaneHeading>
-      {/* Spent coupons leave the section — there is nothing left to
-       * spend; history lives elsewhere. */}
-      <CouponList
-        copy={COUPON_LIST_COPY}
-        state={
-          coupons.status === "ready"
-            ? {
-                status: "ready",
-                data: coupons.data.filter(
-                  (coupon) => coupon.status !== "spent",
-                ),
-              }
-            : coupons
-        }
-      />
+      {coupons.status === "ready" ? (
+        coupons.data.length === 0 ? (
+          /* Nothing to part — the wallet's own empty state stands for the
+           * whole pane, no tab bar. */
+          <CouponList
+            copy={COUPON_LIST_COPY}
+            state={{
+              status: "empty",
+              message: COUPONS_PAGE_COPY.noCoupons,
+              description: COUPONS_PAGE_COPY.noCouponsDescription,
+            }}
+          />
+        ) : (
+          <CouponTabs
+            coupons={coupons.data}
+            promo={
+              <Alert
+                actions={
+                  <Button
+                    onClick={onBrowseRewards}
+                    size="sm"
+                    variant="secondary"
+                  >
+                    {COUPON_PROMO_COPY.cta}
+                  </Button>
+                }
+                description={COUPON_PROMO_COPY.description}
+                dismissible={false}
+                icon={<Gift aria-hidden />}
+                title={COUPON_PROMO_COPY.title}
+              />
+            }
+          />
+        )
+      ) : (
+        <CouponList copy={COUPON_LIST_COPY} state={coupons} />
+      )}
     </section>
   );
 }
@@ -231,40 +272,17 @@ function PointHistoryPane({ view }: { view: MembershipView }) {
 }
 
 /**
- * Tiers & benefits — the ladder, one card per rung and How Points Work. The
- * same composition the standalone Tiers & Benefits screen draws.
+ * Tiers & benefits — one card per rung and How Points Work. The same
+ * composition the standalone Tiers & Benefits screen draws; the member's
+ * standing lives on the tier card, not a ladder.
  */
-function TiersBenefitsPane({
-  heldTier,
-  qualifyingPoints,
-  qualifyingTarget,
-}: {
-  heldTier: string;
-  /** The ladder draws only on the standalone Tiers & Benefits screen; on
-   * Membership the tier card already carries the member's standing, so the
-   * pane drops the rungs and keeps the per-tier benefit cards. */
-  qualifyingPoints?: number;
-  qualifyingTarget?: number;
-}) {
+function TiersBenefitsPane({ heldTier }: { heldTier: string }) {
   return (
     <div className="flex flex-col gap-8">
       <section
         aria-label={TIER_BENEFITS_PAGE_COPY.title}
         className="flex flex-col gap-4"
       >
-        {qualifyingPoints !== undefined && qualifyingTarget !== undefined ? (
-          <TierLadder
-            copy={TIER_LADDER_COPY}
-            currentTier={heldTier}
-            qualifyingPoints={qualifyingPoints}
-            qualifyingTarget={qualifyingTarget}
-            rungs={TIER_BENEFITS.map((row) => ({
-              tier: row.tier,
-              caption: row.ladderCaption,
-              invitationOnly: row.invitationOnly,
-            }))}
-          />
-        ) : null}
         <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
           {TIER_BENEFITS.map((row) => (
             <TierInfoCard

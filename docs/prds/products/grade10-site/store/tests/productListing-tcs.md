@@ -218,6 +218,34 @@ Runs once per row of **Test data**.
 * Step 2 starts with the row's first card; every card for sale lists before `<sold-out product>`; `<multi-variant product>` sorts at `<lowest variant price>`.
 * Step 3 carries `sort=` for a price order.
 
+<!-- trace:case id=g10.store-product-listing.TC-83t rev=1 -->
+### g10.store-product-listing.TC16: [Mobile only] The sort pill's drawer applies an order on choose
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** product-listing#sort/small-screens
+
+**Pre-conditions:**
+
+* customer is on a phone below the wide breakpoint, on `<listing url>`, ordered by latest product.
+
+**Steps:**
+
+1. Tap the sort pill.
+2. Tap highest price.
+
+**Expected Results:**
+
+* Step 1 opens a bottom drawer of orders.
+* Step 2 applies it, UI matching store-product-listing-blocks-productbrowse--narrow-sort-applies-on-choose, listing the highest-priced card for sale first; ❓ the drawer closes - design confirms.
+
 ---
 
 ## product-listing#products-display: Products Display
@@ -418,10 +446,6 @@ Runs once per row of **Test data**.
 
 * The row's narrowing, with its count, and the address carries only it.
 
----
-
-## product-listing#small-screens: Small Screens
-
 <!-- trace:case id=g10.store-product-listing.TC-qa1 rev=1 -->
 ### g10.store-product-listing.TC14: [Mobile only] A small screen shows the count and pills, and no search
 
@@ -436,7 +460,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#small-screens/pills, product-listing#search/search-box
+* **Trace:** product-listing#filters/small-screens, product-listing#sort/small-screens, product-listing#search/search-box
 
 **Pre-conditions:**
 
@@ -473,7 +497,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#small-screens/worlds-and-types
+* **Trace:** product-listing#filters/small-screens
 
 **Pre-conditions:**
 
@@ -496,34 +520,6 @@ Runs once per row of **Test data**.
 
 * Step 1 opens a bottom drawer for Worlds; ticking narrows nothing before Show Results.
 * Step 3 lists the row's narrowing.
-
-<!-- trace:case id=g10.store-product-listing.TC-83t rev=1 -->
-### g10.store-product-listing.TC16: [Mobile only] The sort pill's drawer applies an order on choose
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** product-listing#small-screens/sort
-
-**Pre-conditions:**
-
-* customer is on a phone below the wide breakpoint, on `<listing url>`, ordered by latest product.
-
-**Steps:**
-
-1. Tap the sort pill.
-2. Tap highest price.
-
-**Expected Results:**
-
-* Step 1 opens a bottom drawer of orders.
-* Step 2 applies it, UI matching store-product-listing-blocks-productbrowse--narrow-sort-applies-on-choose, listing the highest-priced card for sale first; ❓ the drawer closes - design confirms.
 
 ---
 

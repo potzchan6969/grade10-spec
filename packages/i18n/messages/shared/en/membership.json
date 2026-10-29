@@ -35,7 +35,10 @@
     "join": "Join the programme",
     "coupons": "Your coupons",
     "noCoupons": "You hold no coupons.",
-    "pointHistory": "Point History"
+    "pointHistory": "Point History",
+    "overview": "Overview",
+    "couponsTab": "Coupons",
+    "memberPass": "Member Pass"
   },
   "collectWithin": "Collect in store within {days, plural, one {# day} other {# days}}",
   "outcome": {
@@ -52,7 +55,11 @@
     "renewal": "Tier renews",
     "balanceExpiry": "{points, plural, one {# point expires} other {# points expire}} on {date}",
     "balanceExpirySoon": "{points, plural, one {# point expires} other {# points expire}} on {date}. Buy or redeem before then to move the date on.",
-    "balanceExpiryToday": "{points, plural, one {# point expires} other {# points expire}} today. Buy or redeem today to move the date on."
+    "balanceExpiryToday": "{points, plural, one {# point expires} other {# points expire}} today. Buy or redeem today to move the date on.",
+    "worthSuffix": "off at checkout",
+    "keepTier": "Keep {tier}",
+    "upgradeTo": "Upgrade to {tier}",
+    "earnLine": "{tier} earning {multiplier}x points"
   },
   "rewards": {
     "label": "Rewards",
@@ -142,7 +149,7 @@
   },
   "join": {
     "title": "Join the programme",
-    "lead": "Earn points on everything you buy, and spend them in store or at checkout.",
+    "lead": "Earn points on what you pay, and spend them in store or at checkout.",
     "action": "Join",
     "joined": "You are in. Your card and the reward menu are on your membership page.",
     "already": "You are already a member.",
@@ -221,5 +228,25 @@
     "refusedEntered": "You have already sent a link.",
     "refusedClosed": "This campaign is not running right now.",
     "refusedOther": "That did not go through. Try again."
+  },
+  "tiers": {
+    "title": "Tiers & Benefits",
+    "ask": {
+      "base": "Free to join",
+      "pointsInWindow": "{points} pts / {months, plural, =12 {year} other {# months}}",
+      "invitation": "Invitation only"
+    },
+    "earnRate": "{points} pt for every {spend} spent",
+    "howPointsWork": {
+      "heading": "How points work",
+      "earnTitle": "Earn",
+      "earnBody": "1 pt for every {spend} you spend.",
+      "pendingTitle": "Pending",
+      "pendingBody": "Points arrive after your order completes.",
+      "spendTitle": "Spend",
+      "spendBody": "1 pt = {worth} off at checkout, or swap them for rewards and coupons.",
+      "expiryTitle": "Expiry",
+      "expiryBody": "Points expire after {months} months with no activity. We’ll remind you {days} days before."
+    }
   }
 }

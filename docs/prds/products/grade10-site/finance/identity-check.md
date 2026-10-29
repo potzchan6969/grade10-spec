@@ -94,10 +94,10 @@ anybody types.
   for a verified identity — before the custody paperwork, the first cash-out,
   the first sale payout, a withdrawal, a total held above a value — is
   switched on or off by an admin, so the rule moves without a release
-- ❓ Owner — **Which points ask** — when identity is required is still being
-  discussed; the draft asks at the first cash-out, sale payout or withdrawal,
-  or above a total held of **HKD 50,000** or **HKD 100,000**, and today's
-  vault asks before the custody paperwork
+- ❓ Owner — **Which points ask** — the vault-first answer is on
+  [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
+  and still being discussed; built as asking before the custody paperwork, at
+  every cash-out and before sale proceeds reach the balance
 
 :::detail{title="Product decisions" for="pm"}
 The vault is where an identity is felt: who is asked, when, what the counter

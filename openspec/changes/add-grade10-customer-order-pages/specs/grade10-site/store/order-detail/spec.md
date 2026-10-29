@@ -24,7 +24,7 @@ Store order without revealing another customer's order or inventing absent facts
 
 ### Requirement: One private address shows one owned order
 
-The Grade10 site SHALL serve an order at `/profile/orders/<order-id>`. It SHALL
+The Grade10 site SHALL serve an order at `/profile/my-orders/<order-id>`. It SHALL
 show the order only when it belongs to the signed-in collector. A missing order
 and an order owned by another account SHALL use the same not-found treatment and
 SHALL NOT disclose whether the id exists. A collector without a decided session
@@ -36,7 +36,7 @@ the session.
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** a signed-in collector who owns an order
-- **WHEN** they open `/profile/orders/<order-id>` for it
+- **WHEN** they open `/profile/my-orders/<order-id>` for it
 - **THEN** that order's detail appears
 
 <!-- trace:scenario id=g10.store-order-detail.SC-a2p rev=1 -->
@@ -53,7 +53,7 @@ the session.
 **Serves:** grade10-site-store-order-detail-US-02 - Collector signs in to the requested order
 
 - **GIVEN** a collector without a signed-in session
-- **WHEN** they open `/profile/orders/<order-id>`
+- **WHEN** they open `/profile/my-orders/<order-id>`
 - **THEN** the sign-in surface opens without replacing that address
 - **AND** a successful sign-in reads that order at the same address
 
@@ -170,7 +170,7 @@ another fact.
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** an owned order with or without a non-empty Store-supplied shop order number
-- **WHEN** its detail renders at `/profile/orders/<order-id>`
+- **WHEN** its detail renders at `/profile/my-orders/<order-id>`
 - **THEN** the shop order number identifies the order when supplied
 - **AND** the Store order id identifies it otherwise
 - **AND** the address continues to use the immutable Store order id

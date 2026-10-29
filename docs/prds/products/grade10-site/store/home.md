@@ -7,46 +7,38 @@ order: 1
 `grade10.com/store` is the front door: a hero, a grid of collections, one
 row of cards. Links people already hold still land here.
 
-1. **Hero** — a small label, headline, copy, image, two ways on
-   - In the response HTML before any script runs, whether or not the
-     catalogue answers
-2. **Catalogue sections** — read from the shop after the hero; each says it
-   is loading, or that the read failed and can be retried without a full
-   page load, or is absent when there is nothing to show, never a titled
-   empty row
-   1. **Collection grid** — one tile per collection, in catalogue order; a
-      collection added to the shop arrives with no deploy
-   2. **Merchandised row** — cards from whichever collection the shop lists
-      first
-      - **Card status** — sold out, and what it used to cost where the shop
-        has marked it down, both said the way the browse listing says them
-      - **Opens, never sells** — a card leads to the product's own page and
-        offers no cart
+## Hero
 
-## Designs
+- **Hero** — a small label, a headline, copy, an image and two ways on
+  - **Before Any Script** — in the page as it arrives, whether or not the catalogue answers
 
 ::story{id="store-home-screens-store-home--default" title="The main page, whole"}
 
+## Collection Grid
+
+- **Tiles** — one per collection, in catalogue order
+  - **New Collection** — one added in the shop arrives with no deploy
+
 ::story{id="store-home-blocks-storecollectiongrid--default" title="The collection grid"}
 
+## Merchandised Row
+
+- **Cards** — from whichever collection the shop lists first
+  - **Card Status** — sold out, and what it used to cost where the shop has marked it down, both said the way the browse listing says them
+  - **Opens, Never Sells** — a card opens the product's own page and offers no cart
+
+## Loading and Errors
+
+- **Catalogue Read** — the grid and the row are read from the shop after the hero
+  - **Loading** — each says it is loading
+  - **Failed** — each says the read failed and can be retried without a full page load
+  - **Nothing to Show** — the section is absent, never a titled empty row
+
 :::detail{title="Product decisions" for="pm"}
-The front door is a shop window: it shows what the shop leads with, and a
-collector who means to buy goes on to the product's own page for the cart.
-
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Collector arriving cold | Reads the row | Sees what the shop leads with, what each card costs, and whether it is still there to buy. |
-| Collector who means to buy | Presses a card | Lands on that product's own page, where the cart is. |
-
-**Not in scope.** Selling from the row — the shop window shows, and the
+The front door is a shop window: it shows what the shop leads with, and the
 product's own page sells.
 
-**Measurement.** On [Analytics](/p/grade10-site/analytics#store).
-
-**Decisions.**
-
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| The row merchandises | Decided | A card opens the product's page and offers no cart. A control the surface cannot honour is worse than none: it draws, takes the press and answers with nothing, so a collector reads the shop as broken rather than the affordance as absent. | Product |
-| Status is read the listing's way | Decided | Sold out and marked down come from the same rules the browse listing reads them by, so the two surfaces cannot disagree about what is unavailable or what counts as a saving. | Engineering |
+- **The row merchandises, never sells** — a control the surface cannot honour is worse than none: it takes the press and answers with nothing, so a collector reads the shop as broken rather than the affordance as absent
+- **Status is read the listing's way** — sold out and marked down come from the browse listing's rules, so the two surfaces cannot disagree about what is unavailable or what counts as a saving
+- **Measured by** — row-led product views — [Analytics](/p/grade10-site/analytics#store)
 :::

@@ -27,7 +27,8 @@ const ICONS: Record<
 };
 
 function signed(delta: number) {
-  return delta > 0 ? `+${delta}` : `−${Math.abs(delta)}`;
+  const abs = Math.abs(delta).toLocaleString("en-HK");
+  return delta > 0 ? `+${abs}` : `−${abs}`;
 }
 
 /**

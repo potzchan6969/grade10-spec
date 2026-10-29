@@ -22,17 +22,17 @@ understand which still need attention, and open tracking or one order safely.
 
 ### Requirement: A collector reaches their orders at one private address
 
-The Grade10 site SHALL serve Your Orders at `/profile/orders`. A signed-in
+The Grade10 site SHALL serve My Orders at `/profile/my-orders`. A signed-in
 collector SHALL see only orders associated with their account. A collector
 without a decided session SHALL remain at that address while the existing
 sign-in surface decides the session.
 
 <!-- trace:scenario id=g10.store-order-history.SC-u2y rev=1 -->
-#### Scenario: grade10-site-store-order-history-SC-01 - A signed-in collector opens Your Orders
+#### Scenario: grade10-site-store-order-history-SC-01 - A signed-in collector opens My Orders
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** a signed-in collector with Store orders
-- **WHEN** they open `/profile/orders`
+- **WHEN** they open `/profile/my-orders`
 - **THEN** the page lists only that collector's orders
 
 <!-- trace:scenario id=g10.store-order-history.SC-si2 rev=1 -->
@@ -40,11 +40,11 @@ sign-in surface decides the session.
 **Serves:** grade10-site-store-order-history-US-02 - Collector signs in to the intended order page
 
 - **GIVEN** a collector without a signed-in session
-- **WHEN** they open `/profile/orders`
-- **THEN** the sign-in surface opens without replacing `/profile/orders`
-- **AND** a successful sign-in reveals Your Orders at the same address
+- **WHEN** they open `/profile/my-orders`
+- **THEN** the sign-in surface opens without replacing `/profile/my-orders`
+- **AND** a successful sign-in reveals My Orders at the same address
 
-### Requirement: Your Orders presents newest active and past orders
+### Requirement: My Orders presents newest active and past orders
 
 The page SHALL present orders newest first. It SHALL list a web order only
 once Shopify holds it. It SHALL pass the customer-facing badge defined by
@@ -67,7 +67,7 @@ formatted for the collector.
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** a collector with active and past orders created at different times
-- **WHEN** Your Orders loads
+- **WHEN** My Orders loads
 - **THEN** active orders appear above past orders
 - **AND** each group is ordered newest first
 
@@ -109,7 +109,7 @@ formatted for the collector.
 
 ### Requirement: Order actions use settled Grade10 and carrier addresses
 
-View Details SHALL open `/profile/orders/<order-id>` using the selected order's
+View Details SHALL open `/profile/my-orders/<order-id>` using the selected order's
 immutable Store order id, including when the summary displays a different shop
 order number. Track Order SHALL appear only when the order supplies an absolute
 `https` carrier URL with no embedded credentials. Activating Track Order SHALL
@@ -122,7 +122,7 @@ tracking action.
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **WHEN** a collector activates View Details for an order
-- **THEN** `/profile/orders/<order-id>` opens for that order
+- **THEN** `/profile/my-orders/<order-id>` opens for that order
 
 <!-- trace:scenario id=g10.store-order-history.SC-raj rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-07 - A safe carrier URL enables tracking
@@ -161,20 +161,20 @@ designed empty state and a Shop Now action to `/store`.
 
 - **GIVEN** the order read failed
 - **WHEN** the collector activates Retry
-- **THEN** the page reads the orders again at `/profile/orders`
+- **THEN** the page reads the orders again at `/profile/my-orders`
 
 <!-- trace:scenario id=g10.store-order-history.SC-li6 rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-11 - A collector with no orders returns to the Store
 **Serves:** grade10-site-store-order-history-US-03 - Collector starts shopping from an empty account
 
 - **GIVEN** the order read succeeded with no orders
-- **WHEN** Your Orders renders
+- **WHEN** My Orders renders
 - **THEN** the designed empty state appears
 - **AND** Shop Now opens `/store`
 
 ### Requirement: Current product pictures identify recorded purchases
 
-Your Orders SHALL show each available first current product picture beside its
+My Orders SHALL show each available first current product picture beside its
 matching recorded item, including purchases made before picture support. A
 later catalogue edit SHALL be reflected when the order is read again. Pictures
 SHALL NOT replace recorded titles, quantities, currency, prices, totals,
@@ -199,7 +199,7 @@ availability SHALL NOT change which collector can read an order.
 **Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
 
 - **GIVEN** earlier orders with different recorded items and available current product pictures
-- **WHEN** the collector opens Your Orders
+- **WHEN** the collector opens My Orders
 - **THEN** each item shows its own product's first current picture
 - **AND** its recorded title, quantity, currency, price, line total, order total, status and tracking remain unchanged
 
@@ -208,7 +208,7 @@ availability SHALL NOT change which collector can read an order.
 **Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
 
 - **GIVEN** an earlier purchase whose product's first picture has changed since a previous order read
-- **WHEN** the collector reads Your Orders again
+- **WHEN** the collector reads My Orders again
 - **THEN** that item shows the new first current picture
 - **AND** its recorded purchase facts remain unchanged
 
@@ -217,7 +217,7 @@ availability SHALL NOT change which collector can read an order.
 **Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
 
 - **GIVEN** recorded items whose products are removed, unpublished or supply no picture
-- **WHEN** Your Orders loads successfully
+- **WHEN** My Orders loads successfully
 - **THEN** each affected item keeps the existing placeholder
 - **AND** the recorded items, order facts and available actions remain visible
 
@@ -235,7 +235,7 @@ availability SHALL NOT change which collector can read an order.
 **Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
 
 - **GIVEN** the collector's order facts are readable but the picture lookup fails
-- **WHEN** Your Orders loads
+- **WHEN** My Orders loads
 - **THEN** the affected items keep the existing placeholder
 - **AND** the successful list, purchase facts, View Details and any valid tracking action remain usable
 - **AND** the picture lookup failure has a diagnostic record
@@ -246,7 +246,7 @@ availability SHALL NOT change which collector can read an order.
 
 - **GIVEN** a compatible order response without picture fields on its items
 - **WHEN** the current application reads that response
-- **THEN** Your Orders renders the recorded items with the existing placeholder
+- **THEN** My Orders renders the recorded items with the existing placeholder
 - **AND** absent picture fields do not turn the successful read into an error
 
 <!-- trace:scenario id=g10.store-order-history.SC-a5w rev=1 -->

@@ -1,16 +1,16 @@
 /** Story ids the wireframes click through to, in this feature's titles. */
 export const REQUEST_WIZARD_DESCRIBE_STORY_ID =
-  "vault-collector-pages-prototypes-request-wizard--describe";
+  "finance-collector-pages-prototypes-request-wizard--describe";
 export const CASE_PAGE_OFFER_WAITING_STORY_ID =
-  "vault-collector-pages-prototypes-case-page--offer-waiting";
+  "finance-collector-pages-prototypes-case-page--offer-waiting";
 export const CASE_PAGE_LOAN_RUNNING_STORY_ID =
-  "vault-collector-pages-prototypes-case-page--loan-running";
+  "finance-collector-pages-prototypes-case-page--loan-running";
 export const BOOK_A_VISIT_SHOP_STORY_ID =
-  "vault-collector-pages-prototypes-book-a-visit--shop";
+  "finance-collector-pages-prototypes-book-a-visit--shop";
 export const BOOK_A_VISIT_TIMES_STORY_ID =
-  "vault-collector-pages-prototypes-book-a-visit--times";
+  "finance-collector-pages-prototypes-book-a-visit--times";
 export const BOOK_A_VISIT_BOOKED_STORY_ID =
-  "vault-collector-pages-prototypes-book-a-visit--booked";
+  "finance-collector-pages-prototypes-book-a-visit--booked";
 
 export const COLLECTOR_PAGES_MANUAL_PATH = "vault/collector-pages";
 

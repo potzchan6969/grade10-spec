@@ -12,8 +12,11 @@ export type PageSection = { id: string; title: string; level: 2 | 3 };
  * as one. */
 export const MIN_SECTIONS = 3;
 
-/** How far under the sticky header a heading counts as the one being read. */
-const ACTIVE_LINE = 120;
+/** Where a jump to a heading lands it, under the sticky header and the
+ * compact page heading: the line a heading passes to be the one being read. */
+export function jumpLine(heading: Element): number {
+  return Number.parseFloat(getComputedStyle(heading).scrollMarginTop) || 0;
+}
 
 /** The page's sections and the one being read, scanned once for every surface
  * that lists them. */
@@ -23,7 +26,7 @@ export type PageSections = { sections: PageSection[]; active?: string };
  * The section the reader is in: the last heading that has passed the line, or
  * the first one while the page is still above all of them.
  */
-export function activeSection(tops: number[], line = ACTIVE_LINE): number {
+export function activeSection(tops: number[], line: number): number {
   let active = 0;
   for (let at = 0; at < tops.length; at += 1) {
     if (tops[at] - line <= 1) active = at;
@@ -80,12 +83,16 @@ function useActive(sections: PageSection[]): string | undefined {
     let frame = 0;
     const measure = () => {
       frame = 0;
-      const tops = sections.map(
-        (section) =>
-          document.getElementById(section.id)?.getBoundingClientRect().top ??
-          Number.POSITIVE_INFINITY,
+      const headings = sections.map((section) =>
+        document.getElementById(section.id),
       );
-      setActive(activeSection(tops));
+      const first = headings.find((heading) => heading !== null);
+      if (!first) return;
+      const tops = headings.map(
+        (heading) =>
+          heading?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
+      );
+      setActive(activeSection(tops, jumpLine(first)));
     };
     const onScroll = () => {
       if (frame === 0) frame = window.requestAnimationFrame(measure);

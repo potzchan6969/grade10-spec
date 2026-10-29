@@ -34,12 +34,12 @@ One Postgres schema (`loyalty`) per product database (`stg-/prd-<product>-loyalt
 
 - Balance is `SUM(remaining)` over the credits unspent and still alive at the instant asked — alive meaning past neither their own date nor the member's activity clock
 - A lot's effective expiry is `greatest(expires_at, activity_expires_at)`, written in one place and read everywhere: in SQL for every balance, and in TypeScript wherever the row is already in hand
-- Tier is `evaluateTier` over the earned tier the member still holds, the window's points, and any live invitation — a term that has run out is dropped before the call, so the function itself needs no clock
+- Tier is the earned tier the member's current period holds, raised by any live invitation; a period that has ended is closed — renewed or dropped — before the answer, so the rule itself needs no clock
 
 ### The mutable columns are enumerated
 
 - The menu, by audited admin edit: name, description, `point_cost`, `stock`, `fulfillment`, the active window, `archived_at`. The cost and the fulfilment template are copied onto each redemption, so repricing or retemplating never rewrites what a member paid or what an in-flight redemption produces
-- The member row under its own lock: `enrolled_at` stamped once; `earned_tier_id`, `earned_tier_activated_at`, `earned_tier_period_started_at` and `earned_tier_expires_at` moving together on attainment, extension or lapse; `activity_expires_at` moving forwards only
+- The member row under its own lock: `enrolled_at` stamped once; `earned_tier_id`, `earned_tier_activated_at`, `earned_tier_period_started_at` and `earned_tier_expires_at` moving together on promotion, renewal or drop; `activity_expires_at` moving forwards only
 - A credit's `remaining`, drawing down and never below zero
 - A redemption's lifecycle: `state` flips `issued → reversed` once; `fulfillment_state` walks the machine forward; `fulfillment_code` is written once, before any vendor call; `fulfillment_used` only ever climbs; `fulfillment_artifact`, `attempts`, `next_attempt_at`, `last_error`, `fulfilled_at`, `fulfilled_by`, `unparked_by`, `unparked_at` and `reversed_at` follow it
 - An invitation's `revoked_at` and the operator in `revoked_by`, one way
@@ -51,7 +51,7 @@ One Postgres schema (`loyalty`) per product database (`stg-/prd-<product>-loyalt
 - Every credit's consumptions sum to at most its amount, and `remaining = amount − consumed` at all times
 - Therefore `SUM(amount) = SUM(remaining over open credits) ≥ 0` — the two ways of adding the ledger up always agree, and no member goes negative
 - The balance anyone reads is the part of that which is past neither its own date nor the member's clock
-- A member's earned tier, the day it was reached, and the two ends of the period it is held for are all set or all null — a term over no tier governs nothing, a tier without one could never lapse, and a period with no start is retention measured from nowhere
+- Every member holds an earned tier and a tier period — Silver's from enrolment or the last drop, Gold's from the day it was reached; a period with no start is progress measured from nowhere
 - The shared behavior suite reconciles all of this after every scenario, plus that every restoration names a root that is not itself a restoration — an allocator bug fails a test, not a reconciliation months later
 
 ## Mutation protocol
@@ -112,25 +112,23 @@ One Postgres schema (`loyalty`) per product database (`stg-/prd-<product>-loyalt
 - How long one event's points live is computed in one place (`creditLife`), so the date stamped on the credit and the date the clock lands on can never disagree
 - Settling a lapse is one statement whatever the backlog — the debits, their consumptions and the drawn-down credits move together — so a dormant member with a thousand dead lots can still check out
 
-### Tiers are earned for a term and re-earned inside it
+### Every tier is held for a period, and progress counts inside it
 
-- Attainment: the member's own points reach a rank above the one they hold, so the tier, the day and a fresh term are stamped together
-- Retention: the same tier, its threshold already earned inside the current period, extends the term by one more from the term's own end — the anniversary is kept, and it lands the moment an evaluation sees it rather than at a year-end reckoning
-- The period's start is stamped with its end, never inverted back out of it: month arithmetic clamps, so a term stamped on 29 February ends on 28 February and the inversion would open the period a day before the earn that bought it. An extension opens the next period where this one ends, so the measurement window rolls forward with the term and re-anchoring is once per period by construction
-- A start behind the attainment it belongs to is read as the attainment, loudly — the deploy window between the migration and the code writes exactly that row, with no start after a first attainment and a closed period's start after a re-attainment. A tier with no attainment instant or no end is a broken row and throws
-- The term itself never moves on a claw-back: the window is derived on each side of the debit, and the member gives up a rung only where the window attained it before and no longer does — a tier held on its term rather than on today's window is not a claw-back's to take. The member lands on the rung the window still attains for the period they are already holding, and only a drop to the base tier clears the four columns
-- Lapse: the term ran out and the rolling window attains nothing, so all four columns go back to null and the member is on the base tier
-- Losing a tier — a lapse or a claw-back demotion — also stamps `demoted_at`, the floor every later reading of progress is taken under: an earn dated before that instant counts toward reaching or retaining nothing, so the climb starts at zero and a stale rolling-window earn can never flip a demotion back into a promotion on its own. Only a fresh demotion moves it; a later attainment needs no clearing, since its own period start already reads later than it
-- What a tier is retained on defaults to what it was attained on. A config that asks more to keep a tier than to reach it is refused at boot, as is a term that is not exactly the qualifying window, and as is a rung that pays no more than the one beneath it — a points tier is compared against the points tier below it on the chain, an invitation tier against whatever it was placed over, because the evaluation hands out the highest rank's multiplier whatever qualified it
-- Every evaluation runs twice — once ignoring invitations, once with them — so a tier earned while invited survives losing the invitation, and an invitation never becomes the floor nor extends a term
-- A floor naming a tier the running config no longer knows is logged and left exactly as it is, so a config rollback finds it intact
+- Silver and Gold are each held for a 12-month period; Black is held by its invitation. Silver's opens at enrolment and on every drop, Gold's on the day it is reached
+- Progress is the qualifying points that reached the member's record inside the current period, counted by when they were processed, not by the order's date: a late webhook, a till sale attributed later or a ticket bought before the account existed counts toward the period it lands in, so no date a member was shown ever moves back
+- Promotion: Silver-period progress reaches Gold's threshold, so Gold and a fresh period open at that earn; the promoting earn counts toward the Silver period alone, and every row processed after it counts toward Gold, whatever instant it shares
+- Renewal: at a period's end, the tier's retention threshold earned inside it opens the same tier's next period where this one ends; Silver always renews. Every end is the run's anchor plus whole periods, never chained from the last end, so a 29 February anchor does not drift
+- Drop: a Gold period that ends short of retention, an operator's removal, an erasure, or an invitation ending over an earned Silver puts the member on Silver with a fresh period from that instant; it starts at zero, so nothing earned before the drop counts toward climbing back
+- A refund takes its qualifying points from the earn they came from, priced from the refunded money — not from what the debit could still reach, so points already spent are no shield. It re-checks only the decision that opened the current period: a promotion it undoes returns the member to the Silver period the promotion ended, and a renewal it undoes ends that Gold period on its old date with Silver from there. Nothing older is re-judged
+- What a tier is retained on defaults to what it was reached on. A config that asks more to keep a tier than to reach it is refused at boot, as is a rung that pays no more than the one beneath it — a points tier is compared against the points tier below it on the chain, an invitation tier against whatever it was placed over, because the evaluation hands out the highest rank's multiplier whatever qualified it
+- Black stays an overlay on the earned tier: a Gold earned while invited survives losing the invitation, and an invitation never extends a period
+- A tier the running config no longer knows is logged and left exactly as it is, so a config rollback finds it intact
 - `tier_changes` records one row per effective-tier move; `loyalty.tier.changed` counts moves between tiers, not the null → base anchor row a new member gets
 
-### A lapse is observed, and the review only records it
+### A period's end is observed, and the review only records it
 
-- Every read resolves the tier live: a term that ran out a second ago already reads as base, and a dated invitation stops counting the instant it expires
-- The nightly review writes the history — under each member's lock it re-reads the term, re-evaluates, and appends the `review` row — then counts who fell and who re-earned what they held or better
-- A lapsed member does not drop to base by default: they land on the highest tier their rolling window still attains, as a fresh attainment with a fresh term. Any landing below the tier they held — a lower rung or the base — also stamps `demoted_at`, so only earnings dated after the drop count toward climbing back, wherever the member landed
+- Every read resolves the period live: a Gold period that ended a second ago already reads as Silver, and a dated invitation stops counting the instant it expires
+- The nightly review writes the history — under each member's lock it re-reads the period, closes it, and appends the `review` row — then counts who dropped and who kept Gold
 - A member the review settles nothing for — a tier this config no longer knows, which is left exactly as it is — leaves the run on the same terms a failure does: counted under its own name, out of the batch, and still in the leftover the next run picks up. A row the review changes nothing about matches the candidate scan again, so keeping it in would burn the whole budget on it and starve every member behind it
 
 ### Rounding floors base points first, then the multiplier
@@ -148,21 +146,20 @@ One Postgres schema (`loyalty`) per product database (`stg-/prd-<product>-loyalt
 - What it cannot reach is counted by cause, spent-first: `loyalty.clawback.shortfall` carries `cause:redeemed` — the pricing signal for the redeem-then-refund loop — or `cause:expired`
 - It prices the goods that came back, at the rate the earn used: the seller sends the goods share of a refund, never the charge, so refunding a delivery removes no points ([Commerce](/p/grade10-site/commerce/commerce))
 
-### Claw-backs age out with their earn
+### A claw-back takes from its earn's period
 
-- Every debit writes zero tier fuel; a claw-back subtracts qualifying points through its consumptions, dated by the root credit
-- The penalty cancels exactly that earn's window contribution and slides out of the window with it — never a double penalty for an earn the window already forgot
+- Every debit writes zero tier fuel; a claw-back subtracts qualifying points from the period its earn counted toward, and from nothing else
 
 ### Event time is the caller's, within reason
 
-- A backdated spend is accepted — late webhooks are real — and its expiry, its clock reset and its window membership follow `occurredAt`
+- A backdated spend is accepted — late webhooks are real — and its expiry, its clock reset follow `occurredAt`; the tier period it counts toward follows when it was processed
 - Backdated far enough that its whole life is already past, the credit is born dead: the earn stands and replays like any other, `EarnResult.deadAt` says when it died, and it is counted as `loyalty.points.dead_on_arrival` rather than as points earned
 - The multiplier is the tier held when the spend is processed
 - A spend dated more than five minutes ahead is refused
 
 ### Calendar math runs in the program's time zone
 
-- Window starts, expiry dates and tier terms are computed once in `program.timeZone` and passed to SQL as absolute instants; no `now() − interval` in a query
+- Expiry dates and tier periods are computed once in `program.timeZone` and passed to SQL as absolute instants; no `now() − interval` in a query
 - Month arithmetic clamps the day: Jan 31 + 1 month is the end of February
 - An ambiguous wall-clock reading is the earlier instant; a skipped one lands just past the gap
 
@@ -223,7 +220,7 @@ One Postgres schema (`loyalty`) per product database (`stg-/prd-<product>-loyalt
 - Admin permissions in the shared RBAC vocabulary: `loyalty:read`, `loyalty:adjust`, `loyalty:invite`, `loyalty:catalog`, `loyalty:finance`, plus `audit:read` for the audit trail; `staff` holds `loyalty:read`, `admin` holds every one
 - `admin.liability` reads what the program still owes, behind `loyalty:finance`, which no scoped role holds. Two registers at one instant: every unspent, unexpired point across all members — still a count, because what a point is worth in money is Finance's answer and not this surface's — and the money out in the codes those points bought, which already carries a face value and is reported as money. The second register belongs to the fulfiller: what is still spendable, what expired unused (breakage), and the three mismatch signals a person has to settle. A deployment that mints no codes answers `none` and one whose minter cannot be reached answers `unavailable` with the reason — never a zero, which an operator would read as "nothing to look at"
 - `admin.redemptions.*` is the fulfilment queue: list it, retry a parked one, or settle one by hand — each recorded against the operator who did it; `admin.reverseRedemption` gives the points back. Retrying, settling and reversing all sit with `loyalty:adjust`, because un-parking a fulfilment moves what a member is owed
-- `me.summary` carries both clocks: when the balance lapses without activity, when the earned tier lapses, and how far through retaining it the member is
+- `me.summary` carries both clocks: when the balance lapses without activity, when the current tier period ends, and how far the member is toward Gold or toward keeping it
 - `me.history` answers a member-facing entry (id, kind, amount, occurredAt, effective expiresAt, reference, reward name, createdAt), never the ledger row — the row carries the request fingerprint, which is the retry key's business and nobody else's
 
 ### RPC over a service binding
@@ -281,8 +278,8 @@ The program implements the owner's 2026-08 draft ([the programme reference](/ref
 | Can a settled lapse be revived? | No — activity settles what is already dead before it moves the clock | A balance that came back would depend on when the sweep last ran |
 | Is a reversal activity? | No | It undoes a redemption; the member did nothing new |
 | What holds a tier for another term? | The tier's attainment points — 500 for Gold | The softer 400 is an open business question; the config carries a separate retention threshold for the day it closes |
-| Where does a lapsed member land? | On the highest tier their rolling window still attains, as a fresh attainment with a fresh term | Dropping to base while holding a window's worth of points would demote and re-promote in the same breath |
-| When is a tier verdict made? | At processing time, from the state the evaluation reads | A backdated earn counts the moment it lands and the multiplier is the tier held when the spend is processed — never a reconstruction of what the member would have been |
+| Where does a member land when Gold is not kept? | On Silver, with a fresh Silver period from the day Gold ended | The owner's rule (2026-10-29): Silver's period opens on registering or on dropping from Gold or Black, and progress counts only inside a period |
+| When is a tier verdict made? | At processing time, from the state the evaluation reads | A backdated earn counts the moment it lands and the multiplier is the tier held when the spend is processed — never a reconstruction of what the member would have been A refund is the one exception: it takes its points from the period they counted toward, which can undo the promotion or renewal that opened the current period — [Tiers](/p/grade10-site/loyalty/tiers) |
 | Reversing a redemption whose coupon was used? | Refused loudly; the points stay spent | The reward was consumed; giving the points back would pay for it twice |
 | What prices the menu? | Nothing yet — no fulfiller ships, so `manual` is the only kind a catalog can offer | The exchange rate is the business's to set, and inventing one in code would make it engineering's |
 
@@ -302,7 +299,7 @@ The `grade10-spec` store still carries the superseded requirements — they desc
 - Why does a refund on a reference that has earned no credit yet throw `NOT_FOUND` instead of storing an answer?
   - That money is missing an earn, not terminal — the retry claws it back once the earn lands. Money a spend already priced at zero points is terminal, and the money those spends recorded is what tells the two apart. Asking only whether some spend arrived would settle a refund for money nobody has priced yet, and the earn that follows would never be clawed back.
 - Why is a tier's period start stored when its end already implies it?
-  - It does not imply it. Month arithmetic clamps the day, so a term stamped on 29 February ends on 28 February and walking that end back a year lands on the 28th — a day before the earn that attained the tier, which would then also count towards keeping it. Recording the start is one column; inverting clamped arithmetic is a free extra year at the higher multiplier, once every four years.
+  - It does not imply it. Month arithmetic clamps the day, so a period anchored on 29 February ends on 28 February and walking that end back a year lands on the 28th — a day before the earn that reached the tier, which would then also count towards keeping it. Recording the start is one column; inverting clamped arithmetic is a bug waiting for a leap year.
 - Why are the two money cursors their own tables rather than sums over the rows the mutations left?
   - Because the mutations that move them may leave no row at all. A claw-back that reaches an empty balance writes no revoke row and would lose the money it refunded; a spend too small to earn a point writes no credit and would leave its refund refusing forever. Each writer advances its own cursor unconditionally, so the fact survives the side effect that never happened.
 - Why does each cursor read still take a `max` over the old rows?

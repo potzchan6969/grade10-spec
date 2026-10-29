@@ -9,9 +9,9 @@ import { useEditMode } from "../editor/edit-mode";
 import { PageEditor } from "../editor/page-editor";
 import { useLayoutMaybe } from "../shell/layout";
 import {
+  HintedPage,
   hasSide,
   ReadingRunout,
-  SideHint,
   SplitPage,
 } from "../shell/side-panel";
 import { PageWarnings, warningsForPage } from "./check-warnings";
@@ -42,6 +42,9 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
   const cases = useMemo(() => casesOfPage(suites ?? [], path), [suites, path]);
   const side = hasSide(rows, cases);
   const split = (layout?.split ?? false) && side;
+  // Each section's hint on a wide page holds its stories and engineering
+  // detail, so the reading leaves them out; a narrow screen keeps them.
+  const hinted = (layout?.wide ?? false) && side;
 
   if (!page) return <NotFoundPage index={index} path={path} />;
   // A page that does not parse is exactly the page you want to open.
@@ -70,9 +73,12 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
       ) : (
         <>
           {head}
-          <BlockList blocks={page.ast.blocks} />
+          {hinted ? (
+            <HintedPage cases={cases} rows={rows} />
+          ) : (
+            <BlockList blocks={page.ast.blocks} />
+          )}
           {children}
-          {layout && side ? <SideHint cases={cases} rows={rows} /> : null}
         </>
       )}
       {layout && side ? <ReadingRunout /> : null}

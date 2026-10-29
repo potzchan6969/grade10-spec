@@ -73,7 +73,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   statement they were shown, once the collector's screens ship, and until
   then the draft waits and ends silently on its own clock; staff type no name, and an account the walk-in
   creates reads by its email handle until the customer names themselves —
-  [Collector Pages](/p/grade10-site/vault/collector-pages#case-page)
+  [Collector Pages](/p/grade10-site/finance/collector-pages#case-page)
 - **An address signed in to before** — a walk-in is refused when the
   address belongs to an account someone has signed in to
 - **An address that is not an email address** — refused beside the
@@ -84,7 +84,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   before staff type the address, and the open keeps the version shown; in
   production the open is refused while the statement is unwritten, so the
   walk-in is dark in production until Legal's statement lands —
-  [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case)
+  [Compliance and Readiness](/p/grade10-site/finance/compliance-and-readiness#before-the-first-production-case)
 - **A slab the register knows** - at a walk-in, staff type the grader and
   cert and the case takes the item the register knows, its facts filled in -
   [Items](/p/grade10-admin/inventory/items#facts)
@@ -118,14 +118,14 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   for this visit as an ordered checklist, each ticked as its act lands, and
   says why an act is not offered yet
 - **Key terms** — the Documents tab ticks the loan agreement's own terms —
-  [Documents and Signing](/p/grade10-site/vault/documents-and-signing#document-terms)
+  [Documents and Signing](/p/grade10-site/finance/documents-and-signing#document-terms)
 - **The identity panel** — six states, Verified, Out, Stalled, Refused,
-  Lapsed and None — [Identity Check](/p/grade10-site/vault/identity-check#identity-states)
+  Lapsed and None — [Identity Check](/p/grade10-site/finance/identity-check#identity-states)
 - **Forfeit, withheld in words** — the Custody tab says why Forfeit is
   not offered yet — not before the cure date, the notice sent on which day —
   beside what the collector was told
 - **Before the act** — the make-offer, vault and payout dialogs state the
-  rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
+  rule before the operator sends — [Loan and Money](/p/grade10-site/finance/loan-and-money#records)
 - 🚧 **A loan's clock** - beside the status, a live loan past its due date
   reads `N days past due`, in calendar days on the brand's calendar as the
   collector's Past due stage counts them; once a forfeiture notice stands it
@@ -235,7 +235,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | Staff see the contact; the verified name stays in the KYC service | Decided | The console shows what staff set and never the legal name | Product |
 | Collector by name | Decided | Queue and held-item rows show the collector's account name to staff and admins under the identity grant; a treasurer and the arrears row keep what they read today | Owner |
 | No search by name | Decided | A collector is found by an exact contact, the case reference or a click on their name; a name search would let staff walk the customer list | Owner |
-| The identity panel reads the record's six states | Decided | Verified, Out, Stalled, Refused, Lapsed and None, as [Identity Check](/p/grade10-site/vault/identity-check#identity-states) defines them; the provider's finer states fold into them, because an operator arranging a visit needs the difference between out and none, not the provider's stage | Product |
+| The identity panel reads the record's six states | Decided | Verified, Out, Stalled, Refused, Lapsed and None, as [Identity Check](/p/grade10-site/finance/identity-check#identity-states) defines them; the provider's finer states fold into them, because an operator arranging a visit needs the difference between out and none, not the provider's stage | Product |
 | Counter intake | Decided | Staff open a draft for a customer at the counter, under the customer's own account, with staff's photos, and no email is sent; the customer sends it from their own account, keeping the version of the collection statement they were shown, before it is valued or any email is sent; until the collector's screens ship, the draft waits and ends silently on its own clock. A mistyped address is cancelled and opened again. No identity is keyed to a case | Owner |
 | Signed-in customers at the counter | Decided | Refused: a typed address does not prove the account is theirs, so that customer sends the request from their own phone with staff beside them | Owner |
 | Walk-ins open under `vault:operate`, names read under `kyc:read` | Decided | Opening a case at the counter is an operate act; collector names sit behind the identity grant, and every read that names a person — the names on a page, one collector's cases, a collector's page — is on the audit chain | Product |
@@ -246,7 +246,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | Valuation record | Deferred | A second valuer, a condition report and counter photographs | Product |
 | Locker registry and stock-take | Decided | Shops and lockers become sites and storage units in inventory's locations, with caps and counts, and a move between shops ships as a transfer - [Locations](/p/grade10-admin/inventory/locations) - decided under the owner's delegation, 2026-10-08. Damage and loss stay deferred | Owner |
 | A locker before the units are set up | Decided | The locker staff type is kept as the shop's storage unit it names, by its label, its name or its place in the shop; text no unit answers to is kept as typed. The item goes into that unit in inventory, where a cap refuses it - decided under the owner's delegation, 2026-10-10 | Product |
-| Forfeited stock | Decided | A forfeited item leaves custody, written `out`, and is held as the shop's stock; the chain keeps the figure it settled and the rest is inventory's. It is not sold before Legal names the lending regime — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness) | Owner |
+| Forfeited stock | Decided | A forfeited item leaves custody, written `out`, and is held as the shop's stock; the chain keeps the figure it settled and the rest is inventory's. It is not sold before Legal names the lending regime — [Compliance and Readiness](/p/grade10-site/finance/compliance-and-readiness) | Owner |
 | Staff notifications | Decided | The queue is the inbox: badges, counts, Today and Overdue, and nothing emailed to staff. Revisited when a shop asks | Product |
 | A case nobody is valuing | Decided | `under_valuation` badges after **7 days** untouched, derived where every other badge is | Product |
 | Valuer versus approver | Decided | One grant prices, offers and forfeits; the split that matters is per case — the payout's recorder is not the offer's maker — and a separate valuing grant would over-split a shop of three | Owner |
