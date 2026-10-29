@@ -20,14 +20,19 @@ import {
   SiteHeader,
 } from "@grade10/ui";
 import { QrCode } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { storyHref } from "../../workbench-story-nav";
 import {
+  BALANCE_DROPPED_REWARDS,
+  DROPPED_BALANCE,
+  FLAKY_REWARDS,
   ISSUED_COUPON,
   MEMBERSHIP_PAGE_COPY,
   type MembershipView,
+  RETRY_COPY,
   REWARD_CHECKOUT_COPY,
+  SHORT_BALANCE_COPY,
   SOLD_OUT_COPY,
   SOLD_OUT_REWARDS,
 } from "../loyalty-content";
@@ -97,6 +102,8 @@ function MembershipPage({
   const [pending, setPending] = useState(false);
   const [passOpen, setPassOpen] = useState(false);
   const [topUpOpen, setTopUpOpen] = useState(false);
+  /* Attempts already refused on the wire — a flaky reward redeems on retry. */
+  const flaked = useRef<ReadonlySet<string>>(new Set());
   const smUp = useSmUp();
 
   /* The surface stays mounted once opened — only `open` flips — so the
@@ -134,6 +141,28 @@ function MembershipPage({
         setFailure(SOLD_OUT_COPY.title);
         toast.error(SOLD_OUT_COPY.title, {
           description: SOLD_OUT_COPY.description,
+        });
+        return;
+      }
+      if (BALANCE_DROPPED_REWARDS.has(reward.id)) {
+        /* The balance fell short elsewhere since the sheet opened; the page
+         * refetches and the deficit row re-reads it. */
+        setPending(false);
+        setBalance(DROPPED_BALANCE);
+        toast.error(SHORT_BALANCE_COPY.title, {
+          description: SHORT_BALANCE_COPY.description(
+            reward.pointCost - DROPPED_BALANCE,
+          ),
+        });
+        return;
+      }
+      if (FLAKY_REWARDS.has(reward.id) && !flaked.current.has(reward.id)) {
+        /* A retryable refusal: the surface stays open and the press stays
+         * live; the page raises it as a toast. */
+        flaked.current = new Set([...flaked.current, reward.id]);
+        setPending(false);
+        toast.error(RETRY_COPY.title, {
+          description: RETRY_COPY.description,
         });
         return;
       }
@@ -234,7 +263,12 @@ function MembershipPage({
               {active === "rewards" ? (
                 <RewardsPane balance={balance} onSelect={select} view={view} />
               ) : null}
-              {active === "coupons" ? <CouponsPane coupons={coupons} /> : null}
+              {active === "coupons" ? (
+                <CouponsPane
+                  coupons={coupons}
+                  onBrowseRewards={() => setActive("rewards")}
+                />
+              ) : null}
               {active === "points" ? <PointHistoryPane view={view} /> : null}
             </div>
           </div>

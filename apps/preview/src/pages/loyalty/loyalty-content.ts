@@ -204,6 +204,11 @@ const COUPON_PROMO_COPY = {
   cta: "Browse Rewards",
 };
 
+const REWARDS_PAGE_COPY = {
+  title: "Rewards",
+  subtitle: "Swap points for coupons, collecting supplies and vault services.",
+};
+
 const MEMBERSHIP_PAGE_COPY = {
   title: "Membership",
   cardHeading: "Your Member Pass",
@@ -572,7 +577,8 @@ const MEMBERSHIP_STATE_VIEWS = {
     earnLine: "Silver earning 1x points",
     coupons: {
       status: "empty",
-      message: "You have no coupons yet. Redeem a reward to get one.",
+      message: COUPONS_PAGE_COPY.noCoupons,
+      description: COUPONS_PAGE_COPY.noCouponsDescription,
     },
     ledger: {
       status: "empty",
@@ -594,7 +600,8 @@ const MEMBERSHIP_STATE_VIEWS = {
     ...MEMBERSHIP_VIEW,
     coupons: {
       status: "empty",
-      message: "You have no coupons yet. Redeem a reward to get one.",
+      message: COUPONS_PAGE_COPY.noCoupons,
+      description: COUPONS_PAGE_COPY.noCouponsDescription,
     },
   },
   passAdded: {
@@ -655,6 +662,7 @@ export {
   REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
   REWARDS,
+  REWARDS_PAGE_COPY,
   SHORT_BALANCE_COPY,
   SOLD_OUT_COPY,
   SOLD_OUT_REWARDS,

@@ -1,3 +1,5 @@
+import { Alert } from "@grade10/design-system/components/display/alert";
+import { Button } from "@grade10/design-system/components/forms/button";
 import {
   type AsyncState,
   type CouponItem,
@@ -14,12 +16,16 @@ import {
 import {
   Basket,
   ClockCountdown,
+  Gift,
   HandCoins,
   Truck,
 } from "@phosphor-icons/react";
 import { useEffect, useRef } from "react";
+import { CouponTabs } from "../coupon-tabs";
 import {
   COUPON_LIST_COPY,
+  COUPON_PROMO_COPY,
+  COUPONS_PAGE_COPY,
   HOW_POINTS_WORK,
   MEMBER,
   MEMBER_PASS_COPY,
@@ -27,6 +33,7 @@ import {
   type MembershipView,
   POINT_HISTORY_COPY,
   REWARD_MENU_COPY,
+  REWARDS_PAGE_COPY,
   TIER_BENEFITS,
   TIER_BENEFITS_PAGE_COPY,
   TIER_CARD_COPY,
@@ -161,9 +168,14 @@ function RewardsPane({
       className="flex flex-col gap-4"
       ref={ref}
     >
-      <PaneHeading id="membership-rewards-heading">
-        {MEMBERSHIP_PAGE_COPY.rewardsHeading}
-      </PaneHeading>
+      <div className="flex flex-col gap-2">
+        <PaneHeading id="membership-rewards-heading">
+          {MEMBERSHIP_PAGE_COPY.rewardsHeading}
+        </PaneHeading>
+        <p className="text-sm text-secondary-foreground">
+          {REWARDS_PAGE_COPY.subtitle}
+        </p>
+      </div>
       <RewardMenu
         balance={balance}
         copy={REWARD_MENU_COPY}
@@ -174,11 +186,15 @@ function RewardsPane({
   );
 }
 
-/** Coupons — every coupon the member holds; spent ones leave the list. */
+/** Coupons — the same Available / Used & Expired ledger the Coupons
+ * screen draws; the upsell's Browse Rewards press switches the sidebar to
+ * the Rewards pane instead of leaving the page. */
 function CouponsPane({
   coupons,
+  onBrowseRewards,
 }: {
   coupons: AsyncState<readonly CouponItem[]>;
+  onBrowseRewards: () => void;
 }) {
   const ref = usePaneEnter<HTMLElement>();
   return (
@@ -190,21 +206,43 @@ function CouponsPane({
       <PaneHeading id="membership-coupons-heading">
         {MEMBERSHIP_PAGE_COPY.couponsHeading}
       </PaneHeading>
-      {/* Spent coupons leave the section — there is nothing left to
-       * spend; history lives elsewhere. */}
-      <CouponList
-        copy={COUPON_LIST_COPY}
-        state={
-          coupons.status === "ready"
-            ? {
-                status: "ready",
-                data: coupons.data.filter(
-                  (coupon) => coupon.status !== "spent",
-                ),
-              }
-            : coupons
-        }
-      />
+      {coupons.status === "ready" ? (
+        coupons.data.length === 0 ? (
+          /* Nothing to part — the wallet's own empty state stands for the
+           * whole pane, no tab bar. */
+          <CouponList
+            copy={COUPON_LIST_COPY}
+            state={{
+              status: "empty",
+              message: COUPONS_PAGE_COPY.noCoupons,
+              description: COUPONS_PAGE_COPY.noCouponsDescription,
+            }}
+          />
+        ) : (
+          <CouponTabs
+            coupons={coupons.data}
+            promo={
+              <Alert
+                actions={
+                  <Button
+                    onClick={onBrowseRewards}
+                    size="sm"
+                    variant="secondary"
+                  >
+                    {COUPON_PROMO_COPY.cta}
+                  </Button>
+                }
+                description={COUPON_PROMO_COPY.description}
+                dismissible={false}
+                icon={<Gift aria-hidden />}
+                title={COUPON_PROMO_COPY.title}
+              />
+            }
+          />
+        )
+      ) : (
+        <CouponList copy={COUPON_LIST_COPY} state={coupons} />
+      )}
     </section>
   );
 }
