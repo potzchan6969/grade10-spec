@@ -8,7 +8,7 @@ import { VaultAssetCustodyDocuments } from "./vault-asset-custody-documents";
  * vault asset detail page.
  */
 const meta = {
-  title: "Vault/Portfolio/Parts/VaultAssetCustodyDocuments",
+  title: "Vault/Asset Detail/Parts/VaultAssetCustodyDocuments",
   component: VaultAssetCustodyDocuments,
   parameters: { layout: "padded" },
   decorators: [
