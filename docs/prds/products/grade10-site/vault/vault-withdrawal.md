@@ -1,10 +1,16 @@
 ---
 title: Vault Withdrawal
-order: 7
+order: 9
 ---
 
 The collector takes a card out of the vault and home. Phase C; until then
-staff run withdrawals by hand.
+staff run withdrawals by hand. It replaces the storage
+lane's release; a financed case releases as before -
+[Case Lifecycle](/p/grade10-site/vault/case-lifecycle).
+
+:::callout{kind="note"}
+- ❓ **Not built yet** — no change carries it yet. Product confirms
+:::
 
 ## Request
 

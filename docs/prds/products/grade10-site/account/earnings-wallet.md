@@ -1,14 +1,21 @@
 ---
 title: Earnings Wallet
-order: 5
+order: 8
 ---
 
-Where incentive and sale proceeds collect before the collector cashes out.
+One wallet per collector, where everything they can cash out collects: the
+vault's daily incentive and consignment sale proceeds -
+[Incentive](/p/grade10-site/vault/incentive),
+[Consigning](/p/grade10-site/consignment/consigning).
+
+:::callout{kind="note"}
+- ❓ **Not built yet** — no change carries it yet. Product confirms
+:::
 
 ## Wallet
 
 - **Available Amount** — incentive and sale proceeds posted, less cash-outs; all of it cashable
-  - **Incentive** — posted daily, after the card's vesting - [Incentive](/p/grade10-site/consignment/incentive#reaching-the-wallet)
+  - **Incentive** — posted daily, after the card's vesting - [Incentive](/p/grade10-site/vault/incentive#reaching-the-wallet)
   - **Sale Proceeds** — posted 3 business days after the buyer pays
   - **Vesting** — shown beside it, with its release date; not part of the wallet
 - **Earnings, Not a Balance** — cashed out only, never spent on Grade10

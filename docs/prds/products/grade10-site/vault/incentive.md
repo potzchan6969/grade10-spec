@@ -1,9 +1,14 @@
 ---
 title: Incentive
-order: 3
+order: 8
 ---
 
 A daily amount paid on approved, eligible vaulted cards, consigned or not.
+It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
+
+:::callout{kind="note"}
+- ❓ **Not built yet** — no change carries it yet. Product confirms
+:::
 
 ## Daily Amount
 

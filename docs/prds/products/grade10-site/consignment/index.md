@@ -3,11 +3,11 @@ title: Consignment
 icon: storefront
 ---
 
-Vault-first consignment: a collector deposits cards into the Grade10 vault for
-free, eligible cards earn a small daily incentive while they sit there, and the
-collector consigns them online to the store or the auction. The vault is the
-top of the funnel; consignment commission is the revenue, and the incentive is
-what it costs to win the deposit.
+Consignment is selling a card a collector keeps in the Grade10 vault, in the
+store or at auction, for a commission. The card is already deposited and
+authenticated - [Vault Deposit](/p/grade10-site/vault/deposit) - so consigning
+is an online application on a vaulted card, with no second intake. The vault
+is the top of the funnel; consignment commission is the revenue.
 
 :::callout{kind="note"}
 - ❓ **Not built yet** — the owner's model as of 2026-10-29; no change carries it yet. The working draft is [Vault-First Consignment](/references/vault-first-consignment). Product confirms each figure below
@@ -17,13 +17,13 @@ what it costs to win the deposit.
 
 :::flow{title="One card"}
 ## *Collector* - **Deposits**
-At the shop's counter or an event, for free; staff record and photograph each card - [Deposit and Custody](/p/grade10-site/consignment/deposit).
+At the shop's counter or an event, for free; staff record and photograph each card - [Vault Deposit](/p/grade10-site/vault/deposit).
 
 ## *Staff* - **Authenticate and store it**
 The card is checked at deposit and put away in the vault.
 
 ## *Staff* - **Approve it to earn**
-An internal review checks the card's market price and how easily it sells, then approves it - [Incentive](/p/grade10-site/consignment/incentive#incentive-review).
+An internal review checks the card's market price and how easily it sells, then approves it - [Incentive](/p/grade10-site/vault/incentive#incentive-review).
 
 ## *Collector* - **Earns daily**
 An approved card earns a daily amount into the earnings wallet.
@@ -38,12 +38,12 @@ An internal review sets the list or starting price and approves it for sale.
 In the shop, online or at auction; the card ships from the vault and stops earning.
 
 ## *Collector* - **Cashes out**
-Sale proceeds reach the wallet 3 business days after the buyer pays; the collector cashes out after the identity check - [Earnings Wallet](/p/grade10-site/consignment/earnings-wallet).
+Sale proceeds reach the wallet 3 business days after the buyer pays; the collector cashes out after the identity check - [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 :::
 
 - **Off the Main Path**
   - **Ending a Consignment** — the card comes off sale and stays in the vault, earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
-  - **Vault Withdrawal** — the card goes back to the collector - [Vault Withdrawal](/p/grade10-site/consignment/vault-withdrawal)
+  - **Vault Withdrawal** — the card goes back to the collector - [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal)
 - **One Card, One Channel** — a card is consigned to the store or the auction, never both
 - **Card States** — deposited, authenticated, in the vault, approved to earn, consigned, then sold or withdrawn
 
@@ -54,15 +54,13 @@ is the default it starts on.
 
 | Setting | Default |
 | --- | --- |
-| Deposit and storage | free |
-| Incentive rate | **3%** a year of the card's market price, times its liquidity |
-| Vesting period | ❓ **30** or **60** days |
 | Consignment period | **1** year from signing |
 | Sale proceeds | in the wallet **3** business days after the buyer pays |
-| Cash-out | at least **HKD 500**, one request every **7** days, paid within **3** business days |
-| Cash-out maximum | ❓ unset |
 | Fee for ending early | ❓ unset |
 | Currency | HKD |
+
+- **Vault Figures** — the free deposit, the incentive rate and vesting - [Incentive](/p/grade10-site/vault/incentive)
+- **Wallet Figures** — cash-out minimum, interval and maximum - [Earnings Wallet](/p/grade10-site/account/earnings-wallet)
 
 ## Phases
 

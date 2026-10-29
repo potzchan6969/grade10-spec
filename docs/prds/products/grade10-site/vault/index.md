@@ -13,6 +13,7 @@ made.
   attachment, decided at intake by whether the collector asked for a loan;
   storage is free. The financed lane is Grade10 Finance
   ([Finance](/p/grade10-site/finance))
+- ❓ **Vault-first deposit** — the storage lane is to become a free deposit whose eligible cards earn a daily incentive, and from which a collector consigns - [Vault Deposit](/p/grade10-site/vault/deposit), [Incentive](/p/grade10-site/vault/incentive), [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal). Product confirms
 - **Two entities** — the custodian holds the item and the lender lends
   against it; each prints on its own paper, and only the lender's carries a
   licence

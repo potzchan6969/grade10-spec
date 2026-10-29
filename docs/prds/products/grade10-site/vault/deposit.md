@@ -1,7 +1,15 @@
 ---
-title: Deposit and Custody
-order: 2
+title: Vault Deposit
+order: 7
 ---
+
+The vault-first deposit: a collector leaves cards in the vault for free, and
+eligible cards earn a daily incentive. It replaces the storage lane of a case;
+the financed lane is unchanged - [Case Lifecycle](/p/grade10-site/vault/case-lifecycle).
+
+:::callout{kind="note"}
+- ❓ **Not built yet** — the owner's model as of 2026-10-29; no change carries it yet - [Vault-First Consignment](/references/vault-first-consignment). Product confirms
+:::
 
 ## Deposit Form
 
@@ -29,14 +37,14 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
 - **Account** — a Grade10 account with a confirmed email
 - **Phone Number** — on the account, for contact and abuse checks; it proves no identity
 - **Signed Declaration** — that the collector owns the cards
-- **Identity Check** — not at deposit; it comes before money or a card leaves Grade10 - [Earnings Wallet](/p/grade10-site/consignment/earnings-wallet#identity-check)
+- **Identity Check** — not at deposit; it comes before money or a card leaves Grade10 - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
 
 ## Card States
 
 1. **Received** — recorded and photographed at deposit
 2. **Authenticating** — checked at deposit
 3. **In the Vault** — passed and stored; not earning yet
-4. **Approved to Earn** — passed incentive review; earning from the next day - [Incentive](/p/grade10-site/consignment/incentive#incentive-review)
+4. **Approved to Earn** — passed incentive review; earning from the next day - [Incentive](/p/grade10-site/vault/incentive#incentive-review)
 
 - **Failed** — returned to the collector; it never earns
 
