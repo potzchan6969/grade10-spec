@@ -67,7 +67,7 @@ current review, quote and existing callback guards.
 | Answer | Kind | Drawer |
 | --- | --- | --- |
 | `created` with a URL | `redirect` | Close, then `leaveFor(url)` |
-| `created` without a URL | `settling` | Close, then open Your Orders |
+| `created` without a URL | `settling` | Close, then open My Orders |
 | `contradicted`, or `rejected` other than `currencyMismatch` | `amendCart` | Toast naming the moved lines when any are named, `retryReview()`, then throw |
 | `failed` with `points_refused` or `coupon_refused` | `retry` | Toast naming the refused tender; no throw |
 | `identityRequired` | `verify` | Threshold toast with the profile action when `config.gates.profile` is on, then throw |

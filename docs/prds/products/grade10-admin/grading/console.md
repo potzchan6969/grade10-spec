@@ -13,7 +13,7 @@ one submission in tabs whose buttons follow its status; cards are counted here, 
 
 ## Queue
 
-🚧 **Seven views** — every status belongs to one; Today is a query on the shop's own day, its drop-offs in a strip above:
+- 🚧 **Seven views** — every status belongs to one; Today is a query on the shop's own day, its drop-offs in a strip above:
 
 | View | What it lists |
 | --- | --- |
@@ -156,10 +156,10 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 
 ## Settings
 
-🚧 **Every default is a setting the console reads** — never a constant, and each row stands until its owner confirms
-it; the fee sheet is pinned to a submission at booking and every figure the agreement prints at signing, so a change
-reaches only submissions not yet booked; in production a seal is refused while a figure it prints has no approver,
-so a seeded default waits for its owner:
+- 🚧 **Every default is a setting the console reads** — never a constant, and each row stands until its owner confirms
+  it; the fee sheet is pinned to a submission at booking and every figure the agreement prints at signing, so a change
+  reaches only submissions not yet booked; in production a seal is refused while a figure it prints has no approver,
+  so a seeded default waits for its owner:
 
 | Setting | Default | Confirms |
 | --- | --- | --- |
@@ -193,7 +193,7 @@ so a seeded default waits for its owner:
 - 🚧 **Two people for money** — a waiver, a payout and a money setting take a reason; one `grading:approve` holder asks
   and a second, never the recorder, approves on their own console; a settings write is filed under `settings`
 - 🚧 **Second factor and audit** — as the vault's: required in production, and every action filed under its
-  submission on the audit chain, or under its batch where it acts on the batch — [Operator Console](/p/grade10-site/vault/operator-console#permissions)
+  submission on the audit chain, or under its batch where it acts on the batch — [Operator Console](/p/grade10-site/finance/operator-console#permissions)
 - 🚧 **Staff hear nothing** — no email to staff; the badges, the tiles and the day's strip are the signal
 
 <!-- story: the queue with its tiles, the hand-in runbook, the receive table -->

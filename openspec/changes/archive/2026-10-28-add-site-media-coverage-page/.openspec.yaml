@@ -1,0 +1,3 @@
+schema: grade10-planning
+created: 2026-10-18
+tasks_waived: "@seankcw, the browser walks (3.1-3.4) are waived: the page unit test and the site e2e prove US-01 and US-02"

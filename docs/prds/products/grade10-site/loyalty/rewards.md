@@ -11,9 +11,9 @@ order: 3
 | Product coupon | A fixed amount, or a percentage with an optional maximum discount | Named products or variants, a filter over the catalog's worlds and types, or the whole order | Optional | $50 off Pokémon |
 | Gift | A free line added to the order, the variant it names | — | Required, above zero, so a gift always rides on a purchase | A free booster pack over $500 |
 
-**A gift is handed over at the till alone** - whatever channels a gift's
-definition names, online refuses it as the wrong channel; the console locks
-its channel to In store
+- **A gift is handed over at the till alone** — whatever channels a gift's
+  definition names, online refuses it as the wrong channel; the console locks
+  its channel to In store
 
 Both are coupons, Grade10's own instrument, and a reward that takes money
 off the whole order is a product coupon whose scope is the whole order —
@@ -41,8 +41,8 @@ Both kinds state:
 | A free booster pack | 100% | The variant it names | — |
 | A free booster pack over $500 | A free line, the pack's own variant | — | $500 |
 
-**Online only by product or filter** - a till sale names its goods by
-variant alone, so a coupon scoped to named products or a filter is online only
+- **Online only by product or filter** — a till sale names its goods by
+  variant alone, so a coupon scoped to named products or a filter is online only
 
 ## Ways to Get a Reward
 
@@ -164,9 +164,9 @@ takes 100% off it, and the order goes through at nothing. ❓ Online, that order
 is HKD 0 plus shipping — whether it ships free or is collection only is
 Product's call.
 
-❓ **A redeemed item stays off the shelf** — stock comes off at the redemption,
-so a coupon that expires unspent never puts it back. Either reward stock is a
-budget rather than a shelf count, or an operator restores the unit by hand.
+- ❓ **A redeemed item stays off the shelf** — stock comes off at the redemption,
+  so a coupon that expires unspent never puts it back. Either reward stock is a
+  budget rather than a shelf count, or an operator restores the unit by hand.
 
 ## Reward Catalog
 

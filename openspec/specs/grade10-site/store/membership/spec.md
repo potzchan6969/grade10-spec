@@ -449,7 +449,7 @@ the rest later.
 ### Requirement: A till session spends for the member and notifies them once it lands
 
 Inside a till session, staff SHALL see the member's name, tier,
-redeemable balance, qualifying-window progress, tier renewal and
+redeemable balance, tier-period progress, tier renewal and
 balance-lapse dates, recent activity, and open coupons — the store's own
 and the member's reward coupons alike — and SHALL be able to redeem points
 against the current sale and apply a coupon from that list. Undoing a

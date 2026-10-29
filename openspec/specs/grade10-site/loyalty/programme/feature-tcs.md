@@ -9,7 +9,7 @@
 Starting state:
 
 * customer(Gold member) is signed in and is on `<loyalty>`.
-* The member holds `<balance>` and has `<qualifying points>` qualifying points over the rolling twelve months.
+* The member holds `<balance>` and has `<qualifying points>` qualifying points inside their current Gold period.
 
 Shared test data:
 
@@ -29,15 +29,15 @@ Shared test data:
 ## Background
 
 * The member's surface is `<loyalty>` on the Grade10 site: the membership summary with its two counts, activity, the reward menu and the member's coupons. The operator console is `<loyalty console>` on the admin console; the reward form is `<reward form>`. A till session serves a member through the loyalty terminal's panel; Shopify POS is the till.
-* Tiers: Silver, the entry tier; Gold at 500 qualifying points over the rolling twelve months; Black by invitation alone. A purchase earns a base point per HKD 10 of qualifying spend, floored, then the tier's multiplier (Gold 1.2), floored again. A point pays HKD 1 at checkout. The balance expires twelve calendar months after the member's last earning or redemption, on the programme's clock, Hong Kong's.
+* Tiers: Silver, the entry tier; Gold at 500 qualifying points earned inside a twelve-month Silver period, held for twelve-month Gold periods kept on 500 earned inside each; Black by invitation alone. A purchase earns a base point per HKD 10 of qualifying spend, floored, then the tier's multiplier (Gold 1.2), floored again. A point pays HKD 1 at checkout. The balance expires twelve calendar months after the member's last earning or redemption, on the programme's clock, Hong Kong's.
 * An operator is admin with the loyalty permission each case names: read, move points, grant invitations, remove a tier, cancel a redemption, edit rewards.
 
 * The member's surface is `<loyalty>` on the Grade10 site; its first section, "Membership", holds the tier card, a tier-skinned card in silver, gold or black.
-* Tiers: Silver, the entry tier; Gold at 500 qualifying points over the rolling twelve months; Black by invitation alone, with no qualifying threshold.
+* Tiers: Silver, the entry tier; Gold at 500 qualifying points earned inside a twelve-month Silver period, held for twelve-month Gold periods kept on 500 earned inside each; Black by invitation alone, with no qualifying threshold.
 * A point is worth HKD1 at checkout.
 
 * The member's surface is `<loyalty>` on the Grade10 site; the member pass is its own section, "Your member pass", and the standalone pass is `<member pass page>` on a phone. A till session serves a member through the loyalty terminal's panel.
-* Tiers: Silver, the entry tier; Gold at 500 qualifying points over the rolling twelve months; Black by invitation alone. The pass's skin follows the member's tier.
+* Tiers: Silver, the entry tier; Gold at 500 qualifying points earned inside a twelve-month Silver period, held for twelve-month Gold periods kept on 500 earned inside each; Black by invitation alone. The pass's skin follows the member's tier.
 * A pass's code lives 10 minutes and is used once. The pass counts down and rotates the code out before it lapses.
 * No name is collected at registration: the pass identifies the member by the account email.
 
@@ -76,7 +76,7 @@ Shared test data:
 * Step 1 reads a balance of 100 and tier progress still 600, Gold unchanged.
 * Step 2 reads a balance of 0, the member still Gold until its validity period ends.
 
-<!-- trace:case id=g10.loyalty-programme.TC-v68 rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
+<!-- trace:case id=g10.loyalty-programme.TC-v68 rev=2 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### g10.loyalty-programme.US1-TC2: Earning counts toward both, and reaching 500 makes Gold at once; Black is never earned
 
 **Classification:**
@@ -102,7 +102,7 @@ Shared test data:
 
 **Expected Results:**
 
-* Step 1 raises the balance and the progress by 40, to 510: Gold from that purchase, earned at Silver's rate; one history entry records the move and the earning that caused it, Gold's validity dated from it.
+* Step 1 raises the balance by 40 and takes the Silver period's progress to 510: Gold from that purchase, earned at Silver's rate, its own period's progress starting at 0; one history entry records the move and the earning that caused it, the Gold period dated from it.
 * Step 2 never reaches Black.
 
 <!-- trace:case id=g10.loyalty-programme.TC-r5y rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
@@ -130,8 +130,8 @@ Runs once per row of **Test data**.
 
 | `<tier>` | `<ends>` | `<then holds>` |
 | --- | --- | --- |
-| Gold, earning 300 inside its validity period | the period's end | Silver |
-| Gold, earning 500 inside its validity period | the period's end | Gold, for a further twelve months |
+| Gold, earning 300 inside its Gold period | the period's end | Silver, in a fresh period |
+| Gold, earning 500 inside its Gold period | the period's end | Gold, for a further twelve-month period |
 | Black, by a dated invitation | the invitation's end | the tier they still hold by earning |
 
 **Steps:**
@@ -159,7 +159,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A member was dropped from Gold at the end of its validity period, having earned 400 in the year before.
+* A member was dropped from Gold at the end of its Gold period, having earned 400 in it.
 
 **Steps:**
 
@@ -289,7 +289,7 @@ Runs once per row of **Test data**.
 
 * The expiry reads `<expiry reads>`; a lapsed balance reads 0 at once, and nothing lapsed returns.
 
-<!-- trace:case id=g10.loyalty-programme.TC-0er rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
+<!-- trace:case id=g10.loyalty-programme.TC-0er rev=2 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### g10.loyalty-programme.US2-TC3: A refund claws back only what its money earned, never below zero
 
 Runs once per row of **Test data**.
@@ -323,7 +323,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The balance reads `<balance after>`; the tier progress falls by what was clawed back.
+* The balance reads `<balance after>`; the tier progress falls by what the refunded money earned, spent points included.
 
 <!-- trace:case id=g10.loyalty-programme.TC-u6v rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### g10.loyalty-programme.US2-TC4: A purchase completes while loyalty is unreachable, and earns once when it is back
@@ -837,7 +837,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(`<tier>` member) is signed in and is on `<loyalty>`, holding `<balance>` and `<qualifying points>` qualifying points over the rolling twelve months.
+* customer(`<tier>` member) is signed in and is on `<loyalty>`, holding `<balance>` and `<qualifying points>` qualifying points inside their current tier period.
 
 **Test data:**
 

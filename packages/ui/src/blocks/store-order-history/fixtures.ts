@@ -69,7 +69,7 @@ const PAST_CANCELED: OrderHistoryOrderSummary = {
 };
 
 const ORDER_HISTORY_COPY = {
-  title: "Your Orders",
+  title: "My Orders",
   activeHeading: "Active Orders",
   pastHeading: "Past Orders",
   emptyTitle: "No orders yet",

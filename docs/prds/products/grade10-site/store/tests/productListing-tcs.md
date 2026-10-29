@@ -218,6 +218,34 @@ Runs once per row of **Test data**.
 * Step 2 starts with the row's first card; every card for sale lists before `<sold-out product>`; `<multi-variant product>` sorts at `<lowest variant price>`.
 * Step 3 carries `sort=` for a price order.
 
+<!-- trace:case id=g10.store-product-listing.TC-83t rev=1 -->
+### g10.store-product-listing.TC16: [Mobile only] The sort pill's drawer applies an order on choose
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** product-listing#sort/small-screens
+
+**Pre-conditions:**
+
+* customer is on a phone below the wide breakpoint, on `<listing url>`, ordered by latest product.
+
+**Steps:**
+
+1. Tap the sort pill.
+2. Tap highest price.
+
+**Expected Results:**
+
+* Step 1 opens a bottom drawer of orders.
+* Step 2 applies it, UI matching store-product-listing-blocks-productbrowse--narrow-sort-applies-on-choose, listing the highest-priced card for sale first; ❓ the drawer closes - design confirms.
+
 ---
 
 ## product-listing#products-display: Products Display
@@ -395,7 +423,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#filters, product-listing#links-and-back-button/address
+* **Trace:** product-listing#filters/narrowings-in-force, product-listing#filters/clearing-every-filter, product-listing#links-and-back-button/address
 
 **Pre-conditions:**
 
@@ -418,10 +446,6 @@ Runs once per row of **Test data**.
 
 * The row's narrowing, with its count, and the address carries only it.
 
----
-
-## product-listing#small-screens: Small Screens
-
 <!-- trace:case id=g10.store-product-listing.TC-qa1 rev=1 -->
 ### g10.store-product-listing.TC14: [Mobile only] A small screen shows the count and pills, and no search
 
@@ -436,7 +460,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#small-screens/pills, product-listing#search/search-box
+* **Trace:** product-listing#filters/small-screens, product-listing#sort/small-screens, product-listing#search/search-box
 
 **Pre-conditions:**
 
@@ -473,7 +497,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#small-screens/worlds-and-types
+* **Trace:** product-listing#filters/small-screens
 
 **Pre-conditions:**
 
@@ -496,34 +520,6 @@ Runs once per row of **Test data**.
 
 * Step 1 opens a bottom drawer for Worlds; ticking narrows nothing before Show Results.
 * Step 3 lists the row's narrowing.
-
-<!-- trace:case id=g10.store-product-listing.TC-83t rev=1 -->
-### g10.store-product-listing.TC16: [Mobile only] The sort pill's drawer applies an order on choose
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** product-listing#small-screens/sort
-
-**Pre-conditions:**
-
-* customer is on a phone below the wide breakpoint, on `<listing url>`, ordered by latest product.
-
-**Steps:**
-
-1. Tap the sort pill.
-2. Tap highest price.
-
-**Expected Results:**
-
-* Step 1 opens a bottom drawer of orders.
-* Step 2 applies it, UI matching store-product-listing-blocks-productbrowse--narrow-sort-applies-on-choose, listing the highest-priced card for sale first; ❓ the drawer closes - design confirms.
 
 ---
 
@@ -893,6 +889,42 @@ Runs once per row of **Test data**.
 * While loading, no count shows, never `0 products`; then `<world A>`'s sidebar count.
 * Step 2: the same count.
 
+<!-- trace:case id=g10.store-product-listing.TC-82a rev=1 -->
+#### g10.store-product-listing.TC35: A product in Draft stays off the cards, the counts and search
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** product-listing#products-display/draft-and-unpublished-products
+
+**Pre-conditions:**
+
+* admin is in the shop's admin; `<draft product>` carries `<world A>` and a title word `<draft word>` no other product has, in the row's state.
+
+**Test data:**
+
+| `<draft product>` |
+| --- |
+| ❓ created as Draft and published to the store's channel - product confirms |
+| ❓ an active product set to Draft and saved - product confirms |
+
+**Steps:**
+
+1. Wait 60 seconds past the save, then open `<listing url>` and read the count and `<world A>`'s count.
+2. Tick `<world A>`, then type `<draft word>` and press Enter.
+
+**Expected Results:**
+
+* Neither count includes `<draft product>`; it is not listed, suggested or found.
+
 ---
 
 ### product-listing#filters: Filters
@@ -1009,7 +1041,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#filters
+* **Trace:** product-listing#filters/clearing-every-filter, product-listing#filters/narrowings-in-force
 
 **Pre-conditions:**
 
@@ -1146,7 +1178,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#catalogue-source
+* **Trace:** product-listing#catalogue-source/product-changes, product-listing#catalogue-source/stock-changes, product-listing#catalogue-source/up-to-a-minute-behind
 
 **Pre-conditions:**
 
@@ -1184,7 +1216,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-listing#catalogue-source
+* **Trace:** product-listing#catalogue-source/lost-changes
 
 **Pre-conditions:**
 
@@ -1252,42 +1284,6 @@ Runs once per row of **Test data**.
 
 * The product page waits on the shop, and opens once the shop answers.
 
-<!-- trace:case id=g10.store-product-listing.TC-82a rev=1 -->
-#### g10.store-product-listing.TC35: A product in Draft stays off the cards, the counts and search
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** product-listing#products-display/draft-and-unpublished-products
-
-**Pre-conditions:**
-
-* admin is in the shop's admin; `<draft product>` carries `<world A>` and a title word `<draft word>` no other product has, in the row's state.
-
-**Test data:**
-
-| `<draft product>` |
-| --- |
-| ❓ created as Draft and published to the store's channel - product confirms |
-| ❓ an active product set to Draft and saved - product confirms |
-
-**Steps:**
-
-1. Wait 60 seconds past the save, then open `<listing url>` and read the count and `<world A>`'s count.
-2. Tick `<world A>`, then type `<draft word>` and press Enter.
-
-**Expected Results:**
-
-* Neither count includes `<draft product>`; it is not listed, suggested or found.
-
 ---
 
 ### discounts#where-each-shows: Where Each Shows
@@ -1306,7 +1302,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display/sale-price, discounts#where-each-shows
+* **Trace:** product-listing#products-display/sale-price, discounts#where-each-shows/named
 
 **Pre-conditions:**
 

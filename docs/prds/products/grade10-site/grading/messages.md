@@ -8,15 +8,15 @@ Every event on a submission decides one email, or silence on purpose; the
 channel is email only, in English, and every message links to the submission
 page, which needs no account.
 
-❓ **The submission's address** — every message, and the console's copy
-link and WhatsApp, open `grade10.com/grading/submissions/<id>`; whether the
-collector's redesigned pages answer at that address — Design —
-[Grading](/p/grade10-site/grading)
+- ❓ **The submission's address** — every message, and the console's copy
+  link and WhatsApp, open `grade10.com/grading/submissions/<id>`; whether the
+  collector's redesigned pages answer at that address — Design —
+  [Grading](/p/grade10-site/grading)
 
 ## Messages
 
-🚧 **One decision per event** — the table is the map, written down once so a
-new event cannot ship silent:
+- 🚧 **One decision per event** — the table is the map, written down once so a
+  new event cannot ship silent:
 
 | Event | Subject | When | Carries | Link |
 | --- | --- | --- | --- | --- |
@@ -52,7 +52,7 @@ new event cannot ship silent:
   carries ([Dates and Times](/p/platform/shared/dates-and-times))
 - 🚧 **A failed send is kept** — every message rides the vault's retry ladder
   and parks with its reason —
-  [Collector Pages](/p/grade10-site/vault/collector-pages)
+  [Collector Pages](/p/grade10-site/finance/collector-pages)
 - **Registered post** — the written notice goes by registered post and by
   email the same day; whether email alone serves is counsel's, readiness item 3
   on [Grading](/p/grade10-site/grading#before-the-first-submission)

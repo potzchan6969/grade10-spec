@@ -38,6 +38,8 @@ export {
   userBidHistoryForState,
 } from "./listing-auction-bid-fixtures";
 
+import AUCTION_LOT_FIXTURE from "./auction-lot.fixture.json";
+
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 const IMAGE_CARDDASS = new URL(
   "./auction-catalogue-carddass-starters.fixture.png",
@@ -50,7 +52,8 @@ const IMAGE_MEW = new URL(
 
 export const AUCTION_LOT_EXTENSION_POLICY = DEFAULT_LISTING_EXTENSION_POLICY;
 
-export const LIVE_INITIAL_REMAINING_MS = (6 * 60 + 9) * 1000;
+export const LIVE_INITIAL_REMAINING_MS =
+  AUCTION_LOT_FIXTURE.closesInSeconds * 1000;
 
 export function shouldExtendClose(
   closesAtMs: number,
@@ -89,27 +92,23 @@ export function applyBidExtension(
   };
 }
 
+/** The lot every auction screen draws, and the seed a capture recipe gives the site. */
+const LOT_IMAGES: Record<string, string> = {
+  "auction-catalogue-carddass-starters.fixture.png": IMAGE_CARDDASS,
+  "product.fixture.png": IMAGE,
+  "auction-catalogue-mew-ex.fixture.png": IMAGE_MEW,
+};
+
 export const AUCTION_LOT = {
-  title: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10",
-  listingNumber: "12",
-  saleName: "September Slabs",
-  category: "Pokémon",
-  description:
-    "Bandai Carddass checklist and starters slab from the Pocket Monsters set. Printed in 1997 for the early Bandai Carddass series, this PSA 10 example covers the starter trio and checklist art collectors look for when building a first-wave Japanese set. Surfaces stay sharp under the slab; corners and edges grade clean. A strong reference piece for Carddass-era Pokémon in top grade.",
-  images: [
-    {
-      src: IMAGE_CARDDASS,
-      alt: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10, front",
-    },
-    {
-      src: IMAGE,
-      alt: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10, angle",
-    },
-    {
-      src: IMAGE_MEW,
-      alt: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10, detail",
-    },
-  ],
+  title: AUCTION_LOT_FIXTURE.title,
+  listingNumber: AUCTION_LOT_FIXTURE.listingNumber,
+  saleName: AUCTION_LOT_FIXTURE.saleName,
+  category: AUCTION_LOT_FIXTURE.category,
+  description: AUCTION_LOT_FIXTURE.description,
+  images: AUCTION_LOT_FIXTURE.images.map((image) => ({
+    src: LOT_IMAGES[image.file],
+    alt: image.alt,
+  })),
   ...BID_FIXTURE_LOT,
   currency: "USD",
 };
@@ -119,12 +118,7 @@ export const AUCTION_LOT_BADGES: readonly ListingLotMetaBadge[] = [
   { label: "Bandai Starters" },
 ];
 
-export const AUCTION_LOT_FACTS = [
-  { label: "Year", value: "1997" },
-  { label: "Set", value: "Pocket Monsters Carddass" },
-  { label: "Grade", value: "PSA 10" },
-  { label: "Cert number", value: "95109007" },
-] as const;
+export const AUCTION_LOT_FACTS = AUCTION_LOT_FIXTURE.facts;
 
 /** Demo linked card — matches Auction Listing → Bid Panel → Ready. */
 export const AUCTION_LOT_LINKED_PAYMENT_METHOD = {
@@ -165,7 +159,7 @@ export const AUCTION_SITE_HEADER = {
   },
   session: "signed-in" as const,
   accountEmail: VIEWER_INITIALS,
-  promo: "PROMO UTILITY BAR",
+  promo: null,
   logo: NAV_LOGO,
   logoHref: "/",
   locales: [

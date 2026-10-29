@@ -52,7 +52,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home
+* **Trace:** home#collection-grid/tiles
 
 **Pre-conditions:**
 
@@ -89,7 +89,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home
+* **Trace:** home#merchandised-row/cards
 
 **Pre-conditions:**
 
@@ -124,7 +124,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home
+* **Trace:** home#merchandised-row/card-status
 
 **Pre-conditions:**
 
@@ -161,7 +161,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home
+* **Trace:** home#merchandised-row/opens-never-sells
 
 **Pre-conditions:**
 
@@ -204,7 +204,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home
+* **Trace:** home#hero/before-any-script, home#hero/hero
 
 **Pre-conditions:**
 
@@ -273,7 +273,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home
+* **Trace:** home#collection-grid/new-collection
 
 **Pre-conditions:**
 
@@ -304,7 +304,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** home
+* **Trace:** home#loading-and-errors/loading, home#loading-and-errors/catalogue-read
 
 **Pre-conditions:**
 
@@ -341,7 +341,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** home
+* **Trace:** home#loading-and-errors/failed
 
 **Pre-conditions:**
 
@@ -378,7 +378,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home
+* **Trace:** home#loading-and-errors/nothing-to-show
 
 **Pre-conditions:**
 

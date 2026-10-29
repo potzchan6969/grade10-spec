@@ -1,0 +1,3 @@
+schema: grade10-planning
+created: 2026-10-28
+design_waived: component extraction inside the design store; the only contract is the export itself

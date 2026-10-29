@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "4ebfe312d40a1024996b5292aefe93cac94a2c89d1f6f9e20d267cce512f0cdf"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "4103356956000b09c8cdf0fa84b6fa830e23822e",
+    "capturedAt": "2026-10-28T07:09:24.681Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-site-media-coverage-page/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/media-coverage/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/media-coverage/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A card marks a story in another language",
+          "Requirement: A page with no coverage shows the header alone",
+          "Requirement: Every card leads to its story",
+          "Requirement: The cards keep the published order",
+          "Requirement: The page fits the viewport",
+          "Requirement: The page presents the coverage"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/media-coverage/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "cf9d06130d0bcb70d0895b6644472243928091bf",
+      "components": [
+        "web"
+      ]
+    }
+  ]
+}

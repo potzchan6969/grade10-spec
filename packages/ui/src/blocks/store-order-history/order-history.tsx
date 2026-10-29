@@ -107,7 +107,7 @@ function OrderSection({
 }
 
 /**
- * Your Orders page body: breadcrumbs, title, Active/Past sections, or empty.
+ * My Orders page body: breadcrumbs, title, Active/Past sections, or empty.
  *
  * Figma frames `Order History` (`4835:1534`) and `Order History (Empty)`
  * (`4923:3424`). Annotation: hide a section with no orders; if there are no

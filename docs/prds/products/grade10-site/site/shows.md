@@ -12,35 +12,35 @@ answers without a session, like any public surface —
 
 ## The Page
 
-- 🚧 **Hero** — Grade10 Shows over "Asia’s card shows, at full scale.",
+- **Hero** — Grade10 Shows over "Asia’s card shows, at full scale.",
   an Explore Shows jump into the formats and a
   Press Releases link to `/press-releases`, beside an Upcoming Shows card
   listing the upcoming dates — hidden when no show is current or upcoming
-- 🚧 **Event scale** — Real Trends. In the Room. over a show-floor photo
+- **Event scale** — Real Trends. In the Room. over a show-floor photo
   and a statistic card for each published statistic — today 25,000+
   visitors at Grade10 FEST Summer 2026, 120+ exhibitors, millions in
   industry revenue
-- 🚧 **Event formats** — Three Platforms. One Community. under a sticky
+- **Event formats** — Three Platforms. One Community. under a sticky
   pill link list that scrolls to each published chapter — today Hong Kong (Grade10 FEST HK
   with video and two editions), Overseas Partnership (Seoul Auction ×
   ZZZ with photo and caption), Chinese Mainland (CARDJOY × Grade10
   with video and two editions)
-- 🚧 **Edition cards** — each edition carries a photo carousel, a date, a
+- **Edition cards** — each edition carries a photo carousel, a date, a
   description, and a Press Release link to its `/press-releases/{slug}`
   article once that release is published, otherwise to `/press-releases`;
   a chapter carries its own Press Release link only while its release is
   published — today Seoul Auction × ZZZ
-- 🚧 **Video presentations** — a chapter with a video carries a poster-first
+- **Video presentations** — a chapter with a video carries a poster-first
   YouTube container (today two chapters): the poster and a play affordance, and on click the embed
   plays inside the same container
-- 🚧 **Event records** — Every Show. A Milestone. lists every published
+- **Event records** — Every Show. A Milestone. lists every published
   record in the order the admin gives — today Seoul Auction, FEST Summer 2026, Shanghai, Hangzhou,
   Festival 2025
-- 🚧 **Published content** — the page shows the shows the admin has
+- **Published content** — the page shows the shows the admin has
   published, in the reader's language, falling back to the base text for what is not
   translated; nothing published answers not
   found rather than an empty page
-- 🚧 **Responsive** — wide viewports draw the two-column hero while the Upcoming Shows card
+- **Responsive** — wide viewports draw the two-column hero while the Upcoming Shows card
   shows, stats
   beside the photo, and editions side by side; narrow viewports stack
   everything at the page inset

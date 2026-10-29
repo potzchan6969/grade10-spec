@@ -85,7 +85,7 @@ export const MemberOrderSignedOut: Story = {
 
 /** A wrong secret or unknown order: the same not-found as any unseen order —
  * but a link holder may hold no account, so the way out is the store, not
- * Your Orders. */
+ * My Orders. */
 export const NotFound: Story = {
   name: "Not found",
   args: { notFound: true },

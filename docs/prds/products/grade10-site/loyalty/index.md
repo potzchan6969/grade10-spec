@@ -46,10 +46,10 @@ and giving the top tier to a named person with a reason.
 ## Not in Scope
 
 - **Paid membership** — every tier is free, and the top one is given
-- **Earning outside the store and the counter** — beyond operator-granted
-  campaign points; auction wins and credit top-ups are later-phase candidates
-  and earn nothing today, and a points pack earns nothing —
-  [Top-ups](/p/grade10-site/loyalty/top-ups)
+- **Earning outside the store, the counter and the ticket office** — beyond
+  operator-granted campaign points; auction wins and credit top-ups are
+  later-phase candidates and earn nothing today, and a points pack earns
+  nothing — [Top-ups](/p/grade10-site/loyalty/top-ups)
 - **Redeeming against an auction** — points and coupons buy nothing there, in
   any phase
 - **SMS verification**, and NFC tap in any wallet

@@ -1,0 +1,86 @@
+{
+  "version": 2,
+  "change": "add-site-about-page",
+  "baseline": "2c6af5cc93bfeee08fe76123802911fccde758356105ce5d4626bfebb6532381",
+  "fingerprint": "14439f5a7827cdcfd421ba16fd8ac665780a2eebc4c00977f116d053428857a6",
+  "reviewedBy": "seankcw",
+  "acceptedAt": "2026-10-28T06:27:49.068Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/site/about.md#the-page",
+      "sha256": "5e6ea1d61e945f951b97abb166ebd597394f320f6b1d85dd6dc2a5c64f87b63c",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-site-about-page/decisions.md",
+      "sha256": "cf9e61734b7cd898a4541ca467bfb44f36371a09b6f4f7c0cb086532639c983d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-about-page/proposal.md",
+      "sha256": "b5624a4bc44f67778e7b9f3396016756ae60bd3be0dfcd8e0d5822d207384ab6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-about-page/specs/grade10-site/site/about/feature-tcs.md",
+      "sha256": "4489ea8dc9a945ad721efb51e028da94ed7c30d557b4dd49d562f79d1c1e0794",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-about-page/specs/grade10-site/site/about/spec.md",
+      "sha256": "8cc790f7b480891d0a3a7dbc40bad0c01e42fac83fbde7927974e907a10ecd54",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-about-page/specs/grade10-site/site/about/user-journeys.md",
+      "sha256": "38c63c76bb58c1e1e24a0e570425f482569695e69b9f9fa2dd473384a87abd78",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-about-page/ui-design.md",
+      "sha256": "3fb411452c1ef39f60930980d949eebd6ee64db3c8a6940c0908550bcd646ae1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/about/feature-tcs.md",
+      "sha256": "4489ea8dc9a945ad721efb51e028da94ed7c30d557b4dd49d562f79d1c1e0794",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/about/spec.md",
+      "sha256": "4c8be33fa3c63bd2c9ad65479250ba6313cc5c0459b7f87f611bd17bf189e5b1",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/about/user-journeys.md",
+      "sha256": "5c97a33cd505b16fd44dcc95b02e57aa336de6182b8e55a7dbfdcd45c01f6635",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-site-about-page/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/about/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/about/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Every link leads to its named surface",
+        "Requirement: The Market indexes tabs show each index",
+        "Requirement: The milestones read newest first",
+        "Requirement: The page fits the viewport",
+        "Requirement: The page presents the company"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/about/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

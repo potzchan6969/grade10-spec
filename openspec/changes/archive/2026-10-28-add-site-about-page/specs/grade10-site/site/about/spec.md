@@ -1,0 +1,129 @@
+# grade10-site/site/about Specification
+
+## Purpose
+What the About surface tells a collector about the company: who backs it,
+what it does, where it is going, and the parent company's record — and
+where each link on it leads.
+
+## Feature set
+
+- What the page tells
+  - Heading and introduction: About Us as the page's top-level heading
+    beside a paragraph naming its backers
+  - What we do and where we're going: two statements, side by side on a
+    wide viewport, stacked on a narrow one
+  - Market indexes: a tabbed showcase of the four index pages — each tab
+    previews the live index page — highlighted ahead of the parent-company
+    panel
+  - Parent company: the MemeStrategy mark, a paragraph on the company, and
+    its milestones newest first, the upcoming one labelled Coming soon
+- Where the links lead
+  - Partner and index surfaces open in a new tab
+  - Product surfaces open in place
+
+## ADDED Requirements
+
+### Requirement: The page presents the company
+The About surface SHALL present, in order: About Us as the page's
+top-level heading beside an introduction naming MemeStrategy and 9GAG, a
+"What we do" statement, a "Where we're going" statement, a Market indexes
+section naming the four index pages, and a parent-company panel holding
+the MemeStrategy mark, a paragraph on the company, and the company's
+milestones.
+
+<!-- trace:scenario id=g10.site-about.SC-zem rev=1 -->
+#### Scenario: grade10-site-site-about-SC-01 - A collector reads the page top to bottom
+**Serves:** grade10-site-site-about-US-01 - Collector learns who is behind Grade10
+
+- **WHEN** a collector opens `/about`
+- **THEN** the page SHALL show About Us as its top-level heading, an
+  introduction naming MemeStrategy and 9GAG, the What we do and Where we're
+  going statements, the Market indexes section, and the parent-company
+  panel, in that order
+
+### Requirement: The page fits the viewport
+On a wide viewport the About surface SHALL lay the heading beside the
+introduction and the two statements side by side; on a narrow viewport it
+SHALL stack every section at the page inset. In the parent-company panel
+the company paragraph SHALL sit beside the milestones on a wide viewport.
+
+<!-- trace:scenario id=g10.site-about.SC-20b rev=1 -->
+#### Scenario: grade10-site-site-about-SC-02 - The page splits into two columns on a wide viewport
+**Serves:** grade10-site-site-about-US-01 - Collector learns who is behind Grade10
+
+- **WHEN** a collector opens `/about` on a wide viewport
+- **THEN** the introduction SHALL sit beside the About Us heading, the
+  two statements SHALL sit side by side, and the company paragraph SHALL
+  sit beside the milestones
+
+<!-- trace:scenario id=g10.site-about.SC-npo rev=1 -->
+#### Scenario: grade10-site-site-about-SC-03 - The page stacks on a narrow viewport
+**Serves:** grade10-site-site-about-US-01 - Collector learns who is behind Grade10
+
+- **WHEN** a collector opens `/about` on a narrow viewport
+- **THEN** every section SHALL stack in the page's order at the page inset
+
+### Requirement: The Market indexes tabs show each index
+The Market indexes section SHALL offer one tab per index page, and
+selecting a tab SHALL show a preview of that index's live page with its
+description underneath.
+
+<!-- trace:scenario id=g10.site-about.SC-tb4 rev=1 -->
+#### Scenario: grade10-site-site-about-SC-08 - Selecting a tab swaps the index preview
+**Serves:** grade10-site-site-about-US-02 - Collector follows a link from About to a product or partner
+
+- **WHEN** a collector selects a tab in the Market indexes section
+- **THEN** the section SHALL show that index's preview and description in
+  place of the previous one
+
+### Requirement: The milestones read newest first
+The parent-company panel SHALL list the company's milestones newest first,
+and the milestone that has not happened yet SHALL be labelled Coming soon.
+
+<!-- trace:scenario id=g10.site-about.SC-59c rev=1 -->
+#### Scenario: grade10-site-site-about-SC-04 - The upcoming milestone opens the list labelled Coming soon
+**Serves:** grade10-site-site-about-US-01 - Collector learns who is behind Grade10
+
+- **WHEN** a collector reads the parent-company panel
+- **THEN** the milestones SHALL appear newest first with the upcoming
+  milestone labelled Coming soon
+
+### Requirement: Every link leads to its named surface
+Each link on the About surface SHALL lead to the surface it names, in a new
+tab when the surface is another site's:
+
+| Link | Destination | New tab |
+| --- | --- | --- |
+| MemeStrategy | `https://memestrategy.com.hk/` | yes |
+| 9GAG | `https://9gag.com/` | yes |
+| Grade10 AI | `https://app.grade10.com/` | yes |
+| Hat Price Index | `https://grade10.com/hat-price-index/` | yes |
+| PTCG100 | `https://index.grade10.com/ptcg100` | yes |
+| PTCG500 | `https://index.grade10.com/ptcg500` | yes |
+| OPCG100 | `https://index.grade10.com/opcg100` | yes |
+| Grade10 | the front door | no |
+
+A mention of a surface the site has not launched — vaulting services,
+Grade10 Finance — SHALL render as plain text, never a link.
+
+<!-- trace:scenario id=g10.site-about.SC-ozy rev=1 -->
+#### Scenario: grade10-site-site-about-SC-05 - A partner link opens in a new tab
+**Serves:** grade10-site-site-about-US-02 - Collector follows a link from About to a product or partner
+
+- **WHEN** a collector opens a link whose destination is another site —
+  MemeStrategy, 9GAG, Grade10 AI or a market index
+- **THEN** the destination SHALL open in a new tab
+
+<!-- trace:scenario id=g10.site-about.SC-e1r rev=1 -->
+#### Scenario: grade10-site-site-about-SC-06 - A product link opens in place
+**Serves:** grade10-site-site-about-US-02 - Collector follows a link from About to a product or partner
+
+- **WHEN** a collector opens the Grade10 link in the milestones
+- **THEN** the front door SHALL open in place
+
+<!-- trace:scenario id=g10.site-about.SC-kxj rev=1 -->
+#### Scenario: grade10-site-site-about-SC-07 - A mention of an unlaunched surface is plain text
+**Serves:** grade10-site-site-about-US-02 - Collector follows a link from About to a product or partner
+
+- **WHEN** the page names vaulting services or Grade10 Finance
+- **THEN** each mention SHALL render as plain text, not a link

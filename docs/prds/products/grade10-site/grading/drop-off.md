@@ -65,7 +65,7 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
 
 ## Before You Come
 
-🚧 **Four items** — on the booked view and in the booked email:
+- 🚧 **Four items** — on the booked view and in the booked email:
 
 1. **The cards, each in a sleeve** — penny sleeves are fine; no toploaders
    taped shut and nothing to keep, because the grader keeps the sleeve

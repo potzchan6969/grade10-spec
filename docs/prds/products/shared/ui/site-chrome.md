@@ -17,51 +17,41 @@ The chrome can mark which surface is being viewed, and it invents no copy: every
 word and every destination comes from the application. That is what lets the
 same header wear another brand's words without a fork.
 
-**Language, not currency** — the locale control switches language (English,
-Traditional Chinese, Simplified Chinese for Grade10). It does not switch
-currency.
+- **Language, not currency** — the locale control switches language (English,
+  Traditional Chinese, Simplified Chinese for Grade10). It does not switch
+  currency.
 
 ## Account Entry
 
-**`SiteHeader`** - a compound header wraps the design-system `Nav` with
-session-aware account entry: Sign In as a primary button when signed out; the
-account icon and a menu when signed in, with an avatar above the
-sign-in email, then My Auctions and Sign Out
-
-**Pending session** - while the application says the session has not answered,
-the account entry is a placeholder the size of the account icon, with nothing to
-press and nothing read aloud
-
-**Profile** - first in the menu, only when `onProfile` is supplied
-
-**My Orders** - ahead of My Auctions, only when `onMyOrders` is supplied
-
-**Membership** - after My Auctions, only when `onMembership` and
-`copy.membership` are supplied
-
-🚧 **No other item** - the menu offers nothing beyond these, KYC and a second
-orders item included
-
-🚧 **Profile image** - the menu's avatar shows the profile's image where the
-collector has one, and the initial where they do not - built; its contract
-is specified by the follow-up site-chrome change, written after
-`restrict-auctions-by-region` lands
-
-🚧 **Image that fails to load** - the avatar shows the initial and no broken
-image - the same follow-up
-
-**Avatar without an email** - when `accountEmail` is not supplied, the menu
-shows `copy.accountMenuLabel` and no avatar
-
-🚧 **Account menu stories** - on Auction & Store, `WithProfile` supplies every
-handler and shows all five items in order; `Open` supplies no Membership and
-shows My Orders, My Auctions and Sign Out
-
-**Compact menu** - below a 896px-wide container, a leading menu control opens a
-left inset drawer with primary navigation, then utility links in the same
-style, then language through a nested drawer (the language label is not in the
-compact bar). Account / Sign In and Cart stay in the bar; search moves into the
-drawer when it is answered.
+- **`SiteHeader`** — a compound header wraps the design-system `Nav` with
+  session-aware account entry: Sign In as a primary button when signed out; the
+  account icon and a menu when signed in, with an avatar above the
+  sign-in email, then My Auctions and Sign Out
+- **Pending session** — while the application says the session has not answered,
+  the account entry is a placeholder the size of the account icon, with nothing to
+  press and nothing read aloud
+- **Profile** — first in the menu, only when `onProfile` is supplied
+- **My Orders** — ahead of My Auctions, only when `onMyOrders` is supplied
+- **Membership** — after My Auctions, only when `onMembership` and
+  `copy.membership` are supplied
+- 🚧 **No other item** — the menu offers nothing beyond these, KYC and a second
+  orders item included
+- 🚧 **Profile image** — the menu's avatar shows the profile's image where the
+  collector has one, and the initial where they do not - built; its contract
+  is specified by the follow-up site-chrome change, written after
+  `restrict-auctions-by-region` lands
+- 🚧 **Image that fails to load** — the avatar shows the initial and no broken
+  image - the same follow-up
+- **Avatar without an email** — when `accountEmail` is not supplied, the menu
+  shows `copy.accountMenuLabel` and no avatar
+- 🚧 **Account menu stories** — on Auction & Store, `WithProfile` supplies every
+  handler and shows all five items in order; `Open` supplies no Membership and
+  shows My Orders, My Auctions and Sign Out
+- **Compact menu** — below a 896px-wide container, a leading menu control opens a
+  left inset drawer with primary navigation, then utility links in the same
+  style, then language through a nested drawer (the language label is not in the
+  compact bar). Account / Sign In and Cart stay in the bar; search moves into the
+  drawer when it is answered.
 
 ## External Links
 
@@ -71,13 +61,13 @@ utility strip / compact utility list.
 
 ## Cart Count
 
-🚧 **Cart count** - when the cart control is present and the cart holds active
-lines, `SiteHeader` shows a round count on the cart icon, the same number as
-the cart drawer title badge, in full, never `99+`. An empty, omitted, or
-unknown count hides it. A signed-out visitor's count is the cart their
-browser holds. Design-system `Nav` stays
-count-agnostic: a header that shows a count hands `Nav` its own cart control
-through an optional cart slot, as it does for account.
+- 🚧 **Cart count** — when the cart control is present and the cart holds active
+  lines, `SiteHeader` shows a round count on the cart icon, the same number as
+  the cart drawer title badge, in full, never `99+`. An empty, omitted, or
+  unknown count hides it. A signed-out visitor's count is the cart their
+  browser holds. Design-system `Nav` stays
+  count-agnostic: a header that shows a count hands `Nav` its own cart control
+  through an optional cart slot, as it does for account.
 
 ::story{id="design-system-layout-nav-overview--all-controls" title="Nav — all controls"}
 

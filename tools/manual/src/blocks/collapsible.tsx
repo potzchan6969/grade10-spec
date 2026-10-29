@@ -44,7 +44,7 @@ export function Collapsible({
 
   return (
     <section
-      className={`group/anchor my-6 scroll-mt-24 ${
+      className={`group/anchor my-6 ${
         ghost
           ? ""
           : "overflow-hidden rounded-(--radius-2xl) border border-border bg-background-subtle"

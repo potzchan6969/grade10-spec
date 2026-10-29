@@ -5,7 +5,7 @@ order: 4
 ---
 
 Order Status is the one badge every Store surface uses for where an order
-stands. [Your Orders](/p/grade10-site/store/order-history) and
+stands. [My Orders](/p/grade10-site/store/order-history) and
 [Order Details](/p/grade10-site/store/order-detail) both take it from one
 rule.
 
@@ -37,7 +37,7 @@ and nothing else.
   from Shopify clears it. Points still earn at fulfilment
 - **Till sales** - a sale at the counter reads through the same rules as a
   web order; where an order was sold never decides its badge
-- **Orders covered** - orders Shopify holds. Your Orders lists a web
+- **Orders covered** - orders Shopify holds. My Orders lists a web
   checkout once the shop records it
 - **No archiving** - the shop does not archive orders, so whether Shopify
   archived an order never decides its badge
@@ -47,7 +47,7 @@ and nothing else.
 
 ## Updates from Shopify
 
-Both pages read one stored copy of Shopify's facts, so after a reload Your
+Both pages read one stored copy of Shopify's facts, so after a reload My
 Orders shows the same badge as Order Details.
 
 | Change in Shopify | Reaches both pages |
@@ -105,9 +105,9 @@ Badges beyond the five, and thresholds a merchant sets.
 | Till sales | Decided | Read through the same rules as web orders. Where an order was sold is not a fact the badge reads. | Product |
 | No generic note | Decided | An order no confirmed note fits shows its badge alone. A badge from the rule is a correct answer; reassurance nobody confirmed is not. | Product |
 | No notifications | Decided | This rule names no message. The notification centre owns its own rules. | Product |
-| One stored copy | Decided | Both pages read one stored copy of Shopify's facts. Not a Shopify read on every Your Orders load, one read per order listed. | Product |
+| One stored copy | Decided | Both pages read one stored copy of Shopify's facts. Not a Shopify read on every My Orders load, one read per order listed. | Product |
 | Orders covered | Decided | Only orders Shopify holds. The rule reads Shopify's facts alone, so a checkout Shopify never recorded has nothing to read. | Product |
 | Note on surfaces | Decided | No surface shows the note in this delivery. No design has a place for it, and the rule still names it for the surface that adds one. | Product |
-| Partly refunded | Decided | Your Orders puts an order with past purchases once nothing is left to happen on it: its badge is Completed, Canceled or Refunded. A partly refunded order reads its progress, so it stays with the orders needing attention until it completes, and a held or scheduled order whatever its refund reads Processing, so a collector never finds an order still in progress among finished ones. | Product |
+| Partly refunded | Decided | My Orders puts an order with past purchases once nothing is left to happen on it: its badge is Completed, Canceled or Refunded. A partly refunded order reads its progress, so it stays with the orders needing attention until it completes, and a held or scheduled order whatever its refund reads Processing, so a collector never finds an order still in progress among finished ones. | Product |
 | Source rows | Decided | The [Store Order Status Brief](/references/store-order-status-brief) holds one row per note and each combination a decision settles by name, and the rule is checked against each; a fulfilled order not paid in full reads Shipped, since Completed needs the order paid in full, on common storefront practice. An order fulfilled and paid in full now reads Completed without being archived, and D7 is the product owner's: no surface shows a note this delivery, so the owner's check would change nothing on screen. A canceled order carries the awaiting-refund note only when it took money and none has gone back, and a held order carrying a partial refund carries one note naming both. | Product |
 :::

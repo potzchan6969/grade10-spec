@@ -50,6 +50,9 @@ function bodyOf(lines: string[]): string {
     }
     out.push(line);
   }
+  // The rule closing a group of cases is the suite's, not the last case's.
+  while (out.length > 0 && /^\s*(---\s*)?$/.test(out[out.length - 1]))
+    out.pop();
   return out.join("\n").trim();
 }
 
@@ -124,4 +127,67 @@ export function casesOfPage(suites: SuiteEntry[], pagePath: string): PageCases {
     }
   }
   return { bySection, page };
+}
+
+/** A case read the way a tester walks it: where it starts, what to do and
+ * what to see. A part that is not a plain list, such as a test-data table,
+ * is kept as written under its label. */
+export type CaseParts = {
+  /** What the case says before its first part. */
+  lead: string;
+  given: string[];
+  steps: string[];
+  /** A result naming its step (`Step 2 lists …`) carries that step. */
+  expect: { step?: number; text: string }[];
+  other: { label: string; text: string }[];
+};
+
+const PART = /^\*\*([^*]+?):\*\*\s*$/;
+const ITEM = /^(?:[*-]|\d+\.)\s+(.*)$/;
+const STEP_RESULT = /^Step (\d+)\s+(.*)$/;
+
+/** A part's list items, or nothing where any line is not one. */
+function itemsOf(lines: string[]): string[] | null {
+  const items: string[] = [];
+  for (const line of lines) {
+    if (line.trim() === "") continue;
+    const item = ITEM.exec(line);
+    if (item) items.push(item[1].trim());
+    else if (/^\s/.test(line) && items.length > 0)
+      items[items.length - 1] += ` ${line.trim()}`;
+    else return null;
+  }
+  return items;
+}
+
+export function caseParts(body: string): CaseParts {
+  const parts: CaseParts = {
+    lead: "",
+    given: [],
+    steps: [],
+    expect: [],
+    other: [],
+  };
+  const lead: string[] = [];
+  const labelled: { label: string; lines: string[] }[] = [];
+  for (const line of body.split("\n")) {
+    const part = PART.exec(line);
+    if (part) labelled.push({ label: part[1], lines: [] });
+    else if (labelled.length > 0)
+      labelled[labelled.length - 1].lines.push(line);
+    else lead.push(line);
+  }
+  parts.lead = lead.join("\n").trim();
+  for (const { label, lines } of labelled) {
+    const items = itemsOf(lines);
+    if (items && label === "Pre-conditions") parts.given = items;
+    else if (items && label === "Steps") parts.steps = items;
+    else if (items && label === "Expected Results")
+      parts.expect = items.map((text) => {
+        const named = STEP_RESULT.exec(text);
+        return named ? { step: Number(named[1]), text: named[2] } : { text };
+      });
+    else parts.other.push({ label, text: lines.join("\n").trim() });
+  }
+  return parts;
 }

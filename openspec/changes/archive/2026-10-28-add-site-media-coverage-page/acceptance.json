@@ -1,0 +1,92 @@
+{
+  "version": 2,
+  "change": "add-site-media-coverage-page",
+  "baseline": "903e7396415b2095ccc75853801d19ca741219a68d54707966284cdafc8f4a82",
+  "fingerprint": "4ebfe312d40a1024996b5292aefe93cac94a2c89d1f6f9e20d267cce512f0cdf",
+  "reviewedBy": "seankcw",
+  "acceptedAt": "2026-10-28T07:07:21.995Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/site/media-coverage.md#the-page",
+      "sha256": "15a099e4db56043dcde55578d6bd5c53816345df1b4cab5b91e5c7e76d5ee5c2",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-site-media-coverage-page/decisions.md",
+      "sha256": "a2bc8a412e5dd0f35122d6649fae02dc6251c13c13787de11216a112db69e122",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-media-coverage-page/proposal.md",
+      "sha256": "ea317d5837ddd518a47f0d51f4789b6a3c5268d75eac1145801a55d3531320a8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-media-coverage-page/specs/grade10-site/site/media-coverage/feature-tcs.md",
+      "sha256": "c2d83621bc2893069cc213b63e444ce9a717c29540faebce8ed8be5d51f26e50",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-media-coverage-page/specs/grade10-site/site/media-coverage/spec.md",
+      "sha256": "6cb06e67b1ebcd2bd74bb9a9b946dabda76e653d3281ad46196a41af0985889a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-media-coverage-page/specs/grade10-site/site/media-coverage/user-journeys.md",
+      "sha256": "dfa4c24158e6b1c56932da2c3d1c237f818439975f374906aa78ecac48a9ef87",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-media-coverage-page/tech-design.md",
+      "sha256": "df6c12b9ec8758d03a02274064babe06a95b92f54a01f3974adbb7c2dfe1e58b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-site-media-coverage-page/ui-design.md",
+      "sha256": "9462f149e9635c417bdf551f397d6e9c2706bff7a68d78177649473804ca6fa7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/media-coverage/feature-tcs.md",
+      "sha256": "c2d83621bc2893069cc213b63e444ce9a717c29540faebce8ed8be5d51f26e50",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/media-coverage/spec.md",
+      "sha256": "970030e54a9357473177f2e5a2ee929078f9ee1d3d0d6ec908c68aba45e261de",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/media-coverage/user-journeys.md",
+      "sha256": "e11f87b76094d36b3e087cc2216939ae0e5c35fac3d595edb95f69368bc2eb36",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-site-media-coverage-page/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/media-coverage/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/media-coverage/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A card marks a story in another language",
+        "Requirement: A page with no coverage shows the header alone",
+        "Requirement: Every card leads to its story",
+        "Requirement: The cards keep the published order",
+        "Requirement: The page fits the viewport",
+        "Requirement: The page presents the coverage"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/media-coverage/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

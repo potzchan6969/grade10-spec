@@ -77,7 +77,7 @@ Shopify.
 | --- | --- | --- |
 | Cart review is pending | Lines are unconfirmed and checkout is unavailable | `grade10-site-store-cart-validation-SC-03` |
 | Only part of a requested quantity can be filled | The corrected quantity and an explanation of the short fill | `grade10-site-store-cart-validation-SC-05` |
-| A line is out of stock | The line remains visible, marked out of stock and removable; checkout is unavailable until it is removed | `grade10-site-store-cart-validation-SC-06`, `grade10-site-store-cart-validation-SC-26` |
+| A line is out of stock | The line remains visible, marked out of stock and removable; the totals and checkout leave it out; checkout is unavailable only when no line still sells | `grade10-site-store-cart-validation-SC-06`, `grade10-site-store-cart-validation-SC-26` |
 | A product is withdrawn from the store | The line leaves the cart when it opens; one toast names every removed product | `grade10-site-store-cart-validation-SC-09`, `grade10-site-store-cart-validation-SC-10` |
 | A line's price changes | The current price and a clear price-change message | `grade10-site-store-cart-validation-SC-11`, `grade10-site-store-cart-validation-SC-12` |
 | Cart-open review cannot finish | A persistent error toast names each unchecked line and offers retry; the affected lines' availability, prices and cart total are replaced with unchecked copy; checkout remains unavailable | `grade10-site-store-cart-validation-SC-22` |

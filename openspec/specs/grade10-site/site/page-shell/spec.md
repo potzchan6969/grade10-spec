@@ -658,7 +658,7 @@ withholds: My Orders until Store answers, Profile where the account page is
 withheld, and Membership where the membership page is withheld.
 
 **Each item** - Activating Profile SHALL take them to the account page.
-Activating My Orders SHALL take them to My Orders at `/profile/orders`.
+Activating My Orders SHALL take them to My Orders at `/profile/my-orders`.
 Activating My Auctions SHALL take them to My Auctions. Activating Sign Out
 SHALL start sign-out.
 
@@ -741,7 +741,7 @@ SHALL start sign-out.
 
 - **GIVEN** a signed-in collector, Store answers, and the account menu is open
 - **WHEN** they activate My Orders
-- **THEN** they arrive at My Orders at `/profile/orders`
+- **THEN** they arrive at My Orders at `/profile/my-orders`
 
 <!-- trace:scenario id=g10.site-page-shell.SC-lcs rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-65 - My Auctions opens My Auctions

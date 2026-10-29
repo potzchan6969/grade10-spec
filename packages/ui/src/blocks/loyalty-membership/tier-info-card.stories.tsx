@@ -58,27 +58,6 @@ export const Black: Story = {
   },
 };
 
-/** Every benefit line draws behind its own check, however many there are. */
-export const SeveralBenefits: Story = {
-  args: {
-    benefits: [
-      "1.5 pt for every HK$10 spent",
-      "Priority grading queue",
-      "Invitation-only drops and previews, worded however long the benefit needs to run",
-    ],
-  },
-  play: async ({ canvasElement }) => {
-    expect(
-      canvasElement.querySelectorAll('[data-slot="tier-info-card-benefit"]'),
-    ).toHaveLength(3);
-    expect(
-      canvasElement.querySelectorAll(
-        '[data-slot="tier-info-card-benefit"] svg',
-      ),
-    ).toHaveLength(3);
-  },
-};
-
 /** The card fills a narrow column; its designed cap only applies at `sm` up. */
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },

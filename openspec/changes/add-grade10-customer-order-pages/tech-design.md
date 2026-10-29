@@ -53,8 +53,8 @@ already implemented.
 
 The [history](specs/grade10-site/store/order-history/spec.md) and
 [detail](specs/grade10-site/store/order-detail/spec.md) requirements govern the
-customer pages. Keep their session surfaces at `/profile/orders` and
-`/profile/orders/:orderId`, `SessionDecided`, query-state branches, callbacks
+customer pages. Keep their session surfaces at `/profile/my-orders` and
+`/profile/my-orders/:orderId`, `SessionDecided`, query-state branches, callbacks
 and safe tracking helper. The routes own navigation and browser effects;
 shared blocks receive props. A null owned-order answer remains not found.
 

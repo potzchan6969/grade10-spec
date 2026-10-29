@@ -5,11 +5,13 @@
  * across cases along one route; `UI matching <story-id>` names a real story.
  */
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { headingAnchor } from "./lib/store-suites.mjs";
+import { retrace } from "./tcs-retrace.mjs";
 import { runValidator, specFiles } from "./test/suite-store.mjs";
 
 function store(files) {
@@ -414,4 +416,152 @@ test("a store case or suite that carries a status warns", () => {
     /case `g10\.store-product-listing\.TC1` carries a \*\*Status:\*\* line/,
   );
   assert.match(text, /store suite carries a `\*\*Status:\*\*` line/);
+});
+
+test("a case sits under the heading of something it traces", () => {
+  const suite = (trace) =>
+    store({
+      "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
+      [`${PRD}/order-detail.md`]: `${PAGE}\n## Order Link\n\nIt opens.\n`,
+      [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+        "**Capabilities:** grade10-site/store/order-detail",
+        "",
+        "## Ungrouped",
+        "",
+        "### order-detail#product-pictures: Product Pictures",
+        "",
+        "#### g10.store-order-detail.TC1: Each item shows its picture",
+        "",
+        ...STORE_PROPS(trace),
+      ]),
+    });
+  const ok = out(
+    suite("order-detail#order-link, order-detail#product-pictures"),
+  );
+  assert.equal(ok.status, 0, ok.text);
+
+  const { status, text } = out(suite("order-detail#order-link"));
+  assert.notEqual(status, 0, text);
+  assert.match(
+    text,
+    /`g10\.store-order-detail\.TC1` sits under `order-detail#product-pictures` but traces `order-detail#order-link`/,
+  );
+});
+
+test("a rename moves the traces inside it, and its headings", () => {
+  const text = [
+    "## cart#points: Points",
+    "* **Trace:** cart#points/earning, cart#points-shown, cart",
+    "* **Trace:** cart#pointsy",
+    "## cart-drawer#points: Points",
+  ].join("\n");
+  assert.deepEqual(retrace(text, "cart#points", "cart#rewards"), {
+    text: [
+      "## cart#rewards: Points",
+      "* **Trace:** cart#rewards/earning, cart#points-shown, cart",
+      "* **Trace:** cart#pointsy",
+      "## cart-drawer#points: Points",
+    ].join("\n"),
+    lines: 2,
+  });
+  assert.equal(
+    retrace(text, "cart", "basket").text.split("\n")[3],
+    "## cart-drawer#points: Points",
+  );
+});
+
+test("a rename refuses a target the page does not hold yet", () => {
+  const root = store({
+    [`${PRD}/order-detail.md`]: PAGE,
+    [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+      "## order-detail#pictures: Pictures",
+      "",
+      ...STORE_PROPS("order-detail#pictures"),
+    ]),
+  });
+  const run = (to) =>
+    spawnSync(
+      process.execPath,
+      [
+        join(import.meta.dirname, "tcs-retrace.mjs"),
+        "order-detail#pictures",
+        to,
+      ],
+      { cwd: root, encoding: "utf8" },
+    );
+  const refused = run("order-detail#photos");
+  assert.equal(refused.status, 1, refused.stdout);
+  assert.match(refused.stderr, /has no heading `photos`/);
+
+  const moved = run("order-detail#product-pictures");
+  assert.equal(moved.status, 0, moved.stderr);
+  const suite = readFileSync(
+    join(root, PRD, "tests/orderDetails-tcs.md"),
+    "utf8",
+  );
+  assert.match(suite, /## order-detail#product-pictures: Pictures/);
+  assert.match(suite, /\*\*Trace:\*\* order-detail#product-pictures$/m);
+});
+
+test("a section trace warns where the section names rules", () => {
+  const suite = (rule) =>
+    store({
+      "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
+      [`${PRD}/order-detail.md`]: `${PAGE}\n- ${rule}**Picture** — the item's photo\n`,
+      [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+        "**Capabilities:** grade10-site/store/order-detail",
+        "",
+        "## order-detail#product-pictures: Product Pictures",
+        "",
+        "### g10.store-order-detail.TC1: Each item shows its picture",
+        "",
+        ...STORE_PROPS("order-detail#product-pictures"),
+      ]),
+    });
+  const named = out(suite(""));
+  assert.equal(named.status, 0, named.text);
+  assert.match(
+    named.text,
+    /traces the section `order-detail#product-pictures`, which names rules/,
+  );
+  assert.doesNotMatch(out(suite("❓ ")).text, /which names rules/);
+});
+
+test("a numbered item's bold name is a rule, so its order can be the rule", () => {
+  const root = store({
+    "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
+    [`${PRD}/order-detail.md`]: `${PAGE}\n1. **Picture** — the item's photo\n2. **Name** — the item's title\n`,
+    [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+      "**Capabilities:** grade10-site/store/order-detail",
+      "",
+      "## order-detail#product-pictures: Product Pictures",
+      "",
+      "### g10.store-order-detail.TC1: Each item shows its picture",
+      "",
+      ...STORE_PROPS("order-detail#product-pictures/picture"),
+    ]),
+  });
+  const result = out(root);
+  assert.equal(result.status, 0, result.text);
+  assert.doesNotMatch(result.text, /names no rule/);
+  assert.match(result.text, /rule \*\*Name\*\* .* has no case/);
+});
+
+test("a row of a table headed Rule is a rule", () => {
+  const root = store({
+    "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
+    [`${PRD}/order-detail.md`]: `${PAGE}\n| Rule | Value |\n| --- | --- |\n| Picture | **1** per item |\n| ❓ Zoom | TBC |\n\n| Item | Note |\n| --- | --- |\n| Not a rule | x |\n`,
+    [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+      "**Capabilities:** grade10-site/store/order-detail",
+      "",
+      "## order-detail#product-pictures: Product Pictures",
+      "",
+      "### g10.store-order-detail.TC1: Each item shows its picture",
+      "",
+      ...STORE_PROPS("order-detail#product-pictures/picture"),
+    ]),
+  });
+  const result = out(root);
+  assert.equal(result.status, 0, result.text);
+  assert.doesNotMatch(result.text, /names no rule|has no case/);
 });

@@ -129,7 +129,12 @@ describe("one reference", () => {
     expect(html).toContain('id="tiers"');
     expect(html).toContain("abcdef12");
     expect(html).toContain("docs/references/owner-draft.md");
-    expect(html.match(/The owner&#x27;s draft/g)?.length).toBe(1);
+    // The page's h1, and its compact copy held under the header once the
+    // heading scrolls away; the document's own `# ` heading is not drawn.
+    expect(html.match(/<h1[^>]*>The owner&#x27;s draft<\/h1>/g)?.length).toBe(
+      1,
+    );
+    expect(html.match(/The owner&#x27;s draft/g)?.length).toBe(2);
   });
 
   it("says when it is still loading, or could not be read", () => {

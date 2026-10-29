@@ -20,8 +20,10 @@ export const CASE_ID =
 
 export const newCaseId = () => `vc_${randomUUID()}`;
 
+/** Every flow carries a case id: its steps are what a recipe walks on the site. */
 export const needsCaseId = (title) => {
   const parts = title.split("/");
+  if (parts[1] === "Flows") return true;
   return VERIFIED_DOMAINS.includes(parts[0]) && !parts.includes(EXEMPT_KIND);
 };
 

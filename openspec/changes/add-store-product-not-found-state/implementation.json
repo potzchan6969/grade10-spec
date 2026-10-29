@@ -34,5 +34,41 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "add8358a240f03501b9262ec80c7742df11e389e",
+      "components": [
+        "web"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@kinisworking",
+    "reviewedAt": "2026-10-29T06:37:58Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "TCS-rules r7 removed the old draft cross-feature suite from the durable OpenSpec test index. Its missing-product checks are retained in the current Store product PRD test case and the accepted product-page SC-03 route contract; no current domain suite carries a separate scanner journey.",
+        "evidence": [
+          "docs/prds/products/grade10-site/store/tests/productDetails-tcs.md: current g10.store-product-page.TC5 / trace g10.store-product-page.TC-48a",
+          "apps/frontend/grade10/e2e/tests/store/product-page.spec.ts: TC-48a checks localized 404/recovery and generic unknown route; TC-xpc checks product success",
+          "apps/frontend/grade10/src/serving/prerender.test.tsx: SC-03 prerender assertion in en, zh-Hant and zh-Hans"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "TCS-rules r7 retired this draft feature suite after its behavior was folded into the durable product-page requirement and the PRD-maintained Store test case. The current product-page case remains manual for human QA; implementation regressions exercise its accepted route contract.",
+        "evidence": [
+          "openspec/specs/grade10-site/store/product-page/spec.md: SC-03 and SC-04",
+          "docs/prds/products/grade10-site/store/tests/productDetails-tcs.md: g10.store-product-page.TC5 / trace g10.store-product-page.TC-48a",
+          "apps/frontend/grade10/e2e/tests/store/product-page.spec.ts: localized missing-product, generic catch-all and success-path assertions"
+        ]
+      }
+    ]
+  }
 }

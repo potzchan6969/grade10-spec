@@ -62,7 +62,7 @@ const STORE_SITE_HEADER = {
   },
   session: "signed-in" as const,
   accountEmail: ACCOUNT_EMAIL,
-  promo: "PROMO UTILITY BAR",
+  promo: null,
   logo: NAV_LOGO,
   logoHref: "/",
   locales: [

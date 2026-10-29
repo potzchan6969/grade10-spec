@@ -3,10 +3,10 @@ title: Tickets
 icon: ticket
 ---
 
-Tickets to grade10's own events: a show, a signing, a launch. A signed-in
-collector buys on Stripe's hosted page, gets a QR code per ticket, and shows
-it at the door. One ticketing service runs each brand's events, so another
-brand sells with the same screens.
+Tickets to grade10's own events: a show, a signing, a launch. A collector
+buys on Stripe's hosted page with an email alone — no sign-in — gets a QR
+code per ticket, and shows it at the door. One ticketing service runs each
+brand's events, so another brand sells with the same screens.
 
 - **Events** — a title, a venue, a start and an end, in every language the
   site speaks; listed once an operator puts it on sale, and a cancelled event
@@ -21,13 +21,17 @@ brand sells with the same screens.
 - **Orders** — one checkout on one event, with a six-character reference a
   collector can read out at the door
 - **Tickets** — one per person admitted, each with its own QR code
+- **Points** — a paid ticket order earns in the
+  [loyalty programme](/p/grade10-site/loyalty/points) under the buyer's
+  email, lands on the member's ledger once a sign-in proves that address,
+  and counts as activity for the balance's expiry
 
 ## Where It Is Open
 
-**Not open to the public yet** — the ticketing service and the site's data
-for it are carried in development and the two staging lanes, and on no lane
-the public reaches; the pages a collector buys on are not built yet —
-[Carried Surfaces](/p/grade10-site/site/carried-surfaces)
+- **Not open to the public yet** — the ticketing service and the site's data
+  for it are carried in development and the two staging lanes, and on no lane
+  the public reaches; the pages a collector buys on are not built yet —
+  [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
 ## Users
 
@@ -82,7 +86,7 @@ shape:
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Signed-in buying | Decided | Every order belongs to an account; sign-in is passwordless, so it proves the address. | Product |
+| Email-keyed buying | Decided | Buying asks only an email — no sign-in — so the press stays short; the order belongs to that address and joins the account a later sign-in proves, its points dated to the purchase. Decided 2026-10-28; supersedes signed-in buying. | Product |
 | Payment | Decided | Stripe's hosted page, card only, on the g10-gems account; no card form on the site. | Engineering |
 | Busy, never queued | Decided | A press that meets a crowd is answered busy in seconds rather than held waiting. | Engineering |
 | Ballot | ❓ Open | Whether a drop that a crowd outnumbers many times sells by ballot — entries, a logged draw, a window to pay each win — decided before the first such drop. | Product |

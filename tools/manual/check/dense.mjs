@@ -2,7 +2,7 @@
  * RULE: a page is the essence a reader expands from, never the expansion.
  * Past the style's budget it has become the spec, the suite or the
  * architecture doc restated: too many lines of prose, a section that opens
- * on an essay, an engineer block written as a design note, or a 🚧 buried in
+ * on an essay, an engineer block that maps the code, or a 🚧 buried in
  * a step or a sentence. Every finding here is a warning — it asks for the
  * rewrite and never blocks a fold.
  */
@@ -107,44 +107,40 @@ function countSentences(text) {
   return (text.match(SENTENCE_END) ?? []).length + 1;
 }
 
-/** An engineer block is a code map: items of a name and a link. A paragraph
- * in one is a design note, and the architecture doc is where that lives. */
+/** An engineer block explains how the section works. A file path or a
+ * link into the source is a code map, which the code already is. */
 function checkEngineerBlocks(blocks, add) {
   for (const block of everyContainer(blocks)) {
     if (block.type !== "detail" || block.for !== "engineer") continue;
-    const paragraphs = block.body
+    const named = block.body
       .filter((item) => item.type === "prose")
-      .reduce((sum, item) => sum + countParagraphs(item.markdown), 0);
-    if (paragraphs > 0) {
+      .flatMap((item) => codeNamed(item.markdown));
+    if (named.length > 0) {
+      const more = named.length > 1 ? ` and ${named.length - 1} more` : "";
       add(
-        `engineer block \`${block.title}\` holds ${paragraphs === 1 ? "a paragraph" : `${paragraphs} paragraphs`} — a code map is names and links`,
+        `engineer block \`${block.title}\` maps code — ${named[0]}${more}; explain how it works instead`,
       );
     }
   }
 }
 
-/** A run of non-blank lines whose first line is neither a heading, an item,
- * a table row nor a directive. */
-function countParagraphs(markdown) {
-  let count = 0;
-  let open = false;
+/** A path ending in a file extension or a slash, `services/catalog/browse.ts`
+ * or `durables/CatalogKeeper/`; a name with a slash and neither, such as the
+ * webhook topic `products/create`, is not one, and neither is a doc. */
+const CODE_PATH = /`([\w.@-]+(?:\/[\w.@-]+)*(?:\.[a-z]{1,5}|\/))`/g;
+const SOURCE_LINK =
+  /\]\((https:\/\/github\.com\/[^)\s]+\/(?:blob|tree)\/[^)\s]+)\)/g;
+
+function codeNamed(markdown) {
+  const named = [];
   for (const line of unfenced(markdown)) {
-    if (line.trim() === "") {
-      open = false;
-      continue;
-    }
-    if (open) continue;
-    open = true;
-    if (
-      !HEADING.test(line) &&
-      !LIST_MARKER.test(line) &&
-      !TABLE_ROW.test(line) &&
-      !DIRECTIVE.test(line)
-    ) {
-      count += 1;
-    }
+    for (const [, path] of line.matchAll(CODE_PATH))
+      if (path.includes("/") && !path.endsWith(".md"))
+        named.push(`\`${path}\``);
+    for (const [, url] of line.matchAll(SOURCE_LINK))
+      if (!url.endsWith(".md")) named.push(url);
   }
-  return count;
+  return named;
 }
 
 /** A 🚧 starts the line of one outcome, in the section that owns it. Inside a

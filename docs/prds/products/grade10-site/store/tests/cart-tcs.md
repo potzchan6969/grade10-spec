@@ -59,7 +59,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/unresolved, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -101,7 +101,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/typed
 
 **Pre-conditions:**
 
@@ -136,7 +136,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/picked, cart#promo-code/public-codes, cart#promo-code/held-codes
 
 **Pre-conditions:**
 
@@ -172,7 +172,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/running-out-reads-louder
 
 **Pre-conditions:**
 
@@ -207,7 +207,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/running-out-reads-louder, cart#promo-code/picked
 
 **Pre-conditions:**
 
@@ -241,7 +241,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/running-out-reads-louder
 
 **Pre-conditions:**
 
@@ -280,7 +280,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#points/applied, cart#points/offered, cart#points/rate, cart#points/removing-points
 
 **Pre-conditions:**
 
@@ -318,7 +318,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#reviewing-the-cart/the-choice-follows-the-cart, cart#points/applied
 
 **Pre-conditions:**
 
@@ -349,7 +349,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#checkout/created-from-the-drawer, cart#checkout/sent
 
 **Pre-conditions:**
 
@@ -385,7 +385,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#pending-operations/wait-before-another-action, cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
 
@@ -427,7 +427,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/edits
 
 **Pre-conditions:**
 
@@ -466,7 +466,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/product-pictures
 
 **Pre-conditions:**
 
@@ -488,66 +488,6 @@ Runs once per row of **Test data**.
 
 * The row's line.
 
-<!-- trace:case id=g10.store-cart-checkout.TC-c56 rev=2 -->
-#### g10.store-cart.TC5: A shop answer within 2.5 seconds brings the site discount into the total
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** cart#reviewing-the-cart
-
-**Pre-conditions:**
-
-* The cart holds `<product A>` × 2, HKD1,760; the shop has the order discount Spend HKD1,000, save HKD100, and answers within 2.5 seconds.
-
-**Steps:**
-
-1. Open Cart and wait 3 seconds past the store's read.
-
-**Expected Results:**
-
-* `Discount (Spend HKD1,000, save HKD100)` −HKD100, and Estimated Total HKD1,660.
-
-#### g10.store-cart.TC6: Past 2.5 seconds without the shop, the total is the store's own figure
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** cart#reviewing-the-cart
-
-**Pre-conditions:**
-
-* The cart holds `<product A>` × 2, HKD1,760; the shop has the order discount Spend HKD1,000, save HKD100; its price answer comes as the row says.
-
-**Test data:**
-
-| Shop's answer |
-| --- |
-| after 2.5 seconds |
-| never |
-
-**Steps:**
-
-1. Open Cart and wait 3 seconds past the store's read.
-
-**Expected Results:**
-
-* No site discount row; Estimated Total HKD1,760.
-
 <!-- trace:case id=g10.store-cart-checkout.TC-g2h rev=2 -->
 #### g10.store-cart.TC7: A member's open drawer closes when the session ends elsewhere
 
@@ -562,7 +502,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/when-the-session-ends
 
 **Pre-conditions:**
 
@@ -596,7 +536,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/when-the-session-ends
 
 **Pre-conditions:**
 
@@ -622,7 +562,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/whose-cart
 
 **Pre-conditions:**
 
@@ -648,7 +588,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/whose-cart
 
 **Pre-conditions:**
 
@@ -677,7 +617,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -712,7 +652,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/lines-whose-product-left-the-shop
 
 **Pre-conditions:**
 
@@ -742,7 +682,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/lines-whose-product-left-the-shop
 
 **Pre-conditions:**
 
@@ -779,7 +719,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
 
@@ -816,7 +756,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
 
@@ -850,7 +790,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/lines-whose-product-left-the-shop
 
 **Pre-conditions:**
 
@@ -875,7 +815,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/current-read, cart#reviewing-the-cart/edits
 
 **Pre-conditions:**
 
@@ -904,7 +844,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart
+* **Trace:** cart#reviewing-the-cart/current-read, cart#reviewing-the-cart/edits
 
 **Pre-conditions:**
 
@@ -940,7 +880,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#struck-price-on-a-cart-line
+* **Trace:** discounts#struck-price-on-a-cart-line/cut-by-the-shop, discounts#struck-price-on-a-cart-line/on-sale, discounts#cart-footer/order-discount
 
 **Pre-conditions:**
 
@@ -976,7 +916,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#struck-price-on-a-cart-line
+* **Trace:** discounts#struck-price-on-a-cart-line/cut-by-the-shop, discounts#order-of-application/larger-wins, discounts#cart-footer/code
 
 **Pre-conditions:**
 
@@ -1017,7 +957,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#cart-footer
+* **Trace:** discounts#cart-footer/order-discount, discounts#cart-footer/code, discounts#cart-footer/points, discounts#cart-footer/estimated-total, discounts#order-of-application/minimum
 
 **Pre-conditions:**
 
@@ -1050,7 +990,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#cart-footer
+* **Trace:** discounts#cart-footer/order-discount, discounts#cart-footer/estimated-total, discounts#order-of-application/minimum
 
 **Pre-conditions:**
 
@@ -1081,7 +1021,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/typed, cart#promo-code/refusals-in-the-readers-language, cart#promo-code/public-codes
 
 **Pre-conditions:**
 
@@ -1116,7 +1056,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** discounts#one-discount-at-a-time/in-the-count, cart#promo-code/typed, cart#promo-code/one-code
 
 **Pre-conditions:**
 
@@ -1142,7 +1082,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/refused-by-the-shop, cart#promo-code/picked
 
 **Pre-conditions:**
 
@@ -1170,7 +1110,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/removed
 
 **Pre-conditions:**
 
@@ -1205,7 +1145,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/wallet-not-answered
 
 **Pre-conditions:**
 
@@ -1233,7 +1173,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code
+* **Trace:** cart#promo-code/gift
 
 **Pre-conditions:**
 
@@ -1267,7 +1207,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#one-discount-at-a-time
+* **Trace:** discounts#order-of-application/larger-wins, discounts#one-discount-at-a-time/set-aside, cart#promo-code/set-aside-for-a-site-discount
 
 **Pre-conditions:**
 
@@ -1308,7 +1248,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#order-of-application
+* **Trace:** discounts#order-of-application/minimum, discounts#order-of-application/larger-wins
 
 **Pre-conditions:**
 
@@ -1342,7 +1282,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#order-of-application
+* **Trace:** cart#promo-code/the-shops-figure, discounts#order-of-application
 
 **Pre-conditions:**
 
@@ -1375,7 +1315,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#points/not-offered
 
 **Pre-conditions:**
 
@@ -1409,7 +1349,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points
+* **Trace:** cart#points/nothing-left
 
 **Pre-conditions:**
 
@@ -1422,6 +1362,70 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * It says there is nothing left for points to pay.
+
+---
+
+### cart#estimated-total: Estimated Total
+
+<!-- trace:case id=g10.store-cart-checkout.TC-c56 rev=2 -->
+#### g10.store-cart.TC5: A shop answer within 2.5 seconds brings the site discount into the total
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** cart#estimated-total/discounts-on-a-line-and-below-it, cart#estimated-total/estimated-total
+
+**Pre-conditions:**
+
+* The cart holds `<product A>` × 2, HKD1,760; the shop has the order discount Spend HKD1,000, save HKD100, and answers within 2.5 seconds.
+
+**Steps:**
+
+1. Open Cart and wait 3 seconds past the store's read.
+
+**Expected Results:**
+
+* `Discount (Spend HKD1,000, save HKD100)` −HKD100, and Estimated Total HKD1,660.
+
+#### g10.store-cart.TC6: Past 2.5 seconds without the shop, the total is the store's own figure
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** cart#estimated-total/shops-answer, cart#reviewing-the-cart/current-read
+
+**Pre-conditions:**
+
+* The cart holds `<product A>` × 2, HKD1,760; the shop has the order discount Spend HKD1,000, save HKD100; its price answer comes as the row says.
+
+**Test data:**
+
+| Shop's answer |
+| --- |
+| after 2.5 seconds |
+| never |
+
+**Steps:**
+
+1. Open Cart and wait 3 seconds past the store's read.
+
+**Expected Results:**
+
+* No site discount row; Estimated Total HKD1,760.
 
 ---
 
@@ -1441,7 +1445,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#paying-again/another-pay, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1476,7 +1480,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#paying-again/changed-purchase, checkout#paying-again/after-a-refusal, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1514,7 +1518,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#checkout/after-paying, checkout#after-paying/cleared-cart, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1549,7 +1553,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** checkout#after-paying/cleared-cart, cart#checkout/after-paying, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1583,7 +1587,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** cart#checkout
+* **Trace:** checkout#paying-again/recovery, checkout#paying-again/lost-answer, checkout#paying-again/another-pay, cart#checkout/created-from-the-drawer
 
 **Pre-conditions:**
 
@@ -1614,7 +1618,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout
+* **Trace:** cart#checkout/no-identity-check
 
 **Pre-conditions:**
 
@@ -1652,7 +1656,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** checkout#guest-checkout/gateway, checkout#guest-checkout/a-public-code
 
 **Pre-conditions:**
 
@@ -1681,7 +1685,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout
+* **Trace:** cart#checkout/guest, checkout#guest-checkout/gateway, cart#reviewing-the-cart/whose-cart, cart#checkout/signing-in
 
 **Pre-conditions:**
 
@@ -1719,7 +1723,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#pending-operations
+* **Trace:** cart#pending-operations/wait-before-another-action, checkout#proceed-to-checkout/closing-during-pay, checkout#proceed-to-checkout/one-pay-at-a-time
 
 **Pre-conditions:**
 
@@ -1737,33 +1741,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### checkout#store--read-every-line-live: Store — Read every line live
-
-<!-- trace:case id=g10.store-cart-checkout.TC-rbr rev=1 -->
-#### g10.store-cart.TC43: Shopify refuses an item that sold out after the drawer's read
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** checkout#store--read-every-line-live
-
-**Pre-conditions:**
-
-* customer(signed-in member) is on Shopify's page for `<product A>`; admin then sells it out, by the recipe "Sell a card out".
-
-**Steps:**
-
-1. Fill in the shipping address and the test card that succeeds, and pay.
-
-**Expected Results:**
-
-* The payment is refused, naming `<product A>`, and no order is placed.
+### checkout#proceed-to-checkout: Proceed to Checkout
 
 <!-- trace:case id=g10.store-product-listing.TC-jdu rev=1 -->
 #### g10.store-cart.TC44: Checkout's own read names moved lines and refuses a short fill
@@ -1779,7 +1757,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#store--read-every-line-live
+* **Trace:** checkout#proceed-to-checkout/live-read
 
 **Pre-conditions:**
 
@@ -1802,39 +1780,33 @@ Runs once per row of **Test data**.
 
 ---
 
-### checkout#collector--open-your-orders-in-grade10: Collector — Open Your Orders in Grade10
+### checkout#on-shopifys-page: On Shopify's Page
 
-<!-- trace:case id=g10.store-cart-checkout.TC-k2d rev=1 -->
-#### g10.store-cart.TC45: Shopify's thank-you page leads to Your Orders with the purchase
+<!-- trace:case id=g10.store-cart-checkout.TC-rbr rev=1 -->
+#### g10.store-cart.TC43: Shopify refuses an item that sold out after the drawer's read
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#collector--open-your-orders-in-grade10
+* **Trace:** checkout#on-shopifys-page/sold-out-meanwhile
 
 **Pre-conditions:**
 
-* customer(signed-in member) is on Shopify's page for `<product A>`.
+* customer(signed-in member) is on Shopify's page for `<product A>`; admin then sells it out, by the recipe "Sell a card out".
 
 **Steps:**
 
-1. Pay with the test card that succeeds and read the thank-you page.
-2. Select its Grade10 Your Orders link.
+1. Fill in the shipping address and the test card that succeeds, and pay.
 
 **Expected Results:**
 
-* Step 1 offers a Grade10 Your Orders link.
-* Step 2 lists the order for `<product A>` within seconds.
-
----
-
-### checkout#shopify--take-the-payment: Shopify — Take the payment
+* The payment is refused, naming `<product A>`, and no order is placed.
 
 <!-- trace:case id=g10.store-cart.TC-mhq rev=1 -->
 #### g10.store-cart.TC46: A declined payment places no order and keeps the cart for another try
@@ -1850,7 +1822,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#shopify--take-the-payment
+* **Trace:** checkout#on-shopifys-page/a-declined-card
 
 **Pre-conditions:**
 
@@ -1874,3 +1846,35 @@ Runs once per row of **Test data**.
 * Step 1 refuses the payment and places no order.
 * ❓ Step 2: the cart still holds `<product A>`, and paying places the order - product confirms.
 * ❓ Step 3: exactly one order for `<product A>`.
+
+---
+
+### checkout#after-paying: After Paying
+
+<!-- trace:case id=g10.store-cart-checkout.TC-k2d rev=1 -->
+#### g10.store-cart.TC45: Shopify's thank-you page leads to My Orders with the purchase
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** checkout#after-paying/my-orders-link
+
+**Pre-conditions:**
+
+* customer(signed-in member) is on Shopify's page for `<product A>`.
+
+**Steps:**
+
+1. Pay with the test card that succeeds and read the thank-you page.
+2. Select its Grade10 My Orders link.
+
+**Expected Results:**
+
+* Step 1 offers a Grade10 My Orders link.
+* Step 2 lists the order for `<product A>` within seconds.

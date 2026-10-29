@@ -47,7 +47,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** order-detail#order-link/signed-out, order-detail#order-link/no-account-facts
 
 **Pre-conditions:**
 
@@ -71,45 +71,6 @@ Runs once per row of **Test data**.
 * Step 1 shows no Points to Earn, no Points Earned, no Points row, and no wallet or account details.
 * Step 2 shows no toast for this order.
 
----
-
-## order-detail#back-from-checkout: Back From Checkout
-
-<!-- trace:case id=g10.store-order-detail.TC-0pz rev=1 -->
-### g10.store-order-detail.TC12: Continue opens the order this browser just paid
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
-
-**Pre-conditions:**
-
-* customer, as the row says, has just paid `<order>` on Shopify's page in this browser.
-
-**Test data:**
-
-| Customer | Opens |
-| --- | --- |
-| signed out | `/orders/<order id>`, with its secret, UI matching store-order-detail-screens-order-link--just-paid |
-| signed-in member | `/profile/orders/<order id>` |
-
-**Steps:**
-
-1. Select Continue on Shopify's thank-you page.
-
-**Expected Results:**
-
-* The address passes through `/orders/latest`, then shows the row's page with `<order>`.
-
 <!-- trace:case id=g10.store-order-detail.TC-frp rev=2 -->
 ### g10.store-order-detail.TC13: Signed out, an order page shows the receipt line and the account toast
 
@@ -124,7 +85,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#order-link/receipt-line, order-detail#order-link/account-toast, order-detail#order-link/joined-at-payment, order-detail#order-link/signed-out-only
 
 **Pre-conditions:**
 
@@ -162,7 +123,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#order-link/added
 
 **Pre-conditions:**
 
@@ -184,7 +145,46 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: the toast says the order was added to the account.
-* Step 2 opens `/profile/orders/<order id>`.
+* Step 2 opens `/profile/my-orders/<order id>`.
+
+---
+
+## order-detail#back-from-checkout: Back From Checkout
+
+<!-- trace:case id=g10.store-order-detail.TC-0pz rev=1 -->
+### g10.store-order-detail.TC12: Continue opens the order this browser just paid
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** order-detail#back-from-checkout/latest-order, order-detail#back-from-checkout/guest, order-detail#back-from-checkout/member
+
+**Pre-conditions:**
+
+* customer, as the row says, has just paid `<order>` on Shopify's page in this browser.
+
+**Test data:**
+
+| Customer | Opens |
+| --- | --- |
+| signed out | `/orders/<order id>`, with its secret, UI matching store-order-detail-screens-order-link--just-paid |
+| signed-in member | `/profile/my-orders/<order id>` |
+
+**Steps:**
+
+1. Select Continue on Shopify's thank-you page.
+
+**Expected Results:**
+
+* The address passes through `/orders/latest`, then shows the row's page with `<order>`.
 
 ---
 
@@ -206,7 +206,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/known-facts
 
 **Pre-conditions:**
 
@@ -221,7 +221,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>`.
+1. Open `/profile/my-orders/<order id>`.
 
 **Expected Results:**
 
@@ -241,7 +241,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/owner-only-address
 
 **Pre-conditions:**
 
@@ -256,7 +256,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<row's id>`.
+1. Open `/profile/my-orders/<row's id>`.
 
 **Expected Results:**
 
@@ -274,7 +274,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/owner-only-address
 
 **Pre-conditions:**
 
@@ -282,11 +282,11 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and sign in.
+1. Open `/profile/my-orders/<order id>` and sign in.
 
 **Expected Results:**
 
-* The address is `/profile/orders/<order id>`, showing `<order>`.
+* The address is `/profile/my-orders/<order id>`, showing `<order>`.
 
 <!-- trace:case id=g10.store-order-detail.TC-j3h rev=2 -->
 #### g10.store-order-detail.TC4: While the order loads, the page shows loading, not not-found
@@ -300,7 +300,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/read-states
 
 **Pre-conditions:**
 
@@ -308,7 +308,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>`.
+1. Open `/profile/my-orders/<order id>`.
 
 **Expected Results:**
 
@@ -325,7 +325,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#order/read-states
 
 **Pre-conditions:**
 
@@ -333,13 +333,17 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>`.
+1. Open `/profile/my-orders/<order id>`.
 2. Select Retry.
 
 **Expected Results:**
 
 * Step 1: a failure in the site's language, with Retry, UI matching store-order-detail-screens-order-details--recoverable-failure, and not the not-found state.
 * Step 2 shows `<order>`, and the address is unchanged.
+
+---
+
+### order-detail#delivery-status: Delivery Status
 
 <!-- trace:case id=g10.store-order-detail.TC-rup rev=2 -->
 #### g10.store-order-detail.TC6: Delivery Status shows how far the order has come, and Track Order follows a shipped one
@@ -355,7 +359,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order
+* **Trace:** order-detail#delivery-status/steps, order-detail#delivery-status/order-placed, order-detail#delivery-status/shipping, order-detail#delivery-status/completed, order-detail#delivery-status/status-badge, order-detail#delivery-status/step-not-reached, order-detail#delivery-status/track-order
 
 **Pre-conditions:**
 
@@ -371,7 +375,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and read the badge and Delivery Status.
+1. Open `/profile/my-orders/<order id>` and read the badge and Delivery Status.
 2. Select Track Order, where offered.
 
 **Expected Results:**
@@ -380,7 +384,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### order-detail#product-pictures: Product Pictures
+### order-detail#items: Items
 
 #### g10.store-order-detail.TC7: Order items show their current product pictures, or a placeholder
 
@@ -395,7 +399,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#product-pictures
+* **Trace:** order-detail#items/product-picture
 
 **Pre-conditions:**
 
@@ -405,7 +409,7 @@ Runs once per row of **Test data**.
 
 | Item | Opened as | Shown |
 | --- | --- | --- |
-| a product whose picture changed since the purchase | the owner, at `/profile/orders/<order id>` | its current picture |
+| a product whose picture changed since the purchase | the owner, at `/profile/my-orders/<order id>` | its current picture |
 | the same product | anyone, from the order's View order link | its current picture |
 | a product with no picture | the owner | the placeholder, and the order still opens |
 
@@ -435,7 +439,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** order-detail#order-link/owner-signed-in, order-detail#order-link/someone-else-signed-in
 
 **Pre-conditions:**
 
@@ -445,7 +449,7 @@ Runs once per row of **Test data**.
 
 | Signed in as | Shown |
 | --- | --- |
-| member A | `/profile/orders/<order id>` |
+| member A | `/profile/my-orders/<order id>` |
 | member B | the same public link page anyone holding the link sees |
 
 **Steps:**
@@ -470,7 +474,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** order-detail#order-link/wrong-link
 
 **Pre-conditions:**
 
@@ -489,7 +493,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The not-found state with no order facts, UI matching store-order-detail-screens-order-link--not-found; its way out leads to the store, not Your Orders.
+* The not-found state with no order facts, UI matching store-order-detail-screens-order-link--not-found; its way out leads to the store, not My Orders.
 
 <!-- trace:case id=g10.store-order-detail.TC-ogu rev=1 -->
 #### g10.store-order-detail.TC11: Shopify's order email carries the View order link
@@ -505,7 +509,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-link
+* **Trace:** checkout#guest-checkout/order-link, order-detail#order-link/link, order-detail#order-link/secret, order-detail#order-link/signed-out
 
 **Pre-conditions:**
 
@@ -529,10 +533,6 @@ Runs once per row of **Test data**.
 * Step 2: the button's address is `/orders/<order id>` with its secret after `#`, and it opens the order page signed out.
 * Step 3 holds no other order email from Grade10.
 
----
-
-### order-detail#back-from-checkout: Back From Checkout
-
 #### g10.store-order-detail.TC14: Signed in, the owner sees neither the receipt line nor the toast
 
 **Classification:**
@@ -544,7 +544,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#order-link/signed-out-only
 
 **Pre-conditions:**
 
@@ -552,7 +552,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>`.
+1. Open `/profile/my-orders/<order id>`.
 
 **Expected Results:**
 
@@ -570,7 +570,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#order-link/another-email
 
 **Pre-conditions:**
 
@@ -586,6 +586,10 @@ Runs once per row of **Test data**.
 * Step 1 signs the customer in; the toast says the order was not added, as it was placed with `<order email>`.
 * Step 2 says a sign-in link was sent to `<order email>`.
 
+---
+
+### order-detail#back-from-checkout: Back From Checkout
+
 <!-- trace:case id=g10.store-order-detail.TC-gn1 rev=1 -->
 #### g10.store-order-detail.TC17: With no order remembered, the latest address opens the order list or the store
 
@@ -600,7 +604,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#back-from-checkout
+* **Trace:** order-detail#back-from-checkout/nothing-remembered, order-detail#back-from-checkout/one-day, order-detail#back-from-checkout/another-device
 
 **Pre-conditions:**
 
@@ -610,7 +614,7 @@ Runs once per row of **Test data**.
 
 | Why nothing is remembered | Customer | Opens |
 | --- | --- | --- |
-| no checkout from this browser | signed-in member | Your Orders |
+| no checkout from this browser | signed-in member | My Orders |
 | the last checkout was more than a day ago | signed out | the store |
 | Continue already opened the last order once | signed out | the store |
 | the order was paid on another device | signed out | the store |
@@ -639,7 +643,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/amount-marks
 
 **Pre-conditions:**
 
@@ -647,7 +651,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and read the summary.
+1. Open `/profile/my-orders/<order id>` and read the summary.
 
 **Expected Results:**
 
@@ -667,7 +671,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/points, order-detail#order-summary/points-to-earn
 
 **Pre-conditions:**
 
@@ -682,7 +686,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and read the summary and the points section.
+1. Open `/profile/my-orders/<order id>` and read the summary and the points section.
 
 **Expected Results:**
 
@@ -701,7 +705,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/no-points-row, order-detail#order-summary/no-points-section
 
 **Pre-conditions:**
 
@@ -718,46 +722,11 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and read the summary and the points section.
+1. Open `/profile/my-orders/<order id>` and read the summary and the points section.
 
 **Expected Results:**
 
 * The row's absence.
-
-<!-- trace:case id=g10.store-order-detail.TC-fbs rev=1 -->
-#### g10.store-order-detail.TC21: A refund shows its amount beside what was paid
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** order-detail#order-summary
-
-**Pre-conditions:**
-
-* customer(signed-in member) owns `<order>`: `<product A>` HKD780 and `<product B>` HKD105, paid HKD885; admin refunded the row's lines in the shop's admin.
-
-**Test data:**
-
-| Refunded | Summary |
-| --- | --- |
-| `<product B>`, HKD105 | Total HKD885; a Refund row of −HKD105, UI matching store-order-detail-screens-order-details--partial-refund |
-| ❓ both lines, HKD885 - design confirms | Total HKD885; a Refund row of −HKD885 |
-
-**Steps:**
-
-1. Open `/profile/orders/<order id>` and read the summary and the badge.
-
-**Expected Results:**
-
-* The row's summary, and the badge Refunded.
 
 <!-- trace:case id=g10.store-order-detail.TC-wxh rev=2 -->
 #### g10.store-order-detail.TC22: Refunded goods take back the points they earned
@@ -771,7 +740,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/points-to-earn
 
 **Pre-conditions:**
 
@@ -797,7 +766,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** order-detail#order-summary
+* **Trace:** order-detail#order-summary/points-to-earn
 
 **Pre-conditions:**
 
@@ -811,3 +780,38 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The balance is unchanged.
+
+<!-- trace:case id=g10.store-order-detail.TC-fbs rev=1 -->
+#### g10.store-order-detail.TC21: A refund shows its amount beside what was paid
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** order-detail#order-summary/full-refund
+
+**Pre-conditions:**
+
+* customer(signed-in member) owns `<order>`: `<product A>` HKD780 and `<product B>` HKD105, paid HKD885; admin refunded the row's lines in the shop's admin.
+
+**Test data:**
+
+| Refunded | Summary |
+| --- | --- |
+| `<product B>`, HKD105 | Total HKD885; a Refund row of −HKD105, UI matching store-order-detail-screens-order-details--partial-refund |
+| ❓ both lines, HKD885 - design confirms | Total HKD885; a Refund row of −HKD885 |
+
+**Steps:**
+
+1. Open `/profile/my-orders/<order id>` and read the summary and the badge.
+
+**Expected Results:**
+
+* The row's summary, and the badge Refunded.

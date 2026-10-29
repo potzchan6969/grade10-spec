@@ -43,7 +43,7 @@ An operator is a person holding a role above `user`.
 
 ## Tests
 
-🚧 **Sign-in without a mailbox** — QA walks sign-in on staging through a gated endpoint. Collectors never see it — [Sign-In Tests](/p/grade10-site/account/sign-in#staging-tests)
+- 🚧 **Sign-in without a mailbox** — QA walks sign-in on staging through a gated endpoint. Collectors never see it — [Sign-In Tests](/p/grade10-site/account/sign-in#staging-tests)
 
 :::detail{title="Code map" for="engineer"}
 - **Contract** — `openspec/specs/shared/auth/`, one spec per capability

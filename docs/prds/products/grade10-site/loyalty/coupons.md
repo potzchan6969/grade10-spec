@@ -32,9 +32,9 @@ so redefining the reward never rewrites a coupon a member already holds —
   the member's birthday; loyalty holds no birthday, so every coupon asking
   for one is refused
 
-**The picture** - the coupon list shown here draws a code only where the
-coupon is passed one; 🚧 a money-off redemption mints one member-readable
-code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
+- **The picture** — the coupon list shown here draws a code only where the
+  coupon is passed one; 🚧 a money-off redemption mints one member-readable
+  code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
 
 ::story{id="loyalty-coupons-blocks-couponlist--codeless" title="The coupons a member holds"}
 
@@ -58,11 +58,12 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
   over the member's own sale opens a new session that keeps the sale and its
   points, and chooses the coupon for staff to apply
 - 🚧 **Its own page** — the wallet is its own Coupons page, Available and
-  Used & Expired as tabs; Membership keeps the coupons still to spend as a
-  section
+  Used & Expired as tabs; Membership's Coupons section draws the same
+  ledger, tabs and empty lines
 - 🚧 **Points still buy more** — under the Available list sits a Rewards
-  upsell ("Want more coupons?"); where its CTA lands waits on the
-  Membership design, so the link target is ❓ — Design
+  upsell ("Want more coupons?"); on the Coupons page its CTA opens the
+  Rewards page, on Membership it switches the rail to the Rewards
+  section
 
 ::story{id="loyalty-coupons-screens-coupons--default" title="The Coupons page"}
 

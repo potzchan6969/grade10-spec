@@ -186,16 +186,18 @@ so it stays searchable and deep-linkable. Its title names what it holds: the
 title is all a collapsed block shows, the badge already says who it is for,
 and the block's link is made from the title, so `Data model`, never
 `For engineers`, and never two alike on one page. Engineer depth sits under
-the section it deepens; a fact another page owns is a link, not a
-restatement:
+the section it deepens and explains how it works: the parts, what moves
+between them and when. It is never a code map: no file paths, no links into
+the source and no retelling of the code's logic, which the code already
+says. A fact another page owns is a link, not a restatement:
 
 ```md
 :::callout{kind="warning" author="@echo" date="2026-08-30"}
 What ships and what the spec says have parted company here.
 :::
 
-:::detail{title="Code map" for="engineer"}
-- **Config** — `GRADE10_LOYALTY_PROGRAM` in `packages/app-env`
+:::detail{title="Points ledger" for="engineer"}
+- **Points Ledger** — every earn and every spend is a row, and a balance is their sum, so an earn that is retried counts once
 - **Design record** — [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
 :::
 ```

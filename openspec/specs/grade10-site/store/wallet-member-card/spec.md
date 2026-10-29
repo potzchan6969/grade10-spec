@@ -129,7 +129,7 @@ failure off on its own curve.
 By the end of the first sweep beginning after a member's standing moves, the
 wallet SHALL hold what they then are — whether the change was recorded, as a
 spend, a redemption or an operator's correction is, or happened on its own,
-as points reaching their expiry, a tier term running out and an invitation
+as points reaching their expiry, a held tier's period ending and an invitation
 lapsing do. A change nobody records SHALL name the instant it happens at, and
 the pass SHALL be due at that instant rather than on the daily floor.
 
@@ -173,8 +173,8 @@ account name SHALL reach the pass within the daily floor.
 #### Scenario: grade10-site-store-wallet-member-card-SC-26 - A change nobody recorded is due at the instant it happens
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
-- **WHEN** a member's points reach their expiry, their earned tier term runs
-  out, or an invitation holding their tier lapses, with nothing written
+- **WHEN** a member's points reach their expiry, their held tier's period
+  ends, or an invitation holding their tier lapses, with nothing written
 - **THEN** the pass is due at that instant rather than on the daily floor
 - **AND** the first sweep after it sends the wallet the tier and points the
   member's own surfaces then read

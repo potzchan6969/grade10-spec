@@ -2,7 +2,7 @@
 title: Consignment Console
 spec: grade10-admin/consignment/console
 audience: operator
-order: 1
+order: 4
 ---
 
 The Consignment section of the admin console: a queue of consignments cut by
@@ -28,6 +28,10 @@ the settings the schedule runs on.
   price, days on sale and a badge naming why it waits
 - **Counts** - each view carries its count, and every view adds up to all
 
+- 🚧 **Pending Approval** — a consignment the collector submitted from the vault waits here for approval, replacing To price and To sign - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
+- 🚧 **Sold** — waits 3 business days after the buyer pays, not the return window
+- 🚧 **Ended Unsold** — the card goes back to the vault and keeps earning; nothing waits on the collector's choice
+
 ## One Consignment
 
 | Part | Shows |
@@ -43,10 +47,7 @@ the settings the schedule runs on.
 - **Acts** - receive, set terms, prepare the agreement, list, change the
   price, take off sale, return, extend, move to the other channel or the
   vault - [Services and Hand-offs](/p/grade10-admin/inventory/services#hand-offs)
-- 🚧 **At intake** - the receive act records where the consignment was
-  taken - the shop or an event - and its channel, the store or the
-  auction, and registers each item's market value and the consignment
-  rates applying to it
+- 🚧 **Approve or Reject** — sets the list or starting price, never below the lowest acceptable price, and the starting channel of a card consigned to both; receiving and setting terms at the counter leave the console
 - **Before the act** - a dialog states the rule first: the floor, the
   schedule, the term
 - **Withheld in words** - an act not offered yet says why
@@ -78,6 +79,8 @@ the settings the schedule runs on.
   payout grant, never the one who recorded it
 - **Export** - a CSV of a period's payouts, on the audit chain
 
+- 🚧 **Cash-Out Requests** — payouts come from the collector's cash-out requests on the earnings wallet - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#payouts)
+
 ## Settings
 
 An admin changes every setting here; each starts on its default and is
@@ -99,6 +102,7 @@ pinned to a consignment when its agreement is prepared.
 - ❓ Product - **The intended figures** - the consignment fee is intended
   at **10–12%** of the price at sale and the incentive at **5%** of the
   estimated value; the exact figures are unset
+- 🚧 **Vault-First Defaults** — the term **1** year; paid **3** business days after the buyer pays; a refund after payout reversed from the wallet; the identity check at the first cash-out; the incentive leaves this schedule for the vault's - [Incentive](/p/grade10-site/vault/incentive#settings)
 - **Pinned to the agreement** - a change reaches the next agreement
   prepared; one waiting for a signature keeps the schedule it was prepared on
 - **Unset refuses** - an agreement is not prepared while a figure it prints
@@ -121,7 +125,7 @@ pinned to a consignment when its agreement is prepared.
   person who set a commission outside the schedule does not pay it out
 - **Second factor and audit** - as the vault's: required in production, and
   every act filed under its consignment -
-  [Operator Console](/p/grade10-site/vault/operator-console#permissions)
+  [Operator Console](/p/grade10-site/finance/operator-console#permissions)
 - **Staff hear nothing** - the queue's badges and counts are the signal
 
 :::detail{title="Product decisions" for="pm"}

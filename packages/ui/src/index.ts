@@ -509,12 +509,6 @@ export {
   TierInfoCard,
   type TierInfoCardProps,
 } from "./blocks/loyalty-membership/tier-info-card";
-export {
-  TierLadder,
-  type TierLadderCopy,
-  type TierLadderProps,
-  type TierLadderRung,
-} from "./blocks/loyalty-membership/tier-ladder";
 export type {
   CouponItem,
   CouponStatus,
@@ -536,6 +530,12 @@ export {
   type WalletPassState,
   type WalletPassWallet,
 } from "./blocks/loyalty-membership/wallet-pass-links";
+// shared-ui/loyalty-top-ups
+export {
+  TopUpPackCard,
+  type TopUpPackCardCopy,
+  type TopUpPackCardProps,
+} from "./blocks/loyalty-top-ups/top-up-pack-card";
 // shared/ui/page-blocks
 export {
   FactCard,

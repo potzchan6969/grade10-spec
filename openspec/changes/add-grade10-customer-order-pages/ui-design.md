@@ -1,10 +1,10 @@
 ## Screens
 
-### Your Orders — filled
+### My Orders — filled
 
 [Order history, filled — Product / Order](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1534&m=dev)
 
-### Your Orders — empty
+### My Orders — empty
 
 [Order history, empty — Product / Order](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4923-3424&m=dev)
 
@@ -23,7 +23,7 @@ The cart drawer's applied Points line remains visual parity for success-styled
 money credit only; it does not carry the points count in its label for this
 change.
 
-### Your Orders - Product Pictures
+### My Orders - Product Pictures
 
 Keep the existing [Order history frame](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1534&m=dev)
 and [line item component](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4901-3026).
@@ -39,7 +39,7 @@ Private links and the existing admin customer preview keep the same item frame.
 
 ## Components
 
-### Your Orders
+### My Orders
 
 - `OrderHistory` from `@grade10/ui` — filled and empty page body.
 - `OrderHistoryCard`, `OrderHistoryCardHeader`, `OrderHistoryLineItem`, and
@@ -85,7 +85,7 @@ component, variant, primitive, or token is required.
 
 ## States
 
-### Your Orders
+### My Orders
 
 - **Filled active and past** — `grade10-site-store-order-history-SC-01`,
   `grade10-site-store-order-history-SC-03`, and
@@ -123,7 +123,7 @@ component, variant, primitive, or token is required.
   `grade10-site-store-order-detail-SC-12`.
 - **Sign-in overlay** — `grade10-site-store-order-detail-SC-03`.
 
-### Your Orders - Product Pictures
+### My Orders - Product Pictures
 
 | State | Shows | Verification |
 | --- | --- | --- |

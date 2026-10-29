@@ -275,7 +275,7 @@ Runs once per row of **Test data**.
 | `<item>` | `<opens>` |
 | --- | --- |
 | Profile | the account page at `/profile`, which also offers Sign Out |
-| My Orders | `/profile/orders` |
+| My Orders | `/profile/my-orders` |
 | My Auctions | `/auction/my-auctions` |
 | Sign Out | sign-out, the header then showing Sign In |
 
