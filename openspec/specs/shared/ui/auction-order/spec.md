@@ -263,11 +263,30 @@ consuming applications are the `grade10` site's Winner Order page and
 | `summary.lines[].subtext` | An optional text, formatted | A muted line under that row's value, such as the quoted amount in the other currency; no line when absent |
 | `bankDetails` | An `AuctionWinnerOrderBankDetails` | The View Bank Details dialog for the one rail it carries |
 
-An `AuctionWinnerOrderBankDetails` carries one `rail`, a `title`, the rail's
-`rows` (each a label and a value), the bank reference as a labelled row, an
-optional `qrSrc` and an optional `note`. The dialog SHALL render exactly those
-rows, SHALL render no tabs and SHALL name no other rail. A press on View Bank
-Details SHALL open it and SHALL also report through the control's callback.
+An `AuctionWinnerOrderBankDetails` carries one `rail`, a `title`, an optional
+`invoice` line, the `amountDue` (a label and a value), the rail's `rows` (each
+a label and a value, where two rows may be supplied as one side-by-side pair),
+the `reference` (a label, a value and the warning shown under it), an optional
+`qr` (an image source and the scan hint shown beside it) and an optional
+`alert`. Every text and amount arrives formatted from the application.
+
+The dialog SHALL draw as the `View Bank Details` design story draws its rail:
+
+- The title, with the `invoice` line under it when supplied, and no close
+  control in the header
+- The amount due as its label over a larger value
+- One bordered panel holding the rail: each row's label above its value, a
+  pair side by side from the `sm` breakpoint and stacked below it, then the
+  reference with its warning under it
+- When a `qr` is supplied, the QR with its scan hint under it, beside the rows
+  from the `sm` breakpoint and above them below it
+- When an `alert` is supplied, an inline warning after the reference
+- One footer control, Done, which closes the dialog, full width below the `sm`
+  breakpoint
+
+The dialog SHALL render exactly the rows supplied, SHALL render no tabs and
+SHALL name no other rail. A press on View Bank Details SHALL open it and SHALL
+also report through the control's callback.
 
 When `summary.subtotal` is supplied or `summary.feeLines` holds at least one row,
 the block SHALL draw one separator above them and another above the total. It SHALL render the Subtotal
