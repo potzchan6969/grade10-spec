@@ -49,14 +49,14 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
   - **Shown** — "Using last price, day 2 of 3" to staff and the collector
   - **Built** — no grace on a last price: a day whose price or rate of exchange has not arrived waits and is paid in full once it does, and a market with no sales for 3 days earns nothing for those days
 - 🚧 **Stops** — when the card is sold
-  - **Built** — which moment stops it is a setting; it is unset, and a production deploy is refused while it is. On settled, a sold card earns until its sale is settled; a sale that is reversed takes the stop away
+  - **Built** — which moment stops it is a setting; it is unset and TBC, so a sold card earns until it is delivered to the buyer, as any card leaving the vault. On settled, a sold card earns until its sale is settled; a sale that is reversed takes the stop away
   - **Heard From Consignment** — the sale, a reversed sale, the delivery, the settlement and a refund after payout reach the vault once each
 
 :::callout{kind="note"}
 - ❓ **Liquidity model, tiers and grace days** — the formula, the tier figures and 3 grace days are drafts. Product confirms
 - ❓ **Eligible products** — which products, grades or value ranges earn. Product confirms
 - ❓ **Caps** — the most value counted per card, and the most incentive per account a month. Product confirms
-- ❓ **When a sold card stops** — marked sold, the buyer pays, or proceeds settle. Product confirms
+- ❓ **When a sold card stops** — TBC: marked sold, delivered to the buyer, or proceeds settle; built as earning until the delivery. Product confirms
 - ❓ **A late pass** — whether a card that passes authentication after it was vaulted earns from its start date; built as earning from the start date. Owner confirms
 :::
 
@@ -122,6 +122,6 @@ deposit, cash out and leave.
 - **The price** - market price days and ECB rate days in inventory, read over
   `VaultItemsService`; the sales come from the price worker's `PRICE_HISTORY`
   binding
-- **When it stops** - `stopOn` in `packages/app-env/src/earnings.ts`, which
-  refuses a production deploy while unset
+- **When it stops** - `stopOn` in `packages/app-env/src/earnings.ts`, TBC and
+  unset, so the custody end bounds a sold card
 :::
