@@ -56,7 +56,7 @@ function PointHistorySummary({
             {label}
           </Text>
           <Text className="font-semibold" size="xl" tone={tone}>
-            {Math.abs(value)} {copy.points}
+            {Math.abs(value).toLocaleString("en-HK")} {copy.points}
           </Text>
         </VStack>
       ))}
