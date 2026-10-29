@@ -29,6 +29,12 @@ Causeway Bay, in-store registration, digitization, and a collector
 portfolio (Storybook `Appointment/*` + `Vault/*` + flow canvas);
 no change carries it yet.
 
+[`vault-first-consignment.md`](vault-first-consignment.md) is the owner's
+product specification for vault-first consignment: deposit, authentication
+and incentive review, the daily incentive with its price tiers and vesting,
+online consignment with staff review, T+3 settlement, the earnings wallet
+and cash-out, by phase; no change carries it yet.
+
 [`inventory-and-services-design.md`](inventory-and-services-design.md) is
 the design behind the owner's inventory brief: one item per physical object,
 the places it sits, how it moves, the marks and hand-offs between the vault,
