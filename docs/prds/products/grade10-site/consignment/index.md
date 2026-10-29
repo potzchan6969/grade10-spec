@@ -29,7 +29,7 @@ Staff check the card's market price and how easily it sells, then approve it - [
 An approved card earns a daily amount into the earnings wallet.
 
 ## *Collector* - **Consigns**
-From their dashboard: the store or the auction, and the lowest price they accept - [Consigning](/p/grade10-site/consignment/consigning).
+From their dashboard: the store, the auction or both, and the lowest price they accept - [Consigning](/p/grade10-site/consignment/consigning).
 
 ## *Staff* - **Approve the listing**
 Staff set the list or starting price and approve it for sale - [Consigning](/p/grade10-site/consignment/consigning#listing-approval).
@@ -44,7 +44,7 @@ Sale proceeds reach the wallet 3 business days after the buyer pays; the collect
 - **Off the Main Path**
   - **Ending a Consignment** — the card comes off sale and stays in the vault, earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
   - **Vault Withdrawal** — the card goes back to the collector - [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal)
-- **One Card, One Channel** — a card is consigned to the store or the auction, never both
+- **One Channel at a Time** — a card may be consigned to the store, the auction or both, but is on sale in only one at a time - [Both Channels](/p/grade10-site/consignment/consigning#both-channels)
 - **Card States** — deposited, authenticated, in the vault, approved to earn, consigned, then sold or withdrawn
 
 ## Values

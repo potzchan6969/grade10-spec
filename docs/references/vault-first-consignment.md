@@ -8,9 +8,9 @@ The owner's product specification for the vault-first consignment model as of 20
 2. **Enter the vault** — Card is authenticated and stored in the vault.
 3. **Incentive approval** (internal) — Staff check the card's price match and liquidity, then approve it to earn.
 4. **Daily incentive** — Approved, eligible cards earn a daily amount into the earnings wallet.
-5. **Consign** — Owner chooses store or auction and sets the lowest acceptable price.
+5. **Consign** — Owner chooses store, auction or both, and sets the lowest acceptable price.
 6. **Consignment approval** (internal) — Staff check the listing, set the list or starting price, and approve it for sale.
-7. **Sale & settlement** — Sold in store or at auction, shipped from the vault; incentive stops.
+7. **Sale & settlement** — Sold in store or at auction (one channel at a time), shipped from the vault; incentive stops.
 8. **Cash out** — Owner cashes out incentive and sale proceeds after KYC (min HKD 500, every 7 days).
 
 Off the main path:
@@ -275,19 +275,21 @@ Turning vaulted cards into consignments, the core revenue. Owners consign from t
 
 - **CS1** — The owner consigns online from their dashboard; there is no in-store or paper submission.
   - No new intake: the card is already authenticated and in the vault
-  - Each card goes to either Store or Auction, not both
+  - The owner chooses Store, Auction or Both for each card
+  - Even with Both, a card is on sale in one channel at a time (CS8)
   - Staff can help an owner use the dashboard, but the owner submits and signs
 - **CS2** — Terms per card:
+  - Channel: Store, Auction or Both
   - Store: commission can differ by channel (in store and marketplace)
   - Auction: one commission %
   - Optional minimum charge
-  - Lowest acceptable price (a hard limit); for auction it is also the reserve
+  - Lowest acceptable price (a hard limit); for auction it is also the reserve. With Both, one price covers both channels
   - The owner sets only the lowest acceptable price. Grade10 sets the list price (store) or starting price (auction) at review, never below it
   - Consignment period: 1 year from signing
 - **CS3** — One Consignment Agreement per consignment, signed in the app.
 - **CS6** — Consign form in the owner dashboard:
   - Step 1: choose cards already in the vault
-  - Step 2: per card, sell via store or auction, lowest acceptable price; commission shown at Grade10's rate
+  - Step 2: per card, sell via Store, Auction or Both, lowest acceptable price; commission shown at Grade10's rate for each channel chosen
   - Step 3: review estimated payout and e-sign the Consignment Agreement
   - Staff approve every online request before it goes on sale (OP3); the owner sees Pending approval until then
 - **CS7** — Changing the lowest acceptable price after consigning:
@@ -295,6 +297,13 @@ Turning vaulted cards into consignments, the core revenue. Owners consign from t
   - Store: if the new lowest price is above the current list price, Grade10 raises the list price to match
   - Auction: allowed until the catalogue is published; after that it's locked
   - The Consignment Agreement gets a new version (DC-R1)
+- **CS8** — A card consigned to Both is on sale in one channel at a time:
+  - It is never on the store shelf and in an auction at once
+  - One Consignment Agreement and one lowest acceptable price cover both channels; the commission is the rate of the channel it sells in
+  - Staff decide which channel it starts in, when they approve it (OP3); the owner doesn't choose the order
+  - If it doesn't sell there, staff move it to the other channel without the owner signing again
+  - Moving it takes it off the first channel at once; an auction lot can only move before the catalogue is published (WA1), or after the auction ends unsold
+  - The owner dashboard shows which channel it is in now
 
 **Encouraging consignment**
 
@@ -314,10 +323,11 @@ Selling consigned cards in store and, once it launches, on the marketplace.
 
 **Sale channel**
 
-- **ST1** — A store consignment lists the card in both store channels at the same time:
+- **ST1** — A card on sale in the store is listed in both store channels at the same time:
   - In store: Shopify POS at CWB and events
   - Marketplace: online, when it launches (no date yet)
-  - The first sale wins; the card comes off the other channel at once
+  - The first sale wins; the card comes off the other store channel at once
+  - A card consigned to Both is not in an auction while it is on the shelf (CS8)
   - Commission can differ by channel
 
 **Price**
@@ -336,6 +346,7 @@ Selling consigned cards as auction lots, shipped from the vault.
 **Listing**
 
 - **AU1** — Auction listing from vault stock.
+  - A card consigned to Both is not on the store shelf while its lot is open (CS8)
   - The reserve is the lowest acceptable price
   - Commission on the hammer price only
   - If the winner doesn't pay, the card is relisted
@@ -506,6 +517,7 @@ Staff tools in the internal portal for running the vault day to day.
 
 - **OP3** — Consignment approval, between consign and sale:
   - Check each listing the owner submitted before it goes on sale
+  - For a card consigned to Both, choose which channel it starts in (CS8)
   - Set the list price (store) or starting price (auction), never below the lowest acceptable price
   - Create the Shopify product (store) or add the card to an auction lot
   - Approve: the listing goes on sale; reject: the owner is told why and can edit and resubmit

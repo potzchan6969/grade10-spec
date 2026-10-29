@@ -9,7 +9,7 @@ The collector consigns cards already in the vault from their dashboard; there
 is no counter or paper consignment.
 
 1. **Cards** — chosen from the collector's vaulted cards
-2. **Terms** — per card, the store or the auction, and the lowest acceptable price; the commission shown at Grade10's rate
+2. **Terms** — per card, the store, the auction or both, and the lowest acceptable price; the commission shown at Grade10's rate for each channel chosen
 3. **Review and Sign** — the estimated payout, then the Consignment Agreement signed in the app
 
 - **Pending Review** — what the collector sees until staff approve the listing
@@ -18,6 +18,8 @@ is no counter or paper consignment.
 
 ## Terms
 
+- **Channel** — the store, the auction or both
+  - **Both** — the card is on sale in one channel at a time, never on the shelf and in an auction together; one agreement and one lowest price cover both - [Both Channels](/p/grade10-site/consignment/consigning#both-channels)
 - **Lowest Acceptable Price** — the only price the collector sets; a hard limit no sale goes below
   - **At Auction** — also the reserve
 - **Commission** — Grade10's rate; in the store it may differ between the shop and online
@@ -29,11 +31,19 @@ is no counter or paper consignment.
 
 - **Staff Approval** — every consignment, before it goes on sale
   - **List or Starting Price** — set by Grade10, never below the lowest acceptable price
+  - **Starting Channel** — for a card consigned to both, staff decide which channel it starts in; the collector doesn't choose the order
   - **Approved** — listed: a store product, or the card added to an auction lot
   - **Rejected** — the collector is told why and can edit and resubmit
 - **Changing the Lowest Price** — from the dashboard; approved like a new listing
   - **In the Store** — a new lowest price above the list price raises the list price to match
   - **At Auction** — until the catalogue is published, then locked
+
+## Both Channels
+
+- **One at a Time** — a card consigned to both is never on the store shelf and in an auction together
+- **Moving** — if it doesn't sell, staff move it to the other channel without the collector signing again; the commission is the rate of the channel it sells in
+  - **From an Auction** — only before the catalogue is published, or after the auction ends unsold
+- **Dashboard** — shows which channel the card is in now
 
 ## In the Store
 

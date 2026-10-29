@@ -22,7 +22,7 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
 3. **Cards** — card, condition or certificate, front and back photos; a label printed for each
    - **Market Price** — the card's 30-day price, shown to the collector
    - **Estimated Daily Incentive** — or Not Eligible, for a card that earns nothing
-4. **Consign Now** — optional, per card: the store or the auction, the lowest acceptable price and the commission; Grade10 sets the list or starting price at review - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
+4. **Consign Now** — optional, per card: the store, the auction or both, the lowest acceptable price and the commission; Grade10 sets the list or starting price at review - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
 5. **Sign** — on the shop's tablet, or by a link emailed to the collector
    - **Vault Terms** — signed
    - **Consignment Agreement** — signed only where a card is consigned now
