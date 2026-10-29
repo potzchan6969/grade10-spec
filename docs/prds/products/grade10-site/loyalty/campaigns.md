@@ -66,7 +66,8 @@ the gift follows when the campaign has one to give.
 - **A win may be the whole prize** — a win-only way names no gift and issues
   nothing: the member's page says they are in and shows the picture they
   sent, and staff look at it on their phone. What happens at the store, such
-  as a lucky draw, runs outside the campaign
+  as a lucky draw, runs outside the campaign. Once a way has a winner,
+  whether it is win-only no longer changes, as its kind does not
 
 ## Running a Campaign
 
