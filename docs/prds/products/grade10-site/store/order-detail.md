@@ -83,7 +83,7 @@ or log sees it.
   link
 - **Wrong link** - an unknown order or a wrong secret shows not-found;
   a link holder may hold no account, so the way out is the store, not
-  Your Orders
+  My Orders
 - **Not indexed** - search engines are told not to index the address
 - **No account facts** - guest or member, the link page shows no loyalty
   points at all: no Points to Earn, no Points Earned, and no Points row in

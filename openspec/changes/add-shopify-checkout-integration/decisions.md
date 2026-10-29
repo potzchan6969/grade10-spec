@@ -26,7 +26,7 @@
 | Q7 | Who settles payment? | Verified webhooks, reconciliation and order reads use guarded backend transition | Frontend settlement |
 | Q8 | What happens to the cart? | Convert the active cart bought only when its member-edit counter matches; shop review changes alone allow conversion. Re-read and preserve later member edits or a rebuilt cart | General-version conversion, matching-variant deletion or quantity subtraction |
 | Q9 | Who owns carrier rates? | Preserve and verify token-gated carrier rule and preview parity | Dropping carrier requirements |
-| Q10 | Where does confirmation return? | Static Grade10 Your Orders link on both Shopify confirmation surfaces | Purchase-specific link or native Continue shopping dependency |
+| Q10 | Where does confirmation return? | Static Grade10 My Orders link on both Shopify confirmation surfaces | Purchase-specific link or native Continue shopping dependency |
 | Q11 | Does reload reuse a purchase? | Preserve one identity through same-session reload; backend decides invoice/state | New invoice after reload |
 | Q12 | What happens on refusal? | Name changed lines, block stale handoff and permit repair; retain tender refusal honesty | Stale basket or silently dropped tender |
 | Q13 | What happens on response loss? | Recover existing purchase without another invoice | Transport error treated as proof nothing was created |
@@ -63,7 +63,7 @@
 | `grade10-site/store/checkout` | Does the shop's review of the cart retire an open invoice? | Q23 |
 | `grade10-site/store/checkout` | Does this change keep the backend guarantees? | Q24 |
 | `grade10-site/store/checkout` | Which payment request does the drawer send after the v2 transport was removed? | Q25 |
-| `grade10-site/store/checkout` | After a lost Pay answer, today's backend may already hold a payable invoice, and a deliberate second Pay is a new request. Does this change ship with a second payable invoice possible until `add-checkout-purchase-safety` lands, and does the failure feedback point the collector to Your Orders before paying again? | Q30 |
+| `grade10-site/store/checkout` | After a lost Pay answer, today's backend may already hold a payable invoice, and a deliberate second Pay is a new request. Does this change ship with a second payable invoice possible until `add-checkout-purchase-safety` lands, and does the failure feedback point the collector to My Orders before paying again? | Q30 |
 | `grade10-site/store/checkout` | While a Pay is pending and the collector saves a cart or tender edit, is Pay available for the edited cart before the older answer arrives, or only once it does? | Q31 |
 | `grade10-site/store/checkout` | With retirement moved to `add-checkout-purchase-safety`, can an older order read canceled in this change at all, and does the "Canceled older invoice" state belong to this change's acceptance? | Q32 |
 | `grade10-site/store/checkout` | Settlement through notification and reconciliation, repeated or invalid notifications, and another member's order reads are backend guarantees this change does not modify. Does this change's suite keep verifying them, or do they move with the backend guarantees to `add-checkout-purchase-safety`? | Q33 |

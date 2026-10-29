@@ -1,10 +1,10 @@
 ---
-title: Your Orders
+title: My Orders
 spec: grade10-site/store/order-history
 order: 6
 ---
 
-Your Orders is the signed-in collector's way back to Store purchases after
+My Orders is the signed-in collector's way back to Store purchases after
 checkout. It has its own account address rather than living inside the profile
 screen, because order loading and order actions are an independent job.
 
@@ -52,7 +52,7 @@ order, or return to the Store when the account is empty.
 
 ## Designs
 
-::story{id="store-order-history-screens-order-history--filled" title="Your Orders, filled"}
+::story{id="store-order-history-screens-order-history--filled" title="My Orders, filled"}
 
 ::story{id="store-order-history-blocks-orderhistory--empty" title="An account with no orders"}
 
@@ -61,6 +61,7 @@ order, or return to the Store when the account is empty.
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| Page name | Decided | "My Orders", the same words the account menu uses to open it, and the order details breadcrumb and back link follow. Rejected keeping "Your Orders", which left the menu item and the page it opens under two names. Decided 2026-10-29. | Product |
 | Order pictures | Decided | Use the first current product picture, as the cart does. Images identify products; recorded names, quantities and money remain the purchase's facts. Historical image storage is outside this change. Selected from the recommended fix on 2026-10-22. | Product |
 | Guest orders after sign-in | Decided | Every paid guest order placed under an email appears in the account automatically once a sign-in proves that email — the way Shopify customer accounts and WooCommerce already list a guest's orders under a proven email, and the reason the member is the order's owner rather than a recipient of a saved link. Linking gives the order an owner and earns nothing. Decided 2026-10-13, earning dropped 2026-10-14; supersedes prompt-only saving (earlier 2026-10-13), which itself superseded the first email-match row (2026-10-12). | Product |
 | Join at payment | Decided | A guest order placed under the proven email of an existing account joins that account at payment, so it is listed without waiting for a sign-in. Decided 2026-10-13, the owner's answer. | Product |

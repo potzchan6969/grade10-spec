@@ -69,7 +69,7 @@ function OrderDetailsPage({
     <Breadcrumbs>
       <BreadcrumbItem href="#account">Account</BreadcrumbItem>
       <BreadcrumbSeparator />
-      <BreadcrumbItem href="#orders">Your Orders</BreadcrumbItem>
+      <BreadcrumbItem href="#orders">My Orders</BreadcrumbItem>
       <BreadcrumbSeparator />
       <BreadcrumbItem current>Order Details</BreadcrumbItem>
     </Breadcrumbs>

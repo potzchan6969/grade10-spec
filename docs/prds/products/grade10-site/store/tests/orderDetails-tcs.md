@@ -524,7 +524,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The not-found state with no order facts, UI matching store-order-detail-screens-order-link--not-found; its way out leads to the store, not Your Orders.
+* The not-found state with no order facts, UI matching store-order-detail-screens-order-link--not-found; its way out leads to the store, not My Orders.
 
 <!-- trace:case id=g10.store-order-detail.TC-ogu rev=1 -->
 #### g10.store-order-detail.TC11: Shopify's order email carries the View order link
@@ -645,7 +645,7 @@ Runs once per row of **Test data**.
 
 | Why nothing is remembered | Customer | Opens |
 | --- | --- | --- |
-| no checkout from this browser | signed-in member | Your Orders |
+| no checkout from this browser | signed-in member | My Orders |
 | the last checkout was more than a day ago | signed out | the store |
 | Continue already opened the last order once | signed out | the store |
 | the order was paid on another device | signed out | the store |
