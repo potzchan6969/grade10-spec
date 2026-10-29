@@ -35,7 +35,10 @@
     "join": "加入計劃",
     "coupons": "你的優惠券",
     "noCoupons": "你沒有持有優惠券。",
-    "pointHistory": "積分紀錄"
+    "pointHistory": "積分紀錄",
+    "overview": "概覽",
+    "couponsTab": "優惠券",
+    "memberPass": "會員通行證"
   },
   "collectWithin": "須於 {days} 天內到門市領取",
   "outcome": {
@@ -52,7 +55,11 @@
     "renewal": "等級續期",
     "balanceExpiry": "{points} 積分將於 {date} 到期",
     "balanceExpirySoon": "{points} 積分將於 {date} 到期，在此之前購物或使用積分即可延長到期日。",
-    "balanceExpiryToday": "{points} 積分將於今天到期，今天購物或使用積分即可延長到期日。"
+    "balanceExpiryToday": "{points} 積分將於今天到期，今天購物或使用積分即可延長到期日。",
+    "worthSuffix": "可於結帳時抵扣",
+    "keepTier": "保持{tier}",
+    "upgradeTo": "升級至{tier}",
+    "earnLine": "{tier}會員可賺取 {multiplier} 倍積分"
   },
   "rewards": {
     "label": "獎賞",
@@ -221,5 +228,25 @@
     "refusedEntered": "你已提交過連結。",
     "refusedClosed": "此活動目前未有進行。",
     "refusedOther": "未能完成，請再試一次。"
+  },
+  "tiers": {
+    "title": "等級與禮遇",
+    "ask": {
+      "base": "免費加入",
+      "pointsInWindow": "{months, plural, =12 {每年} other {每 # 個月}} {points} 分",
+      "invitation": "只限邀請"
+    },
+    "earnRate": "每消費 {spend} 賺取 {points} 分",
+    "howPointsWork": {
+      "heading": "積分如何運作",
+      "earnTitle": "賺取",
+      "earnBody": "每消費 {spend} 賺取 1 分。",
+      "pendingTitle": "待入賬",
+      "pendingBody": "訂單完成後積分才會入賬。",
+      "spendTitle": "使用",
+      "spendBody": "1 分 = 結帳時減 {worth}，亦可兌換獎賞和優惠券。",
+      "expiryTitle": "到期",
+      "expiryBody": "連續 {months} 個月沒有活動，積分便會到期。我們會在到期前 {days} 天提醒你。"
+    }
   }
 }
