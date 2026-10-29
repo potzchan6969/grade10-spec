@@ -1,5 +1,5 @@
 ---
-title: Ending a Consignment
+title: Consignment Retrieval
 order: 2
 ---
 
@@ -14,7 +14,7 @@ vault and keeps earning.
 - 🚧 **Early Fee** — where one is charged, it comes from the wallet; a short wallet is paid at the counter or becomes a debt
 
 :::callout{kind="note"}
-- ❓ **Fee for ending early** — none, a fixed fee a card, or a fee only once an auction lot is prepared. Product confirms
+- ❓ **Fee for ending early** — none, a fixed fee a card, or a fee only once an auction lot is prepared. Product confirms before Phase 2, 6 December
 :::
 
 ## What Happens
@@ -25,12 +25,12 @@ vault and keeps earning.
 
 ## Unsold at Auction
 
-- 🚧 **No Sale** — the lot didn't sell, or the winner didn't pay and it isn't relisted: back to vault-only; the collector consigns it again or withdraws it
+- 🚧 **No Sale** — the lot didn't sell, or the winner didn't pay and it isn't relisted: back to vault-only; the collector consigns it again or retrieves it
 
 :::detail{title="Product decisions" for="pm"}
-Ending a consignment should cost the collector as little as consigning did, so
+Taking a card off consignment should cost the collector as little as consigning did, so
 it never needs a visit.
 
 - **Locked once the catalogue is published** — bidders never see a lot disappear
-- **A card off sale is a vault card again** — it keeps earning, so ending a consignment is never a loss of the incentive
+- **A card off sale is a vault card again** — it keeps earning, so retrieving it from consignment is never a loss of the incentive
 :::

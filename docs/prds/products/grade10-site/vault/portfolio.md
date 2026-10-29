@@ -23,18 +23,6 @@ collector's own pages.
   institute's own record in a new tab
 - **Documents** — each document on the item opens or downloads
 
-## Earning and Consigning
-
-What each card in the vault tells the collector about its money.
-
-- 🚧 **Market Price** — the card's 30-day SNKRDUNK price - [Incentive](/p/grade10-site/vault/incentive#daily-amount)
-- 🚧 **Daily Incentive** — what the card earns a day, or why it isn't earning today - [Incentive](/p/grade10-site/vault/incentive#earning)
-- 🚧 **Vesting** — what is vesting on the card and the day it is released
-- 🚧 **Available Amount** — what the collector can cash out - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#wallet)
-- 🚧 **Consign Button** — one tap on each card, beside its market price and daily incentive - [Consigning](/p/grade10-site/consignment/consigning#consign-form)
-- 🚧 **Documents and Records** — the card's papers and records, exported to PDF - [Vault Documents](/p/grade10-site/vault/documents)
-- 🚧 **Cash-Out and Identity Check** — where each stands
-
 ## The item's page
 
 - 🚧 **Estimated value since intake** — the intake figure and how far it has

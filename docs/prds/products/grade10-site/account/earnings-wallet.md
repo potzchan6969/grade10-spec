@@ -21,7 +21,7 @@ vault's daily incentive and consignment sale proceeds -
 ## Sale Proceeds
 
 - 🚧 **When** — 3 business days after the buyer pays, without waiting for delivery
-  - **In the Store** — from payment at the counter or the online order
+  - **In the Store** — from payment at the shop's counter
   - **At Auction** — from the winner's payment
   - **Built** — one setting for the brand picks where a person's proceeds go, and the consignment agreement pins it when it seals; a partner is always paid by bank. Paid after the return window by default
     - **A Bank Account for the Consignment** — the counter names the account with the terms, before the agreement is prepared, and the agreement prints it; it pays that consignment alone and stays off the consignor's list
@@ -40,10 +40,11 @@ vault's daily incentive and consignment sale proceeds -
   - **Built** — by bank transfer, to a payout account whose name matches the verified identity
 - 🚧 **Held While It Is Paid** — the amount leaves what can be cashed out the moment it is asked for, and comes back if its batch is rejected
 - **Account** — entered on the first request, saved to the profile and filled in next time; in the verified collector's name
+  - 🚧 **Changing It** — the collector may change it, after passing the identity check again
 - **Held** — while the collector has a debt
 
 :::callout{kind="note"}
-- ❓ **Cash-out maximum** — HKD 50,000 a request, or no maximum with a manual review above a threshold. Finance confirms
+- ❓ **Cash-out maximum** — HKD 50,000 a request, or no maximum with a manual review above a threshold. Finance confirms before Phase 2, 6 December
 - ❓ **Where proceeds go by default** — recommended the wallet; built as a bank account kept on the consignor's list. Owner confirms
 :::
 
@@ -59,28 +60,27 @@ What finance does with the requests.
 
 ## Identity Check
 
-- 🚧 **When** — at the first of these: the first cash-out, the first sale payout, any vault withdrawal, or the collector's vault value passing a threshold
+- 🚧 **When** — where money leaves Grade10: before the first cash-out, before the first sale payout, and when the cash-out account changes - [KYC](/p/grade10-site/account/kyc)
+  - **Mail-In** — before staff approve a mailed-in card, since no staff see the collector - [Mail-In](/p/grade10-site/vault/intake#mail-in)
+  - **Proceeds Held** — sale proceeds wait in the wallet until the check passes
+  - **Not for a Retrieval** — staff check the ID at the counter against the one recorded at intake - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#collection)
   - **Built** — at every cash-out and before sale proceeds reach the wallet; each point is an admin setting - [Identity Check](/p/grade10-site/finance/identity-check#gate)
-- 🚧 **Verified Name** — every cash-out and withdrawal goes only to the verified collector
+- 🚧 **Verified Name** — every cash-out goes only to the verified collector
 - 🚧 **Review** — finance approves or rejects, with a reason shown to the collector
-
-:::callout{kind="note"}
-- ❓ **Vault value threshold** — HKD 50,000 or HKD 100,000. Product confirms
-:::
 
 ## Abuse Checks
 
-- 🚧 **Signals** — accounts sharing a phone, device or bank account; a card deposited, withdrawn and deposited again; a card's price moving sharply on SNKRDUNK
+- 🚧 **Signals** — accounts sharing a phone, device or bank account; a card vaulted, retrieved and vaulted again; a card's price moving sharply on SNKRDUNK
 - 🚧 **Review** — staff may pause incentive on the card or the account
 
 :::detail{title="Product decisions" for="pm"}
 One wallet holds everything a collector can take out, so the collector reads one
 number and finance pays one way. Money only leaves to a verified name; the
-deposit itself stays light.
+intake itself stays light.
 
 - **Paid 3 business days after the buyer pays** — proceeds don't wait for delivery or a return window; a rare refund is reversed from the wallet instead
 - **At least HKD 500, once every 7 days** — keeps payouts batchable for finance
-- **Identity before money leaves, not at deposit** — anti-money-laundering practice asks for it at the exit, and asking at the door would turn deposits away
+- **Identity before money leaves, not at intake** — anti-money-laundering practice asks for it at the exit, and asking at the door would turn intakes away
 - **Earnings, not a balance** — it is cashed out only, so it never reads as store credit
 - **Not in scope** — spending the wallet on Grade10; payout to a card
 

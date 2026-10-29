@@ -9,7 +9,6 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 ## Daily Amount
 
 - 🚧 **Daily Incentive** — market price × liquidity factor × yearly rate ÷ 365
-  - HKD 10,000 card, liquidity factor 0.85, 3% a year: about HKD 0.70 a day
   - **Built** — the same formula, the factor's model still the owner's draft; each day's price, rate of exchange, factor, rate and settings are kept with its amount, so a changed setting never changes an amount already credited
 - 🚧 **Market Price** — the median of the card's sales on SNKRDUNK over 30 days, outliers removed; staff never enter a price by hand
   - **In Another Currency** — a yen price is converted at the European Central Bank's daily reference rate
@@ -20,6 +19,22 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
   - **Price Stability** — 1 − price variation, at least 0.5
   - **Price Variation** — the median distance of each sale from the market price, as a share of it
 - 🚧 **Yearly Rate** — 3%; the same for vault-only and consigned cards
+
+A HKD 10,000 card, worked through:
+
+| Step | Working | Result |
+| --- | --- | --- |
+| Market price | the median of 30 days' sales on SNKRDUNK | HKD 10,000 |
+| Price tier | 5,000 – 19,999: at least 3 sales, a target of 10 | 12 sales: eligible |
+| Velocity | 12 ÷ 10, at most 1 | 1.00 |
+| Price variation | sales of 9,000, 9,500, 10,000, 10,500 and 13,000 sit 1,000, 500, 0, 500 and 3,000 from the median; the middle distance, 500, is 5% of it | 5% |
+| Price stability | 1 − 5% | 0.95 |
+| Liquidity factor | 1.00 × 0.95 | 0.95 |
+| Daily incentive | 10,000 × 0.95 × 3% ÷ 365 | about HKD 0.78 |
+
+With 15% variation instead, stability is 0.85 and the card earns about HKD
+0.70 a day. Under a 30-day vesting, that card's first 30 days, about HKD 21,
+reach the wallet together on day 30, and each day's amount drips in after that.
 
 ## Price Tiers
 
@@ -39,9 +54,10 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
   - **Approved** — earns from the next day; days waiting for approval are not paid later
   - **Rejected or Held** — stays in the vault without earning; the collector sees why
   - **Built** — no approval step: a card earns from the day it is vaulted, its own effective start date, once it passes authentication; a card that fails never earns
-  - **Skipped at Deposit** — staff who already authenticated the card and verified its value tick Skip Incentive Approval on the deposit form; the card is approved when the deposit is submitted, and the skip is recorded with the staff member - [Vault Deposit](/p/grade10-site/vault/deposit#deposit-form)
+  - **Skipped at Intake** — staff who already authenticated the card and verified its value tick Skip Incentive Approval on the intake form; the card is approved when the intake is submitted, and the skip is recorded with the staff member - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
 - 🚧 **Eligible on the Day** — checked every day; a card earns on a day it has a market price, its tier's minimum sales, a liquidity factor of 0.2 or more, an eligible product, and no pause
   - **Not Eligible** — earns nothing that day and is not paid later; it earns again the next day it qualifies, and the dashboard says why
+  - **Vesting Still Releases** — what vested before stays on the card and is released on its day; what is in the wallet stays there
   - **Built** — no tiers: at least **5** sales in 30 days for every card, every product eligible and no cap
 - 🚧 **Grace Days** — a card that was earning and loses its market price keeps earning on its last price and liquidity for up to 3 days
   - **Day 4** — it stops until a price comes back; a new price resets the count
@@ -53,9 +69,9 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
   - **Heard From Consignment** — the sale, a reversed sale, the delivery, the settlement and a refund after payout reach the vault once each
 
 :::callout{kind="note"}
-- ❓ **Liquidity model, tiers and grace days** — the formula, the tier figures and 3 grace days are drafts. Product confirms
-- ❓ **Eligible products** — which products, grades or value ranges earn. Product confirms
-- ❓ **Caps** — the most value counted per card, and the most incentive per account a month. Product confirms
+- ❓ **Liquidity model, tiers and grace days** — the formula, the tier figures and 3 grace days are drafts. Product confirms before Phase 1, mid November
+- ❓ **Eligible products** — which products, grades or value ranges earn. Product confirms before Phase 1, mid November
+- ❓ **Caps** — the most value counted per card, and the most incentive per account a month. Product confirms before Phase 2, 6 December
 - ❓ **A late pass** — whether a card that passes authentication after it was vaulted earns from its start date; built as earning from the start date. Owner confirms
 :::
 
@@ -68,17 +84,17 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
   - **Built** — credited the day after it closes in Hong Kong; a day is never paid twice
 - 🚧 **Vesting** — for its first days in the vault a card's incentive vests on the card, not in the wallet
   - **Release** — on the last vesting day everything vested is posted at once; daily drips follow
-  - **Once a Deposit** — vesting runs once, not again on every stretch
+  - **Once an Intake** — vesting runs once, not again on every stretch
   - **Shown Beside the Wallet** — "Vesting: HKD X", with its release date; not cashable
-  - **Withdrawn Early** — a card that leaves the vault before release forfeits what is vesting
+  - **Retrieved Early** — a card that leaves the vault before release forfeits what is vesting
   - **Sold Early** — a card sold before release, say on day 60 of 90; sale proceeds are paid as usual, and the note below says what happens to the incentive
   - **Built** — credited every day and locked until day N, or shown as one held figure posted on day N; an admin setting switches the view, every amount and unlock day the same either way, so it may be flipped at any time
-  - **Forfeit at Release, as Built** — where the card's rule forfeits, releasing it before day N takes back what is still locked on it; a withdrawal request that is cancelled takes back nothing
+  - **Forfeit at Release, as Built** — where the card's rule forfeits, releasing it before day N takes back what is still locked on it; a retrieval request that is called off takes back nothing
 - 🚧 **Never Taken Back** — incentive in the wallet stays the collector's, whatever happens to the card
 
 :::callout{kind="note"}
-- ❓ **Vesting period** — 30 or 60 days. Product confirms
-- ❓ **Incentive when a card sells during vesting** — only the vested days (recommended: pays what the card earned), or the full period (pays the remaining days too, at a higher cost). A sold card stops earning the day it sells; built as a sale forfeiting nothing, its credited incentive unlocking on its own day. Product confirms
+- ❓ **Vesting period** — 30 or 60 days; longer protects more, but delays the first payout a collector sees. Product confirms before Phase 1, mid November
+- ❓ **Incentive when a card sells during vesting** — only the vested days (recommended: pays what the card earned), or the full period (pays the remaining days too, at a higher cost). A sold card stops earning the day it sells; built as a sale forfeiting nothing, its credited incentive unlocking on its own day. Product confirms before Phase 2, 6 December
 - ❓ **Which view to launch on** — credited daily and locked, the owner's own reading, or vesting held on the card. Owner confirms
 - ❓ **Forfeit** — whether a card taken back inside its vesting days loses what is still locked; the draft says it does, and each card keeps the rule it was signed with. Owner confirms
 :::
@@ -86,7 +102,7 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 ## Settings
 
 - 🚧 **Admin Settings** — the rate, the liquidity model, eligible products, caps and the price check's limits; every change logged
-- 🚧 **Pinned to the Card** — the rate, the vesting days, the early withdrawal fee's period and amount, and the forfeit rule are pinned when the card's custody paper is prepared; a later change reaches only the next card
+- 🚧 **Pinned to the Card** — the rate, the vesting days, the early retrieval fee's period and amount, and the forfeit rule are pinned when the card's custody paper is prepared; a later change reaches only the next card
   - **Unset Refuses** — the paper is not prepared while the rate, the vesting days or the fee's period is unset
 - 🚧 **Pause and the Daily Run** — staff pause incentive, the price import and the drip run daily - [Vault Operations](/p/grade10-site/vault/operations#daily-run)
 
@@ -94,7 +110,7 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 The incentive is an acquisition cost: it pays a collector to keep cards where
 consigning them is one step away. It rewards cards Grade10 can sell, which is
 why the market price and liquidity drive it, and vesting protects against
-deposit, cash out and leave.
+vault, cash out and leave.
 
 - **Market price from SNKRDUNK's 30-day median** — so one odd sale can't move it, and no staff member types a price
 - **Liquidity in the amount** — a card that sells easily and holds its price earns more, so the cost follows the cards Grade10 can sell
@@ -113,7 +129,7 @@ deposit, cash out and leave.
 | Nothing is held | Decided | An unlikely price or rate is used and flagged, never held, because a credit stays locked until vesting ends and nothing is cashed out without a second treasurer; a wrong one is corrected in Inventory and the days it priced are worked again with no second approver - decided by the owner, 2026-10-28 | Owner |
 | A late fact waits | Decided | A day whose price or rate has not arrived waits and is paid in full, rather than earning nothing after 3 days - decided by the owner, 2026-10-28 | Owner |
 | A sold card stops on the sale | Decided | It stops earning on the day it is marked sold, not at the delivery or the settlement, so a card earns nothing while its sale is being completed - decided by the owner, 2026-10-29 | Owner |
-| A sale is not an early withdrawal | ❓ | A card sold through consignment forfeits nothing; its credited incentive unlocks on its own day - built so, 2026-10-27 | Owner |
+| A sale is not an early retrieval | ❓ | A card sold through consignment forfeits nothing; its credited incentive unlocks on its own day - built so, 2026-10-27 | Owner |
 :::
 
 :::detail{title="Code map" for="engineer"}
