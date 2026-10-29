@@ -25,12 +25,12 @@ no-screen:
   site/page-shell: the header and footer on every screen
   site/crawlable-pages: server responses, tags and the sitemap
   site/typography: the font kit; drawn in the design system
-  store/checkout: Shopify's page; walked as a flow from the Cart Drawer to Your Orders
+  store/checkout: Shopify's page; walked as a flow from the Cart Drawer to My Orders
   store/cross-sell: a rail drawn on Product Detail
   store/cart-validation: the cart's promise; drawn as Cart Drawer states
   store/discounts: the price rules; drawn on product, cart and order screens
   store/refunds: started in Shopify; drawn on Order Details
-  store/shipping: Shopify takes the address; tracking is on Your Orders
+  store/shipping: Shopify takes the address; tracking is on My Orders
   vault/case-lifecycle: the status machine; drawn on the case page
   vault/compliance-and-readiness: policy
   account/audit: the trail; read in the console

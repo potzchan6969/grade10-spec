@@ -266,7 +266,7 @@ const ORDER_DETAILS_READ_COPY = {
     "Check the order number, or find the order in your orders.",
   /** The public link page presumes no account — point at the email. */
   notFoundLinkDescription: "Check the link in your order email.",
-  backToOrders: "Back to Your Orders",
+  backToOrders: "Back to My Orders",
   backToHome: "Back to Home",
   failed: "We couldn’t load this order.",
   retry: "Retry",

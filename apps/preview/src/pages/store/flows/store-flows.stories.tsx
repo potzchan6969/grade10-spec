@@ -78,7 +78,7 @@ const MEMBER_CHECKS_OUT = [
 const MEMBER_FOLLOWS_ORDERS = [
   flowScreen(
     "1",
-    "Your orders",
+    "My Orders",
     "order-list",
     "store-order-history-screens-order-history--filled",
   ),
