@@ -49,14 +49,13 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
   - **Shown** — "Using last price, day 2 of 3" to staff and the collector
   - **Built** — no grace on a last price: a day whose price or rate of exchange has not arrived waits and is paid in full once it does, and a market with no sales for 3 days earns nothing for those days
 - 🚧 **Stops** — when the card is sold
-  - **Built** — which moment stops it is a setting; it is unset and TBC, so a sold card earns until it is delivered to the buyer, as any card leaving the vault. On settled, a sold card earns until its sale is settled; a sale that is reversed takes the stop away
+  - **Built** — which moment stops it is a setting, set to sold: the card stops earning on the day it is marked sold, and a sale that is reversed takes the stop away. Delivered and settled remain options; on settled a sold card would earn until its sale is settled. A production deploy is refused while it is unset
   - **Heard From Consignment** — the sale, a reversed sale, the delivery, the settlement and a refund after payout reach the vault once each
 
 :::callout{kind="note"}
 - ❓ **Liquidity model, tiers and grace days** — the formula, the tier figures and 3 grace days are drafts. Product confirms
 - ❓ **Eligible products** — which products, grades or value ranges earn. Product confirms
 - ❓ **Caps** — the most value counted per card, and the most incentive per account a month. Product confirms
-- ❓ **When a sold card stops** — TBC: marked sold, delivered to the buyer, or proceeds settle; built as earning until the delivery. Product confirms
 - ❓ **A late pass** — whether a card that passes authentication after it was vaulted earns from its start date; built as earning from the start date. Owner confirms
 :::
 
@@ -79,7 +78,7 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 
 :::callout{kind="note"}
 - ❓ **Vesting period** — 30 or 60 days. Product confirms
-- ❓ **Incentive when a card sells during vesting** — only the vested days (recommended: pays what the card earned), or the full period (pays the remaining days too, at a higher cost). Decide with when a sold card stops earning; built as a sale forfeiting nothing, its credited incentive unlocking on its own day. Product confirms
+- ❓ **Incentive when a card sells during vesting** — only the vested days (recommended: pays what the card earned), or the full period (pays the remaining days too, at a higher cost). A sold card stops earning the day it sells; built as a sale forfeiting nothing, its credited incentive unlocking on its own day. Product confirms
 - ❓ **Which view to launch on** — credited daily and locked, the owner's own reading, or vesting held on the card. Owner confirms
 - ❓ **Forfeit** — whether a card taken back inside its vesting days loses what is still locked; the draft says it does, and each card keeps the rule it was signed with. Owner confirms
 :::
@@ -113,6 +112,7 @@ deposit, cash out and leave.
 | Where prices come from | Decided | A separate price worker, reached by a service binding; its answer's shape is assumed until it exists - decided by the owner, 2026-10-27 | Owner |
 | Nothing is held | Decided | An unlikely price or rate is used and flagged, never held, because a credit stays locked until vesting ends and nothing is cashed out without a second treasurer; a wrong one is corrected in Inventory and the days it priced are worked again with no second approver - decided by the owner, 2026-10-28 | Owner |
 | A late fact waits | Decided | A day whose price or rate has not arrived waits and is paid in full, rather than earning nothing after 3 days - decided by the owner, 2026-10-28 | Owner |
+| A sold card stops on the sale | Decided | It stops earning on the day it is marked sold, not at the delivery or the settlement, so a card earns nothing while its sale is being completed - decided by the owner, 2026-10-29 | Owner |
 | A sale is not an early withdrawal | ❓ | A card sold through consignment forfeits nothing; its credited incentive unlocks on its own day - built so, 2026-10-27 | Owner |
 :::
 
@@ -122,6 +122,6 @@ deposit, cash out and leave.
 - **The price** - market price days and ECB rate days in inventory, read over
   `VaultItemsService`; the sales come from the price worker's `PRICE_HISTORY`
   binding
-- **When it stops** - `stopOn` in `packages/app-env/src/earnings.ts`, TBC and
-  unset, so the custody end bounds a sold card
+- **When it stops** - `stopOn` in `packages/app-env/src/earnings.ts`, `sold`;
+  a production deploy is refused if it is unset
 :::
