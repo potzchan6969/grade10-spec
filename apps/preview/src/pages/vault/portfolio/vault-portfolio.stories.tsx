@@ -2,11 +2,10 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
-import { expect, userEvent, waitFor, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
 import { activeIntakeSubmissionCount } from "../../intake-content";
 import {
   INTAKE_TRACKER_STORY_ID,
-  PAYOUT_METHOD,
   PAYOUT_REQUESTS,
   PORTFOLIO_ASSETS,
   PORTFOLIO_SUMMARY,
@@ -24,7 +23,6 @@ import { ActiveIntakeAlert } from "./active-intake-alert";
 import { VaultAssetList } from "./vault-asset-list";
 import { VaultPayoutList } from "./vault-payout-list";
 import { VaultWalletSummary } from "./vault-wallet-summary";
-import { VaultWithdrawDialog } from "./vault-withdraw-dialog";
 
 /** Simulated holdings fetch — the workbench recipe's ready beat. */
 const HOLDINGS_LOAD_MS = 350;
@@ -53,7 +51,6 @@ function VaultPortfolioPage({
   }, [empty]);
 
   const holdingsLoading = loading || fetching;
-  const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   return (
     <VaultPageShell wide>
@@ -83,7 +80,11 @@ function VaultPortfolioPage({
               rewardsAvailableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
               totalEstimateHkd={PORTFOLIO_SUMMARY.totalEstimateHkd}
               withdrawnHkd={PORTFOLIO_SUMMARY.withdrawnHkd}
-              onWithdraw={() => setWithdrawOpen(true)}
+              onWithdraw={() =>
+                navigateToStory(
+                  "vault-portfolio-screens-withdraw-dialog--amount",
+                )
+              }
             />
           </div>
         )}
@@ -118,13 +119,6 @@ function VaultPortfolioPage({
           />
         )}
       </div>
-      <VaultWithdrawDialog
-        availableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
-        minWithdrawalHkd={PORTFOLIO_SUMMARY.minWithdrawalHkd}
-        payoutMethod={PAYOUT_METHOD}
-        open={withdrawOpen}
-        onOpenChange={setWithdrawOpen}
-      />
     </VaultPageShell>
   );
 }
@@ -172,16 +166,6 @@ export const Filled: Story = {
     ).toBe(6);
     // Intake-stage assets never appear in holdings.
     expect(canvas.queryByText("Pre-check")).toBeNull();
-    // Withdraw opens the payout dialog from the wallet card.
-    const page = within(canvasElement.ownerDocument.body);
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Withdraw" }),
-    );
-    await waitFor(() =>
-      expect(
-        page.getByRole("dialog", { name: "Withdraw Rewards" }),
-      ).toBeVisible(),
-    );
   },
 };
 
