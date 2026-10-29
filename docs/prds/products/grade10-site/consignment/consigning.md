@@ -25,13 +25,13 @@ is no counter or paper consignment.
 - **Consignment Period** — 1 year from signing
 - **Agreement** — one Consignment Agreement a consignment; a change makes a new version, never an edit
 
-## Listing Review
+## Listing Approval
 
-- **Staff Review** — every consignment, before it goes on sale
+- **Staff Approval** — every consignment, before it goes on sale
   - **List or Starting Price** — set by Grade10, never below the lowest acceptable price
   - **Approved** — listed: a store product, or the card added to an auction lot
   - **Rejected** — the collector is told why and can edit and resubmit
-- **Changing the Lowest Price** — from the dashboard; reviewed like a new listing
+- **Changing the Lowest Price** — from the dashboard; approved like a new listing
   - **In the Store** — a new lowest price above the list price raises the list price to match
   - **At Auction** — until the catalogue is published, then locked
 

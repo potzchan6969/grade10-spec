@@ -23,7 +23,7 @@ At the shop's counter or an event, for free; staff record and photograph each ca
 The card is checked at deposit and put away in the vault.
 
 ## *Staff* - **Approve it to earn**
-An internal review checks the card's market price and how easily it sells, then approves it - [Incentive](/p/grade10-site/vault/incentive#incentive-review).
+Staff check the card's market price and how easily it sells, then approve it - [Incentive](/p/grade10-site/vault/incentive#incentive-approval).
 
 ## *Collector* - **Earns daily**
 An approved card earns a daily amount into the earnings wallet.
@@ -31,8 +31,8 @@ An approved card earns a daily amount into the earnings wallet.
 ## *Collector* - **Consigns**
 From their dashboard: the store or the auction, and the lowest price they accept - [Consigning](/p/grade10-site/consignment/consigning).
 
-## *Staff* - **Review the listing**
-An internal review sets the list or starting price and approves it for sale.
+## *Staff* - **Approve the listing**
+Staff set the list or starting price and approve it for sale - [Consigning](/p/grade10-site/consignment/consigning#listing-approval).
 
 ## *Buyer* - **Buys it**
 In the shop, online or at auction; the card ships from the vault and stops earning.

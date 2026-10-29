@@ -35,7 +35,7 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 
 ## Earning
 
-- **Incentive Review** — staff check the card's SNKRDUNK match, its price and its liquidity, then approve it
+- **Incentive Approval** — staff check the card's SNKRDUNK match, its price and its liquidity, then approve it
   - **Approved** — earns from the next day; days waiting for approval are not paid later
   - **Rejected or Held** — stays in the vault without earning; the collector sees why
 - **Eligible on the Day** — checked every day; a card earns on a day it has a market price, its tier's minimum sales, a liquidity factor of 0.2 or more, an eligible product, and no pause

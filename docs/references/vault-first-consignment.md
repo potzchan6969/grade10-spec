@@ -6,10 +6,10 @@ The owner's product specification for the vault-first consignment model as of 20
 
 1. **Deposit** — Owner drops cards at CWB or an event. Free; staff record and photograph each card.
 2. **Enter the vault** — Card is authenticated and stored in the vault.
-3. **Incentive review** (internal) — Staff check the card's price match and liquidity, then approve it to earn (OP6).
+3. **Incentive approval** (internal) — Staff check the card's price match and liquidity, then approve it to earn.
 4. **Daily incentive** — Approved, eligible cards earn a daily amount into the earnings wallet.
 5. **Consign** — Owner chooses store or auction and sets the lowest acceptable price.
-6. **Consignment review** (internal) — Staff check the listing, set the list or starting price and approve it for sale (OP3).
+6. **Consignment approval** (internal) — Staff check the listing, set the list or starting price, and approve it for sale.
 7. **Sale & settlement** — Sold in store or at auction, shipped from the vault; incentive stops.
 8. **Cash out** — Owner cashes out incentive and sale proceeds after KYC (min HKD 500, every 7 days).
 
@@ -37,7 +37,7 @@ Guardrails:
 Done when:
 
 - Deposit a card at an event, with photos and the owner's confirmation
-- The card is authenticated, approved in incentive review, and starts earning the next day
+- The card is authenticated, approved in incentive approval, and starts earning the next day
 - The owner sees the card and its daily incentive in their dashboard
 
 ### Phase B — Consign & sell (6 Dec 2026 (store))
@@ -95,7 +95,7 @@ States: Card: Deposited → Authenticated → In vault → Approved to earn (ear
   - Received: staff record and photograph it at deposit (Custody Receipt PR1)
   - Authenticating: checked at deposit in this phase
   - In vault: passed and stored; not earning yet
-  - Approved to earn: staff approve it in incentive review (OP6); incentive counts from the day after approval (IC11)
+  - Approved to earn: staff approve it in incentive approval (OP6); incentive counts from the day after approval (IC11)
   - Failed: returned to the owner; it never earns
 - **VA3** — No storage fee for now.
 
@@ -222,7 +222,7 @@ A daily amount paid on eligible vaulted cards, treated as an acquisition cost. R
 - **IC11** — Daily drip into the wallet:
   - Once a day, after midnight Hong Kong time, each eligible card's incentive for the previous day is posted to the wallet
   - Once posted, it can be cashed out
-  - Counting starts the day after staff approve the card in incentive review (OP6), not at authentication; days waiting for approval are not paid later
+  - Counting starts the day after staff approve the card in incentive approval (OP6), not at authentication; days waiting for approval are not paid later
   - The day's price and liquidity factor are fixed at the start of the day
   - Fractions of a cent carry over to the next day, so rounding never gains or loses money
 - **IC12** — One-time vesting period, held on the card (not in the wallet): ❓ T4
@@ -289,9 +289,9 @@ Turning vaulted cards into consignments, the core revenue. Owners consign from t
   - Step 1: choose cards already in the vault
   - Step 2: per card, sell via store or auction, lowest acceptable price; commission shown at Grade10's rate
   - Step 3: review estimated payout and e-sign the Consignment Agreement
-  - Staff review every online request before it goes on sale (OP3); the owner sees Pending review until then
+  - Staff approve every online request before it goes on sale (OP3); the owner sees Pending approval until then
 - **CS7** — Changing the lowest acceptable price after consigning:
-  - The owner changes it from their dashboard; staff review it like a new listing (OP3)
+  - The owner changes it from their dashboard; staff approve it like a new listing (OP3)
   - Store: if the new lowest price is above the current list price, Grade10 raises the list price to match
   - Auction: allowed until the catalogue is published; after that it's locked
   - The Consignment Agreement gets a new version (DC-R1)
@@ -485,12 +485,12 @@ Staff tools in the internal portal for running the vault day to day.
 
 - **OP1** — Deposit queue:
   - Cards waiting for authentication
-  - Pass: the card enters the vault and joins the incentive review queue (OP6); it doesn't earn until approved
+  - Pass: the card enters the vault and joins the incentive approval queue (OP6); it doesn't earn until approved
   - Fail: the owner is told and the card is returned; it never earns
 
 **Incentive approval**
 
-- **OP6** — Incentive review, between entering the vault and earning:
+- **OP6** — Incentive approval, between entering the vault and earning:
   - Staff check the card's SNKRDUNK match, price and liquidity factor (IC2, IC3)
   - Approve: the card starts earning from the next day (IC11)
   - Reject or hold: the card stays in the vault without earning; the owner sees the reason
@@ -504,7 +504,7 @@ Staff tools in the internal portal for running the vault day to day.
 
 **Consignment**
 
-- **OP3** — Consignment review and approval, between consign and sale:
+- **OP3** — Consignment approval, between consign and sale:
   - Check each listing the owner submitted before it goes on sale
   - Set the list price (store) or starting price (auction), never below the lowest acceptable price
   - Create the Shopify product (store) or add the card to an auction lot
