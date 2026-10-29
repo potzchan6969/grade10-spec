@@ -1,3 +1,8 @@
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@grade10/design-system/components/display/tabs";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { NavigationLink } from "@grade10/design-system/components/layout/navigation-link";
@@ -13,7 +18,6 @@ import {
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
-import { cn } from "@grade10/design-system/lib/utils";
 import {
   RewardCheckout,
   type RewardMenuItem,
@@ -243,30 +247,26 @@ function MembershipPage({
           </div>
 
           <div className="flex flex-col gap-8 md:flex-row md:gap-16">
-            {/* Narrow: the rail's names as an underline tab row — pills stay
+            {/* Narrow: the rail's names as the line-tab row — pills stay
              * for the header's action buttons, so actions and navigation
              * never share a shape. */}
-            <nav
-              aria-label="Membership"
-              className="flex gap-5 overflow-x-auto border-b border-border md:hidden"
+            <Tabs
+              className="md:hidden"
+              onValueChange={(value) => setActive(value as MembershipTab)}
+              value={active}
             >
-              {MEMBERSHIP_TABS.map((item) => (
-                <button
-                  aria-current={active === item.id ? "page" : undefined}
-                  className={cn(
-                    "-mb-px shrink-0 cursor-pointer border-b-2 px-1 pt-1 pb-3 text-sm whitespace-nowrap outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
-                    active === item.id
-                      ? "border-foreground font-medium text-foreground"
-                      : "border-transparent text-secondary-foreground hover:text-foreground",
-                  )}
-                  key={item.id}
-                  onClick={() => setActive(item.id)}
-                  type="button"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </nav>
+              <TabsList
+                aria-label="Membership"
+                className="w-full justify-start overflow-x-auto border-b border-border"
+                variant="list"
+              >
+                {MEMBERSHIP_TABS.map((item) => (
+                  <TabsTrigger key={item.id} value={item.id}>
+                    {item.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
             {/* Wide: the pill rail. */}
             <nav
               aria-label="Membership"
