@@ -12,7 +12,7 @@ Where the store's stock sits in Shopify, and the channels that sell it.
   - **Events** — the till at an event sells from the shop's stock
 - **Kerry Logistics** — the shipping partner: it comes to the shop, takes the stock that ships and ships it; it is never a location, so no stock sits with it
   - **Set Up as a Location** — a Kerry location filling online orders is flagged to be turned off
-- **The Vault's Custody** — where a vaulted card is held is the vault's own record, never a Shopify location - [Vault Deposit](/p/grade10-site/vault/deposit#custody)
+- **The Vault's Custody** — where a vaulted card is held is the vault's own record, never a Shopify location - [Vault Intake](/p/grade10-site/vault/intake#custody)
 
 ## Sales Channels
 
@@ -23,7 +23,8 @@ Where the store's stock sits in Shopify, and the channels that sell it.
 | SuperPacks | in a partner's storefront |
 
 - **Same Stock** — every channel sells the one location's stock; the first sale wins and the product comes off the others - [Consigning](/p/grade10-site/consignment/consigning#at-the-store)
-- 🚧 **Marketplace** — once it launches, one more channel on the same stock
+- 🚧 **Consigned Cards** — sold on Point of Sale only, at the shop and events
+- **Marketplace** — online, later, with no date; one more channel on the same stock
 
 :::detail{title="Product decisions" for="pm"}
 - **One location** — every channel reads the same count, so a card can't sell twice from two places; a second location would split it

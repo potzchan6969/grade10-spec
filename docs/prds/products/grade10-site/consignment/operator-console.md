@@ -102,7 +102,7 @@ pinned to a consignment when its agreement is prepared.
 - ❓ Product - **The intended figures** - the consignment fee is intended
   at **10–12%** of the price at sale and the incentive at **5%** of the
   estimated value; the exact figures are unset
-- 🚧 **Vault-First Defaults** — the term **1** year; paid **3** business days after the buyer pays; a refund after payout reversed from the wallet; the identity check at the first cash-out; the incentive leaves this schedule for the vault's - [Incentive](/p/grade10-site/vault/incentive#settings)
+- 🚧 **Vault-First Defaults** — one commission rate for the store and one for the auction; the term **1** year; paid **3** business days after the buyer pays; a refund after payout reversed from the wallet; the identity check at the first cash-out; the incentive leaves this schedule for the vault's - [Incentive](/p/grade10-site/vault/incentive#settings)
 - **Pinned to the agreement** - a change reaches the next agreement
   prepared; one waiting for a signature keeps the schedule it was prepared on
 - **Unset refuses** - an agreement is not prepared while a figure it prints

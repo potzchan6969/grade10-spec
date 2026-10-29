@@ -54,7 +54,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
   - **Approved** — earns from the next day; days waiting for approval are not paid later
   - **Rejected or Held** — stays in the vault without earning; the collector sees why
   - **Built** — no approval step: a card earns from the day it is vaulted, its own effective start date, once it passes authentication; a card that fails never earns
-  - **Skipped at Deposit** — staff who already authenticated the card and verified its value tick Skip Incentive Approval on the deposit form; the card is approved when the deposit is submitted, and the skip is recorded with the staff member - [Vault Deposit](/p/grade10-site/vault/deposit#deposit-form)
+  - **Skipped at Intake** — staff who already authenticated the card and verified its value tick Skip Incentive Approval on the intake form; the card is approved when the intake is submitted, and the skip is recorded with the staff member - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
 - 🚧 **Eligible on the Day** — checked every day; a card earns on a day it has a market price, its tier's minimum sales, a liquidity factor of 0.2 or more, an eligible product, and no pause
   - **Not Eligible** — earns nothing that day and is not paid later; it earns again the next day it qualifies, and the dashboard says why
   - **Vesting Still Releases** — what vested before stays on the card and is released on its day; what is in the wallet stays there
@@ -84,7 +84,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
   - **Built** — credited the day after it closes in Hong Kong; a day is never paid twice
 - 🚧 **Vesting** — for its first days in the vault a card's incentive vests on the card, not in the wallet
   - **Release** — on the last vesting day everything vested is posted at once; daily drips follow
-  - **Once a Deposit** — vesting runs once, not again on every stretch
+  - **Once an Intake** — vesting runs once, not again on every stretch
   - **Shown Beside the Wallet** — "Vesting: HKD X", with its release date; not cashable
   - **Withdrawn Early** — a card that leaves the vault before release forfeits what is vesting
   - **Sold Early** — a card sold before release, say on day 60 of 90; sale proceeds are paid as usual, and the note below says what happens to the incentive
@@ -110,7 +110,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 The incentive is an acquisition cost: it pays a collector to keep cards where
 consigning them is one step away. It rewards cards Grade10 can sell, which is
 why the market price and liquidity drive it, and vesting protects against
-deposit, cash out and leave.
+vault, cash out and leave.
 
 - **Market price from SNKRDUNK's 30-day median** — so one odd sale can't move it, and no staff member types a price
 - **Liquidity in the amount** — a card that sells easily and holds its price earns more, so the cost follows the cards Grade10 can sell

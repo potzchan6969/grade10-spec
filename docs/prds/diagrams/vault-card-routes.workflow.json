@@ -32,19 +32,19 @@
     }
   ],
   "mainPath": [
-    "deposit",
+    "intake",
     "vault",
     "store",
     "counter"
   ],
   "nodes": [
     {
-      "id": "deposit",
+      "id": "intake",
       "lane": "collector",
       "col": 0,
       "type": "frontend",
-      "label": "Deposit",
-      "sublabel": "the shop or an event",
+      "label": "Intake",
+      "sublabel": "a card event or the shop",
       "width": 150
     },
     {
@@ -71,7 +71,7 @@
       "col": 2,
       "type": "backend",
       "label": "On sale",
-      "sublabel": "the shop's tills and online",
+      "sublabel": "the shop's tills and events",
       "tag": "marketplace later",
       "width": 170
     },
@@ -105,7 +105,7 @@
   ],
   "edges": [
     {
-      "from": "deposit",
+      "from": "intake",
       "to": "vault",
       "variant": "emphasis"
     },
@@ -124,11 +124,6 @@
       "from": "store",
       "to": "counter",
       "variant": "emphasis"
-    },
-    {
-      "from": "store",
-      "to": "shipped",
-      "label": "sold online"
     },
     {
       "from": "auction",

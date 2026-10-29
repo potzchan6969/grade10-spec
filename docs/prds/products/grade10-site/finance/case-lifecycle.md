@@ -14,7 +14,7 @@ against it.
      accepted → signing → vaulted → active → repaid → released`
   2. **Storage** — `draft → submitted → under_valuation → accepted → signing
      → vaulted → released`
-- ❓ **Storage lane replaced** — the owner's vault-first deposit is to replace it: a free deposit at the counter, incentive approval, daily incentive and withdrawal by appointment; the financed lane stays. Product confirms the change that carries it - [Vault Deposit](/p/grade10-site/vault/deposit)
+- ❓ **Storage lane replaced** — the owner's vault-first intake is to replace it: a free intake at the counter, incentive approval, daily incentive and withdrawal by appointment; the financed lane stays. Product confirms the change that carries it - [Vault Intake](/p/grade10-site/vault/intake)
 - **Exits that are not a release** — `declined`, `cancelled`, `expired`,
   `forfeited`
 - **Two moves back** — a reversed payout returns `active → vaulted` while no

@@ -65,16 +65,15 @@ svg[data-diagram="vault-card-routes"] .c-lane{fill: var(--lane-fill); stroke: va
         
         
         
-        <path data-step="shipped" data-edge-from="auction" data-edge-to="shipped" data-edge-label="won" data-edge-key="0" data-composition-points="448,498;654,498;654,598" d="M 448 498 L 654 498 L 654 598" class="a-default" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead)"/>
-        <path data-step="vault" data-edge-from="deposit" data-edge-to="vault" data-edge-key="1" data-composition-points="198,120;243,120;243,220" d="M 198 120 L 243 120 L 243 220" class="a-emphasis" stroke-width="1.8" marker-end="url(#vault-card-routes-arrowhead-emphasis)"/>
-        <path data-step="counter" data-edge-from="store" data-edge-to="counter" data-edge-key="2" data-composition-points="448,365;483,365;483,598" d="M 448 365 L 483 365 L 483 598" class="a-emphasis" stroke-width="1.8" marker-end="url(#vault-card-routes-arrowhead-emphasis)"/>
-        <path data-step="shipped" data-edge-from="store" data-edge-to="shipped" data-edge-label="sold online" data-edge-key="3" data-composition-points="448,379;668,379;668,598" d="M 448 379 L 668 379 L 668 598" class="a-default" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead)"/>
-        <path data-step="auction" data-edge-from="vault" data-edge-to="auction" data-edge-label="consigned" data-edge-key="4" data-composition-points="243,272;243,552;363,552;363,524" d="M 243 272 L 243 552 L 363 552 L 363 524" class="a-default" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead)"/>
-        <path data-step="store" data-edge-from="vault" data-edge-to="store" data-edge-label="consigned" data-edge-key="5" data-composition-points="243,272;243,294;363,294;363,338" d="M 243 272 L 243 294 L 363 294 L 363 338" class="a-emphasis" stroke-width="1.8" marker-end="url(#vault-card-routes-arrowhead-emphasis)"/>
-        <path data-step="withdrawn" data-edge-from="vault" data-edge-to="withdrawn" data-edge-label="withdrawn" data-edge-key="6" data-composition-points="318,246;483,246;483,146" d="M 318 246 L 483 246 L 483 146" class="a-dashed" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead-dashed)"/>
+        <path data-step="shipped" data-edge-from="auction" data-edge-to="shipped" data-edge-label="won" data-edge-key="0" data-composition-points="448,498;661,498;661,598" d="M 448 498 L 661 498 L 661 598" class="a-default" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead)"/>
+        <path data-step="vault" data-edge-from="intake" data-edge-to="vault" data-edge-key="1" data-composition-points="198,120;243,120;243,220" d="M 198 120 L 243 120 L 243 220" class="a-emphasis" stroke-width="1.8" marker-end="url(#vault-card-routes-arrowhead-emphasis)"/>
+        <path data-step="counter" data-edge-from="store" data-edge-to="counter" data-edge-key="2" data-composition-points="448,372;483,372;483,598" d="M 448 372 L 483 372 L 483 598" class="a-emphasis" stroke-width="1.8" marker-end="url(#vault-card-routes-arrowhead-emphasis)"/>
+        <path data-step="auction" data-edge-from="vault" data-edge-to="auction" data-edge-label="consigned" data-edge-key="3" data-composition-points="243,272;243,552;363,552;363,524" d="M 243 272 L 243 552 L 363 552 L 363 524" class="a-default" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead)"/>
+        <path data-step="store" data-edge-from="vault" data-edge-to="store" data-edge-label="consigned" data-edge-key="4" data-composition-points="243,272;243,294;363,294;363,338" d="M 243 272 L 243 294 L 363 294 L 363 338" class="a-emphasis" stroke-width="1.8" marker-end="url(#vault-card-routes-arrowhead-emphasis)"/>
+        <path data-step="withdrawn" data-edge-from="vault" data-edge-to="withdrawn" data-edge-label="withdrawn" data-edge-key="5" data-composition-points="318,246;483,246;483,146" d="M 318 246 L 483 246 L 483 146" class="a-dashed" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead-dashed)"/>
         
-        <g data-step="deposit" id="vault-card-routes-node-deposit" data-node-id="deposit" data-node-label="Deposit" aria-label="Focus Deposit, the shop or an event, Collector" data-node-kind="frontend" data-node-sublabel="the shop or an event" data-node-context="Collector">
-          <title>Deposit · the shop or an event · Collector</title>
+        <g data-step="intake" id="vault-card-routes-node-intake" data-node-id="intake" data-node-label="Intake" aria-label="Focus Intake, a card event or the shop, Collector" data-node-kind="frontend" data-node-sublabel="a card event or the shop" data-node-context="Collector">
+          <title>Intake · a card event or the shop · Collector</title>
           <rect x="48" y="94" width="150" height="52" rx="6" class="c-mask"/>
           <rect x="48" y="94" width="150" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(54 100) scale(0.6875)">
@@ -83,8 +82,8 @@ svg[data-diagram="vault-card-routes"] .c-lane{fill: var(--lane-fill); stroke: va
             <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
             <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="123" y="115" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Deposit</text>
-          <text data-detail="context" x="123" y="132" class="t-muted" font-size="8" text-anchor="middle">the shop or an event</text>
+          <text data-node-label="" data-detail-anchor="" x="123" y="115" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Intake</text>
+          <text data-detail="context" x="123" y="132" class="t-muted" font-size="8" text-anchor="middle">a card event or the shop</text>
         </g>
         <g data-step="withdrawn" id="vault-card-routes-node-withdrawn" data-node-id="withdrawn" data-node-label="Withdrawn" aria-label="Focus Withdrawn, collected at the shop, Collector" data-node-kind="frontend" data-node-sublabel="collected at the shop" data-node-context="Collector">
           <title>Withdrawn · collected at the shop · Collector</title>
@@ -110,15 +109,15 @@ svg[data-diagram="vault-card-routes"] .c-lane{fill: var(--lane-fill); stroke: va
           <text data-node-label="" data-detail-anchor="" x="243" y="241" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">In the vault</text>
           <text data-detail="context" x="243" y="258" class="t-muted" font-size="8" text-anchor="middle">earning, if approved</text>
         </g>
-        <g data-step="store" id="vault-card-routes-node-store" data-node-id="store" data-node-label="On sale" aria-label="Focus On sale, the shop&#39;s tills and online, The store" data-node-kind="backend" data-node-sublabel="the shop&#39;s tills and online" data-node-tag="marketplace later" data-node-context="The store">
-          <title>On sale · the shop&#39;s tills and online · The store · marketplace later</title>
+        <g data-step="store" id="vault-card-routes-node-store" data-node-id="store" data-node-label="On sale" aria-label="Focus On sale, the shop&#39;s tills and events, The store" data-node-kind="backend" data-node-sublabel="the shop&#39;s tills and events" data-node-tag="marketplace later" data-node-context="The store">
+          <title>On sale · the shop&#39;s tills and events · The store · marketplace later</title>
           <rect x="278" y="338" width="170" height="68" rx="6" class="c-mask"/>
           <rect x="278" y="338" width="170" height="68" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(284 344) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="363" y="359" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">On sale</text>
-          <text data-detail="context" x="363" y="376" class="t-muted" font-size="8" text-anchor="middle">the shop&#39;s tills and online</text>
+          <text data-detail="context" x="363" y="376" class="t-muted" font-size="8" text-anchor="middle">the shop&#39;s tills and events</text>
         <text data-detail="fine" x="363" y="394" class="t-backend" font-size="7" text-anchor="middle">marketplace later</text>
         </g>
         <g data-step="auction" id="vault-card-routes-node-auction" data-node-id="auction" data-node-label="A lot" aria-label="Focus A lot, listed from the vault, The auction" data-node-kind="backend" data-node-sublabel="listed from the vault" data-node-context="The auction">
@@ -157,22 +156,18 @@ svg[data-diagram="vault-card-routes"] .c-lane{fill: var(--lane-fill); stroke: va
         </g>
         
         <g data-step="shipped" data-detail="context" data-edge-from="auction" data-edge-to="shipped" data-edge-label="won" data-edge-key="0">
-          <rect x="536" y="478" width="30" height="14" rx="3" class="c-mask"/>
-          <text x="551" y="488" class="t-muted" font-size="8" text-anchor="middle">won</text>
+          <rect x="539.5" y="478" width="30" height="14" rx="3" class="c-mask"/>
+          <text x="554.5" y="488" class="t-muted" font-size="8" text-anchor="middle">won</text>
         </g>
-        <g data-step="shipped" data-detail="context" data-edge-from="store" data-edge-to="shipped" data-edge-label="sold online" data-edge-key="3">
-          <rect x="526.6" y="359" width="62.8" height="14" rx="3" class="c-mask"/>
-          <text x="558" y="369" class="t-muted" font-size="8" text-anchor="middle">sold online</text>
-        </g>
-        <g data-step="auction" data-detail="context" data-edge-from="vault" data-edge-to="auction" data-edge-label="consigned" data-edge-key="4">
+        <g data-step="auction" data-detail="context" data-edge-from="vault" data-edge-to="auction" data-edge-label="consigned" data-edge-key="3">
           <rect x="276.4" y="532" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
           <text x="303" y="542" class="t-muted" font-size="8" text-anchor="middle">consigned</text>
         </g>
-        <g data-step="store" data-detail="context" data-edge-from="vault" data-edge-to="store" data-edge-label="consigned" data-edge-key="5">
+        <g data-step="store" data-detail="context" data-edge-from="vault" data-edge-to="store" data-edge-label="consigned" data-edge-key="4">
           <rect x="276.4" y="274" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
           <text x="303" y="284" class="t-backend" font-size="8" text-anchor="middle">consigned</text>
         </g>
-        <g data-step="withdrawn" data-detail="context" data-edge-from="vault" data-edge-to="withdrawn" data-edge-label="withdrawn" data-edge-key="6">
+        <g data-step="withdrawn" data-detail="context" data-edge-from="vault" data-edge-to="withdrawn" data-edge-label="withdrawn" data-edge-key="5">
           <rect x="373.9" y="226" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
           <text x="400.5" y="236" class="t-database" font-size="8" text-anchor="middle">withdrawn</text>
         </g>

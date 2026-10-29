@@ -5,7 +5,7 @@ order: 1
 
 ## Two Ways In
 
-- 🚧 **At Deposit** — the main way: staff tick Consign Now for a card on the deposit form; it is registered into the vault first and consigned in the same visit, and the collector signs the Consignment Agreement with the Vault Terms - [Vault Deposit](/p/grade10-site/vault/deposit#deposit-form)
+- 🚧 **At Intake** — the main way: staff tick Consign Now for a card on the intake form; it is registered into the vault first and consigned in the same visit, and the collector signs the Consignment Agreement with the Vault Terms - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
 - 🚧 **From the Dashboard** — a card already in the vault, on the consign form below
 - 🚧 **Approved Alike** — either way, staff approve the listing before it goes on sale - [Listing Approval](/p/grade10-site/consignment/consigning#listing-approval)
 
@@ -29,12 +29,11 @@ goes below. Grade10 prices the listing at approval.
 | --- | --- | --- |
 | 🚧 Lowest acceptable price | required: the lowest the collector sells for; staff may price higher at their will | optional: the reserve; with none, the lot sells at the winning bid |
 | 🚧 Price Grade10 sets | the list price, never below the lowest acceptable price | the starting price |
-| Commission | a share of the sale price, by price band | a share of the hammer price only; the buyer's premium is Grade10's |
+| Commission | 🚧 a share of the sale price, one rate for the store, replacing the price bands | a share of the hammer price only, one rate; the buyer's premium is Grade10's |
 
 - 🚧 **Both** — one agreement and one lowest acceptable price, required, cover both; the commission is the rate of the channel the card sells in - [Consign to Store & Auction](/p/grade10-site/consignment/consigning#consign-to-store-auction)
 - **Commission**
   - **Minimum Charge** — optional, per card
-  - 🚧 **By Store Channel** — in the store, the rate may differ between the shop and online
   - **Pinned to the Agreement** — the rates in force when the agreement is prepared; a later change reaches only the next agreement
   - **Outside the Schedule** — a rate negotiated for a partner is set by someone who may approve it - [Consignment Console](/p/grade10-site/consignment/operator-console#grants)
 - 🚧 **Consignment Period** — 1 year from signing
@@ -45,7 +44,7 @@ goes below. Grade10 prices the listing at approval.
 
 ## Price Check
 
-On the deposit form's Consign Now, on the consign form, and whenever the lowest price is changed.
+On the intake form's Consign Now, on the consign form, and whenever the lowest price is changed.
 
 - 🚧 **Market Price** — the card's 30-day SNKRDUNK median; a card with no market price has no check
 - 🚧 **The Check** — how far the lowest acceptable price sits from the market price:
@@ -78,7 +77,7 @@ For a card with a market price of HKD 10,000:
 ## Listing Approval
 
 - 🚧 **Staff Approval** — every consignment, before it goes on sale
-  - **Authenticated First** — a card checked later waits until it passes - [Authentication](/p/grade10-site/vault/deposit#authentication)
+  - **Authenticated First** — a card checked later waits until it passes - [Authentication](/p/grade10-site/vault/intake#authentication)
   - **List or Starting Price** — set by Grade10, as the terms say
   - **Starting Channel** — for a card consigned to both, staff decide which channel it starts in; the collector doesn't choose the order
   - **Approved** — listed: a store product, or the card added to an auction lot
@@ -96,10 +95,11 @@ For a card with a market price of HKD 10,000:
   - **First Sale Wins** — the card comes off the other channels at once; a second sale of the same card is refunded
     - 🚧 **Sold Twice** — a till sale of a card an online buyer paid for at the same moment stands; the online buyer is refunded and staff alerted
   - 🚧 **One Buyer at a Time** — an open order holds the card, refusing every other buyer until it is paid, expires or is cancelled
-  - 🚧 **Marketplace** — once it launches, a channel like the others
+- 🚧 **The Shop's Tills Only** — replacing every store channel, a card consigned to the store is sold at the shop in Causeway Bay and at events, not online or at partners
+  - **Marketplace** — online, later, with no date; it joins as a second store channel, the first sale wins, and its commission is decided then
 - **Sales Report Themselves** — the store and the auction report each sale, delivery and refund; staff record one by hand only where a channel didn't
 - 🚧 **Price Changes** — entered by staff; they may raise the price at their will, never below the lowest acceptable price
-- 🚧 **Handover** — at the counter in the shop; an online order ships from the shop, Kerry Logistics collecting it there; a card at an event moves to the shop first
+- 🚧 **Handover** — the buyer takes the card at the counter; a card held elsewhere moves to the shop first
   - **Released to Its Buyer** — on delivery, under the consignment agreement; no release paper, no early withdrawal fee, and the card's credited incentive is kept - [Case Lifecycle](/p/grade10-site/finance/case-lifecycle)
 
 :::callout{kind="note"}
@@ -160,11 +160,11 @@ By email, in the collector's language.
 
 :::detail{title="Product decisions" for="pm"}
 A consigned card is always a vaulted card, authenticated and photographed once,
-so consigning it takes no second intake: a tick on the deposit form, or a few
+so consigning it takes no second intake: a tick on the intake form, or a few
 taps later. Asking only for the lowest price the collector accepts
 lets Grade10 price the listing while the collector keeps a hard limit.
 
-- **Vault first, then consign** — at deposit both happen in one visit, the card registered into the vault before it is consigned; later the collector consigns from the dashboard, where staff may help but never submit. Either way the collector signs, so the agreement is their own act
+- **Vault first, then consign** — at intake both happen in one visit, the card registered into the vault before it is consigned; later the collector consigns from the dashboard, where staff may help but never submit. Either way the collector signs, so the agreement is their own act
 - **A reserve only where the collector sets one** — at auction the lowest price is optional, so a collector who wants the hammer to decide isn't made to guess a floor
 - **The price check warns low and refuses high** — a low price may be the collector's reason and is confirmed twice; a price far above market would only stall the sale
 - **Both channels, one at a time** — a card is never on the shelf and in an auction together, so it can't sell twice; moving it needs no second signature

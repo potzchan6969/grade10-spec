@@ -9,11 +9,11 @@ it is registered into the vault first, then consigned, either in the same visit
 or later from the collector's dashboard, with no second intake -
 [Vault](/p/grade10-site/vault).
 
-:::flow{title="Deposit and consign"}
+:::flow{title="Intake and consign"}
 # At the counter
 
-## Collector — Deposit and consign
-At the shop or an event; on the deposit form staff tick Consign Now for the card, with the store, the auction or both and the lowest price the collector accepts.
+## Collector — Intake and consign
+At a card event, or the shop's counter from Phase 2; on the intake form staff tick Consign Now for the card, with the store, the auction or both and the lowest price the collector accepts.
 
 ## Collector — Sign
 The Vault Terms and the Consignment Agreement together, on the shop's tablet or by an emailed link.
@@ -63,7 +63,7 @@ is the default it starts on.
 For a collector whose card is already in the vault, consigning should take a
 minute from a phone; for Grade10, the commission is what pays for the vault.
 
-- **Vault first, in one visit** — at deposit the card is registered into the vault, then consigned on the same form, so the collector signs once; a card consigned later is consigned from the dashboard. It replaces the old intake, which consigned a card that was never vaulted
+- **Vault first, in one visit** — at intake the card is registered into the vault, then consigned on the same form, so the collector signs once; a card consigned later is consigned from the dashboard. It replaces the old intake, which consigned a card that was never vaulted
 - **Lowest acceptable price only** — replaces a list price and floor agreed at signing: the collector keeps a hard limit and Grade10 prices the listing, so there is less back-and-forth
 - **Paid 3 business days after the buyer pays** — replaces payout after the return window; a later refund is reversed from the wallet, so the collector isn't kept waiting on a rare return
 - **No incentive at consigning** — replaces the incentive paid on consigning: a vaulted card earns daily, consigned or not, so consigning never costs the collector the incentive - [Incentive](/p/grade10-site/vault/incentive)

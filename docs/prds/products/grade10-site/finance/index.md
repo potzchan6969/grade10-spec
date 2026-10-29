@@ -13,7 +13,7 @@ in a locker and the money is really a bank transfer somebody made.
   owner's notes are [Grade10 Finance](/references/grade10-finance)
 - **One case, one card** — the loan runs on a vault case that holds the
   collateral, decided at intake by the financing amount the collector asks for
-  - 🚧 **Keeping a Card Without a Loan** — a free deposit, no longer a case's
+  - 🚧 **Keeping a Card Without a Loan** — a free vault intake, no longer a case's
     storage lane - [Vault](/p/grade10-site/vault)
   - 🚧 **Many Cards, Each Its Own Contract** — as built, a case holds every
     card handed in on a visit as one-card contracts, and a financed card is
@@ -140,7 +140,7 @@ multi-card cases; renewing a live loan.
 | A payout takes two people; a correction takes a second one | Decided | Staff and treasurer share no money grant, and nobody may take back a row they recorded | Product |
 | Entity, retention and lending policy are data | Decided | Three per-brand tables on one mechanism, every undecided field named by the checks with its owner and its cost; a field marked blocking refuses a production deploy | Engineering |
 | Lending policy is seeded from the owner's numbers | Decided | Loan to value, the rate band per 30 days, term presets and offer validity in one per-brand table; in production a null bound refuses the offer, never the deploy | Owner |
-| Keeping without a loan moves to the vault | Decided | A card kept without a loan is a free vault deposit that can earn and be consigned, rather than a case's storage lane - [Vault](/p/grade10-site/vault) | Owner |
+| Keeping without a loan moves to the vault | Decided | A card kept without a loan is a free vault intake that can earn and be consigned, rather than a case's storage lane - [Vault](/p/grade10-site/vault) | Owner |
 | Finance is the vault's financed lane | Decided | The owner's notes describe the vault's flow step for step, and the collateral is the item the vault itself holds; a second service would be a second copy of one product | Owner |
 | Two entities, one table | Decided | The custodian holds and the lender lends, each printing on its own paper; the lender's name refuses an offer in production, so custody opens while the lender is still being registered | Legal |
 | Host | Decided | One host and a path, `grade10.com/vault`; a vanity domain redirects, because a second host would not share the session cookie | Owner |

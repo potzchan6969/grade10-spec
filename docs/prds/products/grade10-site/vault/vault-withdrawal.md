@@ -8,11 +8,32 @@ staff run withdrawals by hand. It replaces the storage
 lane's release; a financed case releases as before -
 [Case Lifecycle](/p/grade10-site/finance/case-lifecycle).
 
+:::flow{title="Taking a card home"}
+# Asking
+
+## Collector — Request
+From the dashboard, or staff for them; a consigned card ends its consignment first and comes back to the vault.
+
+## Collector — Confirm what is forfeited
+Everything still vesting before release, or only the day's incentive after it.
+
+# Collecting
+
+## Staff — Move it to the shop
+A card held at an event moves to Causeway Bay first; staff confirm it arrived.
+
+## Collector — Book a collection
+The ready email links to a collection appointment.
+
+## Staff — Hand it over
+The ID checked against the one recorded at intake, the condition against the intake photos; the collector confirms the Withdrawal Note. Incentive already in the wallet stays cashable.
+:::
+
 ## Request
 
 - 🚧 **Who** — the collector from their dashboard, or staff for them
 - 🚧 **Which Cards** — in the vault and not consigned; a consigned card ends its consignment first - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
-- 🚧 **Identity Check** — complete before the request is accepted
+- 🚧 **No Identity Check First** — the ID was recorded at intake, and staff check it at the handover
 - 🚧 **What Is Forfeited** — shown before the collector confirms
   - **Before Release** — everything vesting on the card
   - **After Release** — only the day's incentive not yet posted
@@ -45,9 +66,10 @@ on the day of the request. Consignment's fee for ending early is its own -
 - 🚧 **Moving to Causeway Bay** — a card held elsewhere moves to the shop first
 - 🚧 **Ready Email** — when staff confirm it arrived, the collector is emailed a link to book a collection appointment; the dashboard shows it too
 - 🚧 **Handover** — at the shop, by appointment
-  - **Identity** — checked against the collector's identity record; name and ID number must match
+  - **Identity** — staff check the collector's face against their ID, and the ID against the one recorded at intake: the legal name must match, and the ID number typed again must match the stored digest
+  - **A Mismatch** — the card is handed over only with a recorded reason, naming the staff member who gave it
   - **Someone Else Collecting** — a person the collector named in the dashboard shows their own ID
-  - **Condition** — checked against the deposit photos
+  - **Condition** — checked against the intake photos
   - **Withdrawal Note** — confirmed by whoever collects
 
 ## Withdrawal States
@@ -60,10 +82,11 @@ on the day of the request. Consignment's fee for ending early is its own -
 - 🚧 **Cancelled** — the request is withdrawn before collection
 
 :::detail{title="Product decisions" for="pm"}
-A withdrawal is the one moment a card leaves Grade10's hands, so it carries the
-full identity check and an in-person handover.
+A withdrawal is the one moment a card leaves Grade10's hands, so it is handed
+over in person, against the ID recorded at intake.
 
 - **Collected in person, at the shop** — no shipping back, so the card is handed only to someone whose ID was checked
+- **Checked against the intake ID, not the identity check** — staff saw the ID at intake, so matching it at the counter is enough, and a collector who never cashes out isn't asked to verify online
 - **The wallet is kept** — incentive already posted stays the collector's; only what is still vesting is forfeited
 
 | Item | Status | Decision | Owner |
