@@ -30,7 +30,7 @@ amount on it is whole cents written down by a person after the bank moved it.
   the cure date of a written notice has passed; the item settles the debt,
   and the figure it settled is on the audit chain
 - ❓ Legal — whether a surplus over the debt is returned; the regime decides —
-  [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#outside-the-code)
+  [Compliance and Readiness](/p/grade10-site/finance/compliance-and-readiness#outside-the-code)
 - **Release** — refused while anything is outstanding; a storage case owes nothing
 
 ## Arithmetic
@@ -125,7 +125,7 @@ every bound unset and writes no offer in production.
 - **The arrears** — every live loan past its due date, longest overdue first,
   judged on the payout's own due date and paged on a keyset cursor over it
 - **What the collector reads** — the offer and what is owed, as the
-  [Case page](/p/grade10-site/vault/collector-pages#case-page) lists them; no
+  [Case page](/p/grade10-site/finance/collector-pages#case-page) lists them; no
   annualised rate and no payoff quote with a validity: the balance is the quote
 - **How to pay** — one block: the lender's FPS id, its bank account under the
   lender's registered name, the case reference as the transfer reference, or
@@ -137,12 +137,12 @@ every bound unset and writes no offer in production.
   day set; once one is sent, its date to pay by, before which nothing can be taken
 - **Where a borrower pays** — the lender's own FPS id and bank account, one
   set per brand beside its legal identity; Finance supplies both, readiness
-  item 11 on [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case),
+  item 11 on [Compliance and Readiness](/p/grade10-site/finance/compliance-and-readiness#before-the-first-production-case),
   and every production offer refuses while unset
 - **Unset, outside production** — the block prints `[fpsId]` and `[bankAccount]`
 - **Unset, in production** — the counter line alone: pay by card or cash at
   the counter; no money message goes until both are set again
-- **What the collector is mailed** — [Messages](/p/grade10-site/vault/collector-pages#messages)
+- **What the collector is mailed** — [Messages](/p/grade10-site/finance/collector-pages#messages)
 
 ## Specs and journeys
 

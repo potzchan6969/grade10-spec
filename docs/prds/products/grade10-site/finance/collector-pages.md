@@ -74,7 +74,7 @@ again.
 - **Endings** — why a case ended is on the case: the reason staff gave,
   verbatim, who called it off, the clock that ran out, or the figure the item
   settled at; the signed agreements stay —
-  [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#exits)
+  [Case Lifecycle](/p/grade10-site/finance/case-lifecycle#exits)
 - **Photos** — served only to the owner and to staff
 - **The offer** — amount, term in days, rate for the term, the total to
   repay, what a late day costs, and the expiry; **Accept** and **Decline**
@@ -83,7 +83,7 @@ again.
   overdue, and the instant it was computed at
 - **Money on a live loan** — the how-to-pay block, the daily figure after the
   deadline, the dates the reminders go, each repayment and the final notice, as
-  [Loan and Money](/p/grade10-site/vault/loan-and-money#reading-the-book) states them
+  [Loan and Money](/p/grade10-site/finance/loan-and-money#reading-the-book) states them
 - **Custody** — held since when, settled or what is outstanding, and **Ask
   for it back**, which records one ask while the item is held
 - **Documents** — each packet with its fingerprint, each sealed document with
@@ -116,7 +116,7 @@ again.
   on a move, and is withdrawn on a cancel
 - **A missed visit** — closes the visit and keeps the case; a submitted case
   ends **24 hours** after the slot instead, and the email says the visit was
-  missed — [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#timers)
+  missed — [Case Lifecycle](/p/grade10-site/finance/case-lifecycle#timers)
 - **The visit completes** on the first counter act after its slot
 - ❓ **Booking on screen** — the shop and slot picker and the booked visit;
   which screen holds them is @tangconst's
@@ -125,7 +125,7 @@ again.
 
 - **Email, English** - one per event the collector may see; the set is the
   capability's own table, and its identity-check invitation is never sent -
-  [Identity Check](/p/grade10-site/vault/identity-check)
+  [Identity Check](/p/grade10-site/finance/identity-check)
 - **What a message names** — its figures as a table, not a sentence: the
   offer its terms, total, late-day cost and expiry; a money message the
   amount, the due date, the daily figure after it, how to pay while a balance

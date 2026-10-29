@@ -23,7 +23,7 @@ made.
 - **The collector's address** - mailed links keep `grade10.com/vault/cases/<id>`,
   which lands on the not-found surface
   until the collector's screens ship —
-  [Collector Pages](/p/grade10-site/vault/collector-pages#messages)
+  [Collector Pages](/p/grade10-site/finance/collector-pages#messages)
 - **Money** — the brand's currency in whole cents, recorded by a person
   after the bank moved it and against the date it moved; a payout takes two
   people, and a correction takes a second holder of the money grant
@@ -38,13 +38,13 @@ made.
 
 | Page | What it holds |
 | --- | --- |
-| [Collector Pages](/p/grade10-site/vault/collector-pages) | What a collector does on their own case, and what they hear |
+| [Collector Pages](/p/grade10-site/finance/collector-pages) | What a collector does on their own case, and what they hear |
 | [Portfolio](/p/grade10-site/vault/portfolio) | What a collector holds in the vault, and the acts on one item |
-| [Case Lifecycle](/p/grade10-site/vault/case-lifecycle) | The fourteen statuses, the two lanes, the timers, the exits |
-| [Loan and Money](/p/grade10-site/vault/loan-and-money) | The arithmetic, the policy the brand lends under, the money records and corrections, the ledger |
-| [Documents and Signing](/p/grade10-site/vault/documents-and-signing) | The three documents, the ceremony, consent, copies, verification |
-| [Operator Console](/p/grade10-site/vault/operator-console) | The queue and its views, one case's tabs, grants, the physical vault |
-| [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness) | Identity, retention, evidence, the checklist before the first production case, what counsel supplies |
+| [Case Lifecycle](/p/grade10-site/finance/case-lifecycle) | The fourteen statuses, the two lanes, the timers, the exits |
+| [Loan and Money](/p/grade10-site/finance/loan-and-money) | The arithmetic, the policy the brand lends under, the money records and corrections, the ledger |
+| [Documents and Signing](/p/grade10-site/finance/documents-and-signing) | The three documents, the ceremony, consent, copies, verification |
+| [Operator Console](/p/grade10-site/finance/operator-console) | The queue and its views, one case's tabs, grants, the physical vault |
+| [Compliance and Readiness](/p/grade10-site/finance/compliance-and-readiness) | Identity, retention, evidence, the checklist before the first production case, what counsel supplies |
 
 ## Where It Is Open
 

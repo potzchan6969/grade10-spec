@@ -41,7 +41,7 @@ names those currencies and does not decide them.
 | --- | --- | --- |
 | Grade10 store and loyalty points | HKD | [Points](/p/grade10-site/loyalty/points) |
 | zzz store | USD | Brand setting |
-| Vault | HKD, USD, one per case | [Loan and Money](/p/grade10-site/vault/loan-and-money) |
+| Vault | HKD, USD, one per case | [Loan and Money](/p/grade10-site/finance/loan-and-money) |
 | Auction | USD, HKD, JPY, one per lot | [Bidding](/p/grade10-site/auction/bidding) |
 | Grading | HKD | [Grading](/p/grade10-site/grading) |
 

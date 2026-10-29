@@ -27,7 +27,7 @@ company owns. Stock counts units of a product; an item is one object.
 - **One owner** - an item belongs to one account, or to the custodian or
   the lender under their registered names, or to no one once the owner is
   erased -
-  [Documents and Signing](/p/grade10-site/vault/documents-and-signing#document-terms)
+  [Documents and Signing](/p/grade10-site/finance/documents-and-signing#document-terms)
 - **Owner by name** - staff and admins, behind `kyc:read`, read the
   owner's name here; each read is on the audit chain; where the name cannot
   be read the page shows the short id and "name unavailable" and still opens
@@ -58,7 +58,7 @@ mark the vault no longer has.
 - **The vault registers** - an item gets its record when staff start the
   vault valuation, and carries the vault's mark from the day it is vaulted
   until it is released, unwound or forfeited -
-  [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#exits)
+  [Case Lifecycle](/p/grade10-site/finance/case-lifecycle#exits)
 - **The place decides** - the register never refuses what the vault has
   already done; where the vault and the register disagree on the owner, the
   item's page shows staff both owners
@@ -92,7 +92,7 @@ mark the vault no longer has.
   the default list, and its grader and cert may name a new item; staff
   restore a retired item with a reason, refused while its cert names a live
   item; a vault case's papers are refused while its item is retired -
-  [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#item-record)
+  [Case Lifecycle](/p/grade10-site/finance/case-lifecycle#item-record)
 
 ## Finding an Item
 

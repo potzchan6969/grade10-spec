@@ -136,7 +136,7 @@ released`, guarded on nothing outstanding and no packet open.
   cancel with no email
 - **A lapsed offer reads as one** — the offer's own expiry is read at the
   read, and the case stays `offer_made`, open for another —
-  [Collector Pages](/p/grade10-site/vault/collector-pages#case-page)
+  [Collector Pages](/p/grade10-site/finance/collector-pages#case-page)
 
 ## Exits
 

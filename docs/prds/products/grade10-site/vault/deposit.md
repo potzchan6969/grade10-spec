@@ -5,7 +5,7 @@ order: 7
 
 The vault-first deposit: a collector leaves cards in the vault for free, and
 eligible cards earn a daily incentive. It replaces the storage lane of a case;
-the financed lane is unchanged - [Case Lifecycle](/p/grade10-site/vault/case-lifecycle).
+the financed lane is unchanged - [Case Lifecycle](/p/grade10-site/finance/case-lifecycle).
 
 :::callout{kind="note"}
 - ❓ **Not built yet** — the owner's model as of 2026-10-29; no change carries it yet - [Vault-First Consignment](/references/vault-first-consignment). Product confirms

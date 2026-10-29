@@ -121,7 +121,7 @@ pinned to a consignment when its agreement is prepared.
   person who set a commission outside the schedule does not pay it out
 - **Second factor and audit** - as the vault's: required in production, and
   every act filed under its consignment -
-  [Operator Console](/p/grade10-site/vault/operator-console#permissions)
+  [Operator Console](/p/grade10-site/finance/operator-console#permissions)
 - **Staff hear nothing** - the queue's badges and counts are the signal
 
 :::detail{title="Product decisions" for="pm"}
