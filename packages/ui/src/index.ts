@@ -482,12 +482,6 @@ export {
   TierInfoCard,
   type TierInfoCardProps,
 } from "./blocks/loyalty-membership/tier-info-card";
-export {
-  TierLadder,
-  type TierLadderCopy,
-  type TierLadderProps,
-  type TierLadderRung,
-} from "./blocks/loyalty-membership/tier-ladder";
 export type {
   CouponItem,
   CouponStatus,
