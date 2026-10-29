@@ -16,7 +16,7 @@ management tracks. Turning vaulted cards into consignments has its own view -
   - **Fail** — the collector is told and the card is returned; it never earns
 - 🚧 **Incentive Approval** — cards waiting to be approved to earn - [Incentive](/p/grade10-site/vault/incentive#earning)
   - **Second Approver** — a second staff member approves a card above a value threshold, skipped at intake or not
-- 🚧 **Withdrawal Queue** — requests waiting for a move to Causeway Bay, the collection appointments, and the handover with the ID check and the Withdrawal Note - [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal)
+- 🚧 **Retrieval Queue** — requests waiting for a move to Causeway Bay, the collection appointments, and the handover with the ID check and the Retrieval Note - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval)
 
 :::callout{kind="note"}
 - ❓ **Second approver** — the value above which a second staff member approves. Product confirms
@@ -29,7 +29,7 @@ management tracks. Turning vaulted cards into consignments has its own view -
 
 ## Roles
 
-- 🚧 **Vault Staff** — intake, custody and withdrawals
+- 🚧 **Vault Staff** — intake, custody and retrievals
 - 🚧 **Consignment Staff** — listings and sales
 - **Finance** — cash-outs, the identity check and statements; the only role that sees the identity check's documents and bank details
 - 🚧 **ID at Intake** — vault staff read the collector's ID in hand and see it afterwards only as its mask
@@ -42,7 +42,7 @@ management tracks. Turning vaulted cards into consignments has its own view -
 
 ## Staff Dashboard
 
-- 🚧 **At a Glance** — intakes waiting for authentication, cards by location and status, incentive paid against cards consigned, abuse flags, and withdrawals and cash-outs waiting
+- 🚧 **At a Glance** — intakes waiting for authentication, cards by location and status, incentive paid against cards consigned, abuse flags, and retrievals and cash-outs waiting
 - 🚧 **Reports** — cards vaulted, consigned and sold by owner type; incentive paid against commission earned; days in the vault before consigning; cards earning but never consigned, by age
 
 :::detail{title="Product decisions" for="pm"}

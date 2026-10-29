@@ -62,14 +62,14 @@ What finance does with the requests.
 
 - 🚧 **When** — where money leaves Grade10: before the first cash-out, before the first sale payout, and when the cash-out account changes - [KYC](/p/grade10-site/account/kyc)
   - **Proceeds Held** — sale proceeds wait in the wallet until the check passes
-  - **Not for a Withdrawal** — staff check the ID at the counter against the one recorded at intake - [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal#collection)
+  - **Not for a Retrieval** — staff check the ID at the counter against the one recorded at intake - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#collection)
   - **Built** — at every cash-out and before sale proceeds reach the wallet; each point is an admin setting - [Identity Check](/p/grade10-site/finance/identity-check#gate)
 - 🚧 **Verified Name** — every cash-out goes only to the verified collector
 - 🚧 **Review** — finance approves or rejects, with a reason shown to the collector
 
 ## Abuse Checks
 
-- 🚧 **Signals** — accounts sharing a phone, device or bank account; a card vaulted, withdrawn and vaulted again; a card's price moving sharply on SNKRDUNK
+- 🚧 **Signals** — accounts sharing a phone, device or bank account; a card vaulted, retrieved and vaulted again; a card's price moving sharply on SNKRDUNK
 - 🚧 **Review** — staff may pause incentive on the card or the account
 
 :::detail{title="Product decisions" for="pm"}

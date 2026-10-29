@@ -57,7 +57,7 @@ intake, so an intake never waits for it.
 - 🚧 **Account** — a Grade10 account with a confirmed email
 - 🚧 **Phone Number** — on the account, for contact and abuse checks; it proves no identity
 - 🚧 **Signed Declaration** — that the collector owns the cards
-- 🚧 **ID Recorded** — the legal name, ID type, masked number and digest, and 18 or over, read by staff at intake; the identity a withdrawal is checked against - [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal#collection)
+- 🚧 **ID Recorded** — the legal name, ID type, masked number and digest, and 18 or over, read by staff at intake; the identity a retrieval is checked against - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#collection)
 - 🚧 **Identity Check** — not at an intake in person; it comes before money leaves Grade10 - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
 
 ## Card States
@@ -68,9 +68,9 @@ intake, so an intake never waits for it.
 4. 🚧 **Approved to Earn** — passed incentive approval, or approved at intake where staff skipped it; earning from the next day - [Incentive](/p/grade10-site/vault/incentive#earning)
 
 - 🚧 **Failed** — returned to the collector; it never earns
-- 🚧 **Afterwards** — an earning card is consigned, sold or withdrawn; a consignment ended or unsold comes back earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
+- 🚧 **Afterwards** — an earning card is consigned, sold or retrieved; a consignment ended or unsold comes back earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
 
-::image{src="assets/diagrams/vault-card-life.svg" alt="A card in the vault: Received, Authenticating, In the Vault, Approved to Earn and Consigned; a card that fails authentication is Failed and returned; an earning card is Withdrawn, collected at the shop; a consigned card is Sold, or comes back earning when the consignment ends or it goes unsold"}
+::image{src="assets/diagrams/vault-card-life.svg" alt="A card in the vault: Received, Authenticating, In the Vault, Approved to Earn and Consigned; a card that fails authentication is Failed and returned; an earning card is Retrieved, collected at the shop; a consigned card is Sold, or comes back earning when the consignment ends or it goes unsold"}
 
 ## Custody
 
@@ -88,6 +88,6 @@ can: an account, a phone number, a declaration and the ID staff read in hand.
 - **Events first, then the shop** — Phase 1 takes cards in person at card events, where staff reach collectors; the shop's counter joins in Phase 2 on the same form
 - **Storage at nothing for now, as a setting** — a fee would turn away the intakes the incentive is paying for, and a setting leaves room to charge one later without a rebuild; pinned to the Vault Terms, so a fee is never added to terms a collector already signed
 - **Checked at the counter, or later** — the counter check is the usual way, but an intake shouldn't wait for a professional to be free; a card kept unchecked earns and sells nothing until it passes, so taking it early costs nothing
-- **The ID read at intake, kept masked** — a withdrawal is matched against it at the counter, so no identity check is needed to take a card home, and no usable ID number is stored
+- **The ID read at intake, kept masked** — a retrieval is matched against it at the counter, so no identity check is needed to take a card home, and no usable ID number is stored
 - **A phone number captured, not confirmed** — it serves contact and abuse checks and proves no identity
 :::

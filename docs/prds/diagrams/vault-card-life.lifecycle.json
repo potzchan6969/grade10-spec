@@ -75,7 +75,7 @@
     {
       "id": "withdrawn",
       "type": "neutral",
-      "label": "Withdrawn",
+      "label": "Retrieved",
       "sublabel": "collected at the shop",
       "lane": "terminal",
       "col": 1
@@ -145,7 +145,7 @@
       "from": "earning",
       "to": "withdrawn",
       "variant": "dashed",
-      "label": "withdrawn",
+      "label": "retrieved",
       "labelAt": [
         556,
         320

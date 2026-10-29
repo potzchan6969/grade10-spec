@@ -52,7 +52,7 @@
       "lane": "collector",
       "col": 3,
       "type": "frontend",
-      "label": "Withdrawn",
+      "label": "Retrieved",
       "sublabel": "collected at the shop",
       "width": 150
     },
@@ -134,7 +134,7 @@
       "from": "vault",
       "to": "withdrawn",
       "variant": "dashed",
-      "label": "withdrawn",
+      "label": "retrieved",
       "fromSide": "right",
       "toSide": "bottom"
     }

@@ -86,7 +86,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
   - **Release** — on the last vesting day everything vested is posted at once; daily drips follow
   - **Once an Intake** — vesting runs once, not again on every stretch
   - **Shown Beside the Wallet** — "Vesting: HKD X", with its release date; not cashable
-  - **Withdrawn Early** — a card that leaves the vault before release forfeits what is vesting
+  - **Retrieved Early** — a card that leaves the vault before release forfeits what is vesting
   - **Sold Early** — a card sold before release, say on day 60 of 90; sale proceeds are paid as usual, and the note below says what happens to the incentive
   - **Built** — credited every day and locked until day N, or shown as one held figure posted on day N; an admin setting switches the view, every amount and unlock day the same either way, so it may be flipped at any time
   - **Forfeit at Release, as Built** — where the card's rule forfeits, releasing it before day N takes back what is still locked on it; a withdrawal request that is cancelled takes back nothing
@@ -102,7 +102,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 ## Settings
 
 - 🚧 **Admin Settings** — the rate, the liquidity model, eligible products, caps and the price check's limits; every change logged
-- 🚧 **Pinned to the Card** — the rate, the vesting days, the early withdrawal fee's period and amount, and the forfeit rule are pinned when the card's custody paper is prepared; a later change reaches only the next card
+- 🚧 **Pinned to the Card** — the rate, the vesting days, the early retrieval fee's period and amount, and the forfeit rule are pinned when the card's custody paper is prepared; a later change reaches only the next card
   - **Unset Refuses** — the paper is not prepared while the rate, the vesting days or the fee's period is unset
 - 🚧 **Pause and the Daily Run** — staff pause incentive, the price import and the drip run daily - [Vault Operations](/p/grade10-site/vault/operations#daily-run)
 
@@ -129,7 +129,7 @@ vault, cash out and leave.
 | Nothing is held | Decided | An unlikely price or rate is used and flagged, never held, because a credit stays locked until vesting ends and nothing is cashed out without a second treasurer; a wrong one is corrected in Inventory and the days it priced are worked again with no second approver - decided by the owner, 2026-10-28 | Owner |
 | A late fact waits | Decided | A day whose price or rate has not arrived waits and is paid in full, rather than earning nothing after 3 days - decided by the owner, 2026-10-28 | Owner |
 | A sold card stops on the sale | Decided | It stops earning on the day it is marked sold, not at the delivery or the settlement, so a card earns nothing while its sale is being completed - decided by the owner, 2026-10-29 | Owner |
-| A sale is not an early withdrawal | ❓ | A card sold through consignment forfeits nothing; its credited incentive unlocks on its own day - built so, 2026-10-27 | Owner |
+| A sale is not an early retrieval | ❓ | A card sold through consignment forfeits nothing; its credited incentive unlocks on its own day - built so, 2026-10-27 | Owner |
 :::
 
 :::detail{title="Code map" for="engineer"}

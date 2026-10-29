@@ -72,7 +72,7 @@ svg[data-diagram="vault-card-life"] .c-grid{stroke-dasharray: 1 4; opacity: 0.48
         <path data-step="consigned" data-edge-from="earning" data-edge-to="consigned" data-edge-key="3" data-edge-id="consign" data-composition-points="615,157;651,157" d="M 615 157 L 651 157" class="a-emphasis" stroke-width="2" marker-end="url(#vault-card-life-arrowhead-emphasis)"/>
         <path data-step="failed" data-edge-from="authenticating" data-edge-to="failed" data-edge-label="fails" data-edge-key="4" data-edge-id="fail" data-composition-points="248,188;248,479;343,479" d="M 248 188 L 248 469 Q 248 479 258 479 L 343 479" class="a-security" stroke-width="1.1" marker-end="url(#vault-card-life-arrowhead-security)"/>
         <path data-step="sold" data-edge-from="consigned" data-edge-to="sold" data-edge-label="sold" data-edge-key="5" data-edge-id="sell" data-composition-points="710,188;710,450" d="M 710 188 L 710 450" class="a-emphasis" stroke-width="2" marker-end="url(#vault-card-life-arrowhead-emphasis)"/>
-        <path data-step="withdrawn" data-edge-from="earning" data-edge-to="withdrawn" data-edge-label="withdrawn" data-edge-key="6" data-edge-id="withdraw" data-composition-points="556,188;556,450" d="M 556 188 L 556 450" class="a-dashed" stroke-width="1.1" marker-end="url(#vault-card-life-arrowhead-dashed)"/>
+        <path data-step="withdrawn" data-edge-from="earning" data-edge-to="withdrawn" data-edge-label="retrieved" data-edge-key="6" data-edge-id="withdraw" data-composition-points="556,188;556,450" d="M 556 188 L 556 450" class="a-dashed" stroke-width="1.1" marker-end="url(#vault-card-life-arrowhead-dashed)"/>
         <path data-step="earning" data-edge-from="consigned" data-edge-to="earning" data-edge-label="ended or unsold" data-edge-key="7" data-edge-id="ended" data-composition-points="710,126;710,96;556,96;556,126" d="M 710 126 L 710 106 Q 710 96 700 96 L 566 96 Q 556 96 556 106 L 556 126" class="a-dashed" stroke-width="1.1" marker-end="url(#vault-card-life-arrowhead-dashed)"/>
         
         <g data-step="received" id="vault-card-life-node-received" data-node-id="received" data-node-label="Received" aria-label="Focus Received, recorded and photographed, In the vault" data-node-kind="start" data-node-sublabel="recorded and photographed" data-node-context="In the vault">
@@ -138,15 +138,15 @@ svg[data-diagram="vault-card-life"] .c-grid{stroke-dasharray: 1 4; opacity: 0.48
           <text data-node-label="" data-detail-anchor="" x="402" y="471" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Failed</text>
           <text data-detail="context" x="402" y="487" class="t-muted" font-size="7" text-anchor="middle">returned; never earns</text>
         </g>
-        <g data-step="withdrawn" id="vault-card-life-node-withdrawn" data-node-id="withdrawn" data-node-label="Withdrawn" aria-label="Focus Withdrawn, collected at the shop, Leaves the vault" data-node-kind="neutral" data-node-sublabel="collected at the shop" data-node-context="Leaves the vault">
-          <title>Withdrawn · collected at the shop · Leaves the vault</title>
+        <g data-step="withdrawn" id="vault-card-life-node-withdrawn" data-node-id="withdrawn" data-node-label="Retrieved" aria-label="Focus Retrieved, collected at the shop, Leaves the vault" data-node-kind="neutral" data-node-sublabel="collected at the shop" data-node-context="Leaves the vault">
+          <title>Retrieved · collected at the shop · Leaves the vault</title>
           <rect x="497" y="450" width="118" height="58" rx="7" class="c-mask"/>
           <rect x="497" y="450" width="118" height="58" rx="7" class="c-external" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="neutral" class="semantic-sigil s-external" transform="translate(598 456) scale(0.6875)">
             <rect x="3" y="3" width="10" height="10" rx="2"/>
             <circle cx="8" cy="8" r="1.2" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="556" y="471" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Withdrawn</text>
+          <text data-node-label="" data-detail-anchor="" x="556" y="471" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Retrieved</text>
           <text data-detail="context" x="556" y="487" class="t-muted" font-size="7" text-anchor="middle">collected at the shop</text>
         </g>
         <g data-step="sold" id="vault-card-life-node-sold" data-node-id="sold" data-node-label="Sold" aria-label="Focus Sold, stops earning, Leaves the vault" data-node-kind="success" data-node-sublabel="stops earning" data-node-context="Leaves the vault">
@@ -169,9 +169,9 @@ svg[data-diagram="vault-card-life"] .c-grid{stroke-dasharray: 1 4; opacity: 0.48
           <rect x="694" y="309" width="32" height="16" rx="4" class="c-mask"/>
           <text x="710" y="320" class="t-backend" font-size="8" text-anchor="middle">sold</text>
         </g>
-        <g data-step="withdrawn" data-detail="context" data-edge-from="earning" data-edge-to="withdrawn" data-edge-label="withdrawn" data-edge-key="6" data-edge-id="withdraw">
+        <g data-step="withdrawn" data-detail="context" data-edge-from="earning" data-edge-to="withdrawn" data-edge-label="retrieved" data-edge-key="6" data-edge-id="withdraw">
           <rect x="527.95" y="309" width="56.1" height="16" rx="4" class="c-mask"/>
-          <text x="556" y="320" class="t-messagebus" font-size="8" text-anchor="middle">withdrawn</text>
+          <text x="556" y="320" class="t-messagebus" font-size="8" text-anchor="middle">retrieved</text>
         </g>
         <g data-step="earning" data-detail="context" data-edge-from="consigned" data-edge-to="earning" data-edge-label="ended or unsold" data-edge-key="7" data-edge-id="ended">
           <rect x="590.25" y="85" width="85.5" height="16" rx="4" class="c-mask"/>

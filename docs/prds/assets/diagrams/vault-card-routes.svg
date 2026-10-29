@@ -70,7 +70,7 @@ svg[data-diagram="vault-card-routes"] .c-lane{fill: var(--lane-fill); stroke: va
         <path data-step="counter" data-edge-from="store" data-edge-to="counter" data-edge-key="2" data-composition-points="448,372;483,372;483,598" d="M 448 372 L 483 372 L 483 598" class="a-emphasis" stroke-width="1.8" marker-end="url(#vault-card-routes-arrowhead-emphasis)"/>
         <path data-step="auction" data-edge-from="vault" data-edge-to="auction" data-edge-label="consigned" data-edge-key="3" data-composition-points="243,272;243,552;363,552;363,524" d="M 243 272 L 243 552 L 363 552 L 363 524" class="a-default" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead)"/>
         <path data-step="store" data-edge-from="vault" data-edge-to="store" data-edge-label="consigned" data-edge-key="4" data-composition-points="243,272;243,294;363,294;363,338" d="M 243 272 L 243 294 L 363 294 L 363 338" class="a-emphasis" stroke-width="1.8" marker-end="url(#vault-card-routes-arrowhead-emphasis)"/>
-        <path data-step="withdrawn" data-edge-from="vault" data-edge-to="withdrawn" data-edge-label="withdrawn" data-edge-key="5" data-composition-points="318,246;483,246;483,146" d="M 318 246 L 483 246 L 483 146" class="a-dashed" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead-dashed)"/>
+        <path data-step="withdrawn" data-edge-from="vault" data-edge-to="withdrawn" data-edge-label="retrieved" data-edge-key="5" data-composition-points="318,246;483,246;483,146" d="M 318 246 L 483 246 L 483 146" class="a-dashed" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead-dashed)"/>
         
         <g data-step="intake" id="vault-card-routes-node-intake" data-node-id="intake" data-node-label="Intake" aria-label="Focus Intake, a card event or the shop, Collector" data-node-kind="frontend" data-node-sublabel="a card event or the shop" data-node-context="Collector">
           <title>Intake · a card event or the shop · Collector</title>
@@ -85,8 +85,8 @@ svg[data-diagram="vault-card-routes"] .c-lane{fill: var(--lane-fill); stroke: va
           <text data-node-label="" data-detail-anchor="" x="123" y="115" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Intake</text>
           <text data-detail="context" x="123" y="132" class="t-muted" font-size="8" text-anchor="middle">a card event or the shop</text>
         </g>
-        <g data-step="withdrawn" id="vault-card-routes-node-withdrawn" data-node-id="withdrawn" data-node-label="Withdrawn" aria-label="Focus Withdrawn, collected at the shop, Collector" data-node-kind="frontend" data-node-sublabel="collected at the shop" data-node-context="Collector">
-          <title>Withdrawn · collected at the shop · Collector</title>
+        <g data-step="withdrawn" id="vault-card-routes-node-withdrawn" data-node-id="withdrawn" data-node-label="Retrieved" aria-label="Focus Retrieved, collected at the shop, Collector" data-node-kind="frontend" data-node-sublabel="collected at the shop" data-node-context="Collector">
+          <title>Retrieved · collected at the shop · Collector</title>
           <rect x="408" y="94" width="150" height="52" rx="6" class="c-mask"/>
           <rect x="408" y="94" width="150" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(414 100) scale(0.6875)">
@@ -95,7 +95,7 @@ svg[data-diagram="vault-card-routes"] .c-lane{fill: var(--lane-fill); stroke: va
             <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
             <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="483" y="115" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Withdrawn</text>
+          <text data-node-label="" data-detail-anchor="" x="483" y="115" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Retrieved</text>
           <text data-detail="context" x="483" y="132" class="t-muted" font-size="8" text-anchor="middle">collected at the shop</text>
         </g>
         <g data-step="vault" id="vault-card-routes-node-vault" data-node-id="vault" data-node-label="In the vault" aria-label="Focus In the vault, earning, if approved, The vault" data-node-kind="database" data-node-sublabel="earning, if approved" data-node-context="The vault">
@@ -167,9 +167,9 @@ svg[data-diagram="vault-card-routes"] .c-lane{fill: var(--lane-fill); stroke: va
           <rect x="276.4" y="274" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
           <text x="303" y="284" class="t-backend" font-size="8" text-anchor="middle">consigned</text>
         </g>
-        <g data-step="withdrawn" data-detail="context" data-edge-from="vault" data-edge-to="withdrawn" data-edge-label="withdrawn" data-edge-key="5">
+        <g data-step="withdrawn" data-detail="context" data-edge-from="vault" data-edge-to="withdrawn" data-edge-label="retrieved" data-edge-key="5">
           <rect x="373.9" y="226" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
-          <text x="400.5" y="236" class="t-database" font-size="8" text-anchor="middle">withdrawn</text>
+          <text x="400.5" y="236" class="t-database" font-size="8" text-anchor="middle">retrieved</text>
         </g>
         
       </svg>

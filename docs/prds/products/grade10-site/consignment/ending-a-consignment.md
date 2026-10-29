@@ -25,7 +25,7 @@ vault and keeps earning.
 
 ## Unsold at Auction
 
-- 🚧 **No Sale** — the lot didn't sell, or the winner didn't pay and it isn't relisted: back to vault-only; the collector consigns it again or withdraws it
+- 🚧 **No Sale** — the lot didn't sell, or the winner didn't pay and it isn't relisted: back to vault-only; the collector consigns it again or retrieves it
 
 :::detail{title="Product decisions" for="pm"}
 Ending a consignment should cost the collector as little as consigning did, so

@@ -31,12 +31,12 @@ Incentive, after the identity check.
 
 - **Intake and Consign** — the main way into consignment: the card is registered into the vault, then consigned, in the same visit - [Consignment](/p/grade10-site/consignment)
 
-::image{src="assets/diagrams/vault-card-routes.svg" alt="Where a vaulted card can go: taken in at a card event or the shop into the vault; consigned to the store, on the shop's tills with the marketplace later, or to an auction lot; sold at the counter; won at auction and shipped, with Kerry Logistics collecting at the shop, or collected; or withdrawn and collected at the shop"}
+::image{src="assets/diagrams/vault-card-routes.svg" alt="Where a vaulted card can go: taken in at a card event or the shop into the vault; consigned to the store, on the shop's tills with the marketplace later, or to an auction lot; sold at the counter; won at auction and shipped, with Kerry Logistics collecting at the shop, or collected; or retrieved and collected at the shop"}
 
 - **Off the Main Path**
   - **Consign Later** — the collector consigns a card already in the vault from the dashboard - [Consigning](/p/grade10-site/consignment/consigning#consign-form)
   - **Ending a Consignment** — the card comes off sale and stays in the vault, earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
-  - **Vault Withdrawal** — the card goes back to the collector - [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal)
+  - **Vault Retrieval** — the card goes back to the collector - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval)
 - **A Loan Against a Card** — not the vault's; it is a case - [Finance](/p/grade10-site/finance)
 
 | Page | What it holds |
@@ -44,8 +44,8 @@ Incentive, after the identity check.
 | [Vault Intake](/p/grade10-site/vault/intake) | The ways in, the intake form, what an intake needs, card states, custody |
 | [Incentive](/p/grade10-site/vault/incentive) | The daily amount, price tiers, approval, eligibility, vesting |
 | [Portfolio](/p/grade10-site/vault/portfolio) | What the collector sees of their cards in the vault |
-| [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal) | Taking a card home |
-| [Vault Documents](/p/grade10-site/vault/documents) | The papers a card collects, from intake to withdrawal |
+| [Vault Retrieval](/p/grade10-site/vault/vault-retrieval) | Taking a card home |
+| [Vault Documents](/p/grade10-site/vault/documents) | The papers a card collects, from intake to retrieval |
 | [Vault Operations](/p/grade10-site/vault/operations) | The staff side: queues, moves, roles, the daily run, reports |
 | [Earnings Wallet](/p/grade10-site/account/earnings-wallet) | Where incentive and sale proceeds collect, and cash-out |
 
@@ -56,17 +56,17 @@ done when its last line works with a real collector and a real card.
 
 1. **Vault and Incentive** — mid November 2026
    - **Delivers** — intake at card events, with a confirmed email, a phone number, the collector's ID read by staff and the ownership declaration; authentication, custody and moves; the daily price feed, eligibility and the daily amount; the collector's dashboard and the staff's
-   - **Until Phase 2** — intake is at card events only; nothing cashes out, so incentive builds up; staff run withdrawals by hand
+   - **Until Phase 2** — intake is at card events only; nothing cashes out, so incentive builds up; staff run retrievals by hand
    - **Done When** — a card taken in at an event is authenticated, approved, earns from the next day, and the collector sees it and its daily amount in the dashboard
 2. **Consign and Sell** — 6 December 2026 for the store
    - **Delivers** — intake at the shop's counter, on the same form as events; consigning at intake or later from the dashboard, with the agreement signed in the app; the shop's tills, at the shop and events, and auction lots from vault stock; statements and commission invoices; incentive stopping when a card sells; the identity check before the first cash-out or sale payout; cash-out at least HKD 500 once every 7 days, to an account in the verified name; the consignment dashboard
    - **Until a Later Phase** — staff enter store price changes
    - **Done When** — a vaulted card is consigned and signed, sold at the shop and at auction, its proceeds and incentive reach the wallet, and the collector passes the identity check and cashes out
-3. **Withdrawal** — taking a card home through the product
+3. **Retrieval** — taking a card home through the product
    - ❓ **Date** — not set. Product confirms
-   - **Delivers** — withdrawal by appointment, the ID checked at handover against the one recorded at intake
-   - **On Go-Live** — withdrawals staff ran by hand are entered
-   - **Done When** — a collector withdraws a card, and the incentive already in the wallet stays cashable
+   - **Delivers** — retrieval by appointment, the ID checked at handover against the one recorded at intake
+   - **On Go-Live** — retrievals staff ran by hand are entered
+   - **Done When** — a collector retrieves a card, and the incentive already in the wallet stays cashable
 
 - **After Launch** — the online marketplace, with no date yet; stocktake
 - **Not Planned** — business verification for company owners
@@ -89,7 +89,7 @@ Decisions:
 
 - **Vault first** — every consigned card is a vaulted card: consigned at intake in the same visit, or later with a tap, never through a second intake
 - **The incentive is an acquisition cost** — paid on cards Grade10 can sell, and recovered from commission; a storage fee would turn the intake away, so it is a setting at nothing for now - [Vault Intake](/p/grade10-site/vault/intake#custody)
-- **Identity at the exit, not the door** — an intake needs an account, a phone number, a declaration and the ID staff read in hand; the identity check waits until money leaves, and a withdrawal is matched against the ID recorded at intake
+- **Identity at the exit, not the door** — an intake needs an account, a phone number, a declaration and the ID staff read in hand; the identity check waits until money leaves, and a retrieval is matched against the ID recorded at intake
 - **Keeping without a loan is a vault intake** — it replaces a case's storage lane, so the card can earn and be consigned; the loan stays a case - [Finance](/p/grade10-site/finance)
 - **Not in scope** — spending the wallet on Grade10, scanning labels to record moves, a price staff type in by hand
 

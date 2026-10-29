@@ -14,7 +14,7 @@ against it.
      accepted → signing → vaulted → active → repaid → released`
   2. **Storage** — `draft → submitted → under_valuation → accepted → signing
      → vaulted → released`
-- ❓ **Storage lane replaced** — the owner's vault-first intake is to replace it: a free intake at the counter, incentive approval, daily incentive and withdrawal by appointment; the financed lane stays. Product confirms the change that carries it - [Vault Intake](/p/grade10-site/vault/intake)
+- ❓ **Storage lane replaced** — the owner's vault-first intake is to replace it: a free intake at the counter, incentive approval, daily incentive and retrieval by appointment; the financed lane stays. Product confirms the change that carries it - [Vault Intake](/p/grade10-site/vault/intake)
 - **Exits that are not a release** — `declined`, `cancelled`, `expired`,
   `forfeited`
 - **Two moves back** — a reversed payout returns `active → vaulted` while no
@@ -27,14 +27,14 @@ against it.
   start date, incentive rate and, on a financed card, its own loan, while
   staff open, prepare, vault and authenticate the case in one act each —
   [Incentive](/p/grade10-site/vault/incentive)
-- 🚧 **An early withdrawal pays its fee** — a card taken back inside the
-  vault's early-withdrawal period is released only once its fee is paid by
+- 🚧 **An early retrieval pays its fee** — a card taken back inside the
+  vault's early-retrieval period is released only once its fee is paid by
   card on its Shopify invoice, online or at the shop's till; the refusal names
   the fee outstanding, and a withdrawn request voids the invoice —
-  [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal#early-withdrawal-fee)
+  [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#early-retrieval-fee)
 - 🚧 **Released to its buyer** — a storage card sold through consignment is
   released to its buyer on delivery under the consignment agreement, with no
-  release paper and no early withdrawal fee —
+  release paper and no early retrieval fee —
   [Consignment](/p/grade10-site/consignment)
 
 :::flow{title="Intake to release"}

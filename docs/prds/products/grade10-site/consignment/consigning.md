@@ -100,7 +100,7 @@ For a card with a market price of HKD 10,000:
 - **Sales Report Themselves** — the store and the auction report each sale, delivery and refund; staff record one by hand only where a channel didn't
 - 🚧 **Price Changes** — entered by staff; they may raise the price at their will, never below the lowest acceptable price
 - 🚧 **Handover** — the buyer takes the card at the counter; a card held elsewhere moves to the shop first
-  - **Released to Its Buyer** — on delivery, under the consignment agreement; no release paper, no early withdrawal fee, and the card's credited incentive is kept - [Case Lifecycle](/p/grade10-site/finance/case-lifecycle)
+  - **Released to Its Buyer** — on delivery, under the consignment agreement; no release paper, no early retrieval fee, and the card's credited incentive is kept - [Case Lifecycle](/p/grade10-site/finance/case-lifecycle)
 
 :::callout{kind="note"}
 - ❓ **Who wins the counter** — the first hold, the shop reserving the card for an online checkout, or the till, cancelling an unpaid online checkout; built on the first. Owner confirms
@@ -156,7 +156,7 @@ By email, in the collector's language.
 
 ## End of the Period
 
-- 🚧 **Unsold After a Year** — the card goes back to vault-only and keeps earning; the collector consigns it again or withdraws it
+- 🚧 **Unsold After a Year** — the card goes back to vault-only and keeps earning; the collector consigns it again or retrieves it
 
 :::detail{title="Product decisions" for="pm"}
 A consigned card is always a vaulted card, authenticated and photographed once,
