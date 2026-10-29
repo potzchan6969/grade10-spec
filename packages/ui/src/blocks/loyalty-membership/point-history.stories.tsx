@@ -91,8 +91,7 @@ export const TopUpUnderReview: Story = {
           track: "earned",
           delta: 60000,
           pending: true,
-          context:
-            "Under review — the card is charged only if it's approved. Reference TU-2026-0384.",
+          context: "Under review. Ref TU-2026-0384.",
         },
       ],
     },

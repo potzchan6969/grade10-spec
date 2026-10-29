@@ -449,8 +449,7 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     /* Above the 50,000-point review threshold, so the ledger shows it held. */
     delta: 60000,
     pending: true,
-    context:
-      "Under review — the card is charged only if it’s approved. Reference TU-2026-0384.",
+    context: "Under review. Ref TU-2026-0384.",
   },
   {
     id: "entry-topup-chargeback",
