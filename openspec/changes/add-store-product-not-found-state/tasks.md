@@ -15,6 +15,6 @@
 
 ## 3. The walk (grade10) (owner: @kinisworking)
 
-- [ ] 3.1 Walk `grade10-site-store-product-page-US-01` end to end through the implemented product route using `g10.store-product-page.US1-TC1`, `g10.store-product-page.US1-TC2` and the composed `g10.store-dmn.US11-TC2`; verify `grade10-site-store-product-page-SC-03`, `grade10-site-store-product-page-SC-04`, the missing-product 404/UI contract, the generic unrelated-route boundary and the existing product success path, leaving draft manual cases for the later human QA walk.
-- [ ] 3.2 Mark only the cases the walk decides to automate with `pnpm run tcs:automated <case-id…> --decided-by grade10:openspec/changes/add-store-product-not-found-state/tasks.md` in the walk's own commit; keep the remaining cases manual for human QA.
-- [ ] 3.3 Verify: the Store product-page and domain walk results, `pnpm run tcs:validate`, `pnpm run validate:changes add-store-product-not-found-state`, and `pnpm check:manual`.
+- [x] 3.1 Walk `grade10-site-store-product-page-US-01` end to end through the implemented product route using `g10.store-product-page.US1-TC1`, `g10.store-product-page.US1-TC2` and the composed `g10.store-dmn.US11-TC2`; verify `grade10-site-store-product-page-SC-03`, `grade10-site-store-product-page-SC-04`, the missing-product 404/UI contract, the generic unrelated-route boundary and the existing product success path, leaving draft manual cases for the later human QA walk.
+- [x] 3.2 Mark only the cases the walk decides to automate with `pnpm run tcs:automated <case-id…> --decided-by grade10:openspec/changes/add-store-product-not-found-state/tasks.md` in the walk's own commit; keep the remaining cases manual for human QA.
+- [x] 3.3 Verify: the Store product-page and domain walk results, `pnpm run tcs:validate`, `pnpm run validate:changes add-store-product-not-found-state`, and `pnpm check:manual`.
