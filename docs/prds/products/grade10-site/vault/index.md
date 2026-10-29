@@ -56,7 +56,7 @@ done when its last line works with a real collector and a real card.
 
 1. **Vault and Incentive** — mid November 2026
    - **Delivers** — the deposit at the shop or an event, authentication, custody and moves; the daily price feed, eligibility and the daily amount; the collector's dashboard and the staff's
-   - **Until Phase B** — nothing cashes out, so incentive builds up; staff run withdrawals by hand
+   - **Until Phase 2** — nothing cashes out, so incentive builds up; staff run withdrawals by hand
    - **Done When** — a card deposited at an event is authenticated, approved, earns from the next day, and the collector sees it and its daily amount in the dashboard
 2. **Consign and Sell** — 6 December 2026 for the store
    - **Delivers** — consigning from the vault with the agreement signed in the app; the shop's tills and auction lots from vault stock; statements and commission invoices; cash-out after the identity check; the consignment dashboard

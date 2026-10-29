@@ -26,8 +26,6 @@ The card is authenticated and stored; it earns once approved, like any vaulted c
 ## Staff — Approve the listing
 Grade10 sets the list or starting price, and for both channels where the card starts.
 
-# Selling
-
 ## Buyer — Buy it
 At the shop's counter, online or at auction; the card stops earning.
 
@@ -39,7 +37,7 @@ Sale price less commission reaches the wallet 3 business days after the buyer pa
 
 | Page | What it holds |
 | --- | --- |
-| [Consigning](/p/grade10-site/consignment/consigning) | The two ways in, the consign form, the terms, the price check, approval, both channels, the store and the auction |
+| [Consigning](/p/grade10-site/consignment/consigning) | The two ways in, the consign form, the terms, the price check, approval, the store and the auction, notifications |
 | [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment) | Taking a card off sale before it sells |
 | [Consignment Dashboard](/p/grade10-site/consignment/dashboard) | The staff view that turns vaulted cards into sales |
 | [Consignment Console](/p/grade10-site/consignment/operator-console) | The admin section's queue, one consignment, payouts and settings |

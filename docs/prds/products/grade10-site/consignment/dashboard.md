@@ -32,7 +32,7 @@ the share of vaulted cards that get consigned, and the time it takes.
   - **Row** — the collector's lowest acceptable price against the market price, and any low price the collector confirmed
   - **Act in the Row** — approve, reject with a reason, set the list or starting price and the starting channel
   - **Bulk Approve** — rows with nothing flagged
-- 🚧 **Incentive Approval** — cards waiting to be approved to earn, oldest first, with the price match and liquidity beside each; a card approved at deposit doesn't appear - [Incentive](/p/grade10-site/vault/incentive#incentive-approval)
+- 🚧 **Incentive Approval** — cards waiting to be approved to earn, oldest first, with the price match and liquidity beside each; a card approved at deposit doesn't appear - [Incentive](/p/grade10-site/vault/incentive#earning)
 
 :::callout{kind="note"}
 - ❓ **Target time to approve** — how long a consignment may wait. Product confirms

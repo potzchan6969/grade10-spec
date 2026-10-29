@@ -3,7 +3,7 @@ title: Vault Withdrawal
 order: 4
 ---
 
-The collector takes a card out of the vault and home. Phase C; until then
+The collector takes a card out of the vault and home. Phase 3; until then
 staff run withdrawals by hand. It replaces the storage
 lane's release; a financed case releases as before -
 [Case Lifecycle](/p/grade10-site/finance/case-lifecycle).

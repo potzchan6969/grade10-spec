@@ -23,14 +23,17 @@ From the dashboard, for cards already in the vault.
 
 ## Terms
 
-- 🚧 **Channel** — the store, the auction or both
-  - **Both** — the card is on sale in one channel at a time, never on the shelf and in an auction together; one agreement and one lowest price cover both - [Both Channels](/p/grade10-site/consignment/consigning#both-channels)
-- 🚧 **Lowest Acceptable Price** — the only price the collector sets; a hard limit no sale goes below
-  - **In the Store** — required: the lowest the collector will sell for in the store; staff may price higher at their will, which helps both sides
-  - **At Auction** — optional: with none there is no reserve and the lot sells at the winning bid; with one, it is the reserve
-  - **Both** — required, and it covers both channels
-  - **Price Check** — compared with the card's market price - [Price Check](/p/grade10-site/consignment/consigning#price-check)
-- **Commission** — Grade10's rate: in the store a share of the sale price by price band, at auction a share of the hammer price
+The collector sets one price, the lowest acceptable price: a hard limit no sale
+goes below. Grade10 prices the listing at approval.
+
+| Term | At the store | At auction |
+| --- | --- | --- |
+| 🚧 Lowest acceptable price | required: the lowest the collector sells for; staff may price higher at their will | optional: the reserve; with none, the lot sells at the winning bid |
+| 🚧 Price Grade10 sets | the list price, never below the lowest acceptable price | the starting price |
+| Commission | a share of the sale price, by price band | a share of the hammer price only; the buyer's premium is Grade10's |
+
+- 🚧 **Both** — one agreement and one lowest acceptable price, required, cover both; the commission is the rate of the channel the card sells in - [Consign to Store & Auction](/p/grade10-site/consignment/consigning#consign-to-store-auction)
+- **Commission**
   - **Minimum Charge** — optional, per card
   - 🚧 **By Store Channel** — in the store, the rate may differ between the shop and online
   - **Pinned to the Agreement** — the rates in force when the agreement is prepared; a later change reaches only the next agreement
@@ -46,14 +49,23 @@ From the dashboard, for cards already in the vault.
 On the consign form, and whenever the lowest price is changed.
 
 - 🚧 **Market Price** — the card's 30-day SNKRDUNK median; a card with no market price has no check
-- 🚧 **Too Low** — more than 20% below the market price: a warning that suggests raising it; the collector confirms a second time to keep it, and isn't forced to raise it
-- 🚧 **Too High** — more than 50% above the market price: rejected, since a price that far above would hurt the chance of a sale; the collector lowers it to continue
+- 🚧 **The Check** — how far the lowest acceptable price sits from the market price:
+
+```text
+gap = (lowest acceptable price − market price) ÷ market price
+
+gap more than 20% below   warned; kept only if the collector confirms again
+gap more than 50% above   refused; the collector lowers it to continue
+otherwise                 accepted
+```
+
+- 🚧 **Never Forced Up** — a warned collector may keep a low price
 - 🚧 **Settings** — the 20% and 50% limits are admin settings
 - 🚧 **At Approval** — staff see the market price and whether the collector confirmed a low price, so there is less back-and-forth
 
 For a card with a market price of HKD 10,000:
 
-| Lowest acceptable price | Against the market | Outcome |
+| Lowest acceptable price | Gap | Outcome |
 | --- | --- | --- |
 | HKD 7,500 | 25% below | warned; kept if the collector confirms again |
 | HKD 9,000 | 10% below | accepted |
@@ -67,7 +79,7 @@ For a card with a market price of HKD 10,000:
 ## Listing Approval
 
 - 🚧 **Staff Approval** — every consignment, before it goes on sale
-  - **List or Starting Price** — set by Grade10; a store price is never below the lowest acceptable price, and staff may raise it at their will
+  - **List or Starting Price** — set by Grade10, as the terms say
   - **Starting Channel** — for a card consigned to both, staff decide which channel it starts in; the collector doesn't choose the order
   - **Approved** — listed: a store product, or the card added to an auction lot
   - **Rejected** — the collector is told why and can edit and resubmit
@@ -75,16 +87,11 @@ For a card with a market price of HKD 10,000:
   - **In the Store** — a new lowest price above the list price raises the list price to match
   - **At Auction** — until the catalogue is published, then locked
 
-## Both Channels
+## Consign to Store & Auction
 
-- 🚧 **One at a Time** — a card consigned to both is never on the store shelf and in an auction together
-- 🚧 **Moving** — if it doesn't sell, staff move it to the other channel without the collector signing again, taking it off the first channel at once; the commission is the rate of the channel it sells in
-  - **From an Auction** — only before the catalogue is published, or after the auction ends unsold
-- 🚧 **Dashboard** — shows which channel the card is in now
+### At the Store
 
-## In the Store
-
-- **One Product, Every Store Channel** — the card is one store product, on the shop's tills at Causeway Bay and events and in the online store - [Inventory and Sales Channels](/p/grade10-site/store/inventory-and-channels)
+- **One Product, Every Store Channel** — the card is one store product, on the shop's tills at Causeway Bay and events, in the online store and at partners - [Inventory and Sales Channels](/p/grade10-site/store/inventory-and-channels)
   - 🚧 **Shop, Online or Both** — staff list a store card in the shop only, online only, or both
   - **First Sale Wins** — the card comes off the other channels at once; a second sale of the same card is refunded
     - 🚧 **Sold Twice** — a till sale of a card an online buyer paid for at the same moment stands; the online buyer is refunded and staff alerted
@@ -92,7 +99,7 @@ For a card with a market price of HKD 10,000:
   - 🚧 **Marketplace** — once it launches, a channel like the others
 - **Sales Report Themselves** — the store and the auction report each sale, delivery and refund; staff record one by hand only where a channel didn't
 - 🚧 **Price Changes** — entered by staff; they may raise the price at their will, never below the lowest acceptable price
-- 🚧 **Handover** — at the counter in the shop; online orders ship from the vault, and a card held elsewhere moves first
+- 🚧 **Handover** — at the counter in the shop; an online order ships from the shop, Kerry Logistics collecting it there; a card at an event moves to the shop first
   - **Released to Its Buyer** — on delivery, under the consignment agreement; no release paper, no early withdrawal fee, and the card's credited incentive is kept - [Case Lifecycle](/p/grade10-site/finance/case-lifecycle)
 
 :::callout{kind="note"}
@@ -100,13 +107,19 @@ For a card with a market price of HKD 10,000:
 - ❓ **The release clause** — its exact words in the consignment agreement; a draft prints until they are confirmed. Owner confirms
 :::
 
-## At Auction
+### At Auction
 
 - 🚧 **Lot** — listed from the vault; the reserve is the lowest acceptable price where the collector set one, otherwise there is no reserve
   - **Built** — the lot opens at the floor agreed at signing, with no reserve; an HKD floor at a dollar auction is converted at US$1 = HK$7.85, rounded up, the rate kept on the lot, and the sale comes back in HKD
-- **Commission** — on the hammer price only; the buyer's premium is Grade10's
 - 🚧 **Winner Doesn't Pay** — the card is relisted
-- 🚧 **Handover** — shipped from the vault, or collected at Causeway Bay
+- 🚧 **Handover** — shipped from the shop, or collected there
+
+### Both
+
+- 🚧 **One at a Time** — a card consigned to both is never on the store shelf and in an auction together
+- 🚧 **Moving** — if it doesn't sell, staff move it to the other channel without the collector signing again, taking it off the first channel at once
+  - **From an Auction** — only before the catalogue is published, or after the auction ends unsold
+- 🚧 **Dashboard** — shows which channel the card is in now
 
 ## The Sale Price
 
@@ -124,11 +137,11 @@ For a card with a market price of HKD 10,000:
 - **Display Name** — the name the collector gave to be shown, never their legal name
 - **Agreement Withdrawn** — the name comes off the store and the lot at once
 
-## Messages
+## Notifications
 
 By email, in the collector's language.
 
-| Message | When |
+| Notification | When |
 | --- | --- |
 | Agreement signed | the sealed agreement, with its terms |
 | On sale | listed in the shop or at auction, with its link |
@@ -137,7 +150,7 @@ By email, in the collector's language.
 | Sold | the sale price, and when the proceeds reach the wallet |
 | Ended unsold | the period ended without a sale |
 
-- 🚧 **Pending Approval** — a message when staff approve or reject a consignment the collector submitted
+- 🚧 **Pending Approval** — a notification when staff approve or reject a consignment the collector submitted
 - 🚧 **Ended Unsold** — says the card is back in the vault and earning
 - 🚧 **Sold** — names the day the proceeds reach the wallet, 3 business days after the buyer pays
 

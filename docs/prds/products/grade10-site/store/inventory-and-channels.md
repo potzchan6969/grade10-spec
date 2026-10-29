@@ -22,7 +22,7 @@ Where the store's stock sits in Shopify, and the channels that sell it.
 | grade10.com | in the online store |
 | SuperPacks | in a partner's storefront |
 
-- **Same Stock** — every channel sells the one location's stock; the first sale wins and the product comes off the others - [Consigning](/p/grade10-site/consignment/consigning#in-the-store)
+- **Same Stock** — every channel sells the one location's stock; the first sale wins and the product comes off the others - [Consigning](/p/grade10-site/consignment/consigning#at-the-store)
 - 🚧 **Marketplace** — once it launches, one more channel on the same stock
 
 :::detail{title="Product decisions" for="pm"}
