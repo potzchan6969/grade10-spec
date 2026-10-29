@@ -89,6 +89,141 @@ export const ChannelIsNamed: Story = {
   },
 };
 
+/** A purchase: the order tile, the order number, points earned. */
+export const Purchase: Story = {
+  args: {
+    state: {
+      status: "ready",
+      data: [
+        {
+          id: "entry-purchase",
+          kind: "In-store purchase",
+          track: "earned",
+          icon: "order",
+          delta: 105,
+          date: "20 Sep 2026",
+          month: "September 2026",
+          context: "Order #10482",
+        },
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("In-store purchase")).toBeInTheDocument();
+    expect(canvas.getByText("Order #10482")).toBeInTheDocument();
+    expect(canvas.getByText("+105 pts")).toBeInTheDocument();
+  },
+};
+
+/** A points top-up bought as a pack, credited at once. */
+export const TopUp: Story = {
+  args: {
+    state: {
+      status: "ready",
+      data: [
+        {
+          id: "entry-topup",
+          kind: "Points top-up",
+          track: "earned",
+          icon: "topup",
+          delta: 200,
+          date: "15 Sep 2026",
+          month: "September 2026",
+        },
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Points top-up")).toBeInTheDocument();
+    expect(canvas.getByText("+200 pts")).toBeInTheDocument();
+  },
+};
+
+/** A reward redeemed: points leave, the reward's name is the context. */
+export const RewardRedeemed: Story = {
+  args: {
+    state: {
+      status: "ready",
+      data: [
+        {
+          id: "entry-sleeves",
+          kind: "Redeemed reward",
+          track: "used",
+          icon: "reward",
+          delta: -120,
+          date: "14 Oct 2026",
+          month: "October 2026",
+          context: "Redeemed Grade10 card sleeves",
+        },
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Redeemed reward")).toBeInTheDocument();
+    expect(
+      canvas.getByText("Redeemed Grade10 card sleeves"),
+    ).toBeInTheDocument();
+    expect(canvas.getByText("−120 pts")).toBeInTheDocument();
+  },
+};
+
+/** A goodwill adjustment: the programme's own hand on the balance. */
+export const PointsAdjusted: Story = {
+  args: {
+    state: {
+      status: "ready",
+      data: [
+        {
+          id: "entry-adjustment",
+          kind: "Points adjusted",
+          track: "earned",
+          icon: "adjustment",
+          delta: 120,
+          date: "9 Oct 2026",
+          month: "October 2026",
+          context: "Goodwill credit",
+        },
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Points adjusted")).toBeInTheDocument();
+    expect(canvas.getByText("Goodwill credit")).toBeInTheDocument();
+    expect(canvas.getByText("+120 pts")).toBeInTheDocument();
+  },
+};
+
+/** Points spent straight off an order's total at checkout. */
+export const CreditsAtCheckout: Story = {
+  args: {
+    state: {
+      status: "ready",
+      data: [
+        {
+          id: "entry-credits",
+          kind: "Use at checkout",
+          track: "used",
+          icon: "credits",
+          delta: -80,
+          date: "10 Sep 2026",
+          month: "September 2026",
+          context: "Order #10514",
+        },
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Use at checkout")).toBeInTheDocument();
+    expect(canvas.getByText("Order #10514")).toBeInTheDocument();
+    expect(canvas.getByText("−80 pts")).toBeInTheDocument();
+  },
+};
+
 export const Loading: Story = { args: { state: { status: "loading" } } };
 
 /** Nothing earned, nothing pending: the empty state points at the shop. */
