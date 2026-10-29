@@ -1,0 +1,65 @@
+---
+title: Deposit and Custody
+order: 2
+---
+
+## Deposit Form
+
+Staff register the cards on the deposit form, at the shop's counter or an event.
+
+1. **Location** — the shop in Causeway Bay or an event location
+2. **Collector** — found by email, or a new account created and an invite sent
+   - **Phone Number** — taken if the account has none; not confirmed by a code
+   - **Ownership Declaration** — the collector declares they own every card
+3. **Cards** — card, condition or certificate, front and back photos; a label printed for each
+   - **Market Price** — the card's 30-day price, shown to the collector
+   - **Estimated Daily Incentive** — or Not Eligible, for a card that earns nothing
+4. **Consign Now** — optional, per card: the store or the auction, the lowest acceptable price and the commission; Grade10 sets the list or starting price at review - [Consigning](/p/grade10-site/consignment/consigning#listing-review)
+5. **Sign** — on the shop's tablet, or by a link emailed to the collector
+   - **Vault Terms** — signed
+   - **Consignment Agreement** — signed only where a card is consigned now
+   - **Custody Receipt** — confirmed
+
+:::callout{kind="note"}
+- ❓ **Warehouse location** — whether the Kowloon warehouse takes deposits. Product confirms
+:::
+
+## What a Deposit Needs
+
+- **Account** — a Grade10 account with a confirmed email
+- **Phone Number** — on the account, for contact and abuse checks; it proves no identity
+- **Signed Declaration** — that the collector owns the cards
+- **Identity Check** — not at deposit; it comes before money or a card leaves Grade10 - [Earnings Wallet](/p/grade10-site/consignment/earnings-wallet#identity-check)
+
+## Card States
+
+1. **Received** — recorded and photographed at deposit
+2. **Authenticating** — checked at deposit
+3. **In the Vault** — passed and stored; not earning yet
+4. **Approved to Earn** — passed incentive review; earning from the next day - [Incentive](/p/grade10-site/consignment/incentive#incentive-review)
+
+- **Failed** — returned to the collector; it never earns
+
+## Custody
+
+- **Locations** — the shop in Causeway Bay and an event location until the card moves; the Kowloon warehouse is open, as the note above says
+  - **In Transit** — a card between two locations; not a location itself
+- **Moves** — recorded when the card leaves and when it arrives, both confirmed by hand by staff
+  - **Missing or Damaged** — on arrival, raised for review
+- **Storage** — free
+
+:::detail{title="Product decisions" for="pm"}
+The deposit is the top of the funnel, so it asks for as little as it safely
+can: an account, a phone number and a declaration. The identity check waits for
+the moment money or a card leaves.
+
+**Decisions.**
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Free deposit and storage | Decided | No storage fee for now | Product |
+| Authenticated at deposit | Decided | In this phase the card is checked at the counter, before it is stored | Product |
+| Moves confirmed by hand | Decided | No label scanning in this phase | Operations |
+| Phone captured, not confirmed | Decided | No one-time code; the number serves contact and abuse checks | Product |
+| Warehouse deposits | ❓ Open | Whether the Kowloon warehouse is a deposit location | Product |
+:::
