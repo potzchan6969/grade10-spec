@@ -288,12 +288,17 @@ function MembershipPage({
               {active === "overview" ? (
                 <OverviewPane
                   actions={
-                    <div className="flex items-center gap-2 md:hidden">
-                      <Button onClick={() => setPassOpen(true)} size="md">
+                    <div className="flex flex-col gap-2 md:hidden">
+                      <Button
+                        className="w-full"
+                        onClick={() => setPassOpen(true)}
+                        size="md"
+                      >
                         <QrCode aria-hidden size={16} weight="regular" />
                         Member Pass
                       </Button>
                       <Button
+                        className="w-full"
                         onClick={() => setTopUpOpen(true)}
                         size="md"
                         variant="secondary"
