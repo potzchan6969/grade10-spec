@@ -222,22 +222,21 @@ function MembershipPage({
       <SiteHeader {...STORE_SITE_HEADER} />
       <main className="flex w-full flex-1 justify-center">
         <div className="flex w-full max-w-6xl flex-col gap-10 px-4 py-10 sm:px-8">
-          <div className="flex flex-col gap-4 border-b border-border pb-8">
+          <div className="flex flex-col gap-4 md:border-b md:border-border md:pb-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <h1 className="text-3xl font-semibold text-foreground">
                 {MEMBERSHIP_PAGE_COPY.title}
               </h1>
-              <div className="flex items-center gap-2">
-                <Button
-                  onClick={() => setPassOpen(true)}
-                  size={smUp ? "lg" : "md"}
-                >
+              {/* On a narrow viewport the two entrances sit under the tier
+               * card on Overview instead — the header keeps the title. */}
+              <div className="hidden items-center gap-2 md:flex">
+                <Button onClick={() => setPassOpen(true)} size="lg">
                   <QrCode aria-hidden size={16} weight="regular" />
                   Member Pass
                 </Button>
                 <Button
                   onClick={() => setTopUpOpen(true)}
-                  size={smUp ? "lg" : "md"}
+                  size="lg"
                   variant="secondary"
                 >
                   {MEMBERSHIP_PAGE_COPY.topUpAction}
@@ -287,7 +286,25 @@ function MembershipPage({
 
             <div className="flex min-w-0 flex-1 flex-col gap-10">
               {active === "overview" ? (
-                <OverviewPane balance={balance} view={view} />
+                <OverviewPane
+                  actions={
+                    <div className="flex items-center gap-2 md:hidden">
+                      <Button onClick={() => setPassOpen(true)} size="md">
+                        <QrCode aria-hidden size={16} weight="regular" />
+                        Member Pass
+                      </Button>
+                      <Button
+                        onClick={() => setTopUpOpen(true)}
+                        size="md"
+                        variant="secondary"
+                      >
+                        {MEMBERSHIP_PAGE_COPY.topUpAction}
+                      </Button>
+                    </div>
+                  }
+                  balance={balance}
+                  view={view}
+                />
               ) : null}
               {active === "rewards" ? (
                 <RewardsPane balance={balance} onSelect={select} view={view} />

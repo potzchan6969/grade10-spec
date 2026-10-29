@@ -20,7 +20,7 @@ import {
   HandCoins,
   Truck,
 } from "@phosphor-icons/react";
-import { useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import { CouponTabs } from "../coupon-tabs";
 import {
   COUPON_LIST_COPY,
@@ -122,9 +122,13 @@ const CODE_SECONDS = 480;
 function OverviewPane({
   view,
   balance,
+  actions,
 }: {
   view: MembershipView;
   balance: number;
+  /** The member pass and top-up entrances on a narrow viewport; on a wide
+   * one the page header carries them. */
+  actions?: ReactNode;
 }) {
   const ref = usePaneEnter<HTMLDivElement>();
   return (
@@ -140,6 +144,7 @@ function OverviewPane({
         variant={view.tierVariant}
         worth={view.worth}
       />
+      {actions}
       {/* The heading and the benefits join the card's rise one level down. */}
       <div className="flex flex-col gap-4" data-enter-group>
         <PaneHeading id="membership-tiers-heading">
