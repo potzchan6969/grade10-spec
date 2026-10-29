@@ -11,7 +11,7 @@ because loading and acting on orders is a job of its own.
 
 ## Orders
 
-- **Private Address** — `grade10.com/profile/orders`, for the signed-in
+- **Private Address** — `grade10.com/profile/my-orders`, for the signed-in
   collector; signing in keeps them at that address
 - **Active and Past** — active orders above past ones, newest first in each.
   An order is past once nothing is left to happen on it: Completed, Canceled or

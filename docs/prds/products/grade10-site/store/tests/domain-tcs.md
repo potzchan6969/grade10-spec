@@ -77,7 +77,7 @@ title: Store Test Cases
 2. Select Check out as guest, enter `<order email>` on Shopify's page, and pay with the payment provider's published test card that succeeds.
 3. Select Continue on Shopify's thank-you page.
 4. Select Sign in on the toast and sign in by the link sent to `<order email>`.
-5. Open `/profile/orders`.
+5. Open `/profile/my-orders`.
 
 **Expected Results:**
 
@@ -243,10 +243,10 @@ Runs once per row of **Test data**.
 
 1. Open View order in Shopify's order email.
 2. Select Sign in on the toast and sign in as the member.
-3. Open `/profile/orders`.
+3. Open `/profile/my-orders`.
 
 **Expected Results:**
 
 * Step 1 shows the order with no points or account details.
-* Step 2 opens `/profile/orders/<member order id>`, with the order's points section.
+* Step 2 opens `/profile/my-orders/<member order id>`, with the order's points section.
 * Step 3 lists `<member order>`.

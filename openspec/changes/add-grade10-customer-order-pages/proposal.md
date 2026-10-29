@@ -20,10 +20,10 @@ the first baseline without adding production instrumentation.
 
 ## What Changes
 
-- Add a signed-in My Orders surface at `/profile/orders`, with Active orders
+- Add a signed-in My Orders surface at `/profile/my-orders`, with Active orders
   above Past orders, the designed empty state, loading and recoverable error
   states, and links to one order.
-- Add an owner-only order detail surface at `/profile/orders/<order-id>`, composed
+- Add an owner-only order detail surface at `/profile/my-orders/<order-id>`, composed
   from the existing shared Order Details block and the current Store order read.
 - Integrate both pages through `@grade10/store-frontend`; the Grade10
   application does not call the Store transport or Shopify directly.

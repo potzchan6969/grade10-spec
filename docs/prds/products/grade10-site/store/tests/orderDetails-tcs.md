@@ -145,7 +145,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: the toast says the order was added to the account.
-* Step 2 opens `/profile/orders/<order id>`.
+* Step 2 opens `/profile/my-orders/<order id>`.
 
 ---
 
@@ -176,7 +176,7 @@ Runs once per row of **Test data**.
 | Customer | Opens |
 | --- | --- |
 | signed out | `/orders/<order id>`, with its secret, UI matching store-order-detail-screens-order-link--just-paid |
-| signed-in member | `/profile/orders/<order id>` |
+| signed-in member | `/profile/my-orders/<order id>` |
 
 **Steps:**
 
@@ -221,7 +221,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>`.
+1. Open `/profile/my-orders/<order id>`.
 
 **Expected Results:**
 
@@ -256,7 +256,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<row's id>`.
+1. Open `/profile/my-orders/<row's id>`.
 
 **Expected Results:**
 
@@ -282,11 +282,11 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and sign in.
+1. Open `/profile/my-orders/<order id>` and sign in.
 
 **Expected Results:**
 
-* The address is `/profile/orders/<order id>`, showing `<order>`.
+* The address is `/profile/my-orders/<order id>`, showing `<order>`.
 
 <!-- trace:case id=g10.store-order-detail.TC-j3h rev=2 -->
 #### g10.store-order-detail.TC4: While the order loads, the page shows loading, not not-found
@@ -308,7 +308,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>`.
+1. Open `/profile/my-orders/<order id>`.
 
 **Expected Results:**
 
@@ -333,7 +333,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>`.
+1. Open `/profile/my-orders/<order id>`.
 2. Select Retry.
 
 **Expected Results:**
@@ -375,7 +375,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and read the badge and Delivery Status.
+1. Open `/profile/my-orders/<order id>` and read the badge and Delivery Status.
 2. Select Track Order, where offered.
 
 **Expected Results:**
@@ -409,7 +409,7 @@ Runs once per row of **Test data**.
 
 | Item | Opened as | Shown |
 | --- | --- | --- |
-| a product whose picture changed since the purchase | the owner, at `/profile/orders/<order id>` | its current picture |
+| a product whose picture changed since the purchase | the owner, at `/profile/my-orders/<order id>` | its current picture |
 | the same product | anyone, from the order's View order link | its current picture |
 | a product with no picture | the owner | the placeholder, and the order still opens |
 
@@ -449,7 +449,7 @@ Runs once per row of **Test data**.
 
 | Signed in as | Shown |
 | --- | --- |
-| member A | `/profile/orders/<order id>` |
+| member A | `/profile/my-orders/<order id>` |
 | member B | the same public link page anyone holding the link sees |
 
 **Steps:**
@@ -552,7 +552,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>`.
+1. Open `/profile/my-orders/<order id>`.
 
 **Expected Results:**
 
@@ -651,7 +651,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and read the summary.
+1. Open `/profile/my-orders/<order id>` and read the summary.
 
 **Expected Results:**
 
@@ -686,7 +686,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and read the summary and the points section.
+1. Open `/profile/my-orders/<order id>` and read the summary and the points section.
 
 **Expected Results:**
 
@@ -722,7 +722,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and read the summary and the points section.
+1. Open `/profile/my-orders/<order id>` and read the summary and the points section.
 
 **Expected Results:**
 
@@ -810,7 +810,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/profile/orders/<order id>` and read the summary and the badge.
+1. Open `/profile/my-orders/<order id>` and read the summary and the badge.
 
 **Expected Results:**
 

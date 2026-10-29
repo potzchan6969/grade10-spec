@@ -6,7 +6,7 @@ order: 7
 
 ## Order
 
-- **Owner-Only Address** — `grade10.com/profile/orders/<order-id>`, for the
+- **Owner-Only Address** — `grade10.com/profile/my-orders/<order-id>`, for the
   signed-in collector who placed it; sign-in keeps the collector there; an
   unknown order and another collector's order look the same
 - 🚧 **Store Orders Only** — a ticket order placed on
@@ -111,7 +111,7 @@ order: 7
   - **Signed Out Only** — the receipt line and the toast show whenever an
     order page is viewed signed out, back from checkout or from a link opened
     later; signed in, neither shows
-- **Owner Signed In** — sent to `grade10.com/profile/orders/<order-id>`
+- **Owner Signed In** — sent to `grade10.com/profile/my-orders/<order-id>`
 - **Someone Else Signed In** — the same page as anyone holding the link
 - **Wrong Link** — an unknown order or a wrong secret shows not-found; a link
   holder may hold no account, so the way out is the store, not My Orders

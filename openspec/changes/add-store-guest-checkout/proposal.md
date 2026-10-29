@@ -46,7 +46,7 @@ secondary: share of guest orders linked to an account.
   receipt's email on its placed-on line and carries a persistent sign-in
   toast — add this order on a guest's, sign in to see it on a member's.
   Owner signed in: sent to
-  `/profile/orders/<id>`. Someone else signed in: the public page. A wrong
+  `/profile/my-orders/<id>`. Someone else signed in: the public page. A wrong
   secret or unknown order shows not-found, and the page carries no points,
   wallet or account facts
 
