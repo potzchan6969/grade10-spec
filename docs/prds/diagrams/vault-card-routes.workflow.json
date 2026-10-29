@@ -44,7 +44,7 @@
       "col": 0,
       "type": "frontend",
       "label": "Intake",
-      "sublabel": "a card event or the shop",
+      "sublabel": "a card event, the shop or by post",
       "width": 150
     },
     {

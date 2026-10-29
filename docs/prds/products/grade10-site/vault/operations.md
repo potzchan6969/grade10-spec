@@ -14,6 +14,7 @@ management tracks. Turning vaulted cards into consignments has its own view -
 - 🚧 **Intake Queue** — cards waiting for authentication, kept unchecked at intake - [Authentication](/p/grade10-site/vault/intake#authentication)
   - **Pass** — the card enters the vault and waits for incentive approval, unless staff skipped it at intake; it earns nothing until approved - [Incentive](/p/grade10-site/vault/incentive#earning)
   - **Fail** — the collector is told and the card is returned; it never earns
+- 🚧 **Mail-In Parcels** — requests expected and parcels received at the KEC warehouse, from Phase 3 - [Mail-In](/p/grade10-site/vault/intake#mail-in)
 - 🚧 **Incentive Approval** — cards waiting to be approved to earn - [Incentive](/p/grade10-site/vault/incentive#earning)
   - **Second Approver** — a second staff member approves a card above a value threshold, skipped at intake or not
 - 🚧 **Retrieval Queue** — requests waiting for a move to Causeway Bay, the collection appointments, and the handover with the ID check and the Retrieval Note - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval)

@@ -72,8 +72,8 @@ svg[data-diagram="vault-card-routes"] .c-lane{fill: var(--lane-fill); stroke: va
         <path data-step="store" data-edge-from="vault" data-edge-to="store" data-edge-label="consigned" data-edge-key="4" data-composition-points="243,272;243,294;363,294;363,338" d="M 243 272 L 243 294 L 363 294 L 363 338" class="a-emphasis" stroke-width="1.8" marker-end="url(#vault-card-routes-arrowhead-emphasis)"/>
         <path data-step="withdrawn" data-edge-from="vault" data-edge-to="withdrawn" data-edge-label="retrieved" data-edge-key="5" data-composition-points="318,246;483,246;483,146" d="M 318 246 L 483 246 L 483 146" class="a-dashed" stroke-width="1.4" marker-end="url(#vault-card-routes-arrowhead-dashed)"/>
         
-        <g data-step="intake" id="vault-card-routes-node-intake" data-node-id="intake" data-node-label="Intake" aria-label="Focus Intake, a card event or the shop, Collector" data-node-kind="frontend" data-node-sublabel="a card event or the shop" data-node-context="Collector">
-          <title>Intake · a card event or the shop · Collector</title>
+        <g data-step="intake" id="vault-card-routes-node-intake" data-node-id="intake" data-node-label="Intake" aria-label="Focus Intake, a card event, the shop or by post, Collector" data-node-kind="frontend" data-node-sublabel="a card event, the shop or by post" data-node-context="Collector">
+          <title>Intake · a card event, the shop or by post · Collector</title>
           <rect x="48" y="94" width="150" height="52" rx="6" class="c-mask"/>
           <rect x="48" y="94" width="150" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(54 100) scale(0.6875)">
@@ -83,7 +83,7 @@ svg[data-diagram="vault-card-routes"] .c-lane{fill: var(--lane-fill); stroke: va
             <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="123" y="115" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Intake</text>
-          <text data-detail="context" x="123" y="132" class="t-muted" font-size="8" text-anchor="middle">a card event or the shop</text>
+          <text data-detail="context" x="123" y="132" class="t-muted" font-size="7.1" text-anchor="middle">a card event, the shop or by post</text>
         </g>
         <g data-step="withdrawn" id="vault-card-routes-node-withdrawn" data-node-id="withdrawn" data-node-label="Retrieved" aria-label="Focus Retrieved, collected at the shop, Collector" data-node-kind="frontend" data-node-sublabel="collected at the shop" data-node-context="Collector">
           <title>Retrieved · collected at the shop · Collector</title>

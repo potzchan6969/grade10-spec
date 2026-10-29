@@ -20,7 +20,7 @@ Everything still vesting before release, or only the day's incentive after it.
 # Collecting
 
 ## Staff — Move it to the shop
-A card held at an event moves to Causeway Bay first; staff confirm it arrived.
+A card held at the KEC warehouse or an event moves to Causeway Bay first; staff confirm it arrived.
 
 ## Collector — Book a collection
 The ready email links to a collection appointment.
@@ -63,10 +63,10 @@ on the day of the request. Consignment's fee for ending early is its own -
 
 ## Collection
 
-- 🚧 **Moving to Causeway Bay** — a card held elsewhere moves to the shop first
+- 🚧 **Moving to Causeway Bay** — a card at the KEC warehouse or an event moves to the shop first
 - 🚧 **Ready Email** — when staff confirm it arrived, the collector is emailed a link to book a collection appointment; the dashboard shows it too
 - 🚧 **Handover** — at the shop, by appointment
-  - **Identity** — staff check the collector's face against their ID, and the ID against the one recorded at intake: the legal name must match, and the ID number typed again must match the stored digest
+  - **Identity** — staff check the collector's face against their ID, and the ID against the one recorded at intake, or the identity check for a mail-in: the legal name must match, and the ID number typed again must match the stored digest
   - **A Mismatch** — the card is handed over only with a recorded reason, naming the staff member who gave it
   - **Someone Else Collecting** — a person the collector named in the dashboard shows their own ID
   - **Condition** — checked against the intake photos

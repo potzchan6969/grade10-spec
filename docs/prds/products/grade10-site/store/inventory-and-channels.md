@@ -3,16 +3,17 @@ title: Inventory and Sales Channels
 order: 9
 ---
 
-Where the store's stock sits in Shopify, and the channels that sell it.
+Where the store's stock sits, and the channels that sell it.
 
 ## Inventory Location
 
-- **One Location** — the shop in Causeway Bay; every product's stock sits there, the store's own and consigned cards alike
+- **One Selling Location** — the shop in Causeway Bay; every channel sells from its stock, the store's own and consigned cards alike
   - **Online Orders** — filled from the shop
   - **Events** — the till at an event sells from the shop's stock
-- **Kerry Logistics** — the shipping partner: it comes to the shop, takes the stock that ships and ships it; it is never a location, so no stock sits with it
-  - **Set Up as a Location** — a Kerry location filling online orders is flagged to be turned off
-- **The Vault's Custody** — where a vaulted card is held is the vault's own record, never a Shopify location - [Vault Intake](/p/grade10-site/vault/intake#custody)
+- **KEC Warehouse** — Kerry Logistics' warehouse, where some of the store's stock is kept; the shop replenishes from it, and nothing sells from it directly
+  - **Filling Online Orders** — a Kerry location set to fill online orders is flagged to be turned off
+- **Kerry Logistics** — also the shipping partner: it comes to the shop, takes the stock that ships and ships it
+- **The Vault's Custody** — where a vaulted card is held, the shop or the KEC warehouse, is the vault's own record, never a Shopify location - [Vault Intake](/p/grade10-site/vault/intake#custody)
 
 ## Sales Channels
 
@@ -22,12 +23,10 @@ Where the store's stock sits in Shopify, and the channels that sell it.
 | grade10.com | in the online store |
 | SuperPacks | in a partner's storefront |
 
-- **Same Stock** — every channel sells the one location's stock; the first sale wins and the product comes off the others - [Consigning](/p/grade10-site/consignment/consigning#at-the-store)
+- **Same Stock** — every channel sells the shop's stock; the first sale wins and the product comes off the others - [Consigning](/p/grade10-site/consignment/consigning#at-the-store)
 - 🚧 **Consigned Cards** — sold on Point of Sale only, at the shop and events
 - **Marketplace** — online, later, with no date; one more channel on the same stock
 
 :::detail{title="Product decisions" for="pm"}
-- **One location** — every channel reads the same count, so a card can't sell twice from two places; a second location would split it
-- **The shipping partner carries parcels, not stock** — Kerry Logistics collects from the shop, so stock never leaves the one count before it sells
-- **Not in scope** — a warehouse location; stock held by the shipping partner
+- **One selling location** — every channel reads the same count, so a card can't sell twice from two places; stock kept at the KEC warehouse reaches a buyer only once the shop has replenished from it
 :::

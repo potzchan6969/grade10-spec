@@ -61,6 +61,7 @@ What finance does with the requests.
 ## Identity Check
 
 - 🚧 **When** — where money leaves Grade10: before the first cash-out, before the first sale payout, and when the cash-out account changes - [KYC](/p/grade10-site/account/kyc)
+  - **Mail-In** — before staff approve a mailed-in card, since no staff see the collector - [Mail-In](/p/grade10-site/vault/intake#mail-in)
   - **Proceeds Held** — sale proceeds wait in the wallet until the check passes
   - **Not for a Retrieval** — staff check the ID at the counter against the one recorded at intake - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#collection)
   - **Built** — at every cash-out and before sale proceeds reach the wallet; each point is an admin setting - [Identity Check](/p/grade10-site/finance/identity-check#gate)

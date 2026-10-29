@@ -31,7 +31,7 @@ Incentive, after the identity check.
 
 - **Intake and Consign** — the main way into consignment: the card is registered into the vault, then consigned, in the same visit - [Consignment](/p/grade10-site/consignment)
 
-::image{src="assets/diagrams/vault-card-routes.svg" alt="Where a vaulted card can go: taken in at a card event or the shop into the vault; consigned to the store, on the shop's tills with the marketplace later, or to an auction lot; sold at the counter; won at auction and shipped, with Kerry Logistics collecting at the shop, or collected; or retrieved and collected at the shop"}
+::image{src="assets/diagrams/vault-card-routes.svg" alt="Where a vaulted card can go: taken in at a card event, the shop or by post to the KEC warehouse into the vault; consigned to the store, on the shop's tills with the marketplace later, or to an auction lot; sold at the counter; won at auction and shipped, with Kerry Logistics collecting at the shop, or collected; or retrieved and collected at the shop"}
 
 - **Off the Main Path**
   - **Consign Later** — the collector consigns a card already in the vault from the dashboard - [Consigning](/p/grade10-site/consignment/consigning#consign-form)
@@ -41,7 +41,7 @@ Incentive, after the identity check.
 
 | Page | What it holds |
 | --- | --- |
-| [Vault Intake](/p/grade10-site/vault/intake) | The ways in, the intake form, what an intake needs, card states, custody |
+| [Vault Intake](/p/grade10-site/vault/intake) | The ways in, the intake form, mail-in, what an intake needs, card states, custody |
 | [Incentive](/p/grade10-site/vault/incentive) | The daily amount, price tiers, approval, eligibility, vesting |
 | [Portfolio](/p/grade10-site/vault/portfolio) | What the collector sees of their cards in the vault |
 | [Vault Retrieval](/p/grade10-site/vault/vault-retrieval) | Taking a card home |
@@ -62,11 +62,11 @@ done when its last line works with a real collector and a real card.
    - **Delivers** — intake at the shop's counter, on the same form as events; consigning at intake or later from the dashboard, with the agreement signed in the app; the shop's tills, at the shop and events, and auction lots from vault stock; statements and commission invoices; incentive stopping when a card sells; the identity check before the first cash-out or sale payout; cash-out at least HKD 500 once every 7 days, to an account in the verified name; the consignment dashboard
    - **Until a Later Phase** — staff enter store price changes
    - **Done When** — a vaulted card is consigned and signed, sold at the shop and at auction, its proceeds and incentive reach the wallet, and the collector passes the identity check and cashes out
-3. **Retrieval** — taking a card home through the product
+3. **Mail-In and Retrieval** — sending cards in by post, and taking a card home through the product
    - ❓ **Date** — not set. Product confirms
-   - **Delivers** — retrieval by appointment, the ID checked at handover against the one recorded at intake
+   - **Delivers** — mail-in to the KEC warehouse, with the identity check before approval; retrieval by appointment, the ID checked at handover against the one recorded at intake
    - **On Go-Live** — retrievals staff ran by hand are entered
-   - **Done When** — a collector retrieves a card, and the incentive already in the wallet stays cashable
+   - **Done When** — a collector mails a card in and it is authenticated at KEC, approved and moved into the vault; a collector retrieves a card, and the incentive already in the wallet stays cashable
 
 - **After Launch** — the online marketplace, with no date yet; stocktake
 - **Not Planned** — business verification for company owners
