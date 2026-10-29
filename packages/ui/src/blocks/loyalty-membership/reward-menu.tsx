@@ -1,7 +1,10 @@
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
+import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
+import { Gift } from "@phosphor-icons/react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
 import { RewardItem } from "./reward-item";
@@ -55,11 +58,32 @@ function RewardMenu({
           <Skeleton className="h-28 w-full" />
         </VStack>
       ) : null}
-      {state.status === "empty" || state.status === "error" ? (
+      {state.status === "empty" ? (
+        <EmptyState
+          actions={
+            state.action ? (
+              <Button
+                disabled={state.action.pending}
+                onClick={state.action.onAction}
+                size="md"
+                type="button"
+                variant="secondary"
+              >
+                {state.action.label}
+              </Button>
+            ) : undefined
+          }
+          data-slot="reward-menu-empty"
+          description={state.description}
+          icon={<Gift aria-hidden size={24} weight="regular" />}
+          title={state.message}
+        />
+      ) : null}
+      {state.status === "error" ? (
         <AsyncMessage
           action={state.action}
           message={state.message}
-          slot={`reward-menu-${state.status}`}
+          slot="reward-menu-error"
         />
       ) : null}
       {state.status === "ready" ? (

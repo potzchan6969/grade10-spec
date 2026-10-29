@@ -31,7 +31,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** A card per reward: the item draws its art, the coupon its gift tile; a
- * press reports the reward's id and redeems nothing. */
+ * press reports the reward's id and redeems nothing. Affordability reads
+ * off the balance the consumer supplies — a reward it cannot pay stays
+ * pressable, the checkout surface does the refusing — and the menu offers
+ * no quantity, a redemption is always one unit. */
 export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -43,32 +46,19 @@ export const Default: Story = {
     expect(canvas.getByText("Halloween Potatoz")).toBeInTheDocument();
     expect(canvas.getByText("Until 31 Dec 2026")).toBeInTheDocument();
     expect(canvas.getByText("500")).toBeInTheDocument();
-
-    await userEvent.click(cards[0] as HTMLElement);
-    expect(args.onSelect).toHaveBeenCalledWith("potatoz");
-  },
-};
-
-/** Affordability is read off the balance the consumer supplies; a reward the
- * balance cannot pay stays pressable — the checkout surface does the refusing. */
-export const AffordabilityIsRead: Story = {
-  play: async ({ canvasElement }) => {
-    const cards = [
+    const items = [
       ...canvasElement.querySelectorAll('[data-slot="reward-menu-item"]'),
     ];
-    expect(cards[0]).toHaveAttribute("data-affordable", "true");
-    expect(cards[2]).toHaveAttribute("data-affordable", "false");
-  },
-};
-
-/** The menu offers no quantity — a redemption is always one unit. */
-export const NoQuantity: Story = {
-  play: async ({ canvasElement }) => {
+    expect(items[0]).toHaveAttribute("data-affordable", "true");
+    expect(items[2]).toHaveAttribute("data-affordable", "false");
     expect(
       canvasElement.querySelector(
         '[role="spinbutton"], [data-slot="stepper-input"]',
       ),
     ).toBeNull();
+
+    await userEvent.click(cards[0] as HTMLElement);
+    expect(args.onSelect).toHaveBeenCalledWith("potatoz");
   },
 };
 

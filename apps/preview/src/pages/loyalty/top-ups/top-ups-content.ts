@@ -23,8 +23,9 @@ export const TOP_UP_PACKS: readonly TopUpPack[] = [
   { id: "pack-100k", points: 100_000, discountPercent: 12 },
 ];
 
-/** A pack strictly above this many points is reviewed before it is credited. */
-export const REVIEW_THRESHOLD = 20_000;
+/** A pack strictly above this many points is reviewed before it is
+ * credited — the edge case; every smaller pack lands straight away. */
+export const REVIEW_THRESHOLD = 50_000;
 
 /** Points still allowed today in the over-limit state. */
 export const LEFT_TODAY = 8_000;

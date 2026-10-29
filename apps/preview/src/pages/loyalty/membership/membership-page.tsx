@@ -1,3 +1,8 @@
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@grade10/design-system/components/display/tabs";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { NavigationLink } from "@grade10/design-system/components/layout/navigation-link";
@@ -20,14 +25,19 @@ import {
   SiteHeader,
 } from "@grade10/ui";
 import { QrCode } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { storyHref } from "../../workbench-story-nav";
 import {
+  BALANCE_DROPPED_REWARDS,
+  DROPPED_BALANCE,
+  FLAKY_REWARDS,
   ISSUED_COUPON,
   MEMBERSHIP_PAGE_COPY,
   type MembershipView,
+  RETRY_COPY,
   REWARD_CHECKOUT_COPY,
+  SHORT_BALANCE_COPY,
   SOLD_OUT_COPY,
   SOLD_OUT_REWARDS,
 } from "../loyalty-content";
@@ -97,6 +107,8 @@ function MembershipPage({
   const [pending, setPending] = useState(false);
   const [passOpen, setPassOpen] = useState(false);
   const [topUpOpen, setTopUpOpen] = useState(false);
+  /* Attempts already refused on the wire — a flaky reward redeems on retry. */
+  const flaked = useRef<ReadonlySet<string>>(new Set());
   const smUp = useSmUp();
 
   /* The surface stays mounted once opened — only `open` flips — so the
@@ -134,6 +146,28 @@ function MembershipPage({
         setFailure(SOLD_OUT_COPY.title);
         toast.error(SOLD_OUT_COPY.title, {
           description: SOLD_OUT_COPY.description,
+        });
+        return;
+      }
+      if (BALANCE_DROPPED_REWARDS.has(reward.id)) {
+        /* The balance fell short elsewhere since the sheet opened; the page
+         * refetches and the deficit row re-reads it. */
+        setPending(false);
+        setBalance(DROPPED_BALANCE);
+        toast.error(SHORT_BALANCE_COPY.title, {
+          description: SHORT_BALANCE_COPY.description(
+            reward.pointCost - DROPPED_BALANCE,
+          ),
+        });
+        return;
+      }
+      if (FLAKY_REWARDS.has(reward.id) && !flaked.current.has(reward.id)) {
+        /* A retryable refusal: the surface stays open and the press stays
+         * live; the page raises it as a toast. */
+        flaked.current = new Set([...flaked.current, reward.id]);
+        setPending(false);
+        toast.error(RETRY_COPY.title, {
+          description: RETRY_COPY.description,
         });
         return;
       }
@@ -188,12 +222,14 @@ function MembershipPage({
       <SiteHeader {...STORE_SITE_HEADER} />
       <main className="flex w-full flex-1 justify-center">
         <div className="flex w-full max-w-6xl flex-col gap-10 px-4 py-10 sm:px-8">
-          <div className="flex flex-col gap-4 border-b border-border pb-8">
+          <div className="flex flex-col gap-4 md:border-b md:border-border md:pb-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <h1 className="text-3xl font-semibold text-foreground">
                 {MEMBERSHIP_PAGE_COPY.title}
               </h1>
-              <div className="flex items-center gap-2">
+              {/* On a narrow viewport the two entrances sit under the tier
+               * card on Overview instead — the header keeps the title. */}
+              <div className="hidden items-center gap-2 md:flex">
                 <Button onClick={() => setPassOpen(true)} size="lg">
                   <QrCode aria-hidden size={16} weight="regular" />
                   Member Pass
@@ -210,9 +246,30 @@ function MembershipPage({
           </div>
 
           <div className="flex flex-col gap-8 md:flex-row md:gap-16">
+            {/* Narrow: the rail's names as the line-tab row — pills stay
+             * for the header's action buttons, so actions and navigation
+             * never share a shape. */}
+            <Tabs
+              className="md:hidden"
+              onValueChange={(value) => setActive(value as MembershipTab)}
+              value={active}
+            >
+              <TabsList
+                aria-label="Membership"
+                className="w-full justify-start overflow-x-auto border-b border-border"
+                variant="list"
+              >
+                {MEMBERSHIP_TABS.map((item) => (
+                  <TabsTrigger key={item.id} value={item.id}>
+                    {item.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+            {/* Wide: the pill rail. */}
             <nav
               aria-label="Membership"
-              className="flex gap-1 overflow-x-auto md:w-64 md:sticky md:top-8 md:shrink-0 md:self-start md:flex-col md:items-stretch md:overflow-visible"
+              className="hidden gap-1 md:sticky md:top-8 md:flex md:w-64 md:shrink-0 md:flex-col md:items-stretch md:self-start"
             >
               {MEMBERSHIP_TABS.map((item) => (
                 <NavigationLink
@@ -229,12 +286,42 @@ function MembershipPage({
 
             <div className="flex min-w-0 flex-1 flex-col gap-10">
               {active === "overview" ? (
-                <OverviewPane balance={balance} view={view} />
+                <OverviewPane
+                  actions={
+                    /* The pane's gap-10 would float the buttons off the
+                     * card — pull them up to a section gap. */
+                    <div className="-mt-6 flex flex-col gap-2 md:hidden">
+                      <Button
+                        className="w-full"
+                        onClick={() => setPassOpen(true)}
+                        size="md"
+                      >
+                        <QrCode aria-hidden size={16} weight="regular" />
+                        Member Pass
+                      </Button>
+                      <Button
+                        className="w-full"
+                        onClick={() => setTopUpOpen(true)}
+                        size="md"
+                        variant="secondary"
+                      >
+                        {MEMBERSHIP_PAGE_COPY.topUpAction}
+                      </Button>
+                    </div>
+                  }
+                  balance={balance}
+                  view={view}
+                />
               ) : null}
               {active === "rewards" ? (
                 <RewardsPane balance={balance} onSelect={select} view={view} />
               ) : null}
-              {active === "coupons" ? <CouponsPane coupons={coupons} /> : null}
+              {active === "coupons" ? (
+                <CouponsPane
+                  coupons={coupons}
+                  onBrowseRewards={() => setActive("rewards")}
+                />
+              ) : null}
               {active === "points" ? <PointHistoryPane view={view} /> : null}
             </div>
           </div>
