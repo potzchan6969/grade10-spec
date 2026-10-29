@@ -1852,7 +1852,7 @@ Runs once per row of **Test data**.
 ### checkout#after-paying: After Paying
 
 <!-- trace:case id=g10.store-cart-checkout.TC-k2d rev=1 -->
-#### g10.store-cart.TC45: Shopify's thank-you page leads to Your Orders with the purchase
+#### g10.store-cart.TC45: Shopify's thank-you page leads to My Orders with the purchase
 
 **Classification:**
 
@@ -1863,7 +1863,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#after-paying/your-orders-link
+* **Trace:** checkout#after-paying/my-orders-link
 
 **Pre-conditions:**
 
@@ -1872,9 +1872,9 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Pay with the test card that succeeds and read the thank-you page.
-2. Select its Grade10 Your Orders link.
+2. Select its Grade10 My Orders link.
 
 **Expected Results:**
 
-* Step 1 offers a Grade10 Your Orders link.
+* Step 1 offers a Grade10 My Orders link.
 * Step 2 lists the order for `<product A>` within seconds.

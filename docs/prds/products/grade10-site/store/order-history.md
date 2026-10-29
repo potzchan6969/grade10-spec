@@ -1,10 +1,10 @@
 ---
-title: Your Orders
+title: My Orders
 spec: grade10-site/store/order-history
 order: 6
 ---
 
-Your Orders is the signed-in collector's way back to Store purchases after
+My Orders is the signed-in collector's way back to Store purchases after
 checkout: active and past purchases in one place, each order a click away. It
 has its own account address rather than sitting inside the profile screen,
 because loading and acting on orders is a job of its own.
@@ -35,7 +35,7 @@ because loading and acting on orders is a job of its own.
 - ❓ **A Safe Carrier Address** — an `https` address opens; any other scheme, such as `javascript:`, offers no tracking. Engineering confirms
 :::
 
-::story{id="store-order-history-screens-order-history--filled" title="Your Orders, filled"}
+::story{id="store-order-history-screens-order-history--filled" title="My Orders, filled"}
 
 ::story{id="store-order-history-blocks-orderhistory--empty" title="An account with no orders"}
 
@@ -55,6 +55,7 @@ because loading and acting on orders is a job of its own.
 ::story{id="store-order-history-screens-order-history--with-guest-orders" title="Guest orders under the member's email, listed"}
 
 :::detail{title="Product decisions" for="pm"}
+- **Page name** — "My Orders", the words the account menu uses to open it, with the order details breadcrumb and back link following; keeping "Your Orders" left the menu item and the page it opens under two names
 - **Order pictures** — the first current product picture, as the cart does: images identify products, while recorded names, quantities and money remain the purchase's facts; storing a purchase-time image was ruled out
 - **Guest orders after sign-in** — every paid guest order under an email joins once a sign-in proves it, the way Shopify customer accounts and WooCommerce list a guest's orders, so the member owns the order rather than holding a saved link; joining earns nothing
 - **A changed sign-in email** — a guest order joins under the email the account holds; following Google's email would move an identity across auth, the store, loyalty and Shopify for a rare case, and a Gmail address cannot change

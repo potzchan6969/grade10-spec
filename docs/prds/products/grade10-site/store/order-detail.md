@@ -114,7 +114,7 @@ order: 7
 - **Owner Signed In** — sent to `grade10.com/profile/orders/<order-id>`
 - **Someone Else Signed In** — the same page as anyone holding the link
 - **Wrong Link** — an unknown order or a wrong secret shows not-found; a link
-  holder may hold no account, so the way out is the store, not Your Orders
+  holder may hold no account, so the way out is the store, not My Orders
 - **No Account Facts** — guest or member, no loyalty points at all: no Points
   to Earn, no Points Earned, no Points row in the summary; no wallet or
   account details either

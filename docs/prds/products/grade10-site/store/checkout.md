@@ -34,7 +34,7 @@ An item that sold out meanwhile is refused, named.
 The order moves from pending to paid within seconds.
 
 ## Collector — Find the order
-In Your Orders.
+In My Orders.
 :::
 
 ## Proceed to Checkout
@@ -70,7 +70,7 @@ In Your Orders.
 ## After Paying
 
 - **Paid Order** — Shopify tells the store, and the order moves from pending to paid within seconds
-- 🚧 **Your Orders Link** — Shopify's Thank You and Order status page offers a link to Your Orders in Grade10, where the matching purchase appears; Shopify's own Continue shopping button is not the way back
+- 🚧 **My Orders Link** — Shopify's Thank You and Order status page offers a link to My Orders in Grade10, where the matching purchase appears; Shopify's own Continue shopping button is not the way back
 - **Cleared Cart** — payment clears the cart it bought, unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart
 - **Order Labels** — the shared order-status labels, with no unpaid badge of its own
 
