@@ -37,9 +37,8 @@ pnpm storybook:workbench
 - **Open** - Open a story that carries a `verification` parameter, then the Approve or Site Compare tab. The Not Found story is the first.
 - **Archive** - Development mounts the filesystem archive at the Storybook origin. The default is `.cache/ui-verification` in this checkout, or in the consuming app root when this checkout is its submodule. Set `UI_VERIFICATION_ARCHIVE` to an absolute directory before startup for another one.
 - **No data yet** - Both tabs stay empty until the application has captured a site run, which names the story's cases. Capture from the application repository, then press Refresh.
-- **Reference capture** - Approving uses the preview app's Playwright, launched by the workbench itself. The capture renders the story from this Storybook with the application's capture settings: fixed sizes, scale 1, reduced motion, `en-US`, `Asia/Hong_Kong`, light.
+- **Reference capture** - Approving uses the preview app's Playwright, launched by the workbench itself. `packages/ui-verification/src/reference-capture.mjs` renders the story from this Storybook: fixed sizes, scale 1, reduced motion, `en-US`, `Asia/Hong_Kong`, light. The application's site runs draw their reference with the same module.
 - **Capture** - Follow `tools/ui-verification/README.md` in the application repository. The short form is `pnpm ui:verify capture --config ./ui-verification.json --selection all`, pointed at the same archive directory.
-- **Demo data** - `pnpm ui:verify demo --archive <dir>` in the application repository writes two synthetic runs without Chromium.
 
 ## Give A Story A Case
 
@@ -59,9 +58,11 @@ pnpm storybook:workbench
 ## Approve A Reference
 
 - **Approve tab** - Per size it shows Last approved, Current and the pixel diff between them, both cropped to the reference region.
-- **Approve** - Captures the live story at the chosen size and locale, stores the image, and approves it. The reference is the design to hold the site to. A comment is optional.
-- **Capture current reference** - Captures the live story without approving it, to see how far it has moved from the last approval.
-- **Request changes** - The current reference is wrong. A comment is required, on one line. It needs a captured reference to judge.
+- **Approve all sizes** - Captures the live story at desktop, tablet and mobile in the chosen locale, stores each image, and approves all three. The reference is the design to hold the site to. A comment is optional.
+- **All or nothing** - Every size is captured before anything is stored, so a size that fails to capture leaves no approval behind.
+- **Region off the screen** - At the case's score size the reference region must fit the screen. At another size a region that does not fit is compared as the whole viewport, as a site run does.
+- **Capture current reference** - Captures all three sizes without approving them, to see how far the story has moved from the last approval.
+- **Request changes** - The current reference at the chosen size is wrong. A comment is required, on one line. It needs a captured reference to judge.
 - **Current reference** - The newest reference this workbench captured at the case, target, capture point, size and locale.
 - **Last approved reference** - The newest approved one at the same case, target, capture point, size and locale.
 - **What an approval judges** - One captured reference image, tied to its SHA-256. A later capture of the same PNG carries the approval. A capture that changes one pixel is not approved.
@@ -113,5 +114,6 @@ pnpm storybook:workbench
 - **Approve the reference, not the site** - Approval says the Storybook reference is the right design, at each version it is approved. Site Compare holds the site to it; nobody approves a site capture.
 - **No site reviews or calibration** - Human reviews of site captures and calibration are retired, with their routes. Model assessments stay advisory: nothing passes automatically.
 - **The workbench captures what it approves** - An approval names an image this workbench captured from the live story, so the designer approves what they see. The run's own reference shows drift; it is never approved.
+- **One reference capturer** - The workbench and the application's site runs draw a reference with the same module, so they differ only by the Playwright install each runs. ❓ The application resolves Playwright 1.62.1 and this repository 1.62.0; Tony L confirms whether to pin them together.
 - **Latest run per version** - Recaptures append a new run and the panel shows the newest. Deleting the older run was ruled out: later runs may reuse its images, and a half-finished overwrite would leave a version with no valid evidence.
 - **Old runs** - Older English-only runs keep their original images and coverage. Missing locale or viewport evidence stays unavailable.
