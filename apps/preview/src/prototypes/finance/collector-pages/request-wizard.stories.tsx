@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { RequestWizardPrototype } from "./request-wizard-prototype";
 
 const meta = {
-  title: "Vault/Collector Pages/Prototypes/Request Wizard",
+  title: "Finance/Collector Pages/Prototypes/Request Wizard",
   component: RequestWizardPrototype,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

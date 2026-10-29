@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { OfferAndRepaymentsPrototype } from "./offer-and-repayments-prototype";
 
 const meta = {
-  title: "Vault/Loan And Money/Prototypes/Offer And Repayments",
+  title: "Finance/Loan And Money/Prototypes/Offer And Repayments",
   component: OfferAndRepaymentsPrototype,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

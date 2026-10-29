@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { BookVisitPrototype } from "./book-visit-prototype";
 
 const meta = {
-  title: "Vault/Collector Pages/Prototypes/Book A Visit",
+  title: "Finance/Collector Pages/Prototypes/Book A Visit",
   component: BookVisitPrototype,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

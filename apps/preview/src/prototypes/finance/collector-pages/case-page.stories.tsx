@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { CasePagePrototype } from "./case-page-prototype";
 
 const meta = {
-  title: "Vault/Collector Pages/Prototypes/Case Page",
+  title: "Finance/Collector Pages/Prototypes/Case Page",
   component: CasePagePrototype,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
