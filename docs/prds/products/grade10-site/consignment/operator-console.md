@@ -47,10 +47,6 @@ the settings the schedule runs on.
 - **Acts** - receive, set terms, prepare the agreement, list, change the
   price, take off sale, return, extend, move to the other channel or the
   vault - [Services and Hand-offs](/p/grade10-admin/inventory/services#hand-offs)
-- 🚧 **At intake** - the receive act records where the consignment was
-  taken - the shop or an event - and its channel, the store or the
-  auction, and registers each item's market value and the consignment
-  rates applying to it
 - 🚧 **Approve or Reject** — sets the list or starting price, never below the lowest acceptable price, and the starting channel of a card consigned to both; receiving and setting terms at the counter leave the console
 - **Before the act** - a dialog states the rule first: the floor, the
   schedule, the term
