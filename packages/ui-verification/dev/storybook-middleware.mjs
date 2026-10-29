@@ -212,9 +212,10 @@ export function installUiVerificationArchive(
   const handler = createLocalArchiveHandler(archive, archiveRoot, {
     captureReference: (input) => {
       capture ??= createReferenceCapturer({
-        chromium: createRequire(resolve(specRoot, "apps/preview/package.json"))(
-          "playwright",
-        ).chromium,
+        launch: () =>
+          createRequire(resolve(specRoot, "apps/preview/package.json"))(
+            "playwright",
+          ).chromium.launch({ headless: true }),
         repoRoot: specRoot,
       });
       return capture(input);

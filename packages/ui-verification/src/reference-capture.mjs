@@ -2,13 +2,336 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { PROFILES } from "./model.mjs";
 
+// The one Storybook reference capturer: the workbench's Approve tab and the
+// application's site runs both call it, so a reference is drawn one way.
+
 const git = promisify(execFile);
-const CAPTURE_TIMEOUT_MS = 30_000;
-const DEFAULT_BROWSER = {
+const DEFAULT_TIMEOUT_MS = 30_000;
+const IMAGE_TIMEOUT_MS = 15_000;
+const REQUIRED_RESOURCE_TYPES = new Set([
+  "document",
+  "font",
+  "image",
+  "script",
+  "stylesheet",
+]);
+const REQUIRED_SUBRESOURCE_TYPES = new Set([
+  "font",
+  "image",
+  "script",
+  "stylesheet",
+]);
+
+export const CAPTURE_BROWSER = Object.freeze({
   locale: "en-US",
   timezoneId: "Asia/Hong_Kong",
   colorScheme: "light",
-};
+});
+
+function coded(message, code) {
+  return Object.assign(new Error(message), { code });
+}
+
+/** The fixed browser context every capture, site or reference, draws in. */
+export function newCaptureContext(
+  browser,
+  viewport,
+  options = CAPTURE_BROWSER,
+) {
+  return browser.newContext({
+    viewport,
+    deviceScaleFactor: 1,
+    locale: options.locale,
+    timezoneId: options.timezoneId,
+    colorScheme: options.colorScheme,
+    reducedMotion: "reduce",
+    serviceWorkers: "block",
+  });
+}
+
+export function watchPageFailures(page, { failedResources, pageErrors }) {
+  page.on("requestfailed", (request) => {
+    // The page cancelled a request it no longer needs, such as a swapped
+    // image; a drawn image that never loads still fails the settle wait.
+    if (
+      request.failure()?.errorText === "net::ERR_ABORTED" &&
+      request.resourceType() !== "document"
+    )
+      return;
+    if (REQUIRED_RESOURCE_TYPES.has(request.resourceType())) {
+      const url = new URL(request.url());
+      failedResources.push(
+        `${request.resourceType()} ${url.origin}${url.pathname}`,
+      );
+    }
+  });
+  page.on("response", (response) => {
+    const request = response.request();
+    const resourceType = request.resourceType();
+    if (
+      response.status() >= 400 &&
+      REQUIRED_SUBRESOURCE_TYPES.has(resourceType)
+    ) {
+      const url = new URL(request.url());
+      failedResources.push(
+        `HTTP ${response.status()} ${resourceType} ${url.origin}${url.pathname}`,
+      );
+    }
+  });
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+}
+
+export async function waitForSettledPage(page) {
+  await page.evaluate(async (imageTimeoutMs) => {
+    // The screenshot is the viewport, so only an image drawn inside it must
+    // load: one under display: none, or a lazy one below the fold that the
+    // browser never fetches, is not in the picture.
+    const inViewport = (image) => {
+      if (!image.checkVisibility()) return false;
+      const box = image.getBoundingClientRect();
+      return (
+        box.bottom > 0 &&
+        box.right > 0 &&
+        box.top < window.innerHeight &&
+        box.left < window.innerWidth
+      );
+    };
+    const named = (image) => image.currentSrc || image.src || "an image";
+    if (document.fonts?.ready) await document.fonts.ready;
+    const brokenFonts = [...(document.fonts ?? [])].filter(
+      (font) => font.status === "error",
+    );
+    if (brokenFonts.length > 0)
+      throw new Error(`${brokenFonts.length} font resource(s) failed`);
+    await Promise.all(
+      [...document.images].filter(inViewport).map(async (image) => {
+        if (!image.complete) {
+          await new Promise((resolve, reject) => {
+            const timer = setTimeout(
+              () =>
+                reject(
+                  new Error(
+                    `image ${named(image)} did not load within ${imageTimeoutMs}ms`,
+                  ),
+                ),
+              imageTimeoutMs,
+            );
+            image.addEventListener(
+              "load",
+              () => {
+                clearTimeout(timer);
+                resolve();
+              },
+              { once: true },
+            );
+            image.addEventListener(
+              "error",
+              () => {
+                clearTimeout(timer);
+                reject(new Error(`image resource ${named(image)} failed`));
+              },
+              { once: true },
+            );
+          });
+        }
+        if (image.naturalWidth === 0)
+          throw new Error("image resource failed to load");
+        if (image.decode) await image.decode();
+      }),
+    );
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)),
+    );
+  }, IMAGE_TIMEOUT_MS);
+}
+
+export async function requireSingleVisibleLocator(locator, label) {
+  if (
+    !locator ||
+    typeof locator.count !== "function" ||
+    typeof locator.isVisible !== "function"
+  ) {
+    throw coded(
+      `capture recipe did not return a Playwright locator for ${label}`,
+      "RECIPE_REGION_MISSING",
+    );
+  }
+  const count = await locator.count();
+  if (count !== 1) {
+    throw coded(
+      `expected one ${label}; found ${count}`,
+      count === 0 ? "REGION_MISSING" : "REGION_AMBIGUOUS",
+    );
+  }
+  if (!(await locator.isVisible()))
+    throw coded(`${label} is not visible`, "REGION_NOT_VISIBLE");
+  const box = await locator.boundingBox();
+  if (!box)
+    throw coded(`${label} has no visible bounding box`, "REGION_MISSING");
+  return { x: box.x, y: box.y, width: box.width, height: box.height };
+}
+
+export function regionFits(region, viewport) {
+  const values = [region.x, region.y, region.width, region.height];
+  return (
+    values.every(Number.isFinite) &&
+    region.width > 0 &&
+    region.height > 0 &&
+    region.x >= 0 &&
+    region.y >= 0 &&
+    region.x + region.width <= viewport.width &&
+    region.y + region.height <= viewport.height
+  );
+}
+
+async function installStoryCompletionListener(page, storyId) {
+  await page.addInitScript((expectedStoryId) => {
+    const state = { attached: false, result: null, failure: null };
+    Object.defineProperty(window, "__uiVerificationStory", { value: state });
+    const attach = () => {
+      const preview = window.__STORYBOOK_PREVIEW__;
+      const channel = preview?.channel ?? window.__STORYBOOK_ADDONS_CHANNEL__;
+      if (!channel || typeof channel.on !== "function") return false;
+      state.attached = true;
+      channel.on("storyFinished", (event) => {
+        if (event?.storyId === expectedStoryId) state.result = event;
+      });
+      channel.on("storyMissing", (event) => {
+        if (event?.storyId === expectedStoryId)
+          state.failure = "Storybook could not find the declared story";
+      });
+      channel.on("storyErrored", (event) => {
+        if (event?.storyId === expectedStoryId)
+          state.failure = "Storybook reported a story render error";
+      });
+      return true;
+    };
+    if (!attach()) {
+      const interval = setInterval(() => {
+        if (attach()) clearInterval(interval);
+      }, 10);
+    }
+  }, storyId);
+}
+
+async function waitForStoryCompletion(page, storyId, timeoutMs) {
+  await page.waitForFunction(
+    (expectedStoryId) => {
+      const state = window.__uiVerificationStory;
+      return Boolean(
+        state?.failure ||
+          (state?.result && state.result.storyId === expectedStoryId),
+      );
+    },
+    storyId,
+    { timeout: timeoutMs },
+  );
+  const state = await page.evaluate(() => window.__uiVerificationStory);
+  if (state.failure) throw coded(state.failure, "STORY_FAILED");
+  if (state.result?.status !== "success") {
+    throw coded(
+      `Storybook finished ${storyId} with status ${state.result?.status ?? "unknown"}`,
+      "STORY_FAILED",
+    );
+  }
+}
+
+/**
+ * Renders one story at one profile and returns the full viewport PNG with the
+ * selector's box as Playwright measured it; the caller decides what a box that
+ * leaves the screen means at its profile.
+ */
+export async function captureStoryReference(
+  browser,
+  {
+    baseURL,
+    storyId,
+    selector,
+    profileId,
+    locale,
+    browserOptions = CAPTURE_BROWSER,
+    timeoutMs = DEFAULT_TIMEOUT_MS,
+  },
+) {
+  const viewport = PROFILES[profileId];
+  if (!viewport) throw new TypeError(`unknown profile ${profileId}`);
+  const context = await newCaptureContext(browser, viewport, browserOptions);
+  const page = await context.newPage();
+  const failedResources = [];
+  const pageErrors = [];
+  watchPageFailures(page, { failedResources, pageErrors });
+  try {
+    await installStoryCompletionListener(page, storyId);
+    const storyUrl = new URL("iframe.html", baseURL);
+    storyUrl.searchParams.set("id", storyId);
+    storyUrl.searchParams.set("viewMode", "story");
+    if (locale) storyUrl.searchParams.set("globals", `locale:${locale}`);
+    const response = await page.goto(storyUrl.href, {
+      waitUntil: "load",
+      timeout: timeoutMs,
+    });
+    if (!response)
+      throw coded(
+        "Storybook iframe did not return a document response",
+        "REFERENCE_NAVIGATION_FAILED",
+      );
+    if (!response.ok())
+      throw coded(
+        `Storybook iframe returned HTTP ${response.status()}`,
+        "REFERENCE_RESOURCE_FAILED",
+      );
+    await page
+      .locator("#storybook-root")
+      .waitFor({ state: "visible", timeout: timeoutMs });
+    await waitForStoryCompletion(page, storyId, timeoutMs);
+    await waitForSettledPage(page);
+    if (pageErrors.length > 0)
+      throw coded(
+        `Storybook page error: ${pageErrors[0]}`,
+        "REFERENCE_PAGE_ERROR",
+      );
+    if (failedResources.length > 0)
+      throw coded(
+        `required Storybook resource failed: ${failedResources[0]}`,
+        "REFERENCE_RESOURCE_FAILED",
+      );
+    const box = await requireSingleVisibleLocator(
+      page.locator(selector ?? "#storybook-root"),
+      "reference comparison region",
+    );
+    const bytes = await page.screenshot({
+      type: "png",
+      fullPage: false,
+      animations: "disabled",
+    });
+    return { bytes: new Uint8Array(bytes), box, viewport };
+  } finally {
+    await context.close();
+  }
+}
+
+/**
+ * The region a stored reference crops to. At the score profile the box must
+ * fit the screen; elsewhere a box that does not fit is context, so the whole
+ * viewport is compared, as a site run does.
+ */
+export function storedRegion(box, viewport, { wholeViewport, scored }) {
+  const whole = { x: 0, y: 0, width: viewport.width, height: viewport.height };
+  if (wholeViewport) return whole;
+  const rounded = {
+    x: Math.round(box.x),
+    y: Math.round(box.y),
+    width: Math.round(box.width),
+    height: Math.round(box.height),
+  };
+  if (regionFits(rounded, viewport)) return rounded;
+  if (scored)
+    throw coded(
+      `reference comparison region falls outside the ${viewport.width}x${viewport.height} viewport`,
+      "REGION_OUTSIDE_VIEWPORT",
+    );
+  return whole;
+}
 
 async function checkoutState(repoRoot) {
   const read = async (args) =>
@@ -25,183 +348,44 @@ async function checkoutState(repoRoot) {
   };
 }
 
-function storyUrl(origin, storyId, locale) {
-  const url = new URL("iframe.html", `${origin}/`);
-  url.searchParams.set("id", storyId);
-  url.searchParams.set("viewMode", "story");
-  url.searchParams.set("globals", `locale:${locale}`);
-  return url.href;
-}
-
-async function waitForStory(page, storyId) {
-  await page.waitForFunction(
-    (expected) => {
-      const state = window.__uiVerificationStory;
-      return Boolean(
-        state?.failure || (state?.result && state.result.storyId === expected),
-      );
-    },
-    storyId,
-    { timeout: CAPTURE_TIMEOUT_MS },
-  );
-  const state = await page.evaluate(() => window.__uiVerificationStory);
-  if (state.failure) throw new Error(state.failure);
-  if (state.result?.status !== "success")
-    throw new Error(
-      `Storybook finished ${storyId} with status ${state.result?.status ?? "unknown"}`,
-    );
-}
-
-// The same settle the application's site capture waits for: fonts, the
-// images drawn in the viewport, then two frames.
-async function waitForSettledPage(page) {
-  await page.evaluate(async () => {
-    const inViewport = (image) => {
-      if (!image.checkVisibility()) return false;
-      const box = image.getBoundingClientRect();
-      return (
-        box.bottom > 0 &&
-        box.right > 0 &&
-        box.top < window.innerHeight &&
-        box.left < window.innerWidth
-      );
-    };
-    if (document.fonts?.ready) await document.fonts.ready;
-    if ([...(document.fonts ?? [])].some((font) => font.status === "error"))
-      throw new Error("a font resource failed");
-    await Promise.all(
-      [...document.images].filter(inViewport).map(async (image) => {
-        if (!image.complete)
-          await new Promise((resolve, reject) => {
-            image.addEventListener("load", resolve, { once: true });
-            image.addEventListener(
-              "error",
-              () => reject(new Error(`image ${image.currentSrc} failed`)),
-              { once: true },
-            );
-          });
-        if (image.naturalWidth === 0)
-          throw new Error("image resource failed to load");
-        if (image.decode) await image.decode();
-      }),
-    );
-    await new Promise((resolve) =>
-      requestAnimationFrame(() => requestAnimationFrame(resolve)),
-    );
-  });
-}
-
-function regionOnScreen(box, viewport, profileId) {
-  const x = Math.max(0, Math.floor(box.x));
-  const y = Math.max(0, Math.floor(box.y));
-  const width = Math.min(viewport.width, Math.ceil(box.x + box.width)) - x;
-  const height = Math.min(viewport.height, Math.ceil(box.y + box.height)) - y;
-  if (width <= 0 || height <= 0)
-    throw new Error(`the reference region is not on screen at ${profileId}`);
-  return { x, y, width, height };
-}
-
 /**
- * Captures a story's reference the way the application's site capture does:
- * a fresh Chromium context per shot, so nothing carries between captures.
+ * The workbench's capturer: a fresh browser per request, every profile of one
+ * case and locale, stamped with this checkout's commit.
  */
-export function createReferenceCapturer({
-  chromium,
-  repoRoot,
-  browser: browserOptions = DEFAULT_BROWSER,
-}) {
+export function createReferenceCapturer({ launch, repoRoot }) {
   return async function captureReference({
     origin,
     storyId,
     selector,
-    viewport: wholeViewport,
-    profileId,
+    wholeViewport,
+    scoreProfile,
     locale,
   }) {
-    const viewport = PROFILES[profileId];
-    if (!viewport) throw new TypeError(`unknown profile ${profileId}`);
     if (typeof locale !== "string" || locale === "")
       throw new TypeError("locale is required");
     const checkout = await checkoutState(repoRoot);
-    const browser = await chromium.launch({ headless: true });
+    const browser = await launch();
     try {
-      const context = await browser.newContext({
-        viewport,
-        deviceScaleFactor: 1,
-        locale: browserOptions.locale,
-        timezoneId: browserOptions.timezoneId,
-        colorScheme: browserOptions.colorScheme,
-        reducedMotion: "reduce",
-        serviceWorkers: "block",
-      });
-      const page = await context.newPage();
-      const pageErrors = [];
-      page.on("pageerror", (error) => pageErrors.push(error.message));
-      await page.addInitScript((expected) => {
-        const state = { result: null, failure: null };
-        Object.defineProperty(window, "__uiVerificationStory", {
-          value: state,
+      const shots = [];
+      for (const profileId of Object.keys(PROFILES)) {
+        const shot = await captureStoryReference(browser, {
+          baseURL: `${origin}/`,
+          storyId,
+          selector,
+          profileId,
+          locale,
         });
-        const attach = () => {
-          const channel =
-            window.__STORYBOOK_PREVIEW__?.channel ??
-            window.__STORYBOOK_ADDONS_CHANNEL__;
-          if (!channel || typeof channel.on !== "function") return false;
-          channel.on("storyFinished", (event) => {
-            if (event?.storyId === expected) state.result = event;
-          });
-          channel.on("storyMissing", (event) => {
-            if (event?.storyId === expected)
-              state.failure = "Storybook could not find the story";
-          });
-          channel.on("storyErrored", (event) => {
-            if (event?.storyId === expected)
-              state.failure = "Storybook reported a story render error";
-          });
-          return true;
-        };
-        if (!attach()) {
-          const timer = setInterval(() => {
-            if (attach()) clearInterval(timer);
-          }, 10);
-        }
-      }, storyId);
-      const response = await page.goto(storyUrl(origin, storyId, locale), {
-        waitUntil: "load",
-        timeout: CAPTURE_TIMEOUT_MS,
-      });
-      if (!response?.ok())
-        throw new Error(
-          `the Storybook iframe returned HTTP ${response?.status() ?? "nothing"}`,
-        );
-      await page
-        .locator("#storybook-root")
-        .waitFor({ state: "visible", timeout: CAPTURE_TIMEOUT_MS });
-      await waitForStory(page, storyId);
-      await waitForSettledPage(page);
-      if (pageErrors.length > 0)
-        throw new Error(`Storybook page error: ${pageErrors[0]}`);
-      const matches = page.locator(selector ?? "#storybook-root");
-      const visible = [];
-      for (const element of await matches.all())
-        if (await element.isVisible()) visible.push(element);
-      if (visible.length !== 1)
-        throw new Error(
-          `the reference selector ${selector ?? "#storybook-root"} matched ${visible.length} visible elements`,
-        );
-      const box = await visible[0].boundingBox();
-      if (!box) throw new Error("the reference element has no box");
-      const region = wholeViewport
-        ? { x: 0, y: 0, width: viewport.width, height: viewport.height }
-        : regionOnScreen(box, viewport, profileId);
-      const bytes = await page.screenshot({
-        type: "png",
-        fullPage: false,
-        animations: "disabled",
-      });
+        shots.push({
+          profileId,
+          bytes: shot.bytes,
+          region: storedRegion(shot.box, shot.viewport, {
+            wholeViewport,
+            scored: profileId === scoreProfile,
+          }),
+        });
+      }
       return {
-        bytes: new Uint8Array(bytes),
-        region,
+        shots,
         ...checkout,
         browser: `chromium ${browser.version()}`,
       };

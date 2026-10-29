@@ -177,6 +177,8 @@ function pathRunId(pathname) {
 
 // The workbench captures the live story itself, so the reference an approval
 // names is the one a designer saw; the capturer runs only where a browser can.
+// Every profile is captured before anything is stored, so a failed size
+// leaves no half-approved case.
 async function captureForApproval(
   archive,
   captureReference,
@@ -190,7 +192,6 @@ async function captureForApproval(
     "caseId",
     "targetId",
     "capturePointId",
-    "profileId",
     "locale",
     "approve",
     "comment",
@@ -219,14 +220,14 @@ async function captureForApproval(
       "CASE_NOT_FOUND",
       "the run does not declare this case",
     );
-  let shot;
+  let captured;
   try {
-    shot = await captureReference({
+    captured = await captureReference({
       origin,
       storyId: entry.reference.storyId,
       selector: entry.reference.selector ?? null,
-      viewport: entry.region === "viewport",
-      profileId: request.profileId,
+      wholeViewport: entry.region === "viewport",
+      scoreProfile: entry.scoreProfile,
       locale: request.locale,
     });
   } catch (error) {
@@ -236,34 +237,45 @@ async function captureForApproval(
       `the reference could not be captured: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
-  const reference = await archive.createReference(
-    {
-      caseId: entry.caseId,
-      targetId: entry.targetId,
-      capturePointId: entry.capturePointId,
-      profileId: request.profileId,
-      locale: request.locale,
-      storyId: entry.reference.storyId,
-      selector: entry.reference.selector ?? null,
-      region: shot.region,
-      commit: shot.commit,
-      ref: shot.ref,
-      verified: shot.verified,
-      browser: shot.browser,
-    },
-    shot.bytes,
-    person,
-  );
-  if (!request.approve) return { reference };
-  const approval = await archive.createApproval(
-    {
-      referenceId: reference.referenceId,
-      decision: "approved",
-      ...(request.comment ? { comment: request.comment } : {}),
-    },
-    person,
-  );
-  return { reference, approval };
+  const references = [];
+  for (const shot of captured.shots) {
+    references.push(
+      await archive.createReference(
+        {
+          caseId: entry.caseId,
+          targetId: entry.targetId,
+          capturePointId: entry.capturePointId,
+          profileId: shot.profileId,
+          locale: request.locale,
+          storyId: entry.reference.storyId,
+          selector: entry.reference.selector ?? null,
+          region: shot.region,
+          commit: captured.commit,
+          ref: captured.ref,
+          verified: captured.verified,
+          browser: captured.browser,
+        },
+        shot.bytes,
+        person,
+      ),
+    );
+  }
+  const approvals = [];
+  if (request.approve) {
+    for (const reference of references) {
+      approvals.push(
+        await archive.createApproval(
+          {
+            referenceId: reference.referenceId,
+            decision: "approved",
+            ...(request.comment ? { comment: request.comment } : {}),
+          },
+          person,
+        ),
+      );
+    }
+  }
+  return { references, approvals };
 }
 
 export function createArchiveHandler(
