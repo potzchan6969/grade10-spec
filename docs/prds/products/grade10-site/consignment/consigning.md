@@ -31,7 +31,10 @@ is no counter or paper consignment.
   - **Pinned to the Agreement** — the rates in force when the agreement is prepared; a later change reaches only the next agreement
   - **Outside the Schedule** — a rate negotiated for a partner is set by someone who may approve it - [Consignment Console](/p/grade10-site/consignment/operator-console#grants)
 - 🚧 **Consignment Period** — 1 year from signing
+  - **Built** — a term from the brand's settings, intended 90 days; its dates are set when the agreement seals, an item ends on its latest signed renewal, and a lot already placed runs to its close
 - **Agreement** — one Consignment Agreement a consignment; a change makes a new version, never an edit
+  - 🚧 **Renewal Is Signed** — extending or repricing prepares a renewal the consignor signs, linked to the one it renews
+- 🚧 **No Incentive at Consigning** — built as a setting that starts at 0, so the agreement leaves its line out; a vaulted card earns the vault's daily incentive instead - [Incentive](/p/grade10-site/vault/incentive)
 
 ## Price Check
 
@@ -68,15 +71,25 @@ On the consign form, and whenever the lowest price is changed.
 ## In the Store
 
 - **One Product, Every Store Channel** — the card is one store product, on the shop's tills at Causeway Bay and events and in the online store
+  - 🚧 **Shop, Online or Both** — staff list a store card in the shop only, online only, or both
   - **First Sale Wins** — the card comes off the other channels at once; a second sale of the same card is refunded
+    - 🚧 **Sold Twice** — a till sale of a card an online buyer paid for at the same moment stands; the online buyer is refunded and staff alerted
+  - 🚧 **One Buyer at a Time** — an open order holds the card, refusing every other buyer until it is paid, expires or is cancelled
   - 🚧 **Marketplace** — once it launches, a channel like the others
 - **Sales Report Themselves** — the store and the auction report each sale, delivery and refund; staff record one by hand only where a channel didn't
 - 🚧 **Price Changes** — entered by staff; they may raise the price at their will, never below the lowest acceptable price
 - 🚧 **Handover** — at the counter in the shop; online orders ship from the vault, and a card held elsewhere moves first
+  - **Released to Its Buyer** — on delivery, under the consignment agreement; no release paper, no early withdrawal fee, and the card's credited incentive is kept - [Case Lifecycle](/p/grade10-site/finance/case-lifecycle)
+
+:::callout{kind="note"}
+- ❓ **Who wins the counter** — the first hold, the shop reserving the card for an online checkout, or the till, cancelling an unpaid online checkout; built on the first. Owner confirms
+- ❓ **The release clause** — its exact words in the consignment agreement; a draft prints until they are confirmed. Owner confirms
+:::
 
 ## At Auction
 
 - 🚧 **Lot** — listed from the vault; the reserve is the lowest acceptable price where the collector set one, otherwise there is no reserve
+  - **Built** — the lot opens at the floor agreed at signing, with no reserve; an HKD floor at a dollar auction is converted at US$1 = HK$7.85, rounded up, the rate kept on the lot, and the sale comes back in HKD
 - **Commission** — on the hammer price only; the buyer's premium is Grade10's
 - 🚧 **Winner Doesn't Pay** — the card is relisted
 - 🚧 **Handover** — shipped from the vault, or collected at Causeway Bay
@@ -129,4 +142,10 @@ lets Grade10 price the listing while the collector keeps a hard limit.
 - **Both channels, one at a time** — a card is never on the shelf and in an auction together, so it can't sell twice; moving it needs no second signature
 - **A year's period** — long enough for an auction cycle and a slow card, and an unsold card simply goes back to earning
 - **Not in scope** — a counter or paper consignment; the collector setting the list price
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| The shop and online | 🚧 | One store product per consigned item; staff list it in the shop, online or both - decided by the owner, 2026-10-27, reversing no shop-only listing of 2026-10-11 | Product |
+| Instant incentive | 🚧 | The consignor is paid an incentive on the item's estimated value instantly when the consignment is taken - decided under the owner's delegation, 2026-10-16; it defaults to 0 now that a vault card earns daily, and stays a setting - 2026-10-27 | Owner |
+| Selling from the vault | Decided | A storage card is consigned where it sits and released to its buyer on delivery under the consignment agreement; the exact clause is confirmed later - owner, 2026-10-27 | Owner |
 :::

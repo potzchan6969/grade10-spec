@@ -15,6 +15,12 @@ in a locker and the money is really a bank transfer somebody made.
   collateral, decided at intake by the financing amount the collector asks for
   - 🚧 **Keeping a Card Without a Loan** — a free deposit, no longer a case's
     storage lane - [Vault](/p/grade10-site/vault)
+  - 🚧 **Many Cards, Each Its Own Contract** — as built, a case holds every
+    card handed in on a visit as one-card contracts, and a financed card is
+    its own loan beside its own incentive rate —
+    [Case Lifecycle](/p/grade10-site/finance/case-lifecycle)
+  - 🚧 **A Financed Card Is Not Sold From the Vault** — only a storage card
+    may be consigned where it sits; a card under a loan is refused
 - **Two entities** — the custodian holds the card and the lender lends against
   it; each prints on its own paper, and only the lender's carries a licence
 - **Where** — `admin.grade10.com/vault` for the shop and
@@ -130,6 +136,7 @@ multi-card cases; renewing a live loan.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | One case is one card | Decided | Siblings are separate cases booked on the lead case | Product |
+| A case of one-card contracts | 🚧 | Built in place of one case, one card: a case is everything one owner hands in on one visit, made of one-card contracts, each with its own incentive rate and, financed, its own loan, because the vault and finance share one vaulting base - reversed by the owner, 2026-10-27 | Owner |
 | A payout takes two people; a correction takes a second one | Decided | Staff and treasurer share no money grant, and nobody may take back a row they recorded | Product |
 | Entity, retention and lending policy are data | Decided | Three per-brand tables on one mechanism, every undecided field named by the checks with its owner and its cost; a field marked blocking refuses a production deploy | Engineering |
 | Lending policy is seeded from the owner's numbers | Decided | Loan to value, the rate band per 30 days, term presets and offer validity in one per-brand table; in production a null bound refuses the offer, never the deploy | Owner |

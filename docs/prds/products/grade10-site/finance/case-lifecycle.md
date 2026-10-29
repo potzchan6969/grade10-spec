@@ -4,8 +4,9 @@ spec: grade10-site/vault/case-lifecycle
 order: 2
 ---
 
-A case is one item, one collector and one path through fourteen statuses,
-decided at intake by one question: does the collector want a loan against it.
+Each card is one contract, one collector and one path through fourteen
+statuses, decided at intake by one question: does the collector want a loan
+against it.
 
 - **Two lanes, one machine** — a financing amount at intake makes the
   financed lane; none makes storage
@@ -21,8 +22,20 @@ decided at intake by one question: does the collector want a loan against it.
   repayment reopens `repaid → active`; the machine holds no other move back
 - **What is not a status** — a booking (a relationship the diary holds) and
   overdue (a computation against the clock)
-- **One case, one item** — a unique index; a collector with three items
-  sends three requests and books one visit on the first
+- 🚧 **A case of one-card contracts** — a case is everything one owner hands
+  in on one visit; each card in it runs the statuses on its own, with its own
+  start date, incentive rate and, on a financed card, its own loan, while
+  staff open, prepare, vault and authenticate the case in one act each —
+  [Incentive](/p/grade10-site/vault/incentive)
+- 🚧 **An early withdrawal pays its fee** — a card taken back inside the
+  vault's early-withdrawal period is released only once its fee is paid by
+  card on its Shopify invoice, online or at the shop's till; the refusal names
+  the fee outstanding, and a withdrawn request voids the invoice —
+  [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal#early-withdrawal-fee)
+- 🚧 **Released to its buyer** — a storage card sold through consignment is
+  released to its buyer on delivery under the consignment agreement, with no
+  release paper and no early withdrawal fee —
+  [Consignment](/p/grade10-site/consignment)
 
 :::flow{title="Intake to release"}
 # Intake

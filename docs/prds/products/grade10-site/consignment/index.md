@@ -46,6 +46,10 @@ is the default it starts on.
 | Fee for ending early | ❓ unset |
 | Currency | HKD |
 
+- 🚧 **Proceeds as built** - the brand's payout setting picks where they go,
+  by default a bank account kept on the consignor's list after the return
+  window - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#sale-proceeds)
+
 :::detail{title="Product decisions" for="pm"}
 For a collector whose card is already in the vault, consigning should take a
 minute from a phone; for Grade10, the commission is what pays for the vault.
