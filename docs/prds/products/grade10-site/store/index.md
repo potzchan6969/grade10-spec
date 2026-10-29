@@ -15,7 +15,7 @@ The Grade10 store is the trading-card and collectibles shop at
 
 - **Shopify owns**
   1. Product catalog
-  2. Inventory
+  2. Inventory — one location, the shop - [Inventory and Sales Channels](/p/grade10-site/store/inventory-and-channels)
   3. Orders
   4. Shipping
 - **Grade10 owns**

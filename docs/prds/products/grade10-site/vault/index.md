@@ -8,11 +8,11 @@ now. Eligible cards earn a small daily amount, and any card is one step from bei
 the store or at auction. The vault is the top of the funnel; consignment
 commission is the revenue - [Consignment](/p/grade10-site/consignment).
 
-:::flow{title="One card, from deposit to sale"}
+:::flow{title="Vaulting a card"}
 # In the vault
 
 ## Collector — Deposit
-At the shop in Causeway Bay or an event; staff record and photograph each card.
+At the shop in Causeway Bay or an event; staff record and photograph each card, and the collector signs the Vault Terms.
 
 ## Staff — Authenticate and store
 The card is checked at deposit and put away.
@@ -23,29 +23,18 @@ The card's market price and how easily it sells are checked.
 ## Collector — Earn daily
 An approved card earns a daily amount into the earnings wallet.
 
-# On sale
-
-## Collector — Consign
-From the dashboard: the store, the auction or both, and the lowest price they accept.
-
-## Staff — Approve the listing
-Grade10 sets the list or starting price.
-
-## Buyer — Buy it
-At the shop's counter, online or at auction; a card that ships leaves from the shop. It stops earning.
-
 # Paid
 
-## Grade10 — Settle
-Sale price less commission reaches the wallet 3 business days after the buyer pays.
-
 ## Collector — Cash out
-Incentive and sale proceeds, after the identity check.
+Incentive, after the identity check.
 :::
 
-::image{src="assets/diagrams/vault-card-routes.svg" alt="Where a vaulted card can go: deposited at the shop or an event into the vault; consigned to the store, on the shop's tills and online with the marketplace later, or to an auction lot; sold at the counter, or shipped by Kerry Logistics from the shop or collected; or withdrawn and collected at the shop"}
+- **Deposit and Consign** — the main way into consignment: the card is registered into the vault, then consigned, in the same visit - [Consignment](/p/grade10-site/consignment)
+
+::image{src="assets/diagrams/vault-card-routes.svg" alt="Where a vaulted card can go: deposited at the shop or an event into the vault; consigned to the store, on the shop's tills and online with the marketplace later, or to an auction lot; sold at the counter, or shipped, with Kerry Logistics collecting at the shop, or collected; or withdrawn and collected at the shop"}
 
 - **Off the Main Path**
+  - **Consign Later** — the collector consigns a card already in the vault from the dashboard - [Consigning](/p/grade10-site/consignment/consigning#consign-form)
   - **Ending a Consignment** — the card comes off sale and stays in the vault, earning - [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment)
   - **Vault Withdrawal** — the card goes back to the collector - [Vault Withdrawal](/p/grade10-site/vault/vault-withdrawal)
 - **A Loan Against a Card** — not the vault's; it is a case - [Finance](/p/grade10-site/finance)
@@ -98,7 +87,7 @@ consigning it is one step from the dashboard. Three collectors it is for:
 
 Decisions:
 
-- **Vault first** — consignment starts from a vaulted card, never a new intake, so the second step costs the collector a tap, not a visit
+- **Vault first** — every consigned card is a vaulted card: consigned at deposit in the same visit, or later with a tap, never through a second intake
 - **The incentive is an acquisition cost** — paid on cards Grade10 can sell, and recovered from commission; a storage fee would turn the deposit away, so it is a setting at nothing for now - [Vault Deposit](/p/grade10-site/vault/deposit#custody)
 - **Identity at the exit, not the door** — a deposit needs an account, a phone number and a declaration; the full identity check waits until money or a card leaves
 - **Keeping without a loan is a deposit** — it replaces a case's storage lane, so the card can earn and be consigned; the loan stays a case - [Finance](/p/grade10-site/finance)

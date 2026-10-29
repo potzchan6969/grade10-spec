@@ -4,15 +4,24 @@ icon: storefront
 ---
 
 Consignment is selling a card a collector keeps in the Grade10 vault, in the
-store or at auction, for a commission. The card is already deposited and
-authenticated, so consigning is an online application on a vaulted card, with
-no second intake - [Vault](/p/grade10-site/vault).
+store or at auction, for a commission. Every consigned card is a vaulted card:
+it is registered into the vault first, then consigned, either in the same visit
+or later from the collector's dashboard, with no second intake -
+[Vault](/p/grade10-site/vault).
 
-:::flow{title="One consignment"}
-# Consigning
+:::flow{title="Deposit and consign"}
+# At the counter
 
-## Collector — Consign
-From the dashboard: the store, the auction or both, the lowest price they accept, and the agreement signed in the app.
+## Collector — Deposit and consign
+At the shop or an event; on the deposit form staff tick Consign Now for the card, with the store, the auction or both and the lowest price the collector accepts.
+
+## Collector — Sign
+The Vault Terms and the Consignment Agreement together, on the shop's tablet or by an emailed link.
+
+## Staff — Vault it first
+The card is authenticated and stored; it earns once approved, like any vaulted card.
+
+# Selling
 
 ## Staff — Approve the listing
 Grade10 sets the list or starting price, and for both channels where the card starts.
@@ -20,15 +29,17 @@ Grade10 sets the list or starting price, and for both channels where the card st
 # Selling
 
 ## Buyer — Buy it
-In the shop, online or at auction; the card ships from the vault and stops earning.
+At the shop's counter, online or at auction; the card stops earning.
 
 ## Grade10 — Settle
 Sale price less commission reaches the wallet 3 business days after the buyer pays.
 :::
 
+- **Consign Later** — a card already in the vault, consigned by the collector from the dashboard and approved the same way - [Consigning](/p/grade10-site/consignment/consigning#consign-form)
+
 | Page | What it holds |
 | --- | --- |
-| [Consigning](/p/grade10-site/consignment/consigning) | The consign form, the terms, the price check, approval, both channels, the store and the auction |
+| [Consigning](/p/grade10-site/consignment/consigning) | The two ways in, the consign form, the terms, the price check, approval, both channels, the store and the auction |
 | [Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment) | Taking a card off sale before it sells |
 | [Consignment Dashboard](/p/grade10-site/consignment/dashboard) | The staff view that turns vaulted cards into sales |
 | [Consignment Console](/p/grade10-site/consignment/operator-console) | The admin section's queue, one consignment, payouts and settings |
@@ -54,7 +65,7 @@ is the default it starts on.
 For a collector whose card is already in the vault, consigning should take a
 minute from a phone; for Grade10, the commission is what pays for the vault.
 
-- **Consign fully online** — the collector consigns and signs from the dashboard; a counter or paper consignment was the old intake, and a vaulted card needs none
+- **Vault first, in one visit** — at deposit the card is registered into the vault, then consigned on the same form, so the collector signs once; a card consigned later is consigned from the dashboard. It replaces the old intake, which consigned a card that was never vaulted
 - **Lowest acceptable price only** — replaces a list price and floor agreed at signing: the collector keeps a hard limit and Grade10 prices the listing, so there is less back-and-forth
 - **Paid 3 business days after the buyer pays** — replaces payout after the return window; a later refund is reversed from the wallet, so the collector isn't kept waiting on a rare return
 - **No incentive at consigning** — replaces the incentive paid on consigning: a vaulted card earns daily, consigned or not, so consigning never costs the collector the incentive - [Incentive](/p/grade10-site/vault/incentive)

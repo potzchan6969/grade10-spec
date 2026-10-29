@@ -20,7 +20,7 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
    - **Sales and Liquidity** — the card's sales count and liquidity, in the staff's detail view
    - **Estimated Daily Incentive** — or Not Eligible, for a card that earns nothing
    - **Skip Incentive Approval** — a checkbox on each card, unticked by default; staff tick it when they have already authenticated the card and verified its value on the spot, so it needn't wait for approval - [Incentive](/p/grade10-site/vault/incentive#incentive-approval)
-4. 🚧 **Consign Now** — optional, per card: the store, the auction or both, the lowest acceptable price (required for the store or both, optional for the auction) and the commission; Grade10 sets the list or starting price at approval - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
+4. 🚧 **Consign Now** — optional, per card; the card is registered into the vault first, then consigned in the same visit: the store, the auction or both, the lowest acceptable price (required for the store or both, optional for the auction) and the commission; Grade10 sets the list or starting price at approval - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
 5. 🚧 **Sign** — on the shop's tablet, or by a link emailed to the collector
    - **Vault Terms** — signed
    - **Consignment Agreement** — signed only where a card is consigned now
@@ -49,7 +49,7 @@ Staff register the cards on the deposit form, at the shop's counter or an event.
 
 - 🚧 **Locations** — the shop in Causeway Bay, and an event location until the card moves
   - **In Transit** — a card between two locations; not a location itself
-- **Kerry Logistics** — the shipping partner: it takes stock from the shop to fill online orders, and is never a vault location
+- **Shipping** — Kerry Logistics comes to the shop to take what ships; it is never a location - [Inventory and Sales Channels](/p/grade10-site/store/inventory-and-channels#inventory-location)
 - **Moves** — recorded when the card leaves and when it arrives, both confirmed by hand by staff - [Vault Operations](/p/grade10-site/vault/operations#moves)
 - 🚧 **Storage Fee** — an admin setting, nothing for now; every change logged
 

@@ -99,7 +99,7 @@
       "col": 4,
       "type": "external",
       "label": "Shipped or collected",
-      "sublabel": "Kerry Logistics ships from the shop",
+      "sublabel": "Kerry Logistics collects at the shop",
       "width": 190
     }
   ],

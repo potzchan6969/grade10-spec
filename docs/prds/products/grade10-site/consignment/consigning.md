@@ -3,10 +3,15 @@ title: Consigning
 order: 1
 ---
 
+## Two Ways In
+
+- 🚧 **At Deposit** — the main way: staff tick Consign Now for a card on the deposit form; it is registered into the vault first and consigned in the same visit, and the collector signs the Consignment Agreement with the Vault Terms - [Vault Deposit](/p/grade10-site/vault/deposit#deposit-form)
+- 🚧 **From the Dashboard** — a card already in the vault, on the consign form below
+- 🚧 **Approved Alike** — either way, staff approve the listing before it goes on sale - [Listing Approval](/p/grade10-site/consignment/consigning#listing-approval)
+
 ## Consign Form
 
-The collector consigns cards already in the vault from their dashboard; there
-is no counter or paper consignment.
+From the dashboard, for cards already in the vault.
 
 1. 🚧 **Cards** — chosen from the collector's vaulted cards
 2. 🚧 **Terms** — per card, the store, the auction or both, and the lowest acceptable price; the commission shown at Grade10's rate for each channel chosen
@@ -79,7 +84,7 @@ For a card with a market price of HKD 10,000:
 
 ## In the Store
 
-- **One Product, Every Store Channel** — the card is one store product, on the shop's tills at Causeway Bay and events and in the online store
+- **One Product, Every Store Channel** — the card is one store product, on the shop's tills at Causeway Bay and events and in the online store - [Inventory and Sales Channels](/p/grade10-site/store/inventory-and-channels)
   - 🚧 **Shop, Online or Both** — staff list a store card in the shop only, online only, or both
   - **First Sale Wins** — the card comes off the other channels at once; a second sale of the same card is refunded
     - 🚧 **Sold Twice** — a till sale of a card an online buyer paid for at the same moment stands; the online buyer is refunded and staff alerted
@@ -141,16 +146,17 @@ By email, in the collector's language.
 - 🚧 **Unsold After a Year** — the card goes back to vault-only and keeps earning; the collector consigns it again or withdraws it
 
 :::detail{title="Product decisions" for="pm"}
-A vaulted card is already authenticated and photographed, so consigning it is a
-few taps with no intake. Asking only for the lowest price the collector accepts
+A consigned card is always a vaulted card, authenticated and photographed once,
+so consigning it takes no second intake: a tick on the deposit form, or a few
+taps later. Asking only for the lowest price the collector accepts
 lets Grade10 price the listing while the collector keeps a hard limit.
 
-- **Fully online** — the collector consigns and signs from the dashboard; staff may help but never submit, so the agreement is the collector's own act
+- **Vault first, then consign** — at deposit both happen in one visit, the card registered into the vault before it is consigned; later the collector consigns from the dashboard, where staff may help but never submit. Either way the collector signs, so the agreement is their own act
 - **A reserve only where the collector sets one** — at auction the lowest price is optional, so a collector who wants the hammer to decide isn't made to guess a floor
 - **The price check warns low and refuses high** — a low price may be the collector's reason and is confirmed twice; a price far above market would only stall the sale
 - **Both channels, one at a time** — a card is never on the shelf and in an auction together, so it can't sell twice; moving it needs no second signature
 - **A year's period** — long enough for an auction cycle and a slow card, and an unsold card simply goes back to earning
-- **Not in scope** — a counter or paper consignment; the collector setting the list price
+- **Not in scope** — a paper consignment; consigning a card that isn't vaulted; the collector setting the list price
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
