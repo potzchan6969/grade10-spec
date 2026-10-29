@@ -273,7 +273,17 @@
     "rejectedTitle": "这个链接不符合要求。",
     "endedThanks": "感谢参加。",
     "joinOnce": "参加活动需要免费的 Grade10 账户。",
-    "joinOnceAction": "免费加入或登录"
+    "joinOnceAction": "免费加入或登录",
+    "photoLabel": "帖文截图",
+    "photoChoose": "选择截图",
+    "photoChange": "换一张",
+    "photoHint": "从相册选择你已分享帖文的截图。",
+    "photoSend": "发送截图",
+    "photoPreviewAlt": "你选择的截图",
+    "photoSentAlt": "你已发送的截图",
+    "wonTitle": "已成功参加。",
+    "wonShow": "店铺开幕后，到店出示此截图。",
+    "refusedPhoto": "未能上传这张图片，请改用截图再试。"
   },
   "tiers": {
     "title": "等级与礼遇",

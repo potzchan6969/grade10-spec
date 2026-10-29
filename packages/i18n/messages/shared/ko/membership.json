@@ -273,7 +273,17 @@
     "rejectedTitle": "이 링크는 인정되지 않았습니다.",
     "endedThanks": "참여해 주셔서 감사합니다.",
     "joinOnce": "참여하려면 무료 Grade10 계정이 필요합니다.",
-    "joinOnceAction": "무료 가입 또는 로그인"
+    "joinOnceAction": "무료 가입 또는 로그인",
+    "photoLabel": "게시물 스크린샷",
+    "photoChoose": "스크린샷 선택",
+    "photoChange": "다른 사진 선택",
+    "photoHint": "공유한 게시물의 스크린샷을 사진에서 선택하세요.",
+    "photoSend": "스크린샷 보내기",
+    "photoPreviewAlt": "선택한 스크린샷",
+    "photoSentAlt": "보낸 스크린샷",
+    "wonTitle": "참여가 완료되었습니다.",
+    "wonShow": "매장 오픈 후 이 스크린샷을 보여 주세요.",
+    "refusedPhoto": "이 사진을 보낼 수 없습니다. 스크린샷으로 다시 시도하세요."
   },
   "tiers": {
     "title": "등급 및 혜택",

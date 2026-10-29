@@ -273,7 +273,17 @@
     "rejectedTitle": "That link didn't count.",
     "endedThanks": "Thanks for taking part.",
     "joinOnce": "Taking part needs a free Grade10 account.",
-    "joinOnceAction": "Join free or sign in"
+    "joinOnceAction": "Join free or sign in",
+    "photoLabel": "Screenshot of your post",
+    "photoChoose": "Choose a screenshot",
+    "photoChange": "Choose another",
+    "photoHint": "A screenshot of your shared post, from your phone's photos.",
+    "photoSend": "Send screenshot",
+    "photoPreviewAlt": "The screenshot you chose",
+    "photoSentAlt": "The screenshot you sent",
+    "wonTitle": "You're in.",
+    "wonShow": "Show this screenshot at the store after it opens.",
+    "refusedPhoto": "That picture didn't go through. Try a screenshot instead."
   },
   "tiers": {
     "title": "Tiers & Benefits",
