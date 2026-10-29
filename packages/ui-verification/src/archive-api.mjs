@@ -145,11 +145,12 @@ function queryOptions(url, names) {
 function routeScope(method, pathname) {
   if (method === "GET") return "read";
   if (method === "PUT" && pathname === "/api/objects") return "publish";
-  if (method === "POST" && pathname === "/api/reviews") return "review";
   if (
     method === "POST" &&
-    ["/api/runs", "/api/assessments", "/api/calibrations"].includes(pathname)
+    ["/api/references", "/api/approvals"].includes(pathname)
   )
+    return "approve";
+  if (method === "POST" && ["/api/runs", "/api/assessments"].includes(pathname))
     return "publish";
   return null;
 }
@@ -159,7 +160,7 @@ function hasScope(identity, scope) {
   if (scope === "read")
     return identity.kind === "publisher" || identity.kind === "human";
   if (scope === "publish") return identity.kind === "publisher";
-  return scope === "review" && identity.kind === "human" && identity.reviewer;
+  return scope === "approve" && identity.kind === "human" && identity.reviewer;
 }
 
 function pathRunId(pathname) {
@@ -174,10 +175,102 @@ function pathRunId(pathname) {
   }
 }
 
+// The workbench captures the live story itself, so the reference an approval
+// names is the one a designer saw; the capturer runs only where a browser can.
+async function captureForApproval(
+  archive,
+  captureReference,
+  input,
+  person,
+  origin,
+) {
+  const request = input && typeof input === "object" ? input : {};
+  const allowed = [
+    "sourceRunId",
+    "caseId",
+    "targetId",
+    "capturePointId",
+    "profileId",
+    "locale",
+    "approve",
+    "comment",
+  ];
+  const extra = Object.keys(request).filter((key) => !allowed.includes(key));
+  if (extra.length > 0)
+    throw new TypeError(`reference capture has unknown field ${extra[0]}`);
+  if (request.approve !== undefined && typeof request.approve !== "boolean")
+    throw new TypeError("reference capture approve must be a boolean");
+  const run = await archive.getRun(request.sourceRunId);
+  if (!run)
+    throw new ArchiveError(
+      404,
+      "RUN_NOT_FOUND",
+      `run ${request.sourceRunId} was not found`,
+    );
+  const entry = run.catalogue.find(
+    (candidate) =>
+      candidate.caseId === request.caseId &&
+      candidate.targetId === request.targetId &&
+      candidate.capturePointId === request.capturePointId,
+  );
+  if (!entry)
+    throw new ArchiveError(
+      404,
+      "CASE_NOT_FOUND",
+      "the run does not declare this case",
+    );
+  let shot;
+  try {
+    shot = await captureReference({
+      origin,
+      storyId: entry.reference.storyId,
+      selector: entry.reference.selector ?? null,
+      viewport: entry.region === "viewport",
+      profileId: request.profileId,
+      locale: request.locale,
+    });
+  } catch (error) {
+    throw new ArchiveError(
+      502,
+      "CAPTURE_FAILED",
+      `the reference could not be captured: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+  const reference = await archive.createReference(
+    {
+      caseId: entry.caseId,
+      targetId: entry.targetId,
+      capturePointId: entry.capturePointId,
+      profileId: request.profileId,
+      locale: request.locale,
+      storyId: entry.reference.storyId,
+      selector: entry.reference.selector ?? null,
+      region: shot.region,
+      commit: shot.commit,
+      ref: shot.ref,
+      verified: shot.verified,
+      browser: shot.browser,
+    },
+    shot.bytes,
+    person,
+  );
+  if (!request.approve) return { reference };
+  const approval = await archive.createApproval(
+    {
+      referenceId: reference.referenceId,
+      decision: "approved",
+      ...(request.comment ? { comment: request.comment } : {}),
+    },
+    person,
+  );
+  return { reference, approval };
+}
+
 export function createArchiveHandler(
   archive,
   {
     authorize = async () => null,
+    captureReference = null,
     allowedOrigins = DEFAULT_LOCAL_ORIGINS,
     sameOrigin = false,
     storage = archive?.root
@@ -313,22 +406,51 @@ export function createArchiveHandler(
         return jsonResponse(run, 200, headers);
       }
 
-      if (request.method === "GET" && url.pathname === "/api/reviews") {
+      if (request.method === "GET" && url.pathname === "/api/references") {
         return jsonResponse(
-          await archive.listReviews(
-            queryOptions(url, ["runId", "caseId", "cursor", "locale"]),
-          ),
+          await archive.listReferences(queryOptions(url, ["caseId", "cursor"])),
           200,
           headers,
         );
       }
 
-      if (request.method === "POST" && url.pathname === "/api/reviews") {
-        const review = await archive.createReview(
-          await readJson(request),
-          identity.reviewer,
+      if (request.method === "POST" && url.pathname === "/api/references") {
+        if (!captureReference)
+          throw new ArchiveError(
+            501,
+            "CAPTURE_UNAVAILABLE",
+            "this archive cannot capture a reference; approve it in the local workbench",
+          );
+        return jsonResponse(
+          await captureForApproval(
+            archive,
+            captureReference,
+            await readJson(request),
+            identity.reviewer,
+            url.origin,
+          ),
+          201,
+          headers,
         );
-        return jsonResponse(review, 201, headers);
+      }
+
+      if (request.method === "GET" && url.pathname === "/api/approvals") {
+        return jsonResponse(
+          await archive.listApprovals(queryOptions(url, ["caseId", "cursor"])),
+          200,
+          headers,
+        );
+      }
+
+      if (request.method === "POST" && url.pathname === "/api/approvals") {
+        return jsonResponse(
+          await archive.createApproval(
+            await readJson(request),
+            identity.reviewer,
+          ),
+          201,
+          headers,
+        );
       }
 
       if (request.method === "GET" && url.pathname === "/api/assessments") {
@@ -346,34 +468,6 @@ export function createArchiveHandler(
           await readJson(request),
         );
         return jsonResponse(assessment, 201, headers);
-      }
-
-      if (request.method === "GET" && url.pathname === "/api/calibrations") {
-        return jsonResponse(
-          await archive.listCalibrations(
-            queryOptions(url, [
-              "assessmentId",
-              "locale",
-              "profileId",
-              "scorerId",
-              "scorerVersion",
-              "scorerModel",
-              "contractHash",
-              "rubricVersion",
-              "labelPolicyVersion",
-              "cursor",
-            ]),
-          ),
-          200,
-          headers,
-        );
-      }
-
-      if (request.method === "POST" && url.pathname === "/api/calibrations") {
-        const calibration = await archive.createCalibration(
-          await readJson(request),
-        );
-        return jsonResponse(calibration, 201, headers);
       }
 
       return jsonResponse(

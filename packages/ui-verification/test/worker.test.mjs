@@ -339,7 +339,7 @@ test("Worker publishes immutable PNG objects and seals a run only after verifyin
   assert.equal(conflict.status, 409);
 });
 
-test("Worker attributes human review only to a verified Access JWT and pins capture hashes", async (_t) => {
+test("Worker attributes an approval only to a verified Access JWT and pins the reference hash", async (_t) => {
   const bucket = fakeR2Bucket();
   const { publicKey, privateKey } = generateKeyPairSync("rsa", {
     modulusLength: 2048,
@@ -370,71 +370,72 @@ test("Worker attributes human review only to a verified Access JWT and pins capt
     ALLOWED_ORIGINS: "https://storybook.example.test",
   };
   const { manifest, objects } = makeFixture("run-worker-review");
-  await createR2Archive(bucket).publish(manifest, objects);
+  const capture = manifest.captures[0];
+  const referenceBytes = objects.find(
+    (object) => object.key === capture.reference.key,
+  ).bytes;
+  const reference = await createR2Archive(bucket).createReference(
+    {
+      caseId: CASE_ID,
+      targetId: TARGET_ID,
+      capturePointId: CAPTURE_POINT_ID,
+      profileId: capture.profileId,
+      locale: "en",
+      storyId: "pages-home--default",
+      selector: null,
+      region: { x: 0, y: 0, width: 10, height: 10 },
+      commit: "b".repeat(40),
+      ref: "main",
+      verified: true,
+      browser: "chromium",
+    },
+    referenceBytes,
+    { subject: "local-development" },
+  );
 
   const body = {
-    runId: manifest.runId,
-    caseId: CASE_ID,
-    targetId: TARGET_ID,
-    capturePointId: CAPTURE_POINT_ID,
-    profileId: "desktop",
+    referenceId: reference.referenceId,
     decision: "changes-requested",
     comment: "Please revisit the spacing.",
   };
-  const spoofed = await worker.fetch(
-    new Request("https://archive.example.test/api/reviews", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-reviewer": "reviewer@example.test",
-        Origin: "https://storybook.example.test",
-      },
-      body: JSON.stringify(body),
-    }),
-    env,
-  );
+  const post = (path, headers) =>
+    worker.fetch(
+      new Request(`https://archive.example.test${path}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "https://storybook.example.test",
+          ...headers,
+        },
+        body: JSON.stringify(body),
+      }),
+      env,
+    );
+  const spoofed = await post("/api/approvals", {
+    "x-reviewer": "reviewer@example.test",
+  });
   assert.equal(spoofed.status, 401);
 
-  const serviceTokenReview = await worker.fetch(
-    new Request("https://archive.example.test/api/reviews", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Cf-Access-Jwt-Assertion": accessJwt(
-          privateKey,
-          "archive-app-audience",
-          null,
-        ),
-        Origin: "https://storybook.example.test",
-      },
-      body: JSON.stringify(body),
-    }),
-    env,
-  );
-  assert.equal(serviceTokenReview.status, 401);
+  const serviceToken = await post("/api/approvals", {
+    "Cf-Access-Jwt-Assertion": accessJwt(
+      privateKey,
+      "archive-app-audience",
+      null,
+    ),
+  });
+  assert.equal(serviceToken.status, 401);
 
-  const saved = await worker.fetch(
-    new Request("https://archive.example.test/api/reviews", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Cf-Access-Jwt-Assertion": accessJwt(
-          privateKey,
-          "archive-app-audience",
-        ),
-        Origin: "https://storybook.example.test",
-      },
-      body: JSON.stringify(body),
-    }),
-    env,
-  );
+  const signedIn = {
+    "Cf-Access-Jwt-Assertion": accessJwt(privateKey, "archive-app-audience"),
+  };
+  const saved = await post("/api/approvals", signedIn);
   assert.equal(saved.status, 201);
-  const review = await saved.json();
-  assert.equal(review.reviewer.subject, "access-subject-42");
-  assert.equal(review.reviewer.email, "reviewer@example.test");
-  assert.equal(review.capture.siteHash, manifest.captures[0].site.sha256);
-  assert.equal(
-    review.capture.referenceHash,
-    manifest.captures[0].reference.sha256,
-  );
+  const approval = await saved.json();
+  assert.equal(approval.approver.subject, "access-subject-42");
+  assert.equal(approval.approver.email, "reviewer@example.test");
+  assert.equal(approval.referenceHash, reference.image.sha256);
+
+  const hostedCapture = await post("/api/references", signedIn);
+  assert.equal(hostedCapture.status, 501);
+  assert.equal((await hostedCapture.json()).code, "CAPTURE_UNAVAILABLE");
 });

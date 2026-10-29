@@ -190,7 +190,7 @@ function assessmentFor(manifest, locale, profileId = "desktop") {
   return { runId, ...assessment };
 }
 
-test("archive lookup, reviews, and assessments remain isolated by locale", async () => {
+test("archive lookup and assessments remain isolated by locale", async () => {
   const root = await mkdtemp(join(tmpdir(), "ui-verification-locales-"));
   try {
     const archive = createArchive(root);
@@ -215,43 +215,6 @@ test("archive lookup, reviews, and assessments remain isolated by locale", async
       ),
     );
 
-    const englishReview = await archive.createReview(
-      {
-        runId,
-        caseId,
-        targetId,
-        capturePointId,
-        profileId: "desktop",
-        decision: "approved",
-      },
-      { subject: "english-reviewer" },
-    );
-    const chineseReview = await archive.createReview(
-      {
-        runId,
-        caseId,
-        targetId,
-        capturePointId,
-        profileId: "desktop",
-        locale: "zh-Hant",
-        decision: "approved",
-      },
-      { subject: "chinese-reviewer" },
-    );
-    assert.equal(englishReview.locale, "en");
-    assert.equal(englishReview.capture.inputFingerprint, "c".repeat(64));
-    assert.equal(chineseReview.locale, "zh-Hant");
-    assert.equal(chineseReview.capture.inputFingerprint, "f".repeat(64));
-    assert.equal((await archive.listReviews()).reviews.length, 2);
-    assert.equal(
-      (await archive.listReviews({ locale: "en" })).reviews.length,
-      1,
-    );
-    assert.equal(
-      (await archive.listReviews({ locale: "zh-Hant" })).reviews[0].reviewId,
-      chineseReview.reviewId,
-    );
-
     const englishAssessment = assessmentFor(manifest, "en");
     const chineseAssessment = assessmentFor(manifest, "zh-Hant");
     assert.notEqual(
@@ -273,115 +236,6 @@ test("archive lookup, reviews, and assessments remain isolated by locale", async
       (await archive.listAssessments({ runId, locale: "zh-Hant" }))
         .assessments[0].assessmentId,
       chineseAssessment.assessmentId,
-    );
-    const calibrationKey = {
-      scorerId: chineseAssessment.scorer.id,
-      scorerVersion: chineseAssessment.scorer.version,
-      scorerModel: chineseAssessment.scorer.model,
-      profileId: chineseAssessment.profileId,
-      contractHash: chineseAssessment.contractHash,
-      rubricVersion: chineseAssessment.rubricVersion,
-      labelPolicyVersion: "human-approval-v1",
-      locale: "zh-Hant",
-    };
-    const observation = {
-      sourceAssessmentId: chineseAssessment.assessmentId,
-      sourceRunId: runId,
-      reviewId: chineseReview.reviewId,
-      reviewerId: "chinese-reviewer",
-      locale: "zh-Hant",
-      siteSha256: chineseAssessment.imageHashes.site,
-      referenceSha256: chineseAssessment.imageHashes.reference,
-      split: "held-out",
-      independent: true,
-      humanApproved: true,
-      similarity: chineseAssessment.similarity,
-      criticalVeto: chineseAssessment.criticalVeto,
-      unknownCategory: chineseAssessment.unknownCategory,
-      provenanceVerified: chineseAssessment.provenanceVerified,
-      captureStatus: "captured",
-    };
-    const savedCalibration = await archive.createCalibration({
-      runId,
-      assessmentId: chineseAssessment.assessmentId,
-      locale: "zh-Hant",
-      calibration: {
-        schemaVersion: 1,
-        key: calibrationKey,
-        observations: [observation],
-      },
-      policy: { labelPolicyVersion: "human-approval-v1" },
-    });
-    assert.equal(savedCalibration.calibrationKey.locale, "zh-Hant");
-    const englishCalibrationKey = { ...calibrationKey, locale: "en" };
-    await archive.createCalibration({
-      runId,
-      assessmentId: englishAssessment.assessmentId,
-      locale: "en",
-      calibration: {
-        schemaVersion: 1,
-        key: englishCalibrationKey,
-        observations: [
-          {
-            ...observation,
-            sourceAssessmentId: englishAssessment.assessmentId,
-            reviewId: englishReview.reviewId,
-            reviewerId: "english-reviewer",
-            locale: "en",
-            siteSha256: englishAssessment.imageHashes.site,
-            referenceSha256: englishAssessment.imageHashes.reference,
-            similarity: englishAssessment.similarity,
-            criticalVeto: englishAssessment.criticalVeto,
-            unknownCategory: englishAssessment.unknownCategory,
-          },
-        ],
-      },
-      policy: { labelPolicyVersion: "human-approval-v1" },
-    });
-    assert.equal((await archive.listCalibrations()).calibrations.length, 2);
-    assert.equal(
-      (await archive.listCalibrations({ locale: "en" })).calibrations.length,
-      1,
-    );
-    assert.equal(
-      (await archive.listCalibrations({ locale: "zh-Hant" })).calibrations
-        .length,
-      1,
-    );
-    await assert.rejects(
-      archive.createCalibration({
-        runId,
-        assessmentId: chineseAssessment.assessmentId,
-        locale: "zh-Hant",
-        calibration: {
-          schemaVersion: 1,
-          key: calibrationKey,
-          observations: [
-            {
-              ...observation,
-              sourceAssessmentId: englishAssessment.assessmentId,
-              locale: "zh-Hant",
-            },
-          ],
-        },
-        policy: { labelPolicyVersion: "human-approval-v1" },
-      }),
-      /source assessment.*not archived/,
-    );
-    await assert.rejects(
-      archive.createReview(
-        {
-          runId,
-          caseId,
-          targetId,
-          capturePointId,
-          profileId: "desktop",
-          locale: "zh-Hans",
-          decision: "approved",
-        },
-        { subject: "wrong-locale-reviewer" },
-      ),
-      /capture was not found/,
     );
     await assert.rejects(
       archive.createAssessment(assessmentFor(manifest, "zh-Hant", "mobile")),
@@ -408,6 +262,88 @@ test("archive lookup, reviews, and assessments remain isolated by locale", async
     await assert.rejects(
       archive.publish(mismatchedLocaleReuse, []),
       /same locale matrix/,
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("an approval judges one captured reference image", async () => {
+  const root = await mkdtemp(join(tmpdir(), "ui-verification-reference-"));
+  try {
+    const archive = createArchive(root);
+    const { width, height } = PROFILES.desktop;
+    const input = {
+      caseId,
+      targetId,
+      capturePointId,
+      profileId: "desktop",
+      locale: "zh-Hant",
+      storyId: "pages-home--default",
+      selector: "main",
+      region: { x: 0, y: 0, width: 200, height: 100 },
+      commit: "b".repeat(40),
+      ref: "main",
+      verified: true,
+      browser: "chromium 140",
+    };
+    const bytes = png(width, height, [10, 20, 30, 255]);
+    const reference = await archive.createReference(input, bytes, {
+      subject: "designer",
+    });
+    assert.match(reference.referenceId, /^reference-/);
+    assert.equal(reference.image.sha256, sha256(bytes));
+    assert.equal(reference.locale, "zh-Hant");
+    assert.deepEqual(
+      await archive.getObject(reference.image.key),
+      new Uint8Array(bytes),
+    );
+    await assert.rejects(
+      archive.createReference(input, png(10, 10, [0, 0, 0, 255]), {
+        subject: "designer",
+      }),
+      /must be 1440x900 at desktop/,
+    );
+    await assert.rejects(
+      archive.createReference(
+        { ...input, region: { x: 1400, y: 0, width: 200, height: 100 } },
+        bytes,
+        { subject: "designer" },
+      ),
+      /must lie inside the image/,
+    );
+
+    const approval = await archive.createApproval(
+      { referenceId: reference.referenceId, decision: "approved" },
+      { subject: "designer", email: "designer@example.com" },
+    );
+    assert.equal(approval.referenceHash, reference.image.sha256);
+    assert.equal(approval.approver.email, "designer@example.com");
+    await assert.rejects(
+      archive.createApproval(
+        { referenceId: reference.referenceId, decision: "changes-requested" },
+        { subject: "designer" },
+      ),
+      /comment is required/,
+    );
+    await assert.rejects(
+      archive.createApproval(
+        { referenceId: "reference-missing", decision: "approved" },
+        { subject: "designer" },
+      ),
+      /was not found/,
+    );
+    assert.equal(
+      (await archive.listReferences({ caseId })).references.length,
+      1,
+    );
+    assert.equal(
+      (await archive.listApprovals({ caseId })).approvals[0].approvalId,
+      approval.approvalId,
+    );
+    assert.equal(
+      (await archive.listApprovals({ caseId: "other-case" })).approvals.length,
+      0,
     );
   } finally {
     await rm(root, { recursive: true, force: true });
