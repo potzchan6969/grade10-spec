@@ -20,6 +20,9 @@ const requirePreview = createRequire(
 const { chromium } = requirePreview("playwright");
 const STORY_ID = "site-navigation-screens-not-found--default";
 const CASE_ID = "vc_c00fc18c-bacf-4e88-931c-85d550dc4c2b";
+// A workbench capture launches Chromium and renders the story at all three
+// sizes, so it outlasts the panel's ordinary waits.
+const CAPTURE_TIMEOUT_MS = 60_000;
 const PROFILE_SIZES = {
   desktop: { width: 1440, height: 900 },
   tablet: { width: 768, height: 1024 },
@@ -90,8 +93,8 @@ function localeEvidenceText(locale, runId, targetId, kind) {
   return `${title ?? locale} · ${runId} · ${targetId}`;
 }
 
-async function waitForCondition(check, description) {
-  const deadline = Date.now() + 5_000;
+async function waitForCondition(check, description, timeoutMs = 5_000) {
+  const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     if (await check()) return;
     await new Promise((resolveWait) => setTimeout(resolveWait, 25));
@@ -571,7 +574,7 @@ async function startWorkbenchServer(root, archive) {
         : { kind: "human" },
     allowedOrigins: [origin],
     captureReference: createReferenceCapturer({
-      chromium,
+      launch: () => chromium.launch({ headless: true }),
       repoRoot: repositoryRoot,
     }),
   });
@@ -891,11 +894,28 @@ test("approving captures the live reference and Site Compare holds the site to i
   });
   server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
 
-  let page = await openPanel(browser, server, "Approve");
+  let page = await openPanel(browser, server, "Site Compare");
+  await page
+    .getByText(
+      "No approved reference at this size, so the site is compared with the current reference.",
+    )
+    .waitFor();
+  assert.equal(
+    await page
+      .getByRole("button", { name: "Current reference" })
+      .getAttribute("aria-pressed"),
+    "true",
+    "with nothing approved the site falls back to the run's reference",
+  );
+  await page.close();
+
+  page = await openPanel(browser, server, "Approve");
   let desktop = page.getByRole("region", { name: "Desktop evidence" });
   const approval = desktop.getByRole("region", { name: "Approval" });
   await approval.waitFor();
-  const flag = page.locator(".verification-reference-bar .verification-flag");
+  const flag = page.locator(
+    '.verification-reference-bar > .verification-flag:not([data-flag="drift"])',
+  );
   await waitForCondition(
     async () => (await flag.innerText()) === "No approved reference",
     "the flag to say nothing is approved",
@@ -908,11 +928,12 @@ test("approving captures the live reference and Site Compare holds the site to i
     "nothing is captured yet to request changes on",
   );
 
-  await approval.getByRole("button", { name: "Approve", exact: true }).click();
+  await approval.getByRole("button", { name: "Approve all sizes" }).click();
   await waitForCondition(
     async () =>
       /^Reference approved · [0-9a-f]{9}$/.test(await flag.innerText()),
     "approving to capture the story and flag it approved",
+    CAPTURE_TIMEOUT_MS,
   );
   assert.deepEqual(server.captureRequests, [
     {
@@ -920,15 +941,24 @@ test("approving captures the live reference and Site Compare holds the site to i
       caseId: CASE_ID,
       targetId: DECLARATIONS[0].targetId,
       capturePointId: DECLARATIONS[0].capturePointId,
-      profileId: "desktop",
       locale: "en",
       approve: true,
     },
   ]);
-  const [reference] = (await archive.listReferences({ caseId: CASE_ID }))
+  const captured = (await archive.listReferences({ caseId: CASE_ID }))
     .references;
-  const [approved] = (await archive.listApprovals({ caseId: CASE_ID }))
+  const approvedAll = (await archive.listApprovals({ caseId: CASE_ID }))
     .approvals;
+  assert.deepEqual(
+    captured.map((item) => item.profileId).sort(),
+    ["desktop", "mobile", "tablet"],
+    "one approval captures every size",
+  );
+  assert.equal(approvedAll.length, 3);
+  const reference = captured.find((item) => item.profileId === "desktop");
+  const approved = approvedAll.find(
+    (item) => item.referenceId === reference.referenceId,
+  );
   assert.equal(reference.storyId, STORY_ID);
   assert.equal(reference.selector, "main");
   assert.deepEqual(
@@ -948,8 +978,9 @@ test("approving captures the live reference and Site Compare holds the site to i
   await waitForCondition(
     async () =>
       (await archive.listReferences({ caseId: CASE_ID })).references.length ===
-      2,
-    "a second capture of the unchanged story",
+      6,
+    "a second capture of the unchanged story at every size",
+    CAPTURE_TIMEOUT_MS,
   );
   await waitForImageDimensions(desktop, "Pixel difference overlay", {
     width: reference.region.width,
@@ -1006,15 +1037,20 @@ test("approving captures the live reference and Site Compare holds the site to i
   await page.getByText("Tablet", { exact: true }).click();
   assert.equal(
     await page
-      .getByRole("button", { name: "Current reference" })
+      .getByRole("button", { name: "Last approved reference" })
       .getAttribute("aria-pressed"),
     "true",
+    "the approval covered every size",
   );
-  await page
-    .getByText(
-      "No approved reference at this size, so the site is compared with the current reference.",
-    )
-    .waitFor();
+  assert.match(
+    await page
+      .locator(
+        '.verification-reference-bar > .verification-flag:not([data-flag="drift"])',
+      )
+      .innerText(),
+    /^Reference approved/,
+    "the change request judged desktop only",
+  );
   await page.close();
 });
 

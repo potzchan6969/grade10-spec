@@ -52,7 +52,6 @@ export interface Approval extends VerificationIdentity {
 
 export interface ReferenceCaptureInput extends VerificationIdentity {
   sourceRunId: string;
-  profileId: ProfileId;
   locale: string;
   approve: boolean;
   comment?: string;
@@ -362,11 +361,11 @@ export function listApprovals(
   );
 }
 
-/** Asks the workbench to capture the live story, approving it when asked. */
+/** Asks the workbench to capture the live story at every size, approving it when asked. */
 export async function captureReference(
   base: string,
   input: ReferenceCaptureInput,
-): Promise<{ reference: ReferenceRecord; approval?: Approval }> {
+): Promise<{ references: ReferenceRecord[]; approvals: Approval[] }> {
   const payload = requireObject(
     await requestJson(apiUrl(base, "/api/references"), {
       method: "POST",
@@ -375,11 +374,12 @@ export async function captureReference(
     }),
     "for the captured reference",
   );
+  if (!Array.isArray(payload.references) || !Array.isArray(payload.approvals)) {
+    throw new Error("The archive response for the capture has no records.");
+  }
   return {
-    reference: referenceRecord(payload.reference),
-    ...(payload.approval === undefined
-      ? {}
-      : { approval: approvalRecord(payload.approval) }),
+    references: payload.references.map(referenceRecord),
+    approvals: payload.approvals.map(approvalRecord),
   };
 }
 

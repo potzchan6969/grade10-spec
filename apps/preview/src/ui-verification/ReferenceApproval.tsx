@@ -46,7 +46,7 @@ function statusLine(status: ReferenceStatus): string {
   if (current) {
     return "The current reference is not approved yet. Approve it to make it the first baseline.";
   }
-  return "No reference captured yet. Approve captures the live story and approves it.";
+  return "No reference captured yet. Approve captures the live story at every size and approves it.";
 }
 
 export function ReferenceApproval({
@@ -116,7 +116,9 @@ export function ReferenceApproval({
           onClick={() => void run("approve", () => onApprove(trimmed))}
           type="button"
         >
-          {pending === "approve" ? "Capturing and approving…" : "Approve"}
+          {pending === "approve"
+            ? "Capturing and approving all sizes…"
+            : "Approve all sizes"}
         </button>
         <button
           disabled={pending !== null || !status.current || trimmed === ""}
@@ -130,7 +132,9 @@ export function ReferenceApproval({
           onClick={() => void run("capture", onCapture)}
           type="button"
         >
-          {pending === "capture" ? "Capturing…" : "Capture current reference"}
+          {pending === "capture"
+            ? "Capturing all sizes…"
+            : "Capture current reference"}
         </button>
       </div>
       {error ? (
@@ -160,8 +164,9 @@ export function ReferenceApproval({
         </div>
       ) : null}
       <p className="verification-hint">
-        Approve captures the live story at this size and locale in this
-        workbench, stores it, and approves that image.
+        Approve and Capture render the live story at desktop, tablet and mobile
+        in this locale, in this workbench, and store each image; Approve then
+        approves all three. Request changes judges this size.
         {status.current
           ? ` The current reference was captured at commit ${shortCommit(status.current.commit)}${status.current.verified ? "" : " from a checkout with uncommitted changes"}.`
           : ""}

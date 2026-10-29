@@ -1088,7 +1088,6 @@ export function VerificationPanel({
       caseId: capture.caseId,
       targetId: capture.targetId,
       capturePointId: capture.capturePointId,
-      profileId: capture.profileId,
       locale: captureLocale(capture),
     };
   }
@@ -1103,9 +1102,8 @@ export function VerificationPanel({
       approve,
       ...(comment ? { comment } : {}),
     });
-    setReferences((previous) => [result.reference, ...previous]);
-    const { approval } = result;
-    if (approval) setApprovals((previous) => [approval, ...previous]);
+    setReferences((previous) => [...result.references, ...previous]);
+    setApprovals((previous) => [...result.approvals, ...previous]);
   }
 
   async function requestChanges(id: ProfileId, comment: string) {
