@@ -19,8 +19,9 @@ order: 1
 
 Points are earned from the **net paid amount after any discount or coupon,
 excluding shipping and tax**, so a redemption never earns back part of what it
-spent. A whole-order discount is shared across the lines by value, so it cannot
-land on the part of a basket that earns nothing.
+spent. A whole-order discount is shared across the goods lines by value, so it
+cannot land on the part of a basket that earns nothing. Shipping takes none of
+it: the whole discount sits on the goods, as Shopify allocates it.
 
 | Item | Earns points |
 | --- | --- |
@@ -44,7 +45,9 @@ An order's earn is written once, the first time the order completes.
   earn never waits for the Completed badge
 - **Basis** - the goods paid for less those refunded at completion; every
   later refund is read against it
-- **Till sale** - earns at the counter
+- **Till sale** - earns at the counter; one attributed to the member later
+  nets the refunds recorded before it lands, as a web order does at completion,
+  so it earns on what it still holds and nothing is clawed back
 - 🚧 **Guest order** - never earns, joined to an account or not -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 - 🚧 **Ticket order** - earns under the buyer's email alone: buying asks no
@@ -190,6 +193,9 @@ the member still holds from them.
 
 - **Goods only** — the store sends the goods share of a refund, priced the
   way the earn was, so refunding the shipping removes no points
+- **An amount, not lines** — a refund that names only an amount is shared
+  across the order's goods, shipping and tax by value, and only its goods
+  share comes back
 - **Same rate** — money comes back at the rate the credit that earned it
   charged, the last money at the last rate
 - **Once over the whole** — each refund resumes where the last stopped, so
@@ -213,15 +219,18 @@ the member still holds from them.
 The store sends no goods for shipping, so nothing comes back.
 :::
 
-:::example{title="Part of the goods refunded" tier="Gold" shipping="$30"}
+:::example{title="Part of the order refunded as an amount" tier="Gold" shipping="$30"}
 - Gengar single $139
 
 | Step | Event | Points | Balance |
 | --- | --- | --- | --- |
 | Earns | 13 pts × 1.2 | +15 | 15 |
-| Refunds | $39 of the single, a price match | −4 | 11 |
+| Refunds | $39 back as an amount, a price match | −3 | 12 |
 
-39 of the 139 that earned 15, floored.
+The refund names no line, so the store shares it across the $169 order:
+$39 × 139/169 ≈ $32.08 of it is goods. 32.08 of the 139 that earned 15 is
+3.46, floored to 3. Refunded against the single itself, the same $39 would take
+4.
 :::
 
 :::example{title="Whole order refunded" tier="Gold" shipping="$30"}
@@ -475,5 +484,8 @@ spend rather than lose a balance that was about to lapse.
 | Earn on completion | Decided | Every store order earns when it completes, by the rule under [Rules](#rules), on the net it has paid then, at the member's tier at completion; a till sale completes at the counter. An order canceled or refunded in full before it completes never earns; a refund before completion lowers the basis, one after claws back as today; the inactivity clock counts the earn on its completion date. Decided 2026-10-13; supersedes earn-when-paid. | Product |
 | Pending points | Decided | No pending line anywhere else — Order Details' own points section reads Points to Earn before completion and Points Earned after, and is absent when the order won't earn. Decided 2026-10-13. | Product |
 | Orders in flight at cutover | Decided | An order paid but not yet completed when the completion rule ships earns when it completes, guarded so no order earns twice — one that already earned at payment under the old rule earns nothing again. Decided 2026-10-13. | Product |
+| Order discounts and shipping | Decided | A whole-order discount sits entirely on the goods, as Shopify allocates it; shipping takes no share, so the discount lowers what the order earns by its whole amount. Decided 2026-10-30. | Product |
+| Refunds that name only an amount | Decided | Shared across the order's goods, shipping and tax by value, and only the goods share claws back; the store's estimate stands rather than asking the shop which lines it meant. Decided 2026-10-30. | Product |
+| A late till sale and its refunds | Decided | A till sale attributed after the money landed nets every refund recorded before it lands and earns on what remains, as a web order does at completion, instead of earning in full and clawing back. Decided 2026-10-30. | Product |
 | Completion, not the badge | Decided | An order earns the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds. Not the Completed badge, which waits for every parcel to arrive. Decided 2026-10-13. | Product |
 :::
