@@ -4,7 +4,7 @@ Drafts of the legal wording the vault and grading print, written 2026-09-30
 when the open questions on `complete-vault-collector-flow`, `add-card-grading`,
 `vault-walk-ins-and-owners` and `add-item-registry` were answered. The
 decisions they serve are on
-[Compliance and Readiness](../prds/products/grade10-site/vault/compliance-and-readiness.md)
+[Compliance and Readiness](../prds/products/grade10-site/finance/compliance-and-readiness.md)
 and [Grading](../prds/products/grade10-site/grading/index.md); each draft is a
 readiness item there.
 
