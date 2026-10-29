@@ -104,22 +104,17 @@ a Google account under it -
 ## Tiers & Benefits
 
 Every rung of the programme on one surface — what each asks, what each pays,
-where the member stands and how points work. Its own page: the breadcrumbs
-name Home, Membership and Tiers & Benefits; a small viewport navigates to
-it; on the Membership page it is a section of Overview, drawing the same
-list 🚧
+where the member stands and how points work. A section of Membership's
+Overview, never a page of its own 🚧
 
 | Section | Shows |
 | --- | --- |
 | Tier cards | One card per rung — the tier name, its ask in the member's words, and its benefits behind checks. The held rung's card wears the primary border and its tint |
 | How Points Work | The mechanics as icon rows — earn, pending, spend, expiry — stacked on a narrow viewport and paired on a wide one. The preview states the programme's own values: a point redeems a Hong Kong dollar, points arrive when the order completes, and the whole balance lapses after twelve months with no activity |
 
-- **Reaches** — the same list is a section of Membership's Overview
 - **The expiry date's home** — the mechanics card states the lapse rule;
-  the Tiers & Benefits page draws no member-dated line; the Membership page's own
+  Tiers & Benefits draws no member-dated line; the Membership page's own
   line carries the date
-
-::story{id="loyalty-membership-screens-tiers-benefits--default" title="Tiers & Benefits, a gold member"}
 
 ## Member Pass
 
