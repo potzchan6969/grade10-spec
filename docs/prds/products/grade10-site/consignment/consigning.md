@@ -95,11 +95,12 @@ For a card with a market price of HKD 10,000:
   - **First Sale Wins** — the card comes off the other channels at once; a second sale of the same card is refunded
     - 🚧 **Sold Twice** — a till sale of a card an online buyer paid for at the same moment stands; the online buyer is refunded and staff alerted
   - 🚧 **One Buyer at a Time** — an open order holds the card, refusing every other buyer until it is paid, expires or is cancelled
-- 🚧 **The Shop's Tills Only** — replacing every store channel, a card consigned to the store is sold at the shop in Causeway Bay and at events, not online or at partners
-  - **Marketplace** — online, later, with no date; it joins as a second store channel, the first sale wins, and its commission is decided then
+  - 🚧 **Phase 1: the Shop's Tills Only** — the online store and partners are switched off, so a card consigned to the store sells at the shop in Causeway Bay and at events until they are switched on
+  - **Marketplace** — online, later, with no date; it joins as one more store channel, the first sale wins, and its commission is decided then
 - **Sales Report Themselves** — the store and the auction report each sale, delivery and refund; staff record one by hand only where a channel didn't
 - 🚧 **Price Changes** — entered by staff; they may raise the price at their will, never below the lowest acceptable price
 - 🚧 **Handover** — the buyer takes the card at the counter; a card held elsewhere moves to the shop first
+  - **Online Orders** — once online is on, an order ships from the shop, Kerry Logistics collecting it there
   - **Released to Its Buyer** — on delivery, under the consignment agreement; no release paper, no early retrieval fee, and the card's credited incentive is kept - [Case Lifecycle](/p/grade10-site/finance/case-lifecycle)
 
 :::callout{kind="note"}
@@ -173,7 +174,7 @@ lets Grade10 price the listing while the collector keeps a hard limit.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| The shop and online | 🚧 | One store product per consigned item; staff list it in the shop, online or both - decided by the owner, 2026-10-27, reversing no shop-only listing of 2026-10-11 | Product |
+| The shop and online | 🚧 | One store product per consigned item; staff list it in the shop, online or both - decided by the owner, 2026-10-27, reversing no shop-only listing of 2026-10-11; Phase 1 opens the shop's tills only, the other channels switched on later - owner, 2026-10-30 | Product |
 | Instant incentive | 🚧 | The consignor is paid an incentive on the item's estimated value instantly when the consignment is taken - decided under the owner's delegation, 2026-10-16; it defaults to 0 now that a vault card earns daily, and stays a setting - 2026-10-27 | Owner |
 | Selling from the vault | Decided | A storage card is consigned where it sits and released to its buyer on delivery under the consignment agreement; the exact clause is confirmed later - owner, 2026-10-27 | Owner |
 :::
