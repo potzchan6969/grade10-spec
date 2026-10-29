@@ -30,7 +30,7 @@ against it.
 - 🚧 **An early retrieval pays its fee** — a card taken back inside the
   vault's early-retrieval period is released only once its fee is paid by
   card on its Shopify invoice, online or at the shop's till; the refusal names
-  the fee outstanding, and a withdrawn request voids the invoice —
+  the fee outstanding, and a request called off voids the invoice —
   [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#early-retrieval-fee)
 - 🚧 **Released to its buyer** — a storage card sold through consignment is
   released to its buyer on delivery under the consignment agreement, with no

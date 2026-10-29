@@ -89,7 +89,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
   - **Retrieved Early** — a card that leaves the vault before release forfeits what is vesting
   - **Sold Early** — a card sold before release, say on day 60 of 90; sale proceeds are paid as usual, and the note below says what happens to the incentive
   - **Built** — credited every day and locked until day N, or shown as one held figure posted on day N; an admin setting switches the view, every amount and unlock day the same either way, so it may be flipped at any time
-  - **Forfeit at Release, as Built** — where the card's rule forfeits, releasing it before day N takes back what is still locked on it; a withdrawal request that is cancelled takes back nothing
+  - **Forfeit at Release, as Built** — where the card's rule forfeits, releasing it before day N takes back what is still locked on it; a retrieval request that is called off takes back nothing
 - 🚧 **Never Taken Back** — incentive in the wallet stays the collector's, whatever happens to the card
 
 :::callout{kind="note"}
