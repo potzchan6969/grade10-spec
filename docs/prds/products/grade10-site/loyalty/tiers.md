@@ -120,6 +120,8 @@ We have a cron sweep to render the record for analytics purposes.
 | 2028/03/04 | buys $1,000 · 100 at 1× again | +100 | 580 | 100 | |
 :::
 
+::image{src="assets/tier-periods.svg" alt="The same three years as tier progress over time: each period climbs from zero, Gold starts at zero on the order that reaches 500, 600 keeps it, and 480 drops the member to Silver"}
+
 ## Black Tier
 
 - **The grant** — an operator's, naming who granted it, why, and optionally
