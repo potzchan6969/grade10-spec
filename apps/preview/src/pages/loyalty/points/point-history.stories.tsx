@@ -102,7 +102,7 @@ export const Empty: Story = {
       ledger: {
         status: "empty",
         message: "No points yet",
-        description: "Earn points with every purchase — online or at the till.",
+        description: "Earn points on what you pay — online or at the till.",
         action: { label: "Start shopping", onAction: () => {} },
       },
       summary: { earned: 0, used: 0, pending: 0 },
