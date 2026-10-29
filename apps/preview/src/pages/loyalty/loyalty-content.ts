@@ -458,7 +458,8 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     id: "entry-topup-review",
     kind: "Points top-up",
     track: "earned",
-    delta: 25000,
+    /* Above the 50,000-point review threshold, so the ledger shows it held. */
+    delta: 60000,
     pending: true,
     context:
       "Under review — the card is charged only if it’s approved. Reference TU-2026-0384.",
