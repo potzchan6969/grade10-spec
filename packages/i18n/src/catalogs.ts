@@ -78,6 +78,7 @@ import sharedEnAuctionListing from "../messages/shared/en/auctionListing.json";
 import sharedEnAuctionOrders from "../messages/shared/en/auctionOrders.json";
 import sharedEnAuctionRecord from "../messages/shared/en/auctionRecord.json";
 import sharedEnAuctionWatchlist from "../messages/shared/en/auctionWatchlist.json";
+import sharedEnCampaignCatch from "../messages/shared/en/campaignCatch.json";
 import sharedEnCheckout from "../messages/shared/en/checkout.json";
 import sharedEnChrome from "../messages/shared/en/chrome.json";
 import sharedEnCommon from "../messages/shared/en/common.json";
@@ -108,6 +109,7 @@ import sharedKoAuctionListing from "../messages/shared/ko/auctionListing.json";
 import sharedKoAuctionOrders from "../messages/shared/ko/auctionOrders.json";
 import sharedKoAuctionRecord from "../messages/shared/ko/auctionRecord.json";
 import sharedKoAuctionWatchlist from "../messages/shared/ko/auctionWatchlist.json";
+import sharedKoCampaignCatch from "../messages/shared/ko/campaignCatch.json";
 import sharedKoCheckout from "../messages/shared/ko/checkout.json";
 import sharedKoChrome from "../messages/shared/ko/chrome.json";
 import sharedKoCommon from "../messages/shared/ko/common.json";
@@ -138,6 +140,7 @@ import sharedZhHansAuctionListing from "../messages/shared/zh-Hans/auctionListin
 import sharedZhHansAuctionOrders from "../messages/shared/zh-Hans/auctionOrders.json";
 import sharedZhHansAuctionRecord from "../messages/shared/zh-Hans/auctionRecord.json";
 import sharedZhHansAuctionWatchlist from "../messages/shared/zh-Hans/auctionWatchlist.json";
+import sharedZhHansCampaignCatch from "../messages/shared/zh-Hans/campaignCatch.json";
 import sharedZhHansCheckout from "../messages/shared/zh-Hans/checkout.json";
 import sharedZhHansChrome from "../messages/shared/zh-Hans/chrome.json";
 import sharedZhHansCommon from "../messages/shared/zh-Hans/common.json";
@@ -168,6 +171,7 @@ import sharedZhHantAuctionListing from "../messages/shared/zh-Hant/auctionListin
 import sharedZhHantAuctionOrders from "../messages/shared/zh-Hant/auctionOrders.json";
 import sharedZhHantAuctionRecord from "../messages/shared/zh-Hant/auctionRecord.json";
 import sharedZhHantAuctionWatchlist from "../messages/shared/zh-Hant/auctionWatchlist.json";
+import sharedZhHantCampaignCatch from "../messages/shared/zh-Hant/campaignCatch.json";
 import sharedZhHantCheckout from "../messages/shared/zh-Hant/checkout.json";
 import sharedZhHantChrome from "../messages/shared/zh-Hant/chrome.json";
 import sharedZhHantCommon from "../messages/shared/zh-Hant/common.json";
@@ -211,6 +215,7 @@ export const sharedEn = {
   auctionListing: sharedEnAuctionListing,
   auctionOrders: sharedEnAuctionOrders,
   auctionWatchlist: sharedEnAuctionWatchlist,
+  campaignCatch: sharedEnCampaignCatch,
   checkout: sharedEnCheckout,
   chrome: sharedEnChrome,
   common: sharedEnCommon,
@@ -244,6 +249,7 @@ export const sharedZhHant = {
   auctionListing: sharedZhHantAuctionListing,
   auctionOrders: sharedZhHantAuctionOrders,
   auctionWatchlist: sharedZhHantAuctionWatchlist,
+  campaignCatch: sharedZhHantCampaignCatch,
   checkout: sharedZhHantCheckout,
   chrome: sharedZhHantChrome,
   common: sharedZhHantCommon,
@@ -277,6 +283,7 @@ export const sharedZhHans = {
   auctionListing: sharedZhHansAuctionListing,
   auctionOrders: sharedZhHansAuctionOrders,
   auctionWatchlist: sharedZhHansAuctionWatchlist,
+  campaignCatch: sharedZhHansCampaignCatch,
   checkout: sharedZhHansCheckout,
   chrome: sharedZhHansChrome,
   common: sharedZhHansCommon,
@@ -310,6 +317,7 @@ export const sharedKo = {
   auctionListing: sharedKoAuctionListing,
   auctionOrders: sharedKoAuctionOrders,
   auctionWatchlist: sharedKoAuctionWatchlist,
+  campaignCatch: sharedKoCampaignCatch,
   checkout: sharedKoCheckout,
   chrome: sharedKoChrome,
   common: sharedKoCommon,
