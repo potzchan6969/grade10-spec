@@ -67,8 +67,12 @@ a Google account under it -
   marked a walk-in by an operator, and stops asking for a link; a member who
   shows the receipt later can still be linked, and the link clears the mark
 - **Earns as if theirs** — the earning is priced as it was when the money
-  landed, and any refund since is replayed in order —
-  [Points](/p/grade10-site/loyalty/points)
+  landed, on what the sale still holds: a refund recorded before it lands is
+  netted first, as a web order nets one before it completes, so nothing is
+  clawed back on landing — [Points](/p/grade10-site/loyalty/points)
+- **Toward a tier only after joining** — a sale that lands counts toward the
+  tier period it lands in, which is never earlier than registration —
+  [Tiers](/p/grade10-site/loyalty/tiers#tier-period)
 
 ## Membership Page
 

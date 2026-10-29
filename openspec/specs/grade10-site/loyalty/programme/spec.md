@@ -500,6 +500,11 @@ change by deploying a different configuration, never by an operator edit —
 an operator who can rewrite what a purchase earns can mint money. The reward
 menu is the intended lever and is editable.
 
+A deploy that changes the tier period's length, the programme's time zone or a
+retention threshold SHALL ship with a planned migration of current tier
+periods. Those values are read live, not frozen per member, so such a change
+re-judges every period still running.
+
 Why these numbers, and what is still open about the top tier and the retention
 threshold:
 [Grade10 loyalty programme](../../../../../../../docs/prds/products/membership/index.md).
@@ -540,12 +545,12 @@ threshold:
 - **THEN** the persisted identifier is `silver` or `gold`, respectively
 - **AND** no record uses `platinum` or `diamond`
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-w02 rev=2 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-w02 rev=3 -->
 #### Scenario: grade10-site-loyalty-programme-SC-133 - Gold is retained by earning again
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a Gold member earns 500 points inside their Gold period
-- **THEN** they hold Gold for a further twelve-month period, from the instant this one ends
+- **THEN** they hold Gold for a further twelve-month period, from the instant after this one ends
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-ksg rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-134 - Gold lapses after a quiet year
@@ -674,6 +679,19 @@ it. A period judged before that decision SHALL NOT be reopened.
 
 Splitting a refund into several parts SHALL claw back exactly what one refund
 for the whole sum would have.
+
+A refund that names lines SHALL claw back on the goods it names. A refund that
+names only an amount SHALL be shared across the order's goods, shipping and tax
+in proportion to each, and only its goods share SHALL claw back.
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-x4d rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-284 - An amount refund is shared across the order
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **GIVEN** a Gold member earned 15 points on a HKD 139 single with HKD 30 shipping, HKD 169 in all
+- **WHEN** HKD 39 is refunded as an amount, naming no line
+- **THEN** its goods share is HKD 39 × 139 / 169, about HKD 32.08
+- **AND** 3 points are clawed back — 15 × 32.08 / 139, floored — never the 4 a refund of HKD 39 of the single takes
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-xig rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-35 - A split refund matches a single refund
@@ -1172,27 +1190,33 @@ onward.
 A member's effective tier SHALL be the highest of: the tier their own earning
 holds and any live invitation.
 
-The entry tier and each earned tier SHALL be held for a tier period, measured
-from the instant the member arrived on that tier; a period's ends SHALL fall at
-whole multiples of its length from that instant, so a chain of periods never
-drifts on a short month. Earning a tier's retention threshold inside its period
-SHALL start a fresh period at the instant the previous one ends, counted again
-from zero. The entry tier's period SHALL renew at its end whatever it holds,
-counted again from zero.
+The entry tier and each earned tier SHALL be held for a tier period, counted
+from the event that opened it — the member joining, a promotion, or a drop to
+the entry tier. A period SHALL end at the last instant (23:59:59.999) of the
+day, in the programme's time zone, that falls a whole multiple of its length
+after that opening event, so a chain of periods never drifts on a short month
+and an order placed any time on the last day still counts in it. The next
+period SHALL start the instant after. Earning a tier's retention threshold
+inside its period SHALL start a fresh period there, counted again from zero.
+The entry tier's period SHALL renew at its end whatever it holds, counted again
+from zero.
+
+A member's first entry-tier period SHALL open when they join. Nothing
+processed before the member joined SHALL count toward any tier.
 
 A member who has not earned the retention threshold inside the period SHALL
-lose that tier at the instant the period ends, falling to the entry tier with a
-fresh period starting there — a live invitation still holds them above it. The
-drop SHALL take effect at that instant, without waiting for a scheduled pass,
-and SHALL be recorded the next time that member is evaluated.
+lose that tier when the period ends, falling to the entry tier with a fresh
+period starting the instant after — a live invitation still holds them above
+it. The drop SHALL take effect at that instant, without waiting for a scheduled
+pass, and SHALL be recorded the next time that member is evaluated.
 
 Progress SHALL NOT carry across a period's end: earnings processed before a
 period began SHALL NOT count toward reaching or retaining any tier in it.
 
-An invitation SHALL never move a tier period: progress earned while invited
-counts as any other, and a tier earned then survives the invitation. An
-invitation that ends while the member's own earning holds the entry tier SHALL
-start a fresh entry-tier period at its end.
+An invitation SHALL never move a tier period. The period running beneath it
+SHALL continue through the invitation and past its end on its own dates,
+progress earned while invited SHALL count in that period as any other, and a
+tier earned then survives the invitation.
 
 A tier SHALL NOT be lost inside its validity period except through a claw-back
 or an operator's recorded act, and SHALL NOT be lost because the points that
@@ -1202,13 +1226,13 @@ An operator holding the permission SHALL be able to remove a tier a member holds
 whatever its period says, recorded with who and why — the remedy for a tier
 granted or reached in error.
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-gru rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-gru rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-77 - Re-qualifying keeps the tier
 **Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member earns at least the retention threshold inside their tier's validity period
 - **THEN** they keep that tier
-- **AND** a fresh validity period starts at the instant the previous one ends
+- **AND** a fresh validity period starts the instant after the previous one ends
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-lfh rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-78 - Not re-qualifying drops the tier
@@ -1255,6 +1279,32 @@ granted or reached in error.
 - **WHEN** a member's effective tier changes
 - **THEN** one entry records the move and what caused it
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-p8e rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-281 - A period ends at the close of its last day
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
+
+- **GIVEN** a Gold period opened at 14:00 Hong Kong time on 2026/03/01, holding 450 points
+- **WHEN** a 50-point earning is processed at 23:59:59.999 on 2027/03/01, Hong Kong time
+- **THEN** it counts in that Gold period, which reaches 500 and keeps Gold
+- **AND** the same earning processed at 00:00:00.000 on 2027/03/02 counts in the next period instead, and the period ending on 450 drops the member to Silver from that instant
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-q3k rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-282 - An invitation leaves the period beneath it running
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
+
+- **GIVEN** a member on Silver in a period opened in January, holding 300 points of progress by May
+- **WHEN** they are invited to Black in May, earn 150 points while invited, and the invitation ends in August
+- **THEN** they are on Silver in the same January period, at 450
+- **AND** that period ends the following January, on its own dates
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-r2m rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-283 - Nothing before joining counts toward a tier
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
+
+- **WHEN** points are processed for a user before they join, and the user then joins
+- **THEN** the first Silver period opens when they join
+- **AND** the points processed before it count toward no tier
+
 ### Requirement: Qualifying spend is what the member actually paid for qualifying goods
 
 Points SHALL be granted from qualifying spend: the qualifying lines of a
@@ -1263,7 +1313,9 @@ minor units in the programme's currency.
 
 A discount or coupon applied to a whole order SHALL be apportioned across its
 lines in proportion to each line's pre-discount amount, and only the share
-falling on qualifying lines SHALL reduce qualifying spend.
+falling on qualifying lines SHALL reduce qualifying spend. Shipping SHALL take
+no share: the whole of an order-level discount falls on the goods lines, as the
+shop allocates it.
 
 Qualifying spend SHALL never be less than zero.
 
@@ -1281,13 +1333,13 @@ Qualifying spend SHALL never be less than zero.
 - **WHEN** a member pays for part of a qualifying basket with a redeemed coupon
 - **THEN** qualifying spend is the basket less the coupon's value
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-4ir rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-4ir rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-86 - An order discount cannot be pushed onto the non-earning lines
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
-- **WHEN** an order-level discount applies to an order that is four fifths qualifying goods and one fifth shipping, measured before the discount
-- **THEN** four fifths of the discount reduces qualifying spend
-- **AND** the fifth falling on shipping reduces nothing
+- **WHEN** a Silver member's HKD 100 order-level discount applies to HKD 800 of qualifying goods and HKD 200 of shipping
+- **THEN** the whole HKD 100 falls on the goods, and qualifying spend is HKD 700, earning 70 points
+- **AND** shipping takes none of it, so qualifying spend is never HKD 720
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-6rj rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-87 - A fully discounted order earns nothing

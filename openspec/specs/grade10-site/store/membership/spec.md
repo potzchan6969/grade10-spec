@@ -365,8 +365,11 @@ SHALL be kept exactly-once for replay when an owner appears.
 An order SHALL become a member's through recorded evidence — the pairing
 at sale time, the commerce customer on the order, or an operator's
 judgement — with exactly one live claim per order; a second claimer SHALL
-be refused naming the holder. Attribution SHALL grant the earning and
-replay any recorded refunds in order. A claim SHALL be revocable: revoking
+be refused naming the holder. Attribution SHALL grant the earning on what
+the sale has paid net of every refund recorded before it lands, as a web
+order nets the refunds recorded before it completes, so nothing is clawed
+back on landing; a refund recorded after it lands claws back as any other.
+A claim SHALL be revocable: revoking
 claws back what it granted, and a later re-attribution earns correctly.
 Operator claims SHALL record the evidence and the operator. An order
 whose earnable amount is not yet known SHALL be refused attribution
@@ -397,6 +400,16 @@ loudly, never guessed.
 - **WHEN** two attributions race for one order
 - **THEN** exactly one claim lives and the other is refused naming the
   holder
+
+<!-- trace:scenario id=g10.store-membership.SC-h7v rev=1 -->
+#### Scenario: grade10-site-store-membership-SC-92 - A late till sale nets its refunds before it earns
+**Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
+
+- **GIVEN** a Silver collector's HKD 1,000 till sale, rung up as a guest, of
+  which HKD 400 was refunded before the sale was theirs
+- **WHEN** the sale is attributed to them
+- **THEN** it earns 60 points, on the HKD 600 it still holds
+- **AND** no claw-back is written for the earlier refund
 
 ### Requirement: Only eligible goods earn, on every channel
 

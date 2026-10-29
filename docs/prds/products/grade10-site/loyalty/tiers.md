@@ -16,6 +16,12 @@ These are deployed values, changed by a deploy and never by an operator: an
 operator who can rewrite what a purchase earns can mint money. The reward
 catalog is the lever an operator holds.
 
+- **Changing the period, the clock or the retention threshold** — the tier
+  period's length, the time zone and the retention threshold are read live
+  rather than frozen per member, so changing one re-judges every period still
+  running; such a deploy ships with a planned migration of current periods.
+  The owner's call, made 2026/10/30
+
 ## Tier Progress
 
 A member holds **one balance**: earning adds to it, redeeming takes from it,
@@ -55,23 +61,38 @@ The multiplier is only applied starting from the next order.
 ## Tier Period
 
 Silver and Gold are each held for a **tier period** of **12 months**; Black is
-held by its invitation. A period starts on the day the member arrives on the tier:
+held by its invitation. A period counts from the moment the member arrives on
+the tier:
 
-- **Silver** — the day they register as a member, or the day they drop to
-  Silver from Gold or Black
-- **Gold** — the day their Silver-period progress reaches 500
+- **Silver** — the moment they register as a member, or the moment they drop
+  to Silver from Gold or Black
+- **Gold** — the order that takes their Silver-period progress to 500
+
+It ends at the close of its anniversary date, 23:59:59.999 Hong Kong time, and
+the next period starts the instant after. An order placed late on the last day
+still counts in the period it closes.
 
 Progress starts at zero with every period, and earning before it began counts
 toward nothing in it. A purchase counts toward the period it reaches the
-member's record in — a till sale attributed later, or a ticket bought before
-the account existed, counts toward the period it lands in. Reaching Gold ends
-the Silver period there and starts the Gold one; the order that reaches it
-counts toward the Silver period alone, points past 500 included.
+member's record in — a till sale attributed later, or a ticket bought on an
+email before the account existed, counts toward the period it lands in. Reaching
+Gold ends the Silver period there and starts the Gold one; the order that
+reaches it counts toward the Silver period alone, points past 500 included.
 
+- **The end of the Hong Kong day** — a period ends at 23:59:59.999 in the
+  shop's zone on its anniversary date rather than at the hour it opened, so a
+  member is never told a period runs to a date and then loses that date's
+  afternoon. Counting still starts at the opening event. The owner's call,
+  made 2026/10/29
+- **Periods date from joining** — the first Silver period opens when the
+  member registers, and nothing earned before that counts toward a tier. A
+  site guest order earns nothing at all —
+  [Points](/p/grade10-site/loyalty/points). The owner's call, made 2026/10/30
 - **Counting a purchase when it lands** — rather than on its order date, so
-  a guest who joins after a big purchase can reach Gold on joining and no
-  period a member was shown is ever re-judged. The owner's call, made
-  2026/10/29
+  no period a member was shown is ever re-judged. Only a till sale or a ticket
+  bought on an email can land after the purchase, and either counts once it
+  lands after joining. The owner's call, made 2026/10/29; narrowed to those
+  two 2026/10/30
 
 ## Keeping a Tier
 
@@ -82,11 +103,16 @@ it.
   whatever it earned short of 500 is gone
 - **Gold, ≥ 500 points** — a new Gold period starts where the last one ended
 - **Gold, < 500 points** — the member drops to Silver and a fresh Silver
-  period starts that day; a live invitation keeps them on Black above it
+  period starts the instant after; a live invitation keeps them on Black
+  above it
 - **Taken back by an operator** — a tier reached or granted in error is
-  removed on the record, whatever its period says; it takes the same
-  permission as granting an invitation, so an operator who may only move
-  points cannot demote anyone
+  removed on the record, whatever its period says; it takes its own
+  permission, `loyalty:demote`, apart from granting an invitation, so an
+  operator who may only move points or invite cannot demote anyone
+
+- **Removing a tier is its own permission** — `loyalty:demote`, as the
+  programme and the console hold it, not the invitation permission this page
+  once named. The owner's call, made 2026/10/30
 
 - ❓ **Retention threshold** — 500 today, the same figure that reaches Gold,
   because the programme sets no separate one. A softer figure around 400 is
@@ -108,7 +134,7 @@ We have a cron sweep to render the record for analytics purposes.
 | 2025/01/15 | registers | | 0 | 0 | Silver · to 2026/01/15 |
 | 2025/02/10 | buys $2,500 · 250 at 1× | +250 | 250 | 250 | |
 | 2025/11/01 | buys $2,000 · 200 at 1×, fifty short | +200 | 450 | 450 | |
-| 2026/01/15 | the Silver period ends on 450 · a new one counts from zero | | 450 | 0 | Silver · to 2027/01/15 |
+| 2026/01/15 | the Silver period ends at the close of the day on 450 · a new one counts from zero | | 450 | 0 | Silver · to 2027/01/15 |
 | 2026/02/14 | buys $1,000 · 100 at 1× | +100 | 550 | 100 | |
 | 2026/03/01 | buys $4,000 · 400 at 1×, reaching 500 — **Gold** | +400 | 950 | 0 | Gold · to 2027/03/01 |
 | 2026/03/05 | redeems 500 | −500 | 450 | | |
@@ -116,7 +142,7 @@ We have a cron sweep to render the record for analytics purposes.
 | 2027/03/01 | the Gold period ends on 600 · a new one counts from zero | | 1050 | 0 | Gold · to 2028/03/01 |
 | 2027/09/20 | twelve months with no activity · the balance lapses | −1050 | 0 | | |
 | 2028/02/01 | buys $4,000 · 480 at 1.2×, twenty short | +480 | 480 | 480 | |
-| 2028/03/01 | the Gold period ends on 480, short of 500 — **Silver** | | 480 | 0 | Silver · to 2029/03/01 |
+| 2028/03/02 | the Gold period ended at the close of 2028/03/01 on 480, short of 500 — **Silver** from midnight | | 480 | 0 | Silver · to 2029/03/02 |
 | 2028/03/04 | buys $1,000 · 100 at 1× again | +100 | 580 | 100 | |
 :::
 
@@ -129,13 +155,18 @@ We have a cron sweep to render the record for analytics purposes.
   tier
 - **No end date** — it holds until it is revoked
 - **Its end is observed, not scheduled** — the member stops holding Black the
-  instant the date passes and lands on the tier they earned beneath it,
-  starting a fresh Silver period there if that is Silver; the history records
-  it at the next evaluation
+  instant the date passes and lands on the tier they earned beneath it, in the
+  period that was running there all along; the history records it at the next
+  evaluation
 - **Never the earned floor** — every evaluation runs twice, once ignoring
   invitations and once with them, so a Gold earned while invited survives
   losing the invitation, and an invitation neither raises what was earned nor
-  extends a period
+  moves a period
+- **An invitation never moves a period** — a Silver member at 300 in a period
+  from January, invited to Black in May, who earns 150 while invited and loses
+  the invitation in August, is back on Silver in the same January period at
+  450, ending the next January. Starting a fresh period when the invitation
+  ended would have thrown the 450 away. The owner's call, made 2026/10/30
 - ❓ **Annual cap and approval** — the owner's draft asks for both; neither is
   fixed and the programme enforces neither, so an invitation with no end date
   holds until revoked. The owner's call
