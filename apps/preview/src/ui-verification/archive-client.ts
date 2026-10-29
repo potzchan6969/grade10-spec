@@ -1,5 +1,7 @@
 import type {
   ImageArtifact,
+  ImageRegion,
+  ProfileId,
   VerificationManifest,
 } from "@grade10/ui-verification/model";
 import {
@@ -16,6 +18,44 @@ export interface VerificationIdentity {
 export interface ArchiveRunPage {
   runs: VerificationManifest[];
   cursor?: string;
+}
+
+export type ApprovalDecision = "approved" | "changes-requested";
+
+/** A reference the workbench captured from the live story at one size. */
+export interface ReferenceRecord extends VerificationIdentity {
+  referenceId: string;
+  profileId: ProfileId;
+  locale: string;
+  storyId: string;
+  commit: string;
+  ref: string;
+  verified: boolean;
+  image: ImageArtifact;
+  region: ImageRegion;
+  capturedAt: string;
+  capturedBy: string;
+}
+
+/** A designer's decision on one captured reference image. */
+export interface Approval extends VerificationIdentity {
+  approvalId: string;
+  referenceId: string;
+  profileId: ProfileId;
+  locale: string;
+  referenceHash: string;
+  decision: ApprovalDecision;
+  comment: string;
+  approver: string;
+  createdAt: string;
+}
+
+export interface ReferenceCaptureInput extends VerificationIdentity {
+  sourceRunId: string;
+  profileId: ProfileId;
+  locale: string;
+  approve: boolean;
+  comment?: string;
 }
 
 export type ArchiveRecord = Record<string, unknown>;
@@ -156,6 +196,204 @@ export async function getRun(
     const detail = error instanceof Error ? error.message : "invalid manifest";
     throw new Error(`The selected archived run is invalid: ${detail}`);
   }
+}
+
+function personOf(value: unknown): string | null {
+  if (!isRecord(value)) return null;
+  if (typeof value.email === "string") return value.email;
+  return typeof value.subject === "string" ? value.subject : null;
+}
+
+function isProfile(value: unknown): value is ProfileId {
+  return value === "desktop" || value === "tablet" || value === "mobile";
+}
+
+function regionOf(value: unknown): ImageRegion | null {
+  if (!isRecord(value)) return null;
+  const { x, y, width, height } = value;
+  return [x, y, width, height].every(Number.isInteger)
+    ? {
+        x: x as number,
+        y: y as number,
+        width: width as number,
+        height: height as number,
+      }
+    : null;
+}
+
+// The archive validated each record when it was written, so one that does
+// not read back is reported rather than shown.
+export function referenceRecord(value: unknown): ReferenceRecord {
+  const record = requireObject(value, "for a reference");
+  const identity = verificationIdentity(record);
+  const image = isRecord(record.image) ? record.image : null;
+  const region = regionOf(record.region);
+  const capturedBy = personOf(record.capturedBy);
+  if (
+    !identity ||
+    typeof record.referenceId !== "string" ||
+    !isProfile(record.profileId) ||
+    typeof record.locale !== "string" ||
+    typeof record.storyId !== "string" ||
+    typeof record.commit !== "string" ||
+    typeof record.ref !== "string" ||
+    typeof record.verified !== "boolean" ||
+    typeof image?.key !== "string" ||
+    typeof image.sha256 !== "string" ||
+    !Number.isInteger(image.width) ||
+    !Number.isInteger(image.height) ||
+    !region ||
+    typeof record.capturedAt !== "string" ||
+    !capturedBy
+  ) {
+    throw new Error("The archive returned an unreadable reference.");
+  }
+  return {
+    ...identity,
+    referenceId: record.referenceId,
+    profileId: record.profileId,
+    locale: record.locale,
+    storyId: record.storyId,
+    commit: record.commit,
+    ref: record.ref,
+    verified: record.verified,
+    image: {
+      key: validateObjectKey(image.key),
+      sha256: image.sha256.toLowerCase(),
+      width: image.width as number,
+      height: image.height as number,
+    },
+    region,
+    capturedAt: record.capturedAt,
+    capturedBy,
+  };
+}
+
+export function approvalRecord(value: unknown): Approval {
+  const record = requireObject(value, "for an approval");
+  const identity = verificationIdentity(record);
+  const approver = personOf(record.approver);
+  if (
+    !identity ||
+    typeof record.approvalId !== "string" ||
+    typeof record.referenceId !== "string" ||
+    !isProfile(record.profileId) ||
+    typeof record.locale !== "string" ||
+    typeof record.referenceHash !== "string" ||
+    (record.decision !== "approved" &&
+      record.decision !== "changes-requested") ||
+    typeof record.comment !== "string" ||
+    !approver ||
+    typeof record.createdAt !== "string"
+  ) {
+    throw new Error("The archive returned an unreadable approval.");
+  }
+  return {
+    ...identity,
+    approvalId: record.approvalId,
+    referenceId: record.referenceId,
+    profileId: record.profileId,
+    locale: record.locale,
+    referenceHash: record.referenceHash.toLowerCase(),
+    decision: record.decision,
+    comment: record.comment,
+    approver,
+    createdAt: record.createdAt,
+  };
+}
+
+async function listPage<T>(
+  base: string,
+  path: string,
+  name: string,
+  read: (value: unknown) => T,
+  caseId: string,
+  cursor: string | undefined,
+  signal: AbortSignal,
+): Promise<{ items: T[]; cursor?: string }> {
+  const query = new URLSearchParams({ caseId, cursor: cursor ?? "" });
+  const payload = requireObject(
+    await requestJson(apiUrl(base, path, query), { signal }),
+    `for ${name}`,
+  );
+  const values = payload[name];
+  if (!Array.isArray(values)) {
+    throw new Error(`The archive response for ${name} has no list.`);
+  }
+  return {
+    items: values.map(read),
+    ...(typeof payload.cursor === "string" && payload.cursor !== ""
+      ? { cursor: payload.cursor }
+      : {}),
+  };
+}
+
+export function listReferences(
+  base: string,
+  caseId: string,
+  cursor: string | undefined,
+  signal: AbortSignal,
+) {
+  return listPage(
+    base,
+    "/api/references",
+    "references",
+    referenceRecord,
+    caseId,
+    cursor,
+    signal,
+  );
+}
+
+export function listApprovals(
+  base: string,
+  caseId: string,
+  cursor: string | undefined,
+  signal: AbortSignal,
+) {
+  return listPage(
+    base,
+    "/api/approvals",
+    "approvals",
+    approvalRecord,
+    caseId,
+    cursor,
+    signal,
+  );
+}
+
+/** Asks the workbench to capture the live story, approving it when asked. */
+export async function captureReference(
+  base: string,
+  input: ReferenceCaptureInput,
+): Promise<{ reference: ReferenceRecord; approval?: Approval }> {
+  const payload = requireObject(
+    await requestJson(apiUrl(base, "/api/references"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    }),
+    "for the captured reference",
+  );
+  return {
+    reference: referenceRecord(payload.reference),
+    ...(payload.approval === undefined
+      ? {}
+      : { approval: approvalRecord(payload.approval) }),
+  };
+}
+
+export async function createApproval(
+  base: string,
+  input: { referenceId: string; decision: ApprovalDecision; comment?: string },
+): Promise<Approval> {
+  return approvalRecord(
+    await requestJson(apiUrl(base, "/api/approvals"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    }),
+  );
 }
 
 export async function getImageObject(

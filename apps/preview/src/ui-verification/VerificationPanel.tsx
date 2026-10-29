@@ -15,16 +15,30 @@ import {
   useStorybookState,
 } from "storybook/manager-api";
 import { useTheme } from "storybook/theming";
-import type { VerificationIdentity } from "./archive-client";
+import type {
+  Approval,
+  ReferenceRecord,
+  VerificationIdentity,
+} from "./archive-client";
 import {
+  captureReference,
+  createApproval,
   getRun,
   identityKey,
   isRecord,
+  listApprovals,
+  listReferences,
   listRuns,
   sameIdentity,
   verificationIdentity,
   verifiedPngUrl,
 } from "./archive-client";
+import {
+  driftNotice,
+  FLAG_LABELS,
+  type ReferenceStatus,
+  referenceStatus,
+} from "./capture-stamp";
 
 import {
   diffLabel,
@@ -36,6 +50,7 @@ import {
 import { CANVAS, type FlowParameter } from "./flow-tree";
 import type { PixelComparison } from "./pixel-compare";
 import { anchorOf, comparePixels, describeAnchor } from "./pixel-compare";
+import { ReferenceApproval, ReferenceFlagChip } from "./ReferenceApproval";
 
 import "./verification-panel.css";
 
@@ -90,7 +105,30 @@ interface VersionOption {
 interface ImageUrls {
   site?: string;
   reference?: string;
+  approved?: string;
+  current?: string;
 }
+
+/** A reference the workbench captured: its PNG and the region to crop to. */
+interface RecordImage {
+  artifact: ImageArtifact;
+  region: ImageRegion;
+}
+
+/** One image of a compared pair, with the region both are cropped to. */
+interface PairSide {
+  url: string;
+  artifact: ImageArtifact;
+  region?: ImageRegion;
+}
+
+/**
+ * Site Compare holds the site to a reference; Approve holds the newest
+ * captured reference to the last approved one.
+ */
+export type PanelMode = "site" | "approve";
+
+type ReferenceChoice = "current" | "approved";
 
 function messageOf(error: unknown): string {
   return error instanceof Error ? error.message : "The archive request failed.";
@@ -257,6 +295,35 @@ async function listAllRuns(
   );
 }
 
+async function listEvery<T>(
+  list: (
+    base: string,
+    caseId: string,
+    cursor: string | undefined,
+    signal: AbortSignal,
+  ) => Promise<{ items: T[]; cursor?: string }>,
+  base: string,
+  caseId: string,
+  signal: AbortSignal,
+): Promise<T[]> {
+  const items: T[] = [];
+  const seenCursors = new Set<string>();
+  let cursor: string | undefined;
+  do {
+    const page = await list(base, caseId, cursor, signal);
+    items.push(...page.items);
+    cursor = page.cursor;
+    if (cursor && seenCursors.has(cursor)) {
+      throw new Error("The archive repeated a cursor.");
+    }
+    if (cursor) seenCursors.add(cursor);
+  } while (cursor && !signal.aborted);
+  if (signal.aborted) {
+    throw new DOMException("The request was aborted.", "AbortError");
+  }
+  return items;
+}
+
 function formatIdentity(identity: VerificationIdentity): string {
   return `${identity.caseId} · ${identity.targetId} · ${identity.capturePointId}`;
 }
@@ -309,6 +376,13 @@ function profileStatus(
     return { text: "Not selected", tone: "idle" };
   }
   if (!capture.reference) return { text: "No reference", tone: "idle" };
+  return comparisonStatus(comparison);
+}
+
+function comparisonStatus(comparison: ComparisonState | undefined): {
+  text: string;
+  tone: Tone;
+} {
   if (comparison === "running") return { text: "Comparing…", tone: "idle" };
   if (!comparison) return { text: "Not compared", tone: "idle" };
   if (comparison.kind === "size-mismatch") {
@@ -537,6 +611,52 @@ function DiffEvidence({
   );
 }
 
+// The left image of a size in Site Compare: the last approved reference by
+// default, or the reference the run recorded.
+function BaseEvidence({
+  againstApproved,
+  capture,
+  referenceUrl,
+  approved,
+  approvedUrl,
+  onOpen,
+}: {
+  againstApproved: boolean;
+  capture: Extract<CaptureOutcome, { status: "captured" }>;
+  referenceUrl: string | undefined;
+  approved: RecordImage | undefined;
+  approvedUrl: string | undefined;
+  onOpen: (image: FullSizeImage) => void;
+}) {
+  if (againstApproved && approved) {
+    return (
+      <ImageEvidence
+        title="Reference, last approved"
+        artifact={approved.artifact}
+        imageUrl={approvedUrl}
+        cropRegion={approved.region}
+        onOpen={onOpen}
+      />
+    );
+  }
+  if (!capture.reference) {
+    return (
+      <p className="verification-notice">
+        No matching reference at this viewport. Not scored at this profile.
+      </p>
+    );
+  }
+  return (
+    <ImageEvidence
+      title="Reference"
+      artifact={capture.reference}
+      imageUrl={referenceUrl}
+      cropRegion={capture.referenceRegion}
+      onOpen={onOpen}
+    />
+  );
+}
+
 // The panel renders in the Storybook manager, where the design-system theme CSS
 // is not loaded, so it borrows the manager theme through scoped variables.
 function themeVariables(theme: ReturnType<typeof useTheme>) {
@@ -578,7 +698,13 @@ function useStableIdentity(value: VerificationIdentity | null) {
   return stable.current;
 }
 
-export function VerificationPanel({ active }: { active: boolean }) {
+export function VerificationPanel({
+  active,
+  mode = "site",
+}: {
+  active: boolean;
+  mode?: PanelMode;
+}) {
   const theme = useTheme();
   const managerApi = useStorybookApi();
   const managerState = useStorybookState();
@@ -630,6 +756,14 @@ export function VerificationPanel({ active }: { active: boolean }) {
   const [loadingRun, setLoadingRun] = useState(false);
   const [loadingImages, setLoadingImages] = useState(false);
   const [refreshVersion, setRefreshVersion] = useState(0);
+  const [references, setReferences] = useState<ReferenceRecord[]>([]);
+  const [approvals, setApprovals] = useState<Approval[]>([]);
+  const [recordsError, setRecordsError] = useState("");
+  const [referenceChoice, setReferenceChoice] =
+    useState<ReferenceChoice>("approved");
+  const [drifts, setDrifts] = useState<
+    Partial<Record<ProfileId, PixelComparison>>
+  >({});
   const diffUrls = useRef<string[]>([]);
   const comparisonGeneration = useRef(0);
   const identityChoices = useMemo(() => identityOptions(runs), [runs]);
@@ -866,6 +1000,138 @@ export function VerificationPanel({ active }: { active: boolean }) {
     return () => controller.abort();
   }, [active, effectiveRunId, refreshVersion, selectedIdentity]);
 
+  const recordCaseId = selectedIdentity?.caseId ?? "";
+  // biome-ignore lint/correctness/useExhaustiveDependencies: refreshVersion reloads the records on demand
+  useEffect(() => {
+    setReferences([]);
+    setApprovals([]);
+    setRecordsError("");
+    if (!active || !archiveBase || !recordCaseId) return;
+    const controller = new AbortController();
+    void Promise.all([
+      listEvery(listReferences, archiveBase, recordCaseId, controller.signal),
+      listEvery(listApprovals, archiveBase, recordCaseId, controller.signal),
+    ])
+      .then(([nextReferences, nextApprovals]) => {
+        if (controller.signal.aborted) return;
+        setReferences(nextReferences);
+        setApprovals(nextApprovals);
+      })
+      .catch((error: unknown) => {
+        if (!controller.signal.aborted) setRecordsError(messageOf(error));
+      });
+    return () => controller.abort();
+  }, [active, archiveBase, recordCaseId, refreshVersion]);
+
+  const statuses = useMemo(
+    () =>
+      Object.fromEntries(
+        PROFILE_TABS.map((item) => [
+          item.id,
+          selectedIdentity
+            ? referenceStatus(
+                references,
+                approvals,
+                selectedIdentity,
+                item.id,
+                localeId,
+              )
+            : null,
+        ]),
+      ) as Record<ProfileId, ReferenceStatus | null>,
+    [approvals, localeId, references, selectedIdentity],
+  );
+  const recordImages = useMemo(
+    () =>
+      Object.fromEntries(
+        PROFILE_TABS.map((item) => {
+          const status = statuses[item.id];
+          const approved = status?.approved?.reference;
+          const current = mode === "approve" ? status?.current : null;
+          return [
+            item.id,
+            {
+              ...(approved
+                ? {
+                    approved: {
+                      artifact: approved.image,
+                      region: approved.region,
+                    },
+                  }
+                : {}),
+              ...(current
+                ? {
+                    current: {
+                      artifact: current.image,
+                      region: current.region,
+                    },
+                  }
+                : {}),
+            },
+          ];
+        }),
+      ) as Record<
+        ProfileId,
+        Partial<Record<"approved" | "current", RecordImage>>
+      >,
+    [mode, statuses],
+  );
+  const recordKey = PROFILE_TABS.map(
+    (item) =>
+      `${recordImages[item.id].approved?.artifact.key ?? ""}|${recordImages[item.id].current?.artifact.key ?? ""}`,
+  ).join(",");
+
+  function captureInput(capture: CaptureOutcome) {
+    if (!manifest) throw new Error("No run is loaded for this story.");
+    return {
+      sourceRunId: manifest.runId,
+      caseId: capture.caseId,
+      targetId: capture.targetId,
+      capturePointId: capture.capturePointId,
+      profileId: capture.profileId,
+      locale: captureLocale(capture),
+    };
+  }
+
+  async function captureCurrent(
+    capture: CaptureOutcome,
+    approve: boolean,
+    comment = "",
+  ) {
+    const result = await captureReference(archiveBase, {
+      ...captureInput(capture),
+      approve,
+      ...(comment ? { comment } : {}),
+    });
+    setReferences((previous) => [result.reference, ...previous]);
+    const { approval } = result;
+    if (approval) setApprovals((previous) => [approval, ...previous]);
+  }
+
+  async function requestChanges(id: ProfileId, comment: string) {
+    const current = statuses[id]?.current;
+    if (!current) throw new Error("Capture the current reference first.");
+    const approval = await createApproval(archiveBase, {
+      referenceId: current.referenceId,
+      decision: "changes-requested",
+      comment,
+    });
+    setApprovals((previous) => [approval, ...previous]);
+  }
+
+  // The site is held to the approved reference; a size nobody has approved
+  // yet falls back to the reference its run recorded.
+  function againstApproved(id: ProfileId): boolean {
+    return (
+      mode === "approve" ||
+      (referenceChoice === "approved" && Boolean(statuses[id]?.approved))
+    );
+  }
+  const basisKey = PROFILE_TABS.map((item) =>
+    againstApproved(item.id) ? "approved" : "current",
+  ).join(",");
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: recordKey stands for the record images
   useEffect(() => {
     if (!active || !archiveBase) {
       setImageUrls({});
@@ -876,33 +1142,50 @@ export function VerificationPanel({ active }: { active: boolean }) {
     const createdUrls: string[] = [];
     const targets = PROFILE_TABS.flatMap((item) => {
       const capture = captures[item.id];
-      return capture?.status === "captured" ? [{ id: item.id, capture }] : [];
+      const fromRun =
+        mode === "site" && capture?.status === "captured" ? capture : null;
+      const images: [keyof ImageUrls, ImageArtifact][] = [
+        ...(fromRun
+          ? ([
+              ["site", fromRun.site],
+              ...(fromRun.reference ? [["reference", fromRun.reference]] : []),
+            ] as [keyof ImageUrls, ImageArtifact][])
+          : []),
+        ...(
+          Object.entries(recordImages[item.id]) as [
+            keyof ImageUrls,
+            RecordImage,
+          ][]
+        ).map(
+          ([name, image]) =>
+            [name, image.artifact] as [keyof ImageUrls, ImageArtifact],
+        ),
+      ];
+      return images.length > 0 ? [{ id: item.id, images }] : [];
     });
     setImageUrls({});
     setImageError("");
     setLoadingImages(targets.length > 0);
     let pending = targets.length;
-    const track = async (artifact: ImageArtifact) => {
-      const url = await verifiedPngUrl(
-        archiveBase,
-        artifact,
-        controller.signal,
-      );
-      createdUrls.push(url);
-      return url;
-    };
-    for (const { id, capture } of targets) {
-      void (async () => {
-        const site = await track(capture.site);
-        const reference = capture.reference
-          ? await track(capture.reference)
-          : undefined;
-        if (controller.signal.aborted) return;
-        setImageUrls((previous) => ({
-          ...previous,
-          [id]: { site, ...(reference ? { reference } : {}) },
-        }));
-      })()
+    for (const { id, images } of targets) {
+      void Promise.all(
+        images.map(async ([name, artifact]) => {
+          const url = await verifiedPngUrl(
+            archiveBase,
+            artifact,
+            controller.signal,
+          );
+          createdUrls.push(url);
+          return [name, url] as const;
+        }),
+      )
+        .then((loaded) => {
+          if (controller.signal.aborted) return;
+          setImageUrls((previous) => ({
+            ...previous,
+            [id]: Object.fromEntries(loaded),
+          }));
+        })
         .catch((error: unknown) => {
           if (!controller.signal.aborted) setImageError(messageOf(error));
         })
@@ -917,7 +1200,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
       controller.abort();
       for (const url of createdUrls) URL.revokeObjectURL(url);
     };
-  }, [active, captures]);
+  }, [active, captures, mode, recordKey]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: a new capture selection drops the earlier comparisons
   useEffect(() => {
@@ -928,17 +1211,122 @@ export function VerificationPanel({ active }: { active: boolean }) {
       for (const url of diffUrls.current) URL.revokeObjectURL(url);
       diffUrls.current = [];
     };
-  }, [captures]);
+  }, [basisKey, captures, recordKey]);
+
+  const driftKey = PROFILE_TABS.map(
+    (item) =>
+      `${imageUrls[item.id]?.reference ?? ""}|${imageUrls[item.id]?.approved ?? ""}`,
+  ).join(",");
+  // Site Compare measures how far each run's reference has moved from the
+  // approved one, so the toggle warns before the site is held to either.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: driftKey stands for the loaded reference pairs
+  useEffect(() => {
+    setDrifts({});
+    if (!active || mode !== "site") return;
+    let cancelled = false;
+    const created: string[] = [];
+    void (async () => {
+      for (const item of PROFILE_TABS) {
+        const capture = captures[item.id];
+        const approved = recordImages[item.id].approved;
+        const urls = imageUrls[item.id];
+        if (
+          capture?.status !== "captured" ||
+          !capture.reference ||
+          !approved ||
+          !urls?.reference ||
+          !urls.approved ||
+          approved.artifact.sha256 === capture.reference.sha256.toLowerCase()
+        ) {
+          continue;
+        }
+        const result = await comparePixels({
+          referenceUrl: urls.approved,
+          siteUrl: urls.reference,
+          referenceRegion: approved.region,
+          siteRegion: capture.referenceRegion,
+        });
+        if (cancelled) {
+          if (result.kind === "compared") URL.revokeObjectURL(result.diffUrl);
+          return;
+        }
+        if (result.kind === "compared") created.push(result.diffUrl);
+        setDrifts((previous) => ({ ...previous, [item.id]: result }));
+      }
+    })();
+    return () => {
+      cancelled = true;
+      for (const url of created) URL.revokeObjectURL(url);
+    };
+  }, [active, captures, driftKey, mode, recordKey]);
+
+  // Approve compares the newest captured reference with the last approved
+  // one; Site Compare compares the site with the approved reference, or with
+  // its run's own reference when none is approved or the viewer chose it.
+  function pairFor(
+    id: ProfileId,
+  ): { base: PairSide; candidate: PairSide } | null {
+    const urls = imageUrls[id];
+    if (!urls) return null;
+    const { approved, current } = recordImages[id];
+    const approvedSide =
+      approved && urls.approved
+        ? {
+            url: urls.approved,
+            artifact: approved.artifact,
+            region: approved.region,
+          }
+        : null;
+    if (mode === "approve") {
+      return approvedSide && current && urls.current
+        ? {
+            base: approvedSide,
+            candidate: {
+              url: urls.current,
+              artifact: current.artifact,
+              region: current.region,
+            },
+          }
+        : null;
+    }
+    const capture = captures[id];
+    if (capture?.status !== "captured" || !capture.reference || !urls.site) {
+      return null;
+    }
+    const base = againstApproved(id)
+      ? approvedSide
+      : urls.reference
+        ? {
+            url: urls.reference,
+            artifact: capture.reference,
+            region: capture.referenceRegion,
+          }
+        : null;
+    return base
+      ? {
+          base,
+          candidate: {
+            url: urls.site,
+            artifact: capture.site,
+            region: capture.siteRegion,
+          },
+        }
+      : null;
+  }
 
   function comparable(id: ProfileId): boolean {
-    const capture = captures[id];
-    const urls = imageUrls[id];
-    return Boolean(
-      capture?.status === "captured" &&
-        capture.reference &&
-        urls?.site &&
-        urls.reference,
-    );
+    return pairFor(id) !== null;
+  }
+
+  function statusOf(id: ProfileId): { text: string; tone: Tone } {
+    if (mode === "approve") {
+      const status = statuses[id];
+      if (!status?.current) return { text: "Not captured", tone: "idle" };
+      if (!status.approved)
+        return { text: "No approved reference", tone: "idle" };
+      return comparisonStatus(comparisons[id]);
+    }
+    return profileStatus(captures[id], comparisons[id]);
   }
 
   async function runComparison(ids: ProfileId[]) {
@@ -948,21 +1336,13 @@ export function VerificationPanel({ active }: { active: boolean }) {
       ...Object.fromEntries(ids.map((id) => [id, "running"])),
     }));
     for (const id of ids) {
-      const capture = captures[id];
-      const urls = imageUrls[id];
-      if (
-        capture?.status !== "captured" ||
-        !capture.reference ||
-        !urls?.site ||
-        !urls.reference
-      ) {
-        continue;
-      }
+      const pair = pairFor(id);
+      if (!pair) continue;
       const result = await comparePixels({
-        referenceUrl: urls.reference,
-        siteUrl: urls.site,
-        referenceRegion: capture.referenceRegion,
-        siteRegion: capture.siteRegion,
+        referenceUrl: pair.base.url,
+        siteUrl: pair.candidate.url,
+        referenceRegion: pair.base.region,
+        siteRegion: pair.candidate.region,
       });
       if (generation !== comparisonGeneration.current) {
         if (result.kind === "compared") URL.revokeObjectURL(result.diffUrl);
@@ -1079,10 +1459,14 @@ export function VerificationPanel({ active }: { active: boolean }) {
     setStoryListOpen(true);
   }
 
+  // Verification and Regression both mount; the hidden one keeps its state
+  // but draws nothing, so the page holds one copy of the evidence.
+  if (!active) return null;
+
   return (
     <div className="verification-panel" style={themeVariables(theme)}>
       <header className="verification-panel-header">
-        <h2>Verification</h2>
+        <h2>{mode === "approve" ? "Approve" : "Site Compare"}</h2>
         <div className="verification-inline-actions">
           {storyListOpen ? (
             <button type="button" onClick={() => setStoryListOpen(false)}>
@@ -1403,6 +1787,67 @@ export function VerificationPanel({ active }: { active: boolean }) {
                 </button>
               </div>
 
+              {statuses[selectedProfile] ? (
+                <div className="verification-reference-bar">
+                  {mode === "site" ? (
+                    <fieldset className="verification-reference-choice">
+                      <legend>Compare the site with</legend>
+                      <div>
+                        <button
+                          aria-pressed={!againstApproved(selectedProfile)}
+                          onClick={() => setReferenceChoice("current")}
+                          type="button"
+                        >
+                          Current reference
+                        </button>
+                        <button
+                          aria-pressed={againstApproved(selectedProfile)}
+                          disabled={!statuses[selectedProfile]?.approved}
+                          onClick={() => setReferenceChoice("approved")}
+                          type="button"
+                        >
+                          Last approved reference
+                        </button>
+                      </div>
+                      {driftNotice(drifts[selectedProfile]) ? (
+                        <span
+                          className="verification-flag"
+                          data-flag="drift"
+                          role="status"
+                        >
+                          {driftNotice(drifts[selectedProfile])}
+                        </span>
+                      ) : null}
+                    </fieldset>
+                  ) : null}
+                  <ReferenceFlagChip
+                    status={statuses[selectedProfile] as ReferenceStatus}
+                  />
+                </div>
+              ) : null}
+              {mode === "site" &&
+              referenceChoice === "approved" &&
+              statuses[selectedProfile] &&
+              !statuses[selectedProfile]?.approved ? (
+                <p className="verification-notice">
+                  No approved reference at this size, so the site is compared
+                  with the current reference.
+                </p>
+              ) : null}
+              {mode === "site" &&
+              againstApproved(selectedProfile) &&
+              statuses[selectedProfile]?.approved ? (
+                <p className="verification-metadata">
+                  Comparing with the reference approved by{" "}
+                  {statuses[selectedProfile]?.approved?.approval.approver} at
+                  commit{" "}
+                  {statuses[selectedProfile]?.approved?.reference.commit.slice(
+                    0,
+                    9,
+                  )}
+                  .
+                </p>
+              ) : null}
               {selectedDeclaration?.status === "retired" ? (
                 <p className="verification-notice">Retired at capture</p>
               ) : null}
@@ -1443,10 +1888,13 @@ export function VerificationPanel({ active }: { active: boolean }) {
                       </div>
                       <fieldset className="verification-size-tabs">
                         <legend className="verification-visually-hidden">
-                          Size, with how far the site differs from the design
+                          {mode === "approve"
+                            ? "Size, with how far the current reference differs from the last approved one"
+                            : "Size, with how far the site differs from the design"}
                         </legend>
                         {PROFILE_TABS.map((item) => {
                           const comparison = comparisons[item.id];
+                          const flag = statuses[item.id]?.flag;
                           const scored =
                             comparison !== undefined &&
                             comparison !== "running" &&
@@ -1455,7 +1903,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
                               : null;
                           const status =
                             scored === null
-                              ? profileStatus(captures[item.id], comparison)
+                              ? statusOf(item.id)
                               : {
                                   text: diffLabel(scored),
                                   tone: diffTone(scored),
@@ -1477,6 +1925,14 @@ export function VerificationPanel({ active }: { active: boolean }) {
                               />
                               <span>{item.shortLabel}</span>
                               <strong>{status.text}</strong>
+                              {flag ? (
+                                <span
+                                  className="verification-stamp"
+                                  data-flag={flag}
+                                >
+                                  {FLAG_LABELS[flag]}
+                                </span>
+                              ) : null}
                             </label>
                           );
                         })}
@@ -1491,6 +1947,11 @@ export function VerificationPanel({ active }: { active: boolean }) {
                     {imageError ? (
                       <p role="alert" className="verification-error">
                         Images: {imageError}
+                      </p>
+                    ) : null}
+                    {recordsError ? (
+                      <p role="alert" className="verification-error">
+                        References and approvals: {recordsError}
                       </p>
                     ) : null}
 
@@ -1511,7 +1972,8 @@ export function VerificationPanel({ active }: { active: boolean }) {
                             <span className="verification-metadata">
                               {item.size}
                             </span>
-                            {capture?.status === "captured" ? (
+                            {mode === "site" &&
+                            capture?.status === "captured" ? (
                               <span
                                 className="verification-chip"
                                 title="Both images are cropped to the component box and aligned at its top-left corner before comparing."
@@ -1523,8 +1985,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
                                 )}
                               </span>
                             ) : null}
-                            {capture?.status === "captured" &&
-                            capture.reference ? (
+                            {pairFor(item.id) ? (
                               <button
                                 type="button"
                                 disabled={
@@ -1545,6 +2006,78 @@ export function VerificationPanel({ active }: { active: boolean }) {
                               This run has no outcome for the selected identity
                               and profile.
                             </p>
+                          ) : mode === "approve" ? (
+                            <>
+                              <div className="verification-image-grid">
+                                {recordImages[item.id].approved ? (
+                                  <ImageEvidence
+                                    title="Last approved"
+                                    artifact={
+                                      recordImages[item.id].approved
+                                        ?.artifact as ImageArtifact
+                                    }
+                                    imageUrl={urls?.approved}
+                                    cropRegion={
+                                      recordImages[item.id].approved?.region
+                                    }
+                                    onOpen={setFullSize}
+                                  />
+                                ) : (
+                                  <p className="verification-notice">
+                                    No approved reference yet at this size.
+                                    Approve the reference to make it the first
+                                    baseline.
+                                  </p>
+                                )}
+                                {recordImages[item.id].current ? (
+                                  <ImageEvidence
+                                    title="Current"
+                                    artifact={
+                                      recordImages[item.id].current
+                                        ?.artifact as ImageArtifact
+                                    }
+                                    imageUrl={urls?.current}
+                                    cropRegion={
+                                      recordImages[item.id].current?.region
+                                    }
+                                    onOpen={setFullSize}
+                                  />
+                                ) : (
+                                  <p className="verification-notice">
+                                    No reference captured yet at this size.
+                                  </p>
+                                )}
+                                {pairFor(item.id) || comparisons[item.id] ? (
+                                  <DiffEvidence
+                                    comparison={comparisons[item.id]}
+                                    canCompare={comparable(item.id)}
+                                    onOpen={setFullSize}
+                                    aspect={(() => {
+                                      const current =
+                                        recordImages[item.id].current;
+                                      return current
+                                        ? `${current.region.width} / ${current.region.height}`
+                                        : "16 / 10";
+                                    })()}
+                                  />
+                                ) : null}
+                              </div>
+                              {statuses[item.id] ? (
+                                <ReferenceApproval
+                                  key={`${identityKey(capture)}::${capture.profileId}::${captureLocale(capture)}`}
+                                  onApprove={(comment) =>
+                                    captureCurrent(capture, true, comment)
+                                  }
+                                  onCapture={() =>
+                                    captureCurrent(capture, false)
+                                  }
+                                  onRequestChanges={(comment) =>
+                                    requestChanges(item.id, comment)
+                                  }
+                                  status={statuses[item.id] as ReferenceStatus}
+                                />
+                              ) : null}
+                            </>
                           ) : capture.status === "failed" ? (
                             <p role="alert">
                               Capture failed: {capture.failure.message}
@@ -1555,27 +2088,21 @@ export function VerificationPanel({ active }: { active: boolean }) {
                             </p>
                           ) : (
                             <div className="verification-image-grid">
-                              {capture.reference ? (
-                                <ImageEvidence
-                                  title="Reference"
-                                  artifact={capture.reference}
-                                  imageUrl={urls?.reference}
-                                  cropRegion={capture.referenceRegion}
-                                  onOpen={setFullSize}
-                                />
-                              ) : (
-                                <p className="verification-notice">
-                                  No matching reference at this viewport. Not
-                                  scored at this profile.
-                                </p>
-                              )}
+                              <BaseEvidence
+                                againstApproved={againstApproved(item.id)}
+                                approved={recordImages[item.id].approved}
+                                approvedUrl={urls?.approved}
+                                capture={capture}
+                                onOpen={setFullSize}
+                                referenceUrl={urls?.reference}
+                              />
                               <ImageEvidence
                                 title="Site"
                                 artifact={capture.site}
                                 imageUrl={urls?.site}
                                 onOpen={setFullSize}
                               />
-                              {capture.reference ? (
+                              {pairFor(item.id) || comparisons[item.id] ? (
                                 <DiffEvidence
                                   comparison={comparisons[item.id]}
                                   canCompare={comparable(item.id)}

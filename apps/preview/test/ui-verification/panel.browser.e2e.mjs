@@ -10,6 +10,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { createArchive } from "@grade10/ui-verification/archive";
 import { createArchiveHandler } from "@grade10/ui-verification/archive-api";
+import { createReferenceCapturer } from "@grade10/ui-verification/reference-capture";
 
 const directory = resolve(fileURLToPath(new URL(".", import.meta.url)));
 const repositoryRoot = resolve(directory, "../../../..");
@@ -482,11 +483,14 @@ async function startWorkbenchServer(root, archive) {
   const indexPath = join(realRoot, "index.html");
   await stat(indexPath);
   const apiRequests = [];
-  const reviewRequests = [];
+  const captureRequests = [];
   let archiveHandler;
   const server = createServer(async (request, response) => {
     try {
-      const url = new URL(request.url ?? "/", "http://127.0.0.1");
+      const url = new URL(
+        request.url ?? "/",
+        `http://${request.headers.host ?? "127.0.0.1"}`,
+      );
       if (url.pathname.startsWith("/api/")) {
         apiRequests.push(
           `${request.method ?? "GET"} ${url.pathname}${url.search}`,
@@ -496,10 +500,10 @@ async function startWorkbenchServer(root, archive) {
         const body = Buffer.concat(chunks);
         if (
           request.method === "POST" &&
-          url.pathname === "/api/reviews" &&
+          url.pathname === "/api/references" &&
           body.length > 0
         ) {
-          reviewRequests.push(JSON.parse(body.toString("utf8")));
+          captureRequests.push(JSON.parse(body.toString("utf8")));
         }
         const headers = new Headers();
         for (const [name, value] of Object.entries(request.headers)) {
@@ -562,15 +566,19 @@ async function startWorkbenchServer(root, archive) {
   const origin = `http://127.0.0.1:${address.port}`;
   archiveHandler = createArchiveHandler(archive, {
     authorize: async (_request, scope) =>
-      scope === "review"
+      scope === "approve"
         ? { kind: "human", reviewer: { subject: "Panel browser fixture" } }
         : { kind: "human" },
     allowedOrigins: [origin],
+    captureReference: createReferenceCapturer({
+      chromium,
+      repoRoot: repositoryRoot,
+    }),
   });
   return {
     origin,
     apiRequests,
-    reviewRequests,
+    captureRequests,
     close: () =>
       new Promise((resolveClose, rejectClose) => {
         server.close((error) => (error ? rejectClose(error) : resolveClose()));
@@ -589,7 +597,7 @@ async function startPanel(browser, server, storyId = STORY_ID) {
   await page.goto(`${server.origin}/?path=/story/${storyId}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   return page;
 }
 
@@ -648,7 +656,7 @@ test("the central workbench shows the newest run of a version at all three sizes
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page
     .getByRole("combobox", { name: "Verification target" })
     .waitFor({ state: "visible" });
@@ -671,9 +679,9 @@ test("the central workbench shows the newest run of a version at all three sizes
     "the panel should request archive runs on cold load",
   );
   assert.equal(
-    server.apiRequests.some((entry) => entry.startsWith("POST /api/reviews")),
+    server.apiRequests.some((entry) => entry.startsWith("POST /api/")),
     false,
-    "the panel does not record reviews",
+    "opening the panel records no stamp",
   );
   assert.equal(
     requestOrigins.has("http://localhost:4466"),
@@ -852,6 +860,164 @@ test("pixel comparison crops to the anchor and draws the diff in the browser", {
   await page.close();
 });
 
+async function openPanel(browser, server, tab) {
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("tab", { name: tab }).click();
+  await selectFirstTarget(page);
+  return page;
+}
+
+test("approving captures the live reference and Site Compare holds the site to it", {
+  timeout: 240_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-approve-"));
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  await publishRun(archive, browser, {
+    runId: "approve-0001",
+    createdAt: "2026-10-29T10:01:00.000Z",
+    storyId: STORY_ID,
+  });
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  let page = await openPanel(browser, server, "Approve");
+  let desktop = page.getByRole("region", { name: "Desktop evidence" });
+  const approval = desktop.getByRole("region", { name: "Approval" });
+  await approval.waitFor();
+  const flag = page.locator(".verification-reference-bar .verification-flag");
+  await waitForCondition(
+    async () => (await flag.innerText()) === "No approved reference",
+    "the flag to say nothing is approved",
+  );
+  assert.equal(
+    await approval
+      .getByRole("button", { name: "Request changes" })
+      .isDisabled(),
+    true,
+    "nothing is captured yet to request changes on",
+  );
+
+  await approval.getByRole("button", { name: "Approve", exact: true }).click();
+  await waitForCondition(
+    async () =>
+      /^Reference approved · [0-9a-f]{9}$/.test(await flag.innerText()),
+    "approving to capture the story and flag it approved",
+  );
+  assert.deepEqual(server.captureRequests, [
+    {
+      sourceRunId: "approve-0001",
+      caseId: CASE_ID,
+      targetId: DECLARATIONS[0].targetId,
+      capturePointId: DECLARATIONS[0].capturePointId,
+      profileId: "desktop",
+      locale: "en",
+      approve: true,
+    },
+  ]);
+  const [reference] = (await archive.listReferences({ caseId: CASE_ID }))
+    .references;
+  const [approved] = (await archive.listApprovals({ caseId: CASE_ID }))
+    .approvals;
+  assert.equal(reference.storyId, STORY_ID);
+  assert.equal(reference.selector, "main");
+  assert.deepEqual(
+    [reference.image.width, reference.image.height],
+    [1440, 900],
+  );
+  assert.equal(approved.referenceHash, reference.image.sha256);
+  assert.equal(approved.approver.subject, "Panel browser fixture");
+  await desktop
+    .getByRole("region", { name: "Last approved evidence" })
+    .getByRole("img")
+    .waitFor();
+
+  await approval
+    .getByRole("button", { name: "Capture current reference" })
+    .click();
+  await waitForCondition(
+    async () =>
+      (await archive.listReferences({ caseId: CASE_ID })).references.length ===
+      2,
+    "a second capture of the unchanged story",
+  );
+  await waitForImageDimensions(desktop, "Pixel difference overlay", {
+    width: reference.region.width,
+    height: reference.region.height,
+  });
+  assert.match(
+    await flag.innerText(),
+    /^Reference approved/,
+    "a capture of the same bytes keeps the approval",
+  );
+
+  await approval
+    .getByRole("textbox", { name: "Comment" })
+    .fill("Heading moved down");
+  await approval.getByRole("button", { name: "Request changes" }).click();
+  await waitForCondition(
+    async () => (await flag.innerText()).startsWith("Changes requested"),
+    "the change request to flag the current reference",
+  );
+  assert.equal(
+    await approval.locator(".verification-approval-history li").count(),
+    2,
+  );
+  await page.close();
+
+  page = await openPanel(browser, server, "Site Compare");
+  desktop = page.getByRole("region", { name: "Desktop evidence" });
+  await desktop
+    .getByRole("region", { name: "Reference, last approved evidence" })
+    .getByRole("img")
+    .waitFor();
+  assert.equal(
+    await page
+      .getByRole("button", { name: "Last approved reference" })
+      .getAttribute("aria-pressed"),
+    "true",
+    "the site is held to the approved reference by default",
+  );
+  assert.match(
+    await page
+      .locator(".verification-metadata", {
+        hasText: "Comparing with the reference approved",
+      })
+      .innerText(),
+    /^Comparing with the reference approved by Panel browser fixture at commit [0-9a-f]{9}\.$/,
+  );
+  const drift = page.locator('.verification-flag[data-flag="drift"]');
+  await drift.waitFor();
+  assert.match(
+    await drift.innerText(),
+    /^Reference (drifted \d+\.\d% |size changed )since approval$/,
+    "the run's own reference is far from the story the designer approved",
+  );
+  await page.getByText("Tablet", { exact: true }).click();
+  assert.equal(
+    await page
+      .getByRole("button", { name: "Current reference" })
+      .getAttribute("aria-pressed"),
+    "true",
+  );
+  await page
+    .getByText(
+      "No approved reference at this size, so the site is compared with the current reference.",
+    )
+    .waitFor();
+  await page.close();
+});
+
 test("locale selection shows the exact localized evidence for all three sizes", {
   timeout: 180_000,
 }, async (t) => {
@@ -982,7 +1148,7 @@ test("locale selection shows the exact localized evidence for all three sizes", 
     ),
     "run discovery must include manifests with non-English-only matrices",
   );
-  for (const route of ["reviews", "assessments", "calibrations"]) {
+  for (const route of ["assessments"]) {
     assert.equal(
       server.apiRequests.some((entry) =>
         entry.startsWith(`GET /api/${route}?`),
@@ -1037,7 +1203,7 @@ test("new locale subsets stay exact while legacy English runs show missing evide
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page
     .getByRole("combobox", { name: "Verification target" })
     .waitFor({ state: "visible" });
@@ -1133,7 +1299,7 @@ test("run discovery includes a manifest whose only locale is Traditional Chinese
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page
     .getByRole("combobox", { name: "Verification target" })
     .waitFor({ state: "visible" });
@@ -1204,7 +1370,7 @@ test("a story switch does not carry the prior case mapping while preparation is 
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page.getByText(`Mapped case: ${CASE_ID}`, { exact: true }).waitFor();
 
   let markBreadcrumbsRequested;
@@ -1304,7 +1470,7 @@ test("a shared story without a verification parameter finds its reference case a
     `${server.origin}/?path=/story/design-system-display-breadcrumbs--default`,
     { waitUntil: "domcontentloaded" },
   );
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page
     .getByText(/^Mapped identity: vc_breadcrumbs_history/)
     .waitFor({ timeout: 60_000 });
@@ -1355,7 +1521,7 @@ test("an explicit historical story stays selected while Storybook navigation cha
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page.getByRole("button", { name: "All recordings" }).click();
 
   const versionSelect = page.getByRole("combobox", {
@@ -1446,7 +1612,7 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page.getByRole("button", { name: "All recordings" }).click();
   await page
     .getByText(`Current live case: ${CASE_ID}`, { exact: true })
