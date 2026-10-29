@@ -7,7 +7,7 @@ product information to recognise each item. My Orders and Order Details now
 exist, but their image frames remain empty because the typed order items and
 page projections carry no picture.
 
-Success is measured by the share of paid Store orders whose owner opens Your
+Success is measured by the share of paid Store orders whose owner opens My
 Orders or an order detail without contacting support for basic fulfilment,
 refund, or tracking information. The first delivery establishes the baseline.
 

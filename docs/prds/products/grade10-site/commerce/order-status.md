@@ -47,7 +47,7 @@ and nothing else.
 
 ## Updates from Shopify
 
-Both pages read one stored copy of Shopify's facts, so after a reload Your
+Both pages read one stored copy of Shopify's facts, so after a reload My
 Orders shows the same badge as Order Details.
 
 | Change in Shopify | Reaches both pages |
