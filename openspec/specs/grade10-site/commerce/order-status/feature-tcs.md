@@ -8,7 +8,7 @@
 
 ## Background
 
-* A collector signed in on the staging storefront reads their orders on My Orders, `<site>/profile/orders`, and one order on Order Details, `<site>/profile/orders/<order id>`. Each order is set to its state in the staging shop's admin, or its point of sale for a counter sale.
+* A collector signed in on the staging storefront reads their orders on My Orders, `<site>/profile/my-orders`, and one order on Order Details, `<site>/profile/my-orders/<order id>`. Each order is set to its state in the staging shop's admin, or its point of sale for a counter sale.
 
 ## g10.commerce-order-status.US1: Collector reads where an order stands
 

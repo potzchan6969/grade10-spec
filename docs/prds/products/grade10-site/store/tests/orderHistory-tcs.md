@@ -9,7 +9,7 @@ title: Store Order History Test Cases
 
 ## Background
 
-* `<my orders url>` is `<g10url>/profile/orders`.
+* `<my orders url>` is `<g10url>/profile/my-orders`.
 
 ## Walk 1: Read My Orders
 
@@ -103,7 +103,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 opens `/profile/orders/<order id>`, and Back returns to `<my orders url>`.
+* Step 1 opens `/profile/my-orders/<order id>`, and Back returns to `<my orders url>`.
 * Step 2 opens the carrier's tracking page, UI matching store-order-history-blocks-orderhistorycardheader--with-track-order.
 
 ---
