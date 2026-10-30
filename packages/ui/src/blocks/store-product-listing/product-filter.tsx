@@ -230,7 +230,7 @@ function ProductFilter({
       {showHeading || showSearch ? (
         <VStack className="w-full gap-2" gap="none">
           {showHeading ? (
-            <h2 className="flex h-10 w-full items-center text-2xl font-bold text-foreground">
+            <h2 className="flex h-10 w-full items-center text-2xl font-semibold text-foreground">
               {copy.heading}
             </h2>
           ) : null}

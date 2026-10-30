@@ -138,7 +138,7 @@ function ListingNarrowChrome({
         gap="none"
       >
         <p
-          className="text-2xl font-bold text-foreground"
+          className="text-2xl font-semibold text-foreground"
           data-slot="listing-narrow-chrome-count"
           role="status"
         >
