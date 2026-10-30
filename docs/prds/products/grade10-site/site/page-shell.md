@@ -92,17 +92,17 @@ documentation site in a new tab.
 
 ## Cart
 
-- 🚧 **Cart count** — the header shows a member the same active-line count as the
+- **Cart count** — the header shows a member the same active-line count as the
   cart drawer title, with the drawer open or closed
-- 🚧 **No count** — an empty or unknown cart shows no count; the Cart control
+- **No count** — an empty or unknown cart shows no count; the Cart control
   stays where it is
-- 🚧 **During a refresh** — the last verified count stays while the same member's
+- **During a refresh** — the last verified count stays while the same member's
   cart is checked, including after a failed change, and disappears if that check
   fails
-- 🚧 **What counts** — each distinct line counts once, whatever its quantity;
+- **What counts** — each distinct line counts once, whatever its quantity;
   adjusted lines count, sold-out and unavailable lines do not
-- 🚧 **Member change** — signing out or changing member clears the count at once
-- 🚧 **Updates** — the count refreshes when the member's cart loads, when a cart
+- **Member change** — signing out or changing member clears the count at once
+- **Updates** — the count refreshes when the member's cart loads, when a cart
   change finishes, saved or failed, when the drawer opens, and on Retry, with the
   drawer open or closed; a change made on another device shows after the next of
   these, not live

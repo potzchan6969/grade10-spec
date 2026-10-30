@@ -61,7 +61,7 @@ utility strip / compact utility list.
 
 ## Cart Count
 
-- 🚧 **Cart count** — when the cart control is present and the cart holds active
+- **Cart count** — when the cart control is present and the cart holds active
   lines, `SiteHeader` shows a round count on the cart icon, the same number as
   the cart drawer title badge, in full, never `99+`. An empty, omitted, or
   unknown count hides it. A signed-out visitor's count is the cart their
