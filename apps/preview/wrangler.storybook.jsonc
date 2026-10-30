@@ -20,6 +20,19 @@
       "preview_bucket_name": "grade10-ui-verification-archive-preview"
     }
   ],
+  // Reference captures and approvals: one Durable Object schedules and
+  // records every capture; Browser Rendering draws the stories. The headless
+  // browser passes Cloudflare Access with the service token in the secrets
+  // CAPTURE_ACCESS_CLIENT_ID and CAPTURE_ACCESS_CLIENT_SECRET.
+  "durable_objects": {
+    "bindings": [{ "name": "REFERENCE_CAPTURES", "class_name": "ReferenceCaptures" }]
+  },
+  "migrations": [{ "tag": "reference-captures-v1", "new_sqlite_classes": ["ReferenceCaptures"] }],
+  "browser": { "binding": "BROWSER" },
+  // Each hour the Worker reads its own build receipt; a commit it has not
+  // seen asks for a full capture. No CI step runs or requests captures.
+  "triggers": { "crons": ["17 * * * *"] },
+  "vars": { "STORYBOOK_ORIGIN": "https://storybook.grade10-stg.com/" },
   "routes": [{ "pattern": "storybook.grade10-stg.com", "custom_domain": true }],
   "workers_dev": false
 }
