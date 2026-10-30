@@ -6,12 +6,13 @@ order: 6
 
 My Orders is the signed-in collector's way back to Store purchases after
 checkout: active and past purchases in one place, each order a click away. It
-has its own account address rather than sitting inside the profile screen,
-because loading and acting on orders is a job of its own.
+has its own address under the store rather than sitting inside the profile
+screen, because loading and acting on orders is a job of its own and follows
+the shop's gate, not the profile's.
 
 ## Orders
 
-- **Private Address** — `grade10.com/profile/my-orders`, for the signed-in
+- **Private Address** — `grade10.com/store/my-orders`, for the signed-in
   collector; signing in keeps them at that address
 - **Active and Past** — active orders above past ones, newest first in each.
   An order is past once nothing is left to happen on it: Completed, Canceled or
