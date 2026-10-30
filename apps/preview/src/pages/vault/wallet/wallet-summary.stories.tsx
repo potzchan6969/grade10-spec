@@ -18,13 +18,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Filled: Story = {
   args: {
-    dailyIncentiveHkd: PORTFOLIO_SUMMARY.dailyIncentiveHkd,
-    availableHkd: PORTFOLIO_SUMMARY.rewardsAvailableHkd,
-    earnedAllTimeHkd: PORTFOLIO_SUMMARY.earnedAllTimeHkd,
-    inCashOutHkd: PORTFOLIO_SUMMARY.inCashOutHkd,
-    cashedOutHkd: PORTFOLIO_SUMMARY.cashedOutHkd,
+    dailyIncentiveUsd: PORTFOLIO_SUMMARY.dailyIncentiveUsd,
+    availableUsd: PORTFOLIO_SUMMARY.rewardsAvailableUsd,
+    earnedAllTimeUsd: PORTFOLIO_SUMMARY.earnedAllTimeUsd,
+    inCashOutUsd: PORTFOLIO_SUMMARY.inCashOutUsd,
+    cashedOutUsd: PORTFOLIO_SUMMARY.cashedOutUsd,
     openCashOutCount: 2,
-    minWithdrawalHkd: PORTFOLIO_SUMMARY.minWithdrawalHkd,
+    minWithdrawalUsd: PORTFOLIO_SUMMARY.minWithdrawalUsd,
     hasPayoutMethod: PORTFOLIO_SUMMARY.hasPayoutMethod,
   },
   play: async ({ canvasElement }) => {
@@ -42,7 +42,7 @@ export const Filled: Story = {
 
 /** Balance under the minimum — CTA disabled, the floor named beside it. */
 export const BelowMinimum: Story = {
-  args: { ...Filled.args, availableHkd: 38 },
+  args: { ...Filled.args, availableUsd: 5 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(

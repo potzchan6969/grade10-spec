@@ -37,8 +37,9 @@ function CashOutDialogDemo({
         ) : null}
       </VStack>
       <CashOutDialog
-        availableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
-        minWithdrawalHkd={PORTFOLIO_SUMMARY.minWithdrawalHkd}
+        availableUsd={PORTFOLIO_SUMMARY.rewardsAvailableUsd}
+        hkdPerUsd={PORTFOLIO_SUMMARY.hkdPerUsd}
+        minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
         payoutMethod={payoutMethod}
         open={open}
         onOpenChange={setOpen}
@@ -77,7 +78,7 @@ export const Amount: Story = {
     const dialog = await openDialog(canvasElement);
     expect(dialog.getByText("Cash Out")).toBeVisible();
     expect(dialog.getByText(/Available to cash out/)).toBeVisible();
-    expect(dialog.getByText(/Minimum HK\$500/)).toBeVisible();
+    expect(dialog.getByText(/Minimum US\$65/)).toBeVisible();
     expect(
       dialog.getByRole("button", { name: "Continue" }),
     ).toBeDisabled();
@@ -117,7 +118,7 @@ export const Review: Story = {
     await waitFor(() =>
       expect(dialog.getByText("Review Cash Out")).toBeVisible(),
     );
-    expect(dialog.getByText("HK$1,240")).toBeVisible();
+    expect(dialog.getByText("$1,240")).toBeVisible();
     expect(dialog.getByText("HSBC ••• 8304")).toBeVisible();
     expect(dialog.getByText("Chan Tai Man")).toBeVisible();
     expect(dialog.getByText(/business days/)).toBeVisible();

@@ -18,6 +18,7 @@ import { Bank, CheckCircle } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import {
   formatHkd,
+  formatUsd,
   WITHDRAWAL_PROCESSING_DAYS,
 } from "../../vault-content";
 
@@ -37,20 +38,23 @@ type CashOutStep = "amount" | "bank-details" | "review" | "submitted";
  * the wallet until then.
  */
 function CashOutDialog({
-  availableHkd,
-  minWithdrawalHkd,
+  availableUsd,
+  minWithdrawalUsd,
+  hkdPerUsd,
   payoutMethod,
   open,
   onOpenChange,
   onSubmit,
 }: {
-  availableHkd: number;
-  minWithdrawalHkd: number;
+  availableUsd: number;
+  minWithdrawalUsd: number;
+  /** Reference conversion for HKD cash-outs. */
+  hkdPerUsd: number;
   /** Saved destination; undefined on a collector's first payout. */
   payoutMethod?: PayoutMethod;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit?: (amountHkd: number) => void;
+  onSubmit?: (amountUsd: number, currency: "USD" | "HKD") => void;
 }) {
   const [step, setStep] = useState<CashOutStep>("amount");
   const [amountInput, setAmountInput] = useState("");
@@ -65,9 +69,11 @@ function CashOutDialog({
     }
   }, [open]);
 
+  const [currency, setCurrency] = useState<"USD" | "HKD">("HKD");
   const amount = Number(amountInput) || 0;
   const amountValid =
-    amount >= minWithdrawalHkd && amount <= availableHkd;
+    amount >= minWithdrawalUsd && amount <= availableUsd;
+  const convertedHkd = Math.round(amount * hkdPerUsd);
   const bankDetailsValid =
     accountHolder.trim() !== "" &&
     bankName.trim() !== "" &&
@@ -85,7 +91,7 @@ function CashOutDialog({
     } else if (step === "bank-details") {
       setStep("review");
     } else if (step === "review") {
-      onSubmit?.(amount);
+      onSubmit?.(amount, currency);
       setStep("submitted");
     }
   };
@@ -98,9 +104,9 @@ function CashOutDialog({
   };
 
   const SUBTEXT: Record<CashOutStep, string> = {
-    amount: `Available to cash out: ${formatHkd(availableHkd)}`,
+    amount: `Available to cash out: ${formatUsd(availableUsd)}`,
     "bank-details": "In your verified name and saved to your profile — where rewards go on your first cash-out.",
-    review: `Grade10 reviews every request — paid by FPS or bank transfer within ${WITHDRAWAL_PROCESSING_DAYS} once approved.`,
+    review: `Grade10 reviews every request — paid by bank transfer within ${WITHDRAWAL_PROCESSING_DAYS} once approved.`,
     submitted: "We’ll email you once Grade10 approves the payout.",
   };
 
@@ -123,7 +129,7 @@ function CashOutDialog({
                   aria-label="Cash-out amount"
                   className="w-full font-heading text-2xl font-medium tabular-nums"
                   inputMode="decimal"
-                  prefix="HK$"
+                  prefix="US$"
                   value={amountInput}
                   onChange={(event) =>
                     setAmountInput(
@@ -135,13 +141,32 @@ function CashOutDialog({
                   size="sm"
                   type="button"
                   variant="outline"
-                  onClick={() => setAmountInput(String(availableHkd))}
+                  onClick={() => setAmountInput(String(availableUsd))}
                 >
                   Max
                 </Button>
               </div>
+              <div className="flex w-full items-center gap-2">
+                {(["HKD", "USD"] as const).map((code) => (
+                  <Button
+                    aria-pressed={currency === code}
+                    key={code}
+                    size="sm"
+                    type="button"
+                    variant={currency === code ? "primary" : "outline"}
+                    onClick={() => setCurrency(code)}
+                  >
+                    {code}
+                  </Button>
+                ))}
+                <Text size="sm" tone="secondary">
+                  {currency === "HKD"
+                    ? `≈ ${formatHkd(convertedHkd)}`
+                    : "USD and overseas cash-outs are handled manually by our team"}
+                </Text>
+              </div>
               <Text size="sm" tone="secondary">
-                Minimum {formatHkd(minWithdrawalHkd)} · One cash-out every 7 days
+                Minimum {formatUsd(minWithdrawalUsd)} · One cash-out every 7 days
               </Text>
             </VStack>
           ) : null}
@@ -155,7 +180,11 @@ function CashOutDialog({
               />
               <TextInput
                 label="Bank name"
-                message="Hong Kong bank accounts only for now"
+                message={
+                  currency === "USD"
+                    ? "Include SWIFT details for overseas banks"
+                    : "Hong Kong bank accounts only for now"
+                }
                 value={bankName}
                 onChange={(event) => setBankName(event.target.value)}
               />
@@ -177,7 +206,13 @@ function CashOutDialog({
                   Amount
                 </Text>
                 <span className="font-heading text-3xl font-medium tracking-tight tabular-nums">
-                  {formatHkd(amount)}
+                  {formatUsd(amount)}
+                  {currency === "HKD" ? (
+                    <span className="text-lg text-secondary-foreground">
+                      {" "}
+                      ≈ {formatHkd(convertedHkd)}
+                    </span>
+                  ) : null}
                 </span>
               </div>
               <div className="flex w-full items-center gap-4 rounded-(--radius-2xl) border border-border bg-background-subtle p-4">
@@ -202,10 +237,12 @@ function CashOutDialog({
               </div>
               <div className="flex w-full items-center justify-between">
                 <Text size="sm" tone="secondary">
-                  Processing time
+                  {currency === "USD" ? "Handled by" : "Processing time"}
                 </Text>
                 <Text size="sm" weight="medium">
-                  Within {WITHDRAWAL_PROCESSING_DAYS} of approval
+                  {currency === "USD"
+                    ? "Our team manually"
+                    : `Within ${WITHDRAWAL_PROCESSING_DAYS} of approval`}
                 </Text>
               </div>
             </VStack>

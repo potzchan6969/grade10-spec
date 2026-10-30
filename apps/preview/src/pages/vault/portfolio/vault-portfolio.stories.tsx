@@ -90,13 +90,13 @@ function VaultPortfolioPage({
         {!empty && (
           <div className={cn(PAGE_ENTER_CLASS, "delay-[30ms]")}>
             <WalletSummary
-              availableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
-              cashedOutHkd={PORTFOLIO_SUMMARY.cashedOutHkd}
-              dailyIncentiveHkd={PORTFOLIO_SUMMARY.dailyIncentiveHkd}
-              earnedAllTimeHkd={PORTFOLIO_SUMMARY.earnedAllTimeHkd}
+              availableUsd={PORTFOLIO_SUMMARY.rewardsAvailableUsd}
+              cashedOutUsd={PORTFOLIO_SUMMARY.cashedOutUsd}
+              dailyIncentiveUsd={PORTFOLIO_SUMMARY.dailyIncentiveUsd}
+              earnedAllTimeUsd={PORTFOLIO_SUMMARY.earnedAllTimeUsd}
               hasPayoutMethod={PORTFOLIO_SUMMARY.hasPayoutMethod}
-              inCashOutHkd={PORTFOLIO_SUMMARY.inCashOutHkd}
-              minWithdrawalHkd={PORTFOLIO_SUMMARY.minWithdrawalHkd}
+              inCashOutUsd={PORTFOLIO_SUMMARY.inCashOutUsd}
+              minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
               openCashOutCount={openCashOuts}
               onCashOut={() => setWithdrawOpen(true)}
               onViewActivity={() => setPageTab("rewards")}
@@ -161,8 +161,9 @@ function VaultPortfolioPage({
         </Tabs>
       </div>
       <CashOutDialog
-        availableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
-        minWithdrawalHkd={PORTFOLIO_SUMMARY.minWithdrawalHkd}
+        availableUsd={PORTFOLIO_SUMMARY.rewardsAvailableUsd}
+        hkdPerUsd={PORTFOLIO_SUMMARY.hkdPerUsd}
+        minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
         payoutMethod={PAYOUT_METHOD}
         open={withdrawOpen}
         onOpenChange={setWithdrawOpen}

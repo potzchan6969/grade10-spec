@@ -34,7 +34,8 @@ export const Declined: Story = {
       {
         id: "po-4",
         requestedAt: "28 Oct 2026",
-        amountHkd: 150,
+        amountUsd: 150,
+        currency: "USD",
         status: "Declined",
       },
     ],

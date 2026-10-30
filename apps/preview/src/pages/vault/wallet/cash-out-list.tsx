@@ -4,6 +4,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
   formatHkd,
+  formatUsd,
   PAYOUT_METHOD,
   type VaultPayoutRequest,
   type VaultPayoutStatus,
@@ -36,11 +37,17 @@ function CashOutRow({
     >
       <div className="flex min-w-0 flex-col gap-0.5">
         <Text className="tabular-nums" weight="medium">
-          {formatHkd(request.amountHkd)}
+          {formatUsd(request.amountUsd)}
+          {request.currency === "HKD" && request.convertedHkd != null ? (
+            <span className="text-secondary-foreground font-normal">
+              {" "}
+              ≈ {formatHkd(request.convertedHkd)}
+            </span>
+          ) : null}
         </Text>
         <Text size="sm" tone="secondary">
           {request.requestedAt} · To {PAYOUT_METHOD.bankName}{" "}
-          {PAYOUT_METHOD.maskedAccount}
+          {PAYOUT_METHOD.maskedAccount} · {request.currency}
         </Text>
       </div>
       <Badge size="sm" variant={STATUS_VARIANT[request.status]}>

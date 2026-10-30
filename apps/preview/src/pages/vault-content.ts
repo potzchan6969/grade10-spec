@@ -456,7 +456,12 @@ type VaultPayoutStatus = "Pending review" | "Processing" | "Paid" | "Declined";
 type VaultPayoutRequest = {
   id: string;
   requestedAt: string;
-  amountHkd: number;
+  /** Incentive wallet is denominated in USD. */
+  amountUsd: number;
+  /** Bank currency the collector asked for. */
+  currency: "USD" | "HKD";
+  /** Converted figure when the request pays out in HKD. */
+  convertedHkd?: number;
   status: VaultPayoutStatus;
 };
 
@@ -464,19 +469,24 @@ const PAYOUT_REQUESTS: VaultPayoutRequest[] = [
   {
     id: "po-3",
     requestedAt: "28 Oct 2026",
-    amountHkd: 150,
+    amountUsd: 83,
+    currency: "HKD",
+    convertedHkd: 650,
     status: "Pending review",
   },
   {
     id: "po-2",
-    requestedAt: "20 Oct 2026",
-    amountHkd: 500,
+    requestedAt: "1 Oct 2026",
+    amountUsd: 64,
+    currency: "USD",
     status: "Processing",
   },
   {
     id: "po-1",
     requestedAt: "3 Oct 2026",
-    amountHkd: 320,
+    amountUsd: 41,
+    currency: "HKD",
+    convertedHkd: 320,
     status: "Paid",
   },
 ];
@@ -484,23 +494,25 @@ const PAYOUT_REQUESTS: VaultPayoutRequest[] = [
 const PORTFOLIO_SUMMARY = {
   itemCount: PORTFOLIO_ASSETS.length,
   totalEstimateHkd: PORTFOLIO_ASSETS.reduce((sum, a) => sum + a.estimateHkd, 0),
-  dailyIncentiveHkd: 124,
-  rewardsAvailableHkd: 1240,
-  earnedAllTimeHkd: 2210,
-  inCashOutHkd: 650,
-  cashedOutHkd: 320,
-  minWithdrawalHkd: 500,
+  dailyIncentiveUsd: 16,
+  rewardsAvailableUsd: 160,
+  earnedAllTimeUsd: 285,
+  inCashOutUsd: 83,
+  cashedOutUsd: 41,
+  minWithdrawalUsd: 65,
+  /** Reference conversion for HKD cash-outs. */
+  hkdPerUsd: 7.76,
   hasPayoutMethod: true,
 };
 
 /** Daily incentive sums — one amount per day, no per-asset breakdown. */
-const DAILY_INCENTIVES: { date: string; amountHkd: number }[] = [
-  { date: "29 Oct 2026", amountHkd: 124 },
-  { date: "28 Oct 2026", amountHkd: 124 },
-  { date: "27 Oct 2026", amountHkd: 121 },
-  { date: "26 Oct 2026", amountHkd: 121 },
-  { date: "25 Oct 2026", amountHkd: 118 },
-  { date: "24 Oct 2026", amountHkd: 118 },
+const DAILY_INCENTIVES: { date: string; amountUsd: number }[] = [
+  { date: "29 Oct 2026", amountUsd: 16 },
+  { date: "28 Oct 2026", amountUsd: 16 },
+  { date: "27 Oct 2026", amountUsd: 15 },
+  { date: "26 Oct 2026", amountUsd: 15 },
+  { date: "25 Oct 2026", amountUsd: 14 },
+  { date: "24 Oct 2026", amountUsd: 14 },
 ];
 
 const VAULT_SITE_HEADER = {
@@ -982,6 +994,10 @@ function formatHkd(amount: number): string {
   return `HK$${amount.toLocaleString("en-HK")}`;
 }
 
+function formatUsd(amount: number): string {
+  return `US$${amount.toLocaleString("en-HK")}`;
+}
+
 function assetSubtitle(asset: VaultAsset): string {
   if (asset.condition === "Graded" && asset.cert) {
     return `${asset.categoryLabel} · ${asset.grade}`;
@@ -1085,6 +1101,7 @@ export {
   DETAILS_FORM_COPY,
   firstAvailableVisitDay,
   formatHkd,
+  formatUsd,
   GRADING_VISIT_RECORD,
   GRADING_VISIT_SERVICE,
   INTAKE_TRACKER_HREF,

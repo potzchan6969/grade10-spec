@@ -9,7 +9,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { Sparkle } from "@phosphor-icons/react";
 import { useState } from "react";
 import {
-  formatHkd,
+  formatUsd,
   type VaultPayoutRequest,
 } from "../../vault-content";
 import { CashOutRow } from "./cash-out-list";
@@ -27,7 +27,7 @@ function RewardsLedger({
   payoutRequests,
   className,
 }: {
-  dailyIncentives: { date: string; amountHkd: number }[];
+  dailyIncentives: { date: string; amountUsd: number }[];
   payoutRequests: VaultPayoutRequest[];
   className?: string;
 }) {
@@ -71,7 +71,7 @@ function RewardsLedger({
                   tone="success"
                   weight="medium"
                 >
-                  +{formatHkd(entry.amountHkd)}
+                  +{formatUsd(entry.amountUsd)}
                 </Text>
               </li>
             ))}

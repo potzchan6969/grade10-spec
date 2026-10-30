@@ -2,7 +2,7 @@ import { Card } from "@grade10/design-system/components/display/card";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { cn } from "@grade10/design-system/lib/utils";
-import { formatHkd } from "../../vault-content";
+import { formatHkd, formatUsd } from "../../vault-content";
 
 /**
  * The collector's vault wallet — cash-out stats over the portfolio. Left:
@@ -14,42 +14,42 @@ import { formatHkd } from "../../vault-content";
  * CTA first).
  */
 function WalletSummary({
-  dailyIncentiveHkd,
-  availableHkd,
-  earnedAllTimeHkd,
-  inCashOutHkd,
-  cashedOutHkd,
+  dailyIncentiveUsd,
+  availableUsd,
+  earnedAllTimeUsd,
+  inCashOutUsd,
+  cashedOutUsd,
   openCashOutCount,
-  minWithdrawalHkd,
+  minWithdrawalUsd,
   hasPayoutMethod,
   onCashOut,
   onViewActivity,
   onSetUpPayout,
   className,
 }: {
-  dailyIncentiveHkd: number;
-  availableHkd: number;
-  earnedAllTimeHkd: number;
-  inCashOutHkd: number;
-  cashedOutHkd: number;
+  dailyIncentiveUsd: number;
+  availableUsd: number;
+  earnedAllTimeUsd: number;
+  inCashOutUsd: number;
+  cashedOutUsd: number;
   openCashOutCount: number;
-  minWithdrawalHkd: number;
+  minWithdrawalUsd: number;
   hasPayoutMethod: boolean;
   onCashOut?: () => void;
   onViewActivity?: () => void;
   onSetUpPayout?: () => void;
   className?: string;
 }) {
-  const meetsMinimum = availableHkd >= minWithdrawalHkd;
+  const meetsMinimum = availableUsd >= minWithdrawalUsd;
 
   const SEGMENTS = [
-    { label: "Available", amountHkd: availableHkd, swatch: "bg-primary" },
+    { label: "Available", amountHkd: availableUsd, swatch: "bg-primary" },
     {
       label: "In cash-out",
-      amountHkd: inCashOutHkd,
+      amountHkd: inCashOutUsd,
       swatch: "bg-secondary",
     },
-    { label: "Cashed out", amountHkd: cashedOutHkd, swatch: "bg-foreground" },
+    { label: "Cashed out", amountHkd: cashedOutUsd, swatch: "bg-foreground" },
   ];
 
   return (
@@ -66,14 +66,14 @@ function WalletSummary({
         <div className="flex flex-1 flex-col items-start justify-center gap-2">
           <p className="flex items-baseline gap-1 whitespace-nowrap text-foreground tabular-nums">
             <span className="font-sans text-3xl leading-9 font-semibold">
-              HK$
+              US$
             </span>
             <span className="font-sans text-6xl leading-15 font-medium">
-              {availableHkd.toLocaleString("en-HK")}
+              {availableUsd.toLocaleString("en-HK")}
             </span>
           </p>
           <p className="font-sans text-sm leading-5 text-pretty text-secondary-foreground">
-            Receive ~${dailyIncentiveHkd.toLocaleString("en-HK")} daily while
+            Receive ~US${dailyIncentiveUsd.toLocaleString("en-HK")} daily while
             your items are in vault.
           </p>
         </div>
@@ -108,7 +108,7 @@ function WalletSummary({
         </div>
         {hasPayoutMethod && !meetsMinimum ? (
           <p className="font-sans text-sm leading-5 text-secondary-foreground">
-            Minimum {formatHkd(minWithdrawalHkd)} to cash out
+            Minimum {formatUsd(minWithdrawalUsd)} to cash out
           </p>
         ) : null}
       </Card>
@@ -120,15 +120,15 @@ function WalletSummary({
               Earned all time
             </p>
             <p className="font-sans text-xl leading-7 font-semibold tabular-nums text-foreground">
-              {formatHkd(earnedAllTimeHkd)}
+              {formatUsd(earnedAllTimeUsd)}
             </p>
           </div>
           <div
-            aria-label={`Available ${formatHkd(availableHkd)}, in cash-out ${formatHkd(inCashOutHkd)}, cashed out ${formatHkd(cashedOutHkd)}`}
+            aria-label={`Available ${formatUsd(availableUsd)}, in cash-out ${formatUsd(inCashOutUsd)}, cashed out ${formatUsd(cashedOutUsd)}`}
             className="grid h-2.5 w-full gap-1 overflow-clip rounded-(--radius-full)"
             role="img"
             style={{
-              gridTemplateColumns: `${availableHkd}fr ${inCashOutHkd}fr ${cashedOutHkd}fr`,
+              gridTemplateColumns: `${availableUsd}fr ${inCashOutUsd}fr ${cashedOutUsd}fr`,
             }}
           >
             {SEGMENTS.map((segment) => (
@@ -165,7 +165,7 @@ function WalletSummary({
                 ) : null}
               </span>
               <span className="font-sans text-base leading-6 font-medium whitespace-nowrap tabular-nums text-foreground">
-                {formatHkd(segment.amountHkd)}
+                {formatUsd(segment.amountHkd)}
               </span>
             </li>
           ))}
