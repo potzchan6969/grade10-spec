@@ -15,7 +15,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { ArrowsDownUp, CaretDown, Check } from "@phosphor-icons/react";
 import { useState } from "react";
 import type { VaultAsset } from "../../vault-content";
-import { PAGE_ENTER_CLASS, StickyTabBar } from "../../vault-shared";
+import { PAGE_ENTER_CLASS } from "../../vault-shared";
 import { VaultAssetCard } from "./vault-asset-card";
 
 /** Per-card enter stagger — 40ms, capped so long lists don't drag. */
@@ -160,8 +160,7 @@ function VaultAssetList({
 
   return (
     <div className={cn("flex flex-col gap-8", className)} data-slot="vault-asset-list">
-      <StickyTabBar>
-        <div
+      <div
           className={cn(
             PAGE_ENTER_CLASS,
             "flex flex-wrap items-center justify-between gap-3 delay-[90ms]",
@@ -210,7 +209,6 @@ function VaultAssetList({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </StickyTabBar>
 
       <ul
         aria-busy={loading || undefined}

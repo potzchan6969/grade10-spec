@@ -24,6 +24,7 @@ import {
 import {
   PAGE_ENTER_CLASS,
   PageHeader,
+  StickyTabBar,
   VaultEmptyState,
   VaultPageShell,
 } from "../../vault-shared";
@@ -108,7 +109,8 @@ function VaultPortfolioPage({
           value={pageTab}
           onValueChange={(value) => setPageTab(value as "assets" | "rewards")}
         >
-          <TabsList aria-label="Portfolio sections" className="w-full justify-start border-b border-border" variant="list">
+          <StickyTabBar>
+            <TabsList aria-label="Portfolio sections" className="w-full justify-start border-b border-border" variant="list">
             <TabsTrigger value="assets">
               Assets
               <Badge size="sm">{PORTFOLIO_SUMMARY.itemCount}</Badge>
@@ -120,6 +122,7 @@ function VaultPortfolioPage({
               ) : null}
             </TabsTrigger>
           </TabsList>
+          </StickyTabBar>
           <TabsContent
             className="mt-0 flex flex-col gap-6 outline-none"
             value="assets"
