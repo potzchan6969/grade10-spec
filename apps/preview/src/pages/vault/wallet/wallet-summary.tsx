@@ -1,4 +1,5 @@
 import { Card } from "@grade10/design-system/components/display/card";
+import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
 import {
@@ -65,30 +66,30 @@ function WalletSummary({
     <Card
       aria-label="Rewards wallet"
       className={cn(
-        "grid grid-cols-1 overflow-clip p-0 sm:grid-cols-2",
+        "grid grid-cols-1 gap-0 overflow-clip p-0 sm:grid-cols-2",
         className,
       )}
       data-slot="wallet-summary"
       padding={false}
       role="region"
     >
-      <div className="flex flex-col gap-4 border-b border-border bg-background-subtle p-8 sm:border-r sm:border-b-0">
-        <p className="font-sans text-sm leading-5 font-medium uppercase text-secondary-foreground">
+      <div className="flex flex-col gap-4 border-b border-border bg-background-subtle p-4 sm:p-8 sm:border-r sm:border-b-0">
+        <Text className="uppercase" size="sm" tone="secondary" weight="medium">
           Incentives available
-        </p>
+        </Text>
         <div className="flex flex-1 flex-col items-start justify-center gap-2">
           <p className="flex items-baseline gap-1 whitespace-nowrap text-foreground tabular-nums">
-            <span className="font-sans text-3xl leading-9 font-semibold">
+            <span className="font-sans text-2xl leading-8 font-semibold sm:text-3xl sm:leading-9">
               US$
             </span>
-            <span className="font-sans text-6xl leading-15 font-medium">
+            <span className="font-sans text-5xl leading-13 font-medium sm:text-6xl sm:leading-15">
               {availableUsd.toLocaleString("en-HK")}
             </span>
           </p>
-          <p className="font-sans text-sm leading-5 text-pretty text-secondary-foreground">
+          <Text size="sm" tone="secondary">
             Receive ~US${dailyIncentiveUsd.toLocaleString("en-HK")} daily while
             your items are in vault.
-          </p>
+          </Text>
         </div>
         <div className="flex items-center gap-2">
           {hasPayoutMethod ? (
@@ -121,12 +122,17 @@ function WalletSummary({
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 p-8">
+      <div className="flex flex-col gap-4 p-4 sm:-ml-px sm:p-8">
         <div className="flex flex-col gap-2">
           <div className="flex items-baseline justify-between whitespace-nowrap">
-            <p className="font-sans text-sm leading-5 font-medium uppercase text-secondary-foreground">
+            <Text
+              className="uppercase"
+              size="sm"
+              tone="secondary"
+              weight="medium"
+            >
               Earned all time
-            </p>
+            </Text>
             <p className="font-sans text-xl leading-7 font-semibold tabular-nums text-foreground">
               {formatUsd(earnedAllTimeUsd)}
             </p>
@@ -162,9 +168,9 @@ function WalletSummary({
                   aria-hidden
                   className={cn("size-2.5 rounded-(--radius-xs)", segment.swatch)}
                 />
-                <span className="font-sans text-base leading-6 whitespace-nowrap text-foreground">
+                <Text as="span" className="whitespace-nowrap">
                   {segment.label}
-                </span>
+                </Text>
                 {segment.label === "In cash-out" && openCashOutCount > 0 ? (
                   <Link variant="secondary" onClick={onViewCashOuts}>
                     {openCashOutCount}{" "}
@@ -172,7 +178,11 @@ function WalletSummary({
                   </Link>
                 ) : null}
               </span>
-              <span className="flex items-center gap-1 font-sans text-base leading-6 font-medium whitespace-nowrap tabular-nums text-foreground">
+              <Text
+                as="span"
+                className="flex items-center gap-1 whitespace-nowrap tabular-nums"
+                weight="medium"
+              >
                 {segment.label === "Available" && hasPayoutMethod && !meetsMinimum ? (
                   <TooltipProvider>
                     <Tooltip>
@@ -190,7 +200,7 @@ function WalletSummary({
                   </TooltipProvider>
                 ) : null}
                 {formatUsd(segment.amountHkd)}
-              </span>
+              </Text>
             </li>
           ))}
         </ul>
