@@ -78,7 +78,7 @@ function ProductListHeader({
           data-slot="product-list-header-toolbar"
         >
           <p
-            className="shrink-0 whitespace-nowrap text-2xl font-bold text-foreground"
+            className="shrink-0 whitespace-nowrap text-2xl font-semibold text-foreground"
             role="status"
           >
             {resultCount}

@@ -44,7 +44,7 @@ function StoreSectionHeader({
       hAlign="space-between"
       vAlign="center"
     >
-      <h2 className="min-w-0 flex-1 text-3xl font-bold text-foreground">
+      <h2 className="min-w-0 flex-1 text-3xl font-semibold text-foreground">
         {title}
       </h2>
       {showBrowseAll ? (
