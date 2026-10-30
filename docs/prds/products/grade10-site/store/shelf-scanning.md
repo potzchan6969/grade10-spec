@@ -30,12 +30,12 @@ availability and a link to its store page.
 
 ## What the Scanner Holds
 
-- 🚧 **Every Published Product** — one item for each product the store
+- **Every Published Product** — one item for each product the store
   publishes: card, slab, sealed box, comic and merch, sold out included, gift
   cards excepted
   - **Every Shelf Product Published** — the shop sells nothing on the shelf
     that the store does not publish, so the scanner misses none
-- 🚧 **Catalogue Changes** — a product the shop publishes, reprices, sells out,
+- **Catalogue Changes** — a product the shop publishes, reprices, sells out,
   brings back or changes the photos of reaches the scanner as the store's own
   copy of the catalogue moves —
   [Catalogue Source](/p/grade10-site/store/product-listing#catalogue-source)
@@ -44,13 +44,13 @@ availability and a link to its store page.
   - **Change Only the Re-Read Finds** — one the shop never reported, found
     when the store reads its whole catalogue again: within 11 minutes of the
     shop's save; within 13 on an open scanner
-  - 🚧 **Dropped Product** — a product the store unpublishes or deletes leaves
+  - **Dropped Product** — a product the store unpublishes or deletes leaves
     the scanner with the next copy
-    - 🚧 **Sold Consigned Slab** — the store takes it off its catalogue, so it
+    - **Sold Consigned Slab** — the store takes it off its catalogue, so it
       leaves the scanner rather than reading Sold out
-  - 🚧 **The Store's Version Wins** — an item changed on the scanner is put back
+  - **The Store's Version Wins** — an item changed on the scanner is put back
     to the store's version with the next copy
-- 🚧 **Before the Store Opens on Production** — production's scanner holds the
+- ❓ **Before the Store Opens on Production** — production's scanner holds the
   store's products with their title, price and availability now; the link to
   the store page appears only where the store is carried —
   [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
@@ -62,11 +62,11 @@ availability and a link to its store page.
   slab on the shop's shelf is a registered inventory item
   - **Consigned Slab** — known by its consigned item, which inventory holds
     with a grader
-  - 🚧 **House-Stock Slab** — the stock keeper writes the slab's label code on
+  - **House-Stock Slab** — the stock keeper writes the slab's label code on
     the product in the shop, naming its inventory item; the store reads the
     grader, grade and cert from inventory, as for a consigned slab
   - **Raw Card** — consigned or not, no slab: recognised by its product photos
-- 🚧 **Slab Label** — the scanner reading a slab's label names the one product
+- **Slab Label** — the scanner reading a slab's label names the one product
   that sells that copy, and the result shows its grade and cert
   - **Graders the Scanner Reads** — PSA, BGS, CGC, SGC and TAG; a PCGS, NGC or
     PMG slab is recognised by its photos
@@ -74,7 +74,7 @@ availability and a link to its store page.
     reads
   - **Certs Are Public** — a slab's cert and its house label code are printed
     on the slab, so the scan and the store's catalogue may carry them
-- 🚧 **Slab with No Known Unit** — recognised by its product photos alone,
+- **Slab with No Known Unit** — recognised by its product photos alone,
   without grade or cert, and Operations is alerted to each
   - **No Item** — a graded product that names no inventory item
   - **Unread Grader** — its item's grader is one the scanner does not read
@@ -83,27 +83,27 @@ availability and a link to its store page.
 
 ## Photos
 
-- 🚧 **Photo Run** — every two hours, on staging and on production, the scanner
+- **Photo Run** — every two hours, on staging and on production, the scanner
   learns the photos it has not seen
   - **Photos Learned** — the first 8 of each product, in the shop's order
-  - 🚧 **Changed Photos** — a new or replaced photo is learned at the next run;
+  - **Changed Photos** — a new or replaced photo is learned at the next run;
     a photo the product drops leaves the scanner with it
-  - 🚧 **Failed Photos** — a photo that could not be learned is tried again 24
+  - **Failed Photos** — a photo that could not be learned is tried again 24
     hours later; a run on another model than the scanner's learns nothing and
     fails, naming both
-  - 🚧 **Idle Run** — a run with no new photo costs nothing
+  - **Idle Run** — a run with no new photo costs nothing
 
 ## Recognition
 
-- 🚧 **Store Product First** — where a store product's match is one the scanner
+- **Store Product First** — where a store product's match is one the scanner
   accepts on its own, it is named over the shared card catalogue's same art
-- 🚧 **Two Listings of One Art** — where two or more store products match the
+- **Two Listings of One Art** — where two or more store products match the
   same art about as closely, slab or not, the scan shows each of them, closest
   first, and the shopkeeper picks one; a slab whose label the scanner read is
   named alone, by its cert
-- 🚧 **Raw Copy of a Slab-Only Card** — a raw card the store sells only as one
+- **Raw Copy of a Slab-Only Card** — a raw card the store sells only as one
   slab names the slab's product, without grade or cert
-- 🚧 **Products Not Yet Recognised** — a sealed box, merch or a comic is held
+- ❓ **Products Not Yet Recognised** — a sealed box, merch or a comic is held
   now with its title, price and availability, and is recognised once the
   scanner's box detector ships
   - **Scanning One Meanwhile** — shows what the scanner shows for anything it
@@ -111,20 +111,20 @@ availability and a link to its store page.
 
 ## On the Shelf
 
-- 🚧 **Scanner Link** — one fixed link, bookmarked or printed as a QR code;
+- **Scanner Link** — one fixed link, bookmarked or printed as a QR code;
   it scans only, adds no photos, and shows only what the store shows publicly
-  - 🚧 **New Key** — rotating the scanner's key retires the link: the old link
+  - **New Key** — rotating the scanner's key retires the link: the old link
     shows the scanner's usual refusal for a link that no longer works, and the
     shop manager hands out the new QR code
-- 🚧 **Scan Result** — the product's title in the store's default language, the
+- **Scan Result** — the product's title in the store's default language, the
   price a shopper pays for its one item, its availability and a link to its
   store page —
   [Product Status](/p/grade10-site/commerce/product-status#availability)
-  - 🚧 **Sale Badge** — while an automatic discount lowers the price; a
+  - **Sale Badge** — while an automatic discount lowers the price; a
     discount that starts or ends reaches the scan with the store's next pass
-  - 🚧 **Availability** — Available or Sold out, the shop's for-sale answer
+  - **Availability** — Available or Sold out, the shop's for-sale answer
     read as the store reads it; no count
-- 🚧 **Open Scanner** — reads its catalogue again every 2 minutes while in view
+- **Open Scanner** — reads its catalogue again every 2 minutes while in view
   and when the shopkeeper returns to it, so it never shows an old price or
   availability for long
 
