@@ -31,24 +31,24 @@ actually creates the checkout session.
 
 ## Empty Cart
 
-- 🚧 **Empty** — when the cart holds nothing, the design-system empty state: a
+- **Empty** — when the cart holds nothing, the design-system empty state: a
   cart icon, a title, and a line under it where the application supplies one,
   with no count on the drawer title and no footer. It offers no action of its
   own.
-- 🚧 **Not read yet** — the drawer never shows the empty state for a cart it has
+- **Not read yet** — the drawer never shows the empty state for a cart it has
   not read. While the read runs, it shows a blank body, a skeleton for the
   title's count and no footer. A cart read empty shows the empty state, even
   when its price check fails.
 
 ::story{id="store-cart-blocks-cartdrawer--loading-no-lines" title="A cart not read yet"}
 
-- 🚧 **First read fails** — the drawer keeps that blank body, never the empty
+- **First read fails** — the drawer keeps that blank body, never the empty
   state, while the application offers Retry and names no line, as
   [Cart Validation](../../grade10-site/store/cart-validation.md) asks for a cart
   whose lines are not loaded.
-- 🚧 **Only delisted lines** — the drawer shows the empty state and removes them
+- **Only delisted lines** — the drawer shows the empty state and removes them
   with its one toast.
-- 🚧 **Only sold-out lines** — not empty: the lines show marked sold out, with
+- **Only sold-out lines** — not empty: the lines show marked sold out, with
   the footer and no count on the drawer title.
 
 ## Pending Operations
