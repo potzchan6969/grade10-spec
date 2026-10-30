@@ -27,7 +27,7 @@ actually creates the checkout session.
 
 ## Product Pictures
 
-- 🚧 **Product pictures** — the drawer shows the picture the application supplies, helping the shopper recognise each item
+- **Product pictures** — the drawer shows the picture the application supplies, helping the shopper recognise each item
 
 ## Empty Cart
 

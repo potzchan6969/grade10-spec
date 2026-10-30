@@ -16,7 +16,7 @@ back to that page.
     totals and Checkout wait; nothing held is shown as current
   - **Lines Whose Product Left the Shop** — leave the cart on open, with one
     notice; a sold-out line stays, marked, until the collector removes it
-- 🚧 **Product Pictures** — each product's current picture, so the collector
+- **Product Pictures** — each product's current picture, so the collector
   recognises what they are buying
 - **Edits** — quantity and removal, written to the same cart the page holds
 - **Whose Cart** — a signed-in member's, kept at the store; a guest's, kept
