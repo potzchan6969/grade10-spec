@@ -33,7 +33,7 @@ import {
 import { navigateToStory } from "../../workbench-story-nav";
 import { ActiveIntakeAlert } from "./active-intake-alert";
 import { VaultAssetList } from "./vault-asset-list";
-import { CashOutDialog } from "../wallet/cash-out-dialog";
+import { WithdrawalDialog } from "../wallet/withdrawal-dialog";
 import { RewardsLedger } from "../wallet/rewards-ledger";
 import { WalletSummary } from "../wallet/wallet-summary";
 
@@ -66,7 +66,7 @@ function VaultPortfolioPage({
   const holdingsLoading = loading || fetching;
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [pageTab, setPageTab] = useState<"assets" | "rewards">("assets");
-  const [ledgerTab, setLedgerTab] = useState<"all" | "rewards" | "cash-out">("all");
+  const [ledgerTab, setLedgerTab] = useState<"all" | "rewards" | "withdrawal">("all");
   const tabsRef = useRef<HTMLDivElement>(null);
   const openCashOuts = PAYOUT_REQUESTS.filter(
     (request) => request.status === "Pending review" || request.status === "Processing",
@@ -101,7 +101,7 @@ function VaultPortfolioPage({
         />
       </div>
 
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-15">
         {!empty && (
           <div className={cn(PAGE_ENTER_CLASS, "delay-[30ms]")}>
             <WalletSummary
@@ -114,10 +114,16 @@ function VaultPortfolioPage({
               minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
               openCashOutCount={openCashOuts}
               onCashOut={() => setWithdrawOpen(true)}
-              onViewActivity={() => setPageTab("rewards")}
+              onViewActivity={() => {
+                setPageTab("rewards");
+                tabsRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }}
               onViewCashOuts={() => {
                 setPageTab("rewards");
-                setLedgerTab("cash-out");
+                setLedgerTab("withdrawal");
                 tabsRef.current?.scrollIntoView({
                   behavior: "smooth",
                   block: "start",
@@ -128,19 +134,19 @@ function VaultPortfolioPage({
         )}
 
         <Tabs
-          className="gap-8"
+          className="gap-0"
           ref={tabsRef as never}
           value={pageTab}
           onValueChange={(value) => setPageTab(value as "assets" | "rewards")}
         >
-          <StickyTabBar className="border-b-0 pb-0 pt-1">
-            <TabsList aria-label="Portfolio sections" className="w-full justify-start overflow-x-auto border-b border-border" variant="list">
+          <StickyTabBar className="border-b border-border pb-0 pt-1">
+            <TabsList aria-label="Portfolio sections" className="justify-start overflow-x-auto overflow-y-hidden" variant="list">
             <TabsTrigger value="assets">
               Assets
               <Badge size="sm">{PORTFOLIO_SUMMARY.itemCount}</Badge>
             </TabsTrigger>
             <TabsTrigger value="rewards">
-              Rewards & Cash-out
+              Rewards & Withdrawal
               {openCashOuts > 0 ? (
                 <Badge size="sm">{openCashOuts} open</Badge>
               ) : null}
@@ -148,7 +154,7 @@ function VaultPortfolioPage({
           </TabsList>
           </StickyTabBar>
           <TabsContent
-            className="mt-0 flex flex-col gap-6 outline-none"
+            className="mt-8 flex flex-col gap-6 outline-none"
             value="assets"
           >
             <div className={cn(PAGE_ENTER_CLASS, "delay-[60ms]")}>
@@ -176,7 +182,7 @@ function VaultPortfolioPage({
               />
             )}
           </TabsContent>
-          <TabsContent className="mt-0 outline-none" value="rewards">
+          <TabsContent className="mt-8 outline-none" value="rewards">
             <RewardsLedger
               dailyIncentives={DAILY_INCENTIVES}
               payoutRequests={PAYOUT_REQUESTS}
@@ -186,7 +192,7 @@ function VaultPortfolioPage({
           </TabsContent>
         </Tabs>
       </div>
-      <CashOutDialog
+      <WithdrawalDialog
         availableUsd={PORTFOLIO_SUMMARY.rewardsAvailableUsd}
         hkdPerUsd={PORTFOLIO_SUMMARY.hkdPerUsd}
         minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
@@ -219,11 +225,11 @@ export const Filled: Story = {
       expect(
         canvas.getByRole("button", { name: "Submit to Vault" }),
       ).toBeVisible();
-      expect(canvas.getByText("Rewards available")).toBeVisible();
+      expect(canvas.getByText("Incentives available")).toBeVisible();
       expect(canvas.getByText("Earned all-time")).toBeVisible();
       expect(canvas.getByText("Total estimated value")).toBeVisible();
       expect(canvas.getByText("Withdrawn to date")).toBeVisible();
-      expect(canvas.getByText("Cash-out requests")).toBeVisible();
+      expect(canvas.getByText("Withdrawal requests")).toBeVisible();
       expect(canvas.getByText("Pending review")).toBeVisible();
       expect(
         canvas.getByText("2 submissions currently in intake"),
@@ -265,7 +271,7 @@ export const Empty: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("No items in your vault")).toBeVisible();
     expect(canvas.queryByText(/currently in intake/)).toBeNull();
-    expect(canvas.queryByText("Rewards available")).toBeNull();
+    expect(canvas.queryByText("Incentives available")).toBeNull();
   },
 };
 
@@ -280,6 +286,6 @@ export const EmptyWithIntake: Story = {
         canvas.getByText("2 submissions currently in intake"),
       ).toBeVisible(),
     );
-    expect(canvas.queryByText("Rewards available")).toBeNull();
+    expect(canvas.queryByText("Incentives available")).toBeNull();
   },
 };
