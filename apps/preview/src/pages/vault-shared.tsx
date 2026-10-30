@@ -61,7 +61,7 @@ function VaultPageShell({
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...VAULT_SITE_HEADER} />
-      <main className="flex w-full flex-1 justify-center px-4 py-8 sm:px-6 md:px-8 md:py-10">
+      <main className="flex w-full flex-1 justify-center overflow-x-clip px-4 py-8 sm:px-6 md:px-8 md:py-16">
         <div
           className={
             wide
@@ -102,7 +102,7 @@ function AppointmentPageShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...VAULT_SITE_HEADER} />
-      <main className="flex w-full flex-1 justify-center px-4 py-8 sm:px-6 md:px-8 md:py-10">
+      <main className="flex w-full flex-1 justify-center overflow-x-clip px-4 py-8 sm:px-6 md:px-8 md:py-16">
         <div className="flex w-full max-w-6xl flex-col gap-8 md:gap-10">
           {children}
         </div>
@@ -229,6 +229,7 @@ function StickyTabBar({
   className?: string;
 }) {
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   const [stuck, setStuck] = useState(false);
 
   useEffect(() => {
@@ -240,6 +241,23 @@ function StickyTabBar({
     });
     observer.observe(sentinel);
     return () => observer.disconnect();
+  }, []);
+
+  /* Anchored targets land below the pinned bar, never under it. */
+  useEffect(() => {
+    const bar = barRef.current;
+    if (!bar) return;
+    const root = document.documentElement;
+    const set = () => {
+      root.style.scrollPaddingTop = `${bar.offsetHeight}px`;
+    };
+    set();
+    const resize = new ResizeObserver(set);
+    resize.observe(bar);
+    return () => {
+      resize.disconnect();
+      root.style.scrollPaddingTop = "";
+    };
   }, []);
 
   return (
@@ -255,6 +273,7 @@ function StickyTabBar({
           stuck && "border-b border-border",
           className,
         )}
+        ref={barRef}
       >
         {children}
       </div>
