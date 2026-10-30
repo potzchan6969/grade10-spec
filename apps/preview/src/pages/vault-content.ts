@@ -543,7 +543,6 @@ const VAULT_SITE_HEADER = {
   ],
   onLocaleChange: noop,
   onSignIn: noop,
-  onProfile: noop,
   onMyAuctions: noop,
   onSubmissions: () => navigateToStory(INTAKE_TRACKER_STORY_ID),
   onSignOut: noop,
