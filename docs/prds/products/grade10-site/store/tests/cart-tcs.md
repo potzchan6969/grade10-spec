@@ -866,7 +866,7 @@ Runs once per row of **Test data**.
 
 ### discounts#struck-price-on-a-cart-line: Struck Price on a Cart Line
 
-<!-- trace:case id=g10.store-cart.TC-x4l rev=1 -->
+<!-- trace:case id=g10.store-cart.TC-x4l rev=2 -->
 #### g10.store-cart.TC16: A cart line strikes the price a site discount took off
 
 Runs once per row of **Test data**.
@@ -884,7 +884,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The cart holds the row's lines; the shop holds only the row's discount, saved at least a minute ago.
+* The customer is on the English site; the cart holds the row's lines; the shop holds only the row's discount, saved at least a minute ago.
 
 **Test data:**
 
@@ -898,10 +898,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open Cart, wait for the read, and read the line and the footer.
+2. With a screen reader, read the prices on each line.
 
 **Expected Results:**
 
-* The row's line and footer.
+* Step 1: the row's line and footer.
+* Step 2: on each line with a struck list price, the screen reader says `Sale price` before the charged price and `Was` before the list price; neither label appears on screen. On a line with no struck price, it reads the price alone.
 
 #### g10.store-cart.TC51: A code beside a sale line keeps or takes the line's cut, and Remove gives the sale back
 
@@ -1878,3 +1880,7 @@ Runs once per row of **Test data**.
 
 * Step 1 offers a Grade10 My Orders link.
 * Step 2 lists the order for `<product A>` within seconds.
+
+## Settled
+
+- A discounted cart line's hidden labels identify the charged and struck prices to a screen reader; a line without a struck price has neither label.

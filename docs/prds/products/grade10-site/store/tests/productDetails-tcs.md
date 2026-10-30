@@ -210,7 +210,7 @@ Runs once per row of **Test data**.
 
 ## cross-sell#rail: Rail
 
-<!-- trace:case id=g10.store-product-page.TC-19g rev=1 -->
+<!-- trace:case id=g10.store-product-page.TC-19g rev=2 -->
 ### g10.store-product-page.TC11: The rail shows picks first, then similar cards, up to six
 
 Runs once per row of **Test data**.
@@ -228,7 +228,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<page product>` has the row's picks, by the recipe "Choose picks on a staging-shop card"; at least 6 other cards for sale share its world.
+* The page language is English; `<page product>` has the row's picks, by the recipe "Choose picks on a staging-shop card"; the first pick is for sale and marked down from a higher earlier price; at least 6 other cards for sale share its world.
 
 **Test data:**
 
@@ -240,11 +240,13 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open `<page url>` and read the rail under the card.
+2. With a screen reader, read the first pick's prices.
 
 **Expected Results:**
 
 * Headed You may also like, holding the row's cards, UI matching store-cross-sell-blocks-storeproductrelatedrail--picks-and-similar.
 * `<page product>` is not in it, and nothing names a card as chosen or similar.
+* The screen reader says `Sale price` before the first pick's current price and `Was` before its earlier price; neither label appears on screen.
 
 <!-- trace:case id=g10.store-product-page.TC-6cv rev=1 -->
 ### g10.store-product-page.TC12: A rail card opens its own page and offers no cart
@@ -454,7 +456,7 @@ Runs once per row of **Test data**.
 
 ### discounts#where-each-shows: Where Each Shows
 
-<!-- trace:case id=g10.store-product-page.TC-hp9 rev=1 -->
+<!-- trace:case id=g10.store-product-page.TC-hp9 rev=2 -->
 #### g10.store-product-page.TC10: The page strikes sales and names the shop's discounts
 
 Runs once per row of **Test data**.
@@ -472,7 +474,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<page product>` is for sale at HKD880 (any price above HKD100); the shop holds only the row's discount for it, saved at least a minute ago.
+* The page language is English; `<page product>` is for sale at HKD880 (any price above HKD100); the shop holds only the row's discount for it, saved at least a minute ago.
 
 **Test data:**
 
@@ -490,10 +492,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open `<page url>` and read the price and badges.
+2. For each row with a struck price, read the page's prices with a screen reader.
 
 **Expected Results:**
 
 * The row's price, strike and badge.
+* For each row with a struck price, the screen reader says `Sale price` before the current price and `Was` before the struck price; neither label appears on screen.
 
 ---
 
@@ -715,3 +719,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * `<sold-out similar>` is not in it.
+
+## Settled
+
+- The product page reads its current and earlier prices with the page-language labels `Sale price` and `Was`; both labels remain visually hidden.
+- Every sale tile in the product page's related-products rail receives both labels from Grade10 Store.
