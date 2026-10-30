@@ -443,12 +443,77 @@ const VAULT_LIVE_AUCTION_ASSET_DETAIL: VaultAsset = {
   ],
 };
 
+const PAYOUT_METHOD = {
+  bankName: "HSBC",
+  accountHolder: "Chan Tai Man",
+  maskedAccount: "••• 8304",
+};
+
+const WITHDRAWAL_PROCESSING_DAYS = "3 business days";
+
+type VaultPayoutStatus = "Pending review" | "Processing" | "Paid" | "Declined";
+
+type VaultPayoutRequest = {
+  id: string;
+  requestedAt: string;
+  /** Incentive wallet is denominated in USD. */
+  amountUsd: number;
+  /** Bank currency the collector asked for. */
+  currency: "USD" | "HKD";
+  /** Converted figure when the request pays out in HKD. */
+  convertedHkd?: number;
+  status: VaultPayoutStatus;
+};
+
+const PAYOUT_REQUESTS: VaultPayoutRequest[] = [
+  {
+    id: "po-3",
+    requestedAt: "28 Oct 2026",
+    amountUsd: 83,
+    currency: "HKD",
+    convertedHkd: 650,
+    status: "Pending review",
+  },
+  {
+    id: "po-2",
+    requestedAt: "1 Oct 2026",
+    amountUsd: 64,
+    currency: "USD",
+    status: "Processing",
+  },
+  {
+    id: "po-1",
+    requestedAt: "3 Oct 2026",
+    amountUsd: 41,
+    currency: "HKD",
+    convertedHkd: 320,
+    status: "Paid",
+  },
+];
+
 const PORTFOLIO_SUMMARY = {
   itemCount: PORTFOLIO_ASSETS.length,
   totalEstimateHkd: PORTFOLIO_ASSETS.reduce((sum, a) => sum + a.estimateHkd, 0),
-  feeLabel: "Complimentary",
-  feeHint: "Launch offer. Free until 31 Dec 2026",
+  dailyIncentiveUsd: 16,
+  rewardsAvailableUsd: 160,
+  earnedAllTimeUsd: 285,
+  inCashOutUsd: 83,
+  cashedOutUsd: 41,
+  minWithdrawalUsd: 65,
+  /** Reference conversion for HKD withdrawals. */
+  hkdPerUsd: 7.76,
+  hasPayoutMethod: true,
 };
+
+/** Daily incentive sums — one amount per day, no per-asset breakdown. */
+const DAILY_INCENTIVES: { date: string; amountUsd: number }[] = [
+  { date: "29 Oct 2026", amountUsd: 16 },
+  { date: "28 Oct 2026", amountUsd: 16 },
+  { date: "27 Oct 2026", amountUsd: 15 },
+  { date: "26 Oct 2026", amountUsd: 15 },
+  { date: "25 Oct 2026", amountUsd: 14 },
+  { date: "24 Oct 2026", amountUsd: 14 },
+];
 
 const VAULT_SITE_HEADER = {
   copy: {
@@ -490,7 +555,6 @@ const VAULT_SITE_HEADER = {
   ],
   onLocaleChange: noop,
   onSignIn: noop,
-  onProfile: noop,
   onMyAuctions: noop,
   onSubmissions: () => navigateToStory(INTAKE_TRACKER_STORY_ID),
   onSignOut: noop,
@@ -930,6 +994,10 @@ function formatHkd(amount: number): string {
   return `HK$${amount.toLocaleString("en-HK")}`;
 }
 
+function formatUsd(amount: number): string {
+  return `US$${amount.toLocaleString("en-HK")}`;
+}
+
 function assetSubtitle(asset: VaultAsset): string {
   if (asset.condition === "Graded" && asset.cert) {
     return `${asset.categoryLabel} · ${asset.grade}`;
@@ -949,8 +1017,9 @@ function statusBadgeVariant(
     case "Imaging":
       return "info";
     case "Retrieval Pending":
-      return "warning";
+      return "default";
     case "Live Auction":
+      return "default";
     case "Listed":
       return "brand";
     default:
@@ -984,27 +1053,6 @@ function vaultItemRelatedStoryId(asset: VaultAsset): string {
   return VAULT_ITEM_DETAIL_STORY_ID;
 }
 
-/**
- * Price line on the portfolio card — the amount and label follow the
- * asset's status: live bids read BID PRICE, store listings LISTED PRICE,
- * everything else the intake estimate.
- */
-function assetPrice(asset: VaultAsset): { label: string; amountHkd: number } {
-  if (asset.status === "Live Auction") {
-    return {
-      label: "Bid price",
-      amountHkd: asset.currentBidHkd ?? asset.estimateHkd,
-    };
-  }
-  if (asset.status === "Listed") {
-    return {
-      label: "Listed price",
-      amountHkd: asset.listedHkd ?? asset.estimateHkd,
-    };
-  }
-  return { label: "Intake estimate", amountHkd: asset.estimateHkd };
-}
-
 export type {
   ItemCondition,
   RegisterCategory,
@@ -1021,7 +1069,6 @@ export {
   ACTIVE_INTAKE_ALERT_STORY_ID,
   APPOINTMENTS_COPY,
   AUCTION_LOT_LIVE_STORY_ID,
-  assetPrice,
   assetSubtitle,
   BOOK_VISIT_NAV_COPY,
   BOOK_VISIT_SERVICES,
@@ -1031,6 +1078,7 @@ export {
   DETAILS_FORM_COPY,
   firstAvailableVisitDay,
   formatHkd,
+  formatUsd,
   GRADING_VISIT_RECORD,
   GRADING_VISIT_SERVICE,
   INTAKE_TRACKER_HREF,
@@ -1038,6 +1086,9 @@ export {
   isPortfolioHolding,
   MANAGE_CARD_COPY,
   NEXT_AVAILABLE_VISIT_DATE,
+  DAILY_INCENTIVES,
+  PAYOUT_METHOD,
+  PAYOUT_REQUESTS,
   PORTFOLIO_ASSETS,
   PORTFOLIO_HOLDING_STATUSES,
   PORTFOLIO_SUMMARY,
@@ -1053,6 +1104,8 @@ export {
   SUMMARY_COPY,
   slotsForVisitDay,
   statusBadgeVariant,
+  type VaultPayoutRequest,
+  type VaultPayoutStatus,
   VAULT_ASSET_CARD_IN_VAULT_HREF,
   VAULT_ASSET_CARD_IN_VAULT_STORY_ID,
   VAULT_ASSET_CARD_LISTED_STORY_ID,
@@ -1060,6 +1113,7 @@ export {
   VAULT_ASSET_CARD_RETRIEVAL_STORY_ID,
   VAULT_ASSET_DETAILS,
   VAULT_ASSETS,
+  WITHDRAWAL_PROCESSING_DAYS,
   VAULT_BOOK_VISIT_HREF,
   VAULT_BOOK_VISIT_STORY_ID,
   VAULT_CONFIRMATION_HREF,

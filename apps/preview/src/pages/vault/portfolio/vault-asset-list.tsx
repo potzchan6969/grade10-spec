@@ -1,10 +1,4 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@grade10/design-system/components/display/tabs";
+
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import {
@@ -17,7 +11,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { ArrowsDownUp, CaretDown, Check } from "@phosphor-icons/react";
 import { useState } from "react";
 import type { VaultAsset } from "../../vault-content";
-import { PAGE_ENTER_CLASS, StickyTabBar } from "../../vault-shared";
+import { PAGE_ENTER_CLASS } from "../../vault-shared";
 import { VaultAssetCard } from "./vault-asset-card";
 
 /** Per-card enter stagger — 40ms, capped so long lists don't drag. */
@@ -36,7 +30,7 @@ type SortKey =
   | "highest-price";
 
 const TABS: { key: ListTab; label: string }[] = [
-  { key: "all", label: "All Assets" },
+  { key: "all", label: "All" },
   { key: "in-vault", label: "In Vault" },
   { key: "live-auction", label: "Live Auction" },
   { key: "listed", label: "Listed" },
@@ -45,14 +39,14 @@ const TABS: { key: ListTab; label: string }[] = [
 /** Figma `7077:10911` — the sort set is a property of the tab. */
 const SORT_OPTIONS: Record<ListTab, { key: SortKey; label: string }[]> = {
   all: [
-    { key: "highest-estimate", label: "Highest est. value" },
-    { key: "lowest-estimate", label: "Lowest est. value" },
-    { key: "recently-added", label: "Recently added" },
+    { key: "highest-estimate", label: "Highest Est. Value" },
+    { key: "lowest-estimate", label: "Lowest Est. Value" },
+    { key: "recently-added", label: "Recently Added" },
   ],
   "in-vault": [
-    { key: "highest-estimate", label: "Highest est. value" },
-    { key: "lowest-estimate", label: "Lowest est. value" },
-    { key: "recently-added", label: "Recently added" },
+    { key: "highest-estimate", label: "Highest Est. Value" },
+    { key: "lowest-estimate", label: "Lowest Est. Value" },
+    { key: "recently-added", label: "Recently Added" },
   ],
   "live-auction": [
     { key: "ending-soonest", label: "Ending Soonest" },
@@ -153,8 +147,6 @@ function VaultAssetList({
     sort,
   );
 
-  const countFor = (key: ListTab) =>
-    assets.filter((a) => matchesTab(a, key)).length;
 
   if (assets.length === 0) {
     return (
@@ -163,27 +155,27 @@ function VaultAssetList({
   }
 
   return (
-    <Tabs
-      className={cn("gap-8", className)}
-      data-slot="vault-asset-list"
-      value={activeTab}
-      onValueChange={(value) => setTab(value as ListTab)}
-    >
-      <StickyTabBar>
-        <div
+    <div className={cn("flex flex-col gap-8", className)} data-slot="vault-asset-list">
+      <div
           className={cn(
             PAGE_ENTER_CLASS,
             "flex flex-wrap items-center justify-between gap-3 delay-[90ms]",
           )}
         >
-          <TabsList aria-label="Filter holdings" variant="list">
+          <div aria-label="Filter holdings" className="flex flex-wrap items-center gap-2" role="group">
             {visibleTabs.map((t) => (
-              <TabsTrigger key={t.key} value={t.key}>
+              <Button
+                aria-pressed={t.key === activeTab}
+                key={t.key}
+                size="md"
+                type="button"
+                variant={t.key === activeTab ? "secondary" : "outline"}
+                onClick={() => setTab(t.key)}
+              >
                 {t.label}
-                <Badge size="sm">{countFor(t.key)}</Badge>
-              </TabsTrigger>
+              </Button>
             ))}
-          </TabsList>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -218,16 +210,13 @@ function VaultAssetList({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </StickyTabBar>
 
-      {visibleTabs.map((t) => (
-        <TabsContent key={t.key} className="mt-0 outline-none" value={t.key}>
-          <ul
-            aria-busy={loading || undefined}
-            aria-label={loading ? "Loading vault assets" : undefined}
-            className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-          >
-            {(t.key === activeTab ? filtered : []).map((asset, index) => (
+      <ul
+        aria-busy={loading || undefined}
+        aria-label={loading ? "Loading vault assets" : undefined}
+        className="grid grid-cols-2 gap-x-4 gap-y-6 lg:gap-x-6 lg:gap-y-8 lg:grid-cols-3 xl:grid-cols-4"
+      >
+        {filtered.map((asset, index) => (
               <li
                 className={loading ? undefined : PAGE_ENTER_CLASS}
                 key={loading ? `skeleton-${index}` : asset.id}
@@ -243,11 +232,9 @@ function VaultAssetList({
                   onOpen={loading ? undefined : () => onOpenAsset?.(asset)}
                 />
               </li>
-            ))}
-          </ul>
-        </TabsContent>
-      ))}
-    </Tabs>
+        ))}
+      </ul>
+    </div>
   );
 }
 

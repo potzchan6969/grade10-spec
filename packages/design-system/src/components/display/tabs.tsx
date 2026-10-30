@@ -50,7 +50,9 @@ function Tabs({
 // `list` — no track; `Gap/gap-6` between triggers and `Gap/gap-2` horizontal
 // padding. Active state is a sliding `Custom/primary-border` underline (2px),
 // not a border on each trigger. Height matches the trigger rung (`size-10` /
-// `size-8`).
+// `size-8`). The list draws no baseline: a page-level bar spanning the
+// section adds it on the list itself (`w-full justify-start border-b
+// border-border`).
 const tabsListVariants = cva(
   "group/tabs-list relative inline-flex items-center justify-center text-foreground",
   {

@@ -15,7 +15,7 @@ type SummaryFlags = {
  * CTAs for the vault asset detail page.
  */
 const meta = {
-  title: "Vault/Portfolio/Parts/VaultAssetSummary",
+  title: "Vault/Asset Detail/Parts/VaultAssetSummary",
   component: VaultAssetSummary,
   parameters: { layout: "padded" },
   decorators: [

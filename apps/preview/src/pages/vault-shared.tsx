@@ -18,6 +18,39 @@ import { VAULT_FOOTER, VAULT_SITE_HEADER } from "./vault-content";
 const PAGE_ENTER_CLASS =
   "animate-in fade-in-0 slide-in-from-bottom-2 blur-in-[2px] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] fill-mode-backwards motion-reduce:animate-none";
 
+/**
+ * Tab-switch entrance — each child rises `rise`px and fades in, staggered.
+ * Matches PAGE_ENTER_CLASS's feel; reduced-motion drops the rise, keeps
+ * the fade.
+ */
+function animateEnter(
+  container: HTMLElement | null,
+  { rise = 6, duration = 220, stagger = 50 }: {
+    rise?: number;
+    duration?: number;
+    stagger?: number;
+  } = {},
+) {
+  if (!container) return;
+  const reduce = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  for (const [i, el] of [...container.children].entries()) {
+    el.animate(
+      [
+        { opacity: 0, transform: reduce ? "none" : `translateY(${rise}px)` },
+        { opacity: 1, transform: "none" },
+      ],
+      {
+        delay: i * stagger,
+        duration,
+        easing: "cubic-bezier(0.23, 1, 0.32, 1)",
+        fill: "backwards",
+      },
+    );
+  }
+}
+
 function VaultPageShell({
   children,
   wide = false,
@@ -28,7 +61,7 @@ function VaultPageShell({
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...VAULT_SITE_HEADER} />
-      <main className="flex w-full flex-1 justify-center px-4 py-8 sm:px-6 md:px-8 md:py-10">
+      <main className="flex w-full flex-1 justify-center overflow-x-clip px-4 py-8 sm:px-6 md:px-8 md:py-16">
         <div
           className={
             wide
@@ -69,7 +102,7 @@ function AppointmentPageShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...VAULT_SITE_HEADER} />
-      <main className="flex w-full flex-1 justify-center px-4 py-8 sm:px-6 md:px-8 md:py-10">
+      <main className="flex w-full flex-1 justify-center overflow-x-clip px-4 py-8 sm:px-6 md:px-8 md:py-16">
         <div className="flex w-full max-w-6xl flex-col gap-8 md:gap-10">
           {children}
         </div>
@@ -196,6 +229,7 @@ function StickyTabBar({
   className?: string;
 }) {
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   const [stuck, setStuck] = useState(false);
 
   useEffect(() => {
@@ -209,6 +243,23 @@ function StickyTabBar({
     return () => observer.disconnect();
   }, []);
 
+  /* Anchored targets land below the pinned bar, never under it. */
+  useEffect(() => {
+    const bar = barRef.current;
+    if (!bar) return;
+    const root = document.documentElement;
+    const set = () => {
+      root.style.scrollPaddingTop = `${bar.offsetHeight}px`;
+    };
+    set();
+    const resize = new ResizeObserver(set);
+    resize.observe(bar);
+    return () => {
+      resize.disconnect();
+      root.style.scrollPaddingTop = "";
+    };
+  }, []);
+
   return (
     <>
       <div
@@ -218,10 +269,11 @@ function StickyTabBar({
       />
       <div
         className={cn(
-          "sticky top-0 z-10 -mx-4 bg-background/95 px-4 py-3 backdrop-blur-sm supports-backdrop-filter:bg-background/90 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8",
+          "sticky top-0 z-10 bg-background/95 py-3 backdrop-blur-sm supports-backdrop-filter:bg-background/90",
           stuck && "border-b border-border",
           className,
         )}
+        ref={barRef}
       >
         {children}
       </div>
@@ -297,6 +349,7 @@ function PrototypeNote({
 export {
   AppointmentPageShell,
   FactRow,
+  animateEnter,
   PAGE_ENTER_CLASS,
   PageHeader,
   PageSection,

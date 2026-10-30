@@ -2,8 +2,6 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { registerBones } from "boneyard-js";
 import { Skeleton } from "boneyard-js/react";
 import {
-  assetPrice,
-  formatHkd,
   PORTFOLIO_ASSETS,
   type VaultAsset,
 } from "../../vault-content";
@@ -24,12 +22,10 @@ const SKELETON_ASSET: VaultAsset = PORTFOLIO_ASSETS[0];
 
 /** The card's layout — image well, grade, title, price line. */
 function VaultAssetCardBody({ asset }: { asset: VaultAsset }) {
-  const price = assetPrice(asset);
 
   return (
     <>
       <div className="relative aspect-square w-full overflow-hidden rounded-(--radius-3xl) border border-border bg-background-subtle">
-        <div className="pointer-events-none absolute inset-0 rounded-(--radius-3xl)" />
         <img
           alt=""
           aria-hidden
@@ -43,22 +39,11 @@ function VaultAssetCardBody({ asset }: { asset: VaultAsset }) {
 
       <div className="flex w-full flex-col gap-3">
         <div className="flex w-full flex-col gap-1">
-          <p className="w-full text-sm text-secondary-foreground">
+          <p className="w-full text-sm font-medium text-secondary-foreground">
             {gradeLine(asset)}
           </p>
-          <p className="line-clamp-2 w-full text-lg leading-7 font-medium text-foreground underline-offset-2 group-hover/vault-card:underline">
+          <p className="line-clamp-3 w-full text-base leading-6 font-medium text-foreground underline-offset-2 group-hover/vault-card:underline">
             {asset.name}
-          </p>
-        </div>
-
-        <div aria-hidden className="border-t border-border" />
-
-        <div className="flex w-full flex-col items-start gap-1">
-          <p className="w-full text-xs font-medium uppercase text-secondary-foreground">
-            {price.label}
-          </p>
-          <p className="w-full text-lg leading-7 font-medium tabular-nums text-card-foreground">
-            {formatHkd(price.amountHkd)}
           </p>
         </div>
       </div>
@@ -69,8 +54,7 @@ function VaultAssetCardBody({ asset }: { asset: VaultAsset }) {
 /**
  * Collectible tile on the vault portfolio grid — Figma `Vault Asset Card`
  * (`7068:10249`). Square image well carries the `VaultAssetStatus` badge
- * (none for In Vault); body stacks grade, title and a status-dependent
- * price line. Only vaulted holdings render here — intake stays on
+ * (none for In Vault); body stacks grade and title. Only vaulted holdings render here — intake stays on
  * Submissions. Click opens the asset detail page.
  */
 function VaultAssetCard({

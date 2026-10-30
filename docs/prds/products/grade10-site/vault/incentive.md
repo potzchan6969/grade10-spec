@@ -30,10 +30,10 @@ A HKD 10,000 card, worked through:
 | Price variation | sales of 9,000, 9,500, 10,000, 10,500 and 13,000 sit 1,000, 500, 0, 500 and 3,000 from the median; the middle distance, 500, is 5% of it | 5% |
 | Price stability | 1 − 5% | 0.95 |
 | Liquidity factor | 1.00 × 0.95 | 0.95 |
-| Daily incentive | 10,000 × 0.95 × 3% ÷ 365 | about HKD 0.78 |
+| Daily incentive | 10,000 × 0.95 × 3% ÷ 365 | about HKD 0.78, ≈ US$0.10 |
 
 With 15% variation instead, stability is 0.85 and the card earns about HKD
-0.70 a day. Under a 30-day vesting, that card's first 30 days, about HKD 21,
+0.70 a day. Under a 30-day vesting, that card's first 30 days, about US$2.70,
 reach the wallet together on day 30, and each day's amount drips in after that.
 
 ## Price Tiers
@@ -78,6 +78,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 ## Reaching the Wallet
 
 - 🚧 **Daily Drip** — after midnight Hong Kong time, each card's incentive for the day before is posted to the wallet
+  - **Base Currency** — the wallet holds US dollars; the HKD-priced amount converts at the day's rate of exchange - decided by the owner, 2026-10-30
   - **Fixed for the Day** — the day's price and liquidity are set at its start
   - **Fractions of a Cent** — carry to the next day, so rounding never gains or loses money
   - **Live Estimate** — the dashboard may show the day so far; only the posted amount counts
@@ -85,7 +86,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 - 🚧 **Vesting** — for its first days in the vault a card's incentive vests on the card, not in the wallet
   - **Release** — on the last vesting day everything vested is posted at once; daily drips follow
   - **Once an Intake** — vesting runs once, not again on every stretch
-  - **Shown Beside the Wallet** — "Vesting: HKD X", with its release date; not cashable
+  - **Shown Beside the Wallet** — "Vesting: US$ X", with its release date; not cashable
   - **Retrieved Early** — a card that leaves the vault before release forfeits what is vesting
   - **Sold Early** — a card sold before release, say on day 60 of 90; sale proceeds are paid as usual, and the note below says what happens to the incentive
   - **Built** — credited every day and locked until day N, or shown as one held figure posted on day N; an admin setting switches the view, every amount and unlock day the same either way, so it may be flipped at any time
@@ -93,6 +94,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 - 🚧 **Never Taken Back** — incentive in the wallet stays the collector's, whatever happens to the card
 
 :::callout{kind="note"}
+- ❓ **Daily credit time** — the exact time each day's incentive posts to the wallet; suggested 00:00 HKT, after the Hong Kong day closes. Owner confirms
 - ❓ **Vesting period** — 30 or 60 days; longer protects more, but delays the first payout a collector sees. Product confirms before Phase 1, mid November
 - ❓ **Incentive when a card sells during vesting** — only the vested days (recommended: pays what the card earned), or the full period (pays the remaining days too, at a higher cost). A sold card stops earning the day it sells; built as a sale forfeiting nothing, its credited incentive unlocking on its own day. Product confirms before Phase 2, 6 December
 - ❓ **Which view to launch on** — credited daily and locked, the owner's own reading, or vesting held on the card. Owner confirms
