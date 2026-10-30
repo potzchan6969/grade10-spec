@@ -42,10 +42,10 @@
 
 ## Decisions
 
-The deltas govern the order, the gating, the destination and the label -
-[page-shell](specs/grade10-site/site/page-shell/spec.md) for the site,
-[site-chrome](specs/shared/ui/site-chrome/spec.md) for the component. These are
-the implementation choices under them:
+The [page-shell](specs/grade10-site/site/page-shell/spec.md) delta governs the
+order, the gating, the destination and the label; the shared header's own
+contract moves to the follow-up site-chrome change (`decisions.md` Q8). These
+are the implementation choices under it:
 
 | Decision | Choice | Rejected |
 | --- | --- | --- |
@@ -53,27 +53,13 @@ the implementation choices under them:
 | Where it leads | `onNavigate(ROUTES.membership)`, the surface table's address, with locale handling left to `onNavigate` as for Profile | A literal `/membership` in the shell, which could drift from the surface table |
 | Its words | `copy.membership: tChrome("membership")`, the brand chrome key every language already answers (Q5) | A key in the membership page's own namespace, which would load that page's catalog into the header; a new key in every language |
 | Who orders the items | `SiteHeader` alone; the site supplies handlers and never sorts | An ordered item list from the site, which changes `SiteHeaderProps` |
-| The component | No code change. Its stories cite the site-chrome scenarios this change adds or restates, and the `Open` story's note that no site supplies Membership is corrected | Re-drawing the menu, which already matches |
-| The site-chrome delta | `## REMOVED` of "SiteHeader composes Nav with session-aware account entry" plus `## ADDED` of "SiteHeader composes Nav with a session-aware account entry" | A `## MODIFIED` block, which `openspec validate --strict` refuses: it must carry `shared-ui-site-chrome-SC-38` under its old, now false, title |
+| The component | No change: it already draws Membership right after Profile, and its stories and written contract follow in the follow-up site-chrome change | Re-drawing the menu, which already matches |
 
-**Ids in the restated requirement.** A scenario keeps its id and trace marker
-where acceptance's issued-id check accepts the carry: the id was first issued
-with that marker. `shared-ui-site-chrome-SC-15`, `-SC-16`, `-SC-18` and
-`-SC-44` were first issued without one, so they are restated unchanged as
-`shared-ui-site-chrome-SC-51`, `-SC-52`, `-SC-54` and `-SC-55`;
-`shared-ui-site-chrome-SC-17` changes meaning and is restated as
-`shared-ui-site-chrome-SC-53`; `shared-ui-site-chrome-SC-38` is restated as
-`shared-ui-site-chrome-SC-49`. No test or story cites a retired id today.
-Reissuing every scenario of the requirement was rejected: it retires
-seventeen more ids, among them `shared-ui-site-chrome-SC-42` and
-`shared-ui-site-chrome-SC-45` to `-SC-48`, which the store's type test and
-stories cite, for no change in meaning.
 
 **Where each scenario is proved.**
 
 | Scenarios | Proved by |
 | --- | --- |
-| `shared-ui-site-chrome-SC-53`, `shared-ui-site-chrome-SC-49`, `shared-ui-site-chrome-SC-50` | grade10-spec Storybook play functions on `Site/Page Shell/Blocks/SiteHeader/Auction & Store/Account menu` |
 | `grade10-site-site-page-shell-SC-59`, `-SC-80`, `-SC-81`, `-SC-82`, `-SC-83`, `-SC-84` | grade10 `SiteShell.test.tsx` and `store-shut.test.tsx` in jsdom, with `arrangeGates` for the gate combinations no lane carries |
 | `grade10-site-site-page-shell-US-03` end to end | grade10 `e2e/tests/auth/account-menu.spec.ts`, reading the lane's own gates through `laneGates` |
 
@@ -95,17 +81,11 @@ it that way.
 - [The pin falls behind `efc781e5a` on a rebase] → `store-shut.test.tsx` and
   `SiteShell.test.tsx` assert Membership's position, so a pin that draws the
   old order fails them.
-- [`restrict-auctions-by-region` archives after this change is accepted] →
-  Its delta MODIFIES the requirement this change removes, and its task 4.2
-  names `shared-ui-site-chrome-SC-44`, restated here as
-  `shared-ui-site-chrome-SC-55`. `depends_on` orders this change after it; its
-  archive acknowledges the difference if it comes later.
 
 ## Migration Plan
 
-- Land the grade10-spec stories first; grade10's pin already contains the
-  component, so a pin bump is needed only to carry the stories and the
-  accepted specs.
+- grade10's pin already contains the component, so the pin bump carries only
+  the accepted specs and suite.
 - The menu changes on the next deploy of each lane whose `membership` gate is
   open - development, staging and staging-2 today. uat and production do not
   change until their gate opens.

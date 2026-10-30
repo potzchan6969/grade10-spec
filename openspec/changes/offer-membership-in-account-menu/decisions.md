@@ -13,6 +13,8 @@
 - Marking the item for the page being viewed, or a points or tier badge beside
   Membership.
 - A new analytics event for account-menu presses.
+- The shared header's written contract - its fixed order, its stories and its
+  unnamed Submissions item - which the follow-up site-chrome change specifies.
 
 ## Decisions
 
@@ -25,6 +27,7 @@
 | Q5 | What does the item read? | "Membership", in each language the brand's chrome catalog already answers - decided by the round | A new label, which adds a key in every language for the same page name |
 | Q6 | Does the grade10 account menu ever show Submissions? | Never: the grade10 site supplies no Submissions, so its menu offers only Profile, Membership, My Orders, My Auctions and Sign Out, each where its page is carried, and the menu's case keeps "nothing else"; whether the shared header's unnamed Submissions item stays, goes or is named is left to the follow-up site-chrome change - decided by the round, as recommended; source: grade10's `SiteShell` (`apps/frontend/grade10/src/chrome/shell/SiteShell.tsx`), which passes no `onSubmissions`, and the non-goal [Submissions in the account menu](#non-goals) | A Submissions item wherever a submissions page is carried, which no change specifies; or leaving the menu's extent unasserted until one does |
 | Q7 | Where does Membership take a signed-in collector who has never joined the loyalty programme? | To `/membership`, as for every collector, with no redirect: every account is a member, so no collector has not joined, and the menu's case expects `/membership` alone - decided by the round, as recommended; source: [Membership](../../../docs/prds/products/grade10-site/loyalty/membership.md), "An account is a member", and its callout that the join page is removed from the product | The join page for a collector who has not joined, from the item itself or by a redirect from `/membership` |
+| Q8 | Does this change also restate the shared header's account-menu order? | No: it carries the site's rules only, and the shared header's contract moves to the follow-up site-chrome change, written after `restrict-auctions-by-region` lands, beside the menu avatar's contract (recommended) | Restating it here: a modified requirement cannot drop a scenario whose title becomes false, so it would be removed and added again under a new name, retiring six scenario ids and leaving an acknowledgement to `restrict-auctions-by-region`'s archive, for a contract whose component already draws the order |
 
 ## Raised
 

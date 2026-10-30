@@ -22,9 +22,6 @@ membership page in a week, up from the few who type its address.
   Profile, Membership, My Orders, My Auctions, Sign Out, each gated item
   omitted on its own; where the account page is withheld, the menu opens on
   Membership
-- **The shared header's order** - `SiteHeader`'s fixed account-menu order names
-  the order it already draws -
-  [Site Header and Footer · Account Entry](../../../docs/prds/products/shared/ui/site-chrome.md#account-entry)
 
 ## Non-Goals
 
@@ -41,16 +38,14 @@ None.
 - `grade10-site/site/page-shell`: the account menu offers Membership right
   after Profile wherever the membership page is carried, and Membership opens
   that page
-- `shared/ui/site-chrome`: `SiteHeader`'s fixed account-menu order puts
-  Membership right after Profile, ahead of My Orders
 
 ## Impact
 
-- **`@grade10/ui` `SiteHeader`** - no export changes. The component and its
-  `WithProfile` story have drawn this order since `efc781e5a`; only the
-  contract moves.
+- **`@grade10/ui` `SiteHeader`** - no change. The component and its
+  `WithProfile` story have drawn this order since `efc781e5a`; its written
+  contract follows in the follow-up site-chrome change (`decisions.md` Q8).
 - **grade10 site** - `SiteShell` supplies `copy.membership` and `onMembership`
   where the build carries the membership page.
 - **ZZZ site** - unaffected; it supplies no Membership.
-- **Overlap** - `restrict-auctions-by-region` modifies the same `SiteHeader`
-  requirement, so this change depends on it.
+- **Overlap** - none: `restrict-auctions-by-region` modifies the `SiteHeader`
+  requirement, which this change leaves to the follow-up.
