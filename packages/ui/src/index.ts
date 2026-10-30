@@ -872,23 +872,6 @@ export type {
   SortOption,
   UtilityLink,
 } from "./blocks/store-product-listing/types";
-// shared/ui/store-profile
-export {
-  ProfileCard,
-  type ProfileCardCopy,
-  type ProfileCardProps,
-} from "./blocks/store-profile/profile-card";
-export {
-  ProfileDetails,
-  type ProfileDetailsCopy,
-  type ProfileDetailsProps,
-} from "./blocks/store-profile/profile-details";
-export {
-  ProfileForm,
-  type ProfileFormCopy,
-  type ProfileFormProps,
-} from "./blocks/store-profile/profile-form";
-export type { ProfileFormValues } from "./blocks/store-profile/types";
 export {
   currencyExponent,
   DEFAULT_LISTING_CURRENCY,
