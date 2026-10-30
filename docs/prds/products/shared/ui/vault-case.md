@@ -7,7 +7,7 @@ order: 14
 The vault collector's own blocks.
 
 ❓ Which blocks the collector's screens need; @tangconst names them as she
-designs the screens — [Collector Pages](/p/grade10-site/vault/collector-pages)
+designs the screens — [Collector Pages](/p/grade10-site/finance/collector-pages)
 
 ## The Blocks
 

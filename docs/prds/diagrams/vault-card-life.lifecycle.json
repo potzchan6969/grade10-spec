@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "A card in the vault",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [930, 640]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "In the vault"
+    },
+    {
+      "id": "terminal",
+      "label": "Leaves the vault"
+    }
+  ],
+  "states": [
+    {
+      "id": "received",
+      "type": "start",
+      "label": "Received",
+      "sublabel": "recorded and photographed",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "authenticating",
+      "type": "decision",
+      "label": "Authenticating",
+      "sublabel": "at the counter, or later",
+      "lane": "main",
+      "col": 1
+    },
+    {
+      "id": "in-vault",
+      "type": "waiting",
+      "label": "In the Vault",
+      "sublabel": "stored, not earning yet",
+      "lane": "main",
+      "col": 2
+    },
+    {
+      "id": "earning",
+      "type": "active",
+      "label": "Approved to Earn",
+      "sublabel": "earns each day it qualifies",
+      "lane": "main",
+      "col": 3
+    },
+    {
+      "id": "consigned",
+      "type": "active",
+      "label": "Consigned",
+      "sublabel": "on sale, still earning",
+      "lane": "main",
+      "col": 4
+    },
+    {
+      "id": "failed",
+      "type": "failure",
+      "label": "Failed",
+      "sublabel": "returned; never earns",
+      "lane": "terminal",
+      "col": 0
+    },
+    {
+      "id": "withdrawn",
+      "type": "neutral",
+      "label": "Retrieved",
+      "sublabel": "collected at the shop",
+      "lane": "terminal",
+      "col": 1
+    },
+    {
+      "id": "sold",
+      "type": "success",
+      "label": "Sold",
+      "sublabel": "stops earning",
+      "lane": "terminal",
+      "col": 2
+    }
+  ],
+  "transitions": [
+    {
+      "id": "checked",
+      "from": "received",
+      "to": "authenticating",
+      "variant": "emphasis"
+    },
+    {
+      "id": "passed",
+      "from": "authenticating",
+      "to": "in-vault",
+      "variant": "emphasis"
+    },
+    {
+      "id": "approved",
+      "from": "in-vault",
+      "to": "earning",
+      "variant": "emphasis"
+    },
+    {
+      "id": "consign",
+      "from": "earning",
+      "to": "consigned",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fail",
+      "from": "authenticating",
+      "to": "failed",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "via": [[248, 479]],
+      "label": "fails"
+    },
+    {
+      "id": "sell",
+      "from": "consigned",
+      "to": "sold",
+      "variant": "emphasis",
+      "label": "sold",
+      "labelAt": [710, 320]
+    },
+    {
+      "id": "withdraw",
+      "from": "earning",
+      "to": "withdrawn",
+      "variant": "dashed",
+      "label": "retrieved",
+      "labelAt": [556, 320]
+    },
+    {
+      "id": "ended",
+      "from": "consigned",
+      "to": "earning",
+      "variant": "dashed",
+      "route": "top-channel",
+      "fromSide": "top",
+      "toSide": "top",
+      "channelY": 96,
+      "label": "ended or unsold",
+      "labelAt": [633, 96]
+    }
+  ]
+}

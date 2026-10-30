@@ -18,6 +18,9 @@ component contract underneath it.
   method, the one selected rail; Storybook and the site render it
 - **Bank details dialog** — shows the same single rail as the invoice, with
   its payment details and reference; no tabs or copy controls
+- 🚧 **Bank details layout** — the dialog draws as its design story: amount
+  due as a heading, the rail in one panel, and each warning or hint beside
+  what it is about
 - **Address form** — the fields [Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order) names, Personal or
   Company, a country-aware phone (country and digits required; E.164 when

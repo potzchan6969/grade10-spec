@@ -48,7 +48,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page
+* **Trace:** product-page#product-card/card, product-page#product-card/one-item-to-buy, product-page#product-card/badges, product-page#buy/stock
 
 **Pre-conditions:**
 
@@ -84,7 +84,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page
+* **Trace:** product-page#product-card/description
 
 **Pre-conditions:**
 
@@ -120,7 +120,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page
+* **Trace:** product-page#product-card/card
 
 **Pre-conditions:**
 
@@ -150,7 +150,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#free-pick-up/opens-store-locator, product-page#free-pick-up/no-dead-label, product-page
+* **Trace:** product-page#free-pick-up/shipping-and-pick-up-lines, product-page#free-pick-up/store-name, product-page#free-pick-up/shipping-fee
 
 **Pre-conditions:**
 
@@ -190,7 +190,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page, product-page#buy/signed-out-add-to-cart
+* **Trace:** product-page#buy/quantity, product-page#buy/cart-button, product-page#buy/pending, product-page#buy/added, product-page#buy/adding-again, product-page#buy/signed-out
 
 **Pre-conditions:**
 
@@ -224,7 +224,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail/one-rail, cross-sell#rail/never-itself
+* **Trace:** cross-sell#rail/one-rail, cross-sell#rail/never-itself, product-page#you-may-also-like/related-cards
 
 **Pre-conditions:**
 
@@ -258,7 +258,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail/opens-the-card
+* **Trace:** cross-sell#rail/rail-card
 
 **Pre-conditions:**
 
@@ -292,7 +292,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page
+* **Trace:** product-page#buy/sold-out
 
 **Pre-conditions:**
 
@@ -321,7 +321,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page
+* **Trace:** product-page#shared-link/link-preview, product-page#shared-link/no-picture
 
 **Pre-conditions:**
 
@@ -360,7 +360,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#unknown-product-address/unknown-product-address
+* **Trace:** product-page#unknown-product-address/not-found-state, product-page#unknown-product-address/other-addresses
 
 **Pre-conditions:**
 
@@ -398,7 +398,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page, product-page#buy/signed-out-add-to-cart
+* **Trace:** product-page#buy/stock, product-page#buy/signed-out
 
 **Pre-conditions:**
 
@@ -428,7 +428,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#buy/signed-out-add-to-cart
+* **Trace:** product-page#buy/signed-out
 
 **Pre-conditions:**
 
@@ -468,7 +468,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#where-each-shows/named
+* **Trace:** discounts#where-each-shows/named, product-page#product-card/sale-price, product-page#product-card/badges
 
 **Pre-conditions:**
 
@@ -513,7 +513,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail/nothing-to-show-no-rail, cross-sell#rail/switched-off, cross-sell#rail/a-rail-the-store-cannot-compose
+* **Trace:** cross-sell#rail/no-rail, cross-sell#rail/nothing-to-show, cross-sell#rail/switched-off, cross-sell#rail/catalogue-unavailable
 
 **Pre-conditions:**
 
@@ -591,31 +591,6 @@ Runs once per row of **Test data**.
 * Step 1: one row, part of the next card showing, UI matching store-cross-sell-blocks-storeproductrelatedrail--narrow.
 * Step 2 reaches the sixth card.
 
-#### g10.store-product-page.TC17: A sold-out similar card is left out of the rail
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** cross-sell#rail/sold-out
-
-**Pre-conditions:**
-
-* `<sold-out similar>` shares `<page product>`'s world, is no pick of it, and is sold out.
-
-**Steps:**
-
-1. Open `<page url>` and read the rail.
-
-**Expected Results:**
-
-* `<sold-out similar>` is not in it.
-
 ---
 
 ### cross-sell#picks: Picks
@@ -632,7 +607,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#rail/sold-out, cross-sell#picks/chosen-in-shopify
+* **Trace:** cross-sell#picks/sold-out-pick, cross-sell#rail/sold-out-card
 
 **Pre-conditions:**
 
@@ -662,7 +637,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cross-sell#picks/chosen-in-shopify, cross-sell#rail/picks-the-store-cannot-read
+* **Trace:** cross-sell#picks/chosen-in-shopify, cross-sell#picks/removed-pick, cross-sell#picks/unreadable-picks
 
 **Pre-conditions:**
 
@@ -715,3 +690,28 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * `<newer same world>`, then `<same world>`, then `<same language>`, then `<same type>`.
+
+#### g10.store-product-page.TC17: A sold-out similar card is left out of the rail
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cross-sell#similar-cards/sold-out-similar-card
+
+**Pre-conditions:**
+
+* `<sold-out similar>` shares `<page product>`'s world, is no pick of it, and is sold out.
+
+**Steps:**
+
+1. Open `<page url>` and read the rail.
+
+**Expected Results:**
+
+* `<sold-out similar>` is not in it.

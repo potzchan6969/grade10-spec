@@ -75,6 +75,8 @@ function useWide(): boolean {
 }
 
 export type Layout = Stored & {
+  /** The screen is at least `lg`: the rail is fixed and the side shows. */
+  wide: boolean;
   /** The rail is folded on a wide screen: the page reads in two columns. */
   split: boolean;
   setNavWidth: (width: number) => void;
@@ -106,6 +108,7 @@ export function LayoutProvider({ children }: { children: ReactNode }) {
   const value = useMemo<Layout>(
     () => ({
       ...stored,
+      wide,
       split: wide && stored.navCollapsed,
       setNavWidth: (navWidth) => update({ navWidth }),
       setNavCollapsed: (navCollapsed) => update({ navCollapsed }),

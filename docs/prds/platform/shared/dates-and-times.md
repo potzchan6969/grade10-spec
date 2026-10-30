@@ -31,7 +31,7 @@ zone of its own. What a person reads depends on the surface.
   here sets how it names that zone, and a collector's vault timeline stamps
   stay UTC
   ([Booking Blocks](/p/shared/ui/appointment-booking),
-  [Collector Pages](/p/grade10-site/vault/collector-pages))
+  [Collector Pages](/p/grade10-site/finance/collector-pages))
 
 ## Documents and Messages
 
@@ -42,7 +42,7 @@ zone of its own. What a person reads depends on the surface.
 - **Grading letters** - the footer reads "Dates and times are Hong Kong time
   (GMT+8)." ([What the Collector Hears](/p/grade10-site/grading/messages))
 - **Vault letters** - the footer reads "Dates and times are in Hong Kong time
-  (GMT+8)." ([Collector Pages](/p/grade10-site/vault/collector-pages#messages))
+  (GMT+8)." ([Collector Pages](/p/grade10-site/finance/collector-pages#messages))
 - **A day with no clock** - a calendar day in a message names no zone; the day
   is the brand's
 

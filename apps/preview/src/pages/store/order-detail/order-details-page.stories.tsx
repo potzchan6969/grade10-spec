@@ -108,13 +108,17 @@ function OrderDetailsPage({
             }}
           />
         ) : read === "notFound" ? (
-          <OrderDetailsNotFound
-            breadcrumbs={breadcrumbs}
-            description={ORDER_DETAILS_READ_COPY.notFoundDescription}
-            onBack={() => navigateToStory(ORDER_HISTORY_STORY_ID)}
-            backLabel={ORDER_DETAILS_READ_COPY.backToOrders}
-            title={ORDER_DETAILS_READ_COPY.notFoundTitle}
-          />
+          <div className="flex w-full max-w-5xl flex-1 flex-col px-4 py-8 sm:px-8 sm:py-12">
+            {breadcrumbs}
+            <div className="flex flex-1 items-center justify-center">
+              <OrderDetailsNotFound
+                description={ORDER_DETAILS_READ_COPY.notFoundDescription}
+                onBack={() => navigateToStory(ORDER_HISTORY_STORY_ID)}
+                backLabel={ORDER_DETAILS_READ_COPY.backToOrders}
+                title={ORDER_DETAILS_READ_COPY.notFoundTitle}
+              />
+            </div>
+          </div>
         ) : (
           <div className="flex w-full max-w-5xl flex-col gap-8 px-4 py-8 sm:px-8 sm:py-12">
             {breadcrumbs}
@@ -192,7 +196,7 @@ export const Filled: Story = {
 };
 
 /** An order the collector cannot see: the same not-found treatment, with no hint it exists. */
-export const NotFoundWithoutDisclosure: Story = {
+export const NotFound: Story = {
   args: { read: "notFound" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

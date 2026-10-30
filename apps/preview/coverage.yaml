@@ -31,8 +31,8 @@ no-screen:
   store/discounts: the price rules; drawn on product, cart and order screens
   store/refunds: started in Shopify; drawn on Order Details
   store/shipping: Shopify takes the address; tracking is on My Orders
-  vault/case-lifecycle: the status machine; drawn on the case page
-  vault/compliance-and-readiness: policy
+  finance/case-lifecycle: the status machine; drawn on the case page
+  finance/compliance-and-readiness: policy
   account/audit: the trail; read in the console
   account/roles: the role vocabulary
 
@@ -41,6 +41,6 @@ operator:
   consignment/operator-console: the consignment console
   doc-sign/service: the documents service and its operator tools
   loyalty/operator-console: the loyalty console
-  vault/operator-console: the vault console
+  finance/operator-console: the vault console
   account/sessions: the console's session list
   account/users: the console's user directory

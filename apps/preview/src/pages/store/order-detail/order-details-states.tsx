@@ -1,7 +1,6 @@
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import type { ReactNode } from "react";
 
 /** The first order read in flight: a skeleton card, announced as loading. */
 function OrderDetailsLoadingCard({ label }: { label: string }) {
@@ -37,13 +36,11 @@ function OrderDetailsReadFailed({
 /** Not found: the same treatment for an unknown order and one not the collector's. */
 function OrderDetailsNotFound({
   backLabel,
-  breadcrumbs,
   description,
   onBack,
   title,
 }: {
   backLabel: string;
-  breadcrumbs: ReactNode;
   description: string;
   onBack: () => void;
   title: string;
@@ -54,9 +51,8 @@ function OrderDetailsNotFound({
       gap="lg"
       hAlign="center"
     >
-      {breadcrumbs}
       <VStack className="w-full" gap="sm" hAlign="center">
-        <h1 className="text-4xl font-semibold leading-none text-foreground sm:text-5xl">
+        <h1 className="text-4xl font-semibold leading-none text-balance text-foreground sm:text-5xl">
           {title}
         </h1>
         <p className="text-base leading-6 text-secondary-foreground">

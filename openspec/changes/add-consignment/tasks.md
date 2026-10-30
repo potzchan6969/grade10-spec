@@ -46,11 +46,11 @@
 - [ ] 2.1 Issue the settlement statement and the commission invoice at the
       sale, with the contact details for payment — blocked: the commission
       invoice composes `add-invoice-and-receipt-pdf-blocks`, still in flight,
-      and both documents' wording is Finance's
+      and both documents' wording is Finance's - superseded 2026-10-29 by @ecchochan: the vault-first model issues both each period per consignor, as the service already does (decisions Q22)
 
 ## 3. The walk (grade10)
 
 - [ ] 3.1 Walk the incentive from the seal to its record in
       `apps/frontend/grade10/e2e/tests/consignment/lifecycle.spec.ts`, beside
       the walks that already consign on each channel — written, not run:
-      blocked: the isolated stack needs Docker, which this environment lacks - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
+      blocked: the isolated stack needs Docker, which this environment lacks - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived; superseded 2026-10-29 by @ecchochan: the vault-first model pays no incentive at the seal (decisions Q22)

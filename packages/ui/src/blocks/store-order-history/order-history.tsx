@@ -141,7 +141,7 @@ function OrderHistory({
       hAlign="stretch"
     >
       {breadcrumbs}
-      <h1 className="w-full text-3xl leading-9 font-bold text-foreground">
+      <h1 className="w-full text-3xl leading-9 font-semibold text-foreground">
         {copy.title}
       </h1>
       {isEmpty ? (

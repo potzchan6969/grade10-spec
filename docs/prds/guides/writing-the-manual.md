@@ -58,6 +58,14 @@ Write for a teammate who joined this week and has never seen the code.
 - **Decisions are product judgments** — the `Product decisions` block at the
   end records why we chose something, for whom, and what we ruled out. It is
   not a log of every detail or of which change decided it
+  - **What stays** — a line a reasonable person would otherwise reverse, with
+    the reason that would stop them: `- **Decision** — why, and what it ruled
+    out`, under a sentence or two on who it is for
+  - **What goes** — a line that restates a rule on the page, an open item the
+    page or another page already marks ❓, and a status or owner column
+  - **Not in scope** — one bullet naming what someone would ask for next
+  - **Measured by** — only a signal something records, linked; the ones
+    nobody records yet are one ❓ line naming who confirms
 
 ## Screens and Stories
 

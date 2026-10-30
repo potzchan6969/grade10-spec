@@ -96,7 +96,7 @@ function StoreLocator({
         style={{ animationDelay: revealEntranceDelayMs(1) }}
       >
         <VStack className="w-full" gap="lg" hAlign="stretch">
-          <h1 className="text-3xl font-bold text-foreground @3xl:text-4xl">
+          <h1 className="text-3xl font-semibold text-foreground @3xl:text-4xl">
             {copy.heading}
           </h1>
 
