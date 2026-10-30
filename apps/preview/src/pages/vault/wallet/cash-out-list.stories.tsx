@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { PAYOUT_REQUESTS } from "../../vault-content";
-import { CashOutList } from "./vault-payout-list";
+import { CashOutList } from "./cash-out-list";
 
 /**
  * Cash-out requests — the status Grade10's approval

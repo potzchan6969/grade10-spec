@@ -1,6 +1,10 @@
 import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
-import { FilterChip } from "@grade10/design-system/components/forms/filter-chip";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@grade10/design-system/components/display/tabs";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Sparkle } from "@phosphor-icons/react";
 import { useState } from "react";
@@ -35,22 +39,12 @@ function RewardsLedger({
       className={cn("flex flex-col gap-4", className)}
       data-slot="rewards-ledger"
     >
-      <div className="flex flex-wrap items-center gap-2">
-        <FilterChip
-          selected={tab === "rewards"}
-          size="md"
-          onClick={() => setTab("rewards")}
-        >
-          Rewards
-        </FilterChip>
-        <FilterChip
-          selected={tab === "cash-out"}
-          size="md"
-          onClick={() => setTab("cash-out")}
-        >
-          Cash-out
-        </FilterChip>
-      </div>
+      <Tabs value={tab} onValueChange={(value) => setTab(value as LedgerTab)}>
+        <TabsList aria-label="Rewards and cash-out filters" variant="pill">
+          <TabsTrigger value="rewards">Rewards</TabsTrigger>
+          <TabsTrigger value="cash-out">Cash-out</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {tab === "rewards" ? (
         <Card padding={false}>

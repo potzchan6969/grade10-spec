@@ -1,5 +1,8 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
-import { FilterChip } from "@grade10/design-system/components/forms/filter-chip";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@grade10/design-system/components/display/tabs";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import {
@@ -31,9 +34,9 @@ type SortKey =
   | "highest-price";
 
 const TABS: { key: ListTab; label: string }[] = [
-  { key: "all", label: "All Assets" },
-  { key: "in-vault", label: "In Vault" },
-  { key: "live-auction", label: "Live Auction" },
+  { key: "all", label: "All" },
+  { key: "in-vault", label: "In vault" },
+  { key: "live-auction", label: "Live auction" },
   { key: "listed", label: "Listed" },
 ];
 
@@ -148,8 +151,6 @@ function VaultAssetList({
     sort,
   );
 
-  const countFor = (key: ListTab) =>
-    assets.filter((a) => matchesTab(a, key)).length;
 
   if (assets.length === 0) {
     return (
@@ -166,19 +167,15 @@ function VaultAssetList({
             "flex flex-wrap items-center justify-between gap-3 delay-[90ms]",
           )}
         >
-          <div aria-label="Filter holdings" className="flex flex-wrap items-center gap-2" role="group">
-            {visibleTabs.map((t) => (
-              <FilterChip
-                key={t.key}
-                selected={t.key === activeTab}
-                size="md"
-                onClick={() => setTab(t.key)}
-              >
-                {t.label}
-                <Badge size="sm">{countFor(t.key)}</Badge>
-              </FilterChip>
-            ))}
-          </div>
+          <Tabs value={activeTab} onValueChange={(value) => setTab(value as ListTab)}>
+            <TabsList aria-label="Filter holdings" variant="pill">
+              {visibleTabs.map((t) => (
+                <TabsTrigger key={t.key} value={t.key}>
+                  {t.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={

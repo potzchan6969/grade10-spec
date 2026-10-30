@@ -1002,8 +1002,9 @@ function statusBadgeVariant(
     case "Imaging":
       return "info";
     case "Retrieval Pending":
-      return "warning";
+      return "default";
     case "Live Auction":
+      return "default";
     case "Listed":
       return "brand";
     default:
