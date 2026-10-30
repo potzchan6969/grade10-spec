@@ -120,7 +120,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-listing, product-page, cart#reviewing-the-cart/current-read
+* **Trace:** home, product-listing#products-display/sale-price, product-page, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -159,11 +159,11 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-listing, product-page, cart#reviewing-the-cart/lines-whose-product-left-the-shop, cart#reviewing-the-cart/current-read
+* **Trace:** home, product-listing#products-display/stock, product-page, cart#reviewing-the-cart/lines-whose-product-left-the-shop, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
-* customer(guest) has `<gone product>` in the cart; it was put in the merchandised row, by the recipe "Put a card in the Main Page's merchandised row", then sold out, by the recipe "Sell a card out".
+* customer(guest)'s cart holds only `<gone product>`; it was put in the merchandised row, by the recipe "Put a card in the Main Page's merchandised row", then sold out, by the recipe "Sell a card out".
 
 **Test data:**
 
