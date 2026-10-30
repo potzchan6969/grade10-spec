@@ -1,5 +1,6 @@
 import { Card } from "@grade10/design-system/components/display/card";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { cn } from "@grade10/design-system/lib/utils";
 import { formatHkd } from "../../vault-content";
 
@@ -42,11 +43,14 @@ function WalletSummary({
   const meetsMinimum = availableHkd >= minWithdrawalHkd;
 
   const SEGMENTS = [
-    { label: "Available", amountHkd: availableHkd, swatch: "bg-accent-foreground" },
-    { label: "In cash-out", amountHkd: inCashOutHkd, swatch: "bg-muted" },
+    { label: "Available", amountHkd: availableHkd, swatch: "bg-primary" },
+    {
+      label: "In cash-out",
+      amountHkd: inCashOutHkd,
+      swatch: "bg-secondary",
+    },
     { label: "Cashed out", amountHkd: cashedOutHkd, swatch: "bg-foreground" },
   ];
-  const total = Math.max(earnedAllTimeHkd, 1);
 
   return (
     <div
@@ -55,27 +59,29 @@ function WalletSummary({
       data-slot="wallet-summary"
       role="region"
     >
-      <Card className="flex flex-col gap-2 p-6 sm:p-8">
-        <p className="font-heading text-sm leading-5 font-medium tracking-wider uppercase text-secondary-foreground">
+      <Card className="flex flex-col gap-4 bg-background-subtle p-8">
+        <p className="font-sans text-sm leading-5 font-medium uppercase text-secondary-foreground">
           Incentives available
         </p>
-        <p className="font-heading font-medium tracking-tight tabular-nums text-card-foreground">
-          <span className="flex flex-wrap items-baseline gap-1">
-            <span className="text-lg leading-7">HK$</span>
-            <span className="text-4xl leading-10 sm:text-5xl sm:leading-12">
+        <div className="flex flex-1 flex-col items-start justify-center gap-2">
+          <p className="flex items-baseline gap-1 whitespace-nowrap text-foreground tabular-nums">
+            <span className="font-sans text-3xl leading-9 font-semibold">
+              HK$
+            </span>
+            <span className="font-sans text-6xl leading-15 font-medium">
               {availableHkd.toLocaleString("en-HK")}
             </span>
-          </span>
-        </p>
-        <p className="text-xs leading-4 text-pretty text-secondary-foreground">
-          Receive ~{formatHkd(dailyIncentiveHkd)} daily while your items are
-          in vault.
-        </p>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
+          </p>
+          <p className="font-sans text-sm leading-5 text-pretty text-secondary-foreground">
+            Receive ~${dailyIncentiveHkd.toLocaleString("en-HK")} daily while
+            your items are in vault.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
           {hasPayoutMethod ? (
             <Button
               disabled={!meetsMinimum}
-              size="sm"
+              size="md"
               type="button"
               onClick={onCashOut}
             >
@@ -83,7 +89,7 @@ function WalletSummary({
             </Button>
           ) : (
             <Button
-              size="sm"
+              size="md"
               type="button"
               variant="secondary"
               onClick={onSetUpPayout}
@@ -92,7 +98,7 @@ function WalletSummary({
             </Button>
           )}
           <Button
-            size="sm"
+            size="md"
             type="button"
             variant="outline"
             onClick={onViewActivity}
@@ -101,56 +107,64 @@ function WalletSummary({
           </Button>
         </div>
         {hasPayoutMethod && !meetsMinimum ? (
-          <p className="text-xs text-secondary-foreground">
+          <p className="font-sans text-sm leading-5 text-secondary-foreground">
             Minimum {formatHkd(minWithdrawalHkd)} to cash out
           </p>
         ) : null}
       </Card>
 
-      <Card className="flex flex-col gap-4 p-6 sm:p-8">
-        <div className="flex items-baseline justify-between gap-3">
-          <p className="font-heading text-sm leading-5 font-medium tracking-wider uppercase text-secondary-foreground">
-            Earned all time
-          </p>
-          <p className="font-heading text-xl font-medium tracking-tight tabular-nums text-card-foreground">
-            {formatHkd(earnedAllTimeHkd)}
-          </p>
+      <Card className="flex flex-col gap-4 p-8">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-baseline justify-between whitespace-nowrap">
+            <p className="font-sans text-sm leading-5 font-medium uppercase text-secondary-foreground">
+              Earned all time
+            </p>
+            <p className="font-sans text-xl leading-7 font-semibold tabular-nums text-foreground">
+              {formatHkd(earnedAllTimeHkd)}
+            </p>
+          </div>
+          <div
+            aria-label={`Available ${formatHkd(availableHkd)}, in cash-out ${formatHkd(inCashOutHkd)}, cashed out ${formatHkd(cashedOutHkd)}`}
+            className="grid h-2.5 w-full gap-1 overflow-clip rounded-(--radius-full)"
+            role="img"
+            style={{
+              gridTemplateColumns: `${availableHkd}fr ${inCashOutHkd}fr ${cashedOutHkd}fr`,
+            }}
+          >
+            {SEGMENTS.map((segment) => (
+              <span
+                aria-hidden
+                className={cn("rounded-(--radius-xs)", segment.swatch)}
+                key={segment.label}
+              />
+            ))}
+          </div>
         </div>
-        <div
-          aria-label={`Available ${formatHkd(availableHkd)}, in cash-out ${formatHkd(inCashOutHkd)}, cashed out ${formatHkd(cashedOutHkd)}`}
-          className="flex h-2 w-full gap-px overflow-hidden rounded-(--radius-full)"
-          role="img"
-        >
-          {SEGMENTS.map((segment) => (
-            <span
-              aria-hidden
-              className={segment.swatch}
-              key={segment.label}
-              style={{ width: `${(segment.amountHkd / total) * 100}%` }}
-            />
-          ))}
-        </div>
-        <ul className="flex flex-col divide-y divide-border">
-          {SEGMENTS.map((segment) => (
+        <ul className="flex flex-col">
+          {SEGMENTS.map((segment, index) => (
             <li
-              className="flex items-baseline justify-between gap-3 py-2.5 first:pt-0 last:pb-0"
+              className={cn(
+                "flex items-center justify-between pt-3",
+                index < SEGMENTS.length - 1 && "border-b border-border pb-3",
+              )}
               key={segment.label}
             >
-              <span className="flex items-center gap-2 text-sm text-secondary-foreground">
+              <span className="flex items-center gap-2">
                 <span
                   aria-hidden
                   className={cn("size-2.5 rounded-(--radius-xs)", segment.swatch)}
                 />
-                {segment.label}
+                <span className="font-sans text-base leading-6 whitespace-nowrap text-foreground">
+                  {segment.label}
+                </span>
                 {segment.label === "In cash-out" && openCashOutCount > 0 ? (
-                  <span className="text-xs text-secondary-foreground">
-                    {" "}
+                  <Link variant="secondary">
                     {openCashOutCount}{" "}
                     {openCashOutCount === 1 ? "request" : "requests"}
-                  </span>
+                  </Link>
                 ) : null}
               </span>
-              <span className="text-sm font-medium tabular-nums text-card-foreground">
+              <span className="font-sans text-base leading-6 font-medium whitespace-nowrap tabular-nums text-foreground">
                 {formatHkd(segment.amountHkd)}
               </span>
             </li>
