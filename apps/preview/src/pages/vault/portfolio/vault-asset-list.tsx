@@ -1,4 +1,3 @@
-
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import {
@@ -147,7 +146,6 @@ function VaultAssetList({
     sort,
   );
 
-
   if (assets.length === 0) {
     return (
       <Text className="text-secondary-foreground">No items in your vault.</Text>
@@ -155,61 +153,68 @@ function VaultAssetList({
   }
 
   return (
-    <div className={cn("flex flex-col gap-8", className)} data-slot="vault-asset-list">
+    <div
+      className={cn("flex flex-col gap-8", className)}
+      data-slot="vault-asset-list"
+    >
       <div
-          className={cn(
-            PAGE_ENTER_CLASS,
-            "flex flex-wrap items-center justify-between gap-3 delay-[90ms]",
-          )}
+        className={cn(
+          PAGE_ENTER_CLASS,
+          "flex flex-wrap items-center justify-between gap-3 delay-[90ms]",
+        )}
+      >
+        <div
+          aria-label="Filter holdings"
+          className="flex flex-wrap items-center gap-2"
+          role="group"
         >
-          <div aria-label="Filter holdings" className="flex flex-wrap items-center gap-2" role="group">
-            {visibleTabs.map((t) => (
-              <Button
-                aria-pressed={t.key === activeTab}
-                key={t.key}
-                size="md"
-                type="button"
-                variant={t.key === activeTab ? "secondary" : "outline"}
-                onClick={() => setTab(t.key)}
-              >
-                {t.label}
-              </Button>
-            ))}
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  leading={<ArrowsDownUp aria-hidden size={14} />}
-                  size="md"
-                  trailing={<CaretDown aria-hidden size={14} />}
-                  variant="secondary"
-                />
-              }
+          {visibleTabs.map((t) => (
+            <Button
+              aria-pressed={t.key === activeTab}
+              key={t.key}
+              size="md"
+              type="button"
+              variant={t.key === activeTab ? "secondary" : "outline"}
+              onClick={() => setTab(t.key)}
             >
-              {activeSortLabel}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {sortOptions.map((option) => {
-                const selected = option.key === sort;
-                return (
-                  <DropdownMenuItem
-                    key={option.key}
-                    onClick={() =>
-                      setSorts((prev) => ({ ...prev, [activeTab]: option.key }))
-                    }
-                    selected={selected}
-                    trailing={
-                      selected ? <Check aria-hidden size={14} /> : undefined
-                    }
-                  >
-                    {option.label}
-                  </DropdownMenuItem>
-                );
-              })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+              {t.label}
+            </Button>
+          ))}
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                leading={<ArrowsDownUp aria-hidden size={14} />}
+                size="md"
+                trailing={<CaretDown aria-hidden size={14} />}
+                variant="secondary"
+              />
+            }
+          >
+            {activeSortLabel}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {sortOptions.map((option) => {
+              const selected = option.key === sort;
+              return (
+                <DropdownMenuItem
+                  key={option.key}
+                  onClick={() =>
+                    setSorts((prev) => ({ ...prev, [activeTab]: option.key }))
+                  }
+                  selected={selected}
+                  trailing={
+                    selected ? <Check aria-hidden size={14} /> : undefined
+                  }
+                >
+                  {option.label}
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
       <ul
         aria-busy={loading || undefined}
@@ -217,21 +222,21 @@ function VaultAssetList({
         className="grid grid-cols-2 gap-x-4 gap-y-6 lg:gap-x-6 lg:gap-y-8 lg:grid-cols-3 xl:grid-cols-4"
       >
         {filtered.map((asset, index) => (
-              <li
-                className={loading ? undefined : PAGE_ENTER_CLASS}
-                key={loading ? `skeleton-${index}` : asset.id}
-                style={{
-                  animationDelay: loading
-                    ? undefined
-                    : `${Math.min(index, REVEAL_STAGGER_CAP) * REVEAL_STAGGER_MS + 120}ms`,
-                }}
-              >
-                <VaultAssetCard
-                  asset={asset}
-                  loading={loading}
-                  onOpen={loading ? undefined : () => onOpenAsset?.(asset)}
-                />
-              </li>
+          <li
+            className={loading ? undefined : PAGE_ENTER_CLASS}
+            key={loading ? `skeleton-${index}` : asset.id}
+            style={{
+              animationDelay: loading
+                ? undefined
+                : `${Math.min(index, REVEAL_STAGGER_CAP) * REVEAL_STAGGER_MS + 120}ms`,
+            }}
+          >
+            <VaultAssetCard
+              asset={asset}
+              loading={loading}
+              onOpen={loading ? undefined : () => onOpenAsset?.(asset)}
+            />
+          </li>
         ))}
       </ul>
     </div>

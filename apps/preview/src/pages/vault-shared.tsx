@@ -25,16 +25,18 @@ const PAGE_ENTER_CLASS =
  */
 function animateEnter(
   container: HTMLElement | null,
-  { rise = 6, duration = 220, stagger = 50 }: {
+  {
+    rise = 6,
+    duration = 220,
+    stagger = 50,
+  }: {
     rise?: number;
     duration?: number;
     stagger?: number;
   } = {},
 ) {
   if (!container) return;
-  const reduce = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   for (const [i, el] of [...container.children].entries()) {
     el.animate(
       [
@@ -348,8 +350,8 @@ function PrototypeNote({
 
 export {
   AppointmentPageShell,
-  FactRow,
   animateEnter,
+  FactRow,
   PAGE_ENTER_CLASS,
   PageHeader,
   PageSection,

@@ -34,9 +34,7 @@ export const Filled: Story = {
     expect(canvas.getByText("In withdrawal")).toBeVisible();
     expect(canvas.getByText("Withdrawn")).toBeVisible();
     expect(canvas.getByText(/daily while your items/)).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Withdraw" }),
-    ).toBeEnabled();
+    expect(canvas.getByRole("button", { name: "Withdraw" })).toBeEnabled();
   },
 };
 
@@ -45,10 +43,10 @@ export const BelowMinimum: Story = {
   args: { ...Filled.args, availableUsd: 5 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "Withdraw" })).toBeDisabled();
     expect(
-      canvas.getByRole("button", { name: "Withdraw" }),
-    ).toBeDisabled();
-    expect(canvas.getByRole("button", { name: "Minimum US$65 to withdraw" })).toBeVisible();
+      canvas.getByRole("button", { name: "Minimum US$65 to withdraw" }),
+    ).toBeVisible();
   },
 };
 
@@ -57,9 +55,7 @@ export const NoPayoutMethod: Story = {
   args: { ...Filled.args, hasPayoutMethod: false },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("button", { name: "Set Up Payout" }),
-    ).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Set Up Payout" })).toBeVisible();
     expect(canvas.queryByRole("button", { name: "Withdraw" })).toBeNull();
   },
 };

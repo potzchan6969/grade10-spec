@@ -71,8 +71,7 @@ function WithdrawalDialog({
 
   const [currency, setCurrency] = useState<"USD" | "HKD">("HKD");
   const amount = Number(amountInput) || 0;
-  const amountValid =
-    amount >= minWithdrawalUsd && amount <= availableUsd;
+  const amountValid = amount >= minWithdrawalUsd && amount <= availableUsd;
   const convertedHkd = Math.round(amount * hkdPerUsd);
   const bankDetailsValid =
     accountHolder.trim() !== "" &&
@@ -105,7 +104,8 @@ function WithdrawalDialog({
 
   const SUBTEXT: Record<CashOutStep, string> = {
     amount: `Available to withdraw: ${formatUsd(availableUsd)}`,
-    "bank-details": "In your verified name and saved to your profile — where rewards go on your first withdrawal.",
+    "bank-details":
+      "In your verified name and saved to your profile — where rewards go on your first withdrawal.",
     review: `Grade10 reviews every request — paid by bank transfer within ${WITHDRAWAL_PROCESSING_DAYS} once approved.`,
     submitted: "We’ll email you once Grade10 approves the payout.",
   };
@@ -132,9 +132,7 @@ function WithdrawalDialog({
                   prefix="US$"
                   value={amountInput}
                   onChange={(event) =>
-                    setAmountInput(
-                      event.target.value.replace(/[^0-9.]/g, ""),
-                    )
+                    setAmountInput(event.target.value.replace(/[^0-9.]/g, ""))
                   }
                 />
                 <Button
@@ -166,7 +164,8 @@ function WithdrawalDialog({
                 </Text>
               </div>
               <Text size="sm" tone="secondary">
-                Minimum {formatUsd(minWithdrawalUsd)} · One withdrawal every 7 days
+                Minimum {formatUsd(minWithdrawalUsd)} · One withdrawal every 7
+                days
               </Text>
             </VStack>
           ) : null}
@@ -256,13 +255,12 @@ function WithdrawalDialog({
                 size={48}
                 weight="fill"
               />
-              <Text weight="medium">Withdrawal of {formatHkd(amount)} requested</Text>
-              <Text
-                className="text-center text-secondary-foreground"
-                size="sm"
-              >
-                Your request shows Pending review on the portfolio until
-                Grade10 approves it.
+              <Text weight="medium">
+                Withdrawal of {formatHkd(amount)} requested
+              </Text>
+              <Text className="text-center text-secondary-foreground" size="sm">
+                Your request shows Pending review on the portfolio until Grade10
+                approves it.
               </Text>
               <Badge variant="outline">Pending review</Badge>
             </VStack>
@@ -271,7 +269,9 @@ function WithdrawalDialog({
         <DialogFooter>
           {step === "submitted" ? (
             <DialogClose
-              render={<Button className="w-full sm:w-auto" size="md" type="button" />}
+              render={
+                <Button className="w-full sm:w-auto" size="md" type="button" />
+              }
             >
               Done
             </DialogClose>

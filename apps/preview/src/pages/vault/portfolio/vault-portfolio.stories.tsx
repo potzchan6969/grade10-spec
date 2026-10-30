@@ -1,17 +1,17 @@
-import { Button } from "@grade10/design-system/components/forms/button";
-import { cn } from "@grade10/design-system/lib/utils";
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useRef, useState } from "react";
-import { expect, waitFor, within } from "storybook/test";
-import { activeIntakeSubmissionCount } from "../../intake-content";
 import { Badge } from "@grade10/design-system/components/display/badge";
-import { Vault } from "@phosphor-icons/react";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@grade10/design-system/components/display/tabs";
+import { Button } from "@grade10/design-system/components/forms/button";
+import { cn } from "@grade10/design-system/lib/utils";
+import { Vault } from "@phosphor-icons/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useEffect, useRef, useState } from "react";
+import { expect, waitFor, within } from "storybook/test";
+import { activeIntakeSubmissionCount } from "../../intake-content";
 import {
   DAILY_INCENTIVES,
   INTAKE_TRACKER_STORY_ID,
@@ -31,11 +31,11 @@ import {
   VaultPageShell,
 } from "../../vault-shared";
 import { navigateToStory } from "../../workbench-story-nav";
-import { ActiveIntakeAlert } from "./active-intake-alert";
-import { VaultAssetList } from "./vault-asset-list";
-import { WithdrawalDialog } from "../wallet/withdrawal-dialog";
 import { RewardsLedger } from "../wallet/rewards-ledger";
 import { WalletSummary } from "../wallet/wallet-summary";
+import { WithdrawalDialog } from "../wallet/withdrawal-dialog";
+import { ActiveIntakeAlert } from "./active-intake-alert";
+import { VaultAssetList } from "./vault-asset-list";
 
 /** Simulated holdings fetch — the workbench recipe's ready beat. */
 const HOLDINGS_LOAD_MS = 350;
@@ -66,10 +66,13 @@ function VaultPortfolioPage({
   const holdingsLoading = loading || fetching;
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [pageTab, setPageTab] = useState<"assets" | "rewards">("assets");
-  const [ledgerTab, setLedgerTab] = useState<"all" | "rewards" | "withdrawal">("all");
+  const [ledgerTab, setLedgerTab] = useState<"all" | "rewards" | "withdrawal">(
+    "all",
+  );
   const tabsRef = useRef<HTMLDivElement>(null);
   const openCashOuts = PAYOUT_REQUESTS.filter(
-    (request) => request.status === "Pending review" || request.status === "Processing",
+    (request) =>
+      request.status === "Pending review" || request.status === "Processing",
   ).length;
 
   /* Enter: the active panel's sections rise in on each tab switch. */
@@ -140,18 +143,22 @@ function VaultPortfolioPage({
           onValueChange={(value) => setPageTab(value as "assets" | "rewards")}
         >
           <StickyTabBar className="border-b border-border pb-0 pt-1">
-            <TabsList aria-label="Portfolio sections" className="justify-start overflow-x-auto overflow-y-hidden" variant="list">
-            <TabsTrigger value="assets">
-              Assets
-              <Badge size="sm">{PORTFOLIO_SUMMARY.itemCount}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="rewards">
-              Rewards & Withdrawal
-              {openCashOuts > 0 ? (
-                <Badge size="sm">{openCashOuts} open</Badge>
-              ) : null}
-            </TabsTrigger>
-          </TabsList>
+            <TabsList
+              aria-label="Portfolio sections"
+              className="justify-start overflow-x-auto overflow-y-hidden"
+              variant="list"
+            >
+              <TabsTrigger value="assets">
+                Assets
+                <Badge size="sm">{PORTFOLIO_SUMMARY.itemCount}</Badge>
+              </TabsTrigger>
+              <TabsTrigger value="rewards">
+                Rewards & Withdrawal
+                {openCashOuts > 0 ? (
+                  <Badge size="sm">{openCashOuts} open</Badge>
+                ) : null}
+              </TabsTrigger>
+            </TabsList>
           </StickyTabBar>
           <TabsContent
             className="mt-8 flex flex-col gap-6 outline-none"
@@ -160,9 +167,7 @@ function VaultPortfolioPage({
             <div className={cn(PAGE_ENTER_CLASS, "delay-[60ms]")}>
               <ActiveIntakeAlert
                 submissionCount={intakeSubmissionCount}
-                onTrackProgress={() =>
-                  navigateToStory(INTAKE_TRACKER_STORY_ID)
-                }
+                onTrackProgress={() => navigateToStory(INTAKE_TRACKER_STORY_ID)}
               />
             </div>
             {empty ? (

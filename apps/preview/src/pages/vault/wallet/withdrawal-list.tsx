@@ -26,13 +26,12 @@ const STATUS_VARIANT: Record<
  * the status Grade10's approval sets. Hidden when nothing has been
  * requested, matching the intake alert's rule.
  */
-function WithdrawalRow({
-  request,
-}: {
-  request: VaultPayoutRequest;
-}) {
+function WithdrawalRow({ request }: { request: VaultPayoutRequest }) {
   return (
-    <li className="flex items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4" key={request.id}>
+    <li
+      className="flex items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4"
+      key={request.id}
+    >
       <span
         aria-hidden
         className="grid size-10 shrink-0 place-items-center rounded-full bg-muted text-foreground"

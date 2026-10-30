@@ -8,8 +8,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
-import { Info } from "@phosphor-icons/react";
 import { cn } from "@grade10/design-system/lib/utils";
+import { Info } from "@phosphor-icons/react";
 import { formatHkd, formatUsd } from "../../vault-content";
 
 /**
@@ -166,13 +166,19 @@ function WalletSummary({
               <span className="flex items-center gap-2">
                 <span
                   aria-hidden
-                  className={cn("size-2.5 rounded-(--radius-xs)", segment.swatch)}
+                  className={cn(
+                    "size-2.5 rounded-(--radius-xs)",
+                    segment.swatch,
+                  )}
                 />
                 <Text as="span" className="whitespace-nowrap">
                   {segment.label}
                 </Text>
                 {segment.label === "In withdrawal" && openCashOutCount > 0 ? (
-                  <Link render={<button type="button" onClick={onViewCashOuts} />} variant="secondary">
+                  <Link
+                    render={<button type="button" onClick={onViewCashOuts} />}
+                    variant="secondary"
+                  >
                     {openCashOutCount}{" "}
                     {openCashOutCount === 1 ? "request" : "requests"}
                   </Link>
@@ -183,7 +189,9 @@ function WalletSummary({
                 className="flex items-center gap-1 whitespace-nowrap tabular-nums"
                 weight="medium"
               >
-                {segment.label === "Available" && hasPayoutMethod && !meetsMinimum ? (
+                {segment.label === "Available" &&
+                hasPayoutMethod &&
+                !meetsMinimum ? (
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger

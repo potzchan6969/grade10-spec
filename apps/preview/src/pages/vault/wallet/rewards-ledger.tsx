@@ -4,10 +4,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Plus } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
-import {
-  formatUsd,
-  type VaultPayoutRequest,
-} from "../../vault-content";
+import { formatUsd, type VaultPayoutRequest } from "../../vault-content";
 import { animateEnter } from "../../vault-shared";
 import { WithdrawalRow } from "./withdrawal-list";
 
@@ -31,7 +28,9 @@ function RewardRow({ entry }: { entry: RewardEntry }) {
         <Plus size={16} />
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <Text className="truncate" weight="medium">Daily incentive</Text>
+        <Text className="truncate" weight="medium">
+          Daily incentive
+        </Text>
         <Text size="sm" tone="secondary">
           {entry.date}
         </Text>
@@ -112,10 +111,7 @@ function RewardsLedger({
       date: request.requestedAt,
       request,
     })),
-  ].sort(
-    (a, b) =>
-      new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
+  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const months: { month: string; nodes: React.ReactNode[] }[] = [];
   const push = (month: string, node: React.ReactNode) => {
@@ -154,7 +150,11 @@ function RewardsLedger({
       className={cn("flex flex-col gap-6", className)}
       data-slot="rewards-ledger"
     >
-      <div aria-label="Activity filters" className="flex flex-wrap items-center gap-2" role="group">
+      <div
+        aria-label="Activity filters"
+        className="flex flex-wrap items-center gap-2"
+        role="group"
+      >
         {(["all", "rewards", "withdrawal"] as const).map((key) => (
           <Button
             aria-pressed={key === activeTab}
@@ -164,7 +164,11 @@ function RewardsLedger({
             variant={key === activeTab ? "secondary" : "outline"}
             onClick={() => setTab(key)}
           >
-            {key === "withdrawal" ? "Withdrawal" : key === "rewards" ? "Rewards" : "All"}
+            {key === "withdrawal"
+              ? "Withdrawal"
+              : key === "rewards"
+                ? "Rewards"
+                : "All"}
           </Button>
         ))}
       </div>

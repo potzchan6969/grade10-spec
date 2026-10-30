@@ -4,14 +4,8 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import {
-  PAYOUT_METHOD,
-  PORTFOLIO_SUMMARY,
-} from "../../vault-content";
-import {
-  type PayoutMethod,
-  WithdrawalDialog,
-} from "./withdrawal-dialog";
+import { PAYOUT_METHOD, PORTFOLIO_SUMMARY } from "../../vault-content";
+import { type PayoutMethod, WithdrawalDialog } from "./withdrawal-dialog";
 
 function WithdrawalDialogDemo({
   payoutMethod,
@@ -79,13 +73,9 @@ export const Amount: Story = {
     expect(dialog.getByText("Withdraw")).toBeVisible();
     expect(dialog.getByText(/Available to withdraw/)).toBeVisible();
     expect(dialog.getByText(/Minimum US\$65/)).toBeVisible();
-    expect(
-      dialog.getByRole("button", { name: "Continue" }),
-    ).toBeDisabled();
+    expect(dialog.getByRole("button", { name: "Continue" })).toBeDisabled();
     await userEvent.click(dialog.getByRole("button", { name: "Max" }));
-    expect(
-      dialog.getByRole("button", { name: "Continue" }),
-    ).toBeEnabled();
+    expect(dialog.getByRole("button", { name: "Continue" })).toBeEnabled();
   },
 };
 
@@ -94,9 +84,7 @@ export const FirstPayout: Story = {
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
     await userEvent.click(dialog.getByRole("button", { name: "Max" }));
-    await userEvent.click(
-      dialog.getByRole("button", { name: "Continue" }),
-    );
+    await userEvent.click(dialog.getByRole("button", { name: "Continue" }));
     await waitFor(() =>
       expect(dialog.getByText("Payout Bank Details")).toBeVisible(),
     );
@@ -112,9 +100,7 @@ export const Review: Story = {
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
     await userEvent.click(dialog.getByRole("button", { name: "Max" }));
-    await userEvent.click(
-      dialog.getByRole("button", { name: "Continue" }),
-    );
+    await userEvent.click(dialog.getByRole("button", { name: "Continue" }));
     await waitFor(() =>
       expect(dialog.getByText("Review Withdraw")).toBeVisible(),
     );
@@ -134,9 +120,7 @@ export const Submitted: Story = {
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
     await userEvent.click(dialog.getByRole("button", { name: "Max" }));
-    await userEvent.click(
-      dialog.getByRole("button", { name: "Continue" }),
-    );
+    await userEvent.click(dialog.getByRole("button", { name: "Continue" }));
     await waitFor(() =>
       expect(
         dialog.getByRole("button", { name: "Submit Request" }),
@@ -149,9 +133,7 @@ export const Submitted: Story = {
       expect(dialog.getByText("Request Submitted")).toBeVisible(),
     );
     expect(dialog.getByText("Pending review")).toBeVisible();
-    expect(
-      dialog.getByRole("button", { name: "Done" }),
-    ).toBeVisible();
+    expect(dialog.getByRole("button", { name: "Done" })).toBeVisible();
   },
 };
 

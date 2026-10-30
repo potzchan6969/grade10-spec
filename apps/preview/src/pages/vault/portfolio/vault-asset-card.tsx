@@ -1,10 +1,7 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import { registerBones } from "boneyard-js";
 import { Skeleton } from "boneyard-js/react";
-import {
-  PORTFOLIO_ASSETS,
-  type VaultAsset,
-} from "../../vault-content";
+import { PORTFOLIO_ASSETS, type VaultAsset } from "../../vault-content";
 import vaultAssetCardBones from "./vault-asset-card.bones.json";
 import { VaultAssetStatus } from "./vault-asset-status";
 
@@ -22,7 +19,6 @@ const SKELETON_ASSET: VaultAsset = PORTFOLIO_ASSETS[0];
 
 /** The card's layout — image well, grade, title, price line. */
 function VaultAssetCardBody({ asset }: { asset: VaultAsset }) {
-
   return (
     <>
       <div className="relative aspect-square w-full overflow-hidden rounded-(--radius-3xl) border border-border bg-background-subtle">
