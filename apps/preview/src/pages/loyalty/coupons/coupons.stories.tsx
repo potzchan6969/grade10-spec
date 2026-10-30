@@ -1,10 +1,4 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@grade10/design-system/components/display/tabs";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { type CouponItem, CouponList, SiteHeader } from "@grade10/ui";
@@ -13,6 +7,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { storyHref } from "../../workbench-story-nav";
+import { CouponTabs, isOpen } from "../coupon-tabs";
 import {
   COUPON_LIST_COPY,
   COUPON_PROMO_COPY,
@@ -21,16 +16,6 @@ import {
 } from "../loyalty-content";
 
 const REWARDS_HREF = storyHref("loyalty-rewards-screens-rewards--default");
-
-const isOpen = (coupon: CouponItem) => coupon.status === "open";
-
-const couponState = (
-  data: readonly CouponItem[],
-  empty: { message: string; description: string },
-) =>
-  data.length > 0
-    ? { status: "ready" as const, data }
-    : { status: "empty" as const, ...empty };
 
 /** The upsell under Available: points still buy more coupons. */
 const couponPromo = (
@@ -75,41 +60,7 @@ function CouponsPage({ coupons = COUPONS }: { coupons?: CouponItem[] }) {
               }}
             />
           ) : (
-            <Tabs defaultValue="available">
-              <TabsList
-                className="w-full justify-start border-b border-border"
-                variant="list"
-              >
-                <TabsTrigger value="available">
-                  {COUPONS_PAGE_COPY.availableTab}
-                </TabsTrigger>
-                <TabsTrigger value="history">
-                  {COUPONS_PAGE_COPY.historyTab}
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent className="pt-4" value="available">
-                <CouponList
-                  copy={COUPON_LIST_COPY}
-                  promo={couponPromo}
-                  state={couponState(coupons.filter(isOpen), {
-                    message: COUPONS_PAGE_COPY.noAvailable,
-                    description: COUPONS_PAGE_COPY.noAvailableDescription,
-                  })}
-                />
-              </TabsContent>
-              <TabsContent className="pt-4" value="history">
-                <CouponList
-                  copy={COUPON_LIST_COPY}
-                  state={couponState(
-                    coupons.filter((coupon) => !isOpen(coupon)),
-                    {
-                      message: COUPONS_PAGE_COPY.noHistory,
-                      description: COUPONS_PAGE_COPY.noHistoryDescription,
-                    },
-                  )}
-                />
-              </TabsContent>
-            </Tabs>
+            <CouponTabs coupons={coupons} promo={couponPromo} />
           )}
         </div>
       </main>
@@ -143,7 +94,7 @@ export const Default: Story = {
     /* The upsell sits under Available, not on the history tab. */
     expect(canvas.getByText("Want more coupons?")).toBeInTheDocument();
     expect(
-      canvas.getByRole("link", { name: "Browse Rewards" }),
+      canvas.getByRole("button", { name: "Browse Rewards" }),
     ).toBeInTheDocument();
     /* Inside its last 14 days the Use by line reads emphasised; an
      * unflagged coupon's reads plainly. */
@@ -157,13 +108,19 @@ export const Default: Story = {
     expect(canvas.queryByText(/Used on/)).not.toBeInTheDocument();
     await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
     /* The upsell is Available's alone — history shows no promo. */
-    expect(canvas.queryByText("Want more coupons?")).not.toBeInTheDocument();
+    expect(
+      within(
+        canvas.getByRole("tabpanel", { name: "Used & Expired" }),
+      ).queryByText("Want more coupons?"),
+    ).not.toBeInTheDocument();
     expect(await canvas.findByText(/Used on/)).toBeInTheDocument();
     expect(canvas.getByText(/Void/)).toBeInTheDocument();
     expect(canvas.getByText(/Expired 1 May 2026/)).toBeInTheDocument();
     expect(
       document.body.querySelector('[data-slot="promo-qr-card"]'),
     ).not.toBeInTheDocument();
+    /* Settle back on the state this story is about. */
+    await userEvent.click(canvas.getByRole("tab", { name: "Available" }));
   },
 };
 
@@ -197,19 +154,23 @@ export const NoCoupons: Story = {
 };
 
 /** Everything spendable is spent or lapsed: Available falls back to its
- * own empty line — and still carries the upsell — while the history tab
- * holds the record. */
+ * own empty line — the upsell yields to it — while the history tab holds
+ * the record. */
 export const AvailableEmpty: Story = {
   args: { coupons: COUPONS.filter((coupon) => !isOpen(coupon)) },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Nothing to use yet")).toBeInTheDocument();
-    expect(canvas.getByText("Want more coupons?")).toBeInTheDocument();
+    /* `CouponList` draws the promo only when the list is ready; an empty
+     * Available keeps its own surface. */
+    expect(canvas.queryByText("Want more coupons?")).not.toBeInTheDocument();
     await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
     expect(await canvas.findByText(/Used on/)).toBeInTheDocument();
     expect(
       canvas.queryByText("No used or expired coupons"),
     ).not.toBeInTheDocument();
+    /* Settle back on the state this story is about. */
+    await userEvent.click(canvas.getByRole("tab", { name: "Available" }));
   },
 };
 
@@ -225,7 +186,11 @@ export const HistoryEmpty: Story = {
       await canvas.findByText("No used or expired coupons"),
     ).toBeInTheDocument();
     /* The promo stays with Available, not with history's empty line. */
-    expect(canvas.queryByText("Want more coupons?")).not.toBeInTheDocument();
+    expect(
+      within(
+        canvas.getByRole("tabpanel", { name: "Used & Expired" }),
+      ).queryByText("Want more coupons?"),
+    ).not.toBeInTheDocument();
   },
 };
 

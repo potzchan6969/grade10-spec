@@ -23,7 +23,7 @@ cart is offered for checkout, where the shop becomes the authority.
   - Reduced: a line the shop can fill in part drops to what it can fill and
     says so
   - Out of stock: a line the shop cannot fill stays, marked, for the collector
-    to remove
+    to remove; checkout leaves it out
   - Withdrawn: a line whose product left the channel, or whose variant no
     longer exists, is removed and named, apart from one that sold out
   - Repriced: a line shows the current price, the change is disclosed once, and
@@ -151,8 +151,10 @@ not their doing.
 
 **Out of stock** - When a re-read answers not fillable, the store SHALL report
 the line as out of stock and SHALL NOT reduce it to zero silently or remove
-it. The collector SHALL be able to remove it themselves, and while it stays
-the cart SHALL NOT be offered for checkout.
+it. The collector SHALL be able to remove it themselves. While it stays, the
+subtotal, shipping and total SHALL leave it out, and checkout SHALL take only
+the lines that still sell; the cart SHALL NOT be offered for checkout only when
+no line still sells.
 
 **Never grown** - The store SHALL NOT increase a line's quantity on a re-read,
 whatever count has since become available. A collector asked for what they
@@ -176,14 +178,15 @@ asked for.
 - **THEN** the line is reported as out of stock
 - **AND** the line is still shown, and the collector can remove it
 
-<!-- trace:scenario id=g10.store-cart-validation.SC-c5i rev=1 -->
-#### Scenario: grade10-site-store-cart-validation-SC-26 - A sold-out line holds checkout
+<!-- trace:scenario id=g10.store-cart-validation.SC-c5i rev=2 -->
+#### Scenario: grade10-site-store-cart-validation-SC-26 - A sold-out line is left out of checkout
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
 - **GIVEN** a cart whose open read found one of its two lines out of stock
-- **THEN** the cart cannot be offered for checkout
-- **WHEN** the collector removes that line
-- **THEN** the cart can be offered for checkout
+- **THEN** the totals leave that line out and the cart can be offered for checkout
+- **WHEN** the collector offers it
+- **THEN** the checkout order holds only the line that still sells
+- **AND** a cart whose every line is out of stock cannot be offered for checkout
 
 <!-- trace:scenario id=g10.store-cart-validation.SC-gut rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-07 - A line is never grown
@@ -355,8 +358,8 @@ order from an earlier read, however recent, and SHALL NOT take two reads where
 one answers both.
 
 **Nothing contradicted goes** - When that read finds any line out of stock,
-unavailable, adjusted, or repriced, the store SHALL NOT create the checkout
-order. It SHALL return the collector to their cart with every such line
+unavailable, adjusted, or repriced that the cart did not already show so, the
+store SHALL NOT create the checkout order. It SHALL return the collector to their cart with every such line
 identified and what happened to each of them said — every contradicted line at
 once, not the first one found.
 

@@ -1,4 +1,3 @@
-import { calibrateAssessment } from "./calibration.mjs";
 import {
   canonicalJson,
   captureLocale,
@@ -10,9 +9,10 @@ import {
 
 const INTERNAL_PREFIX = "ui-verification/v1/";
 const RUNS_PREFIX = `${INTERNAL_PREFIX}runs/`;
-const REVIEWS_PREFIX = `${INTERNAL_PREFIX}reviews/`;
 const ASSESSMENTS_PREFIX = `${INTERNAL_PREFIX}assessments/`;
-const CALIBRATIONS_PREFIX = `${INTERNAL_PREFIX}calibrations/`;
+const REFERENCES_PREFIX = `${INTERNAL_PREFIX}references/`;
+const REFERENCE_RUNS_PREFIX = `${INTERNAL_PREFIX}reference-runs/`;
+const COMMIT = /^[0-9a-f]{40}$/;
 const SAFE_ID = /^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$/;
 const SHA256 = /^[a-f0-9]{64}$/i;
 const PNG_SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10];
@@ -327,18 +327,10 @@ function runKey(runId) {
   return `${RUNS_PREFIX}${assertId(runId, "runId")}.json`;
 }
 
-function reviewPrefix(runId) {
-  return `${REVIEWS_PREFIX}${assertId(runId, "runId")}/`;
-}
-
 function assessmentPrefix(runId) {
   return runId === undefined
     ? ASSESSMENTS_PREFIX
     : `${ASSESSMENTS_PREFIX}${assertId(runId, "runId")}/`;
-}
-
-function calibrationKey(calibrationId) {
-  return `${CALIBRATIONS_PREFIX}${assertHash(calibrationId, "calibrationId")}.json`;
 }
 
 function jsonBytes(value, path) {
@@ -711,96 +703,9 @@ function storeFactory(createStore) {
         fail(
           409,
           "CAPTURE_NOT_REVIEWABLE",
-          "only captured outcomes can be reviewed or assessed",
+          "only captured outcomes can be assessed",
         );
       return { manifest, capture };
-    }
-
-    async function createReview(inputValue, reviewerValue) {
-      const input = record(inputValue, "review");
-      assertOnlyKeys(
-        input,
-        [
-          "runId",
-          "caseId",
-          "targetId",
-          "capturePointId",
-          "profileId",
-          "locale",
-          "decision",
-          "comment",
-        ],
-        "review",
-      );
-      const requestedLocale = Object.hasOwn(input, "locale")
-        ? localeValue(input.locale, "review.locale")
-        : "en";
-      const { manifest, capture } = await getCapture(
-        input.runId,
-        input.caseId,
-        input.targetId,
-        input.capturePointId,
-        input.profileId,
-        requestedLocale,
-      );
-      if (!["approved", "changes-requested"].includes(input.decision)) {
-        throw new TypeError(
-          "review.decision must be approved or changes-requested",
-        );
-      }
-      const comment =
-        input.comment === undefined
-          ? ""
-          : text(input.comment, "review.comment", { max: 10000 });
-      const reviewer = record(reviewerValue, "reviewer");
-      assertOnlyKeys(reviewer, ["subject", "email"], "reviewer");
-      const trustedReviewer = {
-        subject: text(reviewer.subject, "reviewer.subject", { max: 255 }),
-        ...(reviewer.email === undefined
-          ? {}
-          : { email: text(reviewer.email, "reviewer.email", { max: 320 }) }),
-      };
-      const review = {
-        schemaVersion: 1,
-        reviewId: globalThis.crypto.randomUUID(),
-        runId: manifest.runId,
-        caseId: capture.caseId,
-        targetId: capture.targetId,
-        capturePointId: capture.capturePointId,
-        profileId: capture.profileId,
-        ...(carriesLocale(manifest, capture, input)
-          ? { locale: captureLocale(capture) }
-          : {}),
-        capture: {
-          inputFingerprint: capture.inputFingerprint,
-          siteHash: capture.site.sha256.toLowerCase(),
-          referenceHash: capture.reference?.sha256.toLowerCase() ?? null,
-        },
-        decision: input.decision,
-        comment,
-        reviewer: trustedReviewer,
-        createdAt: new Date().toISOString(),
-      };
-      const key = `${reviewPrefix(manifest.runId)}${review.reviewId}.json`;
-      await putImmutable(key, jsonBytes(review, "review"), "application/json");
-      return review;
-    }
-
-    async function listReviews({ runId, caseId, locale, cursor, limit } = {}) {
-      if (runId !== undefined) assertId(runId, "runId");
-      if (caseId !== undefined) assertId(caseId, "caseId");
-      const requestedLocale =
-        locale === undefined ? undefined : localeValue(locale, "locale");
-      return listJson({
-        prefix: runId === undefined ? REVIEWS_PREFIX : reviewPrefix(runId),
-        cursor,
-        limit,
-        resultName: "reviews",
-        filter: (review) =>
-          (!caseId || review.caseId === caseId) &&
-          (requestedLocale === undefined ||
-            sameLocale(captureLocale(review), requestedLocale)),
-      });
     }
 
     function normalizeAssessment(inputValue, manifest, capture) {
@@ -1033,7 +938,7 @@ function storeFactory(createStore) {
       }
       if (input.decision !== "shadow")
         throw new TypeError(
-          "assessment.decision must remain shadow until a separately calibrated policy decides",
+          "assessment.decision must remain shadow: scores are advisory",
         );
 
       return {
@@ -1127,530 +1032,153 @@ function storeFactory(createStore) {
       });
     }
 
-    async function createCalibration(inputValue) {
-      const input = record(inputValue, "calibration");
+    function referenceKey(referenceId) {
+      return `${REFERENCES_PREFIX}${assertId(referenceId, "referenceId")}.json`;
+    }
+
+    function approver(value) {
+      const person = record(value, "approver");
+      assertOnlyKeys(person, ["subject", "email"], "approver");
+      return {
+        subject: text(person.subject, "approver.subject", { max: 255 }),
+        ...(person.email === undefined
+          ? {}
+          : { email: text(person.email, "approver.email", { max: 320 }) }),
+      };
+    }
+
+    // A reference the workbench captured from the live story: its own PNG and
+    // record, apart from any site run, so an approval can name exact bytes.
+    async function createReference(inputValue, bytesValue, capturedBy) {
+      const input = record(inputValue, "reference");
       assertOnlyKeys(
         input,
-        ["runId", "assessmentId", "locale", "calibration", "policy"],
-        "calibration",
+        [
+          "caseId",
+          "targetId",
+          "capturePointId",
+          "profileId",
+          "locale",
+          "storyId",
+          "selector",
+          "region",
+          "commit",
+          "ref",
+          "verified",
+          "browser",
+        ],
+        "reference",
       );
-      assertId(input.runId, "calibration.runId");
-      const assessmentId = assertHash(
-        input.assessmentId,
-        "calibration.assessmentId",
-      );
-      const requestedLocale = Object.hasOwn(input, "locale")
-        ? localeValue(input.locale, "calibration.locale")
-        : "en";
-      const calibrationInput = record(
-        input.calibration,
-        "calibration.calibration",
-      );
-      assertOnlyKeys(
-        calibrationInput,
-        ["schemaVersion", "key", "observations"],
-        "calibration.calibration",
-      );
-      if (calibrationInput.schemaVersion !== 1)
-        throw new TypeError("calibration.calibration.schemaVersion must be 1");
-      const policy = normalizeCalibrationPolicy(input.policy);
-      if (
-        !Array.isArray(calibrationInput.observations) ||
-        calibrationInput.observations.length > 10000
-      ) {
+      assertId(input.caseId, "reference.caseId");
+      assertId(input.targetId, "reference.targetId");
+      assertId(input.capturePointId, "reference.capturePointId");
+      if (!Object.hasOwn(PROFILES, input.profileId))
         throw new TypeError(
-          "calibration.calibration.observations must be an array of at most 10000 rows",
+          "reference.profileId must be a known viewport profile",
         );
+      if (typeof input.commit !== "string" || !COMMIT.test(input.commit))
+        throw new TypeError("reference.commit must be a full lowercase commit");
+      if (typeof input.verified !== "boolean")
+        throw new TypeError("reference.verified must be a boolean");
+      const bytes = asBytes(bytesValue, "reference image");
+      const size = parsePng(bytes);
+      const viewport = PROFILES[input.profileId];
+      if (size.width !== viewport.width || size.height !== viewport.height)
+        throw new TypeError(
+          `reference image must be ${viewport.width}x${viewport.height} at ${input.profileId}`,
+        );
+      const region = record(input.region, "reference.region");
+      assertOnlyKeys(region, ["x", "y", "width", "height"], "reference.region");
+      for (const name of ["x", "y", "width", "height"]) {
+        if (!Number.isInteger(region[name]) || region[name] < 0)
+          throw new TypeError(
+            `reference.region.${name} must be a whole number`,
+          );
       }
-      const suppliedCalibrationKey = record(
-        calibrationInput.key,
-        "calibration.calibration.key",
-      );
       if (
-        !sameLocale(
-          localeValue(suppliedCalibrationKey.locale, "calibration.key.locale"),
-          requestedLocale,
-        )
-      ) {
-        fail(
-          400,
-          "CALIBRATION_KEY_LOCALE_MISMATCH",
-          "calibration key locale does not match the requested locale",
-        );
-      }
-      const targetAssessment = await findAssessment(
-        input.runId,
-        assessmentId,
-        requestedLocale,
-      );
-      if (!targetAssessment)
-        fail(
-          404,
-          "ASSESSMENT_NOT_FOUND",
-          `assessment ${assessmentId} was not found in run ${input.runId}`,
-        );
-      const { capture } = await getCapture(
-        input.runId,
-        targetAssessment.caseId,
-        targetAssessment.targetId,
-        targetAssessment.capturePointId,
-        targetAssessment.profileId,
-        requestedLocale,
-      );
-      if (
-        targetAssessment.caseId !== capture.caseId ||
-        targetAssessment.targetId !== capture.targetId ||
-        targetAssessment.capturePointId !== capture.capturePointId ||
-        targetAssessment.profileId !== capture.profileId ||
-        targetAssessment.imageHashes.site !==
-          capture.site.sha256.toLowerCase() ||
-        targetAssessment.imageHashes.reference !==
-          capture.reference?.sha256.toLowerCase()
-      ) {
-        fail(
-          409,
-          "ASSESSMENT_PIN_MISMATCH",
-          "stored assessment does not match its sealed capture",
-        );
-      }
-
-      const recipe = JSON.parse(
-        canonicalJson({ calibration: calibrationInput, policy }),
-      );
-      const allAssessments = await allRecords(listAssessments, "assessments", {
-        locale: requestedLocale,
-      });
-      const rows = [];
-      const reviewsByRun = new Map();
-      const capturesByIdentity = new Map();
-      for (const observation of recipe.calibration.observations) {
-        record(observation, "calibration observation");
-        assertOnlyKeys(
-          observation,
-          [
-            "sourceAssessmentId",
-            "sourceRunId",
-            "reviewId",
-            "reviewerId",
-            "locale",
-            "siteSha256",
-            "referenceSha256",
-            "split",
-            "independent",
-            "humanApproved",
-            "similarity",
-            "criticalVeto",
-            "unknownCategory",
-            "provenanceVerified",
-            "captureStatus",
-          ],
-          "calibration observation",
-        );
-        const sourceAssessmentId = assertHash(
-          observation.sourceAssessmentId,
-          "observation.sourceAssessmentId",
-        );
-        const observationLocale = Object.hasOwn(observation, "locale")
-          ? localeValue(observation.locale, "observation.locale")
-          : "en";
-        if (!sameLocale(observationLocale, requestedLocale)) {
-          fail(
-            400,
-            "CALIBRATION_OBSERVATION_LOCALE_MISMATCH",
-            "calibration observation locale does not match the requested locale",
-          );
-        }
-        const source = allAssessments.find(
-          (assessment) =>
-            assessment.assessmentId === sourceAssessmentId &&
-            sameLocale(captureLocale(assessment), requestedLocale),
-        );
-        if (!source)
-          fail(
-            400,
-            "UNKNOWN_SOURCE_ASSESSMENT",
-            `calibration source assessment ${sourceAssessmentId} is not archived`,
-          );
-        if (
-          observation.sourceRunId !== undefined &&
-          assertId(observation.sourceRunId, "observation.sourceRunId") !==
-            source.runId
-        ) {
-          fail(
-            400,
-            "CALIBRATION_SOURCE_RUN_MISMATCH",
-            "calibration sourceRunId does not match the archived assessment",
-          );
-        }
-        if (
-          source.scorer.id !== recipe.calibration.key?.scorerId ||
-          source.scorer.version !== recipe.calibration.key?.scorerVersion ||
-          source.scorer.model !== recipe.calibration.key?.scorerModel ||
-          source.profileId !== recipe.calibration.key?.profileId ||
-          !sameLocale(captureLocale(source), requestedLocale) ||
-          source.contractHash !==
-            recipe.calibration.key?.contractHash?.toLowerCase() ||
-          source.rubricVersion !== recipe.calibration.key?.rubricVersion
-        ) {
-          fail(
-            400,
-            "CALIBRATION_SOURCE_KEY_MISMATCH",
-            "calibration source assessment does not match the supplied scorer key",
-          );
-        }
-        const sourceCaptureKey = canonicalJson({
-          runId: source.runId,
-          caseId: source.caseId,
-          targetId: source.targetId,
-          capturePointId: source.capturePointId,
-          profileId: source.profileId,
-          locale: captureLocale(source),
-        });
-        let sourceCapture = capturesByIdentity.get(sourceCaptureKey);
-        if (!sourceCapture) {
-          sourceCapture = (
-            await getCapture(
-              source.runId,
-              source.caseId,
-              source.targetId,
-              source.capturePointId,
-              source.profileId,
-              requestedLocale,
-            )
-          ).capture;
-          capturesByIdentity.set(sourceCaptureKey, sourceCapture);
-        }
-        if (
-          sourceCapture.status !== "captured" ||
-          sourceCapture.site.sha256.toLowerCase() !== source.imageHashes.site ||
-          sourceCapture.reference?.sha256.toLowerCase() !==
-            source.imageHashes.reference ||
-          sourceCapture.provenance.verified !== source.provenanceVerified ||
-          source.failureCount !== 0
-        ) {
-          fail(
-            400,
-            "CALIBRATION_SOURCE_CAPTURE_MISMATCH",
-            "calibration source assessment is not pinned to a verified successful capture",
-          );
-        }
-        const normalizedObservation = {
-          ...observation,
-          ...(suppliedCalibrationKey.locale === undefined &&
-          observation.locale === undefined &&
-          requestedLocale.toLowerCase() === "en"
-            ? {}
-            : { locale: requestedLocale }),
-          sourceAssessmentId,
-          ...(observation.sourceRunId === undefined
-            ? {}
-            : {
-                sourceRunId: assertId(
-                  observation.sourceRunId,
-                  "observation.sourceRunId",
-                ),
-              }),
-          ...(observation.reviewId === undefined
-            ? {}
-            : {
-                reviewId: text(observation.reviewId, "observation.reviewId", {
-                  max: 128,
-                }),
-              }),
-          reviewerId: text(observation.reviewerId, "observation.reviewerId", {
-            max: 255,
-          }),
-          siteSha256: assertHash(
-            observation.siteSha256,
-            "observation.siteSha256",
-          ),
-          referenceSha256: assertHash(
-            observation.referenceSha256,
-            "observation.referenceSha256",
-          ),
-        };
-        if (
-          normalizedObservation.siteSha256 !== source.imageHashes.site ||
-          normalizedObservation.referenceSha256 !==
-            source.imageHashes.reference ||
-          normalizedObservation.similarity !== source.similarity ||
-          normalizedObservation.criticalVeto !== source.criticalVeto ||
-          normalizedObservation.unknownCategory !== source.unknownCategory ||
-          normalizedObservation.provenanceVerified !==
-            source.provenanceVerified ||
-          normalizedObservation.captureStatus !== sourceCapture.status
-        ) {
-          fail(
-            400,
-            "CALIBRATION_OBSERVATION_MISMATCH",
-            "calibration observation does not match its archived assessment and capture",
-          );
-        }
-        const reviewsKey = `${source.runId}:${localeKey(requestedLocale)}`;
-        let sourceReviews = reviewsByRun.get(reviewsKey);
-        if (!sourceReviews) {
-          sourceReviews = (
-            await allRecords(listReviews, "reviews", {
-              runId: source.runId,
-              locale: requestedLocale,
-            })
-          ).filter(
-            (review) =>
-              review.caseId === source.caseId &&
-              review.targetId === source.targetId &&
-              review.capturePointId === source.capturePointId &&
-              review.profileId === source.profileId &&
-              sameLocale(captureLocale(review), requestedLocale) &&
-              review.capture.inputFingerprint ===
-                sourceCapture.inputFingerprint &&
-              review.capture.siteHash === source.imageHashes.site &&
-              review.capture.referenceHash === source.imageHashes.reference,
-          );
-          reviewsByRun.set(reviewsKey, sourceReviews);
-        }
-        const reviewerReviews = sourceReviews
-          .filter(
-            (review) =>
-              review.reviewer.subject === normalizedObservation.reviewerId,
-          )
-          .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
-        const latestReview = reviewerReviews[0];
-        if (!latestReview)
-          fail(
-            400,
-            "CALIBRATION_REVIEW_REQUIRED",
-            `reviewer ${normalizedObservation.reviewerId} has no review for source assessment ${sourceAssessmentId}`,
-          );
-        if (
-          normalizedObservation.reviewId !== undefined &&
-          normalizedObservation.reviewId !== latestReview.reviewId
-        ) {
-          fail(
-            400,
-            "CALIBRATION_REVIEW_ID_MISMATCH",
-            "calibration reviewId must identify the reviewer's latest pinned review",
-          );
-        }
-        const latestDecisionSet = new Set(
-          reviewerReviews
-            .filter((review) => review.createdAt === latestReview.createdAt)
-            .map((review) => review.decision),
-        );
-        if (latestDecisionSet.size > 1)
-          fail(
-            409,
-            "AMBIGUOUS_CALIBRATION_REVIEW",
-            "reviewer has conflicting pinned decisions at the same server timestamp",
-          );
-        if (
-          normalizedObservation.humanApproved !==
-          (latestReview.decision === "approved")
-        ) {
-          fail(
-            400,
-            "CALIBRATION_REVIEW_MISMATCH",
-            "calibration approval label does not match the reviewer's latest pinned review",
-          );
-        }
-        rows.push(normalizedObservation);
-      }
-
-      const computed = calibrateAssessment({
-        assessment: targetAssessment,
-        calibration: { ...recipe.calibration, observations: rows },
-        policy,
-      });
-      const stored = {
-        ...computed,
-        runId: input.runId,
-        rawRecipe: recipe,
+        region.width === 0 ||
+        region.height === 0 ||
+        region.x + region.width > size.width ||
+        region.y + region.height > size.height
+      )
+        throw new TypeError("reference.region must lie inside the image");
+      const referenceId = `reference-${globalThis.crypto.randomUUID()}`;
+      const key = `ui-verification/${referenceId}/reference.png`;
+      await putImmutable(key, bytes, "image/png");
+      const value = {
+        schemaVersion: 1,
+        referenceId,
+        caseId: input.caseId,
+        targetId: input.targetId,
+        capturePointId: input.capturePointId,
+        profileId: input.profileId,
+        locale: captureLocale({
+          locale: localeValue(input.locale, "reference.locale"),
+        }),
+        storyId: text(input.storyId, "reference.storyId", { max: 255 }),
+        selector:
+          input.selector === undefined || input.selector === null
+            ? null
+            : text(input.selector, "reference.selector", { max: 1024 }),
+        commit: input.commit,
+        ref: text(input.ref, "reference.ref", { max: 255 }),
+        verified: input.verified,
+        browser: text(input.browser, "reference.browser", { max: 128 }),
+        image: { key, sha256: await sha256(bytes), ...size },
+        region: {
+          x: region.x,
+          y: region.y,
+          width: region.width,
+          height: region.height,
+        },
+        capturedBy: approver(capturedBy),
+        capturedAt: new Date().toISOString(),
       };
-      const key = calibrationKey(computed.calibrationId);
-      const existing = await readRecord(key, key);
-      if (existing) {
-        const { createdAt: _createdAt, ...prior } = existing;
-        if (canonicalJson(prior) !== canonicalJson(stored))
-          fail(
-            409,
-            "IMMUTABLE_CONFLICT",
-            "calibrationId already exists with different content",
-          );
-        return existing;
-      }
-      const value = { ...stored, createdAt: new Date().toISOString() };
       await putImmutable(
-        key,
-        jsonBytes(value, "calibration"),
+        referenceKey(referenceId),
+        jsonBytes(value, "reference"),
         "application/json",
       );
       return value;
     }
 
-    async function findAssessment(runId, id, locale = "en") {
-      const page = await listAssessments({
-        runId,
-        caseId: undefined,
-        locale,
-        limit: 100,
-      });
-      let found = page.assessments.find(
-        (assessment) =>
-          assessment.assessmentId === id &&
-          sameLocale(captureLocale(assessment), locale),
-      );
-      let cursor = page.cursor;
-      while (!found && cursor) {
-        const next = await listAssessments({
-          runId,
-          locale,
-          limit: 100,
-          cursor,
-        });
-        found = next.assessments.find(
-          (assessment) =>
-            assessment.assessmentId === id &&
-            sameLocale(captureLocale(assessment), locale),
-        );
-        cursor = next.cursor;
-      }
-      return found ?? null;
+    async function getReference(referenceId) {
+      return readRecord(referenceKey(referenceId), "reference");
     }
 
-    async function allRecords(listMethod, resultName, options = {}) {
-      const values = [];
-      let cursor;
-      do {
-        const page = await listMethod({
-          ...options,
-          limit: MAX_LIST_LIMIT,
-          ...(cursor ? { cursor } : {}),
-        });
-        values.push(...page[resultName]);
-        cursor = page.cursor;
-      } while (cursor);
-      return values;
-    }
-
-    function normalizeCalibrationPolicy(value) {
-      const policy = record(value, "calibration.policy");
-      assertOnlyKeys(
-        policy,
-        [
-          "labelPolicyVersion",
-          "similarityThreshold",
-          "confidenceThreshold",
-          "minSampleSize",
-        ],
-        "calibration.policy",
-      );
-      const normalized = {
-        labelPolicyVersion: text(
-          policy.labelPolicyVersion,
-          "calibration.policy.labelPolicyVersion",
-          { max: 128 },
-        ),
-        ...(policy.similarityThreshold === undefined
-          ? {}
-          : { similarityThreshold: policy.similarityThreshold }),
-        ...(policy.confidenceThreshold === undefined
-          ? {}
-          : { confidenceThreshold: policy.confidenceThreshold }),
-        ...(policy.minSampleSize === undefined
-          ? {}
-          : { minSampleSize: policy.minSampleSize }),
-      };
-      if (
-        normalized.similarityThreshold !== undefined &&
-        (!Number.isFinite(normalized.similarityThreshold) ||
-          normalized.similarityThreshold < 98 ||
-          normalized.similarityThreshold > 100)
-      ) {
-        throw new TypeError(
-          "calibration.policy.similarityThreshold must be from 98 to 100",
-        );
-      }
-      if (
-        normalized.confidenceThreshold !== undefined &&
-        (!Number.isFinite(normalized.confidenceThreshold) ||
-          normalized.confidenceThreshold < 0.99 ||
-          normalized.confidenceThreshold > 1)
-      ) {
-        throw new TypeError(
-          "calibration.policy.confidenceThreshold must be from 0.99 to 1",
-        );
-      }
-      if (
-        normalized.minSampleSize !== undefined &&
-        (!Number.isInteger(normalized.minSampleSize) ||
-          normalized.minSampleSize < 400)
-      ) {
-        throw new TypeError(
-          "calibration.policy.minSampleSize must be at least 400",
-        );
-      }
-      return normalized;
-    }
-
-    async function listCalibrations({
-      assessmentId,
-      locale,
-      profileId,
-      scorerId,
-      scorerVersion,
-      scorerModel,
-      contractHash,
-      rubricVersion,
-      labelPolicyVersion,
-      cursor,
-      limit,
-    } = {}) {
-      if (assessmentId !== undefined) assertHash(assessmentId, "assessmentId");
-      const requestedLocale =
-        locale === undefined ? undefined : localeValue(locale, "locale");
-      if (profileId !== undefined && !Object.hasOwn(PROFILES, profileId))
-        throw new TypeError("profileId must be a known viewport profile");
-      for (const [name, value] of Object.entries({
-        scorerId,
-        scorerVersion,
-        scorerModel,
-        contractHash,
-        rubricVersion,
-        labelPolicyVersion,
-      })) {
-        if (value !== undefined)
-          text(value, name, {
-            max:
-              name === "contractHash" ? 64 : name === "scorerModel" ? 256 : 128,
-          });
-      }
-      const normalizedHash = contractHash?.toLowerCase();
+    async function listReferences({ caseId, cursor, limit } = {}) {
+      if (caseId !== undefined) assertId(caseId, "caseId");
       return listJson({
-        prefix: CALIBRATIONS_PREFIX,
+        prefix: REFERENCES_PREFIX,
         cursor,
         limit,
-        resultName: "calibrations",
-        filter: (calibration) =>
-          (requestedLocale === undefined ||
-            sameLocale(
-              captureLocale(calibration.calibrationKey ?? calibration),
-              requestedLocale,
-            )) &&
-          (!assessmentId ||
-            calibration.assessmentId === assessmentId.toLowerCase()) &&
-          (!profileId || calibration.calibrationKey?.profileId === profileId) &&
-          (!scorerId || calibration.calibrationKey?.scorerId === scorerId) &&
-          (!scorerVersion ||
-            calibration.calibrationKey?.scorerVersion === scorerVersion) &&
-          (!scorerModel ||
-            calibration.calibrationKey?.scorerModel === scorerModel) &&
-          (!normalizedHash ||
-            calibration.calibrationKey?.contractHash?.toLowerCase() ===
-              normalizedHash) &&
-          (!rubricVersion ||
-            calibration.calibrationKey?.rubricVersion === rubricVersion) &&
-          (!labelPolicyVersion ||
-            calibration.calibrationKey?.labelPolicyVersion ===
-              labelPolicyVersion),
+        resultName: "references",
+        filter: (reference) => !caseId || reference.caseId === caseId,
+      });
+    }
+
+    // A finished capture run, full or focused, as the coordinator closed it.
+    async function createReferenceRun(value) {
+      const run = record(value, "reference run");
+      assertId(run.runId, "reference run.runId");
+      if (!["full", "focused"].includes(run.lane))
+        throw new TypeError("reference run.lane must be full or focused");
+      if (!["succeeded", "failed"].includes(run.state))
+        throw new TypeError("reference run.state must be succeeded or failed");
+      await putImmutable(
+        `${REFERENCE_RUNS_PREFIX}${run.runId}.json`,
+        jsonBytes(run, "reference run"),
+        "application/json",
+      );
+      return run;
+    }
+
+    async function listReferenceRuns({ cursor, limit } = {}) {
+      return listJson({
+        prefix: REFERENCE_RUNS_PREFIX,
+        cursor,
+        limit,
+        resultName: "runs",
       });
     }
 
@@ -1661,12 +1189,13 @@ function storeFactory(createStore) {
       putObject,
       publish,
       sealRun,
-      createReview,
-      listReviews,
       createAssessment,
       listAssessments,
-      createCalibration,
-      listCalibrations,
+      createReference,
+      getReference,
+      listReferences,
+      createReferenceRun,
+      listReferenceRuns,
     };
   };
 }
@@ -1995,16 +1524,6 @@ export function createHttpArchive(
       });
       return response ? new Uint8Array(await response.arrayBuffer()) : null;
     },
-    async createReview(input) {
-      return jsonRequest("/api/reviews", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: canonicalJson(input),
-      });
-    },
-    async listReviews(options = {}) {
-      return jsonRequest(listPath("/api/reviews", options), { method: "GET" });
-    },
     async createAssessment(input) {
       return jsonRequest("/api/assessments", {
         method: "POST",
@@ -2017,15 +1536,13 @@ export function createHttpArchive(
         method: "GET",
       });
     },
-    async createCalibration(input) {
-      return jsonRequest("/api/calibrations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: canonicalJson(input),
+    async listReferences(options = {}) {
+      return jsonRequest(listPath("/api/references", options), {
+        method: "GET",
       });
     },
-    async listCalibrations(options = {}) {
-      return jsonRequest(listPath("/api/calibrations", options), {
+    async listReferenceRuns(options = {}) {
+      return jsonRequest(listPath("/api/reference-runs", options), {
         method: "GET",
       });
     },

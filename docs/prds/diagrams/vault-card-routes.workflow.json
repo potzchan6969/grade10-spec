@@ -1,0 +1,137 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Where a vaulted card can go",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "collector",
+      "label": "Collector"
+    },
+    {
+      "id": "vault",
+      "label": "The vault"
+    },
+    {
+      "id": "store",
+      "label": "The store"
+    },
+    {
+      "id": "auction",
+      "label": "The auction"
+    },
+    {
+      "id": "buyer",
+      "label": "Buyer"
+    }
+  ],
+  "mainPath": ["intake", "vault", "store", "counter"],
+  "nodes": [
+    {
+      "id": "intake",
+      "lane": "collector",
+      "col": 0,
+      "type": "frontend",
+      "label": "Intake",
+      "sublabel": "a card event, the shop or by post",
+      "width": 150
+    },
+    {
+      "id": "withdrawn",
+      "lane": "collector",
+      "col": 3,
+      "type": "frontend",
+      "label": "Retrieved",
+      "sublabel": "collected at the shop",
+      "width": 150
+    },
+    {
+      "id": "vault",
+      "lane": "vault",
+      "col": 1,
+      "type": "database",
+      "label": "In the vault",
+      "sublabel": "earning, if approved",
+      "width": 150
+    },
+    {
+      "id": "store",
+      "lane": "store",
+      "col": 2,
+      "type": "backend",
+      "label": "On sale",
+      "sublabel": "the shop's tills and events",
+      "tag": "marketplace later",
+      "width": 170
+    },
+    {
+      "id": "auction",
+      "lane": "auction",
+      "col": 2,
+      "type": "backend",
+      "label": "A lot",
+      "sublabel": "listed from the vault",
+      "width": 170
+    },
+    {
+      "id": "counter",
+      "lane": "buyer",
+      "col": 3,
+      "type": "frontend",
+      "label": "At the counter",
+      "sublabel": "sold in the shop",
+      "width": 150
+    },
+    {
+      "id": "shipped",
+      "lane": "buyer",
+      "col": 4,
+      "type": "external",
+      "label": "Shipped or collected",
+      "sublabel": "Kerry Logistics collects at the shop",
+      "width": 190
+    }
+  ],
+  "edges": [
+    {
+      "from": "intake",
+      "to": "vault",
+      "variant": "emphasis"
+    },
+    {
+      "from": "vault",
+      "to": "store",
+      "variant": "emphasis",
+      "label": "consigned"
+    },
+    {
+      "from": "vault",
+      "to": "auction",
+      "label": "consigned"
+    },
+    {
+      "from": "store",
+      "to": "counter",
+      "variant": "emphasis"
+    },
+    {
+      "from": "auction",
+      "to": "shipped",
+      "label": "won"
+    },
+    {
+      "from": "vault",
+      "to": "withdrawn",
+      "variant": "dashed",
+      "label": "retrieved",
+      "fromSide": "right",
+      "toSide": "bottom"
+    }
+  ]
+}

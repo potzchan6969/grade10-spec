@@ -74,6 +74,12 @@ jobs:
       - name: Build workbench Storybook
         run: pnpm run storybook:build:workbench
 
+      # The deployed Worker reads this receipt each hour: a commit it has not
+      # seen starts a full reference capture on Cloudflare. It refuses a dirty
+      # tree. No capture runs here.
+      - name: Write the build receipt
+        run: node packages/ui-verification/dev/deploy.mjs receipt apps/preview/storybook-static
+
       - name: Deploy Storybook
         working-directory: apps/preview
         run: pnpm dlx wrangler@${{ env.WRANGLER_VERSION }} deploy -c wrangler.storybook.jsonc

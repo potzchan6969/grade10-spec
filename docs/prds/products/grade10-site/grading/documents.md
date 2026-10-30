@@ -7,7 +7,7 @@ order: 4
 Two English documents, each one page running on as its list of cards needs,
 signed on the shop iPad with staff present and sealed in-house on the vault's
 ceremony —
-[Documents and Signing](/p/grade10-site/vault/documents-and-signing); the
+[Documents and Signing](/p/grade10-site/finance/documents-and-signing); the
 intake receipt between them is issued, not signed, as is the receipt of a card
 withdrawn early.
 

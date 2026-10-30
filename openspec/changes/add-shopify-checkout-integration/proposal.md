@@ -12,7 +12,7 @@ The cart drawer already reviews the basket and tender, but Pay still needs to se
 - **Current request** - Send the reviewed lines with their seen prices, the accepted coupon, and positive points or no points field when none are spent.
 - **One Pay at a time** - Accept one Pay per drawer and disable its actions while the answer is pending, using `add-store-cart-drawer-ui`'s pending-operation scope. Changes from another tab or session still invalidate older answers.
 - **Answers** - Use the existing feedback for refusal, named lines, verification, settling and failure. A lost answer is not retried by itself.
-- **Payment return** - Poll the order, read the cart and tender again once it is paid, and keep the static Your Orders link on both Shopify confirmation pages.
+- **Payment return** - Poll the order, read the cart and tender again once it is paid, and keep the static My Orders link on both Shopify confirmation pages.
 
 ## Non-Goals
 

@@ -33,7 +33,6 @@ const TIER_CARD_COPY: TierCardCopy = {
   points: "pts",
   worthSuffix: "off at checkout",
   qualifying: "Keep Gold",
-  benefits: "Benefits",
 };
 
 const MEMBER_PASS_COPY: MemberPassCopy = {
@@ -103,14 +102,7 @@ const WALLET_PASS_COPY: WalletPassLinksCopy = {
 };
 
 const TIER_BENEFITS_PAGE_COPY = {
-  breadcrumbAccount: "Account",
-  breadcrumbMembership: "Membership",
   title: "Tiers & Benefits",
-};
-
-const TIER_LADDER_COPY = {
-  qualifying: "Qualifying pts this year",
-  footnote: `Only points from purchases count toward your tier. Your tier year renews ${RENEWS}.`,
 };
 
 /** One line of the programme's mechanics, as the Tiers & Benefits surface reads it. */
@@ -151,8 +143,6 @@ type TierBenefitsRow = {
   id: string;
   tier: string;
   caption: string;
-  /** The shorter ask the ladder's rung carries — "Join", "500 pts / yr". */
-  ladderCaption: string;
   benefits: readonly string[];
   /** A rung nobody earns: the ladder draws no connector into it. */
   invitationOnly?: boolean;
@@ -163,21 +153,18 @@ const TIER_BENEFITS: readonly TierBenefitsRow[] = [
     id: "silver",
     tier: "Silver",
     caption: "Free to join",
-    ladderCaption: "Join",
     benefits: ["1 pt for every HK$10 spent"],
   },
   {
     id: "gold",
     tier: "Gold",
     caption: "500 pts / year",
-    ladderCaption: "500 pts / yr",
     benefits: ["1.2 pt for every HK$10 spent"],
   },
   {
     id: "black",
     tier: "Black",
     caption: "Invitation only",
-    ladderCaption: "Invitation Only",
     benefits: ["1.7 pt for every HK$10 spent"],
     invitationOnly: true,
   },
@@ -203,13 +190,17 @@ const COUPON_PROMO_COPY = {
   cta: "Browse Rewards",
 };
 
+const REWARDS_PAGE_COPY = {
+  title: "Rewards",
+  subtitle: "Swap points for coupons, collecting supplies and vault services.",
+};
+
 const MEMBERSHIP_PAGE_COPY = {
-  breadcrumbAccount: "Account",
   title: "Membership",
   cardHeading: "Your Member Pass",
   rewardsHeading: "Rewards",
   couponsHeading: "Your Coupons",
-  topUpAction: "Top up points",
+  topUpAction: "Top-up Points",
   pointHistoryHeading: "Points History",
 };
 
@@ -421,7 +412,7 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     delta: 120,
     date: formatDay(Date.UTC(2026, 9, 9)),
     month: formatMonthName(Date.UTC(2026, 9, 9)),
-    context: "Goodwill credit",
+    context: "Credit from Grade10",
   },
   {
     id: "entry-redeem",
@@ -434,6 +425,16 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     context: "Redeemed HK$50 off",
   },
   {
+    id: "entry-purchase",
+    kind: "In-store purchase",
+    track: "earned",
+    icon: "order",
+    delta: 105,
+    date: formatDay(Date.UTC(2026, 8, 20)),
+    month: formatMonthName(Date.UTC(2026, 8, 20)),
+    context: "Order #10482",
+  },
+  {
     id: "entry-topup",
     kind: "Points top-up",
     track: "earned",
@@ -441,6 +442,9 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     delta: 200,
     date: formatDay(Date.UTC(2026, 8, 15)),
     month: formatMonthName(Date.UTC(2026, 8, 15)),
+    /* The whole entry opens the Stripe receipt — a top-up's only
+     * paperwork, so the ledger carries no separate history surface. */
+    href: "#receipt-entry-topup",
   },
   {
     id: "entry-credits",
@@ -453,14 +457,13 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     context: "Order #10514",
   },
   {
-    id: "entry-purchase",
-    kind: "In-store purchase",
-    track: "earned",
-    icon: "order",
-    delta: 105,
-    date: formatDay(Date.UTC(2026, 8, 20)),
-    month: formatMonthName(Date.UTC(2026, 8, 20)),
-    context: "Order #10482",
+    id: "entry-topup-chargeback",
+    kind: "Top-up charged back",
+    track: "used",
+    icon: "topup",
+    delta: -1000,
+    date: formatDay(Date.UTC(2026, 8, 5)),
+    month: formatMonthName(Date.UTC(2026, 8, 5)),
   },
 ];
 
@@ -547,12 +550,13 @@ const MEMBERSHIP_STATE_VIEWS = {
     earnLine: "Silver earning 1x points",
     coupons: {
       status: "empty",
-      message: "You have no coupons yet. Redeem a reward to get one.",
+      message: COUPONS_PAGE_COPY.noCoupons,
+      description: COUPONS_PAGE_COPY.noCouponsDescription,
     },
     ledger: {
       status: "empty",
       message: "No points yet",
-      description: "Earn points with every purchase — online or at the till.",
+      description: "Earn points on what you pay — online or at the till.",
       action: { label: "Start shopping", onAction: () => {} },
     },
     ledgerTotals: { earned: 0, used: 0, pending: 0 },
@@ -569,7 +573,8 @@ const MEMBERSHIP_STATE_VIEWS = {
     ...MEMBERSHIP_VIEW,
     coupons: {
       status: "empty",
-      message: "You have no coupons yet. Redeem a reward to get one.",
+      message: COUPONS_PAGE_COPY.noCoupons,
+      description: COUPONS_PAGE_COPY.noCouponsDescription,
     },
   },
   passAdded: {
@@ -630,12 +635,12 @@ export {
   REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
   REWARDS,
+  REWARDS_PAGE_COPY,
   SHORT_BALANCE_COPY,
   SOLD_OUT_COPY,
   SOLD_OUT_REWARDS,
   TIER_BENEFITS,
   TIER_BENEFITS_PAGE_COPY,
   TIER_CARD_COPY,
-  TIER_LADDER_COPY,
   WALLET_PASS_COPY,
 };

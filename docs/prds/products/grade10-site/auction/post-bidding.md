@@ -399,6 +399,10 @@ failure, and locks the form while work is in progress.
   historical order with no recorded rail reads the rail as unknown and keeps
   any stored instruction artifact; Grade10 does not substitute current Finance
   details
+- 🚧 **Invoice in View Bank Details** — the dialog names the invoice ID under
+  its title
+- 🚧 **Closing View Bank Details** — one Done control closes it; the dialog has
+  no close control in its header
 
 #### Bank Transfer Proof
 

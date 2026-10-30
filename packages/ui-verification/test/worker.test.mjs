@@ -4,7 +4,11 @@ import test from "node:test";
 import { deflateSync } from "node:zlib";
 import { createR2Archive } from "../src/archive.mjs";
 import { PROFILES } from "../src/model.mjs";
-import { createWorker } from "../worker/index.mjs";
+import {
+  createWorker,
+  defineReferenceCaptures,
+  watchDeploys,
+} from "../worker/index.mjs";
 
 const CASE_ID = "case-worker-smoke";
 const TARGET_ID = "grade10-site";
@@ -121,6 +125,31 @@ function makeFixture(runId) {
       captures,
     },
     objects,
+  };
+}
+
+// One Durable Object instance behind a namespace, as the runtime gives it.
+function fakeCaptureNamespace(env) {
+  const values = new Map();
+  const storage = {
+    get: async (key) => values.get(key),
+    put: async (key, value) => void values.set(key, structuredClone(value)),
+    delete: async (key) => void values.delete(key),
+    list: async ({ prefix = "" } = {}) =>
+      new Map([...values].filter(([key]) => key.startsWith(prefix))),
+    setAlarm: async () => {},
+  };
+  const ReferenceCaptures = defineReferenceCaptures({
+    launch: async () => {
+      throw new Error("no browser in this test");
+    },
+  });
+  const instance = new ReferenceCaptures({ storage }, env);
+  return {
+    idFromName: (name) => name,
+    get: () => ({
+      fetch: (url, init) => instance.fetch(new Request(url, init)),
+    }),
   };
 }
 
@@ -339,7 +368,7 @@ test("Worker publishes immutable PNG objects and seals a run only after verifyin
   assert.equal(conflict.status, 409);
 });
 
-test("Worker attributes human review only to a verified Access JWT and pins capture hashes", async (_t) => {
+test("Worker attributes an approval only to a verified Access JWT and pins the reference hash", async (_t) => {
   const bucket = fakeR2Bucket();
   const { publicKey, privateKey } = generateKeyPairSync("rsa", {
     modulusLength: 2048,
@@ -369,72 +398,133 @@ test("Worker attributes human review only to a verified Access JWT and pins capt
     ACCESS_JWKS_URL: jwksUrl,
     ALLOWED_ORIGINS: "https://storybook.example.test",
   };
+  env.REFERENCE_CAPTURES = fakeCaptureNamespace(env);
   const { manifest, objects } = makeFixture("run-worker-review");
-  await createR2Archive(bucket).publish(manifest, objects);
+  const capture = manifest.captures[0];
+  const referenceBytes = objects.find(
+    (object) => object.key === capture.reference.key,
+  ).bytes;
+  const reference = await createR2Archive(bucket).createReference(
+    {
+      caseId: CASE_ID,
+      targetId: TARGET_ID,
+      capturePointId: CAPTURE_POINT_ID,
+      profileId: capture.profileId,
+      locale: "en",
+      storyId: "pages-home--default",
+      selector: null,
+      region: { x: 0, y: 0, width: 10, height: 10 },
+      commit: "b".repeat(40),
+      ref: "main",
+      verified: true,
+      browser: "chromium",
+    },
+    referenceBytes,
+    { subject: "local-development" },
+  );
 
   const body = {
-    runId: manifest.runId,
-    caseId: CASE_ID,
-    targetId: TARGET_ID,
-    capturePointId: CAPTURE_POINT_ID,
-    profileId: "desktop",
+    referenceId: reference.referenceId,
     decision: "changes-requested",
     comment: "Please revisit the spacing.",
   };
-  const spoofed = await worker.fetch(
-    new Request("https://archive.example.test/api/reviews", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-reviewer": "reviewer@example.test",
-        Origin: "https://storybook.example.test",
-      },
-      body: JSON.stringify(body),
-    }),
-    env,
-  );
+  const post = (path, headers) =>
+    worker.fetch(
+      new Request(`https://archive.example.test${path}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "https://storybook.example.test",
+          ...headers,
+        },
+        body: JSON.stringify(body),
+      }),
+      env,
+    );
+  const spoofed = await post("/api/approvals", {
+    "x-reviewer": "reviewer@example.test",
+  });
   assert.equal(spoofed.status, 401);
 
-  const serviceTokenReview = await worker.fetch(
-    new Request("https://archive.example.test/api/reviews", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Cf-Access-Jwt-Assertion": accessJwt(
-          privateKey,
-          "archive-app-audience",
-          null,
-        ),
-        Origin: "https://storybook.example.test",
-      },
-      body: JSON.stringify(body),
-    }),
-    env,
-  );
-  assert.equal(serviceTokenReview.status, 401);
+  const serviceToken = await post("/api/approvals", {
+    "Cf-Access-Jwt-Assertion": accessJwt(
+      privateKey,
+      "archive-app-audience",
+      null,
+    ),
+  });
+  assert.equal(serviceToken.status, 401);
 
-  const saved = await worker.fetch(
-    new Request("https://archive.example.test/api/reviews", {
+  const signedIn = {
+    "Cf-Access-Jwt-Assertion": accessJwt(privateKey, "archive-app-audience"),
+  };
+  const saved = await post("/api/approvals", signedIn);
+  assert.equal(saved.status, 201);
+  const approval = await saved.json();
+  assert.equal(approval.approver.subject, "access-subject-42");
+  assert.equal(approval.approver.email, "reviewer@example.test");
+  assert.equal(approval.referenceHash, reference.image.sha256);
+
+  const listed = await worker.fetch(
+    new Request(
+      `https://archive.example.test/api/approvals?caseId=${CASE_ID}`,
+      { headers: { Origin: "https://storybook.example.test", ...signedIn } },
+    ),
+    env,
+  );
+  assert.equal(
+    (await listed.json()).approvals[0].approvalId,
+    approval.approvalId,
+  );
+
+  const unbound = await worker.fetch(
+    new Request("https://archive.example.test/api/approvals", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Cf-Access-Jwt-Assertion": accessJwt(
-          privateKey,
-          "archive-app-audience",
-        ),
         Origin: "https://storybook.example.test",
+        ...signedIn,
       },
       body: JSON.stringify(body),
     }),
-    env,
+    { ...env, REFERENCE_CAPTURES: undefined },
   );
-  assert.equal(saved.status, 201);
-  const review = await saved.json();
-  assert.equal(review.reviewer.subject, "access-subject-42");
-  assert.equal(review.reviewer.email, "reviewer@example.test");
-  assert.equal(review.capture.siteHash, manifest.captures[0].site.sha256);
-  assert.equal(
-    review.capture.referenceHash,
-    manifest.captures[0].reference.sha256,
+  assert.equal(unbound.status, 501);
+  assert.equal((await unbound.json()).code, "CAPTURE_UNAVAILABLE");
+});
+
+test("the Worker's clock reads its own build receipt and notices a new deploy once", async () => {
+  const env = {
+    ARCHIVE: fakeR2Bucket(),
+    STORYBOOK_ORIGIN: "https://storybook.example.test/",
+  };
+  env.REFERENCE_CAPTURES = fakeCaptureNamespace(env);
+  const requested = [];
+  env.ASSETS = {
+    fetch: async (request) => {
+      requested.push(new URL(request.url).pathname);
+      return Response.json({
+        schemaVersion: 1,
+        target: "reference",
+        commit: "f".repeat(40),
+        artifactDigest: "0".repeat(64),
+      });
+    },
+  };
+  const first = await watchDeploys(env);
+  assert.equal(first.state, "started");
+  assert.equal(first.run.trigger, "deploy");
+  assert.equal(first.run.baseURL, "https://storybook.example.test/");
+  assert.deepEqual(await watchDeploys(env), { state: "unchanged" });
+  assert.deepEqual(requested, [
+    "/ui-verification-build.json",
+    "/ui-verification-build.json",
+  ]);
+  await assert.rejects(
+    watchDeploys({
+      ...env,
+      ASSETS: { fetch: async () => new Response("missing", { status: 404 }) },
+    }),
+    /has no receipt \(HTTP 404\)/,
   );
 });

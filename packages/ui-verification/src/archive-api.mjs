@@ -145,11 +145,13 @@ function queryOptions(url, names) {
 function routeScope(method, pathname) {
   if (method === "GET") return "read";
   if (method === "PUT" && pathname === "/api/objects") return "publish";
-  if (method === "POST" && pathname === "/api/reviews") return "review";
   if (
     method === "POST" &&
-    ["/api/runs", "/api/assessments", "/api/calibrations"].includes(pathname)
+    ["/api/references", "/api/approvals"].includes(pathname)
   )
+    return "approve";
+  if (method === "POST" && pathname === "/api/reference-runs") return "approve";
+  if (method === "POST" && ["/api/runs", "/api/assessments"].includes(pathname))
     return "publish";
   return null;
 }
@@ -159,7 +161,7 @@ function hasScope(identity, scope) {
   if (scope === "read")
     return identity.kind === "publisher" || identity.kind === "human";
   if (scope === "publish") return identity.kind === "publisher";
-  return scope === "review" && identity.kind === "human" && identity.reviewer;
+  return scope === "approve" && identity.kind === "human" && identity.reviewer;
 }
 
 function pathRunId(pathname) {
@@ -174,10 +176,21 @@ function pathRunId(pathname) {
   }
 }
 
+function requireCoordinator(coordinator) {
+  if (!coordinator)
+    throw new ArchiveError(
+      501,
+      "CAPTURE_UNAVAILABLE",
+      "this archive has no capture coordinator",
+    );
+  return coordinator;
+}
+
 export function createArchiveHandler(
   archive,
   {
     authorize = async () => null,
+    coordinator = null,
     allowedOrigins = DEFAULT_LOCAL_ORIGINS,
     sameOrigin = false,
     storage = archive?.root
@@ -313,22 +326,65 @@ export function createArchiveHandler(
         return jsonResponse(run, 200, headers);
       }
 
-      if (request.method === "GET" && url.pathname === "/api/reviews") {
+      if (request.method === "GET" && url.pathname === "/api/references") {
         return jsonResponse(
-          await archive.listReviews(
-            queryOptions(url, ["runId", "caseId", "cursor", "locale"]),
+          await archive.listReferences(queryOptions(url, ["caseId", "cursor"])),
+          200,
+          headers,
+        );
+      }
+
+      if (request.method === "POST" && url.pathname === "/api/references") {
+        return jsonResponse(
+          await requireCoordinator(coordinator).captureFocused({
+            ...(await readJson(request)),
+            person: identity.reviewer,
+            baseURL: `${url.origin}/`,
+          }),
+          201,
+          headers,
+        );
+      }
+
+      if (request.method === "GET" && url.pathname === "/api/approvals") {
+        return jsonResponse(
+          await requireCoordinator(coordinator).listApprovals(
+            queryOptions(url, ["caseId"]),
           ),
           200,
           headers,
         );
       }
 
-      if (request.method === "POST" && url.pathname === "/api/reviews") {
-        const review = await archive.createReview(
-          await readJson(request),
-          identity.reviewer,
+      if (request.method === "POST" && url.pathname === "/api/approvals") {
+        return jsonResponse(
+          await requireCoordinator(coordinator).createApproval(
+            await readJson(request),
+            identity.reviewer,
+          ),
+          201,
+          headers,
         );
-        return jsonResponse(review, 201, headers);
+      }
+
+      if (request.method === "GET" && url.pathname === "/api/reference-runs") {
+        const live = await requireCoordinator(coordinator).status();
+        const history = await archive.listReferenceRuns(
+          queryOptions(url, ["cursor"]),
+        );
+        return jsonResponse({ ...live, history }, 200, headers);
+      }
+
+      if (request.method === "POST" && url.pathname === "/api/reference-runs") {
+        return jsonResponse(
+          await requireCoordinator(coordinator).requestFull({
+            trigger: "manual",
+            person: identity.reviewer,
+            baseURL: `${url.origin}/`,
+          }),
+          202,
+          headers,
+        );
       }
 
       if (request.method === "GET" && url.pathname === "/api/assessments") {
@@ -346,34 +402,6 @@ export function createArchiveHandler(
           await readJson(request),
         );
         return jsonResponse(assessment, 201, headers);
-      }
-
-      if (request.method === "GET" && url.pathname === "/api/calibrations") {
-        return jsonResponse(
-          await archive.listCalibrations(
-            queryOptions(url, [
-              "assessmentId",
-              "locale",
-              "profileId",
-              "scorerId",
-              "scorerVersion",
-              "scorerModel",
-              "contractHash",
-              "rubricVersion",
-              "labelPolicyVersion",
-              "cursor",
-            ]),
-          ),
-          200,
-          headers,
-        );
-      }
-
-      if (request.method === "POST" && url.pathname === "/api/calibrations") {
-        const calibration = await archive.createCalibration(
-          await readJson(request),
-        );
-        return jsonResponse(calibration, 201, headers);
       }
 
       return jsonResponse(

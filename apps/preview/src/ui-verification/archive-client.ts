@@ -1,5 +1,7 @@
 import type {
   ImageArtifact,
+  ImageRegion,
+  ProfileId,
   VerificationManifest,
 } from "@grade10/ui-verification/model";
 import {
@@ -16,6 +18,85 @@ export interface VerificationIdentity {
 export interface ArchiveRunPage {
   runs: VerificationManifest[];
   cursor?: string;
+}
+
+export type ApprovalDecision = "approved" | "changes-requested";
+
+/** A reference the workbench captured from the live story at one size. */
+export interface ReferenceRecord extends VerificationIdentity {
+  referenceId: string;
+  profileId: ProfileId;
+  locale: string;
+  storyId: string;
+  commit: string;
+  ref: string;
+  verified: boolean;
+  image: ImageArtifact;
+  region: ImageRegion;
+  capturedAt: string;
+  capturedBy: string;
+}
+
+/** A designer's decision on one captured reference image. */
+export interface Approval extends VerificationIdentity {
+  approvalId: string;
+  referenceId: string;
+  profileId: ProfileId;
+  locale: string;
+  referenceHash: string;
+  decision: ApprovalDecision;
+  comment: string;
+  approver: string;
+  createdAt: string;
+}
+
+export interface CaptureTarget extends VerificationIdentity {
+  sourceRunId: string;
+}
+
+export interface ReferenceCaptureInput {
+  targets: CaptureTarget[];
+  locale: string;
+  approve: boolean;
+  comment?: string;
+}
+
+/** A capture run as the coordinator reports it, live or finished. */
+export interface CaptureRun {
+  runId: string;
+  lane: "full" | "focused";
+  trigger: "deploy" | "manual" | "approve" | "capture";
+  requestedBy: { subject: string; email?: string };
+  requestedAt: string;
+  state: "queued" | "running" | "succeeded" | "failed";
+  commit?: string;
+  browser?: string;
+  total: number;
+  done: number;
+  failed: number;
+  failures: (VerificationIdentity & {
+    profileId: ProfileId;
+    locale: string;
+    message: string;
+  })[];
+  startedAt?: string;
+  finishedAt?: string;
+  message?: string;
+}
+
+export interface CaptureStatus {
+  schedule: {
+    lastFullStartedAt: string | null;
+    nextFullAt: string;
+    activeFullRunId: string | null;
+    pending: {
+      trigger: string;
+      requestedAt: string;
+      requestedBy: { subject: string; email?: string };
+    } | null;
+  };
+  runs: CaptureRun[];
+  history: { runs: CaptureRun[]; cursor?: string };
 }
 
 export type ArchiveRecord = Record<string, unknown>;
@@ -156,6 +237,247 @@ export async function getRun(
     const detail = error instanceof Error ? error.message : "invalid manifest";
     throw new Error(`The selected archived run is invalid: ${detail}`);
   }
+}
+
+function personOf(value: unknown): string | null {
+  if (!isRecord(value)) return null;
+  if (typeof value.email === "string") return value.email;
+  return typeof value.subject === "string" ? value.subject : null;
+}
+
+function isProfile(value: unknown): value is ProfileId {
+  return value === "desktop" || value === "tablet" || value === "mobile";
+}
+
+function regionOf(value: unknown): ImageRegion | null {
+  if (!isRecord(value)) return null;
+  const { x, y, width, height } = value;
+  return [x, y, width, height].every(Number.isInteger)
+    ? {
+        x: x as number,
+        y: y as number,
+        width: width as number,
+        height: height as number,
+      }
+    : null;
+}
+
+// The archive validated each record when it was written, so one that does
+// not read back is reported rather than shown.
+export function referenceRecord(value: unknown): ReferenceRecord {
+  const record = requireObject(value, "for a reference");
+  const identity = verificationIdentity(record);
+  const image = isRecord(record.image) ? record.image : null;
+  const region = regionOf(record.region);
+  const capturedBy = personOf(record.capturedBy);
+  if (
+    !identity ||
+    typeof record.referenceId !== "string" ||
+    !isProfile(record.profileId) ||
+    typeof record.locale !== "string" ||
+    typeof record.storyId !== "string" ||
+    typeof record.commit !== "string" ||
+    typeof record.ref !== "string" ||
+    typeof record.verified !== "boolean" ||
+    typeof image?.key !== "string" ||
+    typeof image.sha256 !== "string" ||
+    !Number.isInteger(image.width) ||
+    !Number.isInteger(image.height) ||
+    !region ||
+    typeof record.capturedAt !== "string" ||
+    !capturedBy
+  ) {
+    throw new Error("The archive returned an unreadable reference.");
+  }
+  return {
+    ...identity,
+    referenceId: record.referenceId,
+    profileId: record.profileId,
+    locale: record.locale,
+    storyId: record.storyId,
+    commit: record.commit,
+    ref: record.ref,
+    verified: record.verified,
+    image: {
+      key: validateObjectKey(image.key),
+      sha256: image.sha256.toLowerCase(),
+      width: image.width as number,
+      height: image.height as number,
+    },
+    region,
+    capturedAt: record.capturedAt,
+    capturedBy,
+  };
+}
+
+export function approvalRecord(value: unknown): Approval {
+  const record = requireObject(value, "for an approval");
+  const identity = verificationIdentity(record);
+  const approver = personOf(record.approver);
+  if (
+    !identity ||
+    typeof record.approvalId !== "string" ||
+    typeof record.referenceId !== "string" ||
+    !isProfile(record.profileId) ||
+    typeof record.locale !== "string" ||
+    typeof record.referenceHash !== "string" ||
+    (record.decision !== "approved" &&
+      record.decision !== "changes-requested") ||
+    typeof record.comment !== "string" ||
+    !approver ||
+    typeof record.createdAt !== "string"
+  ) {
+    throw new Error("The archive returned an unreadable approval.");
+  }
+  return {
+    ...identity,
+    approvalId: record.approvalId,
+    referenceId: record.referenceId,
+    profileId: record.profileId,
+    locale: record.locale,
+    referenceHash: record.referenceHash.toLowerCase(),
+    decision: record.decision,
+    comment: record.comment,
+    approver,
+    createdAt: record.createdAt,
+  };
+}
+
+async function listPage<T>(
+  base: string,
+  path: string,
+  name: string,
+  read: (value: unknown) => T,
+  caseId: string,
+  cursor: string | undefined,
+  signal: AbortSignal,
+): Promise<{ items: T[]; cursor?: string }> {
+  const query = new URLSearchParams({ caseId, cursor: cursor ?? "" });
+  const payload = requireObject(
+    await requestJson(apiUrl(base, path, query), { signal }),
+    `for ${name}`,
+  );
+  const values = payload[name];
+  if (!Array.isArray(values)) {
+    throw new Error(`The archive response for ${name} has no list.`);
+  }
+  return {
+    items: values.map(read),
+    ...(typeof payload.cursor === "string" && payload.cursor !== ""
+      ? { cursor: payload.cursor }
+      : {}),
+  };
+}
+
+export function listReferences(
+  base: string,
+  caseId: string,
+  cursor: string | undefined,
+  signal: AbortSignal,
+) {
+  return listPage(
+    base,
+    "/api/references",
+    "references",
+    referenceRecord,
+    caseId,
+    cursor,
+    signal,
+  );
+}
+
+export function listApprovals(
+  base: string,
+  caseId: string,
+  cursor: string | undefined,
+  signal: AbortSignal,
+) {
+  return listPage(
+    base,
+    "/api/approvals",
+    "approvals",
+    approvalRecord,
+    caseId,
+    cursor,
+    signal,
+  );
+}
+
+/** Asks the coordinator to capture a few stories at every size now, approving them when asked. */
+export async function captureReference(
+  base: string,
+  input: ReferenceCaptureInput,
+): Promise<{ references: ReferenceRecord[]; approvals: Approval[] }> {
+  const payload = requireObject(
+    await requestJson(apiUrl(base, "/api/references"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    }),
+    "for the captured reference",
+  );
+  if (!Array.isArray(payload.references) || !Array.isArray(payload.approvals)) {
+    throw new Error("The archive response for the capture has no records.");
+  }
+  return {
+    references: payload.references.map(referenceRecord),
+    approvals: payload.approvals.map(approvalRecord),
+  };
+}
+
+// The coordinator's own report; its shape is checked where it is drawn.
+export async function getCaptureStatus(
+  base: string,
+  signal: AbortSignal,
+): Promise<CaptureStatus> {
+  const payload = requireObject(
+    await requestJson(apiUrl(base, "/api/reference-runs"), { signal }),
+    "for capture runs",
+  );
+  if (
+    !isRecord(payload.schedule) ||
+    !Array.isArray(payload.runs) ||
+    !isRecord(payload.history) ||
+    !Array.isArray(payload.history.runs)
+  ) {
+    throw new Error("The archive returned an unreadable capture report.");
+  }
+  return payload as unknown as CaptureStatus;
+}
+
+export async function requestFullCapture(
+  base: string,
+): Promise<{ state: "started" | "scheduled"; startsAt?: string }> {
+  const payload = requireObject(
+    await requestJson(apiUrl(base, "/api/reference-runs"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    }),
+    "for the capture request",
+  );
+  if (payload.state !== "started" && payload.state !== "scheduled") {
+    throw new Error("The archive returned an unreadable capture request.");
+  }
+  return {
+    state: payload.state,
+    ...(typeof payload.startsAt === "string"
+      ? { startsAt: payload.startsAt }
+      : {}),
+  };
+}
+
+export async function createApproval(
+  base: string,
+  input: { referenceId: string; decision: ApprovalDecision; comment?: string },
+): Promise<Approval> {
+  return approvalRecord(
+    await requestJson(apiUrl(base, "/api/approvals"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    }),
+  );
 }
 
 export async function getImageObject(

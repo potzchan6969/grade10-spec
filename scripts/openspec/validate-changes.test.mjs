@@ -5,7 +5,12 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { cli, main, waitingOnSpecs } from "./validate-changes.mjs";
+import {
+  cli,
+  main,
+  movedToTicket,
+  waitingOnSpecs,
+} from "./validate-changes.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
@@ -288,4 +293,34 @@ test("a named change is the only one read, and a typo says so", () => {
   assert.doesNotMatch(run.said, /silent/);
   assert.equal(validate(root, "silent").status, 1);
   assert.throws(() => main(root, true, "no-such-change"), /no change named/);
+});
+
+/** A change converted to a feature ticket keeps its delta on the issue, so
+ * the store owes it none - but only a ticket written as one is a ticket. */
+test("a change names the feature ticket it moved to", () => {
+  const moved = (line) =>
+    movedToTicket(change({ ".openspec.yaml": manifest(line) }));
+  assert.equal(moved("ticket: 9gag/grade10#1559\n"), "9gag/grade10#1559");
+  assert.equal(moved("ticket: '#1559'\n"), undefined);
+  assert.equal(moved("ticket: ''\n"), undefined);
+  assert.equal(moved(""), undefined);
+});
+
+test("a change moved to a ticket owes no delta, and every other error still counts", () => {
+  const moved = {
+    "proposal.md": PROPOSAL,
+    ".openspec.yaml": "schema: grade10-planning\nticket: 9gag/grade10#1559\n",
+  };
+  const run = validate(store({ moved }));
+  assert.equal(run.status, 0, run.said);
+  assert.match(run.said, /moved to a ticket: moved - 9gag\/grade10#1559/);
+
+  const alsoBroken = {
+    ...moved,
+    ".openspec.yaml":
+      "schema: no-such-schema\nskip_specs: true\nticket: 9gag/grade10#1559\n",
+  };
+  const broken = validate(store({ moved: alsoBroken }));
+  assert.equal(broken.status, 1, broken.said);
+  assert.match(broken.said, /skip_specs is set but/);
 });

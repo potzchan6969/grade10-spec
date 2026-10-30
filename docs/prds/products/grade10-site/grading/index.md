@@ -75,7 +75,7 @@ Every item is a value or an act outside the code, with who closes it.
 3. *Legal* — **The notice's form** — its wording, whether email alone serves,
    and the period it gives from posting, seeded at **90** days
 4. *Legal* — **The retention classes** — grading's rows on the vault's table
-   — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#retention-and-erasure)
+   — [Compliance and Readiness](/p/grade10-site/finance/compliance-and-readiness#retention-and-erasure)
 5. *Commercial, Legal* — **Cover** — a goods-in-trust quote spanning grading
    and the vault, transit insurance for outbound batches and the courier's
    collectibles terms in writing; clause 5 changes the day a policy is bought

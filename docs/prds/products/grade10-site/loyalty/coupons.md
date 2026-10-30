@@ -58,11 +58,12 @@ so redefining the reward never rewrites a coupon a member already holds —
   over the member's own sale opens a new session that keeps the sale and its
   points, and chooses the coupon for staff to apply
 - 🚧 **Its own page** — the wallet is its own Coupons page, Available and
-  Used & Expired as tabs; Membership keeps the coupons still to spend as a
-  section
+  Used & Expired as tabs; Membership's Coupons section draws the same
+  ledger, tabs and empty lines
 - 🚧 **Points still buy more** — under the Available list sits a Rewards
-  upsell ("Want more coupons?"); where its CTA lands waits on the
-  Membership design, so the link target is ❓ — Design
+  upsell ("Want more coupons?"); on the Coupons page its CTA opens the
+  Rewards page, on Membership it switches the rail to the Rewards
+  section
 
 ::story{id="loyalty-coupons-screens-coupons--default" title="The Coupons page"}
 

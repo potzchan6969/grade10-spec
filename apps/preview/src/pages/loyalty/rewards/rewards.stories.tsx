@@ -20,15 +20,11 @@ import {
   REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
   REWARDS,
+  REWARDS_PAGE_COPY,
   SHORT_BALANCE_COPY,
   SOLD_OUT_COPY,
   SOLD_OUT_REWARDS,
 } from "../loyalty-content";
-
-const REWARDS_PAGE_COPY = {
-  title: "Rewards",
-  subtitle: "Swap points for coupons, collecting supplies and vault services.",
-};
 
 /**
  * The rewards shop as a store assembles it: `SiteHeader`, the page's own

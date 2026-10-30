@@ -7,7 +7,7 @@
 - **No points** - Existing tender controls show no points spent as a valid choice, with or without an accepted store code; Pay sends no points field.
 - **Submission** - One pending Pay per drawer, with the submitted lines and tender fixed. Drawer actions wait under the cart drawer pending guard; dismissal remains available. An answer for an older basket, tender or member opens nothing.
 - **Lost answer** - Existing failure feedback; pending ends and permitted actions return without automatic retry. The drawer claims neither that no invoice exists nor that one was canceled.
-- **Settling** - A settling answer opens Your Orders, which polls the open purchase.
+- **Settling** - A settling answer opens My Orders, which polls the open purchase.
 
 ### Grade10 Orders
 
@@ -18,7 +18,7 @@
 
 ### Shopify Confirmation
 
-- **Return** - Existing Thank You/Order status extensions and static Grade10 Your Orders link.
+- **Return** - Existing Thank You/Order status extensions and static Grade10 My Orders link.
 
 ## Components
 
@@ -42,7 +42,7 @@
 | Changed line or failed read | Named refusal or unchecked facts and Retry | grade10-site-store-checkout-US-02 | `grade10-site-store-checkout-SC-03`, `grade10-site-store-checkout-SC-04`, `grade10-site-store-checkout-SC-51`, `grade10-site-store-checkout-SC-52`, `grade10-site-store-checkout-SC-53`; named refusal, unchecked held facts and Retry |
 | Verification required | Existing threshold feedback, and the account action where the profile page is enabled | grade10-site-store-checkout-US-01 | `grade10-site-store-checkout-SC-37`, `grade10-site-store-checkout-SC-57`; existing gross-goods threshold after Pay, with the account action where the profile page is enabled |
 | Hosted invoice ready | Open the current hosted URL, including after drawer dismissal | grade10-site-store-checkout-US-05 | `grade10-site-store-checkout-SC-05`, `grade10-site-store-checkout-SC-35`; only the current request's answer opens Shopify |
-| Settling | Existing order surface; poll open orders only | grade10-site-store-checkout-US-05 | `grade10-site-store-checkout-SC-12`, `grade10-site-store-checkout-SC-64`; settling answer opens Your Orders, which polls the open order |
+| Settling | Existing order surface; poll open orders only | grade10-site-store-checkout-US-05 | `grade10-site-store-checkout-SC-12`, `grade10-site-store-checkout-SC-64`; settling answer opens My Orders, which polls the open order |
 | Cart or session changed elsewhere during Pay | Keep the current drawer; no stale redirect or automatic new Pay | grade10-site-store-checkout-US-06 | `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-60`; older answer ignored; later edits never rewrite the sent invoice, and whether it stays payable is the store's answer |
 | Paid cart without later member edits | Empty drawer and default tender after authoritative reads, including a shop price or stock review | grade10-site-store-checkout-US-03 | `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-47`, `grade10-site-store-checkout-SC-62`; shop review alone allows conversion |
 | Paid older cart version | Later lines and tender preserved after authoritative reads | grade10-site-store-checkout-US-06 | `grade10-site-store-checkout-SC-36`, `grade10-site-store-checkout-SC-45`; later lines and tender remain |

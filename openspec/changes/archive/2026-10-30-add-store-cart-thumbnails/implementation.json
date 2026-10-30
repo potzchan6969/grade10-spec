@@ -1,0 +1,150 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "a805b47e9e19c3e22774af9c1986b7061c34c9181682286747fb74e4ba057a06"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "c71fc6abfb1ddb08685be299017195a21d1a5c79",
+    "capturedAt": "2026-10-13T10:23:03.879Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-store-cart-thumbnails/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Reviewed picture fields are optional and compatible",
+          "Requirement: Reviewed product pictures follow the current cart"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Existing cart item picture props render supplied content"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "31c9dff2d858c8d6a66076cb8f2d3b6aa465becd",
+      "components": [
+        "store-service",
+        "web"
+      ]
+    },
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "43bc860e49198e837ca7e8b3a263837c47c9944e",
+      "components": [],
+      "scope": "no-runtime",
+      "reason": "Group 1 adds shared Storybook picture states, served test assets and Playwright coverage only; it does not change the production shared renderer. The Grade10 runtime adapter and cart drawer implementation are recorded separately."
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@kinisworking",
+    "reviewedAt": "2026-10-30T05:26:01.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The accepted store test-suite migration retired this durable suite. This acknowledgement records the coverage change and does not claim every retired case was carried forward.",
+        "evidence": [
+          "grade10-spec commit 2c89e48b12bfe0872d2441d40f55398d10d91bb3 explicitly deleted this suite and states that Store cases now live in the PRD test suite.",
+          "docs/prds/products/grade10-site/store/tests/cart-tcs.md#TC4 retains the current-picture, alt fallback and placeholder journey.",
+          "openspec/changes/add-store-cart-thumbnails/tasks.md#1.1 records 10 passing Storybook Playwright tests for supplied and missing pictures, alt text, sold-out treatment, composition and loaded image width."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The current feature set adds later cart capabilities, while its Product pictures group and detailed picture requirements retain this change’s current-catalogue, matching-variant and image-free-intent behavior.",
+        "evidence": [
+          "The current durable spec keeps the Product pictures feature group and the unchanged Requirements Reviewed product pictures follow the current cart and Reviewed picture fields are optional and compatible.",
+          "openspec/changes/add-store-cart-thumbnails/tasks.md#2.1-4.4 records the adapter, contract, drawer tests and application check:quick/build results."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+        "anchors": [
+          "Purpose"
+        ],
+        "classification": "semantic",
+        "reason": "The purpose now also describes editing and continuing from the drawer; that broader scope leaves the picture feature as reviewed display data supplied by the existing cart read.",
+        "evidence": [
+          "The current durable spec retains the Reviewed product pictures follow the current cart requirement, which forbids a separate product request and persisted picture metadata.",
+          "docs/prds/products/grade10-site/store/tests/cart-tcs.md#TC4 covers the shopper’s current-picture journey."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The current journey set adds later drawer use cases and retains US10, the journey to recognise products through their current reviewed pictures.",
+        "evidence": [
+          "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md#US10 is the picture-recognition journey served by the unchanged picture requirement.",
+          "openspec/changes/add-store-cart-thumbnails/tasks.md#5.3 records passing review, cart and browser-resource-failure coverage."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The shared suite was regenerated and reconciled under the store’s test-case rules, changing which cases remain in this file. This acknowledges that suite change without asserting one-for-one replacement of every retired case.",
+        "evidence": [
+          "grade10-spec commits e4d393894399e2f69a931f01883b25841b0005a8 and 9279a7ee5 document the shared-suite regeneration and folding its cases into the Store cart suite.",
+          "openspec/changes/add-store-cart-thumbnails/tasks.md#1.1 records 10 passing shared Storybook Playwright tests for the picture contract.",
+          "docs/prds/products/grade10-site/store/tests/cart-tcs.md#TC4 retains the Store picture journey."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The current shared feature set adds cart outcomes while defining Product pictures in the same way this change implements: use supplied props, retain the item-name alt fallback and placeholder, and acquire no product data.",
+        "evidence": [
+          "The current shared spec’s Product pictures feature group and Existing cart item picture props render supplied content requirement preserve the change’s prop-driven behavior.",
+          "openspec/changes/add-store-cart-thumbnails/tasks.md#1.1 records the shared component browser coverage, including that it makes no product request or picture-metadata storage."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The current shared journeys describe reviewing cart contents and later cart behavior; they do not change the existing image props or make the shared component responsible for acquiring picture facts.",
+        "evidence": [
+          "The current shared spec’s Existing cart item picture props render supplied content requirement keeps optional imageSrc and imageAlt, the placeholder, and no product-data acquisition.",
+          "openspec/changes/add-store-cart-thumbnails/tasks.md#1.1 records tests for the shared item, body and drawer compositions."
+        ]
+      }
+    ]
+  }
+}

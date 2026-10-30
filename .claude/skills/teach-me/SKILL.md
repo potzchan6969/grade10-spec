@@ -1,6 +1,6 @@
 ---
 name: teach-me
-description: Teach a product topic from the store - a short answer in the chat, then the whole lesson as a Lavish page the reader comments on - an overview, a flow chart of the journey and its data, the journeys, the external services, the Storybook stories and the manual pages - shaped by whether the ask is high level, one behaviour, or every case. Use when someone asks to learn, understand or be walked through any part of the product. Invoke as /teach-me <topic>.
+description: Teach a product topic from the store - a short answer in the chat, then the whole lesson as a Lavish page the reader comments on - an overview, one end-to-end flow chart of the topic, the journeys, the external services, the Storybook stories and the manual pages - shaped by whether the ask is high level, one behaviour, or every case. Use when someone asks to learn, understand or be walked through any part of the product. Invoke as /teach-me <topic>.
 ---
 
 # Teach Me
@@ -147,40 +147,56 @@ two levels at most:
 
 ### Product flow
 
-A flow chart in plain HTML and CSS, inside the lesson page: the screens
-the reader moves through, and the data and services each step uses. Replace
-the lanes in the `flow` section of
-[`lesson-template.html`](lesson-template.html).
+One regular flow chart of the whole topic, end to end, as an inline SVG
+in the lesson page: the screens and steps the reader moves through, the
+decisions between them, and the outcome. Replace the sample chart in the
+`flow` section of [`lesson-template.html`](lesson-template.html).
 
+- **One chart, end to end** - draw the topic from its first step to its
+  last outcome in one chart. Do not split it into small charts for each
+  actor or each part. A reader follows the whole path without moving
+  between tiles
+- **Columns** - one column for each actor or channel (online, POS till,
+  after payment), with a small column label at its top. The main path is
+  the first column. An arrow between columns shows a hand-off
+- **Shapes** - the classes in the template's `.fc` styles:
+  - **Start and outcome** - a pill, `rect.e` in `g.end`
+  - **Step** - a rectangle, with the step name and one short second line.
+    `rect.p` for a step a person does, `rect.a` for a step the system or
+    an agent does
+  - **Decision** - a diamond, `polygon.d`, with the question in at most
+    three words. Label each exit `yes` or `no`, or with its condition
+  - **Wait or loop** - a dashed rectangle, `rect.w`
+- **Arrows** - `.ln` lines with the `#ah` marker, top to bottom. A branch
+  that skips steps goes around them in the margin. A line does not cross
+  a box or a label. `.dash` for a dependency that is not a hand-off
+- **Legend** - one row under the chart for each shape the chart uses
 - **No script** - do not add a script, a CDN or a chart library. A file
   viewer, a preview pane and an attachment show no script, so a chart that
   a script draws shows as raw text there
-- **Annotation targets** - give each step a stable `id` and a `title` that
-  says what it is, so a comment names exactly one step
-- **Lanes** - one `<article class="tile">` and one `<ol class="chain">` for
-  each channel or actor (online, POS till, after payment). The chain runs
-  top to bottom. Steps alternate with `<li class="via">` labels: the
-  reader's action
-- **Steps** - screens and steps in the reader's words, as the page names
-  them. `class="node end"` for a start or an outcome
-- **Data** - chips under a step: `read`, `write`, or `ext` for a call to an
-  external service, with the store or service name
-- **Branches** - one `<p class="branch">` under the lane: the step, the
-  condition, the outcome
-- **Size** - 15 steps at most. A larger topic draws its main path and names
-  the branches it left out in the `left-out` note
+- **Annotation targets** - wrap each shape and its text in a `<g>` with a
+  stable `id` and a `<title>` that says what the step is, so a comment
+  names exactly one step
+- **Words** - steps in the reader's words, as the page names them. A
+  second line has at most 30 characters
+- **Data** - the store or service a step reads or writes goes on its
+  second line. Where it does not fit, External services holds it
+- **Notes** - a condition the chart cannot show goes in one
+  `<p class="branch">` under it: the step, the condition, the outcome
+- **Size** - 20 shapes at most. A larger topic draws its main path and
+  names the branches it left out in the `left-out` note
 - **Existing charts** - a chart under `docs/prds/diagrams/` that covers the
   topic is the start; draw the same shape, do not invent a second one
-- **Build it up** - the main lane comes first. Each next lane starts with
-  one line that says what it adds to the lanes above it
+- **Check it** - open the HTML file, not the session, before the hand-off.
+  No line crosses a box, and no text leaves its shape
 
 #### A picture for a spatial idea
 
-A lane chart shows the order of steps. It does not show where things are.
+A flow chart shows the order of steps. It does not show where things are.
 Generate a picture only when all of these conditions are true:
 
 1. **The idea is spatial** - the answer turns on where a thing is on the
-   screen or in the room, and words or a lane chart do not make it clear.
+   screen or in the room, and words or a flow chart do not make it clear.
    Examples:
    - **Layers** - a promo sheet over the cart drawer over the page
    - **Position** - what stays fixed and what scrolls, where a sticky
@@ -200,8 +216,8 @@ When all three are true:
   no real UI chrome, no brand colours
 - **Labels** - at most six labels, at most four words each, in the page's
   names. Image models make long text wrong
-- **Build it up** - the same rule as the lane charts: one picture for each
-  added layer or state, each one the last picture plus one part
+- **Build it up** - one picture for each added layer or state, each one
+  the last picture plus one part
 - **Save** - `${TMPDIR:-/tmp}/teach-me/<topic-slug>-sketch-<n>.png`
 - **Mark it** - give each picture the caption "Sketch to explain the idea.
   It is not the design." Link the Figma frame or the story that is the
@@ -412,7 +428,7 @@ after its `--help` is read again.
 - **Do not open the session in the agent's browser** - Lavish shows a
   session in one tab at a time, so the agent's tab takes it from the
   reader. To check the page, open the HTML file itself
-- **Do not use the Mermaid whiteboard** - the lanes are the chart, so the
+- **Do not use the Mermaid whiteboard** - the SVG is the chart, so the
   page reads the same without Lavish
 - **Fallback** - `npx` refused, no network, or no permission: write the
   same lesson page, give its file path, and say why Lavish did not start.

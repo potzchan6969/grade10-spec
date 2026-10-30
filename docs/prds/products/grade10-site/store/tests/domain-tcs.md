@@ -76,7 +76,7 @@ title: Store Test Cases
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-page#buy/signed-out-add-to-cart, cart#checkout/guest, order-detail#back-from-checkout/added, order-detail#back-from-checkout/order-confirmed, order-detail#back-from-checkout/create-an-account, checkout#guest-checkout/joining-an-account, checkout#guest-checkout/post-checkout-account, checkout#guest-checkout/no-points
+* **Trace:** home, product-page#buy/signed-out, cart#checkout/guest, order-detail#order-link/added, order-detail#order-link/receipt-line, order-detail#order-link/account-toast, checkout#guest-checkout/joining-an-account, checkout#guest-checkout/post-checkout-account, checkout#guest-checkout/no-points
 
 **Pre-conditions:**
 
@@ -97,7 +97,7 @@ title: Store Test Cases
 2. Select Check out as guest, enter `<order email>` on Shopify's page, and pay with `<test card>`.
 3. Select Continue on Shopify's thank-you page.
 4. Select Sign in on the toast and sign in by the link sent to `<order email>`.
-5. Open `<g10url>/profile/orders`.
+5. Open `<g10url>/store/my-orders`.
 
 **Expected Results:**
 
@@ -218,7 +218,7 @@ Runs once per row of **Test data**.
 1. On `<listing url>`, select Add to cart on `<product A>`'s card.
 2. Open Cart, wait for the read, apply `<member code>`, then type 100 in the points field and Apply.
 3. Select Proceed to Checkout, read Shopify's page, and pay with `<test card>`.
-4. Select the Grade10 Your Orders link on the thank-you page, then View Details on the new order.
+4. Select the Grade10 My Orders link on the thank-you page, then View Details on the new order.
 
 **Expected Results:**
 
@@ -238,7 +238,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display/signed-out, product-page#buy/signed-out-add-to-cart, cart#checkout/guest, cart#reviewing-the-cart/whose-cart, cart#reviewing-the-cart/a-product-in-both-carts
+* **Trace:** product-listing#products-display/signed-out, product-page#buy/signed-out, cart#checkout/guest, cart#reviewing-the-cart/whose-cart, cart#reviewing-the-cart/a-product-in-both-carts
 
 **Pre-conditions:**
 
@@ -266,7 +266,7 @@ Runs once per row of **Test data**.
 ### order-detail#order-link: Order Link
 
 <!-- trace:case id=g10.store-dmn.TC-hbl rev=1 -->
-#### g10.store-dmn.TC7: A member's order link, opened signed out, leads into Your Orders
+#### g10.store-dmn.TC7: A member's order link, opened signed out, leads into My Orders
 
 **Classification:**
 
@@ -294,10 +294,10 @@ Runs once per row of **Test data**.
 
 1. Open View order in Shopify's order email.
 2. Select Sign in on the toast and sign in as the member.
-3. Open `<g10url>/profile/orders`.
+3. Open `<g10url>/store/my-orders`.
 
 **Expected Results:**
 
 * Step 1 shows the order with no points or account details.
-* Step 2 opens `/profile/orders/<member order id>`, with the order's points section.
+* Step 2 opens `/store/my-orders/<member order id>`, with the order's points section.
 * Step 3 lists `<member order>`.

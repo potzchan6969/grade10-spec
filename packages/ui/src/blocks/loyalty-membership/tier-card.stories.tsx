@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, within } from "storybook/test";
 import { TierCard } from "./tier-card";
 
 const meta = {
@@ -13,7 +13,6 @@ const meta = {
       points: "pts",
       worthSuffix: "off at checkout",
       qualifying: "Keep Gold",
-      benefits: "Benefits",
     },
     variant: "gold",
     tier: "Gold",
@@ -42,7 +41,6 @@ export const Silver: Story = {
       points: "pts",
       worthSuffix: "off at checkout",
       qualifying: "Upgrade to Gold",
-      benefits: "Benefits",
     },
     retentionLine: "Earn 179+ pts by 31 Mar 2027 to upgrade",
     earnLine: "Silver earning 1x points",
@@ -59,17 +57,14 @@ export const Silver: Story = {
   },
 };
 
-/** Gold: the retention ask is keeping the tier already held. With a Tiers & Benefits address the Benefits affordance is the link to it; the rest of the card is inert. */
+/** Gold: the retention ask is keeping the tier already held. The card is inert — nothing on it navigates. */
 export const Gold: Story = {
-  args: { href: "#tier-and-benefits" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const card = canvasElement.querySelector('[data-slot="tier-card"]');
     expect(card?.tagName).toBe("DIV");
-    expect(canvas.getByRole("link", { name: "Benefits" })).toHaveAttribute(
-      "href",
-      "#tier-and-benefits",
-    );
+    expect(canvas.queryByRole("link")).not.toBeInTheDocument();
+    expect(canvas.queryByRole("button")).not.toBeInTheDocument();
     expect(canvas.getByText("750")).toBeInTheDocument();
     expect(canvas.getByText("250 / 500 pts")).toBeInTheDocument();
     expect(
@@ -126,7 +121,6 @@ export const NoPoints: Story = {
       points: "pts",
       worthSuffix: "off at checkout",
       qualifying: "Upgrade to Gold",
-      benefits: "Benefits",
     },
   },
   play: async ({ canvasElement }) => {
@@ -135,18 +129,5 @@ export const NoPoints: Story = {
     expect(
       canvas.getByRole("progressbar", { name: "Upgrade to Gold" }),
     ).toHaveAttribute("aria-valuenow", "0");
-  },
-};
-
-/** With only a press handler the Benefits affordance is a button that reports the press. */
-export const Pressed: Story = {
-  args: { onClick: fn() },
-  play: async ({ canvasElement, args }) => {
-    const canvas = within(canvasElement);
-    const card = canvasElement.querySelector('[data-slot="tier-card"]');
-    expect(card?.tagName).toBe("DIV");
-    const affordance = canvas.getByRole("button", { name: "Benefits" });
-    affordance.click();
-    expect(args.onClick).toHaveBeenCalledOnce();
   },
 };

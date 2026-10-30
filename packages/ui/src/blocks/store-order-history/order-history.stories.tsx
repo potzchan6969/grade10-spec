@@ -17,7 +17,7 @@ const breadcrumbs = (
   <Breadcrumbs>
     <BreadcrumbItem href="#account">Account</BreadcrumbItem>
     <BreadcrumbSeparator />
-    <BreadcrumbItem current>Your Orders</BreadcrumbItem>
+    <BreadcrumbItem current>My Orders</BreadcrumbItem>
   </Breadcrumbs>
 );
 
@@ -69,7 +69,7 @@ export const Filled: Story = {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Your Orders" }),
+      canvas.getByRole("heading", { level: 1, name: "My Orders" }),
     ).toBeVisible();
     expect(
       canvas.getByRole("heading", { level: 2, name: "Active Orders" }),
@@ -101,7 +101,7 @@ export const Empty: Story = {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Your Orders" }),
+      canvas.getByRole("heading", { level: 1, name: "My Orders" }),
     ).toBeVisible();
     expect(canvas.getByText("No orders yet")).toBeVisible();
     expect(

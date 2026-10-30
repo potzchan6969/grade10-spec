@@ -58,16 +58,15 @@ test("archive root prefers an enclosing app and accepts only absolute overrides"
   }
 });
 
-test("local archive handler reports storage and identifies the local reviewer", async () => {
+test("local archive handler reports storage and identifies the local approver", async () => {
   const storageRoot = resolve("/tmp/ui-verification-local");
-  const handler = createLocalArchiveHandler(
-    {
-      async createReview(_input, reviewer) {
-        return { reviewer };
+  const handler = createLocalArchiveHandler({}, storageRoot, {
+    coordinator: {
+      async createApproval(_input, approver) {
+        return { approver };
       },
     },
-    storageRoot,
-  );
+  });
   const origin = "http://localhost:6006";
 
   const info = await handler(
@@ -81,16 +80,16 @@ test("local archive handler reports storage and identifies the local reviewer", 
   });
   assert.equal(info.headers.has("access-control-allow-origin"), false);
 
-  const review = await handler(
-    new Request(`${origin}/api/reviews`, {
+  const approval = await handler(
+    new Request(`${origin}/api/approvals`, {
       method: "POST",
       headers: { Origin: origin, "Content-Type": "application/json" },
       body: "{}",
     }),
   );
-  assert.equal(review.status, 201);
-  assert.deepEqual(await review.json(), {
-    reviewer: { subject: "local-development" },
+  assert.equal(approval.status, 201);
+  assert.deepEqual(await approval.json(), {
+    approver: { subject: "local-development" },
   });
 
   const rejected = await handler(

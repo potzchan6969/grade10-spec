@@ -88,6 +88,9 @@ Storybook holds it.
   to footer, and declares `parameters: { layout: "fullscreen" }`. The page
   owns its state and callbacks; packages only receive props
 - **Narrow** — a `Narrow` story sets `globals: { viewport: { value: "mobile1" } }`
+- **Main UI only** — a screen story draws the main UI; a sub-feature's popup
+  lives in its own story, reached by `navigateToStory`, never auto-opened
+  in `play`
 - **Interaction test** — every state story carries a `play` that asserts what
   the State's Shows cell says, with `expect` on what a reader sees: roles,
   names and text, not class names. A state the reader reaches by acting —

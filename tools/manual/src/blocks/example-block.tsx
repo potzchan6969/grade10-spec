@@ -78,7 +78,7 @@ export function ExampleBlockView({ block }: { block: ExampleBlock }) {
 
   return (
     <section
-      className="group/anchor my-4 scroll-mt-24 overflow-hidden rounded-(--radius-2xl) border border-border bg-background-subtle"
+      className="group/anchor my-4 overflow-hidden rounded-(--radius-2xl) border border-border bg-background-subtle"
       id={id}
     >
       <div className="flex items-center gap-1 px-4 py-3 pr-2">

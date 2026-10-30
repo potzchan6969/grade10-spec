@@ -1,0 +1,138 @@
+{
+  "intro": {
+    "start": "Catch Now",
+    "privacy": "Your camera stays on your phone. Nothing is uploaded."
+  },
+  "quests": {
+    "title": "Two quests, one car",
+    "lead": "Find the car for a chance at {gift}. Then catch it on camera for a second chance.",
+    "find": {
+      "kicker": "Quest 1 · At the car",
+      "title": "Find the car",
+      "description": "Look out for the yellow Jeep with black lightning bolts, red dots and a POKEMON plate. It turns up somewhere new around the city.",
+      "reward": "A chance at {gift}",
+      "step1": "Spot the car around the city",
+      "step2": "Join Grade10 as a member. It's free",
+      "step3": "Top up your points on the spot",
+      "step4": "Show our staff for your chance at the prize",
+      "join": "Join Grade10 free",
+      "joinText": "Join now, and you're set the moment you find the car.",
+      "member": "You're a member. Top up at the car and show our staff."
+    },
+    "catch": {
+      "kicker": "Quest 2 · Catch it",
+      "step1": "Catch the car with the camera on this page",
+      "step2": "Post your photo to Instagram or Threads",
+      "step3": "Send us a screenshot of your post here"
+    }
+  },
+  "camera": {
+    "title": "The camera did not open",
+    "insecure": "The camera needs a secure (https://) link. Open the campaign link from the QR code.",
+    "blocked": "Camera access was blocked. Allow camera access for this site in your browser settings, then try again.",
+    "missing": "No camera found on this device. Open the campaign link on your phone.",
+    "failed": "The camera could not start. Reload the page and try again."
+  },
+  "scan": {
+    "exit": "Exit",
+    "hint": "Swipe up to throw",
+    "loading": "Loading Jeep recognition…",
+    "failed": "Jeep recognition did not load. Check your connection and reload.",
+    "point": "Point your camera at the yellow Jeep",
+    "locked": "Target locked! Swipe up to throw",
+    "lockedPlate": "Plate verified! Swipe up to throw",
+    "reading": "Reading the plate… hold steady",
+    "closer": "Looks like it! Get closer so we can read the plate",
+    "catching": "Catching…",
+    "caught": "You caught the yellow Jeep!",
+    "soClose": "So close! Throw again",
+    "aimTip": "Tip: flick straight up. The ball steers itself onto the Jeep once it is locked."
+  },
+  "reticle": {
+    "locked": "TARGET LOCKED",
+    "lockedPlate": "POKEMON ✓ LOCKED",
+    "reading": "READING PLATE…",
+    "checking": "CHECKING PLATE…"
+  },
+  "banner": {
+    "missed": "Missed!",
+    "wrong": "Not the yellow Jeep!",
+    "caught": "CAUGHT!",
+    "broke": "It broke free!",
+    "plateNotYet": "Plate not verified yet. Get closer!"
+  },
+  "card": {
+    "campaign": "CATCH ME IF YOU CAN",
+    "headline": "RIP IT. WIN IT.",
+    "caught": "CAUGHT!",
+    "spot": "Spot the yellow Jeep in the city",
+    "pill": "Catch the Jeep · Join the lucky draw"
+  },
+  "share": {
+    "title": "You caught the Jeep!",
+    "framing": "Framing your photo…",
+    "photoAlt": "Your catch, framed for a story",
+    "share": "Share Photo",
+    "save": "Save Photo",
+    "again": "Catch Again",
+    "saved": "Saved to your device"
+  },
+  "quips": {
+    "vehicle": {
+      "bus": {
+        "1": "That’s a bus. Gotta catch ’em all… but not this one.",
+        "2": "Too many seats. Not the Jeep.",
+        "3": "Bus spotted. Jeep still roaming."
+      },
+      "truck": {
+        "1": "Big truck. Wrong truck.",
+        "2": "Close, but no lightning bolts.",
+        "3": "Truck yes, Jeep no."
+      },
+      "car": {
+        "1": "Nice car. Not THE Jeep.",
+        "2": "Keep looking. It’s yellow.",
+        "3": "Wrong car. Look for the lightning bolts.",
+        "4": "Not that one. Check the plate."
+      },
+      "yellow": {
+        "1": "Yellow, but not THE Jeep. Keep hunting!",
+        "2": "Right colour, wrong ride.",
+        "3": "No POKEMON plate, no catch.",
+        "4": "Look for the lightning bolts."
+      }
+    },
+    "person": {
+      "1": "No throwing at people!",
+      "2": "That’s a human. Humans can’t be caught.",
+      "3": "Friend, not a target.",
+      "4": "Hands off the humans. Find the Jeep!",
+      "5": "Not a Pokémon. Probably.",
+      "6": "Wave hello, then find the Jeep.",
+      "7": "Nice pose. Wrong target.",
+      "8": "People are not prizes."
+    },
+    "throw": {
+      "orbit": {
+        "1": "Into orbit! That one’s not coming back.",
+        "2": "Houston, we have a ball.",
+        "3": "Too much power. Ball has left the city."
+      },
+      "weak": {
+        "1": "Weak throw. The ball needs breakfast.",
+        "2": "That was more of a drop.",
+        "3": "Gentle. Too gentle."
+      },
+      "curve": {
+        "1": "Curveball! Nice spin, wrong direction.",
+        "2": "Sideways? Bold strategy.",
+        "3": "That ball took a detour."
+      },
+      "idle": {
+        "1": "The ball is getting sleepy… throw it!",
+        "2": "Still holding? Your arm OK?",
+        "3": "The ball wants to fly. Let it."
+      }
+    }
+  }
+}

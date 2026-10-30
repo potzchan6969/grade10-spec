@@ -4,7 +4,7 @@
 
 | Decision | Value |
 | --- | --- |
-| Review workbench | This repository's combined Storybook |
+| Approval and comparison workbench | This repository's combined Storybook |
 | Historical storage | A dedicated R2 archive |
 | Browser access | The Storybook origin's `/api/*` routes |
 | Site capture recipes | Each consuming application's E2E directory |
@@ -16,14 +16,17 @@
 - **Browser imports** - The panel imports the browser-safe `model` and `pixel-diff` exports; archive and scoring exports run in Node or a Worker with `nodejs_compat`.
 - **Identity** - A story carries a permanent verification `caseId`; application declarations add the target and capture point, so the same story can serve several sites.
 - **History** - Saved reference and site PNGs stay immutable in the archive, independently of what the latest Storybook renders.
+- **Two tabs** - Approve, where a designer approves the Storybook reference, and Site Compare, where the site is held to the approved reference.
 
 ## How It Flows
 
 1. **Declare** - The application keeps a declaration and a site recipe beside the story. The recipe returns the component's locator on the site.
-2. **Capture** - `pnpm ui:verify capture` runs in the application repository with the app and Storybook served. It records the reference story and the full site viewport at desktop, tablet and mobile, for each locale, with the component's box in each image.
+2. **Capture the site** - `pnpm ui:verify capture` runs in the application repository with the app and Storybook served. It records the full site viewport at desktop, tablet and mobile, for each locale, with the component's box in each image. It records the story's reference beside it, as that run saw it.
 3. **Store** - Runs go to the local filesystem in development, and to R2 through the Worker when hosted.
-4. **Review** - The Verification panel in this Storybook reads the archive on its own origin. It shows the newest run of the chosen version, at all three sizes.
-5. **Compare** - Compare pixels runs in the browser on the archived PNGs. It writes nothing.
+4. **Approve** - In the Approve tab, a designer approves the story's reference. Approving captures the live story at once, stores the images, and approves them. Only site captures are run by hand.
+5. **Capture every reference** - Within an hour of each Storybook deploy, or on request from the Reference captures page, the deployed Worker captures every case's reference, at most once every six hours. Nothing runs in CI. The Reference captures page shows each run as it goes.
+6. **Site Compare** - The Site Compare tab holds each site capture to the last approved reference, and flags how far the run's own reference has drifted from it.
+7. **Compare pixels** - Runs in the browser on the archived PNGs. It writes nothing.
 
 ## Set Up Locally
 
@@ -32,11 +35,11 @@ pnpm install --frozen-lockfile
 pnpm storybook:workbench
 ```
 
-- **Open** - Open a story that carries a `verification` parameter, then the Verification tab. The Not Found story is the first.
+- **Open** - Open a Flows story, such as Auction / Flows / Bid And Win A Lot, then the Approve or Site Compare tab. Site Compare compares flows only.
 - **Archive** - Development mounts the filesystem archive at the Storybook origin. The default is `.cache/ui-verification` in this checkout, or in the consuming app root when this checkout is its submodule. Set `UI_VERIFICATION_ARCHIVE` to an absolute directory before startup for another one.
-- **No data yet** - The panel stays empty until the application has captured a run. Capture from the application repository, then press Refresh.
-- **Capture** - Follow `tools/ui-verification/README.md` in the application repository. The short form is `pnpm ui:verify capture --config ./ui-verification.json --selection all`, pointed at the same archive directory.
-- **Demo data** - `pnpm ui:verify demo --archive <dir>` in the application repository writes two synthetic runs without Chromium.
+- **No data yet** - Both tabs stay empty until the application has captured a site run, which names the story's cases. Capture from the application repository, then press Refresh.
+- **Reference capture** - Approving uses the preview app's Playwright, launched by the workbench itself. `packages/ui-verification/src/reference-capture.mjs` renders the story from this Storybook: fixed sizes, scale 1, reduced motion, `en-US`, `Asia/Hong_Kong`, light. The application's site runs draw their reference with the same module.
+- **Capture** - Run `pnpm ui:verify capture` in the application repository. It captures every flow, starting the local stack and this Storybook when they are not running; `tools/ui-verification/README.md` there has the rest.
 
 ## Give A Story A Case
 
@@ -48,12 +51,57 @@ pnpm storybook:workbench
 
 ## Capture One Domain
 
-❓ The capture tool is in the application repository, and this repository holds no copy of its options. Run `pnpm ui:verify capture --help` there for how to select cases.
+- **Domain** - `pnpm ui:verify capture --domain auction` in the application repository captures only the flows whose story is in that Storybook domain. A domain is the first segment of the story id.
+- **Domains** - `pnpm ui:verify capture --help` there lists each declared domain and how many cases it holds.
+- **More than one** - `--domain` repeats, and combines with `--selection`. Cases outside the domains are recorded as not selected.
 
 - **Case list** - `pnpm storybook:case-ids --list Auction` prints each Auction `caseId` and its story id, for a selection or a declaration file.
-- **Check** - Capture one case first. Press Refresh in the panel and confirm the story shows the run.
+- **Check** - Capture one case first. Press Refresh in Site Compare and confirm the story shows the run.
 
-## Read The Panel
+## Approve A Reference
+
+- **Approve tab** - Per size it shows Last approved, Current and the pixel diff between them, both cropped to the reference region.
+- **Approve all sizes** - A focused capture: the live story at desktop, tablet and mobile in the chosen locale, stored and approved. It runs at once and is never held. The reference is the design to hold the site to. A comment is optional.
+- **Capture current reference** - The same focused capture without approving, to see how far the story has moved from the last approval.
+- **Few stories** - A focused capture covers at most five stories, so it finishes in seconds.
+- **All or nothing** - Every size is captured before anything is stored, so a size that fails leaves no reference and no approval behind.
+- **Region off the screen** - At the case's score size the reference region must fit the screen. At another size a region that does not fit is compared as the whole viewport, as a site run does.
+- **Request changes** - The current reference at the chosen size is wrong. A comment is required, on one line. It needs a captured reference to judge.
+- **Current reference** - The newest captured reference at the case, target, capture point, size and locale, from a focused or a full capture.
+- **Last approved reference** - The newest approved one at the same case, target, capture point, size and locale.
+- **What an approval judges** - One captured reference image, tied to its SHA-256. A later capture of the same PNG carries the approval. A capture that changes one pixel is not approved.
+- **Newest wins** - Approvals are never edited or deleted. A new one on the same image replaces the shown one; the history lists every decision at that size and locale.
+- **First baseline** - With no approval yet there is nothing to diff. Approve to start one.
+- **Commit** - Each capture records the commit it drew. Hosted, that is the deploy's build receipt. Locally, it is this checkout's commit, flagged when the checkout had uncommitted changes.
+- **Who** - Hosted, the approver is the Cloudflare Access identity, never a name typed in the panel. The publisher token cannot approve. Locally, every approval is `local-development`.
+
+## Capture Every Reference
+
+- **Full capture** - Every active case of every archived site run, at every size and in every locale that run recorded.
+- **When** - Within an hour of each Storybook deploy, and when someone presses Request a full capture on the Reference captures page.
+- **Noticing a deploy** - Each hour a Cron Trigger on the Worker reads the build receipt from its own static assets. A commit it has not seen asks for a full capture; the same commit asks for nothing. No CI step runs or requests a capture.
+- **Six hours** - At most one full capture starts in any six hours. A request inside that window waits in one slot, and the newest request replaces an older one. The waiting request starts when the window opens.
+- **Focused captures are apart** - Approve and Capture current reference never wait for the window, and they run beside a full capture.
+- **Batches** - A full capture takes a few shots at a time, saves its progress, and goes on. A restart or an eviction resumes it from the last saved shot.
+- **A failed shot** - The run records it with its case, size, locale and message, and goes on. The run ends as Failed and names how many shots failed.
+- **A redeploy mid-run** - When the deployed commit changes during a full capture, the run stops as Failed rather than mix two commits. The deploy's own request captures the new commit.
+
+## Reference Captures Page
+
+- **Where** - A page of its own, not a panel. Open it from Reference captures in the Approve tab, or at `?path=/reference-captures/`.
+- **Schedule** - When the last full capture started, when the next one can start, and the request that waits for it.
+- **Current runs** - Each running capture, full or focused, with a progress bar of shots captured, the failed count, and the commit being captured.
+- **Run history** - Every finished run: its lane and trigger, who asked, its state and message, its commit, and its shots.
+- **Live** - While a run goes or a request waits, the page refreshes every five seconds.
+
+## Where Captures And Approvals Live
+
+- **Coordinator** - One capture coordinator owns the schedule, the live runs and every approval. Hosted, it is one Cloudflare Durable Object, `ReferenceCaptures`, and its alarm drives a full capture. Locally, the workbench runs it in-process, with JSON files beside the archive and a timer for the alarm.
+- **Archive** - Holds what never changes: each captured reference as a record under `ui-verification/v1/references/` with its PNG under `ui-verification/<referenceId>/`, and each finished run under `ui-verification/v1/reference-runs/`.
+- **Approvals** - Live in the coordinator, one record per decision, keyed by case. They are never edited.
+- **Browser** - Hosted, Cloudflare Browser Rendering draws each reference. Locally, the preview app's Playwright does. The two never meet: each writes its own archive.
+
+## Compare A Site
 
 - **Expected layout (Story)** - The story open in Storybook. It is filled in, not chosen. A target choice appears only when the story maps to more than one site target.
 - **Compared version** - An app commit paired with a Storybook reference commit, labelled by tag when there is one. The commits are the identity.
@@ -62,6 +110,9 @@ pnpm storybook:workbench
 - **Status** - One card per size, with the pixel result. It is in the panel's words: not compared, a percentage that differs, size differs, no reference.
 - **Evidence** - One row per size: Reference, Site and Pixel diff.
 - **All recordings** - Opens the story list of the chosen version, to review stories other than the open one.
+- **Compare the site with** - Last approved reference, the default, or Current reference: the reference the run recorded. A size with no approved reference uses the run's reference, and the panel says so.
+- **Drift flag** - When the run's reference differs from the last approved one by more than 20% of the reference region, the toggle says by how much. A reference region that changed size is flagged too.
+- **Approval flag** - Beside the toggle, the story reference's approval at the chosen size, as the Approve tab shows it: Reference approved, Reference not approved, Changes requested, or No approved reference. A size tab names its flag too.
 
 ## Compare Pixels
 
@@ -73,13 +124,18 @@ pnpm storybook:workbench
 
 ## Set Up Hosted Operation
 
-❓ The hosted path is built and tested locally. No Worker has been deployed and no remote run has been uploaded.
+❓ The hosted path is built and tested locally. No Worker has been deployed, and no reference has been captured hosted yet.
 
 - **Storage** - Provision the configured archive and preview buckets before deploying the combined Worker. Keep this evidence separate from expiring E2E report storage.
-- **Deploy** - `pnpm --dir apps/preview run deploy-storybook:staging` builds the workbench and deploys with `apps/preview/wrangler.storybook.jsonc`.
+- **Deploy** - `pnpm --dir apps/preview run deploy-storybook:staging` builds the workbench, writes its build receipt, and deploys with `apps/preview/wrangler.storybook.jsonc`.
+- **Durable Object and browser** - The Worker config binds `REFERENCE_CAPTURES` to the `ReferenceCaptures` class, with a SQLite storage migration, and `BROWSER` to Browser Rendering. Browser Rendering bills browser time beyond its monthly allowance.
+- **Build receipt** - `ui-verification-build.json` in the build names the commit and an artifact digest. The build writes it, and refuses a checkout with uncommitted changes. The Worker's hourly check and every hosted capture read it, and a deploy without one cannot capture.
+- **Hourly check** - The Worker config sets a Cron Trigger at 17 minutes past each hour and the variable `STORYBOOK_ORIGIN`, the origin the headless browser opens.
+- **Browser through Access** - The headless browser opens the workbench through Cloudflare Access. ❓ Create an Access service token for it, and set the Worker secrets `CAPTURE_ACCESS_CLIENT_ID` and `CAPTURE_ACCESS_CLIENT_SECRET`. The browser sends them to the Storybook origin only.
 - **Human access** - Set `ACCESS_ISSUER` and `ACCESS_AUD` for the Cloudflare Access application protecting the Storybook origin. The Worker verifies signed assertions before it reads evidence.
 - **Publishing** - Set the Worker secret `PUBLISHER_TOKEN`. A capture runner publishes with `pnpm ui:verify publish --run <runId> --archive <dir> --endpoint <storybook origin> --token-env UI_VERIFICATION_TOKEN`. When Access protects the host, the runner also needs its service credentials.
 - **Publisher token** - `PUBLISHER_TOKEN` is a value you choose, not one Cloudflare issues. Generate it with `openssl rand -hex 32`. Store it on the Worker with `pnpm dlx wrangler@4.120.0 secret put PUBLISHER_TOKEN -c wrangler.storybook.jsonc` in `apps/preview`. Give the same value to the runner as `UI_VERIFICATION_TOKEN`. Keep it in the team's secret manager, never in git or in the Storybook bundle.
+- **Who may ask** - Only a signed-in person may request a full capture, approve, or make a focused capture. A deploy asks through the Worker's own hourly check.
 - **Reuse** - A run that reuses captures needs its source run published first.
 - **Origins** - The Worker allows its own origin. Set `ALLOWED_ORIGINS` only for a separate development workbench.
 - **Secrets** - Browser bundles hold no R2, publisher or Access credentials.
@@ -87,6 +143,13 @@ pnpm storybook:workbench
 
 ## Decisions
 
-- **No review in the panel** - The panel shows evidence and the pixel result only. The archive API still has review, assessment and calibration routes. The panel does not call them. ❓ Remove them if nothing else will.
+- **Approve the reference, not the site** - Approval says the Storybook reference is the right design, at each version it is approved. Site Compare holds the site to it; nobody approves a site capture.
+- **No site reviews or calibration** - Human reviews of site captures and calibration are retired, with their routes. Model assessments stay advisory: nothing passes automatically.
+- **The workbench captures what it approves** - An approval names an image this workbench captured from the live story, so the designer approves what they see. The run's own reference shows drift; it is never approved.
+- **Focused and full captures** - A focused capture of a few stories runs at once, so approving never waits. A full capture of every case waits for a six-hour window, which bounds browser time however often the workbench deploys.
+- **The Worker notices its own deploys** - An hourly check of its own build receipt starts full captures, so CI only builds and deploys, and holds no capture credentials.
+- **One coordinator** - The schedule, the runs and the approvals live in one Durable Object, so one place decides when a capture starts and every approval is written in order.
+- **Hosted references come from Browser Rendering** - The deployed workbench captures in Cloudflare Browser Rendering. Its images do not match a local Playwright capture byte for byte, so local and hosted approvals stay in their own archives.
+- **One reference capturer** - The workbench and the application's site runs draw a reference with the same module, so they differ only by the Playwright install each runs. ❓ The application resolves Playwright 1.62.1 and this repository 1.62.0; Tony L confirms whether to pin them together.
 - **Latest run per version** - Recaptures append a new run and the panel shows the newest. Deleting the older run was ruled out: later runs may reuse its images, and a half-finished overwrite would leave a version with no valid evidence.
 - **Old runs** - Older English-only runs keep their original images and coverage. Missing locale or viewport evidence stays unavailable.

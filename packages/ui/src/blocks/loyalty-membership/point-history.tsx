@@ -178,7 +178,7 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
           >
             <TabsList
               aria-label={copy.label}
-              className="w-full justify-start gap-4 overflow-x-auto border-b border-border sm:gap-6"
+              className="w-full justify-start gap-4 overflow-x-auto overflow-y-hidden border-b border-border sm:gap-6"
               variant="list"
             >
               {FILTERS.filter((name) => name === "all" || counts[name] > 0).map(
@@ -208,7 +208,7 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
                 <PointHistoryCard
                   entries={pending}
                   header={{
-                    title: `${copy.pending.title} ${pending.reduce((sum, entry) => sum + entry.delta, 0)} ${copy.pending.points}`,
+                    title: `${copy.pending.title} ${pending.reduce((sum, entry) => sum + entry.delta, 0).toLocaleString("en-HK")} ${copy.pending.points}`,
                     description: copy.pending.body,
                   }}
                   label={copy.label}

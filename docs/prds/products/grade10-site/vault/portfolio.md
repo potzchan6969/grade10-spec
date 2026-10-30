@@ -1,7 +1,7 @@
 ---
 title: Portfolio
 spec: grade10-site/vault/portfolio
-order: 2
+order: 3
 ---
 
 What a collector holds in the vault and what they do with it. The portfolio

@@ -67,27 +67,34 @@ a Google account under it -
   marked a walk-in by an operator, and stops asking for a link; a member who
   shows the receipt later can still be linked, and the link clears the mark
 - **Earns as if theirs** — the earning is priced as it was when the money
-  landed, and any refund since is replayed in order —
-  [Points](/p/grade10-site/loyalty/points)
+  landed, on what the sale still holds: a refund recorded before it lands is
+  netted first, as a web order nets one before it completes, so nothing is
+  clawed back on landing — [Points](/p/grade10-site/loyalty/points)
+- **Toward a tier only after joining** — a sale that lands counts toward the
+  tier period it lands in, which is never earlier than registration —
+  [Tiers](/p/grade10-site/loyalty/tiers#tier-period)
 
 ## Membership Page
 
 | Section | Shows |
 | --- | --- |
-| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. Its Benefits link scrolls to Tiers & Benefits — the rest of the card does nothing |
-| Your member pass | Behind the Member pass button beside the title, in a dialog: the tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
+| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. Nothing on it is a link or a button |
+| Your member pass | Behind the Member pass button beside the title, in a dialog, or a drawer on a phone: the tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
-| Point History | The member's own ledger — the earned, used and pending totals on top, tabs that filter the list to each, what is still on the way under Pending, and the settled entries grouped by month. Points land when an order completes — an online order once every item is fulfilled and paid, an in-store purchase at the till, a ticket order when it is confirmed. Every line says where it came from — the counter, the online store, the ticket office, or the programme itself; a ticket purchase names the ticket or event it bought rather than an order number. Earned and topped-up points read apart, here and in the balance — [Top-ups](/p/grade10-site/loyalty/top-ups) |
+| Point History | The member's own ledger — the earned, used and pending totals on top, tabs that filter the list to each, what is still on the way under Pending, and the settled entries grouped by month. Points land when an order completes — an online order once every item is fulfilled and paid, an in-store purchase at the till, a ticket order when it is confirmed. Every line says where it came from — the counter, the online store, the ticket office, or the programme itself; a ticket purchase names the ticket or event it bought rather than an order number. A credited top-up's whole entry opens its Stripe receipt. A bought pack reads as its own entry — [Top-ups](/p/grade10-site/loyalty/top-ups) |
 
 - 🚧 **A rail, not a scroll** — a wide viewport lays the page out as a
   sidebar naming its sections, the picked section drawing on the right; a
   narrow viewport reads the same names as a scrollable row above the
   content. The rail reads Overview, Rewards, Coupons and Points History;
   Tiers & Benefits is an Overview section, and a Member pass button beside
-  the title opens the pass in a dialog. Buying points enters from Overview
-  and Rewards, never the rail —
+  the title opens the pass in a dialog. Buying points enters from a Top-up
+  Points button beside Member pass, never the rail —
   [Top-ups](/p/grade10-site/loyalty/top-ups)
+- 🚧 **Each section has its own address** — a link can open Membership on
+  any rail section, so Rewards' View coupons lands on Coupons rather than
+  the Overview
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
   to say here. The Membership page keeps one dated expiry line of its own,
@@ -104,24 +111,17 @@ a Google account under it -
 ## Tiers & Benefits
 
 Every rung of the programme on one surface — what each asks, what each pays,
-where the member stands and how points work. Its own page: the breadcrumbs
-name Home, Membership and Tiers & Benefits; a small viewport navigates to
-it; on the Membership page it is a section of Overview, drawing the same
-list 🚧
+where the member stands and how points work. A section of Membership's
+Overview, never a page of its own 🚧
 
 | Section | Shows |
 | --- | --- |
-| Tier ladder | A stepper of the rungs in climb order — earned rungs ticked, the held rung in progress, unearned rungs still to come — with a line of qualifying progress beneath where the member's own tier asks one. No stepper line reaches an invitation-only rung, and a member whose tier is held by invitation sees nothing beneath it ticked and no qualifying line |
 | Tier cards | One card per rung — the tier name, its ask in the member's words, and its benefits behind checks. The held rung's card wears the primary border and its tint |
 | How Points Work | The mechanics as icon rows — earn, pending, spend, expiry — stacked on a narrow viewport and paired on a wide one. The preview states the programme's own values: a point redeems a Hong Kong dollar, points arrive when the order completes, and the whole balance lapses after twelve months with no activity |
 
-- **Reaches** — the `TierCard`'s Benefits link lands here, and the same
-  list is a section of its Overview
 - **The expiry date's home** — the mechanics card states the lapse rule;
-  the Tiers & Benefits page draws no member-dated line; the Membership page's own
+  Tiers & Benefits draws no member-dated line; the Membership page's own
   line carries the date
-
-::story{id="loyalty-membership-screens-tiers-benefits--default" title="Tiers & Benefits, a gold member"}
 
 ## Member Pass
 
@@ -133,11 +133,10 @@ list 🚧
 
 - **Email, not name** — no name is collected at registration, so the pass
   carries the member's account email under the tier badge
-- **Its own page on a phone** — the pass section opens it, its route the consumer app's to name, and the page
-  holds a screen wake lock while it is up, so the phone cannot dim or lock
-  mid-scan; the consumer renders the pass only once it holds a code; a web page cannot
-  raise screen brightness, so keeping the screen awake is the part that is
-  feasible
+- **A drawer on a phone** — below 640px the pass opens in a drawer over
+  Membership, as it does in a dialog above, so the member never leaves the
+  page to show the till a code; the consumer renders the pass only once it
+  holds a code
 - **A code swaps in and out** — a fresh code dips the square out of view,
   fading and easing down, and settles the new one in — a transition,
   never an abrupt swap, so a scanner never loses its square mid-read
@@ -194,7 +193,7 @@ The same pass can be added to a phone wallet —
   leak of the loyalty database exposes balances and identifiers, not people
 - **Deleting the account ends the membership** — balance, tier progress
   and coupons end at once, a waiting collection is cancelled without a
-  refund, an open or held top-up closes with nothing charged, and the ledger
+  refund, an open top-up checkout closes with nothing charged, and the ledger
   record survives for audit
 
 :::callout{kind="note"}

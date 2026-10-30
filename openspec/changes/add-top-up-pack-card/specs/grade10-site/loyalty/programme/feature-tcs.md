@@ -19,7 +19,7 @@ Shared test data:
 ### Route
 
 1. Read the 10,000-point pack's row.
-   * The row shows the paid points struck beside the count, the price at the edge and a bonus points line. `g10.loyalty-programme.US14-TC1`
+   * The card shows the paid points plus the bonus points under the count, with the price. `g10.loyalty-programme.US14-TC1`
 2. Read a pack over today's remaining limit.
    * The pack cannot be picked, and its reason is in its name and a tooltip on the warning icon. `g10.loyalty-programme.US14-TC2`
 
@@ -61,8 +61,7 @@ Shared test data:
 
 **Expected Results:**
 
-* The row shows 10,000 points, with 9,500 paid points struck beside the count and HK$9,500 at the row's edge.
-* A bonus line of 500 points shows under the row.
+* The card shows 10,000 points, with 9,500 plus 500 bonus points under the count, and HK$9,500.
 
 <!-- trace:case id=g10.loyalty-programme.TC-q3d rev=1 covers=g10.loyalty-programme.SC-9m2 -->
 ### g10.loyalty-programme.US14-TC2: A pack over today's limit cannot be picked and says why

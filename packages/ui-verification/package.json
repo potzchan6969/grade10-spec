@@ -14,7 +14,9 @@
     },
     "./archive": "./src/archive.mjs",
     "./archive-api": "./src/archive-api.mjs",
-    "./calibration": "./src/calibration.mjs",
+    "./capture-coordinator": "./src/capture-coordinator.mjs",
+    "./local-coordinator": "./dev/local-coordinator.mjs",
+    "./reference-capture": "./src/reference-capture.mjs",
     "./scoring": "./src/scoring.mjs",
     "./worker": "./worker/index.mjs"
   },

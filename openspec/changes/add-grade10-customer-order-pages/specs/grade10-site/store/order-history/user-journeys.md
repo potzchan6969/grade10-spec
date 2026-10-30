@@ -9,7 +9,7 @@
 ### grade10-site-store-order-history-US-02: Collector signs in to the intended order page
 
 **As a** signed-out collector,
-**I want** sign-in to keep the Your Orders address,
+**I want** sign-in to keep the My Orders address,
 **so that** I arrive at the orders I asked to see after proving my account.
 
 ### grade10-site-store-order-history-US-03: Collector starts shopping from an empty account

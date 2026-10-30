@@ -138,12 +138,12 @@ asking the ledger, never stored as running totals.
 - **THEN** it counts every credit recorded before that instant, less what has been spent or clawed back
 - **AND** it counts nothing once the member's inactivity window has passed
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-7o9 rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-7o9 rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-126 - Tier progress is derived from the same entries
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** tier progress is asked for over a given window
-- **THEN** it counts the earnings dated inside that window and after the member's most recent demotion, less any claw-backs against them
+- **WHEN** tier progress is asked for at a given instant
+- **THEN** it counts the earnings processed inside the member's current tier period, less what refunds have taken back from them
 - **AND** redemptions do not appear in it
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-wn3 rev=1 -->
@@ -400,13 +400,12 @@ exempt from every rule below that names an earned tier.
 
 A ladder SHALL carry exactly one entry tier, which SHALL be its lowest rung.
 Tier identifiers SHALL be unique. Each earned tier SHALL ask more qualifying
-points than the tier below it, and every earned tier SHALL measure them over the
-same window. Each earned tier SHALL resolve to a validity period equal to that
-window — a term longer or shorter than the window it is measured over cannot be
-re-qualified in — and to a retention threshold greater than zero and no greater
-than the qualifying points that tier asks for; a programme naming no retention
-threshold SHALL resolve it to that tier's own attainment points rather than be
-refused. The programme SHALL carry an inactivity window longer than zero. The
+points than the tier below it. The programme SHALL carry one tier period,
+longer than zero, when any tier is earned by points, and none when no tier is —
+a period nothing is earned in holds nothing. Each earned tier SHALL resolve to a
+retention threshold greater than zero and no greater than the qualifying points
+that tier asks for; a programme naming no retention threshold SHALL resolve it
+to that tier's own attainment points rather than be refused. The programme SHALL carry an inactivity window longer than zero. The
 programme's time zone SHALL name a real zone.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-y8v rev=1 -->
@@ -438,12 +437,12 @@ programme's time zone SHALL name a real zone.
 - **THEN** the product fails to start, naming both amounts
 - **AND** no member can hold a tier they skipped past
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-n7b rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-21 - Earned tiers measure over different windows
+<!-- trace:scenario id=g10.loyalty-programme.SC-n7b rev=2 -->
+#### Scenario: grade10-site-loyalty-programme-SC-21 - A tier period with no tier earned in it
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** two earned tiers count qualifying points over different periods
-- **THEN** the product fails to start, naming the periods
+- **WHEN** the programme carries a tier period but no tier is earned by points
+- **THEN** the product fails to start, saying the period holds nothing
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-xur rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-127 - A retention threshold asks more than the tier itself
@@ -452,12 +451,12 @@ programme's time zone SHALL name a real zone.
 - **WHEN** an earned tier's retention threshold is greater than the qualifying points that tier asks for
 - **THEN** the product fails to start, naming both amounts
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-evb rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-128 - An earned tier has no validity period
+<!-- trace:scenario id=g10.loyalty-programme.SC-evb rev=2 -->
+#### Scenario: grade10-site-loyalty-programme-SC-128 - An earned tier has no tier period
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** an earned tier carries a validity period of zero or less
-- **THEN** the product fails to start, naming the tier
+- **WHEN** a tier is earned by points and the programme carries no tier period, or one of zero or less
+- **THEN** the product fails to start, saying it needs a period
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-7zl rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-129 - The programme has no inactivity window
@@ -483,10 +482,10 @@ and no redemption.
 
 Its ladder SHALL be, in ascending rank:
 
-| Tier | Earns | Reached by | Valid for | Retained by |
+| Tier | Earns | Reached by | Held for | Retained by |
 | --- | --- | --- | --- | --- |
-| Silver | 1× | Every member starts here | Always | — |
-| Gold | 1.2× | 500 points earned in a rolling twelve months | Twelve months from activation | 500 points earned inside the validity period |
+| Silver | 1× | Joining, or dropping from Gold or Black | A twelve-month tier period, renewed at its end whatever it holds | — |
+| Gold | 1.2× | 500 points earned inside the Silver period | A twelve-month tier period from the instant it is reached | 500 points earned inside the Gold period |
 | Black | 1.7× | Invitation only | The invitation's own end date | A further invitation |
 
 The persisted identifiers for those tiers SHALL be `silver`, `gold` and
@@ -500,6 +499,11 @@ These are the values the product deploys, not a range it may vary within. They
 change by deploying a different configuration, never by an operator edit —
 an operator who can rewrite what a purchase earns can mint money. The reward
 menu is the intended lever and is editable.
+
+A deploy that changes the tier period's length, the programme's time zone or a
+retention threshold SHALL ship with a planned migration of current tier
+periods. Those values are read live, not frozen per member, so such a change
+re-judges every period still running.
 
 Why these numbers, and what is still open about the top tier and the retention
 threshold:
@@ -526,11 +530,11 @@ threshold:
 - **WHEN** a Gold member's qualifying spend is HKD 139
 - **THEN** they earn 15 points, never 16
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-2t5 rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-2t5 rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-24 - The second tier is reached by spending
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** a member's tier progress over the rolling twelve months reaches 500
+- **WHEN** a member's tier progress inside their current Silver period reaches 500
 - **THEN** they hold Gold from that instant
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-bwm rev=1 -->
@@ -541,12 +545,12 @@ threshold:
 - **THEN** the persisted identifier is `silver` or `gold`, respectively
 - **AND** no record uses `platinum` or `diamond`
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-w02 rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-w02 rev=3 -->
 #### Scenario: grade10-site-loyalty-programme-SC-133 - Gold is retained by earning again
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** a Gold member earns 500 points inside their validity period
-- **THEN** they hold Gold for a further twelve months
+- **WHEN** a Gold member earns 500 points inside their Gold period
+- **THEN** they hold Gold for a further twelve-month period, from the instant after this one ends
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-ksg rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-134 - Gold lapses after a quiet year
@@ -659,14 +663,35 @@ A member SHALL be able to list what they have redeemed and the state of each.
 
 When money is returned, the programme SHALL remove the points that money earned,
 priced at the rate each credit recorded, and SHALL never remove more than the
-member still holds from that money. A claw-back SHALL reduce both the member's
-balance and their tier progress, SHALL NOT reset the member's
-inactivity window, and SHALL re-evaluate the member's tier at once: money
-returned is spend that never happened, so the tier it bought does not survive
-it.
+member still holds from that money. A claw-back SHALL NOT reset the member's
+inactivity window.
+
+A refund SHALL take back in full the tier progress that money earned, in the
+tier period that earning counted toward, even where its points were already
+redeemed: points spent must not hold a tier the refunded money bought. It SHALL
+then judge again, on the progress left, the one decision that opened the
+member's current tier period. A promotion still in its first Gold period that
+the remaining progress no longer reaches SHALL be undone, returning the member
+to the Silver period that promotion ended, with what it still holds; a renewal
+the remaining progress no longer keeps SHALL end that Gold period on its old
+date, with a Silver period from there and what was earned since counting toward
+it. A period judged before that decision SHALL NOT be reopened.
 
 Splitting a refund into several parts SHALL claw back exactly what one refund
 for the whole sum would have.
+
+A refund that names lines SHALL claw back on the goods it names. A refund that
+names only an amount SHALL be shared across the order's goods, shipping and tax
+in proportion to each, and only its goods share SHALL claw back.
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-x4d rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-284 - An amount refund is shared across the order
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **GIVEN** a Gold member earned 15 points on a HKD 139 single with HKD 30 shipping, HKD 169 in all
+- **WHEN** HKD 39 is refunded as an amount, naming no line
+- **THEN** its goods share is HKD 39 × 139 / 169, about HKD 32.08
+- **AND** 3 points are clawed back — 15 × 32.08 / 139, floored — never the 4 a refund of HKD 39 of the single takes
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-xig rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-35 - A split refund matches a single refund
@@ -691,30 +716,31 @@ for the whole sum would have.
 - **THEN** it is refused as not found and nothing is recorded
 - **AND** a later retry claws back once the earning lands
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-7vs rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-7vs rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-38 - A claw-back cancels the tier contribution it removes
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** points are clawed back
-- **THEN** the tier contribution of the earning they came from is reduced by the same amount
-- **AND** it leaves the qualifying window at the same time that earning does
+- **WHEN** money is refunded
+- **THEN** the tier contribution of the earning it came from is reduced by what that money earned, in the period that earning counted toward
+- **AND** it is reduced in full even where those points were already redeemed
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-38k rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-38k rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-145 - A claw-back withdraws an unsupported retention extension
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **GIVEN** a purchase inside a tier's validity period reached its retention threshold and started a fresh validity period
-- **WHEN** that purchase is fully refunded and the remaining points inside the original validity period no longer reach the retention threshold
-- **THEN** the fresh validity period is withdrawn
-- **AND** the member keeps the tier only until the original validity period ends
+- **GIVEN** a purchase inside a Gold period reached its retention threshold, keeping Gold for the next period
+- **WHEN** that purchase is fully refunded and the remaining points inside that Gold period no longer reach the retention threshold
+- **THEN** the next Gold period is withdrawn
+- **AND** the member holds Gold only until that period's own end, with a Silver period from there
 - **AND** their retention progress reflects only the points that remain
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-nnv rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-nnv rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-146 - A claw-back can demote
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** a claw-back takes a member's tier progress below what attained their tier
-- **THEN** they hold the tier their remaining points still reach, from that instant
+- **WHEN** a refund leaves the Silver period a promotion ended short of the tier it reached, while that promotion's first Gold period is still running
+- **THEN** the promotion is undone and the member is back in that Silver period, with what it still holds, from that instant
+- **AND** a later earning inside that Silver period can promote them again
 - **AND** the drop is recorded in tier history
 
 ### Requirement: A purchase earns its points exactly once, even when loyalty is unreachable
@@ -1079,18 +1105,20 @@ naming the bound it broke — never silently clipped.
 ### Requirement: Tier progress is a sum over a period, not a second balance
 
 A member SHALL hold one balance, which rises on earning and falls on
-redemption. Tier progress SHALL be the points that member earned inside a
-stated period, summed from the same entries; it decides tier and SHALL NOT be
-reduced by a redemption.
+redemption. Tier progress SHALL be the points that member earned inside their
+current tier period, summed from the same entries; it decides tier and SHALL
+NOT be reduced by a redemption. An earning SHALL count toward the period it was
+processed in, never toward the period of the date the selling surface gave the
+purchase, so a period the member has already been judged on is never reopened.
 
 Every earning and every reward grant SHALL add to the balance and count toward
 progress; an operator correction SHALL add to the balance alone. A redemption
 SHALL reduce the balance alone. A claw-back SHALL reduce both, dated to the
 earning it cancels.
 
-The two SHALL run on independent clocks: a tier's validity is measured from the
-date that tier was activated for that member, and the balance's expiry is
-measured from that member's most recent earning or redemption.
+The two SHALL run on independent clocks: a tier period is measured from the
+instant the member arrived on that tier, and the balance's expiry is measured
+from that member's most recent earning or redemption.
 Neither clock SHALL move the other.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-amv rev=1 -->
@@ -1124,9 +1152,11 @@ Neither clock SHALL move the other.
 
 ### Requirement: A tier is activated the moment it is reached, and earns from the next purchase
 
-A member SHALL be promoted at the instant their tier progress inside the
-qualifying window reaches a tier's threshold, including on their first recorded
-purchase, without waiting for any scheduled pass.
+A member SHALL be promoted at the instant their tier progress inside their
+current tier period reaches a tier's threshold, including on their first
+recorded purchase, without waiting for any scheduled pass. The earning that
+reaches it SHALL count toward the period it ended, points past the threshold
+included; the new tier's period SHALL count from the next earning.
 
 The spend that triggers a promotion SHALL be priced at the tier the member held
 before it. The higher multiplier SHALL apply from the member's next earning
@@ -1157,23 +1187,36 @@ onward.
 
 ### Requirement: A tier is valid for a fixed period, and is re-qualified or lost
 
-A member's effective tier SHALL be the highest of: the entry tier, any earned
-tier whose validity period has not ended, and any live invitation.
+A member's effective tier SHALL be the highest of: the tier their own earning
+holds and any live invitation.
 
-Each earned tier SHALL carry a validity period, measured from the date that tier
-was activated for that member. Earning that tier's retention threshold inside
-the validity period SHALL start a fresh validity period at the
-instant the previous one ends, counted again from zero for the new period.
+The entry tier and each earned tier SHALL be held for a tier period, counted
+from the event that opened it — the member joining, a promotion, or a drop to
+the entry tier. A period SHALL end at the last instant (23:59:59.999) of the
+day, in the programme's time zone, that falls a whole multiple of its length
+after that opening event, so a chain of periods never drifts on a short month
+and an order placed any time on the last day still counts in it. The next
+period SHALL start the instant after. Earning a tier's retention threshold
+inside its period SHALL start a fresh period there, counted again from zero.
+The entry tier's period SHALL renew at its end whatever it holds, counted again
+from zero.
 
-A member who has not earned the retention threshold inside the validity period
-SHALL lose that tier at the instant the period ends, falling to the highest tier
-they still hold by earning or invitation — the entry tier when none is live. The
-drop SHALL take effect at that instant, without waiting for a scheduled pass,
-and SHALL be recorded the next time that member is evaluated.
+A member's first entry-tier period SHALL open when they join. Nothing
+processed before the member joined SHALL count toward any tier.
 
-Losing a tier SHALL also reset the member's tier progress: earnings dated
-before the drop SHALL NOT count toward reaching or retaining any tier
-afterwards, so the climb starts again from zero.
+A member who has not earned the retention threshold inside the period SHALL
+lose that tier when the period ends, falling to the entry tier with a fresh
+period starting the instant after — a live invitation still holds them above
+it. The drop SHALL take effect at that instant, without waiting for a scheduled
+pass, and SHALL be recorded the next time that member is evaluated.
+
+Progress SHALL NOT carry across a period's end: earnings processed before a
+period began SHALL NOT count toward reaching or retaining any tier in it.
+
+An invitation SHALL never move a tier period. The period running beneath it
+SHALL continue through the invitation and past its end on its own dates,
+progress earned while invited SHALL count in that period as any other, and a
+tier earned then survives the invitation.
 
 A tier SHALL NOT be lost inside its validity period except through a claw-back
 or an operator's recorded act, and SHALL NOT be lost because the points that
@@ -1183,27 +1226,27 @@ An operator holding the permission SHALL be able to remove a tier a member holds
 whatever its period says, recorded with who and why — the remedy for a tier
 granted or reached in error.
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-gru rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-gru rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-77 - Re-qualifying keeps the tier
 **Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member earns at least the retention threshold inside their tier's validity period
 - **THEN** they keep that tier
-- **AND** a fresh validity period starts at the instant the previous one ends
+- **AND** a fresh validity period starts the instant after the previous one ends
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-lfh rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-lfh rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-78 - Not re-qualifying drops the tier
 **Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
-- **WHEN** a member's validity period ends and they earned less than the retention threshold inside it
-- **THEN** they hold the entry tier from that instant, unless a higher tier is still live by earning or invitation
+- **WHEN** a member's Gold period ends and they earned less than the retention threshold inside it
+- **THEN** they hold the entry tier from that instant, in a fresh period starting there, unless a live invitation holds them higher
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-f4d rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-f4d rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-79 - Losing a tier resets the climb
 **Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
-- **WHEN** a member is demoted at the end of a validity period and then makes a small purchase
-- **THEN** only earnings dated after the demotion count toward reaching the tier again
+- **WHEN** a member is demoted at the end of a Gold period and then makes a small purchase
+- **THEN** only earnings processed after the demotion count toward reaching the tier again
 - **AND** the earnings from the lapsed period do not re-promote them
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-jvh rev=1 -->
@@ -1236,6 +1279,32 @@ granted or reached in error.
 - **WHEN** a member's effective tier changes
 - **THEN** one entry records the move and what caused it
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-p8e rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-281 - A period ends at the close of its last day
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
+
+- **GIVEN** a Gold period opened at 14:00 Hong Kong time on 2026/03/01, holding 450 points
+- **WHEN** a 50-point earning is processed at 23:59:59.999 on 2027/03/01, Hong Kong time
+- **THEN** it counts in that Gold period, which reaches 500 and keeps Gold
+- **AND** the same earning processed at 00:00:00.000 on 2027/03/02 counts in the next period instead, and the period ending on 450 drops the member to Silver from that instant
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-q3k rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-282 - An invitation leaves the period beneath it running
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
+
+- **GIVEN** a member on Silver in a period opened in January, holding 300 points of progress by May
+- **WHEN** they are invited to Black in May, earn 150 points while invited, and the invitation ends in August
+- **THEN** they are on Silver in the same January period, at 450
+- **AND** that period ends the following January, on its own dates
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-r2m rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-283 - Nothing before joining counts toward a tier
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
+
+- **WHEN** points are processed for a user before they join, and the user then joins
+- **THEN** the first Silver period opens when they join
+- **AND** the points processed before it count toward no tier
+
 ### Requirement: Qualifying spend is what the member actually paid for qualifying goods
 
 Points SHALL be granted from qualifying spend: the qualifying lines of a
@@ -1244,7 +1313,9 @@ minor units in the programme's currency.
 
 A discount or coupon applied to a whole order SHALL be apportioned across its
 lines in proportion to each line's pre-discount amount, and only the share
-falling on qualifying lines SHALL reduce qualifying spend.
+falling on qualifying lines SHALL reduce qualifying spend. Shipping SHALL take
+no share: the whole of an order-level discount falls on the goods lines, as the
+shop allocates it.
 
 Qualifying spend SHALL never be less than zero.
 
@@ -1262,13 +1333,13 @@ Qualifying spend SHALL never be less than zero.
 - **WHEN** a member pays for part of a qualifying basket with a redeemed coupon
 - **THEN** qualifying spend is the basket less the coupon's value
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-4ir rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-4ir rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-86 - An order discount cannot be pushed onto the non-earning lines
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
-- **WHEN** an order-level discount applies to an order that is four fifths qualifying goods and one fifth shipping, measured before the discount
-- **THEN** four fifths of the discount reduces qualifying spend
-- **AND** the fifth falling on shipping reduces nothing
+- **WHEN** a Silver member's HKD 100 order-level discount applies to HKD 800 of qualifying goods and HKD 200 of shipping
+- **THEN** the whole HKD 100 falls on the goods, and qualifying spend is HKD 700, earning 70 points
+- **AND** shipping takes none of it, so qualifying spend is never HKD 720
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-6rj rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-87 - A fully discounted order earns nothing
@@ -1459,7 +1530,7 @@ is erased, the identity simply holds nothing any more.
 #### Scenario: grade10-site-loyalty-programme-SC-114 - Deletion does not wait for a window
 **Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
-- **WHEN** an account is deleted inside a live inactivity window or tier term
+- **WHEN** an account is deleted inside a live inactivity window or tier period
 - **THEN** the clearing is immediate, not deferred to either clock
 
 ### Requirement: Earning is priced in the programme's own currency, on its deployed rounding order
@@ -1568,7 +1639,7 @@ never silent.
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the membership surface — `TierCard`, `TierInfoCard`,
-`TierLadder`, `HowPointsWork`, `MemberPass`, `RewardMenu`, `CouponList`, and
+`HowPointsWork`, `MemberPass`, `RewardMenu`, `CouponList`, and
 `PointHistory` — and the props and copy type of each.
 
 `TierCard` SHALL wear the skin of the tier held — silver, gold or black,
@@ -1578,9 +1649,7 @@ what the balance pays at checkout as the consumer formats it, and the tier's
 earn line. Where the tier names a qualifying threshold `TierCard` SHALL
 render the qualifying count apart from the balance, never summed into it,
 with the progress toward the threshold; where it names none it SHALL render
-neither count nor progress. Given an `href` to the tier-and-benefits surface,
-the Benefits affordance SHALL be the link to it, and the rest of the card
-SHALL NOT be interactive. It SHALL NOT name a balance-expiry
+neither count nor progress. The card SHALL NOT be interactive. It SHALL NOT name a balance-expiry
 day or count, nor derive any expiry wording from a clock or a balance of its
 own — the whole balance lapses on one shared inactivity date, never in
 parts.
@@ -1615,16 +1684,6 @@ its rung states as consumer-worded copy, and its benefits behind checks —
 and SHALL wear the held tier's emphasis, a primary border and its tint,
 where a `currentTier` prop marks it the rung held, never derived from the
 tier name.
-
-`TierLadder` SHALL draw the tiers in climb order inside a card — each rung
-through the stepper, earned rungs beneath the held tier completed, the held
-rung in progress, unearned rungs upcoming — and SHALL draw no connector
-into a rung marked `invitationOnly`. Where the held rung is invitation-only
-every other rung SHALL read upcoming, never completed, and neither the
-qualifying count nor its footnote SHALL render however they are passed;
-otherwise the count SHALL render inside the ladder's card only where both
-the count and its target arrive. The ladder SHALL receive its rungs, the
-held rung's index and the figures through props.
 
 `HowPointsWork` SHALL render the programme's mechanics as rows — an icon,
 a title and a body each, the icons the consumer's own — stacked on a
@@ -1761,9 +1820,13 @@ SHALL require no export of its own.
 - **WHEN** `TierCard` is rendered for a tier that names no qualifying threshold
 - **THEN** neither the qualifying count nor its progress is rendered
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=2 -->
-#### Scenario: grade10-site-loyalty-programme-SC-257 - The Benefits link opens the tier-and-benefits surface
+<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=3 -->
+#### Scenario: grade10-site-loyalty-programme-SC-257 - The tier card carries no link or button
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` renders
+- **THEN** nothing on the card is a link or a button
+- **AND** the footer holds the tier's earn line alone
 
 - **WHEN** `TierCard` is given an `href`
 - **THEN** the Benefits affordance is the link to it, and the rest of the card is not interactive
@@ -1800,21 +1863,6 @@ SHALL require no export of its own.
 - **WHEN** `TierInfoCard` renders the rung marked `currentTier`
 - **THEN** it wears the primary border and its tint
 - **AND** the unheld rungs wear the plain border
-
-<!-- trace:scenario id=g10.loyalty-programme.SC-rwd rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-276 - An invitation-held tier earns nothing beneath it
-**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
-
-- **WHEN** `TierLadder` renders a member whose held rung is `invitationOnly`
-- **THEN** every other rung reads upcoming, never completed
-- **AND** no connector is drawn into the held rung, and neither the qualifying count nor its footnote renders
-
-<!-- trace:scenario id=g10.loyalty-programme.SC-xnm rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-277 - The qualifying line waits for both figures
-**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
-
-- **WHEN** `TierLadder` renders with a qualifying count but no target, or a target but no count
-- **THEN** no qualifying line is rendered
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-fzj rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-278 - The mechanics rows take the consumer's icons and words

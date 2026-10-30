@@ -41,11 +41,18 @@ names those currencies and does not decide them.
 | --- | --- | --- |
 | Grade10 store and loyalty points | HKD | [Points](/p/grade10-site/loyalty/points) |
 | zzz store | USD | Brand setting |
-| Vault | HKD, USD, one per case | [Loan and Money](/p/grade10-site/vault/loan-and-money) |
+| Vault | HKD, USD, one per case | [Loan and Money](/p/grade10-site/finance/loan-and-money) |
 | Auction | USD, HKD, JPY, one per lot | [Bidding](/p/grade10-site/auction/bidding) |
 | Grading | HKD | [Grading](/p/grade10-site/grading) |
 
 A spend or payment in another currency is refused, not converted.
+
+- 🚧 **A reference price may be converted** - a price quoted in another
+  currency is converted at a recorded rate where it only values something: a
+  yen market price behind a vault card's incentive, at the day's ECB rate -
+  [Incentive](/p/grade10-site/vault/incentive#daily-amount) - or a consignment's HKD floor
+  listed at a dollar auction, at the auction's fixed rate. Neither is a
+  payment, and what is paid is still in the payer's own currency
 
 ## Display Shapes
 
@@ -102,5 +109,5 @@ symbol, rather than bare numbers under a header that names the currency, so a
 document reads one shape throughout.
 
 **Not in scope.** Which currency a brand quotes in, which sits on its owning
-page. Currency conversion, which the platform does not do.
+page. Converting a payment, which the platform never does.
 :::

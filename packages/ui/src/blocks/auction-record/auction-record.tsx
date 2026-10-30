@@ -213,7 +213,7 @@ function AuctionRecord({
         <HStack className="w-fit max-w-full" gap="sm" vAlign="center">
           <h1
             className={cn(
-              "shrink-0 text-3xl font-bold leading-none text-foreground",
+              "shrink-0 text-3xl font-semibold leading-none text-foreground",
               // Match Badge: trim ascent/descent so center aligns on cap height.
               "[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]",
             )}

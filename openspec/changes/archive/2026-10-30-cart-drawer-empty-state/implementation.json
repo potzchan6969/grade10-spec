@@ -1,0 +1,82 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "7be0a025f3bdf5f6952e4cc0c40edf5636dbc0a69371be2dd229efd4b62559f6"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "ec4fa357234740a48db90ca7fbfdc7d97ea84c8a",
+    "capturedAt": "2026-10-26T13:33:38.213Z",
+    "targets": [
+      {
+        "path": "openspec/changes/cart-drawer-empty-state/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: An empty cart shows the design-system empty state",
+          "Requirement: Fetching status and price info on open with Boneyard skeletons",
+          "Requirement: Item count badge excludes sold-out items",
+          "Requirement: The drawer displays a minimum 5-row baseline",
+          "Requirement: The drawer lists items without placeholder slots",
+          "Requirement: The store cart drawer exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "a762be3cfe893f6c6e1e6d5fd4f9f998a3f227eb",
+      "components": [
+        "web"
+      ]
+    },
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "2c2a019a7c5c7fdb55e767c94748b38758ab6ae6",
+      "components": [
+        "ui"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@kinisworking",
+    "reviewedAt": "2026-10-30T05:33:45.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The current suite adds the public promo-ticket journey and its draft manual case. The existing empty-state and unread-cart cases remain in the suite; this addition does not change the empty-cart contract.",
+        "evidence": [
+          "openspec/specs/shared/ui/store-cart/feature-tcs.md#shared.ui-store-cart.US2-TC3 and #shared.ui-store-cart.US2-TC8 retain empty-state story coverage.",
+          "openspec/changes/cart-drawer-empty-state/tasks.md#1.1-1.7 records the empty-state stories and shared UI verification; tasks 2.1-2.3 record the unread-cart regression coverage and its verification limits."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The current feature set adds a later near-expiry promo-detail outcome. The empty-cart feature and its settled requirements are unchanged from the claimed baseline.",
+        "evidence": [
+          "The diff from contract baseline ec4fa357234740a48db90ca7fbfdc7d97ea84c8a adds only the Near-expiry detail feature-set bullet and promo-ticket requirement/scenarios; Requirement: An empty cart shows the design-system empty state and its scenarios remain unchanged.",
+          "grade10-spec commit 2c2a019a7c5c7fdb55e767c94748b38758ab6ae6 records the shared empty-state implementation, and grade10 commit a762be3cfe893f6c6e1e6d5fd4f9f998a3f227eb records the unread-cart host fix."
+        ]
+      }
+    ]
+  }
+}

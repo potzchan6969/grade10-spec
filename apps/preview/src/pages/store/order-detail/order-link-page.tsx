@@ -53,7 +53,6 @@ function OrderLinkPage({
       >
         {notFound ? (
           <OrderDetailsNotFound
-            breadcrumbs={null}
             description={ORDER_DETAILS_READ_COPY.notFoundLinkDescription}
             onBack={() =>
               navigateToStory("store-home-screens-store-home--default")

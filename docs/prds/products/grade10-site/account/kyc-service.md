@@ -17,7 +17,7 @@ same human**: a product binds the check another product already recorded.
 
 - **At the counter** - vault staff read the document in front of them and
   record it from the case, the fallback that never closes
-  ([Identity Check](/p/grade10-site/vault/identity-check))
+  ([Identity Check](/p/grade10-site/finance/identity-check))
 - **Who reads it** - vault staff, on the case, the name and the document
   image; an operator, on the account's Identity card, the standings and the
   findings; the collector, a standing and never a name; a bid, the same
@@ -82,7 +82,7 @@ decides it; Grade10 renders none of it.
 :::flow{title="The hosted check" diagram="assets/diagrams/kyc-hosted-check.svg"}
 ## The check is raised
 From the verification page, signed in. A vault case invites nobody - [Identity
-Check](/p/grade10-site/vault/identity-check).
+Check](/p/grade10-site/finance/identity-check).
 ## The provider runs the check
 Photograph the document, photograph your face, screened - resumable, so a
 collector who stops halfway comes back to where they were.

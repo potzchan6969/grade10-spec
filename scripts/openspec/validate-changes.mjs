@@ -9,8 +9,10 @@
  * said what it is waiting for. Those errors are dropped for a change whose
  * `.openspec.yaml` declares `awaiting: specs:` and whose deltas name no
  * requirement yet. A `REMOVED Feature set` amendment is also a real delta:
- * acceptance can fold it without restating an unchanged requirement. Every
- * other error it reports still counts, on that change and on the rest.
+ * acceptance can fold it without restating an unchanged requirement. A change
+ * whose manifest names the feature ticket it moved to, `ticket: <owner>/<repo>#<n>`,
+ * keeps its delta on that issue and owes the store none. Every other error it
+ * reports still counts, on that change and on the rest.
  *
  * `spec.md` is written in two passes — the outline, then the requirements —
  * so the wait is read against the delta headings rather than against the
@@ -39,6 +41,29 @@ const NO_SECTIONS = "No delta sections found.";
 const DELTA_HEADING =
   /^##\s+(?:ADDED|MODIFIED|REMOVED|RENAMED)\s+Requirements\s*$/m;
 const REMOVED_FEATURE_SET = /^##\s+REMOVED\s+Feature set\s*$/m;
+const TICKET = /^[\w.-]+\/[\w.-]+#\d+$/;
+
+/** The change's manifest, or nothing when it has none or the reader refuses
+ * it. A record that is there and cannot be opened stops the run naming it. */
+function manifestOf(dir) {
+  const text = readTextIfThere(join(dir, ".openspec.yaml"));
+  if (text === undefined) return undefined;
+  try {
+    return YAML.parse(text) ?? {};
+  } catch {
+    // A manifest the readers refuse excuses nothing here.
+    return undefined;
+  }
+}
+
+/** The feature ticket the change moved to, or nothing when it names none in
+ * the `<owner>/<repo>#<n>` form. */
+export function movedToTicket(dir) {
+  const ticket = manifestOf(dir)?.ticket;
+  return typeof ticket === "string" && TICKET.test(ticket.trim())
+    ? ticket.trim()
+    : undefined;
+}
 
 /**
  * What the change says it is waiting on before it can write a requirement, or
@@ -47,18 +72,7 @@ const REMOVED_FEATURE_SET = /^##\s+REMOVED\s+Feature set\s*$/m;
  * refuses the change until its author deletes it.
  */
 export function waitingOnSpecs(dir) {
-  // A record that is there and cannot be opened stops the run naming it: read
-  // as no wait, it would run the delta gate over a change its author excused.
-  const text = readTextIfThere(join(dir, ".openspec.yaml"));
-  if (text === undefined) return undefined;
-  let fields;
-  try {
-    fields = YAML.parse(text) ?? {};
-  } catch {
-    // A manifest the readers refuse excuses nothing here.
-    return undefined;
-  }
-  const why = fields?.awaiting?.specs;
+  const why = manifestOf(dir)?.awaiting?.specs;
   if (typeof why !== "string" || why.trim() === "") return undefined;
   return outlineOnly(join(dir, "specs")) ? why.trim() : undefined;
 }
@@ -142,9 +156,11 @@ export function main(root, strict, only) {
 
   const items = report(run.stdout ?? "").items ?? [];
   const waiting = [];
+  const moved = [];
   const failed = [];
   for (const item of items) {
     const why = waitingOnSpecs(join(changes, item.id));
+    const ticket = movedToTicket(join(changes, item.id));
     const featureSetAmendment = removesFeatureSetItem(
       join(changes, item.id, "specs"),
     );
@@ -152,7 +168,7 @@ export function main(root, strict, only) {
       (issue) =>
         issue.level !== "INFO" &&
         !(
-          (why !== undefined || featureSetAmendment) &&
+          (why !== undefined || ticket !== undefined || featureSetAmendment) &&
           (issue.message.startsWith(NO_DELTA) ||
             issue.message.startsWith(NO_SECTIONS))
         ),
@@ -164,6 +180,7 @@ export function main(root, strict, only) {
         left.push({ level: "ERROR", path: "acceptance.json", message });
     }
     if (why !== undefined) waiting.push(`${item.id} — ${why}`);
+    if (ticket !== undefined) moved.push(`${item.id} - ${ticket}`);
     if (left.length > 0) {
       failed.push(
         `${item.id}\n${left.map((one) => `  ${one.level} ${one.path}: ${one.message}`).join("\n")}`,
@@ -172,6 +189,7 @@ export function main(root, strict, only) {
   }
 
   for (const one of waiting) console.log(`waiting on an input: ${one}`);
+  for (const one of moved) console.log(`moved to a ticket: ${one}`);
   if (failed.length > 0) {
     console.error(`\n${failed.join("\n")}\n${failed.length} change(s) failed`);
     process.exitCode = 1;

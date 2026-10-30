@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
 import { TopUpResultPrototype } from "./top-up-result-prototype";
 
 const meta = {
@@ -12,78 +12,54 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/* Only "Confirming Payment" is a modal; every settled outcome is a toast,
+ * which sonner renders on document.body, so plays query the body. */
+
 /** Back from Stripe, still confirming the payment. */
 export const ConfirmingPayment: Story = {
   name: "Confirming Payment",
   args: { state: "confirming" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
+    const overlay = within(document.body);
     expect(
-      canvas.getByRole("heading", {
-        level: 1,
+      await overlay.findByRole("dialog", {
         name: "Confirming your payment…",
       }),
     ).toBeInTheDocument();
-    expect(canvas.getByRole("status")).toBeInTheDocument();
+    expect(overlay.getByRole("status")).toBeInTheDocument();
   },
 };
 
-/** The pack credited: the new balance and the way back. */
+/** The pack credited: the new balance, as a toast. */
 export const PointsAdded: Story = {
   name: "Points Added",
   args: { state: "added" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("heading", { level: 1, name: "1,000 points added" }),
-    ).toBeInTheDocument();
-    expect(canvas.getByText("New balance: 2,200 points")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Back to Membership" }),
-    ).toBeInTheDocument();
+  play: async () => {
+    const overlay = within(document.body);
+    await waitFor(() =>
+      expect(overlay.getByText("1,000 points added")).toBeVisible(),
+    );
+    expect(overlay.getByText("New balance: 2,200 points")).toBeVisible();
+    expect(overlay.queryByRole("dialog")).not.toBeInTheDocument();
   },
 };
 
-/** The pack held for an operator: what happens next and where to watch. */
-export const UnderReview: Story = {
-  name: "Under Review",
-  args: { state: "under-review" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+/** Still unconfirmed after half a minute: the wait closes and the points
+ * are promised in Points History. */
+export const StillConfirming: Story = {
+  name: "Still Confirming",
+  args: { state: "still-confirming" },
+  play: async () => {
+    const overlay = within(document.body);
+    await waitFor(() =>
+      expect(overlay.getByText("Still confirming your payment")).toBeVisible(),
+    );
     expect(
-      canvas.getByRole("heading", {
-        level: 1,
-        name: "Top-up under review",
-      }),
-    ).toBeInTheDocument();
-    expect(
-      canvas.getByText(
-        "Your card is charged only if it’s approved. You can close this page.",
+      overlay.getByText(
+        "Your points will show in Points History once it clears.",
       ),
     ).toBeVisible();
-    expect(canvas.getByText("Reference TU-2026-0384")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "View Top-Up History" }),
-    ).toBeInTheDocument();
-  },
-};
-
-/** The review refused the pack: nothing charged. */
-export const NotApproved: Story = {
-  name: "Not Approved",
-  args: { state: "not-approved" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("heading", {
-        level: 1,
-        name: "Top-up not approved",
-      }),
-    ).toBeInTheDocument();
-    expect(canvas.getByText("You haven’t been charged.")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Back to Membership" }),
-    ).toBeInTheDocument();
+    expect(overlay.queryByRole("dialog")).not.toBeInTheDocument();
   },
 };
 
@@ -91,29 +67,26 @@ export const NotApproved: Story = {
 export const PaymentNotCompleted: Story = {
   name: "Payment Not Completed",
   args: { state: "not-completed" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("heading", {
-        level: 1,
-        name: "Payment not completed",
-      }),
-    ).toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: "Try again" })).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Back to Membership" }),
-    ).toBeInTheDocument();
+  play: async () => {
+    const overlay = within(document.body);
+    await waitFor(() =>
+      expect(overlay.getByText("Payment not completed")).toBeVisible(),
+    );
+    expect(overlay.getByText("You haven’t been charged.")).toBeVisible();
+    expect(overlay.getByRole("button", { name: "Try again" })).toBeVisible();
   },
 };
 
-/** Points added at a phone width. */
+/** The toast reads the same at a phone width — only the confirming wait
+ * is a drawer. */
 export const Narrow: Story = {
   args: { state: "added" },
   globals: { viewport: { value: "mobile1" } },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("heading", { level: 1, name: "1,000 points added" }),
-    ).toBeInTheDocument();
+  play: async () => {
+    const overlay = within(document.body);
+    await waitFor(() =>
+      expect(overlay.getByText("1,000 points added")).toBeVisible(),
+    );
+    expect(overlay.getByText("New balance: 2,200 points")).toBeVisible();
   },
 };

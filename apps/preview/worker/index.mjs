@@ -1,6 +1,20 @@
-import { createWorker } from "@grade10/ui-verification/worker";
+import {
+  createWorker,
+  defineReferenceCaptures,
+  watchDeploys,
+} from "@grade10/ui-verification/worker";
 
 const archiveWorker = createWorker();
+
+// Reference captures run in this Durable Object, in a Cloudflare Browser
+// Rendering browser. A session outlives one batch by its keep-alive, then
+// closes; each batch opens its own.
+export const ReferenceCaptures = defineReferenceCaptures({
+  launch: async (env) => {
+    const { launch } = await import("@cloudflare/playwright");
+    return launch(env.BROWSER, { keep_alive: 120_000 });
+  },
+});
 
 function unavailableResponse() {
   return new Response(
@@ -33,5 +47,16 @@ export default {
     }
 
     return env.ASSETS.fetch(request);
+  },
+
+  // Each hour the Worker checks which build it serves; a new one starts a
+  // full reference capture, held to one every six hours.
+  async scheduled(_controller, env, ctx) {
+    ctx.waitUntil(
+      watchDeploys(env).catch((error) => {
+        console.error("[ui-verification-captures] deploy watch failed", error);
+        throw error;
+      }),
+    );
   },
 };

@@ -72,9 +72,9 @@ test("archive info requires read authorization", async () => {
 test("API list requests preserve omitted locales and pass explicit locales", async () => {
   const calls = [];
   const archive = {
-    async listReviews(options) {
+    async listAssessments(options) {
       calls.push(options);
-      return { reviews: [] };
+      return { assessments: [] };
     },
   };
   const handler = createArchiveHandler(archive, {
@@ -82,10 +82,10 @@ test("API list requests preserve omitted locales and pass explicit locales", asy
   });
 
   const english = await handler(
-    new Request("http://localhost:6006/api/reviews"),
+    new Request("http://localhost:6006/api/assessments"),
   );
   const chinese = await handler(
-    new Request("http://localhost:6006/api/reviews?locale=zh-Hant"),
+    new Request("http://localhost:6006/api/assessments?locale=zh-Hant"),
   );
 
   assert.equal(english.status, 200);

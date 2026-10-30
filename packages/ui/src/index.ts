@@ -430,10 +430,37 @@ export {
   CampaignBanner,
   type CampaignBannerProps,
 } from "./blocks/loyalty-campaign/campaign-banner";
+// shared-ui/loyalty-campaign - the campaign page
+export {
+  type CampaignFact,
+  CampaignFacts,
+} from "./blocks/loyalty-campaign/campaign-facts";
+export {
+  CampaignGift,
+  type CampaignGiftProps,
+} from "./blocks/loyalty-campaign/campaign-gift";
+export {
+  CampaignHero,
+  type CampaignHeroPhase,
+  type CampaignHeroProps,
+} from "./blocks/loyalty-campaign/campaign-hero";
+export { CampaignJoin } from "./blocks/loyalty-campaign/campaign-join";
 export {
   CampaignMechanicCard,
   type CampaignMechanicCardProps,
 } from "./blocks/loyalty-campaign/campaign-mechanic-card";
+export {
+  type CampaignDate,
+  CampaignDates,
+  CampaignPanel,
+  CampaignQuestions,
+} from "./blocks/loyalty-campaign/campaign-panel";
+export { CampaignShare } from "./blocks/loyalty-campaign/campaign-share";
+export {
+  CampaignWayCard,
+  type CampaignWayCardProps,
+  type CampaignWayTone,
+} from "./blocks/loyalty-campaign/campaign-way-card";
 export {
   CouponList,
   type CouponListCopy,
@@ -482,12 +509,6 @@ export {
   TierInfoCard,
   type TierInfoCardProps,
 } from "./blocks/loyalty-membership/tier-info-card";
-export {
-  TierLadder,
-  type TierLadderCopy,
-  type TierLadderProps,
-  type TierLadderRung,
-} from "./blocks/loyalty-membership/tier-ladder";
 export type {
   CouponItem,
   CouponStatus,
@@ -511,10 +532,21 @@ export {
 } from "./blocks/loyalty-membership/wallet-pass-links";
 // shared-ui/loyalty-top-ups
 export {
+  TopUpConfirming,
+  type TopUpConfirmingCopy,
+  type TopUpConfirmingProps,
+} from "./blocks/loyalty-top-ups/top-up-confirming";
+export {
   TopUpPackCard,
   type TopUpPackCardCopy,
   type TopUpPackCardProps,
 } from "./blocks/loyalty-top-ups/top-up-pack-card";
+export {
+  TopUpPicker,
+  type TopUpPickerCopy,
+  type TopUpPickerPack,
+  type TopUpPickerProps,
+} from "./blocks/loyalty-top-ups/top-up-picker";
 // shared/ui/page-blocks
 export {
   FactCard,

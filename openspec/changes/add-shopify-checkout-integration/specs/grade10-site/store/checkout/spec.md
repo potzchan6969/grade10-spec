@@ -17,7 +17,7 @@
 - Order settlement and return
   - Order state: poll pending purchases and read authoritative settlement
   - Cart refresh: read the cart and tender again once an order is paid
-  - Return: use the static Shopify confirmation link to Your Orders
+  - Return: use the static Shopify confirmation link to My Orders
 - Carrier rates
   - Stateless callback: preserve token gating and served destinations
   - Preview parity: the same rate and currency without cart or order writes
@@ -219,7 +219,7 @@ retain the provider's paid total, goods, shipping, tax and order identity when
 Shopify supplies them. Duplicate or cross-shop events SHALL not settle another
 order.
 
-**Visibility** - Your Orders SHALL show a newly placed pending order as
+**Visibility** - My Orders SHALL show a newly placed pending order as
 settling, poll while it can move, and show the paid order and its paid total
 after settlement.
 
@@ -231,7 +231,7 @@ older order. Unchanged conversion SHALL leave no active purchased lines or
 tender; the next cart starts with default tender.
 
 **Return** - A Shopify Thank You and Order status checkout UI extension SHALL
-offer a static link to Grade10 Your Orders, where the matching purchase is
+offer a static link to Grade10 My Orders, where the matching purchase is
 visible after the member returns. The extension SHALL not promise a
 purchase-specific deep link. The native Continue shopping button and Shopify
 account path SHALL not be the required return destination.
@@ -241,7 +241,7 @@ account path SHALL not be the required return destination.
 **Serves:** grade10-site-store-checkout-US-03 - The collector can see that a returned purchase is still settling
 
 - **GIVEN** a member has returned from Shopify with a new pending order
-- **WHEN** they open Your Orders before payment settlement
+- **WHEN** they open My Orders before payment settlement
 - **THEN** the order appears in the active orders section
 - **AND** pending is shown as a settling state, not an empty result or an error
 - **AND** the page polls while the order can still move
@@ -271,7 +271,7 @@ account path SHALL not be the required return destination.
 **Serves:** grade10-site-store-checkout-US-03 - The collector continues from Shopify to the purchase in Grade10
 
 - **GIVEN** a member has completed payment on a Shopify invoice
-- **WHEN** the member activates the Grade10 Your Orders link on the Shopify
+- **WHEN** the member activates the Grade10 My Orders link on the Shopify
   confirmation page
 - **THEN** the Grade10 orders surface opens and shows the matching purchase
 - **AND** it does not require the native Continue shopping button or send the
@@ -361,7 +361,7 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 
 **One Pay at a time** - The drawer SHALL hold at most one pending Pay. While it is active, all non-dismissal drawer actions SHALL wait under the cart drawer's pending-operation contract. Close, backdrop and Escape SHALL remain available. The lines and tender it sent SHALL stay fixed for that request; an edit from another tab or session applies to the next Pay. After this request ends, any other active drawer operation and the current-data guards SHALL still govern availability.
 
-**Answers** - The drawer SHALL use the existing treatment for each answer: a hosted invoice opens Shopify, a settling order opens Your Orders, a named line or refused tender is named in the drawer, and anything else shows the existing failure feedback.
+**Answers** - The drawer SHALL use the existing treatment for each answer: a hosted invoice opens Shopify, a settling order opens My Orders, a named line or refused tender is named in the drawer, and anything else shows the existing failure feedback.
 
 **Dismissed drawer** - Closing the drawer SHALL NOT cancel a sent Pay or make its answer stale. A still-current successful hosted-invoice answer SHALL open Shopify even after dismissal. A changed cart, tender, member or request SHALL retain the older-answer protection below.
 
@@ -420,14 +420,14 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **AND** a later Pay is a new request that the store decides
 
 <!-- trace:scenario id=g10.store-checkout.SC-cbb rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-64 - A settling answer opens Your Orders
-**Serves:** grade10-site-store-checkout-US-05 - The collector whose Pay answers with a settling order goes to Your Orders, not Shopify
+#### Scenario: grade10-site-store-checkout-SC-64 - A settling answer opens My Orders
+**Serves:** grade10-site-store-checkout-US-05 - The collector whose Pay answers with a settling order goes to My Orders, not Shopify
 
 - **GIVEN** Pay has been sent for the current cart and tender
 - **WHEN** its answer is a settling order with no hosted invoice
-- **THEN** the drawer opens Your Orders and no Shopify page
-- **AND** Your Orders shows the matching order with its existing status label
-- **AND** Your Orders reads the order again while it can still move
+- **THEN** the drawer opens My Orders and no Shopify page
+- **AND** My Orders shows the matching order with its existing status label
+- **AND** My Orders reads the order again while it can still move
 
 <!-- trace:scenario id=g10.store-checkout.SC-f6v rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-65 - A failed answer ends the pending Pay for a deliberate retry

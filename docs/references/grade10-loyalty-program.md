@@ -20,6 +20,11 @@ from redeemable points (dual-ledger model). Members start at Silver.
 | **Gold** | Auto-upgrade on earning 500 tier points in a rolling 12-month window. | 1.2× |
 | **Black** | Invite-only, CEO approval, annual cap. Full spec TBD — parked. | 1.7× |
 
+> Superseded 2026-10-29 by the owner: Gold is reached on 500 points earned
+> inside the member's Silver tier period, not a rolling 12 months. Silver has a
+> 12-month period too, starting when the member registers or drops from Gold or
+> Black — [Tiers](../prds/products/grade10-site/loyalty/tiers.md#tier-period).
+
 **Upgrade & validity rules**
 
 - Upgrade is immediate on hitting 500 tier points, including on the first

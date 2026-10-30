@@ -10,6 +10,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { createArchive } from "@grade10/ui-verification/archive";
 import { createArchiveHandler } from "@grade10/ui-verification/archive-api";
+import { createLocalCoordinator } from "@grade10/ui-verification/local-coordinator";
 
 const directory = resolve(fileURLToPath(new URL(".", import.meta.url)));
 const repositoryRoot = resolve(directory, "../../../..");
@@ -19,12 +20,21 @@ const requirePreview = createRequire(
 const { chromium } = requirePreview("playwright");
 const STORY_ID = "site-navigation-screens-not-found--default";
 const CASE_ID = "vc_c00fc18c-bacf-4e88-931c-85d550dc4c2b";
+// A workbench capture launches Chromium and renders the story at all three
+// sizes, so it outlasts the panel's ordinary waits.
+const CAPTURE_TIMEOUT_MS = 60_000;
 const PROFILE_SIZES = {
   desktop: { width: 1440, height: 900 },
   tablet: { width: 768, height: 1024 },
   mobile: { width: 390, height: 844 },
 };
 const GRADE10_LOCALES = ["en", "zh-Hant", "zh-Hans"];
+/** The locale tabs carry the short names; the long names stay in the metadata. */
+const LOCALE_TAB_NAMES = {
+  en: "English",
+  "zh-Hant": "繁中",
+  "zh-Hans": "简中",
+};
 const LOCALE_LABELS = {
   en: "English",
   "zh-Hant": "Traditional Chinese",
@@ -89,8 +99,8 @@ function localeEvidenceText(locale, runId, targetId, kind) {
   return `${title ?? locale} · ${runId} · ${targetId}`;
 }
 
-async function waitForCondition(check, description) {
-  const deadline = Date.now() + 5_000;
+async function waitForCondition(check, description, timeoutMs = 5_000) {
+  const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     if (await check()) return;
     await new Promise((resolveWait) => setTimeout(resolveWait, 25));
@@ -482,11 +492,14 @@ async function startWorkbenchServer(root, archive) {
   const indexPath = join(realRoot, "index.html");
   await stat(indexPath);
   const apiRequests = [];
-  const reviewRequests = [];
+  const captureRequests = [];
   let archiveHandler;
   const server = createServer(async (request, response) => {
     try {
-      const url = new URL(request.url ?? "/", "http://127.0.0.1");
+      const url = new URL(
+        request.url ?? "/",
+        `http://${request.headers.host ?? "127.0.0.1"}`,
+      );
       if (url.pathname.startsWith("/api/")) {
         apiRequests.push(
           `${request.method ?? "GET"} ${url.pathname}${url.search}`,
@@ -496,10 +509,10 @@ async function startWorkbenchServer(root, archive) {
         const body = Buffer.concat(chunks);
         if (
           request.method === "POST" &&
-          url.pathname === "/api/reviews" &&
+          url.pathname === "/api/references" &&
           body.length > 0
         ) {
-          reviewRequests.push(JSON.parse(body.toString("utf8")));
+          captureRequests.push(JSON.parse(body.toString("utf8")));
         }
         const headers = new Headers();
         for (const [name, value] of Object.entries(request.headers)) {
@@ -560,17 +573,25 @@ async function startWorkbenchServer(root, archive) {
   const address = server.address();
   assert(address && typeof address === "object");
   const origin = `http://127.0.0.1:${address.port}`;
+  const coordinator = createLocalCoordinator({
+    archive,
+    archiveRoot: archive.root,
+    repoRoot: repositoryRoot,
+    launch: () => chromium.launch({ headless: true }),
+  });
   archiveHandler = createArchiveHandler(archive, {
     authorize: async (_request, scope) =>
-      scope === "review"
+      scope === "approve"
         ? { kind: "human", reviewer: { subject: "Panel browser fixture" } }
         : { kind: "human" },
     allowedOrigins: [origin],
+    coordinator,
   });
   return {
     origin,
     apiRequests,
-    reviewRequests,
+    captureRequests,
+    coordinator,
     close: () =>
       new Promise((resolveClose, rejectClose) => {
         server.close((error) => (error ? rejectClose(error) : resolveClose()));
@@ -584,12 +605,23 @@ const PROFILE_LABELS = {
   mobile: "Mobile",
 };
 
+/** The panel shows one size at a time: pick the size tab, then read its evidence. */
+async function sizeRegion(page, profileId) {
+  await page
+    .locator(".verification-size-tab")
+    .filter({ hasText: PROFILE_LABELS[profileId] })
+    .click();
+  return page.getByRole("region", {
+    name: `${PROFILE_LABELS[profileId]} evidence`,
+  });
+}
+
 async function startPanel(browser, server, storyId = STORY_ID) {
   const page = await browser.newPage();
   await page.goto(`${server.origin}/?path=/story/${storyId}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   return page;
 }
 
@@ -648,7 +680,7 @@ test("the central workbench shows the newest run of a version at all three sizes
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page
     .getByRole("combobox", { name: "Verification target" })
     .waitFor({ state: "visible" });
@@ -671,9 +703,9 @@ test("the central workbench shows the newest run of a version at all three sizes
     "the panel should request archive runs on cold load",
   );
   assert.equal(
-    server.apiRequests.some((entry) => entry.startsWith("POST /api/reviews")),
+    server.apiRequests.some((entry) => entry.startsWith("POST /api/")),
     false,
-    "the panel does not record reviews",
+    "opening the panel records no stamp",
   );
   assert.equal(
     requestOrigins.has("http://localhost:4466"),
@@ -751,9 +783,7 @@ test("the central workbench shows the newest run of a version at all three sizes
     "the full original reference PNG should remain downloadable",
   );
   for (const profileId of ["tablet", "mobile"]) {
-    const region = page.getByRole("region", {
-      name: `${PROFILE_LABELS[profileId]} evidence`,
-    });
+    const region = await sizeRegion(page, profileId);
     await waitForImageDimensions(
       region,
       "Site full viewport",
@@ -766,29 +796,19 @@ test("the central workbench shows the newest run of a version at all three sizes
     );
   }
   assert.equal(
-    await page.getByRole("tab", { name: /^(Desktop|Tablet|Mobile)/ }).count(),
-    0,
-    "the three sizes are shown together, not behind tabs",
-  );
-
-  assert.equal(
-    await page.getByText("Not compared", { exact: true }).count(),
+    await page.locator(".verification-size-tab").count(),
     3,
+    "the sizes are tabs, each carrying its own status",
   );
-  await page
-    .locator(".verification-controls")
-    .getByRole("button", { name: "Compare pixels" })
-    .click();
   await waitForCondition(
     async () =>
       (await page.getByText("Size differs", { exact: true }).count()) === 3,
-    "a size mismatch for each recorded anchor",
+    "a size mismatch for each recorded anchor, compared once its images arrive",
   );
-  assert.equal(
-    await page.getByText(/The anchors differ in size/).count(),
-    3,
-    "unequal anchors explain themselves instead of resizing",
-  );
+  for (const profileId of Object.keys(PROFILE_SIZES)) {
+    const region = await sizeRegion(page, profileId);
+    await region.getByText(/The anchors differ in size/).waitFor();
+  }
   await page.close();
 });
 
@@ -827,9 +847,7 @@ test("pixel comparison crops to the anchor and draws the diff in the browser", {
   );
   await compareAll.click();
   for (const [profileId, viewport] of Object.entries(PROFILE_SIZES)) {
-    const region = page.getByRole("region", {
-      name: `${PROFILE_LABELS[profileId]} evidence`,
-    });
+    const region = await sizeRegion(page, profileId);
     await waitForImageDimensions(region, "Pixel difference overlay", viewport);
     assert.match(
       await region.locator(".verification-chip").first().innerText(),
@@ -839,15 +857,270 @@ test("pixel comparison crops to the anchor and draws the diff in the browser", {
     await region.getByRole("button", { name: "Recompare" }).waitFor();
   }
   const outcomes = await page
-    .locator(".verification-status-card .verification-chip")
+    .locator(".verification-size-tab strong")
     .allInnerTexts();
   assert.equal(outcomes.length, 3);
   for (const outcome of outcomes) {
-    assert.match(outcome, /differ$/, "each size reports its own result");
+    assert.match(outcome, /^Diff \d/, "each size reports its own result");
   }
   assert.ok(
-    (await page.locator(".verification-diff-box").count()) >= 3,
+    (await page.locator(".verification-diff-box").count()) >= 1,
     "differing areas are boxed on the overlay",
+  );
+  await page.close();
+});
+
+async function openPanel(browser, server, tab) {
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("tab", { name: tab }).click();
+  await selectFirstTarget(page);
+  return page;
+}
+
+test("approving captures the live reference and Site Compare holds the site to it", {
+  timeout: 240_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-approve-"));
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  await publishRun(archive, browser, {
+    runId: "approve-0001",
+    createdAt: "2026-10-29T10:01:00.000Z",
+    storyId: STORY_ID,
+  });
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  let page = await openPanel(browser, server, "Site Compare");
+  await page
+    .getByText(
+      "No approved reference at this size, so the site is compared with the current reference.",
+    )
+    .waitFor();
+  assert.equal(
+    await page
+      .getByRole("button", { name: "Current reference" })
+      .getAttribute("aria-pressed"),
+    "true",
+    "with nothing approved the site falls back to the run's reference",
+  );
+  await page.close();
+
+  page = await openPanel(browser, server, "Approve");
+  let desktop = page.getByRole("region", { name: "Desktop evidence" });
+  const approval = desktop.getByRole("region", { name: "Approval" });
+  await approval.waitFor();
+  const flag = page.locator(
+    '.verification-reference-bar > .verification-flag:not([data-flag="drift"])',
+  );
+  await waitForCondition(
+    async () => (await flag.innerText()) === "No approved reference",
+    "the flag to say nothing is approved",
+  );
+  assert.equal(
+    await approval
+      .getByRole("button", { name: "Request changes" })
+      .isDisabled(),
+    true,
+    "nothing is captured yet to request changes on",
+  );
+
+  await approval.getByRole("button", { name: "Approve all sizes" }).click();
+  await waitForCondition(
+    async () =>
+      /^Reference approved · [0-9a-f]{9}$/.test(await flag.innerText()),
+    "approving to capture the story and flag it approved",
+    CAPTURE_TIMEOUT_MS,
+  );
+  assert.deepEqual(server.captureRequests, [
+    {
+      targets: [
+        {
+          sourceRunId: "approve-0001",
+          caseId: CASE_ID,
+          targetId: DECLARATIONS[0].targetId,
+          capturePointId: DECLARATIONS[0].capturePointId,
+        },
+      ],
+      locale: "en",
+      approve: true,
+    },
+  ]);
+  const captured = (await archive.listReferences({ caseId: CASE_ID }))
+    .references;
+  const approvedAll = (
+    await server.coordinator.listApprovals({ caseId: CASE_ID })
+  ).approvals;
+  assert.deepEqual(
+    captured.map((item) => item.profileId).sort(),
+    ["desktop", "mobile", "tablet"],
+    "one approval captures every size",
+  );
+  assert.equal(approvedAll.length, 3);
+  const reference = captured.find((item) => item.profileId === "desktop");
+  const approved = approvedAll.find(
+    (item) => item.referenceId === reference.referenceId,
+  );
+  assert.equal(reference.storyId, STORY_ID);
+  assert.equal(reference.selector, "main");
+  assert.deepEqual(
+    [reference.image.width, reference.image.height],
+    [1440, 900],
+  );
+  assert.equal(approved.referenceHash, reference.image.sha256);
+  assert.equal(approved.approver.subject, "Panel browser fixture");
+  await desktop
+    .getByRole("region", { name: "Last approved evidence" })
+    .getByRole("img")
+    .waitFor();
+
+  await approval
+    .getByRole("button", { name: "Capture current reference" })
+    .click();
+  await waitForCondition(
+    async () =>
+      (await archive.listReferences({ caseId: CASE_ID })).references.length ===
+      6,
+    "a second capture of the unchanged story at every size",
+    CAPTURE_TIMEOUT_MS,
+  );
+  await waitForImageDimensions(desktop, "Pixel difference overlay", {
+    width: reference.region.width,
+    height: reference.region.height,
+  });
+  assert.match(
+    await flag.innerText(),
+    /^Reference approved/,
+    "a capture of the same bytes keeps the approval",
+  );
+
+  await approval
+    .getByRole("textbox", { name: "Comment" })
+    .fill("Heading moved down");
+  await approval.getByRole("button", { name: "Request changes" }).click();
+  await waitForCondition(
+    async () => (await flag.innerText()).startsWith("Changes requested"),
+    "the change request to flag the current reference",
+  );
+  assert.equal(
+    await approval.locator(".verification-approval-history li").count(),
+    2,
+  );
+  await page.close();
+
+  page = await openPanel(browser, server, "Site Compare");
+  desktop = page.getByRole("region", { name: "Desktop evidence" });
+  await desktop
+    .getByRole("region", { name: "Reference, last approved evidence" })
+    .getByRole("img")
+    .waitFor();
+  assert.equal(
+    await page
+      .getByRole("button", { name: "Last approved reference" })
+      .getAttribute("aria-pressed"),
+    "true",
+    "the site is held to the approved reference by default",
+  );
+  assert.match(
+    await page
+      .locator(".verification-metadata", {
+        hasText: "Comparing with the reference approved",
+      })
+      .innerText(),
+    /^Comparing with the reference approved by Panel browser fixture at commit [0-9a-f]{9}\.$/,
+  );
+  const drift = page.locator('.verification-flag[data-flag="drift"]');
+  await drift.waitFor();
+  assert.match(
+    await drift.innerText(),
+    /^Reference (drifted \d+\.\d% |size changed )since approval$/,
+    "the run's own reference is far from the story the designer approved",
+  );
+  await page.getByText("Tablet", { exact: true }).click();
+  assert.equal(
+    await page
+      .getByRole("button", { name: "Last approved reference" })
+      .getAttribute("aria-pressed"),
+    "true",
+    "the approval covered every size",
+  );
+  assert.match(
+    await page
+      .locator(
+        '.verification-reference-bar > .verification-flag:not([data-flag="drift"])',
+      )
+      .innerText(),
+    /^Reference approved/,
+    "the change request judged desktop only",
+  );
+  await page.close();
+});
+
+test("the captures page requests a full capture, follows it, and holds the next one", {
+  timeout: 240_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-runs-"));
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  await publishRun(archive, browser, {
+    runId: "full-0001",
+    createdAt: "2026-10-29T10:01:00.000Z",
+    storyId: STORY_ID,
+  });
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/reference-captures/`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("heading", { name: "Reference captures" }).waitFor();
+  await page.getByText("No capture is running.").waitFor();
+  await page.getByRole("button", { name: "Request a full capture" }).click();
+  await page.getByText("A full capture started.").waitFor();
+  const history = page.getByRole("region", { name: "Run history" });
+  await waitForCondition(
+    async () =>
+      (await history
+        .getByRole("row", { name: /Full capture, requested by hand/ })
+        .count()) === 1 &&
+      (await history.getByRole("cell", { name: "Done" }).count()) === 1,
+    "the full capture to finish on the page",
+    CAPTURE_TIMEOUT_MS,
+  );
+  assert.equal(
+    (await archive.listReferences()).references.length,
+    DECLARATIONS.length * 3,
+    "a full capture draws every declared case at every size",
+  );
+  assert.equal((await archive.listReferenceRuns()).runs.length, 1);
+
+  await page.getByRole("button", { name: "Request a full capture" }).click();
+  await page.getByText(/^A full capture is scheduled for /).waitFor();
+  assert.match(
+    await page
+      .getByRole("region", { name: "Schedule" })
+      .getByText(/^manual by Panel browser fixture/)
+      .innerText(),
+    /^manual by Panel browser fixture · /,
+    "a request inside six hours waits",
   );
   await page.close();
 });
@@ -909,7 +1182,7 @@ test("locale selection shows the exact localized evidence for all three sizes", 
   assert.equal(localeTabCount, 3);
   assert.equal(
     await page
-      .getByRole("tab", { name: "English (en)" })
+      .getByRole("tab", { name: LOCALE_TAB_NAMES.en, exact: true })
       .getAttribute("aria-selected"),
     "true",
   );
@@ -925,7 +1198,10 @@ test("locale selection shows the exact localized evidence for all three sizes", 
       );
   for (const locale of GRADE10_LOCALES) {
     const localeName = `${LOCALE_LABELS[locale]} (${locale})`;
-    const localeTab = page.getByRole("tab", { name: localeName });
+    const localeTab = page.getByRole("tab", {
+      name: LOCALE_TAB_NAMES[locale],
+      exact: true,
+    });
     await localeTab.click();
     await waitForCondition(
       async () => (await localeTab.getAttribute("aria-selected")) === "true",
@@ -937,9 +1213,7 @@ test("locale selection shows the exact localized evidence for all three sizes", 
       `${localeName} locale metadata`,
     );
     for (const [profileId, viewport] of Object.entries(PROFILE_SIZES)) {
-      const region = page.getByRole("region", {
-        name: `${PROFILE_LABELS[profileId]} evidence`,
-      });
+      const region = await sizeRegion(page, profileId);
       const expectedCapture = manifest.captures.find(
         (capture) =>
           capture.caseId === declaration.caseId &&
@@ -982,7 +1256,7 @@ test("locale selection shows the exact localized evidence for all three sizes", 
     ),
     "run discovery must include manifests with non-English-only matrices",
   );
-  for (const route of ["reviews", "assessments", "calibrations"]) {
+  for (const route of ["assessments"]) {
     assert.equal(
       server.apiRequests.some((entry) =>
         entry.startsWith(`GET /api/${route}?`),
@@ -1037,7 +1311,7 @@ test("new locale subsets stay exact while legacy English runs show missing evide
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page
     .getByRole("combobox", { name: "Verification target" })
     .waitFor({ state: "visible" });
@@ -1048,7 +1322,7 @@ test("new locale subsets stay exact while legacy English runs show missing evide
     );
   await page.getByRole("region", { name: "Run provenance" }).waitFor();
   await page
-    .getByRole("tab", { name: "English (en)" })
+    .getByRole("tab", { name: LOCALE_TAB_NAMES.en, exact: true })
     .waitFor({ state: "visible" });
   assert.equal(
     await page
@@ -1060,7 +1334,7 @@ test("new locale subsets stay exact while legacy English runs show missing evide
   );
   assert.equal(
     await page
-      .getByRole("tab", { name: "English (en)" })
+      .getByRole("tab", { name: LOCALE_TAB_NAMES.en, exact: true })
       .getAttribute("aria-selected"),
     "true",
   );
@@ -1070,7 +1344,8 @@ test("new locale subsets stay exact while legacy English runs show missing evide
     .getByRole("combobox", { name: "Compared version" })
     .selectOption(JSON.stringify(["e".repeat(40), "f".repeat(40)]));
   const traditionalTab = page.getByRole("tab", {
-    name: "Traditional Chinese (zh-Hant)",
+    name: LOCALE_TAB_NAMES["zh-Hant"],
+    exact: true,
   });
   await traditionalTab.waitFor({ state: "visible" });
   assert.equal(
@@ -1093,7 +1368,9 @@ test("new locale subsets stay exact while legacy English runs show missing evide
     0,
     "the panel must not reuse the English image for a missing locale",
   );
-  await page.getByRole("tab", { name: "English (en)" }).click();
+  await page
+    .getByRole("tab", { name: LOCALE_TAB_NAMES.en, exact: true })
+    .click();
   await page.getByRole("img", { name: "Site full viewport" }).first().waitFor();
   assert(
     server.apiRequests.some(
@@ -1133,7 +1410,7 @@ test("run discovery includes a manifest whose only locale is Traditional Chinese
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page
     .getByRole("combobox", { name: "Verification target" })
     .waitFor({ state: "visible" });
@@ -1152,7 +1429,8 @@ test("run discovery includes a manifest whose only locale is Traditional Chinese
     1,
   );
   const traditionalTab = page.getByRole("tab", {
-    name: "Traditional Chinese (zh-Hant)",
+    name: LOCALE_TAB_NAMES["zh-Hant"],
+    exact: true,
   });
   await waitForCondition(
     async () => (await traditionalTab.getAttribute("aria-selected")) === "true",
@@ -1204,7 +1482,7 @@ test("a story switch does not carry the prior case mapping while preparation is 
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page.getByText(`Mapped case: ${CASE_ID}`, { exact: true }).waitFor();
 
   let markBreadcrumbsRequested;
@@ -1304,7 +1582,7 @@ test("a shared story without a verification parameter finds its reference case a
     `${server.origin}/?path=/story/design-system-display-breadcrumbs--default`,
     { waitUntil: "domcontentloaded" },
   );
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page
     .getByText(/^Mapped identity: vc_breadcrumbs_history/)
     .waitFor({ timeout: 60_000 });
@@ -1318,6 +1596,10 @@ test("a shared story without a verification parameter finds its reference case a
       .length > 1,
     "story discovery should follow every run-history cursor",
   );
+  await page
+    .getByRole("region", { name: "Run provenance" })
+    .locator("summary")
+    .click();
   await page
     .getByText("design-system-display-breadcrumbs--previous-name", {
       exact: true,
@@ -1355,7 +1637,7 @@ test("an explicit historical story stays selected while Storybook navigation cha
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page.getByRole("button", { name: "All recordings" }).click();
 
   const versionSelect = page.getByRole("combobox", {
@@ -1446,7 +1728,7 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
   await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
     waitUntil: "domcontentloaded",
   });
-  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("tab", { name: "Site Compare" }).click();
   await page.getByRole("button", { name: "All recordings" }).click();
   await page
     .getByText(`Current live case: ${CASE_ID}`, { exact: true })

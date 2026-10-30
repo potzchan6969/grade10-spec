@@ -157,7 +157,7 @@ card carries its own outcome, so an ungraded card leaves the rest ready.
   of its own; each window runs from the later of the day the submission ends,
   collected, cancelled, expired or its last card paid out, and the day nothing
   is owed either way; no identity class —
-  [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness)
+  [Compliance and Readiness](/p/grade10-site/finance/compliance-and-readiness)
 - 🚧 **Erasure waits** — the ask to be forgotten is refused while a submission
   is between booked and ready, an upcharge is unsettled or ready cards wait
 

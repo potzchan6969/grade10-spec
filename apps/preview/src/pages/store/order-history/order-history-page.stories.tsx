@@ -58,7 +58,7 @@ function OrderHistoryPage({
     <Breadcrumbs>
       <BreadcrumbItem href="#account">Account</BreadcrumbItem>
       <BreadcrumbSeparator />
-      <BreadcrumbItem current>Your Orders</BreadcrumbItem>
+      <BreadcrumbItem current>My Orders</BreadcrumbItem>
     </Breadcrumbs>
   );
 
@@ -83,7 +83,7 @@ function OrderHistoryPage({
             onViewDetails={() => navigateToStory(ORDER_DETAILS_STORY_ID)}
           />
         ) : (
-          <div className="flex w-full max-w-4xl flex-col gap-8 px-8 py-12">
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-8 pt-8 pb-16">
             {breadcrumbs}
             <h1 className="text-3xl font-semibold text-foreground">
               {ORDER_HISTORY_COPY.title}
@@ -139,7 +139,7 @@ export const Filled: Story = {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Your Orders" }),
+      canvas.getByRole("heading", { level: 1, name: "My Orders" }),
     ).toBeVisible();
     expect(
       canvas.getByRole("heading", { level: 2, name: "Active Orders" }),
@@ -186,7 +186,7 @@ export const Loading: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Your Orders" }),
+      canvas.getByRole("heading", { level: 1, name: "My Orders" }),
     ).toBeVisible();
     expect(
       canvas.getByText(ORDER_HISTORY_READ_COPY.loading),
@@ -212,7 +212,7 @@ export const RecoverableFailure: Story = {
   },
 };
 
-/** The paid order, found in Your Orders while the store settles it. */
+/** The paid order, found in My Orders while the store settles it. */
 export const PendingTotal: Story = {
   args: { pendingTotal: true },
   parameters: { journeys: ["grade10-site-store-checkout-US-03"] },

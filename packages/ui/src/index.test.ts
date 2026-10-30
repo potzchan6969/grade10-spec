@@ -153,7 +153,9 @@ const STORE_CART_BLOCKS = [
   "CartDrawerHeader",
   "CartItem",
   "CartPromoSheet",
+  "PromoQrCard",
   "PromoTicket",
+  "PromoTicketSkeleton",
 ];
 
 const STORE_CART_TYPES = [
@@ -173,8 +175,10 @@ const STORE_CART_TYPES = [
   "OrderDiscountRow",
   "PointsState",
   "PromoNotice",
+  "PromoQrCardProps",
   "PromoState",
   "PromoTicketProps",
+  "PromoTicketQr",
 ];
 
 /* Every name the entry re-exports from the store-cart blocks, read off the

@@ -1,10 +1,12 @@
 import { realpathSync } from "node:fs";
+import { createRequire } from "node:module";
 import { isIP } from "node:net";
 import { dirname, isAbsolute, resolve } from "node:path";
 import { Readable } from "node:stream";
 import { fileURLToPath } from "node:url";
 import { createArchive } from "../src/archive.mjs";
 import { createArchiveHandler } from "../src/archive-api.mjs";
+import { createLocalCoordinator } from "./local-coordinator.mjs";
 
 const SPEC_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 const HOP_BY_HOP_HEADERS = new Set([
@@ -58,16 +60,21 @@ export function resolveArchiveRoot({
   return resolve(root, ".cache", "ui-verification");
 }
 
-export function createLocalArchiveHandler(archive, archiveRoot) {
+export function createLocalArchiveHandler(
+  archive,
+  archiveRoot,
+  { coordinator = null } = {},
+) {
   if (typeof archiveRoot !== "string" || !isAbsolute(archiveRoot)) {
     throw new TypeError("archiveRoot must be an absolute path");
   }
 
   return createArchiveHandler(archive, {
     authorize: async (_request, scope) =>
-      scope === "review"
+      scope === "approve"
         ? { kind: "human", reviewer: { subject: "local-development" } }
         : { kind: "publisher" },
+    coordinator,
     sameOrigin: true,
     storage: { kind: "filesystem", location: archiveRoot },
   });
@@ -199,7 +206,19 @@ export function installUiVerificationArchive(
 ) {
   const archiveRoot = resolveArchiveRoot({ specRoot, env });
   const archive = createArchive(archiveRoot);
-  const handler = createLocalArchiveHandler(archive, archiveRoot);
+  // The workbench captures with the preview app's Playwright, from this
+  // checkout's own Storybook; Playwright loads only when a capture runs.
+  const handler = createLocalArchiveHandler(archive, archiveRoot, {
+    coordinator: createLocalCoordinator({
+      archive,
+      archiveRoot,
+      repoRoot: specRoot,
+      launch: () =>
+        createRequire(resolve(specRoot, "apps/preview/package.json"))(
+          "playwright",
+        ).chromium.launch({ headless: true }),
+    }),
+  });
   app.use(createNodeArchiveMiddleware(handler));
 }
 

@@ -27,6 +27,7 @@ export const Ghost: Story = { args: { variant: "ghost" } };
 export const Destructive: Story = { args: { variant: "destructive" } };
 export const Medium: Story = { args: { size: "md" } };
 export const Small: Story = { args: { size: "sm" } };
+export const Large: Story = { args: { size: "lg" } };
 export const Disabled: Story = { args: { disabled: true } };
 /** `loading` shows a spinner and ignores presses, and the button keeps its focus. */
 export const Loading: Story = {
