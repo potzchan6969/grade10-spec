@@ -1,16 +1,30 @@
 {
   "intro": {
-    "kicker": "城中出沒中",
-    "title": "捕捉 Jeep",
-    "lead": "尋找有黑色閃電圖案、紅色圓點和 POKEMON 車牌的黃色 Jeep。將鏡頭對準它，向上掃擲球，然後分享你的收服相片。",
-    "imageAlt": "活動 Jeep：鮮黃色車身、黑色閃電圖案、紅色圓點和 POKEMON 車牌",
-    "caption": "只限這架 Jeep",
-    "step1": "發現它",
-    "step2": "向上掃收服",
-    "step3": "分享相片",
     "start": "立即捕捉",
-    "privacy": "鏡頭畫面只留在你的手機，不會上載任何內容。",
-    "campaignLink": "查看活動頁面"
+    "privacy": "鏡頭畫面只留在你的手機，不會上載任何內容。"
+  },
+  "quests": {
+    "title": "兩個任務，一架車",
+    "lead": "找到車就有機會贏得{gift}。再用鏡頭收服它，多一次機會。",
+    "find": {
+      "kicker": "任務一 · 在車旁",
+      "title": "找到這架車",
+      "description": "留意有黑色閃電圖案、紅色圓點和 POKEMON 車牌的黃色 Jeep，它會隨機在城中不同地方出沒。",
+      "reward": "有機會贏得{gift}",
+      "step1": "在城中發現這架車",
+      "step2": "免費登記成為 Grade10 會員",
+      "step3": "即場增值積分",
+      "step4": "出示給職員，就有機會贏得獎品",
+      "join": "免費加入 Grade10",
+      "joinText": "現在加入，找到車時就能立即參加。",
+      "member": "你已是會員。在車旁增值積分並出示給職員即可。"
+    },
+    "catch": {
+      "kicker": "任務二 · 收服它",
+      "step1": "用這頁的鏡頭收服這架車",
+      "step2": "將相片發佈到 Instagram 或 Threads",
+      "step3": "在這裡把帖子截圖傳送給我們"
+    }
   },
   "camera": {
     "title": "無法打開鏡頭",
@@ -61,12 +75,7 @@
     "share": "分享相片",
     "save": "儲存相片",
     "again": "再捕捉一次",
-    "saved": "已儲存到你的裝置",
-    "nextTitle": "下一步：領獎",
-    "nextPost": "將相片發佈到你的社交媒體。",
-    "nextScreenshot": "將你的帖子截圖。",
-    "nextSend": "在活動頁面把截圖傳送給我們。",
-    "campaignLink": "前往活動頁面"
+    "saved": "已儲存到你的裝置"
   },
   "quips": {
     "vehicle": {
