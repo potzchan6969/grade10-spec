@@ -102,7 +102,7 @@ component, variant, primitive, or token is required.
 
 - **Owned web order** — `grade10-site-store-order-detail-SC-01` and
   `grade10-site-store-order-detail-SC-04`.
-- **Not found without disclosure** — `grade10-site-store-order-detail-SC-02`.
+- **Not found** — `grade10-site-store-order-detail-SC-02`.
 - **Partial refund** — `grade10-site-store-order-detail-SC-05`.
 - **Point-of-sale order** — `grade10-site-store-order-detail-SC-06`.
 - **Unavailable optional groups omitted** —
