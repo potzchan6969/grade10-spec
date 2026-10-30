@@ -1,6 +1,13 @@
 import { Card } from "@grade10/design-system/components/display/card";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@grade10/design-system/components/overlays/tooltip";
+import { Info } from "@phosphor-icons/react";
 import { cn } from "@grade10/design-system/lib/utils";
 import { formatHkd, formatUsd } from "../../vault-content";
 
@@ -24,6 +31,7 @@ function WalletSummary({
   hasPayoutMethod,
   onCashOut,
   onViewActivity,
+  onViewCashOuts,
   onSetUpPayout,
   className,
 }: {
@@ -37,6 +45,7 @@ function WalletSummary({
   hasPayoutMethod: boolean;
   onCashOut?: () => void;
   onViewActivity?: () => void;
+  onViewCashOuts?: () => void;
   onSetUpPayout?: () => void;
   className?: string;
 }) {
@@ -53,13 +62,17 @@ function WalletSummary({
   ];
 
   return (
-    <div
+    <Card
       aria-label="Rewards wallet"
-      className={cn("grid grid-cols-1 gap-4 sm:grid-cols-2", className)}
+      className={cn(
+        "grid grid-cols-1 overflow-clip p-0 sm:grid-cols-2",
+        className,
+      )}
       data-slot="wallet-summary"
+      padding={false}
       role="region"
     >
-      <Card className="flex flex-col gap-4 bg-background-subtle p-8">
+      <div className="flex flex-col gap-4 border-b border-border bg-background-subtle p-8 sm:border-r sm:border-b-0">
         <p className="font-sans text-sm leading-5 font-medium uppercase text-secondary-foreground">
           Incentives available
         </p>
@@ -85,7 +98,7 @@ function WalletSummary({
               type="button"
               onClick={onCashOut}
             >
-              Cash out
+              Cash Out
             </Button>
           ) : (
             <Button
@@ -94,7 +107,7 @@ function WalletSummary({
               variant="secondary"
               onClick={onSetUpPayout}
             >
-              Set up payout
+              Set Up Payout
             </Button>
           )}
           <Button
@@ -103,17 +116,12 @@ function WalletSummary({
             variant="outline"
             onClick={onViewActivity}
           >
-            View activity
+            View Activity
           </Button>
         </div>
-        {hasPayoutMethod && !meetsMinimum ? (
-          <p className="font-sans text-sm leading-5 text-secondary-foreground">
-            Minimum {formatUsd(minWithdrawalUsd)} to cash out
-          </p>
-        ) : null}
-      </Card>
+      </div>
 
-      <Card className="flex flex-col gap-4 p-8">
+      <div className="flex flex-col gap-4 p-8">
         <div className="flex flex-col gap-2">
           <div className="flex items-baseline justify-between whitespace-nowrap">
             <p className="font-sans text-sm leading-5 font-medium uppercase text-secondary-foreground">
@@ -158,20 +166,36 @@ function WalletSummary({
                   {segment.label}
                 </span>
                 {segment.label === "In cash-out" && openCashOutCount > 0 ? (
-                  <Link variant="secondary">
+                  <Link variant="secondary" onClick={onViewCashOuts}>
                     {openCashOutCount}{" "}
                     {openCashOutCount === 1 ? "request" : "requests"}
                   </Link>
                 ) : null}
               </span>
-              <span className="font-sans text-base leading-6 font-medium whitespace-nowrap tabular-nums text-foreground">
+              <span className="flex items-center gap-1 font-sans text-base leading-6 font-medium whitespace-nowrap tabular-nums text-foreground">
+                {segment.label === "Available" && hasPayoutMethod && !meetsMinimum ? (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger
+                        aria-label={`Minimum ${formatUsd(minWithdrawalUsd)} to cash out`}
+                        className="inline-flex size-4 items-center justify-center text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                        render={<button type="button" />}
+                      >
+                        <Info aria-hidden size={16} weight="bold" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Minimum {formatUsd(minWithdrawalUsd)} to cash out
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ) : null}
                 {formatUsd(segment.amountHkd)}
               </span>
             </li>
           ))}
         </ul>
-      </Card>
-    </div>
+      </div>
+    </Card>
   );
 }
 

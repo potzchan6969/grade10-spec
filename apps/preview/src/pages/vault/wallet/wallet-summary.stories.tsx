@@ -35,7 +35,7 @@ export const Filled: Story = {
     expect(canvas.getByText("Cashed out")).toBeVisible();
     expect(canvas.getByText(/daily while your items/)).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "Cash out" }),
+      canvas.getByRole("button", { name: "Cash Out" }),
     ).toBeEnabled();
   },
 };
@@ -46,9 +46,9 @@ export const BelowMinimum: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: "Cash out" }),
+      canvas.getByRole("button", { name: "Cash Out" }),
     ).toBeDisabled();
-    expect(canvas.getByText("Minimum HK$500 to cash out")).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Minimum US$65 to cash out" })).toBeVisible();
   },
 };
 
@@ -58,9 +58,30 @@ export const NoPayoutMethod: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: "Set up payout" }),
+      canvas.getByRole("button", { name: "Set Up Payout" }),
     ).toBeVisible();
-    expect(canvas.queryByRole("button", { name: "Cash out" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Cash Out" })).toBeNull();
+  },
+};
+
+/** Nothing in cash-out — the middle segment collapses, no requests link. */
+export const NoInCashOut: Story = {
+  args: { ...Filled.args, inCashOutUsd: 0, openCashOutCount: 0 },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("In cash-out")).toBeVisible();
+    expect(canvas.queryByText(/requests?$/)).toBeNull();
+    expect(canvas.getByText("US$0")).toBeVisible();
+  },
+};
+
+/** Nothing cashed out yet — the last segment collapses to zero. */
+export const NoCashedOut: Story = {
+  args: { ...Filled.args, cashedOutUsd: 0 },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Cashed out")).toBeVisible();
+    expect(canvas.getByText("US$0")).toBeVisible();
   },
 };
 

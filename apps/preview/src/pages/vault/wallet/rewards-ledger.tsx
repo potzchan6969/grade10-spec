@@ -80,19 +80,29 @@ function MonthGroup({
 function RewardsLedger({
   dailyIncentives,
   payoutRequests,
+  tab,
+  onTabChange,
   className,
 }: {
   dailyIncentives: RewardEntry[];
   payoutRequests: VaultPayoutRequest[];
+  /** Controlled tab; defaults to All internally. */
+  tab?: LedgerTab;
+  onTabChange?: (tab: LedgerTab) => void;
   className?: string;
 }) {
-  const [tab, setTab] = useState<LedgerTab>("all");
+  const [internalTab, setInternalTab] = useState<LedgerTab>("all");
+  const activeTab = tab ?? internalTab;
+  const setTab = (value: LedgerTab) => {
+    setInternalTab(value);
+    onTabChange?.(value);
+  };
   const groupsRef = useRef<HTMLDivElement>(null);
 
   /* Enter: the month groups rise in on each tab switch. */
   useEffect(() => {
     animateEnter(groupsRef.current, { duration: 160, rise: 4 });
-  }, [tab]);
+  }, [activeTab]);
 
   /* All: the two kinds merged on one timeline, latest date first. */
   const merged = [
@@ -118,7 +128,7 @@ function RewardsLedger({
     else months.push({ month, nodes: [node] });
   };
 
-  if (tab === "all") {
+  if (activeTab === "all") {
     for (const item of merged) {
       push(
         monthKey(item.date),
@@ -129,7 +139,7 @@ function RewardsLedger({
         ),
       );
     }
-  } else if (tab === "rewards") {
+  } else if (activeTab === "rewards") {
     for (const entry of dailyIncentives) {
       push(monthKey(entry.date), <RewardRow entry={entry} key={entry.date} />);
     }
@@ -148,7 +158,7 @@ function RewardsLedger({
       className={cn("flex flex-col gap-6", className)}
       data-slot="rewards-ledger"
     >
-      <Tabs value={tab} onValueChange={(value) => setTab(value as LedgerTab)}>
+      <Tabs value={activeTab} onValueChange={(value) => setTab(value as LedgerTab)}>
         <TabsList aria-label="Activity filters" variant="pill">
           <TabsTrigger value="all">All</TabsTrigger>
           <TabsTrigger value="rewards">Rewards</TabsTrigger>

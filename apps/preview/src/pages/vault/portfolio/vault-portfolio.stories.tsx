@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { expect, waitFor, within } from "storybook/test";
 import { activeIntakeSubmissionCount } from "../../intake-content";
 import { Badge } from "@grade10/design-system/components/display/badge";
+import { Vault } from "@phosphor-icons/react";
 import {
   Tabs,
   TabsContent,
@@ -65,6 +66,7 @@ function VaultPortfolioPage({
   const holdingsLoading = loading || fetching;
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [pageTab, setPageTab] = useState<"assets" | "rewards">("assets");
+  const [ledgerTab, setLedgerTab] = useState<"all" | "rewards" | "cash-out">("all");
   const tabsRef = useRef<HTMLDivElement>(null);
   const openCashOuts = PAYOUT_REQUESTS.filter(
     (request) => request.status === "Pending review" || request.status === "Processing",
@@ -86,7 +88,9 @@ function VaultPortfolioPage({
           actions={
             empty ? undefined : (
               <Button
+                leading={<Vault aria-hidden size={16} />}
                 type="button"
+                variant="outline"
                 onClick={() => navigateToStory(VAULT_BOOK_VISIT_STORY_ID)}
               >
                 Submit to Vault
@@ -110,6 +114,14 @@ function VaultPortfolioPage({
               openCashOutCount={openCashOuts}
               onCashOut={() => setWithdrawOpen(true)}
               onViewActivity={() => setPageTab("rewards")}
+              onViewCashOuts={() => {
+                setPageTab("rewards");
+                setLedgerTab("cash-out");
+                tabsRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }}
             />
           </div>
         )}
@@ -167,6 +179,8 @@ function VaultPortfolioPage({
             <RewardsLedger
               dailyIncentives={DAILY_INCENTIVES}
               payoutRequests={PAYOUT_REQUESTS}
+              tab={ledgerTab}
+              onTabChange={setLedgerTab}
             />
           </TabsContent>
         </Tabs>
