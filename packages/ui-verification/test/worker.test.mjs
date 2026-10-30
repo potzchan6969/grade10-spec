@@ -4,7 +4,11 @@ import test from "node:test";
 import { deflateSync } from "node:zlib";
 import { createR2Archive } from "../src/archive.mjs";
 import { PROFILES } from "../src/model.mjs";
-import { createWorker } from "../worker/index.mjs";
+import {
+  createWorker,
+  defineReferenceCaptures,
+  watchDeploys,
+} from "../worker/index.mjs";
 
 const CASE_ID = "case-worker-smoke";
 const TARGET_ID = "grade10-site";
@@ -121,6 +125,31 @@ function makeFixture(runId) {
       captures,
     },
     objects,
+  };
+}
+
+// One Durable Object instance behind a namespace, as the runtime gives it.
+function fakeCaptureNamespace(env) {
+  const values = new Map();
+  const storage = {
+    get: async (key) => values.get(key),
+    put: async (key, value) => void values.set(key, structuredClone(value)),
+    delete: async (key) => void values.delete(key),
+    list: async ({ prefix = "" } = {}) =>
+      new Map([...values].filter(([key]) => key.startsWith(prefix))),
+    setAlarm: async () => {},
+  };
+  const ReferenceCaptures = defineReferenceCaptures({
+    launch: async () => {
+      throw new Error("no browser in this test");
+    },
+  });
+  const instance = new ReferenceCaptures({ storage }, env);
+  return {
+    idFromName: (name) => name,
+    get: () => ({
+      fetch: (url, init) => instance.fetch(new Request(url, init)),
+    }),
   };
 }
 
@@ -369,6 +398,7 @@ test("Worker attributes an approval only to a verified Access JWT and pins the r
     ACCESS_JWKS_URL: jwksUrl,
     ALLOWED_ORIGINS: "https://storybook.example.test",
   };
+  env.REFERENCE_CAPTURES = fakeCaptureNamespace(env);
   const { manifest, objects } = makeFixture("run-worker-review");
   const capture = manifest.captures[0];
   const referenceBytes = objects.find(
@@ -435,7 +465,66 @@ test("Worker attributes an approval only to a verified Access JWT and pins the r
   assert.equal(approval.approver.email, "reviewer@example.test");
   assert.equal(approval.referenceHash, reference.image.sha256);
 
-  const hostedCapture = await post("/api/references", signedIn);
-  assert.equal(hostedCapture.status, 501);
-  assert.equal((await hostedCapture.json()).code, "CAPTURE_UNAVAILABLE");
+  const listed = await worker.fetch(
+    new Request(
+      `https://archive.example.test/api/approvals?caseId=${CASE_ID}`,
+      { headers: { Origin: "https://storybook.example.test", ...signedIn } },
+    ),
+    env,
+  );
+  assert.equal(
+    (await listed.json()).approvals[0].approvalId,
+    approval.approvalId,
+  );
+
+  const unbound = await worker.fetch(
+    new Request("https://archive.example.test/api/approvals", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "https://storybook.example.test",
+        ...signedIn,
+      },
+      body: JSON.stringify(body),
+    }),
+    { ...env, REFERENCE_CAPTURES: undefined },
+  );
+  assert.equal(unbound.status, 501);
+  assert.equal((await unbound.json()).code, "CAPTURE_UNAVAILABLE");
+});
+
+test("the Worker's clock reads its own build receipt and notices a new deploy once", async () => {
+  const env = {
+    ARCHIVE: fakeR2Bucket(),
+    STORYBOOK_ORIGIN: "https://storybook.example.test/",
+  };
+  env.REFERENCE_CAPTURES = fakeCaptureNamespace(env);
+  const requested = [];
+  env.ASSETS = {
+    fetch: async (request) => {
+      requested.push(new URL(request.url).pathname);
+      return Response.json({
+        schemaVersion: 1,
+        target: "reference",
+        commit: "f".repeat(40),
+        artifactDigest: "0".repeat(64),
+      });
+    },
+  };
+  const first = await watchDeploys(env);
+  assert.equal(first.state, "started");
+  assert.equal(first.run.trigger, "deploy");
+  assert.equal(first.run.baseURL, "https://storybook.example.test/");
+  assert.deepEqual(await watchDeploys(env), { state: "unchanged" });
+  assert.deepEqual(requested, [
+    "/ui-verification-build.json",
+    "/ui-verification-build.json",
+  ]);
+  await assert.rejects(
+    watchDeploys({
+      ...env,
+      ASSETS: { fetch: async () => new Response("missing", { status: 404 }) },
+    }),
+    /has no receipt \(HTTP 404\)/,
+  );
 });

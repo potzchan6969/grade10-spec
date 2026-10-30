@@ -3,6 +3,7 @@ import {
   createArchiveHandler,
   DEFAULT_LOCAL_ORIGINS,
 } from "../src/archive-api.mjs";
+import { coordinatorProxy } from "./reference-captures.mjs";
 
 const ACCESS_KEY_CACHE_MS = 10 * 60 * 1000;
 const accessKeyCache = new Map();
@@ -293,6 +294,9 @@ export function createWorker({ fetcher = globalThis.fetch } = {}) {
       const handler = createArchiveHandler(archive, {
         authorize: createRemoteAuthorizer(env, fetcher),
         allowedOrigins: allowedOriginsFromEnv(env),
+        coordinator: env.REFERENCE_CAPTURES
+          ? coordinatorProxy(env.REFERENCE_CAPTURES)
+          : null,
         storage: { kind: "r2", location: "Storybook archive" },
       });
       return handler(request);
@@ -303,5 +307,11 @@ export function createWorker({ fetcher = globalThis.fetch } = {}) {
 export async function fetch(request, env) {
   return createWorker().fetch(request, env);
 }
+
+export {
+  coordinatorProxy,
+  defineReferenceCaptures,
+  watchDeploys,
+} from "./reference-captures.mjs";
 
 export default { fetch };

@@ -11,7 +11,7 @@ const INTERNAL_PREFIX = "ui-verification/v1/";
 const RUNS_PREFIX = `${INTERNAL_PREFIX}runs/`;
 const ASSESSMENTS_PREFIX = `${INTERNAL_PREFIX}assessments/`;
 const REFERENCES_PREFIX = `${INTERNAL_PREFIX}references/`;
-const APPROVALS_PREFIX = `${INTERNAL_PREFIX}approvals/`;
+const REFERENCE_RUNS_PREFIX = `${INTERNAL_PREFIX}reference-runs/`;
 const COMMIT = /^[0-9a-f]{40}$/;
 const SAFE_ID = /^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$/;
 const SHA256 = /^[a-f0-9]{64}$/i;
@@ -1157,59 +1157,28 @@ function storeFactory(createStore) {
       });
     }
 
-    // An approval judges one captured reference image; it is never edited, and
-    // the newest approval on the same bytes is the one that stands.
-    async function createApproval(inputValue, approverValue) {
-      const input = record(inputValue, "approval");
-      assertOnlyKeys(input, ["referenceId", "decision", "comment"], "approval");
-      const reference = await getReference(input.referenceId);
-      if (!reference)
-        fail(
-          404,
-          "REFERENCE_NOT_FOUND",
-          `reference ${input.referenceId} was not found`,
-        );
-      if (!["approved", "changes-requested"].includes(input.decision))
-        throw new TypeError(
-          "approval.decision must be approved or changes-requested",
-        );
-      const comment =
-        input.comment === undefined
-          ? ""
-          : text(input.comment, "approval.comment", { max: 10000 });
-      if (input.decision === "changes-requested" && comment === "")
-        throw new TypeError("approval.comment is required to request changes");
-      const value = {
-        schemaVersion: 1,
-        approvalId: globalThis.crypto.randomUUID(),
-        referenceId: reference.referenceId,
-        caseId: reference.caseId,
-        targetId: reference.targetId,
-        capturePointId: reference.capturePointId,
-        profileId: reference.profileId,
-        locale: reference.locale,
-        referenceHash: reference.image.sha256,
-        decision: input.decision,
-        comment,
-        approver: approver(approverValue),
-        createdAt: new Date().toISOString(),
-      };
+    // A finished capture run, full or focused, as the coordinator closed it.
+    async function createReferenceRun(value) {
+      const run = record(value, "reference run");
+      assertId(run.runId, "reference run.runId");
+      if (!["full", "focused"].includes(run.lane))
+        throw new TypeError("reference run.lane must be full or focused");
+      if (!["succeeded", "failed"].includes(run.state))
+        throw new TypeError("reference run.state must be succeeded or failed");
       await putImmutable(
-        `${APPROVALS_PREFIX}${reference.referenceId}/${value.approvalId}.json`,
-        jsonBytes(value, "approval"),
+        `${REFERENCE_RUNS_PREFIX}${run.runId}.json`,
+        jsonBytes(run, "reference run"),
         "application/json",
       );
-      return value;
+      return run;
     }
 
-    async function listApprovals({ caseId, cursor, limit } = {}) {
-      if (caseId !== undefined) assertId(caseId, "caseId");
+    async function listReferenceRuns({ cursor, limit } = {}) {
       return listJson({
-        prefix: APPROVALS_PREFIX,
+        prefix: REFERENCE_RUNS_PREFIX,
         cursor,
         limit,
-        resultName: "approvals",
-        filter: (approval) => !caseId || approval.caseId === caseId,
+        resultName: "runs",
       });
     }
 
@@ -1225,8 +1194,8 @@ function storeFactory(createStore) {
       createReference,
       getReference,
       listReferences,
-      createApproval,
-      listApprovals,
+      createReferenceRun,
+      listReferenceRuns,
     };
   };
 }
@@ -1572,8 +1541,8 @@ export function createHttpArchive(
         method: "GET",
       });
     },
-    async listApprovals(options = {}) {
-      return jsonRequest(listPath("/api/approvals", options), {
+    async listReferenceRuns(options = {}) {
+      return jsonRequest(listPath("/api/reference-runs", options), {
         method: "GET",
       });
     },

@@ -268,7 +268,7 @@ test("archive lookup and assessments remain isolated by locale", async () => {
   }
 });
 
-test("an approval judges one captured reference image", async () => {
+test("a captured reference and its finished run are immutable records", async () => {
   const root = await mkdtemp(join(tmpdir(), "ui-verification-reference-"));
   try {
     const archive = createArchive(root);
@@ -313,37 +313,23 @@ test("an approval judges one captured reference image", async () => {
       /must lie inside the image/,
     );
 
-    const approval = await archive.createApproval(
-      { referenceId: reference.referenceId, decision: "approved" },
-      { subject: "designer", email: "designer@example.com" },
-    );
-    assert.equal(approval.referenceHash, reference.image.sha256);
-    assert.equal(approval.approver.email, "designer@example.com");
+    const run = {
+      schemaVersion: 1,
+      runId: "capture-run-1",
+      lane: "focused",
+      state: "succeeded",
+      referenceIds: [reference.referenceId],
+    };
+    await archive.createReferenceRun(run);
+    await archive.createReferenceRun(run);
     await assert.rejects(
-      archive.createApproval(
-        { referenceId: reference.referenceId, decision: "changes-requested" },
-        { subject: "designer" },
-      ),
-      /comment is required/,
+      archive.createReferenceRun({ ...run, state: "running" }),
+      /must be succeeded or failed/,
     );
-    await assert.rejects(
-      archive.createApproval(
-        { referenceId: "reference-missing", decision: "approved" },
-        { subject: "designer" },
-      ),
-      /was not found/,
-    );
+    assert.deepEqual((await archive.listReferenceRuns()).runs, [run]);
     assert.equal(
       (await archive.listReferences({ caseId })).references.length,
       1,
-    );
-    assert.equal(
-      (await archive.listApprovals({ caseId })).approvals[0].approvalId,
-      approval.approvalId,
-    );
-    assert.equal(
-      (await archive.listApprovals({ caseId: "other-case" })).approvals.length,
-      0,
     );
   } finally {
     await rm(root, { recursive: true, force: true });

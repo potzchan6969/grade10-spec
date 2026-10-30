@@ -60,14 +60,13 @@ test("archive root prefers an enclosing app and accepts only absolute overrides"
 
 test("local archive handler reports storage and identifies the local approver", async () => {
   const storageRoot = resolve("/tmp/ui-verification-local");
-  const handler = createLocalArchiveHandler(
-    {
+  const handler = createLocalArchiveHandler({}, storageRoot, {
+    coordinator: {
       async createApproval(_input, approver) {
         return { approver };
       },
     },
-    storageRoot,
-  );
+  });
   const origin = "http://localhost:6006";
 
   const info = await handler(

@@ -7,6 +7,8 @@ test("published subpaths resolve through the package exports", async () => {
     "pixel-diff",
     "archive",
     "archive-api",
+    "capture-coordinator",
+    "local-coordinator",
     "reference-capture",
     "scoring",
     "worker",

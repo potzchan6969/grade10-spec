@@ -150,6 +150,7 @@ function routeScope(method, pathname) {
     ["/api/references", "/api/approvals"].includes(pathname)
   )
     return "approve";
+  if (method === "POST" && pathname === "/api/reference-runs") return "approve";
   if (method === "POST" && ["/api/runs", "/api/assessments"].includes(pathname))
     return "publish";
   return null;
@@ -175,114 +176,21 @@ function pathRunId(pathname) {
   }
 }
 
-// The workbench captures the live story itself, so the reference an approval
-// names is the one a designer saw; the capturer runs only where a browser can.
-// Every profile is captured before anything is stored, so a failed size
-// leaves no half-approved case.
-async function captureForApproval(
-  archive,
-  captureReference,
-  input,
-  person,
-  origin,
-) {
-  const request = input && typeof input === "object" ? input : {};
-  const allowed = [
-    "sourceRunId",
-    "caseId",
-    "targetId",
-    "capturePointId",
-    "locale",
-    "approve",
-    "comment",
-  ];
-  const extra = Object.keys(request).filter((key) => !allowed.includes(key));
-  if (extra.length > 0)
-    throw new TypeError(`reference capture has unknown field ${extra[0]}`);
-  if (request.approve !== undefined && typeof request.approve !== "boolean")
-    throw new TypeError("reference capture approve must be a boolean");
-  const run = await archive.getRun(request.sourceRunId);
-  if (!run)
+function requireCoordinator(coordinator) {
+  if (!coordinator)
     throw new ArchiveError(
-      404,
-      "RUN_NOT_FOUND",
-      `run ${request.sourceRunId} was not found`,
+      501,
+      "CAPTURE_UNAVAILABLE",
+      "this archive has no capture coordinator",
     );
-  const entry = run.catalogue.find(
-    (candidate) =>
-      candidate.caseId === request.caseId &&
-      candidate.targetId === request.targetId &&
-      candidate.capturePointId === request.capturePointId,
-  );
-  if (!entry)
-    throw new ArchiveError(
-      404,
-      "CASE_NOT_FOUND",
-      "the run does not declare this case",
-    );
-  let captured;
-  try {
-    captured = await captureReference({
-      origin,
-      storyId: entry.reference.storyId,
-      selector: entry.reference.selector ?? null,
-      wholeViewport: entry.region === "viewport",
-      scoreProfile: entry.scoreProfile,
-      locale: request.locale,
-    });
-  } catch (error) {
-    throw new ArchiveError(
-      502,
-      "CAPTURE_FAILED",
-      `the reference could not be captured: ${error instanceof Error ? error.message : String(error)}`,
-    );
-  }
-  const references = [];
-  for (const shot of captured.shots) {
-    references.push(
-      await archive.createReference(
-        {
-          caseId: entry.caseId,
-          targetId: entry.targetId,
-          capturePointId: entry.capturePointId,
-          profileId: shot.profileId,
-          locale: request.locale,
-          storyId: entry.reference.storyId,
-          selector: entry.reference.selector ?? null,
-          region: shot.region,
-          commit: captured.commit,
-          ref: captured.ref,
-          verified: captured.verified,
-          browser: captured.browser,
-        },
-        shot.bytes,
-        person,
-      ),
-    );
-  }
-  const approvals = [];
-  if (request.approve) {
-    for (const reference of references) {
-      approvals.push(
-        await archive.createApproval(
-          {
-            referenceId: reference.referenceId,
-            decision: "approved",
-            ...(request.comment ? { comment: request.comment } : {}),
-          },
-          person,
-        ),
-      );
-    }
-  }
-  return { references, approvals };
+  return coordinator;
 }
 
 export function createArchiveHandler(
   archive,
   {
     authorize = async () => null,
-    captureReference = null,
+    coordinator = null,
     allowedOrigins = DEFAULT_LOCAL_ORIGINS,
     sameOrigin = false,
     storage = archive?.root
@@ -427,20 +335,12 @@ export function createArchiveHandler(
       }
 
       if (request.method === "POST" && url.pathname === "/api/references") {
-        if (!captureReference)
-          throw new ArchiveError(
-            501,
-            "CAPTURE_UNAVAILABLE",
-            "this archive cannot capture a reference; approve it in the local workbench",
-          );
         return jsonResponse(
-          await captureForApproval(
-            archive,
-            captureReference,
-            await readJson(request),
-            identity.reviewer,
-            url.origin,
-          ),
+          await requireCoordinator(coordinator).captureFocused({
+            ...(await readJson(request)),
+            person: identity.reviewer,
+            baseURL: `${url.origin}/`,
+          }),
           201,
           headers,
         );
@@ -448,7 +348,9 @@ export function createArchiveHandler(
 
       if (request.method === "GET" && url.pathname === "/api/approvals") {
         return jsonResponse(
-          await archive.listApprovals(queryOptions(url, ["caseId", "cursor"])),
+          await requireCoordinator(coordinator).listApprovals(
+            queryOptions(url, ["caseId"]),
+          ),
           200,
           headers,
         );
@@ -456,11 +358,31 @@ export function createArchiveHandler(
 
       if (request.method === "POST" && url.pathname === "/api/approvals") {
         return jsonResponse(
-          await archive.createApproval(
+          await requireCoordinator(coordinator).createApproval(
             await readJson(request),
             identity.reviewer,
           ),
           201,
+          headers,
+        );
+      }
+
+      if (request.method === "GET" && url.pathname === "/api/reference-runs") {
+        const live = await requireCoordinator(coordinator).status();
+        const history = await archive.listReferenceRuns(
+          queryOptions(url, ["cursor"]),
+        );
+        return jsonResponse({ ...live, history }, 200, headers);
+      }
+
+      if (request.method === "POST" && url.pathname === "/api/reference-runs") {
+        return jsonResponse(
+          await requireCoordinator(coordinator).requestFull({
+            trigger: "manual",
+            person: identity.reviewer,
+            baseURL: `${url.origin}/`,
+          }),
+          202,
           headers,
         );
       }

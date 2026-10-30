@@ -1,11 +1,8 @@
-import { execFile } from "node:child_process";
-import { promisify } from "node:util";
 import { PROFILES } from "./model.mjs";
 
 // The one Storybook reference capturer: the workbench's Approve tab and the
 // application's site runs both call it, so a reference is drawn one way.
 
-const git = promisify(execFile);
 const DEFAULT_TIMEOUT_MS = 30_000;
 const IMAGE_TIMEOUT_MS = 15_000;
 const REQUIRED_RESOURCE_TYPES = new Set([
@@ -251,11 +248,13 @@ export async function captureStoryReference(
     locale,
     browserOptions = CAPTURE_BROWSER,
     timeoutMs = DEFAULT_TIMEOUT_MS,
+    originHeaders,
   },
 ) {
   const viewport = PROFILES[profileId];
   if (!viewport) throw new TypeError(`unknown profile ${profileId}`);
   const context = await newCaptureContext(browser, viewport, browserOptions);
+  if (originHeaders) await sendToOrigin(context, baseURL, originHeaders);
   const page = await context.newPage();
   const failedResources = [];
   const pageErrors = [];
@@ -333,64 +332,75 @@ export function storedRegion(box, viewport, { wholeViewport, scored }) {
   return whole;
 }
 
-async function checkoutState(repoRoot) {
-  const read = async (args) =>
-    (await git("git", args, { cwd: repoRoot })).stdout.trim();
-  const [commit, branch, status] = await Promise.all([
-    read(["rev-parse", "HEAD"]),
-    read(["rev-parse", "--abbrev-ref", "HEAD"]),
-    read(["status", "--porcelain"]),
-  ]);
-  return {
-    commit,
-    ref: branch === "HEAD" ? "detached" : branch,
-    verified: status === "",
-  };
+// Access credentials go to the Storybook origin only, never to a font or
+// image host the story loads.
+async function sendToOrigin(context, baseURL, headers) {
+  const origin = new URL(baseURL).origin;
+  await context.route("**/*", (route) => {
+    const request = route.request();
+    if (new URL(request.url()).origin !== origin) return route.continue();
+    return route.continue({ headers: { ...request.headers(), ...headers } });
+  });
+}
+
+/** The deploy's build receipt, read through the same browser as the shots. */
+export async function readBuildReceipt(browser, baseURL, originHeaders) {
+  const context = await browser.newContext();
+  try {
+    if (originHeaders) await sendToOrigin(context, baseURL, originHeaders);
+    const page = await context.newPage();
+    const response = await page.goto(
+      new URL("ui-verification-build.json", baseURL).href,
+    );
+    if (!response?.ok())
+      throw coded(
+        `the deployed Storybook has no build receipt (HTTP ${response?.status() ?? "none"})`,
+        "BUILD_RECEIPT_MISSING",
+      );
+    const receipt = JSON.parse(await response.text());
+    if (
+      receipt?.schemaVersion !== 1 ||
+      receipt.target !== "reference" ||
+      !/^[0-9a-f]{40}$/.test(receipt.commit ?? "")
+    )
+      throw coded("the build receipt is invalid", "BUILD_RECEIPT_INVALID");
+    return receipt;
+  } finally {
+    await context.close();
+  }
 }
 
 /**
- * The workbench's capturer: a fresh browser per request, every profile of one
- * case and locale, stamped with this checkout's commit.
+ * One browser for a batch of shots. The host supplies how to launch it and
+ * how to name the commit it captures: git in a local checkout, the build
+ * receipt on a deployed workbench.
  */
-export function createReferenceCapturer({ launch, repoRoot }) {
-  return async function captureReference({
-    origin,
-    storyId,
-    selector,
-    wholeViewport,
-    scoreProfile,
-    locale,
-  }) {
-    if (typeof locale !== "string" || locale === "")
-      throw new TypeError("locale is required");
-    const checkout = await checkoutState(repoRoot);
-    const browser = await launch();
-    try {
-      const shots = [];
-      for (const profileId of Object.keys(PROFILES)) {
-        const shot = await captureStoryReference(browser, {
-          baseURL: `${origin}/`,
-          storyId,
-          selector,
-          profileId,
-          locale,
-        });
-        shots.push({
-          profileId,
-          bytes: shot.bytes,
-          region: storedRegion(shot.box, shot.viewport, {
-            wholeViewport,
-            scored: profileId === scoreProfile,
-          }),
-        });
-      }
+export async function openCaptureSession({
+  launch,
+  provenance,
+  originHeaders,
+}) {
+  const browser = await launch();
+  return {
+    browser: `chromium ${typeof browser.version === "function" ? browser.version() : "unknown"}`,
+    provenance: (baseURL) => provenance({ browser, baseURL, originHeaders }),
+    async shoot(shot, baseURL) {
+      const captured = await captureStoryReference(browser, {
+        baseURL,
+        storyId: shot.storyId,
+        selector: shot.selector,
+        profileId: shot.profileId,
+        locale: shot.locale,
+        originHeaders,
+      });
       return {
-        shots,
-        ...checkout,
-        browser: `chromium ${browser.version()}`,
+        bytes: captured.bytes,
+        region: storedRegion(captured.box, captured.viewport, {
+          wholeViewport: shot.wholeViewport,
+          scored: shot.profileId === shot.scoreProfile,
+        }),
       };
-    } finally {
-      await browser.close();
-    }
+    },
+    close: () => browser.close(),
   };
 }

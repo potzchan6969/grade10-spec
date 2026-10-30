@@ -6,7 +6,7 @@ import { Readable } from "node:stream";
 import { fileURLToPath } from "node:url";
 import { createArchive } from "../src/archive.mjs";
 import { createArchiveHandler } from "../src/archive-api.mjs";
-import { createReferenceCapturer } from "../src/reference-capture.mjs";
+import { createLocalCoordinator } from "./local-coordinator.mjs";
 
 const SPEC_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 const HOP_BY_HOP_HEADERS = new Set([
@@ -63,7 +63,7 @@ export function resolveArchiveRoot({
 export function createLocalArchiveHandler(
   archive,
   archiveRoot,
-  { captureReference = null } = {},
+  { coordinator = null } = {},
 ) {
   if (typeof archiveRoot !== "string" || !isAbsolute(archiveRoot)) {
     throw new TypeError("archiveRoot must be an absolute path");
@@ -74,7 +74,7 @@ export function createLocalArchiveHandler(
       scope === "approve"
         ? { kind: "human", reviewer: { subject: "local-development" } }
         : { kind: "publisher" },
-    captureReference,
+    coordinator,
     sameOrigin: true,
     storage: { kind: "filesystem", location: archiveRoot },
   });
@@ -207,19 +207,17 @@ export function installUiVerificationArchive(
   const archiveRoot = resolveArchiveRoot({ specRoot, env });
   const archive = createArchive(archiveRoot);
   // The workbench captures with the preview app's Playwright, from this
-  // checkout's own Storybook; it loads only when a reference is captured.
-  let capture;
+  // checkout's own Storybook; Playwright loads only when a capture runs.
   const handler = createLocalArchiveHandler(archive, archiveRoot, {
-    captureReference: (input) => {
-      capture ??= createReferenceCapturer({
-        launch: () =>
-          createRequire(resolve(specRoot, "apps/preview/package.json"))(
-            "playwright",
-          ).chromium.launch({ headless: true }),
-        repoRoot: specRoot,
-      });
-      return capture(input);
-    },
+    coordinator: createLocalCoordinator({
+      archive,
+      archiveRoot,
+      repoRoot: specRoot,
+      launch: () =>
+        createRequire(resolve(specRoot, "apps/preview/package.json"))(
+          "playwright",
+        ).chromium.launch({ headless: true }),
+    }),
   });
   app.use(createNodeArchiveMiddleware(handler));
 }
