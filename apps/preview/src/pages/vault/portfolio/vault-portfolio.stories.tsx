@@ -85,7 +85,7 @@ function VaultPortfolioPage({
         />
       </div>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-12">
         {!empty && (
           <div className={cn(PAGE_ENTER_CLASS, "delay-[30ms]")}>
             <WalletSummary
@@ -108,7 +108,7 @@ function VaultPortfolioPage({
           value={pageTab}
           onValueChange={(value) => setPageTab(value as "assets" | "rewards")}
         >
-          <TabsList aria-label="Portfolio sections" variant="list">
+          <TabsList aria-label="Portfolio sections" className="w-full justify-start border-b border-border" variant="list">
             <TabsTrigger value="assets">
               Assets
               <Badge size="sm">{PORTFOLIO_SUMMARY.itemCount}</Badge>
@@ -121,7 +121,7 @@ function VaultPortfolioPage({
             </TabsTrigger>
           </TabsList>
           <TabsContent
-            className="mt-0 flex flex-col gap-8 outline-none"
+            className="mt-0 flex flex-col gap-6 outline-none"
             value="assets"
           >
             <div className={cn(PAGE_ENTER_CLASS, "delay-[60ms]")}>
