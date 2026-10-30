@@ -1,4 +1,4 @@
-## 1. The shared header's order and its record (grade10-spec) (owner: @seankcw)
+## 1. The shared header's order and its record (grade10-spec)
 
 `SiteHeader` already draws the order; this group proves it against the
 restated contract and keeps the pages in step.
@@ -8,7 +8,7 @@ restated contract and keeps the pages in step.
 - [ ] 1.3 Reconcile `docs/prds/products/grade10-site/site/page-shell.md` (Account Menu) and `docs/prds/products/shared/ui/site-chrome.md` (Account Entry, Account menu stories) with the accepted deltas and the two new stories, adding no rule a requirement states; keep this change's 🚧 marks until archive
 - [ ] 1.4 Verify: `pnpm --filter @grade10/ui run test:stories` with the account-menu play functions green, `pnpm --filter @grade10/ui run typecheck`, `pnpm storybook:check`, `pnpm check:manual`, `pnpm run validate:changes offer-membership-in-account-menu`
 
-## 2. The site offers Membership (grade10) (owner: @seankcw)
+## 2. The site offers Membership (grade10)
 
 Claimable beside group 1: the pinned `external/grade10-spec` already draws
 Membership right after Profile.
@@ -18,7 +18,7 @@ Membership right after Profile.
 - [ ] 2.3 Bump `external/grade10-spec` to a store `main` that holds this change's accepted specs, so every id the tests cite resolves in the pin
 - [ ] 2.4 Verify: `pnpm check:quick`, the site's typecheck against `apps/frontend/grade10/tsconfig.app.json`, `pnpm run check:submodules`, `pnpm plan validate offer-membership-in-account-menu`
 
-## 3. The walk (grade10) (owner: @seankcw)
+## 3. The walk (grade10)
 
 Uses draft `feature-tcs.md` as its planning input, and groups 1 and 2 landed.
 
