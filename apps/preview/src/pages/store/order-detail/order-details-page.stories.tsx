@@ -196,7 +196,7 @@ export const Filled: Story = {
 };
 
 /** An order the collector cannot see: the same not-found treatment, with no hint it exists. */
-export const NotFoundWithoutDisclosure: Story = {
+export const NotFound: Story = {
   args: { read: "notFound" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -260,7 +260,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The not-found state with no order facts, the same for both rows, UI matching store-order-detail-screens-order-details--not-found-without-disclosure.
+* The not-found state with no order facts, the same for both rows, UI matching store-order-detail-screens-order-details--not-found.
 
 <!-- trace:case id=g10.store-order-detail.TC-ek8 rev=1 -->
 #### g10.store-order-detail.TC3: Signing in from an order's address comes back to it
