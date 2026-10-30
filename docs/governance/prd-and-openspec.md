@@ -118,6 +118,7 @@ That is how the work reaches an engineer. The application repository has no plan
 | `schema` | The CLI, at `openspec new change` | Always | Every reader |
 | `created` | The CLI, at `openspec new change` | Always | The digest, for the planning age |
 | `skip_specs: true` with `skip_specs_why: "<why>"` | The author | A change altering no product behaviour | `openspec validate`; `pnpm spec:accept`, which accepts it with no deltas |
+| `ticket: <owner>/<repo>#<n>` | The agent converting the change | A change moved to a feature ticket, whose delta lives on that issue | `pnpm run validate:changes`, which then owes the change no spec delta |
 | `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The stage ladder in `tools/openspec-store`, which reads the change as planned only once it is set |
 | `awaiting:` with `<artifact>: "<what is missing>"` | Whoever is held up | A change that cannot write its next artifact until somebody answers; deleted by its author when the wait is over | `pnpm run validate:changes`; `pnpm accept:preflight`, which refuses a change still waiting |
 | `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | Nothing checks it since `check:manual` stopped reading changes; it records the decision |
