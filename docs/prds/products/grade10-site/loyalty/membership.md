@@ -92,6 +92,9 @@ a Google account under it -
   the title opens the pass in a dialog. Buying points enters from a Top-up
   Points button beside Member pass, never the rail —
   [Top-ups](/p/grade10-site/loyalty/top-ups)
+- 🚧 **Each section has its own address** — a link can open Membership on
+  any rail section, so Rewards' View coupons lands on Coupons rather than
+  the Overview
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
   to say here. The Membership page keeps one dated expiry line of its own,

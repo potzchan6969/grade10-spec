@@ -31,6 +31,16 @@ A member buys points in packs an operator sets.
 - **Receipt** — Stripe's own receipt email, to the address the member is
   signed in with, confirms the top-up; the member's points history links it
   on the entry
+- 🚧 **Picked over Membership** — the Top-up Points button opens the pack
+  picker over the Membership page, and the member comes back to that page
+- 🚧 **A wait that cannot be dismissed** — while the payment is confirmed, a
+  dialog on a wide viewport, a drawer on a narrow one
+- 🚧 **The outcome is a toast on Membership** — points added names the
+  points and the new balance; payment not completed says nothing was
+  charged, with Try again
+- 🚧 **Points History is the only record** — a credited pack's entry links
+  its receipt, a chargeback reads as a negative line, and a checkout left
+  unpaid writes no entry; there is no top-up history page
 - **Account deleted** — an open checkout closes with nothing charged; a
   payment that lands after is flagged for an operator to refund
 - **Told before paying** — checkout says a pack is never refunded, cashed
@@ -197,6 +207,8 @@ chargeback rate on top-ups.
 | Pause | ❓ Open | Shipped: the first chargeback or fraud warning pauses top-ups until an operator resumes them. | Product |
 | Refund in Stripe's dashboard | ❓ Open | Shipped: takes back the refunded share of the points, as a chargeback does. | Product |
 | Launch | ❓ Open | Shipped off; switched on once Stripe is set up and Legal confirms the words. | Product and Legal |
+| Where a pack is bought | Decided | From a Top-up Points button beside Member pass, the outcome a toast on Membership, so the rail stays navigation and the member never looks for a separate top-up page. | Design |
+| Unpaid top-up | Decided | A checkout left unpaid writes no ledger entry: nothing was charged and no points moved, so there is nothing for the member to read. | Product |
 | Part returns | Decided | A part return gives no points back; an operator handles each case by hand. | Product |
 | Told before paying | ❓ Open | Checkout states no refund, no cash-out and no transfer, and the member accepts the terms: the proof a disputed charge is fought with. | Product |
 | The words | ❓ Open | What checkout says, a draft until confirmed. | Legal |
