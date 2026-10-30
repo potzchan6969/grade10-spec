@@ -1,0 +1,72 @@
+{
+  "version": 2,
+  "change": "offer-membership-in-account-menu",
+  "baseline": "83ce6b3272ffc3f4bf493001ee7fa47747965464182af6205f368621e6b2b740",
+  "fingerprint": "33b3f3eb1afb3872387a909797627f49ce8e2a94f8758b321f4c21429d310170",
+  "reviewedBy": "@seankcw",
+  "acceptedAt": "2026-10-30T08:23:01.780Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/offer-membership-in-account-menu/decisions.md",
+      "sha256": "62f72ee1bcf9470bca1f2988a07d857d1945168a2dfd83895ace75c3950dfb3e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/offer-membership-in-account-menu/proposal.md",
+      "sha256": "f120b5f012c86357ca1dc7068ead9fb81d8adea4e84075d008dc46af53e3f736",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/offer-membership-in-account-menu/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "sha256": "4c6108b77ee0742598c861e88389550be2c1d15f6ab8161f10ec40a92ed73b43",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/offer-membership-in-account-menu/specs/grade10-site/site/page-shell/spec.md",
+      "sha256": "39ca0d086bc6f8345b540f6f158343f86d7b2f4f520ddc093c59b12debd0ca19",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/offer-membership-in-account-menu/specs/grade10-site/site/page-shell/user-journeys.md",
+      "sha256": "89c28a04bb8b29d84552fa79b387a36cdfbe347805560a92bc0ac8ef4a0fb817",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/offer-membership-in-account-menu/tech-design.md",
+      "sha256": "67d10e277c2eeb09075ddf8e0b69ac33cf353bfed3efcb2f8a3215928bbbb026",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "sha256": "6b511ca726be195179a3880d113dc9140daccb10b17aed6c7e7425155f84fbd6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+      "sha256": "38cb5175442e09098a01face3f5f0a805ca4877d13457375a2e721ca5a2beb0f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+      "sha256": "d85c2bf5531592e27b9b4900b5e7eab3d291e05d916f4c641dc611f5671423a6",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Signed-in collectors open what the build carries from the account menu"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
