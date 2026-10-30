@@ -27,16 +27,16 @@ type PayoutMethod = {
   maskedAccount: string;
 };
 
-type WithdrawStep = "amount" | "bank-details" | "review" | "submitted";
+type CashOutStep = "amount" | "bank-details" | "review" | "submitted";
 
 /**
- * Rewards withdrawal — the stepped payout request: amount (with `Max` and
+ * Cash-out — the stepped payout request: amount (with `Max` and
  * the minimum named), first-time bank details when no account is on file,
  * a review that states the approval and the working days before submit,
  * then the submitted beat. Grade10 approves every request; nothing leaves
  * the wallet until then.
  */
-function VaultWithdrawDialog({
+function CashOutDialog({
   availableHkd,
   minWithdrawalHkd,
   payoutMethod,
@@ -52,7 +52,7 @@ function VaultWithdrawDialog({
   onOpenChange: (open: boolean) => void;
   onSubmit?: (amountHkd: number) => void;
 }) {
-  const [step, setStep] = useState<WithdrawStep>("amount");
+  const [step, setStep] = useState<CashOutStep>("amount");
   const [amountInput, setAmountInput] = useState("");
   const [accountHolder, setAccountHolder] = useState("");
   const [bankName, setBankName] = useState("");
@@ -90,17 +90,17 @@ function VaultWithdrawDialog({
     }
   };
 
-  const TITLE: Record<WithdrawStep, string> = {
-    amount: "Withdraw Rewards",
+  const TITLE: Record<CashOutStep, string> = {
+    amount: "Cash Out",
     "bank-details": "Payout Bank Details",
-    review: "Review Withdrawal",
+    review: "Review Cash Out",
     submitted: "Request Submitted",
   };
 
-  const SUBTEXT: Record<WithdrawStep, string> = {
-    amount: `Available to withdraw: ${formatHkd(availableHkd)}`,
-    "bank-details": "Where we send your rewards on your first payout.",
-    review: `Grade10 reviews every request — payouts arrive in ${WITHDRAWAL_PROCESSING_DAYS} once approved.`,
+  const SUBTEXT: Record<CashOutStep, string> = {
+    amount: `Available to cash out: ${formatHkd(availableHkd)}`,
+    "bank-details": "In your verified name and saved to your profile — where rewards go on your first cash-out.",
+    review: `Grade10 reviews every request — paid by FPS or bank transfer within ${WITHDRAWAL_PROCESSING_DAYS} once approved.`,
     submitted: "We’ll email you once Grade10 approves the payout.",
   };
 
@@ -120,7 +120,7 @@ function VaultWithdrawDialog({
             <VStack gap="sm" hAlign="start">
               <div className="flex w-full items-end gap-3">
                 <TextInput
-                  aria-label="Withdrawal amount"
+                  aria-label="Cash-out amount"
                   className="w-full font-heading text-2xl font-medium tabular-nums"
                   inputMode="decimal"
                   prefix="HK$"
@@ -141,8 +141,7 @@ function VaultWithdrawDialog({
                 </Button>
               </div>
               <Text size="sm" tone="secondary">
-                Minimum {formatHkd(minWithdrawalHkd)} · Rewards accrue daily
-                while items stay in the vault
+                Minimum {formatHkd(minWithdrawalHkd)} · One cash-out every 7 days
               </Text>
             </VStack>
           ) : null}
@@ -206,7 +205,7 @@ function VaultWithdrawDialog({
                   Processing time
                 </Text>
                 <Text size="sm" weight="medium">
-                  {WITHDRAWAL_PROCESSING_DAYS} after approval
+                  Within {WITHDRAWAL_PROCESSING_DAYS} of approval
                 </Text>
               </div>
             </VStack>
@@ -220,7 +219,7 @@ function VaultWithdrawDialog({
                 size={48}
                 weight="fill"
               />
-              <Text weight="medium">Withdrawal of {formatHkd(amount)} requested</Text>
+              <Text weight="medium">Cash-out of {formatHkd(amount)} requested</Text>
               <Text
                 className="text-center text-secondary-foreground"
                 size="sm"
@@ -292,4 +291,4 @@ function VaultWithdrawDialog({
 }
 
 export type { PayoutMethod };
-export { VaultWithdrawDialog };
+export { CashOutDialog };

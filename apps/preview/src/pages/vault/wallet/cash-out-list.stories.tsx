@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { PAYOUT_REQUESTS } from "../../vault-content";
-import { VaultPayoutList } from "./vault-payout-list";
+import { CashOutList } from "./vault-payout-list";
 
 /**
- * Payout requests on the Vault Portfolio — the status Grade10's approval
+ * Cash-out requests — the status Grade10's approval
  * sets on each request, from Pending review to Paid.
  */
 const meta = {
-  title: "Vault/Portfolio/Parts/VaultPayoutList",
-  component: VaultPayoutList,
+  title: "Vault/Wallet/Parts/CashOutList",
+  component: CashOutList,
   parameters: { layout: "padded" },
-} satisfies Meta<typeof VaultPayoutList>;
+} satisfies Meta<typeof CashOutList>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -20,7 +20,7 @@ export const Filled: Story = {
   args: { requests: PAYOUT_REQUESTS },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Payout requests")).toBeVisible();
+    expect(canvas.getByText("Cash-out requests")).toBeVisible();
     expect(canvas.getByText("Pending review")).toBeVisible();
     expect(canvas.getByText("Processing")).toBeVisible();
     expect(canvas.getByText("Paid")).toBeVisible();

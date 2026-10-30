@@ -24,7 +24,7 @@ const STATUS_VARIANT: Record<
  * the status Grade10's approval sets. Hidden when nothing has been
  * requested, matching the intake alert's rule.
  */
-function VaultPayoutList({
+function CashOutList({
   requests,
   className,
 }: {
@@ -35,16 +35,16 @@ function VaultPayoutList({
 
   return (
     <section
-      aria-labelledby="vault-payout-requests"
+      aria-labelledby="cash-out-requests"
       className={cn("flex flex-col gap-4", className)}
-      data-slot="vault-payout-list"
+      data-slot="cash-out-list"
     >
       <Text
         as="h2"
-        className="font-heading text-xl font-medium tracking-tight"
-        id="vault-payout-requests"
+        className="font-heading text-xl font-semibold tracking-tight"
+        id="cash-out-requests"
       >
-        Payout requests
+        Cash-out requests
       </Text>
       <Card padding={false}>
         <ul className="divide-y divide-border">
@@ -73,4 +73,4 @@ function VaultPayoutList({
   );
 }
 
-export { VaultPayoutList };
+export { CashOutList };

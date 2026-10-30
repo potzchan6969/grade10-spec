@@ -31,7 +31,7 @@ const preview: Preview = {
           "Store": ["Home", "Product Listing", "Product Page", "Cart", "Cart Validation", "Store Locator", "Cross Sell", "Checkout", "Order History", "Order Detail", "Shelf Scanning", "Inventory And Channels", "Discounts", "Refunds", "Shipping"],
           "Loyalty": ["Points", "Tiers", "Rewards", "Paying With Points", "Coupons", "Membership", "Shopify Integration", "Campaigns", "Wallet Member Card", "Operator Console", "Expiry Reminders", "Top Ups"],
           "Auction": ["Account", "Display", "Bidding", "Post Bidding"],
-          "Vault": ["Intake", "Incentive", "Portfolio", "Asset Detail", "Vault Retrieval", "Documents", "Operations"],
+          "Vault": ["Intake", "Incentive", "Portfolio", "Asset Detail", "Wallet", "Vault Retrieval", "Documents", "Operations"],
           "Submissions": ["Intake Tracker"],
           "Grading": ["Planning", "Drop Off", "Submission", "Documents", "Messages"],
           "Consignment": ["Consigning", "Consignment Retrieval", "Dashboard", "Operator Console"],

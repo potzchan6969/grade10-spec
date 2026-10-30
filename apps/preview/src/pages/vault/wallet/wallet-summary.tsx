@@ -45,7 +45,7 @@ function Stat({
  * the floor named), and no payout method yet (set-up CTA first). Below `sm`
  * the cells stack in one column.
  */
-function VaultWalletSummary({
+function WalletSummary({
   rewardsAvailableHkd,
   earnedAllTimeHkd,
   totalEstimateHkd,
@@ -70,9 +70,9 @@ function VaultWalletSummary({
 
   return (
     <Card
-      aria-label="Vault wallet"
+      aria-label="Rewards wallet"
       className={className}
-      data-slot="vault-wallet-summary"
+      data-slot="wallet-summary"
       padding={false}
       role="region"
     >
@@ -100,7 +100,7 @@ function VaultWalletSummary({
                 type="button"
                 onClick={onWithdraw}
               >
-                Withdraw
+                Cash out
               </Button>
             ) : (
               <Button
@@ -114,7 +114,7 @@ function VaultWalletSummary({
             )}
             {hasPayoutMethod && !meetsMinimum ? (
               <p className="text-xs text-secondary-foreground">
-                Minimum {formatHkd(minWithdrawalHkd)} to withdraw
+                Minimum {formatHkd(minWithdrawalHkd)} to cash out
               </p>
             ) : null}
           </div>
@@ -139,4 +139,4 @@ function VaultWalletSummary({
   );
 }
 
-export { VaultWalletSummary };
+export { WalletSummary };

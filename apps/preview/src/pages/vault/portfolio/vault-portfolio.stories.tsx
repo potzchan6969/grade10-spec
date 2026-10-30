@@ -6,6 +6,7 @@ import { expect, waitFor, within } from "storybook/test";
 import { activeIntakeSubmissionCount } from "../../intake-content";
 import {
   INTAKE_TRACKER_STORY_ID,
+  PAYOUT_METHOD,
   PAYOUT_REQUESTS,
   PORTFOLIO_ASSETS,
   PORTFOLIO_SUMMARY,
@@ -21,8 +22,9 @@ import {
 import { navigateToStory } from "../../workbench-story-nav";
 import { ActiveIntakeAlert } from "./active-intake-alert";
 import { VaultAssetList } from "./vault-asset-list";
-import { VaultPayoutList } from "./vault-payout-list";
-import { VaultWalletSummary } from "./vault-wallet-summary";
+import { CashOutDialog } from "../wallet/cash-out-dialog";
+import { CashOutList } from "../wallet/cash-out-list";
+import { WalletSummary } from "../wallet/wallet-summary";
 
 /** Simulated holdings fetch — the workbench recipe's ready beat. */
 const HOLDINGS_LOAD_MS = 350;
@@ -51,6 +53,7 @@ function VaultPortfolioPage({
   }, [empty]);
 
   const holdingsLoading = loading || fetching;
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   return (
     <VaultPageShell wide>
@@ -73,25 +76,21 @@ function VaultPortfolioPage({
       <div className="flex flex-col gap-8">
         {!empty && (
           <div className={cn(PAGE_ENTER_CLASS, "delay-[30ms]")}>
-            <VaultWalletSummary
+            <WalletSummary
               earnedAllTimeHkd={PORTFOLIO_SUMMARY.earnedAllTimeHkd}
               hasPayoutMethod={PORTFOLIO_SUMMARY.hasPayoutMethod}
               minWithdrawalHkd={PORTFOLIO_SUMMARY.minWithdrawalHkd}
               rewardsAvailableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
               totalEstimateHkd={PORTFOLIO_SUMMARY.totalEstimateHkd}
               withdrawnHkd={PORTFOLIO_SUMMARY.withdrawnHkd}
-              onWithdraw={() =>
-                navigateToStory(
-                  "vault-portfolio-screens-withdraw-dialog--amount",
-                )
-              }
+              onWithdraw={() => setWithdrawOpen(true)}
             />
           </div>
         )}
 
         {!empty && (
           <div className={cn(PAGE_ENTER_CLASS, "delay-[70ms]")}>
-            <VaultPayoutList requests={PAYOUT_REQUESTS} />
+            <CashOutList requests={PAYOUT_REQUESTS} />
           </div>
         )}
 
@@ -119,6 +118,13 @@ function VaultPortfolioPage({
           />
         )}
       </div>
+      <CashOutDialog
+        availableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
+        minWithdrawalHkd={PORTFOLIO_SUMMARY.minWithdrawalHkd}
+        payoutMethod={PAYOUT_METHOD}
+        open={withdrawOpen}
+        onOpenChange={setWithdrawOpen}
+      />
     </VaultPageShell>
   );
 }
@@ -148,7 +154,7 @@ export const Filled: Story = {
       expect(canvas.getByText("Earned all-time")).toBeVisible();
       expect(canvas.getByText("Total estimated value")).toBeVisible();
       expect(canvas.getByText("Withdrawn to date")).toBeVisible();
-      expect(canvas.getByText("Payout requests")).toBeVisible();
+      expect(canvas.getByText("Cash-out requests")).toBeVisible();
       expect(canvas.getByText("Pending review")).toBeVisible();
       expect(
         canvas.getByText("2 submissions currently in intake"),

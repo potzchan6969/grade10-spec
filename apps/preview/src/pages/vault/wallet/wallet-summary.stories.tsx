@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { PORTFOLIO_SUMMARY } from "../../vault-content";
-import { VaultWalletSummary } from "./vault-wallet-summary";
+import { WalletSummary } from "./wallet-summary";
 
 /**
- * Rewards wallet above the Vault Portfolio holdings. Rewards accrue daily
- * while items stay in custody; the Withdraw CTA unlocks at the minimum.
+ * Rewards wallet above the holdings. Rewards accrue daily
+ * while items stay in custody; the Cash out CTA unlocks at the minimum.
  */
 const meta = {
-  title: "Vault/Portfolio/Parts/VaultWalletSummary",
-  component: VaultWalletSummary,
+  title: "Vault/Wallet/Parts/WalletSummary",
+  component: WalletSummary,
   parameters: { layout: "padded" },
-} satisfies Meta<typeof VaultWalletSummary>;
+} satisfies Meta<typeof WalletSummary>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -32,7 +32,7 @@ export const Filled: Story = {
     expect(canvas.getByText("Total estimated value")).toBeVisible();
     expect(canvas.getByText("Withdrawn to date")).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "Withdraw" }),
+      canvas.getByRole("button", { name: "Cash out" }),
     ).toBeEnabled();
   },
 };
@@ -43,13 +43,13 @@ export const BelowMinimum: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: "Withdraw" }),
+      canvas.getByRole("button", { name: "Cash out" }),
     ).toBeDisabled();
-    expect(canvas.getByText("Minimum HK$100 to withdraw")).toBeVisible();
+    expect(canvas.getByText("Minimum HK$500 to cash out")).toBeVisible();
   },
 };
 
-/** No bank account on file — set-up CTA replaces Withdraw. */
+/** No bank account on file — set-up CTA replaces Cash out. */
 export const NoPayoutMethod: Story = {
   args: { ...Filled.args, hasPayoutMethod: false },
   play: async ({ canvasElement }) => {
@@ -57,7 +57,7 @@ export const NoPayoutMethod: Story = {
     expect(
       canvas.getByRole("button", { name: "Set up payout" }),
     ).toBeVisible();
-    expect(canvas.queryByRole("button", { name: "Withdraw" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Cash out" })).toBeNull();
   },
 };
 

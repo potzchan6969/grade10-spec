@@ -449,7 +449,7 @@ const PAYOUT_METHOD = {
   maskedAccount: "••• 8304",
 };
 
-const WITHDRAWAL_PROCESSING_DAYS = "3–5 working days";
+const WITHDRAWAL_PROCESSING_DAYS = "3 business days";
 
 type VaultPayoutStatus = "Pending review" | "Processing" | "Paid" | "Rejected";
 
@@ -487,7 +487,7 @@ const PORTFOLIO_SUMMARY = {
   rewardsAvailableHkd: 1240,
   earnedAllTimeHkd: 1560,
   withdrawnHkd: 320,
-  minWithdrawalHkd: 100,
+  minWithdrawalHkd: 500,
   hasPayoutMethod: true,
 };
 
