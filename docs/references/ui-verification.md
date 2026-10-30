@@ -35,11 +35,11 @@ pnpm install --frozen-lockfile
 pnpm storybook:workbench
 ```
 
-- **Open** - Open a story that carries a `verification` parameter, then the Approve or Site Compare tab. The Not Found story is the first.
+- **Open** - Open a Flows story, such as Auction / Flows / Bid And Win A Lot, then the Approve or Site Compare tab. Site Compare compares flows only.
 - **Archive** - Development mounts the filesystem archive at the Storybook origin. The default is `.cache/ui-verification` in this checkout, or in the consuming app root when this checkout is its submodule. Set `UI_VERIFICATION_ARCHIVE` to an absolute directory before startup for another one.
 - **No data yet** - Both tabs stay empty until the application has captured a site run, which names the story's cases. Capture from the application repository, then press Refresh.
 - **Reference capture** - Approving uses the preview app's Playwright, launched by the workbench itself. `packages/ui-verification/src/reference-capture.mjs` renders the story from this Storybook: fixed sizes, scale 1, reduced motion, `en-US`, `Asia/Hong_Kong`, light. The application's site runs draw their reference with the same module.
-- **Capture** - Follow `tools/ui-verification/README.md` in the application repository. The short form is `pnpm ui:verify capture --config ./ui-verification.json --selection all`, pointed at the same archive directory.
+- **Capture** - Run `pnpm ui:verify capture` in the application repository. It captures every flow, starting the local stack and this Storybook when they are not running; `tools/ui-verification/README.md` there has the rest.
 
 ## Give A Story A Case
 
@@ -51,7 +51,9 @@ pnpm storybook:workbench
 
 ## Capture One Domain
 
-❓ The capture tool is in the application repository, and this repository holds no copy of its options. Run `pnpm ui:verify capture --help` there for how to select cases.
+- **Domain** - `pnpm ui:verify capture --domain auction` in the application repository captures only the flows whose story is in that Storybook domain. A domain is the first segment of the story id.
+- **Domains** - `pnpm ui:verify capture --help` there lists each declared domain and how many cases it holds.
+- **More than one** - `--domain` repeats, and combines with `--selection`. Cases outside the domains are recorded as not selected.
 
 - **Case list** - `pnpm storybook:case-ids --list Auction` prints each Auction `caseId` and its story id, for a selection or a declaration file.
 - **Check** - Capture one case first. Press Refresh in Site Compare and confirm the story shows the run.
