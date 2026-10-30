@@ -67,7 +67,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the address is `/orders/<order id>` with its secret after `#`; the items, totals and a placed-on line naming the receipt's email; the row's toast with one Sign in action.
+* Step 1: the address is `/store/orders/<order id>` with its secret after `#`; the items, totals and a placed-on line naming the receipt's email; the row's toast with one Sign in action.
 * Step 1 shows no Points to Earn, no Points Earned, no Points row, and no wallet or account details.
 * Step 2 shows no toast for this order.
 
@@ -175,7 +175,7 @@ Runs once per row of **Test data**.
 
 | Customer | Opens |
 | --- | --- |
-| signed out | `/orders/<order id>`, with its secret, UI matching store-order-detail-screens-order-link--just-paid |
+| signed out | `/store/orders/<order id>`, with its secret, UI matching store-order-detail-screens-order-link--just-paid |
 | signed-in member | `/store/my-orders/<order id>` |
 
 **Steps:**
@@ -484,8 +484,8 @@ Runs once per row of **Test data**.
 
 | Link |
 | --- |
-| `/orders/<an id no order has>#<any secret>` |
-| `/orders/<a real order id>#<a different secret>` |
+| `/store/orders/<an id no order has>#<any secret>` |
+| `/store/orders/<a real order id>#<a different secret>` |
 
 **Steps:**
 
@@ -530,7 +530,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: the button's address is `/orders/<order id>` with its secret after `#`, and it opens the order page signed out.
+* Step 2: the button's address is `/store/orders/<order id>` with its secret after `#`, and it opens the order page signed out.
 * Step 3 holds no other order email from Grade10.
 
 #### g10.store-order-detail.TC14: Signed in, the owner sees neither the receipt line nor the toast

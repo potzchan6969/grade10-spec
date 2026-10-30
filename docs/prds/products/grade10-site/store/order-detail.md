@@ -88,7 +88,7 @@ order: 7
 
 ## Order Link
 
-- **Link** — `grade10.com/orders/<order-id>`, for every web order, guest or
+- **Link** — `grade10.com/store/orders/<order-id>`, for every web order, guest or
   member, behind the View order button in Shopify's order emails; Grade10
   sends no store email of its own
   - **Secret** — carried after `#`, so no server or log sees it
