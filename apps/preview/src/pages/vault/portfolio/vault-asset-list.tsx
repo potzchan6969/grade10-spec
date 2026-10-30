@@ -1,8 +1,4 @@
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from "@grade10/design-system/components/display/tabs";
+
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import {
@@ -35,22 +31,22 @@ type SortKey =
 
 const TABS: { key: ListTab; label: string }[] = [
   { key: "all", label: "All" },
-  { key: "in-vault", label: "In vault" },
-  { key: "live-auction", label: "Live auction" },
+  { key: "in-vault", label: "In Vault" },
+  { key: "live-auction", label: "Live Auction" },
   { key: "listed", label: "Listed" },
 ];
 
 /** Figma `7077:10911` — the sort set is a property of the tab. */
 const SORT_OPTIONS: Record<ListTab, { key: SortKey; label: string }[]> = {
   all: [
-    { key: "highest-estimate", label: "Highest est. value" },
-    { key: "lowest-estimate", label: "Lowest est. value" },
-    { key: "recently-added", label: "Recently added" },
+    { key: "highest-estimate", label: "Highest Est. Value" },
+    { key: "lowest-estimate", label: "Lowest Est. Value" },
+    { key: "recently-added", label: "Recently Added" },
   ],
   "in-vault": [
-    { key: "highest-estimate", label: "Highest est. value" },
-    { key: "lowest-estimate", label: "Lowest est. value" },
-    { key: "recently-added", label: "Recently added" },
+    { key: "highest-estimate", label: "Highest Est. Value" },
+    { key: "lowest-estimate", label: "Lowest Est. Value" },
+    { key: "recently-added", label: "Recently Added" },
   ],
   "live-auction": [
     { key: "ending-soonest", label: "Ending Soonest" },
@@ -166,15 +162,20 @@ function VaultAssetList({
             "flex flex-wrap items-center justify-between gap-3 delay-[90ms]",
           )}
         >
-          <Tabs value={activeTab} onValueChange={(value) => setTab(value as ListTab)}>
-            <TabsList aria-label="Filter holdings" variant="pill">
-              {visibleTabs.map((t) => (
-                <TabsTrigger key={t.key} value={t.key}>
-                  {t.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+          <div aria-label="Filter holdings" className="flex flex-wrap items-center gap-2" role="group">
+            {visibleTabs.map((t) => (
+              <Button
+                aria-pressed={t.key === activeTab}
+                key={t.key}
+                size="md"
+                type="button"
+                variant={t.key === activeTab ? "secondary" : "outline"}
+                onClick={() => setTab(t.key)}
+              >
+                {t.label}
+              </Button>
+            ))}
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -213,7 +214,7 @@ function VaultAssetList({
       <ul
         aria-busy={loading || undefined}
         aria-label={loading ? "Loading vault assets" : undefined}
-        className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        className="grid grid-cols-2 gap-x-4 gap-y-6 lg:gap-x-6 lg:gap-y-8 lg:grid-cols-3 xl:grid-cols-4"
       >
         {filtered.map((asset, index) => (
               <li
