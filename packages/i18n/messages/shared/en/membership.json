@@ -21,6 +21,7 @@
     "title": "Membership",
     "card": "Your member pass",
     "rewards": "Rewards",
+    "rewardsBody": "Swap points for coupons, collecting supplies and vault services.",
     "activity": "Activity",
     "spend": "Spend on your basket",
     "cardUnavailable": "In-store identification is not switched on yet. Nothing to scan — ask a member of staff to look you up by email.",
@@ -28,14 +29,17 @@
     "refresh": "Get a code",
     "loadFailed": "That did not load. Try again.",
     "retry": "Try again",
-    "noRewards": "There is nothing on the menu right now.",
+    "noRewards": "No rewards to redeem right now.",
     "noExpiry": "No expiry",
-    "noActivity": "Nothing has happened on your account yet.",
+    "noActivity": "No points yet",
+    "noActivityBody": "Earn points on what you pay — online or at the till.",
+    "startShopping": "Start shopping",
     "notAMember": "You have not joined the programme yet.",
     "join": "Join the programme",
-    "coupons": "Your coupons",
-    "noCoupons": "You hold no coupons.",
-    "pointHistory": "Point History",
+    "coupons": "Your Coupons",
+    "noCoupons": "No coupons yet",
+    "noCouponsBody": "Coupons you earn or get from the shop appear here.",
+    "pointHistory": "Points History",
     "overview": "Overview",
     "couponsTab": "Coupons",
     "memberPass": "Member Pass"
@@ -77,20 +81,21 @@
     "until": "Until {date}",
     "useAtOnline": "Online store",
     "useAtInStore": "In store",
-    "useAtAnywhere": "Online or in store",
-    "validForDays": "{days, plural, one {# day} other {# days}} from redemption"
+    "useAtAnywhere": "Online or physical store",
+    "validForDays": "{days, plural, one {# day} other {# days}} from redemption",
+    "refresh": "Refresh"
   },
   "checkout": {
     "useAt": "Use at",
     "validFor": "Valid for",
-    "pointBalance": "Point balance",
+    "pointBalance": "Point Balance",
     "pointsNeeded": "Need {points} more pts",
     "redeemFor": "Redeem for {points} pts",
     "cancel": "Cancel",
     "redeemedCouponTitle": "Added to your coupons",
-    "redeemedItemTitle": "Ready to collect",
+    "redeemedItemTitle": "Ready to Collect",
     "done": "Done",
-    "viewCoupons": "View coupons",
+    "viewCoupons": "View Coupons",
     "summary": "{points} pts redeemed · {balance} pts left",
     "useBy": "Use by {date}",
     "collectBy": "Collect by {date}",
@@ -119,11 +124,11 @@
   },
   "activityKind": {
     "earn": "Points earned",
-    "redeem": "Points spent",
-    "pay": "Points put toward a purchase",
+    "redeem": "Redeemed reward",
+    "pay": "Use at checkout",
     "expire": "Points expired",
-    "adjust_credit": "Points added",
-    "adjust_debit": "Points taken off",
+    "adjust_credit": "Points adjusted",
+    "adjust_debit": "Points adjusted",
     "revoke": "Points revoked",
     "reverse": "Points returned",
     "topup": "Points bought",
@@ -133,6 +138,13 @@
     "online": "Online store",
     "in_store": "In store",
     "internal": "Membership programme"
+  },
+  "activitySource": {
+    "purchase": {
+      "online": "Online purchase",
+      "in_store": "In-store purchase"
+    },
+    "redeemed": "Redeemed {reward}"
   },
   "pointHistory": {
     "label": "Point history",
@@ -172,14 +184,19 @@
     "void": "Cancelled",
     "scanTitle": "Use Coupon",
     "expired": "Expired",
-    "validUntil": "Valid until {date}",
+    "validUntil": "Use by {date}",
+    "onlineOnly": "Online only",
     "noExpiry": "No expiry",
-    "percentOff": "{percent}% off"
+    "percentOff": "{percent}% off",
+    "promoTitle": "Want more coupons?",
+    "promoBody": "Turn your points into coupons in Rewards.",
+    "promoAction": "Browse Rewards"
   },
   "tierValidity": {
     "until": "{tier} until {date}",
     "kept": "{until} — you have earned enough to keep it",
-    "earnMore": "{until} — earn {remaining} more points by then to keep it"
+    "earnMore": "Earn {remaining}+ pts by {date} to stay {tier}",
+    "earnToUpgrade": "Earn {remaining}+ pts by {date} to upgrade"
   },
   "present": {
     "action": "Use at the counter",

@@ -21,6 +21,7 @@
     "title": "멤버십",
     "card": "회원 패스",
     "rewards": "리워드",
+    "rewardsBody": "포인트를 쿠폰, 수집 용품, 보관 서비스로 교환하세요.",
     "activity": "내역",
     "spend": "장바구니에 사용",
     "cardUnavailable": "매장 인증이 아직 열리지 않아 스캔할 코드가 없습니다. 매장 직원에게 이메일로 조회를 요청해 주세요.",
@@ -30,11 +31,14 @@
     "retry": "다시 시도",
     "noRewards": "지금은 교환할 리워드가 없습니다.",
     "noExpiry": "유효기간 없음",
-    "noActivity": "계정에 아직 내역이 없습니다.",
+    "noActivity": "아직 포인트가 없습니다",
+    "noActivityBody": "온라인이나 매장에서 결제한 금액만큼 포인트가 적립됩니다.",
+    "startShopping": "쇼핑 시작하기",
     "notAMember": "아직 프로그램에 가입하지 않았습니다.",
     "join": "프로그램 가입",
     "coupons": "내 쿠폰",
-    "noCoupons": "보유한 쿠폰이 없습니다.",
+    "noCoupons": "아직 쿠폰이 없습니다",
+    "noCouponsBody": "획득하거나 스토어에서 받은 쿠폰이 여기에 표시됩니다.",
     "pointHistory": "포인트 내역",
     "overview": "개요",
     "couponsTab": "쿠폰",
@@ -78,7 +82,8 @@
     "useAtOnline": "온라인 스토어",
     "useAtInStore": "매장",
     "useAtAnywhere": "온라인 또는 매장",
-    "validForDays": "교환 후 {days}일"
+    "validForDays": "교환 후 {days}일",
+    "refresh": "새로고침"
   },
   "checkout": {
     "useAt": "사용처",
@@ -119,11 +124,11 @@
   },
   "activityKind": {
     "earn": "포인트 적립",
-    "redeem": "포인트 사용",
-    "pay": "구매에 사용한 포인트",
+    "redeem": "리워드 교환",
+    "pay": "결제 시 사용",
     "expire": "포인트 만료",
-    "adjust_credit": "포인트 추가",
-    "adjust_debit": "포인트 차감",
+    "adjust_credit": "포인트 조정",
+    "adjust_debit": "포인트 조정",
     "revoke": "포인트 회수",
     "reverse": "포인트 반환",
     "topup": "포인트 구매",
@@ -133,6 +138,13 @@
     "online": "온라인 스토어",
     "in_store": "매장",
     "internal": "멤버십 프로그램"
+  },
+  "activitySource": {
+    "purchase": {
+      "online": "온라인 구매",
+      "in_store": "매장 구매"
+    },
+    "redeemed": "{reward} 교환"
   },
   "pointHistory": {
     "label": "포인트 내역",
@@ -172,14 +184,19 @@
     "void": "취소됨",
     "scanTitle": "쿠폰 사용",
     "expired": "기한 만료",
-    "validUntil": "{date}까지 유효",
+    "validUntil": "{date}까지 사용",
+    "onlineOnly": "온라인 전용",
     "noExpiry": "유효기간 없음",
-    "percentOff": "{percent}% 할인"
+    "percentOff": "{percent}% 할인",
+    "promoTitle": "쿠폰이 더 필요하신가요?",
+    "promoBody": "리워드에서 포인트를 쿠폰으로 교환하세요.",
+    "promoAction": "리워드 둘러보기"
   },
   "tierValidity": {
     "until": "{tier} 등급 {date}까지",
     "kept": "{until} — 유지에 필요한 포인트를 이미 적립했습니다",
-    "earnMore": "{until} — 그때까지 {remaining}P를 더 적립하면 유지됩니다"
+    "earnMore": "{date}까지 {remaining}P 이상 적립하면 {tier} 등급이 유지됩니다",
+    "earnToUpgrade": "{date}까지 {remaining}P 이상 적립하면 승급합니다"
   },
   "present": {
     "action": "카운터에서 사용",

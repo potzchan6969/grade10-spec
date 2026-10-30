@@ -31,6 +31,7 @@ import grade10EnEmail from "../messages/grade10/en/email.json";
 import grade10EnHead from "../messages/grade10/en/head.json";
 import grade10EnIdentity from "../messages/grade10/en/identity.json";
 import grade10EnMarketing from "../messages/grade10/en/marketing.json";
+import grade10EnMembership from "../messages/grade10/en/membership.json";
 import grade10EnOrderDetail from "../messages/grade10/en/orderDetail.json";
 import grade10EnOrderHistory from "../messages/grade10/en/orderHistory.json";
 import grade10EnProduct from "../messages/grade10/en/product.json";
@@ -46,6 +47,7 @@ import grade10ZhHansEmail from "../messages/grade10/zh-Hans/email.json";
 import grade10ZhHansHead from "../messages/grade10/zh-Hans/head.json";
 import grade10ZhHansIdentity from "../messages/grade10/zh-Hans/identity.json";
 import grade10ZhHansMarketing from "../messages/grade10/zh-Hans/marketing.json";
+import grade10ZhHansMembership from "../messages/grade10/zh-Hans/membership.json";
 import grade10ZhHansOrderDetail from "../messages/grade10/zh-Hans/orderDetail.json";
 import grade10ZhHansOrderHistory from "../messages/grade10/zh-Hans/orderHistory.json";
 import grade10ZhHansProduct from "../messages/grade10/zh-Hans/product.json";
@@ -61,6 +63,7 @@ import grade10ZhHantEmail from "../messages/grade10/zh-Hant/email.json";
 import grade10ZhHantHead from "../messages/grade10/zh-Hant/head.json";
 import grade10ZhHantIdentity from "../messages/grade10/zh-Hant/identity.json";
 import grade10ZhHantMarketing from "../messages/grade10/zh-Hant/marketing.json";
+import grade10ZhHantMembership from "../messages/grade10/zh-Hant/membership.json";
 import grade10ZhHantOrderDetail from "../messages/grade10/zh-Hant/orderDetail.json";
 import grade10ZhHantOrderHistory from "../messages/grade10/zh-Hant/orderHistory.json";
 import grade10ZhHantProduct from "../messages/grade10/zh-Hant/product.json";
@@ -350,6 +353,7 @@ export const grade10En = {
   head: grade10EnHead,
   identity: grade10EnIdentity,
   marketing: grade10EnMarketing,
+  membership: grade10EnMembership,
   orderDetail: grade10EnOrderDetail,
   orderHistory: grade10EnOrderHistory,
   product: grade10EnProduct,
@@ -368,6 +372,7 @@ export const grade10ZhHant = {
   head: grade10ZhHantHead,
   identity: grade10ZhHantIdentity,
   marketing: grade10ZhHantMarketing,
+  membership: grade10ZhHantMembership,
   orderDetail: grade10ZhHantOrderDetail,
   orderHistory: grade10ZhHantOrderHistory,
   product: grade10ZhHantProduct,
@@ -386,6 +391,7 @@ export const grade10ZhHans = {
   head: grade10ZhHansHead,
   identity: grade10ZhHansIdentity,
   marketing: grade10ZhHansMarketing,
+  membership: grade10ZhHansMembership,
   orderDetail: grade10ZhHansOrderDetail,
   orderHistory: grade10ZhHansOrderHistory,
   product: grade10ZhHansProduct,

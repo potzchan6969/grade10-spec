@@ -21,6 +21,7 @@
     "title": "會員",
     "card": "你的會員通行證",
     "rewards": "獎賞",
+    "rewardsBody": "用積分兌換優惠券、收藏用品及保管服務。",
     "activity": "紀錄",
     "spend": "用於購物車",
     "cardUnavailable": "門市認證尚未開通，暫時沒有可掃描的碼——請門市同事以電郵為你查閱。",
@@ -30,11 +31,14 @@
     "retry": "再試一次",
     "noRewards": "目前沒有可換的獎賞。",
     "noExpiry": "沒有期限",
-    "noActivity": "你的帳戶尚未有任何紀錄。",
+    "noActivity": "尚未有積分",
+    "noActivityBody": "按實付金額賺取積分——網店或門市消費皆可。",
+    "startShopping": "開始購物",
     "notAMember": "你尚未加入此計劃。",
     "join": "加入計劃",
     "coupons": "你的優惠券",
-    "noCoupons": "你沒有持有優惠券。",
+    "noCoupons": "尚未有優惠券",
+    "noCouponsBody": "你賺取或從商店獲得的優惠券會顯示在這裡。",
     "pointHistory": "積分紀錄",
     "overview": "概覽",
     "couponsTab": "優惠券",
@@ -78,7 +82,8 @@
     "useAtOnline": "網店",
     "useAtInStore": "門市",
     "useAtAnywhere": "網店或門市",
-    "validForDays": "兌換後 {days} 天"
+    "validForDays": "兌換後 {days} 天",
+    "refresh": "更新"
   },
   "checkout": {
     "useAt": "使用地點",
@@ -119,11 +124,11 @@
   },
   "activityKind": {
     "earn": "賺取積分",
-    "redeem": "使用積分",
-    "pay": "積分用於付款",
+    "redeem": "兌換獎賞",
+    "pay": "結帳時使用",
     "expire": "積分已過期",
-    "adjust_credit": "積分已增加",
-    "adjust_debit": "積分已扣除",
+    "adjust_credit": "積分調整",
+    "adjust_debit": "積分調整",
     "revoke": "積分已撤回",
     "reverse": "積分已退回",
     "topup": "購買積分",
@@ -133,6 +138,13 @@
     "online": "網店",
     "in_store": "門市",
     "internal": "會員計劃"
+  },
+  "activitySource": {
+    "purchase": {
+      "online": "網店購物",
+      "in_store": "門市購物"
+    },
+    "redeemed": "已兌換{reward}"
   },
   "pointHistory": {
     "label": "積分紀錄",
@@ -172,14 +184,19 @@
     "void": "已取消",
     "scanTitle": "使用優惠券",
     "expired": "已過期",
-    "validUntil": "有效至 {date}",
+    "validUntil": "{date} 前使用",
+    "onlineOnly": "只限網店使用",
     "noExpiry": "沒有期限",
-    "percentOff": "{percent}% 折扣"
+    "percentOff": "{percent}% 折扣",
+    "promoTitle": "想要更多優惠券？",
+    "promoBody": "在「獎賞」用積分兌換優惠券。",
+    "promoAction": "瀏覽獎賞"
   },
   "tierValidity": {
     "until": "{tier} 有效至 {date}",
     "kept": "{until}——你已累積足夠積分保留此等級",
-    "earnMore": "{until}——屆時再累積 {remaining} 分即可保留"
+    "earnMore": "於 {date} 前賺取 {remaining}+ 分即可保持{tier}",
+    "earnToUpgrade": "於 {date} 前賺取 {remaining}+ 分即可升級"
   },
   "present": {
     "action": "在櫃檯使用",

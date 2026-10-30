@@ -21,6 +21,7 @@
     "title": "会员",
     "card": "你的会员通行证",
     "rewards": "奖励",
+    "rewardsBody": "用积分兑换优惠券、收藏用品及保管服务。",
     "activity": "记录",
     "spend": "用于购物车",
     "cardUnavailable": "门店认证尚未开通，暂时没有可扫描的码——请门店店员用邮箱为你查询。",
@@ -30,11 +31,14 @@
     "retry": "再试一次",
     "noRewards": "目前没有可兑换的奖励。",
     "noExpiry": "没有期限",
-    "noActivity": "你的账户尚未有任何记录。",
+    "noActivity": "尚未有积分",
+    "noActivityBody": "按实付金额赚取积分——网店或门店消费均可。",
+    "startShopping": "开始购物",
     "notAMember": "你尚未加入此计划。",
     "join": "加入计划",
     "coupons": "你的优惠券",
-    "noCoupons": "你没有持有优惠券。",
+    "noCoupons": "尚未有优惠券",
+    "noCouponsBody": "你赚取或从商店获得的优惠券会显示在这里。",
     "pointHistory": "积分记录",
     "overview": "概览",
     "couponsTab": "优惠券",
@@ -78,7 +82,8 @@
     "useAtOnline": "网店",
     "useAtInStore": "门店",
     "useAtAnywhere": "网店或门店",
-    "validForDays": "兑换后 {days} 天"
+    "validForDays": "兑换后 {days} 天",
+    "refresh": "更新"
   },
   "checkout": {
     "useAt": "使用地点",
@@ -119,11 +124,11 @@
   },
   "activityKind": {
     "earn": "赚取积分",
-    "redeem": "使用积分",
-    "pay": "积分用于付款",
+    "redeem": "兑换奖励",
+    "pay": "结账时使用",
     "expire": "积分已过期",
-    "adjust_credit": "积分已增加",
-    "adjust_debit": "积分已扣除",
+    "adjust_credit": "积分调整",
+    "adjust_debit": "积分调整",
     "revoke": "积分已撤回",
     "reverse": "积分已退回",
     "topup": "购买积分",
@@ -133,6 +138,13 @@
     "online": "网店",
     "in_store": "门店",
     "internal": "会员计划"
+  },
+  "activitySource": {
+    "purchase": {
+      "online": "网店购物",
+      "in_store": "门店购物"
+    },
+    "redeemed": "已兑换{reward}"
   },
   "pointHistory": {
     "label": "积分记录",
@@ -172,14 +184,19 @@
     "void": "已取消",
     "scanTitle": "使用优惠券",
     "expired": "已过期",
-    "validUntil": "有效至 {date}",
+    "validUntil": "{date} 前使用",
+    "onlineOnly": "只限网店使用",
     "noExpiry": "没有期限",
-    "percentOff": "{percent}% 折扣"
+    "percentOff": "{percent}% 折扣",
+    "promoTitle": "想要更多优惠券？",
+    "promoBody": "在“奖励”用积分兑换优惠券。",
+    "promoAction": "浏览奖励"
   },
   "tierValidity": {
     "until": "{tier} 有效至 {date}",
     "kept": "{until}——你已累计足够积分保留此等级",
-    "earnMore": "{until}——届时再累计 {remaining} 分即可保留"
+    "earnMore": "在 {date} 前赚取 {remaining}+ 分即可保持{tier}",
+    "earnToUpgrade": "在 {date} 前赚取 {remaining}+ 分即可升级"
   },
   "present": {
     "action": "在柜台使用",
