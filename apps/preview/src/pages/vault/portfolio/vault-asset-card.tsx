@@ -45,7 +45,7 @@ function VaultAssetCardBody({ asset }: { asset: VaultAsset }) {
           <p className="w-full text-sm text-secondary-foreground">
             {gradeLine(asset)}
           </p>
-          <p className="line-clamp-2 w-full text-lg leading-7 font-medium text-foreground underline-offset-2 group-hover/vault-card:underline">
+          <p className="line-clamp-2 w-full text-base leading-6 font-medium text-foreground underline-offset-2 group-hover/vault-card:underline">
             {asset.name}
           </p>
         </div>

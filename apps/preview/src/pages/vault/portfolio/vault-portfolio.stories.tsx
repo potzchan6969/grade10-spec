@@ -109,7 +109,7 @@ function VaultPortfolioPage({
           value={pageTab}
           onValueChange={(value) => setPageTab(value as "assets" | "rewards")}
         >
-          <StickyTabBar>
+          <StickyTabBar className="border-b-0 pb-0">
             <TabsList aria-label="Portfolio sections" className="w-full justify-start border-b border-border" variant="list">
             <TabsTrigger value="assets">
               Assets
