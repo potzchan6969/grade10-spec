@@ -6,7 +6,6 @@ import { TopUpPicker } from "../top-up-flow";
 import {
   LEFT_TODAY,
   MEMBER_BALANCE,
-  REVIEW_THRESHOLD,
   TOP_UP_COPY,
   type TopUpPack,
 } from "./top-ups-content";
@@ -16,8 +15,6 @@ import {
  * Pay leaves for Stripe, and these are where Stripe sends the member back. */
 const POINTS_ADDED_STORY_ID =
   "loyalty-top-ups-screens-top-up-result--points-added";
-const UNDER_REVIEW_STORY_ID =
-  "loyalty-top-ups-screens-top-up-result--under-review";
 
 /** Pack pre-selected in the state a member reaches after submitting. */
 const PRESET_PACK_ID = "pack-10k";
@@ -69,7 +66,7 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
     setOpen(true);
   };
 
-  const onContinue = (selectedPack: TopUpPack) => {
+  const onContinue = () => {
     if (busy) return;
     setBusy(true);
     window.setTimeout(() => {
@@ -80,11 +77,7 @@ function TopUpDialogPrototype({ state }: { state: TopUpDialogState }) {
         });
         return;
       }
-      navigateToStory(
-        selectedPack.points > REVIEW_THRESHOLD
-          ? UNDER_REVIEW_STORY_ID
-          : POINTS_ADDED_STORY_ID,
-      );
+      navigateToStory(POINTS_ADDED_STORY_ID);
     }, 600);
   };
 

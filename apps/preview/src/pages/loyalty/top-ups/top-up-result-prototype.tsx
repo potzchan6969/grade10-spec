@@ -1,10 +1,6 @@
 import { Toast } from "@grade10/design-system/components/overlays/toast";
 import { useEffect } from "react";
-import {
-  MEMBERSHIP_STORY_ID,
-  navigateToStory,
-  storyHref,
-} from "../../workbench-story-nav";
+import { navigateToStory } from "../../workbench-story-nav";
 
 import {
   TopUpConfirming,
@@ -29,7 +25,6 @@ function TopUpResultPrototype({ state }: { state: TopUpResultState }) {
     topUpResultToast(state, {
       addedPoints: 1000,
       balanceAfter: 2200,
-      historyHref: `${storyHref(MEMBERSHIP_STORY_ID)}&tab=points`,
       onRetry: () => navigateToStory(TOP_UP_DIALOG_STORY_ID),
     });
   }, [state]);

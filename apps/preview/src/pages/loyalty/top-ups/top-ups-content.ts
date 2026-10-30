@@ -23,17 +23,10 @@ export const TOP_UP_PACKS: readonly TopUpPack[] = [
   { id: "pack-100k", points: 100_000, discountPercent: 12 },
 ];
 
-/** A pack strictly above this many points is reviewed before it is
- * credited — the edge case; every smaller pack lands straight away. */
-export const REVIEW_THRESHOLD = 50_000;
-
 /** Points still allowed today in the over-limit state. */
 export const LEFT_TODAY = 8_000;
 
 export const MEMBER_BALANCE = { total: 1_200 };
-
-/** The reference a held top-up reads back, on the result and its history row. */
-export const UNDER_REVIEW_REFERENCE = "TU-2026-0384";
 
 /** Crumb labels every top-ups surface shares. */
 export const TOP_UPS_BREADCRUMBS = {
@@ -102,15 +95,9 @@ export const TOP_UP_RESULT_COPY = {
     title: (added: number) => `${points(added)} added`,
     balance: (total: number) => `New balance: ${points(total)}`,
   },
-  underReview: {
-    title: "Top-up under review",
-    description: "Your card is charged only if it’s approved.",
-    reference: (ref: string) => `Reference ${ref}`,
-    history: "View in Points History",
-  },
-  notApproved: {
-    title: "Top-up not approved",
-    description: "You haven’t been charged.",
+  stillConfirming: {
+    title: "Still confirming your payment",
+    description: "Your points will show in Points History once it clears.",
   },
   notCompleted: {
     title: "Payment not completed",
