@@ -321,5 +321,32 @@
       "expiryTitle": "到期",
       "expiryBody": "连续 {months} 个月没有活动，积分便会到期。我们会在到期前 {days} 天提醒你。"
     }
+  },
+  "topUp": {
+    "button": "充值积分",
+    "title": "充值积分",
+    "subtitle": "结账时 1 积分可抵 {worth}，也可兑换奖励和优惠券。",
+    "packsLegend": "选择套餐",
+    "unit": "分",
+    "overLimit": "超出今日上限",
+    "packUnavailable": "暂不可用",
+    "balance": "余额",
+    "balanceAfter": "充值后余额",
+    "balanceTo": "至",
+    "balancePoints": "{points} 分",
+    "continue": "立即支付",
+    "pay": "支付 {price}",
+    "opening": "正在跳转…",
+    "secured": "由 Stripe 保障安全",
+    "startFailed": "无法打开结账页面。你未被扣款。",
+    "confirmingTitle": "正在确认付款…",
+    "confirmingBody": "请保持此页面打开。",
+    "addedTitle": "已充值 {points} 积分",
+    "addedBody": "新余额：{balance} 积分",
+    "notCompletedTitle": "付款未完成",
+    "notCompletedBody": "你未被扣款。",
+    "tryAgain": "重试",
+    "stillConfirmingTitle": "仍在确认付款",
+    "stillConfirmingBody": "付款完成后，积分将显示在积分记录中。"
   }
 }
