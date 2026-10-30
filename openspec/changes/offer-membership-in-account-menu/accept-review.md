@@ -40,3 +40,7 @@ Bounded rerun on the prior ledger `a203e924b` (reviewed 03056a172), its repair d
 | Change `proposal.md`, `decisions.md`, `tech-design.md`, `tasks.md`, `.openspec.yaml`, delta `spec.md`, `user-journeys.md`; the suite's cases | unchanged since 03056a172 | Page to delta, Same facts, Nothing open, Designs, Journeys and cases | a203e924b at 03056a172 |
 | Pages: Page Shell, Site Header and Footer Account Entry, Membership :1-43 | unchanged since 03056a172 | Page to delta, Same facts, Nothing open | a203e924b at 03056a172 |
 | Related contract `shared/ui/site-chrome`, overlap `restrict-auctions-by-region`, catalogs `packages/i18n/messages/grade10/*/chrome.json`, fold code `scripts/openspec/lib/acceptance.mjs`, grade10 draft `SiteShell.tsx` and tests | unchanged since 03056a172 (origin/main unmoved) | Same facts across capabilities; Overlap; rows 3, 4 | a203e924b at 03056a172 |
+
+## Rebased
+
+Before the store PR, the branch was rebased onto `910e3de6b`, which touches nothing in scope. The SHAs above map as `03056a172` → `c85602469`, `a203e924b` → `ddc3b2591`, `d1464add5` → `fef2be39b`, `1e95c7209` → `6b4497c64`, `e07ffd296` → `e8d637d6b`. The fingerprint `33b3f3eb` and baseline `83ce6b32` are content digests and did not move.
