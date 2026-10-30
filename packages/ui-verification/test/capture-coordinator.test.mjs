@@ -163,7 +163,10 @@ async function setup(t, { cases = 2, failOn, commits } = {}) {
     storage: memoryStorage(),
     archive,
     now: () => clock.time,
-    newId: () => `id-${(ids += 1)}`,
+    newId: () => {
+      ids += 1;
+      return `id-${ids}`;
+    },
     setAlarm: (time) => alarms.push(time),
     openSession: async () => ({
       browser: "chromium test",

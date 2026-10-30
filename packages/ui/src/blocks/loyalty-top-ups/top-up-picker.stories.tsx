@@ -74,7 +74,9 @@ export const Default: Story = {
         within(dialog).getByRole("button", { name: "Pay HK$4,850" }),
       ).toBeEnabled(),
     );
-    expect(within(dialog).getByText("6,200 pt")).toBeVisible();
+    await waitFor(() =>
+      expect(within(dialog).getByText("6,200 pt")).toBeVisible(),
+    );
     await userEvent.click(
       within(dialog).getByRole("button", { name: "Pay HK$4,850" }),
     );

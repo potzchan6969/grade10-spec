@@ -1,3 +1,4 @@
+import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { ArrowsClockwise, FilePdf, X } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -97,6 +98,72 @@ export const States: Story = {
       canvas.getByRole("button", { name: "Remove receipt.pdf" }),
     ).toBeVisible();
   },
+};
+
+/** Row sizes - default and xs. */
+export const Sizes: Story = {
+  name: "Sizes",
+  render: () => (
+    <VStack className="w-full max-w-md" gap="sm" hAlign="stretch">
+      <Attachment className="w-full" size="default">
+        <AttachmentMedia aria-hidden>
+          <FilePdf size={16} weight="regular" />
+        </AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>default.pdf</AttachmentTitle>
+        </AttachmentContent>
+      </Attachment>
+      <Attachment className="w-full" size="xs">
+        <AttachmentMedia aria-hidden>
+          <FilePdf size={16} weight="regular" />
+        </AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>xs.pdf</AttachmentTitle>
+        </AttachmentContent>
+      </Attachment>
+    </VStack>
+  ),
+};
+
+/** Layout - a horizontal row and a vertical tile. */
+export const Orientations: Story = {
+  name: "Orientations",
+  render: () => (
+    <HStack gap="sm" vAlign="start">
+      <Attachment orientation="horizontal">
+        <AttachmentMedia aria-hidden>
+          <FilePdf size={16} weight="regular" />
+        </AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>horizontal.pdf</AttachmentTitle>
+        </AttachmentContent>
+      </Attachment>
+      <Attachment orientation="vertical">
+        <AttachmentMedia aria-hidden>
+          <FilePdf size={16} weight="regular" />
+        </AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>vertical.pdf</AttachmentTitle>
+        </AttachmentContent>
+      </Attachment>
+    </HStack>
+  ),
+};
+
+/** Thumbnail well holding an image preview. */
+export const ImageMedia: Story = {
+  name: "Image media",
+  render: () => (
+    <Attachment className="w-full max-w-md">
+      <AttachmentMedia variant="image">
+        <img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" />
+      </AttachmentMedia>
+      <AttachmentContent>
+        <AttachmentTitle>photo.png</AttachmentTitle>
+        <AttachmentDescription>PNG · 380 KB</AttachmentDescription>
+      </AttachmentContent>
+    </Attachment>
+  ),
 };
 
 /** Compact horizontal strip with snapping scroll. */

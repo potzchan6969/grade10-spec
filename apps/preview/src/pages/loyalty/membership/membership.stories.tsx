@@ -46,6 +46,10 @@ export const TopUp: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const overlay = within(document.body);
+    const before = {
+      html: document.documentElement.style.overflow,
+      body: document.body.style.overflow,
+    };
     await userEvent.click(
       canvas.getByRole("button", { name: "Top-up Points" }),
     );
@@ -70,11 +74,16 @@ export const TopUp: Story = {
       expect(overlay.queryByRole("dialog")).not.toBeInTheDocument(),
     );
     /* The picker's and result's scroll locks must both release — a stuck
-     * "hidden" would leave the page unscrollable. */
-    await waitFor(() =>
-      expect(document.documentElement.style.overflow).not.toBe("hidden"),
+     * "hidden" would leave the page unscrollable. The page may already be
+     * locked by an earlier story, so the check is that this flow gives back
+     * what it found. */
+    await waitFor(
+      () => {
+        expect(document.documentElement.style.overflow).toBe(before.html);
+        expect(document.body.style.overflow).toBe(before.body);
+      },
+      { timeout: 3000 },
     );
-    expect(document.body.style.overflow).not.toBe("hidden");
     expect(canvas.getByText("11,250")).toBeInTheDocument();
   },
 };

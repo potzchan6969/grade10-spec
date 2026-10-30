@@ -75,7 +75,7 @@
     "classes": "min-w-0 text-foreground"
   },
   {
-    "label": "reward-menu/price",
+    "label": "reward-item/price",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7330-929",
     "classes": "shrink-0 items-end justify-center text-right font-semibold"
   },
@@ -90,14 +90,14 @@
     "classes": "w-full items-center justify-between rounded-2xl px-4 py-3 bg-muted"
   },
   {
-    "label": "reward-menu/card-row",
+    "label": "reward-item/card-row",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7254:2284",
-    "classes": "flex w-full items-center gap-4 border border-border bg-card"
+    "classes": "flex w-full items-center gap-4 border-border"
   },
   {
-    "label": "reward-menu/coupon-card-row",
+    "label": "reward-item/coupon-card-row",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7330:1106",
-    "classes": "flex w-full items-center gap-4 border border-border bg-card"
+    "classes": "flex w-full items-center gap-4 border-border"
   },
   {
     "label": "reward-art/hero",
@@ -110,7 +110,7 @@
     "classes": "object-contain rounded-(--radius-lg) bg-muted"
   },
   {
-    "label": "reward-menu/card-hover",
+    "label": "reward-item/card-hover",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7330-1129",
     "classes": "bg-background-subtle border-border"
   }

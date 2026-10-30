@@ -29,6 +29,12 @@ const PROFILE_SIZES = {
   mobile: { width: 390, height: 844 },
 };
 const GRADE10_LOCALES = ["en", "zh-Hant", "zh-Hans"];
+/** The locale tabs carry the short names; the long names stay in the metadata. */
+const LOCALE_TAB_NAMES = {
+  en: "English",
+  "zh-Hant": "繁中",
+  "zh-Hans": "简中",
+};
 const LOCALE_LABELS = {
   en: "English",
   "zh-Hant": "Traditional Chinese",
@@ -599,6 +605,17 @@ const PROFILE_LABELS = {
   mobile: "Mobile",
 };
 
+/** The panel shows one size at a time: pick the size tab, then read its evidence. */
+async function sizeRegion(page, profileId) {
+  await page
+    .locator(".verification-size-tab")
+    .filter({ hasText: PROFILE_LABELS[profileId] })
+    .click();
+  return page.getByRole("region", {
+    name: `${PROFILE_LABELS[profileId]} evidence`,
+  });
+}
+
 async function startPanel(browser, server, storyId = STORY_ID) {
   const page = await browser.newPage();
   await page.goto(`${server.origin}/?path=/story/${storyId}`, {
@@ -766,9 +783,7 @@ test("the central workbench shows the newest run of a version at all three sizes
     "the full original reference PNG should remain downloadable",
   );
   for (const profileId of ["tablet", "mobile"]) {
-    const region = page.getByRole("region", {
-      name: `${PROFILE_LABELS[profileId]} evidence`,
-    });
+    const region = await sizeRegion(page, profileId);
     await waitForImageDimensions(
       region,
       "Site full viewport",
@@ -781,29 +796,19 @@ test("the central workbench shows the newest run of a version at all three sizes
     );
   }
   assert.equal(
-    await page.getByRole("tab", { name: /^(Desktop|Tablet|Mobile)/ }).count(),
-    0,
-    "the three sizes are shown together, not behind tabs",
-  );
-
-  assert.equal(
-    await page.getByText("Not compared", { exact: true }).count(),
+    await page.locator(".verification-size-tab").count(),
     3,
+    "the sizes are tabs, each carrying its own status",
   );
-  await page
-    .locator(".verification-controls")
-    .getByRole("button", { name: "Compare pixels" })
-    .click();
   await waitForCondition(
     async () =>
       (await page.getByText("Size differs", { exact: true }).count()) === 3,
-    "a size mismatch for each recorded anchor",
+    "a size mismatch for each recorded anchor, compared once its images arrive",
   );
-  assert.equal(
-    await page.getByText(/The anchors differ in size/).count(),
-    3,
-    "unequal anchors explain themselves instead of resizing",
-  );
+  for (const profileId of Object.keys(PROFILE_SIZES)) {
+    const region = await sizeRegion(page, profileId);
+    await region.getByText(/The anchors differ in size/).waitFor();
+  }
   await page.close();
 });
 
@@ -842,9 +847,7 @@ test("pixel comparison crops to the anchor and draws the diff in the browser", {
   );
   await compareAll.click();
   for (const [profileId, viewport] of Object.entries(PROFILE_SIZES)) {
-    const region = page.getByRole("region", {
-      name: `${PROFILE_LABELS[profileId]} evidence`,
-    });
+    const region = await sizeRegion(page, profileId);
     await waitForImageDimensions(region, "Pixel difference overlay", viewport);
     assert.match(
       await region.locator(".verification-chip").first().innerText(),
@@ -854,14 +857,14 @@ test("pixel comparison crops to the anchor and draws the diff in the browser", {
     await region.getByRole("button", { name: "Recompare" }).waitFor();
   }
   const outcomes = await page
-    .locator(".verification-status-card .verification-chip")
+    .locator(".verification-size-tab strong")
     .allInnerTexts();
   assert.equal(outcomes.length, 3);
   for (const outcome of outcomes) {
-    assert.match(outcome, /differ$/, "each size reports its own result");
+    assert.match(outcome, /^Diff \d/, "each size reports its own result");
   }
   assert.ok(
-    (await page.locator(".verification-diff-box").count()) >= 3,
+    (await page.locator(".verification-diff-box").count()) >= 1,
     "differing areas are boxed on the overlay",
   );
   await page.close();
@@ -1179,7 +1182,7 @@ test("locale selection shows the exact localized evidence for all three sizes", 
   assert.equal(localeTabCount, 3);
   assert.equal(
     await page
-      .getByRole("tab", { name: "English (en)" })
+      .getByRole("tab", { name: LOCALE_TAB_NAMES.en, exact: true })
       .getAttribute("aria-selected"),
     "true",
   );
@@ -1195,7 +1198,10 @@ test("locale selection shows the exact localized evidence for all three sizes", 
       );
   for (const locale of GRADE10_LOCALES) {
     const localeName = `${LOCALE_LABELS[locale]} (${locale})`;
-    const localeTab = page.getByRole("tab", { name: localeName });
+    const localeTab = page.getByRole("tab", {
+      name: LOCALE_TAB_NAMES[locale],
+      exact: true,
+    });
     await localeTab.click();
     await waitForCondition(
       async () => (await localeTab.getAttribute("aria-selected")) === "true",
@@ -1207,9 +1213,7 @@ test("locale selection shows the exact localized evidence for all three sizes", 
       `${localeName} locale metadata`,
     );
     for (const [profileId, viewport] of Object.entries(PROFILE_SIZES)) {
-      const region = page.getByRole("region", {
-        name: `${PROFILE_LABELS[profileId]} evidence`,
-      });
+      const region = await sizeRegion(page, profileId);
       const expectedCapture = manifest.captures.find(
         (capture) =>
           capture.caseId === declaration.caseId &&
@@ -1318,7 +1322,7 @@ test("new locale subsets stay exact while legacy English runs show missing evide
     );
   await page.getByRole("region", { name: "Run provenance" }).waitFor();
   await page
-    .getByRole("tab", { name: "English (en)" })
+    .getByRole("tab", { name: LOCALE_TAB_NAMES.en, exact: true })
     .waitFor({ state: "visible" });
   assert.equal(
     await page
@@ -1330,7 +1334,7 @@ test("new locale subsets stay exact while legacy English runs show missing evide
   );
   assert.equal(
     await page
-      .getByRole("tab", { name: "English (en)" })
+      .getByRole("tab", { name: LOCALE_TAB_NAMES.en, exact: true })
       .getAttribute("aria-selected"),
     "true",
   );
@@ -1340,7 +1344,8 @@ test("new locale subsets stay exact while legacy English runs show missing evide
     .getByRole("combobox", { name: "Compared version" })
     .selectOption(JSON.stringify(["e".repeat(40), "f".repeat(40)]));
   const traditionalTab = page.getByRole("tab", {
-    name: "Traditional Chinese (zh-Hant)",
+    name: LOCALE_TAB_NAMES["zh-Hant"],
+    exact: true,
   });
   await traditionalTab.waitFor({ state: "visible" });
   assert.equal(
@@ -1363,7 +1368,9 @@ test("new locale subsets stay exact while legacy English runs show missing evide
     0,
     "the panel must not reuse the English image for a missing locale",
   );
-  await page.getByRole("tab", { name: "English (en)" }).click();
+  await page
+    .getByRole("tab", { name: LOCALE_TAB_NAMES.en, exact: true })
+    .click();
   await page.getByRole("img", { name: "Site full viewport" }).first().waitFor();
   assert(
     server.apiRequests.some(
@@ -1422,7 +1429,8 @@ test("run discovery includes a manifest whose only locale is Traditional Chinese
     1,
   );
   const traditionalTab = page.getByRole("tab", {
-    name: "Traditional Chinese (zh-Hant)",
+    name: LOCALE_TAB_NAMES["zh-Hant"],
+    exact: true,
   });
   await waitForCondition(
     async () => (await traditionalTab.getAttribute("aria-selected")) === "true",
@@ -1588,6 +1596,10 @@ test("a shared story without a verification parameter finds its reference case a
       .length > 1,
     "story discovery should follow every run-history cursor",
   );
+  await page
+    .getByRole("region", { name: "Run provenance" })
+    .locator("summary")
+    .click();
   await page
     .getByText("design-system-display-breadcrumbs--previous-name", {
       exact: true,
