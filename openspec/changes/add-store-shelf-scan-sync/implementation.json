@@ -49,6 +49,65 @@
         "tcg-ar",
         "web"
       ]
+    },
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "78f919edd3a7fce2533d78525bcf815e6c89483b",
+      "components": [],
+      "scope": "no-runtime",
+      "reason": "Group 1 updates only the Store shelf-scanning code map and task record; it introduces no runtime component."
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@kinisworking",
+    "reviewedAt": "2026-10-30T04:08:09.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The store owner retired the durable Store TCS files in the accepted suite migration. This acknowledgement records that loss of suite coverage; it does not claim those removed cases are replaced.",
+        "evidence": [
+          "grade10-spec commit 2c89e48b12bfe0872d2441d40f55398d10d91bb3 explicitly deleted the suites under openspec at the owner’s request.",
+          "docs/prds/products/grade10-site/store/tests/domain-tcs.md lists its current capability scope, which excludes shelf-scanning."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/shelf-scanning/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The store owner retired the shelf-scanning durable TCS file in the accepted suite migration. The current PRD suite inventory has no shelf-scanning suite, so this acknowledgement does not claim its removed cases are replaced.",
+        "evidence": [
+          "grade10-spec commit 2c89e48b12bfe0872d2441d40f55398d10d91bb3 explicitly deleted this file and states that cases not retained in the PRD suites were not carried.",
+          "The merged implementation at grade10/9gag commit f5c735cc0a92f1ff7ba7418ec9155b3488d6b3cb includes scanner E2E and service-level test suites."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/shelf-scanning/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The current accepted contract changes photo learning from hourly to every two hours, matching the delivered schedule.",
+        "evidence": [
+          "docs/prds/products/grade10-site/store/shelf-scanning.md states that the scanner learns unseen photos every two hours.",
+          "grade10/9gag .github/workflows/tcg-ar-ops.yml schedules the photo task at 17 */2 * * *.",
+          "The merged implementation at grade10/9gag commit f5c735cc0a92f1ff7ba7418ec9155b3488d6b3cb contains the photo processing and scanner integration."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/shelf-scanning/spec.md",
+        "anchors": [
+          "Requirement: The scanner learns new photos every hour"
+        ],
+        "classification": "semantic",
+        "reason": "The renamed requirement preserves the photo-learning behavior while adopting the two-hour cadence implemented by the scanner job.",
+        "evidence": [
+          "docs/prds/products/grade10-site/store/shelf-scanning.md states that the scanner learns unseen photos every two hours.",
+          "grade10/9gag .github/workflows/tcg-ar-ops.yml schedules the photo task at 17 */2 * * *.",
+          "grade10/9gag commit f5c735cc0a92f1ff7ba7418ec9155b3488d6b3cb is the merged implementation recorded for this change."
+        ]
+      }
+    ]
+  }
 }
