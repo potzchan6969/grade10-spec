@@ -39,5 +39,16 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "f5c735cc0a92f1ff7ba7418ec9155b3488d6b3cb",
+      "components": [
+        "inventory-service",
+        "store-service",
+        "tcg-ar",
+        "web"
+      ]
+    }
+  ]
 }
