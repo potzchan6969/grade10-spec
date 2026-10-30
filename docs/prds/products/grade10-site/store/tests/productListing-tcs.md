@@ -1288,7 +1288,7 @@ Runs once per row of **Test data**.
 
 ### discounts#where-each-shows: Where Each Shows
 
-<!-- trace:case id=g10.store-product-listing.TC-zpe rev=1 -->
+<!-- trace:case id=g10.store-product-listing.TC-zpe rev=2 -->
 #### g10.store-product-listing.TC30: A card's price shows sales and basket-free discounts only
 
 Runs once per row of **Test data**.
@@ -1306,7 +1306,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<discount product>` is for sale at HKD880 (any price above HKD100), on the first page; the shop holds only the row's discount for it, saved at least a minute ago.
+* The customer is on the English listing route; `<discount product>` is for sale at HKD880 (any price above HKD100), on the first page; the shop holds only the row's discount for it, saved at least a minute ago.
 
 **Test data:**
 
@@ -1325,13 +1325,16 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open `<listing url>` and read `<discount product>`'s card.
+2. For each row with a struck price, read the card's prices with a screen reader.
 
 **Expected Results:**
 
 * The row's price and strike; the card names no discount (❓ a conditional offer's name on the card waits on design).
+* For each row with a struck price, the screen reader says `Sale price` before the current price and `Was` before the struck price; neither label appears on screen.
 
 ## Settled
 
 - A card is always given its product's name, so no case walks a nameless card.
 - A photo the card grows on hover may lose its edges until the pointer leaves; the whole photo holds at rest.
 - A photo that leaves part of the well empty sits centred, scaled until it meets the two edges along its longer side; a square photo's corners round with the well's, which is not a crop.
+- The shared product tile may take sale-price words as copy; Grade10 Store supplies both words on each sale tile.

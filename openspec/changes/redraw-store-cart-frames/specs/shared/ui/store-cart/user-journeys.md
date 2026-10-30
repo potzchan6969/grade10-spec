@@ -15,6 +15,15 @@ holds nothing,
 showing skeletons while that read is in flight,
 **so that** I decide against the current prices rather than stale ones.
 
+### shared-ui-store-cart-US-13: Shopper reads a site sale on the cart lines
+
+**As a** shopper,
+**I want** an automatic site sale to show as the lower price with the list
+price struck through on each line, without a second Store sale line in the
+summary,
+**so that** I can trust the Subtotal as the sum of the lines I can still buy,
+at the prices I see on them.
+
 ## ADDED User journeys
 
 ## MODIFIED User journeys
