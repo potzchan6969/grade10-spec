@@ -59,5 +59,21 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@kinisworking",
+    "reviewedAt": "2026-10-30T05:39:20.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The only change since the contract baseline updates the My Orders destination in a page-shell test case to /store/my-orders. This acknowledges the separately delivered route relocation; it does not change the cart-count contract or its scenarios.",
+        "evidence": [
+          "grade10-spec commit a66aecf4a082ec441431d04e833a216685f87b31 changes only the My Orders route in this suite row.",
+          "docs/prds/products/grade10-site/site/page-shell.md names /store/my-orders, and grade10 commit 28555c4ac729b1b7bbb8f834861a8ecaeb1dc895 implements the route relocation and is an ancestor of grade10 origin/main."
+        ]
+      }
+    ]
+  }
 }
