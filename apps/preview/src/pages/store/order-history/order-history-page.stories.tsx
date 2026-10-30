@@ -83,7 +83,7 @@ function OrderHistoryPage({
             onViewDetails={() => navigateToStory(ORDER_DETAILS_STORY_ID)}
           />
         ) : (
-          <div className="flex w-full max-w-4xl flex-col gap-8 px-8 py-12">
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-8 pt-8 pb-16">
             {breadcrumbs}
             <h1 className="text-3xl font-semibold text-foreground">
               {ORDER_HISTORY_COPY.title}
