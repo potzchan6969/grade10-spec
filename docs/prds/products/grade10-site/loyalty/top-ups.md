@@ -29,17 +29,18 @@ A member buys points in packs an operator sets.
 - **One at a time** — starting a checkout ends the member's open one first
 - **Came back without paying** — the checkout ends at once
 - **Receipt** — Stripe's own receipt email, to the address the member is
-  signed in with, confirms the top-up; the member's points history links it
-  on the entry
+  signed in with, confirms the top-up; the pack's entry in the member's
+  points history opens it
 - 🚧 **Picked over Membership** — the Top-up Points button opens the pack
   picker over the Membership page, and the member comes back to that page
 - 🚧 **A wait that cannot be dismissed** — while the payment is confirmed, a
   dialog on a wide viewport, a drawer on a narrow one
 - 🚧 **The outcome is a toast on Membership** — points added names the
   points and the new balance; payment not completed says nothing was
-  charged, with Try again
-- 🚧 **Points History is the only record** — a credited pack's entry links
-  its receipt, a chargeback reads as a negative line, and a checkout left
+  charged, with Try again; a payment still unconfirmed after half a minute
+  closes the wait and says the points will show in Points History
+- 🚧 **Points History is the only record** — a credited pack's whole entry
+  opens its receipt, a chargeback reads as a negative line, and a checkout left
   unpaid writes no entry; there is no top-up history page
 - **Account deleted** — an open checkout closes with nothing charged; a
   payment that lands after is flagged for an operator to refund
@@ -208,6 +209,8 @@ chargeback rate on top-ups.
 | Refund in Stripe's dashboard | ❓ Open | Shipped: takes back the refunded share of the points, as a chargeback does. | Product |
 | Launch | ❓ Open | Shipped off; switched on once Stripe is set up and Legal confirms the words. | Product and Legal |
 | Where a pack is bought | Decided | From a Top-up Points button beside Member pass, the outcome a toast on Membership, so the rail stays navigation and the member never looks for a separate top-up page. | Design |
+| Still confirming | Decided | A payment unconfirmed after half a minute closes the wait with a toast saying the points will show in Points History, instead of a wait the member cannot leave until Stripe answers. | Design |
+| Receipt from history | Decided | The whole entry of a credited pack opens Stripe's receipt in a new tab, instead of a View receipt link on the entry. | Design |
 | Unpaid top-up | Decided | A checkout left unpaid writes no ledger entry: nothing was charged and no points moved, so there is nothing for the member to read. | Product |
 | Part returns | Decided | A part return gives no points back; an operator handles each case by hand. | Product |
 | Told before paying | ❓ Open | Checkout states no refund, no cash-out and no transfer, and the member accepts the terms: the proof a disputed charge is fought with. | Product |

@@ -321,5 +321,32 @@
       "expiryTitle": "到期",
       "expiryBody": "連續 {months} 個月沒有活動，積分便會到期。我們會在到期前 {days} 天提醒你。"
     }
+  },
+  "topUp": {
+    "button": "增值積分",
+    "title": "增值積分",
+    "subtitle": "結帳時 1 積分可抵 {worth}，亦可換領獎賞及優惠券。",
+    "packsLegend": "選擇套餐",
+    "unit": "分",
+    "overLimit": "超出今日上限",
+    "packUnavailable": "暫不可用",
+    "balance": "結餘",
+    "balanceAfter": "增值後結餘",
+    "balanceTo": "至",
+    "balancePoints": "{points} 分",
+    "continue": "立即付款",
+    "pay": "付款 {price}",
+    "opening": "正在轉往…",
+    "secured": "由 Stripe 保障安全",
+    "startFailed": "未能開啟結帳頁面。你未被收費。",
+    "confirmingTitle": "正在確認付款…",
+    "confirmingBody": "請保持此頁面開啟。",
+    "addedTitle": "已增值 {points} 積分",
+    "addedBody": "新結餘：{balance} 積分",
+    "notCompletedTitle": "付款未完成",
+    "notCompletedBody": "你未被收費。",
+    "tryAgain": "重試",
+    "stillConfirmingTitle": "仍在確認付款",
+    "stillConfirmingBody": "付款完成後，積分將顯示在積分紀錄中。"
   }
 }

@@ -44,34 +44,22 @@ export const PointsAdded: Story = {
   },
 };
 
-/** The pack held for an operator: what happens next and where to watch. */
-export const UnderReview: Story = {
-  name: "Under Review",
-  args: { state: "under-review" },
+/** Still unconfirmed after half a minute: the wait closes and the points
+ * are promised in Points History. */
+export const StillConfirming: Story = {
+  name: "Still Confirming",
+  args: { state: "still-confirming" },
   play: async () => {
     const overlay = within(document.body);
     await waitFor(() =>
-      expect(overlay.getByText("Top-up under review")).toBeVisible(),
+      expect(overlay.getByText("Still confirming your payment")).toBeVisible(),
     );
     expect(
-      overlay.getByText(/charged only if it’s approved.*TU-2026-0384/),
+      overlay.getByText(
+        "Your points will show in Points History once it clears.",
+      ),
     ).toBeVisible();
-    expect(
-      overlay.getByRole("button", { name: "View in Points History" }),
-    ).toBeVisible();
-  },
-};
-
-/** The review refused the pack: nothing charged. */
-export const NotApproved: Story = {
-  name: "Not Approved",
-  args: { state: "not-approved" },
-  play: async () => {
-    const overlay = within(document.body);
-    await waitFor(() =>
-      expect(overlay.getByText("Top-up not approved")).toBeVisible(),
-    );
-    expect(overlay.getByText("You haven’t been charged.")).toBeVisible();
+    expect(overlay.queryByRole("dialog")).not.toBeInTheDocument();
   },
 };
 

@@ -321,5 +321,32 @@
       "expiryTitle": "Expiry",
       "expiryBody": "Points expire after {months} months with no activity. We’ll remind you {days} days before."
     }
+  },
+  "topUp": {
+    "button": "Top-up Points",
+    "title": "Top Up Points",
+    "subtitle": "1 point equals {worth} off at checkout, or swap them for rewards and coupons.",
+    "packsLegend": "Choose a pack",
+    "unit": "pt",
+    "overLimit": "Over today’s limit",
+    "packUnavailable": "Not available right now",
+    "balance": "Balance",
+    "balanceAfter": "Balance after top-up",
+    "balanceTo": "to",
+    "balancePoints": "{points} pt",
+    "continue": "Pay Now",
+    "pay": "Pay {price}",
+    "opening": "Redirecting…",
+    "secured": "Secured by Stripe",
+    "startFailed": "We couldn’t open checkout. You haven’t been charged.",
+    "confirmingTitle": "Confirming your payment…",
+    "confirmingBody": "Please keep this page open.",
+    "addedTitle": "{points} points added",
+    "addedBody": "New balance: {balance} points",
+    "notCompletedTitle": "Payment not completed",
+    "notCompletedBody": "You haven’t been charged.",
+    "tryAgain": "Try again",
+    "stillConfirmingTitle": "Still confirming your payment",
+    "stillConfirmingBody": "Your points will show in Points History once it clears."
   }
 }

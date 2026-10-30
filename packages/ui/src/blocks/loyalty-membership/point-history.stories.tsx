@@ -78,33 +78,6 @@ export const Purchase: Story = {
   },
 };
 
-/** A top-up above the review threshold: held for an operator, so it sits
- * under Pending with no date yet — the hourglass tile, nothing landed. */
-export const TopUpUnderReview: Story = {
-  args: {
-    state: {
-      status: "ready",
-      data: [
-        {
-          id: "entry-topup-review",
-          kind: "Points top-up",
-          track: "earned",
-          delta: 60000,
-          pending: true,
-          context: "Under review. Ref TU-2026-0384.",
-        },
-      ],
-    },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Points top-up")).toBeInTheDocument();
-    expect(canvas.getByText(/Under review/)).toBeInTheDocument();
-    /* Nothing has landed: no date on a pending entry. */
-    expect(canvas.queryByText(/2026$/)).not.toBeInTheDocument();
-  },
-};
-
 /** A points top-up bought as a pack, credited at once. */
 export const TopUp: Story = {
   args: {
@@ -119,13 +92,19 @@ export const TopUp: Story = {
           delta: 200,
           date: "15 Sep 2026",
           month: "September 2026",
+          href: "https://pay.stripe.com/receipts/example",
         },
       ],
     },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Points top-up")).toBeInTheDocument();
+    const entry = canvas.getByRole("link", { name: /Points top-up/ });
+    expect(entry).toHaveAttribute(
+      "href",
+      "https://pay.stripe.com/receipts/example",
+    );
+    expect(entry).toHaveAttribute("target", "_blank");
     expect(canvas.getByText("+200 pts")).toBeInTheDocument();
   },
 };

@@ -1,5 +1,4 @@
 import { formatDay, formatMonthName } from "@grade10/date";
-import { Link } from "@grade10/design-system/components/forms/link";
 import type {
   AsyncState,
   CartItemSummary,
@@ -17,7 +16,6 @@ import type {
   WalletPassWallet,
 } from "@grade10/ui"; /* Stand-in programme content the Loyalty workbench draws with. Grade10's own
  * copy and figures for the examples only; a consumer supplies its own. */
-import { createElement } from "react";
 
 const RENEWS = formatDay(Date.UTC(2027, 2, 1));
 const COUPON_VALID = formatDay(Date.UTC(2027, 0, 11));
@@ -444,22 +442,9 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     delta: 200,
     date: formatDay(Date.UTC(2026, 8, 15)),
     month: formatMonthName(Date.UTC(2026, 8, 15)),
-    /* The Stripe receipt lives on the entry itself — a top-up's only
+    /* The whole entry opens the Stripe receipt — a top-up's only
      * paperwork, so the ledger carries no separate history surface. */
-    context: createElement(
-      Link,
-      { href: "#receipt-entry-topup", size: "sm", variant: "secondary" },
-      "View Receipt",
-    ),
-  },
-  {
-    id: "entry-topup-review",
-    kind: "Points top-up",
-    track: "earned",
-    /* Above the 50,000-point review threshold, so the ledger shows it held. */
-    delta: 60000,
-    pending: true,
-    context: "Under review. Ref TU-2026-0384.",
+    href: "#receipt-entry-topup",
   },
   {
     id: "entry-credits",
