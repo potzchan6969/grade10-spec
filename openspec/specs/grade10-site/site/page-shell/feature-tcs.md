@@ -6,10 +6,8 @@
 
 ## Background
 
-* `<site>` is the Grade10 site: staging answers Store and carries the account page; UAT and production, the auction launch, carry neither Store, the account page nor the membership page. A wide viewport is 1280 CSS pixels; a narrow one 375.
+* `<site>` is the Grade10 site: staging answers Store and carries the account page and the membership page; UAT and production, the auction launch, carry neither Store, the account page nor the membership page. A wide viewport is 1280 CSS pixels; a narrow one 375.
 * A held session read is the session request paused by the tester until released; a cart review is the basket read the header's count waits on.
-
-* `<site>` is the Grade10 site: staging answers Store and carries the account page; UAT and production, the auction launch, carry neither Store, the account page nor the membership page. A wide viewport is 1280 CSS pixels; a narrow one 375.
 
 ## g10.site-page-shell.US1: Collector opens any surface inside the site shell
 
@@ -1195,14 +1193,6 @@ Runs once per row of **Test data**.
 * The header count is one per distinct active line in the reviewed basket, whatever its quantity: adjusted lines count, sold-out and unavailable lines do not, and checkout eligibility does not decide it.
 * The count refreshes when the member's cart loads, when a cart change settles, saved or failed, when the drawer opens, and on Retry, with the drawer open or closed; nothing polls, and a change from another device shows after the next of these.
 * The author chose to retain the last verified same-member count while a refresh is pending, including after failed cart updates; failed review hides the badge. Initial unknown counts and previous-member counts remain hidden.
-* Signed-in account entry opens a menu, the sign-in email with its small
-  initial avatar above the items, offering My Auctions and Sign Out on auction
-  launch, Profile first wherever the account page is carried, and My Orders
-  ahead of My Auctions once Store answers - not the account page directly;
-  Sign Out is offered from that menu and from the account page wherever it is
-  carried.
-* Membership follows the membership page by the rule Profile follows, and a
-  later change offers it; until then the menu never offers it.
 * The menu offers no item whose page the site withholds: My Orders, Profile or
   Membership.
 * The account label in place of the sign-in email is `SiteHeader`'s alone: a
