@@ -184,6 +184,14 @@ SHALL require no export of its own.
 #### Scenario: grade10-site-loyalty-programme-SC-256 - A tier that names no threshold renders no progress
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=3 -->
+#### Scenario: grade10-site-loyalty-programme-SC-257 - The tier card carries no link or button
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` renders
+- **THEN** nothing on the card is a link or a button
+- **AND** the footer holds the tier's earn line alone
+
 - **WHEN** `TierCard` is rendered for a tier that names no qualifying threshold
 - **THEN** neither the qualifying count nor its progress is rendered
 

@@ -25,9 +25,7 @@ what the balance pays at checkout as the consumer formats it, and the tier's
 earn line. Where the tier names a qualifying threshold `TierCard` SHALL
 render the qualifying count apart from the balance, never summed into it,
 with the progress toward the threshold; where it names none it SHALL render
-neither count nor progress. Given an `href` to the tier-and-benefits surface,
-the Benefits affordance SHALL be the link to it, and the rest of the card
-SHALL NOT be interactive. It SHALL NOT name a balance-expiry
+neither count nor progress. The card SHALL NOT be interactive. It SHALL NOT name a balance-expiry
 day or count, nor derive any expiry wording from a clock or a balance of its
 own — the whole balance lapses on one shared inactivity date, never in
 parts.
@@ -199,9 +197,13 @@ SHALL require no export of its own.
 - **WHEN** `TierCard` is rendered for a tier that names no qualifying threshold
 - **THEN** neither the qualifying count nor its progress is rendered
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=2 -->
-#### Scenario: grade10-site-loyalty-programme-SC-257 - The Benefits link opens the tier-and-benefits surface
+<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=3 -->
+#### Scenario: grade10-site-loyalty-programme-SC-257 - The tier card carries no link or button
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` renders
+- **THEN** nothing on the card is a link or a button
+- **AND** the footer holds the tier's earn line alone
 
 - **WHEN** `TierCard` is given an `href`
 - **THEN** the Benefits affordance is the link to it, and the rest of the card is not interactive
