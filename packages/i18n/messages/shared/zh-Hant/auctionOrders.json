@@ -41,7 +41,8 @@
     "paymentProcessingFee": "付款處理費"
   },
   "bankDetails": {
-    "close": "關閉",
+    "done": "完成",
+    "invoice": "發票：{invoiceId}",
     "qrAlt": "此訂單的 FPS 付款二維碼"
   },
   "cancelledOn": "已於 {date} 取消",

@@ -17,7 +17,7 @@ type AuctionWinnerOrderCopy = {
   refundDetails: string;
   winningBid: string;
   bank: string;
-  bankDetailsClose: string;
+  bankDetailsDone: string;
   bankDetailsQrAlt: string;
 };
 
@@ -64,12 +64,23 @@ type AuctionWinnerOrderLine = {
 
 type AuctionPaymentRail = "fps" | "hk_local" | "swift";
 
+type AuctionWinnerOrderBankRow = { label: string; value: string };
+
+/** Every text arrives formatted; a pair draws side by side from `sm`. */
 type AuctionWinnerOrderBankDetails = {
   rail: AuctionPaymentRail;
   title: string;
-  rows: readonly { label: string; value: string }[];
-  qrSrc?: string;
-  note?: string;
+  /** The collector-facing invoice line under the title, already worded. */
+  invoice?: string;
+  amountDue: AuctionWinnerOrderBankRow;
+  rows: readonly (
+    | AuctionWinnerOrderBankRow
+    | readonly [AuctionWinnerOrderBankRow, AuctionWinnerOrderBankRow]
+  )[];
+  reference: AuctionWinnerOrderBankRow & { warning: string };
+  qr?: { src: string; hint: string };
+  /** An inline warning after the reference, such as SWIFT's OUR note. */
+  alert?: string;
 };
 
 type AuctionWinnerOrderProps = {

@@ -41,7 +41,8 @@
     "paymentProcessingFee": "Payment Processing Fee"
   },
   "bankDetails": {
-    "close": "Close",
+    "done": "Done",
+    "invoice": "Invoice: {invoiceId}",
     "qrAlt": "FPS payment QR code for this order"
   },
   "cancelledOn": "Cancelled on {date}",

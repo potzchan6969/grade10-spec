@@ -4,24 +4,17 @@ import { act, createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { within } from "storybook/test";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { AuctionWinnerOrder, type AuctionWinnerOrderProps } from "../../index";
+import {
+  AuctionWinnerOrder,
+  type AuctionWinnerOrderBankDetails,
+  type AuctionWinnerOrderProps,
+} from "../../index";
 
 (
   globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
 ).IS_REACT_ACT_ENVIRONMENT = true;
 
-type PaymentValue = "card" | "fps" | "hk_local" | "swift";
-
-type BankDetails = {
-  rail: Exclude<PaymentValue, "card">;
-  title: string;
-  rows: readonly { label: string; value: string }[];
-  qrSrc?: string;
-  note?: string;
-};
-
 type TestWinnerOrderProps = AuctionWinnerOrderProps & {
-  bankDetails?: BankDetails;
   summary: AuctionWinnerOrderProps["summary"] & {
     convertedTotal?: { label: string; value: string };
     convertedFee?: { label: string; value: string };
@@ -37,7 +30,7 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   refundDetails: "Refund Details",
   winningBid: "Winning bid",
   bank: "Bank",
-  bankDetailsClose: "Close",
+  bankDetailsDone: "Done",
   bankDetailsQrAlt: "FPS payment QR code",
 };
 
@@ -432,139 +425,262 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     ).toHaveLength(1);
   });
 
-  it("winner-order-SC-181 and shared-ui-auction-order-SC-29 - opens one supplied FPS rail and reports the control press", () => {
-    const onViewBankDetails = vi.fn();
+  const REFERENCE_WARNING =
+    "Enter this reference in your bank app's Memo or Remarks field. Missing it delays verification.";
+
+  function openBankDetails(
+    bankDetails: AuctionWinnerOrderBankDetails,
+    onViewBankDetails = vi.fn(),
+  ) {
     const { container } = mount({
-      bankDetails: {
-        rail: "fps",
-        title: "FPS bank details",
-        rows: [
-          { label: "FPS ID", value: "fps@example.test" },
-          { label: "Account name", value: "Grade10 Finance Limited" },
-          { label: "Payment reference", value: "ORDER-123" },
-        ],
-        qrSrc: "data:image/png;base64,ZmFrZS1xci1kYXRh",
-        note: "Open your banking app and scan this QR",
-      },
+      bankDetails,
       summary: {
         ...BASE_PROPS.summary,
         pay: {
           label: "Submit Payment Proof",
           onPress: vi.fn(),
-          secondary: {
-            label: "View Bank Details",
-            onPress: onViewBankDetails,
-          },
+          secondary: { label: "View Bank Details", onPress: onViewBankDetails },
         },
       },
     });
-
     act(() => {
       within(container)
         .getByRole("button", { name: "View Bank Details" })
         .click();
     });
+    return within(document.body).getByRole("dialog");
+  }
+
+  function follows(first: Node, second: Node) {
+    return Boolean(
+      first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  }
+
+  function expectDoneOnly(dialog: HTMLElement) {
+    expect(
+      dialog.querySelector('[data-slot="dialog-header"] button'),
+    ).toBeNull();
+    expect(
+      within(dialog)
+        .getAllByRole("button")
+        .map((button) => button.textContent?.trim()),
+    ).toEqual(["Done"]);
+  }
+
+  const MINIMAL_RAIL: AuctionWinnerOrderBankDetails = {
+    rail: "hk_local",
+    title: "View Bank Details",
+    amountDue: { label: "Amount due", value: "HK$16,340.00" },
+    rows: [{ label: "Bank name", value: "Grade10 Bank" }],
+    reference: {
+      label: "Payment reference",
+      value: "LK7P2Q",
+      warning: REFERENCE_WARNING,
+    },
+  };
+
+  it("issue-1590-TC2 - with no invoice ID supplied, the title is followed directly by the amount due", () => {
+    const dialog = openBankDetails(MINIMAL_RAIL);
+
+    expect(within(dialog).queryByText(/^Invoice:/)).toBeNull();
+    expect(dialog.querySelector('[data-slot="dialog-header"] p')).toBeNull();
+    const title = within(dialog).getByText("View Bank Details");
+    const amount = within(dialog).getByText("Amount due");
+    const between = [...dialog.querySelectorAll("*")].filter(
+      (node) =>
+        follows(title, node) &&
+        follows(node, amount) &&
+        !node.contains(amount) &&
+        node.textContent?.trim(),
+    );
+    expect(between).toEqual([]);
+  });
+
+  it("issue-1590-TC3 - the header has no close control and Done, the only control, closes the dialog", () => {
+    const dialog = openBankDetails(MINIMAL_RAIL);
+
+    expectDoneOnly(dialog);
+    act(() => {
+      within(dialog).getByRole("button", { name: "Done" }).click();
+    });
+    expect(within(document.body).queryByRole("dialog")).toBeNull();
+  });
+
+  it("issue-1590-TC4 - Escape closes the dialog, and so does a press outside it", () => {
+    const { container } = mount({
+      bankDetails: MINIMAL_RAIL,
+      summary: {
+        ...BASE_PROPS.summary,
+        pay: {
+          label: "Submit Payment Proof",
+          onPress: vi.fn(),
+          secondary: { label: "View Bank Details", onPress: vi.fn() },
+        },
+      },
+    });
+    const open = () => {
+      act(() => {
+        within(container)
+          .getByRole("button", { name: "View Bank Details" })
+          .click();
+      });
+      return within(document.body).getByRole("dialog");
+    };
+
+    const first = open();
+    act(() => {
+      first.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+      );
+    });
+    expect(within(document.body).queryByRole("dialog")).toBeNull();
+
+    open();
+    const overlay = document.body.querySelector<HTMLElement>(
+      '[data-slot="dialog-overlay"]',
+    );
+    expect(overlay).not.toBeNull();
+    act(() => {
+      for (const type of [
+        "pointerdown",
+        "mousedown",
+        "pointerup",
+        "mouseup",
+        "click",
+      ]) {
+        overlay?.dispatchEvent(
+          new (type.startsWith("pointer") ? PointerEvent : MouseEvent)(type, {
+            bubbles: true,
+            button: 0,
+          }),
+        );
+      }
+    });
+    expect(within(document.body).queryByRole("dialog")).toBeNull();
+  });
+
+  it("winner-order-SC-181 and shared-ui-auction-order-SC-29 - opens one supplied FPS rail as its design draws it and reports the control press", () => {
+    const onViewBankDetails = vi.fn();
+    const dialog = openBankDetails(
+      {
+        rail: "fps",
+        title: "View Bank Details",
+        invoice: "Invoice: IN-LK7P2Q01",
+        amountDue: { label: "Amount due", value: "HK$16,340.00" },
+        rows: [
+          { label: "FPS ID", value: "12345678" },
+          { label: "Account name", value: "Grade10 Finance Limited" },
+        ],
+        reference: {
+          label: "Payment reference",
+          value: "LK7P2Q",
+          warning: REFERENCE_WARNING,
+        },
+        qr: {
+          src: "data:image/png;base64,ZmFrZS1xci1kYXRh",
+          hint: "Open your banking app and scan this QR",
+        },
+      },
+      onViewBankDetails,
+    );
 
     expect(onViewBankDetails).toHaveBeenCalledTimes(1);
-    const dialog = within(document.body).getByRole("dialog");
-    expect(within(dialog).getByText("FPS bank details")).not.toBeNull();
-    expect(within(dialog).getByText("FPS ID")).not.toBeNull();
-    expect(within(dialog).getByText("fps@example.test")).not.toBeNull();
-    expect(within(dialog).getByText("Payment reference")).not.toBeNull();
-    expect(within(dialog).getByText("ORDER-123")).not.toBeNull();
+    expect(within(dialog).getByText("View Bank Details")).not.toBeNull();
+    expect(within(dialog).getByText("Invoice: IN-LK7P2Q01")).not.toBeNull();
+    expect(
+      follows(
+        within(dialog).getByText("Amount due"),
+        within(dialog).getByText("HK$16,340.00"),
+      ),
+    ).toBe(true);
     expect(
       within(dialog).getByRole("img", { name: COPY.bankDetailsQrAlt }),
     ).not.toBeNull();
+    const hint = within(dialog).getByText(
+      "Open your banking app and scan this QR",
+    );
+    const warning = within(dialog).getByText(REFERENCE_WARNING);
+    expect(hint).not.toBe(warning);
+    expect(follows(within(dialog).getByText("LK7P2Q"), warning)).toBe(true);
+    expect(within(dialog).getByText("12345678")).not.toBeNull();
+    expect(within(dialog).queryByRole("alert")).toBeNull();
     expect(within(dialog).queryByRole("tab")).toBeNull();
     expect(within(dialog).queryByText(/HK Local|SWIFT/i)).toBeNull();
+    expectDoneOnly(dialog);
   });
 
-  it("winner-order-SC-182 - opens HK Local details with bank and account fields", () => {
-    const { container } = mount({
-      bankDetails: {
-        rail: "hk_local",
-        title: "HK Local bank details",
-        rows: [
-          { label: "Bank name", value: "Grade10 Bank" },
+  it("winner-order-SC-182 - opens HK Local details with bank code and branch code side by side", () => {
+    const dialog = openBankDetails({
+      rail: "hk_local",
+      title: "View Bank Details",
+      amountDue: { label: "Amount due", value: "HK$16,340.00" },
+      rows: [
+        { label: "Bank name", value: "Grade10 Bank" },
+        [
           { label: "Bank code", value: "004" },
           { label: "Branch code", value: "123" },
-          { label: "Account number", value: "004-123-987654" },
-          { label: "Payment reference", value: "ORDER-HK-123" },
         ],
-      },
-      summary: {
-        ...BASE_PROPS.summary,
-        pay: {
-          label: "Submit Payment Proof",
-          onPress: vi.fn(),
-          secondary: {
-            label: "View Bank Details",
-            onPress: vi.fn(),
-          },
-        },
+        { label: "Account number", value: "004-123-987654" },
+      ],
+      reference: {
+        label: "Payment reference",
+        value: "ORDER-HK-123",
+        warning: REFERENCE_WARNING,
       },
     });
 
-    act(() => {
-      within(container)
-        .getByRole("button", { name: "View Bank Details" })
-        .click();
-    });
-
-    const dialog = within(document.body).getByRole("dialog");
-    expect(within(dialog).getByText("HK Local bank details")).not.toBeNull();
-    for (const value of [
-      "Grade10 Bank",
-      "004",
-      "123",
-      "004-123-987654",
-      "ORDER-HK-123",
-    ]) {
+    for (const value of ["Grade10 Bank", "004", "123", "004-123-987654"]) {
       expect(within(dialog).getByText(value)).not.toBeNull();
     }
+    const pair = dialog.querySelector<HTMLElement>(
+      '[data-slot="winner-order-bank-pair"]',
+    );
+    expect(pair).not.toBeNull();
+    expect(within(pair as HTMLElement).getByText("Bank code")).not.toBeNull();
+    expect(within(pair as HTMLElement).getByText("Branch code")).not.toBeNull();
+    expect(
+      follows(
+        within(dialog).getByText("ORDER-HK-123"),
+        within(dialog).getByText(REFERENCE_WARNING),
+      ),
+    ).toBe(true);
+    expect(within(dialog).queryByText(/^Invoice:/)).toBeNull();
+    expect(within(dialog).queryByRole("img")).toBeNull();
+    expect(within(dialog).queryByRole("alert")).toBeNull();
     expect(within(dialog).queryByRole("tab")).toBeNull();
     expect(within(dialog).queryByText(/FPS|SWIFT/i)).toBeNull();
+    expectDoneOnly(dialog);
   });
 
-  it("winner-order-SC-183 - opens SWIFT details and places the OUR note after payment reference", () => {
-    const { container } = mount({
-      bankDetails: {
-        rail: "swift",
-        title: "International via SWIFT bank details",
-        rows: [
-          { label: "Beneficiary name", value: "Grade10 Finance Limited" },
-          {
-            label: "Beneficiary address",
-            value: "Unit 2602, Central, Hong Kong",
-          },
-          { label: "Bank name", value: "Grade10 Bank" },
-          { label: "Bank address", value: "1 Queen's Road Central" },
+  it("winner-order-SC-183 - opens SWIFT details and places the OUR warning after the payment reference", () => {
+    const dialog = openBankDetails({
+      rail: "swift",
+      title: "View Bank Details",
+      invoice: "Invoice: IN-LK7P2Q01",
+      amountDue: { label: "Amount due", value: "US$16,340.00" },
+      rows: [
+        { label: "Beneficiary name", value: "Grade10 Finance Limited" },
+        {
+          label: "Beneficiary address",
+          value: "Unit 2602, Central, Hong Kong",
+        },
+        { label: "Bank name", value: "Grade10 Bank" },
+        { label: "Bank address", value: "1 Queen's Road Central" },
+        [
           { label: "SWIFT / BIC", value: "G10BHKHHXXX" },
           { label: "Account number / IBAN", value: "HK00G10B000123456789" },
-          { label: "Payment reference", value: "ORDER-USD-123" },
         ],
-        note: "Choose OUR for transfer fees so Grade10 receives the full order total.",
+      ],
+      reference: {
+        label: "Payment reference",
+        value: "ORDER-USD-123",
+        warning: REFERENCE_WARNING,
       },
-      summary: {
-        ...BASE_PROPS.summary,
-        pay: {
-          label: "Submit Payment Proof",
-          onPress: vi.fn(),
-          secondary: {
-            label: "View Bank Details",
-            onPress: vi.fn(),
-          },
-        },
-      },
+      alert:
+        "In your bank app, choose OUR for transfer fees so we receive the full order total.",
     });
 
-    act(() => {
-      within(container)
-        .getByRole("button", { name: "View Bank Details" })
-        .click();
-    });
-
-    const dialog = within(document.body).getByRole("dialog");
     for (const value of [
       "Grade10 Finance Limited",
       "Unit 2602, Central, Hong Kong",
@@ -576,17 +692,17 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     ]) {
       expect(within(dialog).getByText(value)).not.toBeNull();
     }
-    const reference = within(dialog).getByText("ORDER-USD-123");
-    const note = within(dialog).getByText(
-      "Choose OUR for transfer fees so Grade10 receives the full order total.",
+    const pair = dialog.querySelector<HTMLElement>(
+      '[data-slot="winner-order-bank-pair"]',
     );
-    expect(
-      Boolean(
-        reference.compareDocumentPosition(note) &
-          Node.DOCUMENT_POSITION_FOLLOWING,
-      ),
-    ).toBe(true);
+    expect(within(pair as HTMLElement).getByText("SWIFT / BIC")).not.toBeNull();
+    const alert = within(dialog).getByRole("alert");
+    expect(alert.textContent).toContain("choose OUR for transfer fees");
+    expect(follows(within(dialog).getByText(REFERENCE_WARNING), alert)).toBe(
+      true,
+    );
     expect(within(dialog).queryByRole("tab")).toBeNull();
     expect(within(dialog).queryByText(/FPS|HK Local/i)).toBeNull();
+    expectDoneOnly(dialog);
   });
 });

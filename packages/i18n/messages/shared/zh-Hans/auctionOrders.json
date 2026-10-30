@@ -41,7 +41,8 @@
     "paymentProcessingFee": "付款处理费"
   },
   "bankDetails": {
-    "close": "关闭",
+    "done": "完成",
+    "invoice": "发票：{invoiceId}",
     "qrAlt": "此订单的 FPS 付款二维码"
   },
   "cancelledOn": "已于 {date} 取消",
