@@ -50,11 +50,53 @@ export interface Approval extends VerificationIdentity {
   createdAt: string;
 }
 
-export interface ReferenceCaptureInput extends VerificationIdentity {
+export interface CaptureTarget extends VerificationIdentity {
   sourceRunId: string;
+}
+
+export interface ReferenceCaptureInput {
+  targets: CaptureTarget[];
   locale: string;
   approve: boolean;
   comment?: string;
+}
+
+/** A capture run as the coordinator reports it, live or finished. */
+export interface CaptureRun {
+  runId: string;
+  lane: "full" | "focused";
+  trigger: "deploy" | "manual" | "approve" | "capture";
+  requestedBy: { subject: string; email?: string };
+  requestedAt: string;
+  state: "queued" | "running" | "succeeded" | "failed";
+  commit?: string;
+  browser?: string;
+  total: number;
+  done: number;
+  failed: number;
+  failures: (VerificationIdentity & {
+    profileId: ProfileId;
+    locale: string;
+    message: string;
+  })[];
+  startedAt?: string;
+  finishedAt?: string;
+  message?: string;
+}
+
+export interface CaptureStatus {
+  schedule: {
+    lastFullStartedAt: string | null;
+    nextFullAt: string;
+    activeFullRunId: string | null;
+    pending: {
+      trigger: string;
+      requestedAt: string;
+      requestedBy: { subject: string; email?: string };
+    } | null;
+  };
+  runs: CaptureRun[];
+  history: { runs: CaptureRun[]; cursor?: string };
 }
 
 export type ArchiveRecord = Record<string, unknown>;
@@ -361,7 +403,7 @@ export function listApprovals(
   );
 }
 
-/** Asks the workbench to capture the live story at every size, approving it when asked. */
+/** Asks the coordinator to capture a few stories at every size now, approving them when asked. */
 export async function captureReference(
   base: string,
   input: ReferenceCaptureInput,
@@ -380,6 +422,48 @@ export async function captureReference(
   return {
     references: payload.references.map(referenceRecord),
     approvals: payload.approvals.map(approvalRecord),
+  };
+}
+
+// The coordinator's own report; its shape is checked where it is drawn.
+export async function getCaptureStatus(
+  base: string,
+  signal: AbortSignal,
+): Promise<CaptureStatus> {
+  const payload = requireObject(
+    await requestJson(apiUrl(base, "/api/reference-runs"), { signal }),
+    "for capture runs",
+  );
+  if (
+    !isRecord(payload.schedule) ||
+    !Array.isArray(payload.runs) ||
+    !isRecord(payload.history) ||
+    !Array.isArray(payload.history.runs)
+  ) {
+    throw new Error("The archive returned an unreadable capture report.");
+  }
+  return payload as unknown as CaptureStatus;
+}
+
+export async function requestFullCapture(
+  base: string,
+): Promise<{ state: "started" | "scheduled"; startsAt?: string }> {
+  const payload = requireObject(
+    await requestJson(apiUrl(base, "/api/reference-runs"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    }),
+    "for the capture request",
+  );
+  if (payload.state !== "started" && payload.state !== "scheduled") {
+    throw new Error("The archive returned an unreadable capture request.");
+  }
+  return {
+    state: payload.state,
+    ...(typeof payload.startsAt === "string"
+      ? { startsAt: payload.startsAt }
+      : {}),
   };
 }
 

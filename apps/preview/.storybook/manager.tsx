@@ -1,6 +1,8 @@
 import * as React from "react";
 import { AddonPanel } from "storybook/internal/components";
+import { Route } from "storybook/internal/router";
 import { addons, types, useStorybookState } from "storybook/manager-api";
+import { ReferenceCapturesPage } from "../src/ui-verification/ReferenceCapturesPage";
 import {
   type PanelMode,
   VerificationPanel,
@@ -21,6 +23,10 @@ declare module "storybook/internal/csf" {
 
 const ADDON_ID = "grade10/ui-verification";
 const APPROVE_ID = `${ADDON_ID}/approve`;
+const CAPTURES_ID = `${ADDON_ID}/captures`;
+// A trailing slash is what makes Storybook read this as a page's view mode,
+// as its own Settings page does.
+const CAPTURES_PATH = "/reference-captures/";
 
 // Storybook renders every panel as active and hides the unselected ones, so
 // each of these two asks which panel is selected before it draws.
@@ -46,6 +52,16 @@ function ArchivePanel({
 // Approve first: a designer approves the Storybook reference, then Site
 // Compare holds the site to it.
 addons.register(ADDON_ID, () => {
+  addons.add(CAPTURES_ID, {
+    type: types.experimental_PAGE,
+    url: CAPTURES_PATH,
+    title: "Reference captures",
+    render: () => (
+      <Route path={CAPTURES_PATH} startsWith>
+        <ReferenceCapturesPage />
+      </Route>
+    ),
+  });
   addons.add(APPROVE_ID, {
     id: APPROVE_ID,
     type: types.PANEL,

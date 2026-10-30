@@ -10,7 +10,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { createArchive } from "@grade10/ui-verification/archive";
 import { createArchiveHandler } from "@grade10/ui-verification/archive-api";
-import { createReferenceCapturer } from "@grade10/ui-verification/reference-capture";
+import { createLocalCoordinator } from "@grade10/ui-verification/local-coordinator";
 
 const directory = resolve(fileURLToPath(new URL(".", import.meta.url)));
 const repositoryRoot = resolve(directory, "../../../..");
@@ -567,21 +567,25 @@ async function startWorkbenchServer(root, archive) {
   const address = server.address();
   assert(address && typeof address === "object");
   const origin = `http://127.0.0.1:${address.port}`;
+  const coordinator = createLocalCoordinator({
+    archive,
+    archiveRoot: archive.root,
+    repoRoot: repositoryRoot,
+    launch: () => chromium.launch({ headless: true }),
+  });
   archiveHandler = createArchiveHandler(archive, {
     authorize: async (_request, scope) =>
       scope === "approve"
         ? { kind: "human", reviewer: { subject: "Panel browser fixture" } }
         : { kind: "human" },
     allowedOrigins: [origin],
-    captureReference: createReferenceCapturer({
-      launch: () => chromium.launch({ headless: true }),
-      repoRoot: repositoryRoot,
-    }),
+    coordinator,
   });
   return {
     origin,
     apiRequests,
     captureRequests,
+    coordinator,
     close: () =>
       new Promise((resolveClose, rejectClose) => {
         server.close((error) => (error ? rejectClose(error) : resolveClose()));
@@ -937,18 +941,23 @@ test("approving captures the live reference and Site Compare holds the site to i
   );
   assert.deepEqual(server.captureRequests, [
     {
-      sourceRunId: "approve-0001",
-      caseId: CASE_ID,
-      targetId: DECLARATIONS[0].targetId,
-      capturePointId: DECLARATIONS[0].capturePointId,
+      targets: [
+        {
+          sourceRunId: "approve-0001",
+          caseId: CASE_ID,
+          targetId: DECLARATIONS[0].targetId,
+          capturePointId: DECLARATIONS[0].capturePointId,
+        },
+      ],
       locale: "en",
       approve: true,
     },
   ]);
   const captured = (await archive.listReferences({ caseId: CASE_ID }))
     .references;
-  const approvedAll = (await archive.listApprovals({ caseId: CASE_ID }))
-    .approvals;
+  const approvedAll = (
+    await server.coordinator.listApprovals({ caseId: CASE_ID })
+  ).approvals;
   assert.deepEqual(
     captured.map((item) => item.profileId).sort(),
     ["desktop", "mobile", "tablet"],
@@ -1050,6 +1059,65 @@ test("approving captures the live reference and Site Compare holds the site to i
       .innerText(),
     /^Reference approved/,
     "the change request judged desktop only",
+  );
+  await page.close();
+});
+
+test("the captures page requests a full capture, follows it, and holds the next one", {
+  timeout: 240_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-runs-"));
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  await publishRun(archive, browser, {
+    runId: "full-0001",
+    createdAt: "2026-10-29T10:01:00.000Z",
+    storyId: STORY_ID,
+  });
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/reference-captures/`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("heading", { name: "Reference captures" }).waitFor();
+  await page.getByText("No capture is running.").waitFor();
+  await page.getByRole("button", { name: "Request a full capture" }).click();
+  await page.getByText("A full capture started.").waitFor();
+  const history = page.getByRole("region", { name: "Run history" });
+  await waitForCondition(
+    async () =>
+      (await history
+        .getByRole("row", { name: /Full capture, requested by hand/ })
+        .count()) === 1 &&
+      (await history.getByRole("cell", { name: "Done" }).count()) === 1,
+    "the full capture to finish on the page",
+    CAPTURE_TIMEOUT_MS,
+  );
+  assert.equal(
+    (await archive.listReferences()).references.length,
+    DECLARATIONS.length * 3,
+    "a full capture draws every declared case at every size",
+  );
+  assert.equal((await archive.listReferenceRuns()).runs.length, 1);
+
+  await page.getByRole("button", { name: "Request a full capture" }).click();
+  await page.getByText(/^A full capture is scheduled for /).waitFor();
+  assert.match(
+    await page
+      .getByRole("region", { name: "Schedule" })
+      .getByText(/^manual by Panel browser fixture/)
+      .innerText(),
+    /^manual by Panel browser fixture · /,
+    "a request inside six hours waits",
   );
   await page.close();
 });

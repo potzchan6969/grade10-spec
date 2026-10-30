@@ -1005,3 +1005,75 @@
   font-size: 11px;
   font-weight: 600;
 }
+
+/* Reference captures page: the schedule, live runs and their history */
+/* The panel's inline-size containment means its width cannot come from its
+   content, so the page takes the full width it is given. */
+.verification-page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 24px 16px;
+  background: var(--vp-surface, #f0f2f5);
+}
+
+.verification-capture-run {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+  border-top: 1px solid var(--vp-border, #d7d9df);
+}
+
+.verification-capture-run h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.verification-capture-run progress {
+  width: 100%;
+  height: 10px;
+  accent-color: var(--vp-accent, #0b6fbf);
+}
+
+.verification-flag[data-flag="running"],
+.verification-flag[data-flag="queued"] {
+  border-color: var(--vp-accent, #0b6fbf);
+  color: var(--vp-accent, #0b6fbf);
+}
+
+.verification-flag[data-flag="succeeded"] {
+  border-color: var(--vp-ok-border, #a9d8b8);
+  color: var(--vp-ok-fg, #14602e);
+  background: var(--vp-ok-bg, #e5f5ea);
+}
+
+.verification-flag[data-flag="failed"] {
+  border-color: var(--vp-error-border, #d65a5a);
+  color: var(--vp-error-fg, #7d1818);
+  background: var(--vp-error-bg, #fff0f0);
+}
+
+.verification-table-scroll {
+  overflow-x: auto;
+}
+
+.verification-capture-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.verification-capture-table th,
+.verification-capture-table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--vp-border, #d7d9df);
+  text-align: left;
+  vertical-align: top;
+}
+
+.verification-capture-table tr[data-state="failed"] td:nth-child(2) {
+  color: var(--vp-error-fg, #7d1818);
+}
