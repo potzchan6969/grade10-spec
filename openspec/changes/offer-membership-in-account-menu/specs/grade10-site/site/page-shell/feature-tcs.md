@@ -199,11 +199,10 @@ Runs once per row of **Test data**.
   answers, and opens on it where the account page is withheld.
 * Membership opens `/membership` for every signed-in collector: every account is
   a member, so no collector is sent to a join page or elsewhere, and the page
-  shows its own state (Q7).
+  shows its own state.
 * The grade10 account menu offers no Submissions: the site supplies none, so the
   menu holds Profile, Membership, My Orders, My Auctions and Sign Out, each where
-  its page is carried, and nothing else; whether the shared header keeps an
-  unnamed Submissions item is the follow-up site-chrome change's (Q6).
+  its page is carried, and nothing else.
 
 ## Reconciliation
 
