@@ -32,7 +32,7 @@ function CashOutRow({
   request: VaultPayoutRequest;
 }) {
   return (
-    <li className="flex items-center gap-4 px-6 py-4" key={request.id}>
+    <li className="flex items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4" key={request.id}>
       <span
         aria-hidden
         className="grid size-10 shrink-0 place-items-center rounded-full bg-muted text-foreground"
@@ -40,7 +40,7 @@ function CashOutRow({
         <ArrowUpRight size={16} />
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <Text weight="medium">
+        <Text className="truncate" weight="medium">
           To {PAYOUT_METHOD.bankName} {PAYOUT_METHOD.maskedAccount}
         </Text>
         <Text size="sm" tone="secondary">

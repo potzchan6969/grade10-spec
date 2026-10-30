@@ -27,7 +27,7 @@ function monthKey(date: string) {
 
 function RewardRow({ entry }: { entry: RewardEntry }) {
   return (
-    <li className="flex items-center gap-4 px-6 py-4">
+    <li className="flex items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4">
       <span
         aria-hidden
         className="grid size-10 shrink-0 place-items-center rounded-full bg-muted text-foreground"
@@ -35,7 +35,7 @@ function RewardRow({ entry }: { entry: RewardEntry }) {
         <Plus size={16} />
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <Text weight="medium">Daily incentive</Text>
+        <Text className="truncate" weight="medium">Daily incentive</Text>
         <Text size="sm" tone="secondary">
           {entry.date}
         </Text>

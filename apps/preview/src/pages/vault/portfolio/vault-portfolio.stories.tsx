@@ -89,6 +89,7 @@ function VaultPortfolioPage({
             empty ? undefined : (
               <Button
                 leading={<Vault aria-hidden size={16} />}
+                size="md"
                 type="button"
                 variant="outline"
                 onClick={() => navigateToStory(VAULT_BOOK_VISIT_STORY_ID)}
@@ -132,8 +133,8 @@ function VaultPortfolioPage({
           value={pageTab}
           onValueChange={(value) => setPageTab(value as "assets" | "rewards")}
         >
-          <StickyTabBar className="border-b-0 pb-0">
-            <TabsList aria-label="Portfolio sections" className="w-full justify-start border-b border-border" variant="list">
+          <StickyTabBar className="border-b-0 pb-0 pt-1">
+            <TabsList aria-label="Portfolio sections" className="w-full justify-start overflow-x-auto border-b border-border" variant="list">
             <TabsTrigger value="assets">
               Assets
               <Badge size="sm">{PORTFOLIO_SUMMARY.itemCount}</Badge>
