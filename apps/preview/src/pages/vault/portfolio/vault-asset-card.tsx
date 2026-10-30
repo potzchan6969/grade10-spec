@@ -50,14 +50,16 @@ function VaultAssetCardBody({ asset }: { asset: VaultAsset }) {
           </p>
         </div>
 
-        <div className="flex w-full flex-col items-start gap-1">
-          <p className="w-full text-xs font-medium uppercase tracking-wider text-secondary-foreground">
-            {price.label}
-          </p>
-          <p className="w-full text-lg leading-7 font-medium tabular-nums text-card-foreground">
-            {formatHkd(price.amountHkd)}
-          </p>
-        </div>
+        {price ? (
+          <div className="flex w-full flex-col items-start gap-1">
+            <p className="w-full text-xs font-medium uppercase tracking-wider text-secondary-foreground">
+              {price.label}
+            </p>
+            <p className="w-full text-lg leading-7 font-medium tabular-nums text-card-foreground">
+              {formatHkd(price.amountHkd)}
+            </p>
+          </div>
+        ) : null}
       </div>
     </>
   );

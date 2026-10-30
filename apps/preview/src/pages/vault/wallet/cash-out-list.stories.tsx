@@ -28,20 +28,20 @@ export const Filled: Story = {
 };
 
 /** A request Grade10 turned down — the rejection reads in the row. */
-export const Rejected: Story = {
+export const Declined: Story = {
   args: {
     requests: [
       {
         id: "po-4",
         requestedAt: "28 Oct 2026",
         amountHkd: 150,
-        status: "Rejected",
+        status: "Declined",
       },
     ],
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Rejected")).toBeVisible();
+    expect(canvas.getByText("Declined")).toBeVisible();
   },
 };
 

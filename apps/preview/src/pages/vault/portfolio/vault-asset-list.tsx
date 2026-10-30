@@ -1,10 +1,5 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@grade10/design-system/components/display/tabs";
+import { FilterChip } from "@grade10/design-system/components/forms/filter-chip";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import {
@@ -163,12 +158,7 @@ function VaultAssetList({
   }
 
   return (
-    <Tabs
-      className={cn("gap-8", className)}
-      data-slot="vault-asset-list"
-      value={activeTab}
-      onValueChange={(value) => setTab(value as ListTab)}
-    >
+    <div className={cn("flex flex-col gap-8", className)} data-slot="vault-asset-list">
       <StickyTabBar>
         <div
           className={cn(
@@ -176,14 +166,19 @@ function VaultAssetList({
             "flex flex-wrap items-center justify-between gap-3 delay-[90ms]",
           )}
         >
-          <TabsList aria-label="Filter holdings" variant="list">
+          <div aria-label="Filter holdings" className="flex flex-wrap items-center gap-2" role="group">
             {visibleTabs.map((t) => (
-              <TabsTrigger key={t.key} value={t.key}>
+              <FilterChip
+                key={t.key}
+                selected={t.key === activeTab}
+                size="md"
+                onClick={() => setTab(t.key)}
+              >
                 {t.label}
                 <Badge size="sm">{countFor(t.key)}</Badge>
-              </TabsTrigger>
+              </FilterChip>
             ))}
-          </TabsList>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -220,14 +215,12 @@ function VaultAssetList({
         </div>
       </StickyTabBar>
 
-      {visibleTabs.map((t) => (
-        <TabsContent key={t.key} className="mt-0 outline-none" value={t.key}>
-          <ul
-            aria-busy={loading || undefined}
-            aria-label={loading ? "Loading vault assets" : undefined}
-            className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-          >
-            {(t.key === activeTab ? filtered : []).map((asset, index) => (
+      <ul
+        aria-busy={loading || undefined}
+        aria-label={loading ? "Loading vault assets" : undefined}
+        className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      >
+        {filtered.map((asset, index) => (
               <li
                 className={loading ? undefined : PAGE_ENTER_CLASS}
                 key={loading ? `skeleton-${index}` : asset.id}
@@ -243,11 +236,9 @@ function VaultAssetList({
                   onOpen={loading ? undefined : () => onOpenAsset?.(asset)}
                 />
               </li>
-            ))}
-          </ul>
-        </TabsContent>
-      ))}
-    </Tabs>
+        ))}
+      </ul>
+    </div>
   );
 }
 

@@ -16,7 +16,7 @@ const STATUS_VARIANT: Record<
   "Pending review": "outline",
   Processing: "info",
   Paid: "success",
-  Rejected: "error",
+  Declined: "error",
 };
 
 /**
@@ -24,6 +24,32 @@ const STATUS_VARIANT: Record<
  * the status Grade10's approval sets. Hidden when nothing has been
  * requested, matching the intake alert's rule.
  */
+function CashOutRow({
+  request,
+}: {
+  request: VaultPayoutRequest;
+}) {
+  return (
+    <li
+      className="flex items-center justify-between gap-4 px-6 py-4"
+      key={request.id}
+    >
+      <div className="flex min-w-0 flex-col gap-0.5">
+        <Text className="tabular-nums" weight="medium">
+          {formatHkd(request.amountHkd)}
+        </Text>
+        <Text size="sm" tone="secondary">
+          {request.requestedAt} · To {PAYOUT_METHOD.bankName}{" "}
+          {PAYOUT_METHOD.maskedAccount}
+        </Text>
+      </div>
+      <Badge size="sm" variant={STATUS_VARIANT[request.status]}>
+        {request.status}
+      </Badge>
+    </li>
+  );
+}
+
 function CashOutList({
   requests,
   className,
@@ -49,23 +75,7 @@ function CashOutList({
       <Card padding={false}>
         <ul className="divide-y divide-border">
           {requests.map((request) => (
-            <li
-              className="flex items-center justify-between gap-4 px-6 py-4"
-              key={request.id}
-            >
-              <div className="flex min-w-0 flex-col gap-0.5">
-                <Text weight="medium" className="tabular-nums">
-                  {formatHkd(request.amountHkd)}
-                </Text>
-                <Text size="sm" tone="secondary">
-                  {request.requestedAt} · To {PAYOUT_METHOD.bankName}{" "}
-                  {PAYOUT_METHOD.maskedAccount}
-                </Text>
-              </div>
-              <Badge size="sm" variant={STATUS_VARIANT[request.status]}>
-                {request.status}
-              </Badge>
-            </li>
+            <CashOutRow key={request.id} request={request} />
           ))}
         </ul>
       </Card>
@@ -73,4 +83,4 @@ function CashOutList({
   );
 }
 
-export { CashOutList };
+export { CashOutList, CashOutRow };

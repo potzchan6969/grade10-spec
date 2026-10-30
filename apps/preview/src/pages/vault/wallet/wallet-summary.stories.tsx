@@ -18,19 +18,22 @@ type Story = StoryObj<typeof meta>;
 
 export const Filled: Story = {
   args: {
-    rewardsAvailableHkd: PORTFOLIO_SUMMARY.rewardsAvailableHkd,
+    dailyIncentiveHkd: PORTFOLIO_SUMMARY.dailyIncentiveHkd,
+    availableHkd: PORTFOLIO_SUMMARY.rewardsAvailableHkd,
     earnedAllTimeHkd: PORTFOLIO_SUMMARY.earnedAllTimeHkd,
-    totalEstimateHkd: PORTFOLIO_SUMMARY.totalEstimateHkd,
-    withdrawnHkd: PORTFOLIO_SUMMARY.withdrawnHkd,
+    inCashOutHkd: PORTFOLIO_SUMMARY.inCashOutHkd,
+    cashedOutHkd: PORTFOLIO_SUMMARY.cashedOutHkd,
+    openCashOutCount: 2,
     minWithdrawalHkd: PORTFOLIO_SUMMARY.minWithdrawalHkd,
     hasPayoutMethod: PORTFOLIO_SUMMARY.hasPayoutMethod,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Rewards available")).toBeVisible();
-    expect(canvas.getByText("Earned all-time")).toBeVisible();
-    expect(canvas.getByText("Total estimated value")).toBeVisible();
-    expect(canvas.getByText("Withdrawn to date")).toBeVisible();
+    expect(canvas.getByText("Incentives available")).toBeVisible();
+    expect(canvas.getByText("Earned all time")).toBeVisible();
+    expect(canvas.getByText("In cash-out")).toBeVisible();
+    expect(canvas.getByText("Cashed out")).toBeVisible();
+    expect(canvas.getByText(/daily while your items/)).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Cash out" }),
     ).toBeEnabled();
@@ -39,7 +42,7 @@ export const Filled: Story = {
 
 /** Balance under the minimum — CTA disabled, the floor named beside it. */
 export const BelowMinimum: Story = {
-  args: { ...Filled.args, rewardsAvailableHkd: 38 },
+  args: { ...Filled.args, availableHkd: 38 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(

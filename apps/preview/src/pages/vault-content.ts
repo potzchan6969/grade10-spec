@@ -451,7 +451,7 @@ const PAYOUT_METHOD = {
 
 const WITHDRAWAL_PROCESSING_DAYS = "3 business days";
 
-type VaultPayoutStatus = "Pending review" | "Processing" | "Paid" | "Rejected";
+type VaultPayoutStatus = "Pending review" | "Processing" | "Paid" | "Declined";
 
 type VaultPayoutRequest = {
   id: string;
@@ -484,12 +484,24 @@ const PAYOUT_REQUESTS: VaultPayoutRequest[] = [
 const PORTFOLIO_SUMMARY = {
   itemCount: PORTFOLIO_ASSETS.length,
   totalEstimateHkd: PORTFOLIO_ASSETS.reduce((sum, a) => sum + a.estimateHkd, 0),
+  dailyIncentiveHkd: 124,
   rewardsAvailableHkd: 1240,
-  earnedAllTimeHkd: 1560,
-  withdrawnHkd: 320,
+  earnedAllTimeHkd: 2210,
+  inCashOutHkd: 650,
+  cashedOutHkd: 320,
   minWithdrawalHkd: 500,
   hasPayoutMethod: true,
 };
+
+/** Daily incentive sums — one amount per day, no per-asset breakdown. */
+const DAILY_INCENTIVES: { date: string; amountHkd: number }[] = [
+  { date: "29 Oct 2026", amountHkd: 124 },
+  { date: "28 Oct 2026", amountHkd: 124 },
+  { date: "27 Oct 2026", amountHkd: 121 },
+  { date: "26 Oct 2026", amountHkd: 121 },
+  { date: "25 Oct 2026", amountHkd: 118 },
+  { date: "24 Oct 2026", amountHkd: 118 },
+];
 
 const VAULT_SITE_HEADER = {
   copy: {
@@ -1027,10 +1039,11 @@ function vaultItemRelatedStoryId(asset: VaultAsset): string {
 
 /**
  * Price line on the portfolio card — the amount and label follow the
- * asset's status: live bids read BID PRICE, store listings LISTED PRICE,
- * everything else the intake estimate.
+ * asset's status: live bids read BID PRICE, store listings LISTED PRICE.
+ * In-vault assets carry no figure — the portfolio leads with earnings,
+ * not valuations.
  */
-function assetPrice(asset: VaultAsset): { label: string; amountHkd: number } {
+function assetPrice(asset: VaultAsset): { label: string; amountHkd: number } | null {
   if (asset.status === "Live Auction") {
     return {
       label: "Bid price",
@@ -1043,7 +1056,7 @@ function assetPrice(asset: VaultAsset): { label: string; amountHkd: number } {
       amountHkd: asset.listedHkd ?? asset.estimateHkd,
     };
   }
-  return { label: "Intake estimate", amountHkd: asset.estimateHkd };
+  return null;
 }
 
 export type {
@@ -1079,6 +1092,7 @@ export {
   isPortfolioHolding,
   MANAGE_CARD_COPY,
   NEXT_AVAILABLE_VISIT_DATE,
+  DAILY_INCENTIVES,
   PAYOUT_METHOD,
   PAYOUT_REQUESTS,
   PORTFOLIO_ASSETS,

@@ -4,7 +4,15 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
 import { expect, waitFor, within } from "storybook/test";
 import { activeIntakeSubmissionCount } from "../../intake-content";
+import { Badge } from "@grade10/design-system/components/display/badge";
 import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@grade10/design-system/components/display/tabs";
+import {
+  DAILY_INCENTIVES,
   INTAKE_TRACKER_STORY_ID,
   PAYOUT_METHOD,
   PAYOUT_REQUESTS,
@@ -23,7 +31,7 @@ import { navigateToStory } from "../../workbench-story-nav";
 import { ActiveIntakeAlert } from "./active-intake-alert";
 import { VaultAssetList } from "./vault-asset-list";
 import { CashOutDialog } from "../wallet/cash-out-dialog";
-import { CashOutList } from "../wallet/cash-out-list";
+import { RewardsLedger } from "../wallet/rewards-ledger";
 import { WalletSummary } from "../wallet/wallet-summary";
 
 /** Simulated holdings fetch — the workbench recipe's ready beat. */
@@ -54,6 +62,10 @@ function VaultPortfolioPage({
 
   const holdingsLoading = loading || fetching;
   const [withdrawOpen, setWithdrawOpen] = useState(false);
+  const [pageTab, setPageTab] = useState<"assets" | "rewards">("assets");
+  const openCashOuts = PAYOUT_REQUESTS.filter(
+    (request) => request.status === "Pending review" || request.status === "Processing",
+  ).length;
 
   return (
     <VaultPageShell wide>
@@ -77,46 +89,73 @@ function VaultPortfolioPage({
         {!empty && (
           <div className={cn(PAGE_ENTER_CLASS, "delay-[30ms]")}>
             <WalletSummary
+              availableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
+              cashedOutHkd={PORTFOLIO_SUMMARY.cashedOutHkd}
+              dailyIncentiveHkd={PORTFOLIO_SUMMARY.dailyIncentiveHkd}
               earnedAllTimeHkd={PORTFOLIO_SUMMARY.earnedAllTimeHkd}
               hasPayoutMethod={PORTFOLIO_SUMMARY.hasPayoutMethod}
+              inCashOutHkd={PORTFOLIO_SUMMARY.inCashOutHkd}
               minWithdrawalHkd={PORTFOLIO_SUMMARY.minWithdrawalHkd}
-              rewardsAvailableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
-              totalEstimateHkd={PORTFOLIO_SUMMARY.totalEstimateHkd}
-              withdrawnHkd={PORTFOLIO_SUMMARY.withdrawnHkd}
-              onWithdraw={() => setWithdrawOpen(true)}
+              openCashOutCount={openCashOuts}
+              onCashOut={() => setWithdrawOpen(true)}
+              onViewActivity={() => setPageTab("rewards")}
             />
           </div>
         )}
 
-        {!empty && (
-          <div className={cn(PAGE_ENTER_CLASS, "delay-[70ms]")}>
-            <CashOutList requests={PAYOUT_REQUESTS} />
-          </div>
-        )}
-
-        <div className={cn(PAGE_ENTER_CLASS, "delay-[60ms]")}>
-          <ActiveIntakeAlert
-            submissionCount={intakeSubmissionCount}
-            onTrackProgress={() => navigateToStory(INTAKE_TRACKER_STORY_ID)}
-          />
-        </div>
-
-        {empty ? (
-          <VaultEmptyState
-            title="No items in your vault"
-            description="Book a store visit to vault your collectibles. Your items will appear here once verified and stored."
-            actionLabel="Submit to Vault"
-            onAction={() => navigateToStory(VAULT_BOOK_VISIT_STORY_ID)}
-          />
-        ) : (
-          <VaultAssetList
-            assets={assets}
-            loading={holdingsLoading}
-            onOpenAsset={(asset) =>
-              navigateToStory(vaultItemRelatedStoryId(asset))
-            }
-          />
-        )}
+        <Tabs
+          className="gap-8"
+          value={pageTab}
+          onValueChange={(value) => setPageTab(value as "assets" | "rewards")}
+        >
+          <TabsList aria-label="Portfolio sections" variant="list">
+            <TabsTrigger value="assets">
+              Assets
+              <Badge size="sm">{PORTFOLIO_SUMMARY.itemCount}</Badge>
+            </TabsTrigger>
+            <TabsTrigger value="rewards">
+              Rewards & Cash-out
+              {openCashOuts > 0 ? (
+                <Badge size="sm">{openCashOuts} open</Badge>
+              ) : null}
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent
+            className="mt-0 flex flex-col gap-8 outline-none"
+            value="assets"
+          >
+            <div className={cn(PAGE_ENTER_CLASS, "delay-[60ms]")}>
+              <ActiveIntakeAlert
+                submissionCount={intakeSubmissionCount}
+                onTrackProgress={() =>
+                  navigateToStory(INTAKE_TRACKER_STORY_ID)
+                }
+              />
+            </div>
+            {empty ? (
+              <VaultEmptyState
+                title="No items in your vault"
+                description="Book a store visit to vault your collectibles. Your items will appear here once verified and stored."
+                actionLabel="Submit to Vault"
+                onAction={() => navigateToStory(VAULT_BOOK_VISIT_STORY_ID)}
+              />
+            ) : (
+              <VaultAssetList
+                assets={assets}
+                loading={holdingsLoading}
+                onOpenAsset={(asset) =>
+                  navigateToStory(vaultItemRelatedStoryId(asset))
+                }
+              />
+            )}
+          </TabsContent>
+          <TabsContent className="mt-0 outline-none" value="rewards">
+            <RewardsLedger
+              dailyIncentives={DAILY_INCENTIVES}
+              payoutRequests={PAYOUT_REQUESTS}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
       <CashOutDialog
         availableHkd={PORTFOLIO_SUMMARY.rewardsAvailableHkd}
