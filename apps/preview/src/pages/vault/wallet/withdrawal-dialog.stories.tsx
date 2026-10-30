@@ -10,10 +10,10 @@ import {
 } from "../../vault-content";
 import {
   type PayoutMethod,
-  CashOutDialog,
-} from "./cash-out-dialog";
+  WithdrawalDialog,
+} from "./withdrawal-dialog";
 
-function CashOutDialogDemo({
+function WithdrawalDialogDemo({
   payoutMethod,
 }: {
   payoutMethod?: PayoutMethod;
@@ -24,10 +24,10 @@ function CashOutDialogDemo({
     <div className="flex min-h-svh w-full flex-col bg-background p-8">
       <VStack className="mx-auto w-full max-w-lg" gap="md" hAlign="start">
         <Text as="h2" className="text-xl font-semibold tracking-tight">
-          Cash Out
+          Withdraw
         </Text>
         <Text size="sm" tone="secondary">
-          Standalone preview of the cash-out dialog opened from the wallet
+          Standalone preview of the withdrawal dialog opened from the wallet
           card on the portfolio.
         </Text>
         {!open ? (
@@ -36,7 +36,7 @@ function CashOutDialogDemo({
           </Button>
         ) : null}
       </VStack>
-      <CashOutDialog
+      <WithdrawalDialog
         availableUsd={PORTFOLIO_SUMMARY.rewardsAvailableUsd}
         hkdPerUsd={PORTFOLIO_SUMMARY.hkdPerUsd}
         minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
@@ -49,11 +49,11 @@ function CashOutDialogDemo({
 }
 
 const meta = {
-  title: "Vault/Wallet/Screens/Cash Out Dialog",
-  component: CashOutDialogDemo,
+  title: "Vault/Wallet/Screens/Withdraw Dialog",
+  component: WithdrawalDialogDemo,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
-} satisfies Meta<typeof CashOutDialogDemo>;
+} satisfies Meta<typeof WithdrawalDialogDemo>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -76,8 +76,8 @@ export const Amount: Story = {
   args: { payoutMethod: PAYOUT_METHOD },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
-    expect(dialog.getByText("Cash Out")).toBeVisible();
-    expect(dialog.getByText(/Available to cash out/)).toBeVisible();
+    expect(dialog.getByText("Withdraw")).toBeVisible();
+    expect(dialog.getByText(/Available to withdraw/)).toBeVisible();
     expect(dialog.getByText(/Minimum US\$65/)).toBeVisible();
     expect(
       dialog.getByRole("button", { name: "Continue" }),
@@ -116,7 +116,7 @@ export const Review: Story = {
       dialog.getByRole("button", { name: "Continue" }),
     );
     await waitFor(() =>
-      expect(dialog.getByText("Review Cash Out")).toBeVisible(),
+      expect(dialog.getByText("Review Withdraw")).toBeVisible(),
     );
     expect(dialog.getByText("$1,240")).toBeVisible();
     expect(dialog.getByText("HSBC ••• 8304")).toBeVisible();
@@ -161,6 +161,6 @@ export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
-    expect(dialog.getByText("Cash Out")).toBeVisible();
+    expect(dialog.getByText("Withdraw")).toBeVisible();
   },
 };

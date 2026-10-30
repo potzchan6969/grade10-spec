@@ -4,8 +4,8 @@ import { DAILY_INCENTIVES, PAYOUT_REQUESTS } from "../../vault-content";
 import { RewardsLedger } from "./rewards-ledger";
 
 /**
- * Rewards and cash-out activity — daily incentive sums under Rewards, every
- * request with its approval status under Cash-out.
+ * Rewards and withdrawal activity — daily incentive sums under Rewards, every
+ * request with its approval status under Withdrawal.
  */
 const meta = {
   title: "Vault/Wallet/Parts/RewardsLedger",
@@ -35,7 +35,7 @@ export const Rewards: Story = {
   ...All,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("tab", { name: "Rewards" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Rewards" }));
     expect(canvas.getAllByText("Daily incentive").length).toBe(
       DAILY_INCENTIVES.length,
     );
@@ -47,7 +47,7 @@ export const CashOut: Story = {
   ...Rewards,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("tab", { name: "Cash-out" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Withdrawal" }));
     expect(canvas.getByText("Pending review")).toBeVisible();
     expect(canvas.getByText("Paid")).toBeVisible();
   },

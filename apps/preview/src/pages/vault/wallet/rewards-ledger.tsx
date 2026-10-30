@@ -1,10 +1,6 @@
 import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from "@grade10/design-system/components/display/tabs";
+import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Plus } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
@@ -13,9 +9,9 @@ import {
   type VaultPayoutRequest,
 } from "../../vault-content";
 import { animateEnter } from "../../vault-shared";
-import { CashOutRow } from "./cash-out-list";
+import { WithdrawalRow } from "./withdrawal-list";
 
-type LedgerTab = "all" | "rewards" | "cash-out";
+type LedgerTab = "all" | "rewards" | "withdrawal";
 
 type RewardEntry = { date: string; amountUsd: number };
 
@@ -61,7 +57,7 @@ function MonthGroup({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      <Text size="sm" tone="secondary" weight="medium">
+      <Text as="h3" size="sm" tone="secondary" weight="medium">
         {month}
       </Text>
       <Card padding={false}>
@@ -72,8 +68,8 @@ function MonthGroup({
 }
 
 /**
- * Rewards and cash-out activity under one heading — All reads the two
- * kinds on one timeline, Rewards lists each day's incentive sum, Cash-out
+ * Rewards and withdrawal activity under one heading — All reads the two
+ * kinds on one timeline, Rewards lists each day's incentive sum, Withdrawal
  * lists every request with the status Grade10's approval sets. Entries are
  * grouped by month and year, like the points history ledger.
  */
@@ -112,7 +108,7 @@ function RewardsLedger({
       entry,
     })),
     ...payoutRequests.map((request) => ({
-      kind: "cash-out" as const,
+      kind: "withdrawal" as const,
       date: request.requestedAt,
       request,
     })),
@@ -135,7 +131,7 @@ function RewardsLedger({
         item.kind === "reward" ? (
           <RewardRow entry={item.entry} key={`r-${item.date}`} />
         ) : (
-          <CashOutRow key={item.request.id} request={item.request} />
+          <WithdrawalRow key={item.request.id} request={item.request} />
         ),
       );
     }
@@ -147,24 +143,31 @@ function RewardsLedger({
     for (const request of payoutRequests) {
       push(
         monthKey(request.requestedAt),
-        <CashOutRow key={request.id} request={request} />,
+        <WithdrawalRow key={request.id} request={request} />,
       );
     }
   }
 
   return (
     <section
-      aria-label="Rewards and cash-out activity"
+      aria-label="Rewards and withdrawal activity"
       className={cn("flex flex-col gap-6", className)}
       data-slot="rewards-ledger"
     >
-      <Tabs value={activeTab} onValueChange={(value) => setTab(value as LedgerTab)}>
-        <TabsList aria-label="Activity filters" variant="pill">
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="rewards">Rewards</TabsTrigger>
-          <TabsTrigger value="cash-out">Cash-out</TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <div aria-label="Activity filters" className="flex flex-wrap items-center gap-2" role="group">
+        {(["all", "rewards", "withdrawal"] as const).map((key) => (
+          <Button
+            aria-pressed={key === activeTab}
+            key={key}
+            size="md"
+            type="button"
+            variant={key === activeTab ? "secondary" : "outline"}
+            onClick={() => setTab(key)}
+          >
+            {key === "withdrawal" ? "Withdrawal" : key === "rewards" ? "Rewards" : "All"}
+          </Button>
+        ))}
+      </div>
 
       <div className="flex flex-col gap-6" ref={groupsRef}>
         {months.map((group) => (

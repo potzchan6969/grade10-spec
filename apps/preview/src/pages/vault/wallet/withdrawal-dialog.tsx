@@ -31,13 +31,13 @@ type PayoutMethod = {
 type CashOutStep = "amount" | "bank-details" | "review" | "submitted";
 
 /**
- * Cash-out — the stepped payout request: amount (with `Max` and
+ * Withdrawal — the stepped payout request: amount (with `Max` and
  * the minimum named), first-time bank details when no account is on file,
  * a review that states the approval and the working days before submit,
  * then the submitted beat. Grade10 approves every request; nothing leaves
  * the wallet until then.
  */
-function CashOutDialog({
+function WithdrawalDialog({
   availableUsd,
   minWithdrawalUsd,
   hkdPerUsd,
@@ -48,7 +48,7 @@ function CashOutDialog({
 }: {
   availableUsd: number;
   minWithdrawalUsd: number;
-  /** Reference conversion for HKD cash-outs. */
+  /** Reference conversion for HKD withdrawals. */
   hkdPerUsd: number;
   /** Saved destination; undefined on a collector's first payout. */
   payoutMethod?: PayoutMethod;
@@ -97,15 +97,15 @@ function CashOutDialog({
   };
 
   const TITLE: Record<CashOutStep, string> = {
-    amount: "Cash Out",
+    amount: "Withdraw",
     "bank-details": "Payout Bank Details",
-    review: "Review Cash Out",
+    review: "Review Withdraw",
     submitted: "Request Submitted",
   };
 
   const SUBTEXT: Record<CashOutStep, string> = {
-    amount: `Available to cash out: ${formatUsd(availableUsd)}`,
-    "bank-details": "In your verified name and saved to your profile — where rewards go on your first cash-out.",
+    amount: `Available to withdraw: ${formatUsd(availableUsd)}`,
+    "bank-details": "In your verified name and saved to your profile — where rewards go on your first withdrawal.",
     review: `Grade10 reviews every request — paid by bank transfer within ${WITHDRAWAL_PROCESSING_DAYS} once approved.`,
     submitted: "We’ll email you once Grade10 approves the payout.",
   };
@@ -126,7 +126,7 @@ function CashOutDialog({
             <VStack gap="sm" hAlign="start">
               <div className="flex w-full items-end gap-3">
                 <TextInput
-                  aria-label="Cash-out amount"
+                  aria-label="Withdrawal amount"
                   className="w-full font-heading text-2xl font-medium tabular-nums"
                   inputMode="decimal"
                   prefix="US$"
@@ -162,11 +162,11 @@ function CashOutDialog({
                 <Text size="sm" tone="secondary">
                   {currency === "HKD"
                     ? `≈ ${formatHkd(convertedHkd)}`
-                    : "USD and overseas cash-outs are handled manually by our team"}
+                    : "USD and overseas withdrawals are handled manually by our team"}
                 </Text>
               </div>
               <Text size="sm" tone="secondary">
-                Minimum {formatUsd(minWithdrawalUsd)} · One cash-out every 7 days
+                Minimum {formatUsd(minWithdrawalUsd)} · One withdrawal every 7 days
               </Text>
             </VStack>
           ) : null}
@@ -256,7 +256,7 @@ function CashOutDialog({
                 size={48}
                 weight="fill"
               />
-              <Text weight="medium">Cash-out of {formatHkd(amount)} requested</Text>
+              <Text weight="medium">Withdrawal of {formatHkd(amount)} requested</Text>
               <Text
                 className="text-center text-secondary-foreground"
                 size="sm"
@@ -328,4 +328,4 @@ function CashOutDialog({
 }
 
 export type { PayoutMethod };
-export { CashOutDialog };
+export { WithdrawalDialog };

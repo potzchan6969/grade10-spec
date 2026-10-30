@@ -26,7 +26,7 @@ const STATUS_VARIANT: Record<
  * the status Grade10's approval sets. Hidden when nothing has been
  * requested, matching the intake alert's rule.
  */
-function CashOutRow({
+function WithdrawalRow({
   request,
 }: {
   request: VaultPayoutRequest;
@@ -51,12 +51,21 @@ function CashOutRow({
         <Text className="whitespace-nowrap tabular-nums" weight="medium">
           −{formatUsd(request.amountUsd)}
           {request.currency === "HKD" && request.convertedHkd != null ? (
-            <span className="text-secondary-foreground font-normal">
+            <span className="hidden text-secondary-foreground font-normal sm:inline">
               {" "}
               ≈ {formatHkd(request.convertedHkd)}
             </span>
           ) : null}
         </Text>
+        {request.currency === "HKD" && request.convertedHkd != null ? (
+          <Text
+            size="sm"
+            tone="secondary"
+            className="whitespace-nowrap tabular-nums sm:hidden"
+          >
+            ≈ {formatHkd(request.convertedHkd)}
+          </Text>
+        ) : null}
         <Badge size="sm" variant={STATUS_VARIANT[request.status]}>
           {request.status}
         </Badge>
@@ -65,7 +74,7 @@ function CashOutRow({
   );
 }
 
-function CashOutList({
+function WithdrawalList({
   requests,
   className,
 }: {
@@ -76,21 +85,21 @@ function CashOutList({
 
   return (
     <section
-      aria-labelledby="cash-out-requests"
+      aria-labelledby="withdrawal-requests"
       className={cn("flex flex-col gap-4", className)}
-      data-slot="cash-out-list"
+      data-slot="withdrawal-list"
     >
       <Text
         as="h2"
         className="font-heading text-xl font-semibold tracking-tight"
-        id="cash-out-requests"
+        id="withdrawal-requests"
       >
-        Cash-out requests
+        Withdrawal requests
       </Text>
       <Card padding={false}>
         <ul className="divide-y divide-border">
           {requests.map((request) => (
-            <CashOutRow key={request.id} request={request} />
+            <WithdrawalRow key={request.id} request={request} />
           ))}
         </ul>
       </Card>
@@ -98,4 +107,4 @@ function CashOutList({
   );
 }
 
-export { CashOutList, CashOutRow };
+export { WithdrawalList, WithdrawalRow };

@@ -500,7 +500,7 @@ const PORTFOLIO_SUMMARY = {
   inCashOutUsd: 83,
   cashedOutUsd: 41,
   minWithdrawalUsd: 65,
-  /** Reference conversion for HKD cash-outs. */
+  /** Reference conversion for HKD withdrawals. */
   hkdPerUsd: 7.76,
   hasPayoutMethod: true,
 };
@@ -1053,28 +1053,6 @@ function vaultItemRelatedStoryId(asset: VaultAsset): string {
   return VAULT_ITEM_DETAIL_STORY_ID;
 }
 
-/**
- * Price line on the portfolio card — the amount and label follow the
- * asset's status: live bids read BID PRICE, store listings LISTED PRICE.
- * In-vault assets carry no figure — the portfolio leads with earnings,
- * not valuations.
- */
-function assetPrice(asset: VaultAsset): { label: string; amountHkd: number } | null {
-  if (asset.status === "Live Auction") {
-    return {
-      label: "Bid price",
-      amountHkd: asset.currentBidHkd ?? asset.estimateHkd,
-    };
-  }
-  if (asset.status === "Listed") {
-    return {
-      label: "Listed price",
-      amountHkd: asset.listedHkd ?? asset.estimateHkd,
-    };
-  }
-  return null;
-}
-
 export type {
   ItemCondition,
   RegisterCategory,
@@ -1091,7 +1069,6 @@ export {
   ACTIVE_INTAKE_ALERT_STORY_ID,
   APPOINTMENTS_COPY,
   AUCTION_LOT_LIVE_STORY_ID,
-  assetPrice,
   assetSubtitle,
   BOOK_VISIT_NAV_COPY,
   BOOK_VISIT_SERVICES,

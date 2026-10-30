@@ -5,7 +5,7 @@ import { WalletSummary } from "./wallet-summary";
 
 /**
  * Rewards wallet above the holdings. Rewards accrue daily
- * while items stay in custody; the Cash out CTA unlocks at the minimum.
+ * while items stay in custody; the Withdraw CTA unlocks at the minimum.
  */
 const meta = {
   title: "Vault/Wallet/Parts/WalletSummary",
@@ -31,11 +31,11 @@ export const Filled: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Incentives available")).toBeVisible();
     expect(canvas.getByText("Earned all time")).toBeVisible();
-    expect(canvas.getByText("In cash-out")).toBeVisible();
-    expect(canvas.getByText("Cashed out")).toBeVisible();
+    expect(canvas.getByText("In withdrawal")).toBeVisible();
+    expect(canvas.getByText("Withdrawn")).toBeVisible();
     expect(canvas.getByText(/daily while your items/)).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "Cash Out" }),
+      canvas.getByRole("button", { name: "Withdraw" }),
     ).toBeEnabled();
   },
 };
@@ -46,13 +46,13 @@ export const BelowMinimum: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: "Cash Out" }),
+      canvas.getByRole("button", { name: "Withdraw" }),
     ).toBeDisabled();
-    expect(canvas.getByRole("button", { name: "Minimum US$65 to cash out" })).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Minimum US$65 to withdraw" })).toBeVisible();
   },
 };
 
-/** No bank account on file — set-up CTA replaces Cash out. */
+/** No bank account on file — set-up CTA replaces Withdraw. */
 export const NoPayoutMethod: Story = {
   args: { ...Filled.args, hasPayoutMethod: false },
   play: async ({ canvasElement }) => {
@@ -60,27 +60,27 @@ export const NoPayoutMethod: Story = {
     expect(
       canvas.getByRole("button", { name: "Set Up Payout" }),
     ).toBeVisible();
-    expect(canvas.queryByRole("button", { name: "Cash Out" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Withdraw" })).toBeNull();
   },
 };
 
-/** Nothing in cash-out — the middle segment collapses, no requests link. */
+/** Nothing in withdrawal — the middle segment collapses, no requests link. */
 export const NoInCashOut: Story = {
   args: { ...Filled.args, inCashOutUsd: 0, openCashOutCount: 0 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("In cash-out")).toBeVisible();
+    expect(canvas.getByText("In withdrawal")).toBeVisible();
     expect(canvas.queryByText(/requests?$/)).toBeNull();
     expect(canvas.getByText("US$0")).toBeVisible();
   },
 };
 
-/** Nothing cashed out yet — the last segment collapses to zero. */
+/** Nothing withdrawn yet — the last segment collapses to zero. */
 export const NoCashedOut: Story = {
   args: { ...Filled.args, cashedOutUsd: 0 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Cashed out")).toBeVisible();
+    expect(canvas.getByText("Withdrawn")).toBeVisible();
     expect(canvas.getByText("US$0")).toBeVisible();
   },
 };

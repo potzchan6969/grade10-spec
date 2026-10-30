@@ -13,10 +13,10 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { formatHkd, formatUsd } from "../../vault-content";
 
 /**
- * The collector's vault wallet — cash-out stats over the portfolio. Left:
+ * The collector's vault wallet — withdrawal stats over the portfolio. Left:
  * the available balance and the acts on it; right: everything earned, split
- * into what is available, in cash-out and cashed out as a stacked bar.
- * Cash out runs by bank transfer recorded after the money moves. Three
+ * into what is available, in withdrawal and withdrawn as a stacked bar.
+ * Withdraw runs by bank transfer recorded after the money moves. Three
  * states: ready (balance at or over the minimum), below the minimum
  * (disabled CTA with the floor named), and no payout method yet (set-up
  * CTA first).
@@ -55,11 +55,11 @@ function WalletSummary({
   const SEGMENTS = [
     { label: "Available", amountHkd: availableUsd, swatch: "bg-primary" },
     {
-      label: "In cash-out",
+      label: "In withdrawal",
       amountHkd: inCashOutUsd,
       swatch: "bg-secondary",
     },
-    { label: "Cashed out", amountHkd: cashedOutUsd, swatch: "bg-foreground" },
+    { label: "Withdrawn", amountHkd: cashedOutUsd, swatch: "bg-foreground" },
   ];
 
   return (
@@ -99,7 +99,7 @@ function WalletSummary({
               type="button"
               onClick={onCashOut}
             >
-              Cash Out
+              Withdraw
             </Button>
           ) : (
             <Button
@@ -138,7 +138,7 @@ function WalletSummary({
             </p>
           </div>
           <div
-            aria-label={`Available ${formatUsd(availableUsd)}, in cash-out ${formatUsd(inCashOutUsd)}, cashed out ${formatUsd(cashedOutUsd)}`}
+            aria-label={`Available ${formatUsd(availableUsd)}, in withdrawal ${formatUsd(inCashOutUsd)}, withdrawn ${formatUsd(cashedOutUsd)}`}
             className="grid h-2.5 w-full gap-1 overflow-clip rounded-(--radius-full)"
             role="img"
             style={{
@@ -171,8 +171,8 @@ function WalletSummary({
                 <Text as="span" className="whitespace-nowrap">
                   {segment.label}
                 </Text>
-                {segment.label === "In cash-out" && openCashOutCount > 0 ? (
-                  <Link variant="secondary" onClick={onViewCashOuts}>
+                {segment.label === "In withdrawal" && openCashOutCount > 0 ? (
+                  <Link render={<button type="button" onClick={onViewCashOuts} />} variant="secondary">
                     {openCashOutCount}{" "}
                     {openCashOutCount === 1 ? "request" : "requests"}
                   </Link>
@@ -187,14 +187,14 @@ function WalletSummary({
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger
-                        aria-label={`Minimum ${formatUsd(minWithdrawalUsd)} to cash out`}
+                        aria-label={`Minimum ${formatUsd(minWithdrawalUsd)} to withdraw`}
                         className="inline-flex size-4 items-center justify-center text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                         render={<button type="button" />}
                       >
                         <Info aria-hidden size={16} weight="bold" />
                       </TooltipTrigger>
                       <TooltipContent>
-                        Minimum {formatUsd(minWithdrawalUsd)} to cash out
+                        Minimum {formatUsd(minWithdrawalUsd)} to withdraw
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
