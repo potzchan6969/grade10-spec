@@ -6,7 +6,7 @@
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the membership surface — `TierCard`, `TierInfoCard`,
-`TierLadder`, `HowPointsWork`, `MemberPass`, `RewardMenu`, `CouponList`, and
+`HowPointsWork`, `MemberPass`, `RewardMenu`, `CouponList`, and
 `PointHistory` — and the props and copy type of each.
 
 `TierCard` SHALL wear the skin of the tier held — silver, gold or black,
@@ -51,16 +51,6 @@ its rung states as consumer-worded copy, and its benefits behind checks —
 and SHALL wear the held tier's emphasis, a primary border and its tint,
 where a `currentTier` prop marks it the rung held, never derived from the
 tier name.
-
-`TierLadder` SHALL draw the tiers in climb order inside a card — each rung
-through the stepper, earned rungs beneath the held tier completed, the held
-rung in progress, unearned rungs upcoming — and SHALL draw no connector
-into a rung marked `invitationOnly`. Where the held rung is invitation-only
-every other rung SHALL read upcoming, never completed, and neither the
-qualifying count nor its footnote SHALL render however they are passed;
-otherwise the count SHALL render inside the ladder's card only where both
-the count and its target arrive. The ladder SHALL receive its rungs, the
-held rung's index and the figures through props.
 
 `HowPointsWork` SHALL render the programme's mechanics as rows — an icon,
 a title and a body each, the icons the consumer's own — stacked on a
@@ -228,21 +218,6 @@ SHALL require no export of its own.
 - **WHEN** `TierInfoCard` renders the rung marked `currentTier`
 - **THEN** it wears the primary border and its tint
 - **AND** the unheld rungs wear the plain border
-
-<!-- trace:scenario id=g10.loyalty-programme.SC-rwd rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-276 - An invitation-held tier earns nothing beneath it
-**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
-
-- **WHEN** `TierLadder` renders a member whose held rung is `invitationOnly`
-- **THEN** every other rung reads upcoming, never completed
-- **AND** no connector is drawn into the held rung, and neither the qualifying count nor its footnote renders
-
-<!-- trace:scenario id=g10.loyalty-programme.SC-xnm rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-277 - The qualifying line waits for both figures
-**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
-
-- **WHEN** `TierLadder` renders with a qualifying count but no target, or a target but no count
-- **THEN** no qualifying line is rendered
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-fzj rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-278 - The mechanics rows take the consumer's icons and words
