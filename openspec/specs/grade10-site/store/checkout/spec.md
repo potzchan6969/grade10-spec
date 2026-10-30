@@ -248,7 +248,7 @@ order paid, unless the guest changed the cart's lines or code after Pay.
 Every order SHALL carry a link to its Grade10 page, and Shopify's order emails
 SHALL print it. A member's link SHALL be their order under
 `/store/my-orders/<order-id>`. A guest order's link SHALL be
-`/orders/<order-id>#<secret>`: the secret rides after `#`, so no server or log
+`/store/orders/<order-id>#<secret>`: the secret rides after `#`, so no server or log
 sees it.
 
 The page SHALL open the order for whoever holds the link, ask nobody to sign

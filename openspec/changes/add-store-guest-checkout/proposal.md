@@ -25,7 +25,7 @@ secondary: share of guest orders linked to an account.
   and the drawer reopens with points and the wallet; a public code on the
   cart stays if it still fits
 - **Order confirmed, then an account ask** — on return from checkout
-  (`/orders/latest` → `/orders/<id>#secret`, same browser, within a day) the
+  (`/orders/latest` → `/store/orders/<id>#secret`, same browser, within a day) the
   guest's order page is a normal order page whose placed-on line names the
   email the receipt went to, and a persistent toast asks to add the order to
   an account — Sign in
@@ -80,7 +80,7 @@ See [Non-Goals](decisions.md#non-goals).
   the existing `Toast` primitive, no new shared export. Design Override
   needed for the footer visuals
 - **grade10 application** — a guest `createCheckout` with no session, the
-  order secret link and its `/orders/<id>` route, linking guest orders on
+  order secret link and its `/store/orders/<id>` route, linking guest orders on
   sign-in by proven email, a magic link that proves the order's email, the
   View order link in Shopify's notification templates, and the
   `/orders/latest` prompt. A linked guest order earns nothing. These are
