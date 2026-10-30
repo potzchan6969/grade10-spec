@@ -1,0 +1,19 @@
+---
+description: Use semibold for emphasised text — page titles, headings and strong labels — not bold
+globs: '{apps/preview/**,packages/**}'
+alwaysApply: false
+---
+
+# Font weight for emphasis
+
+- Emphasised text uses `font-semibold` (600), never `font-bold` (700): page
+  titles (`h1`), section headings, card titles and labels styled to stand out.
+- This matches the page convention already used across account, loyalty,
+  store, grading and vault screens (`text-3xl font-semibold` page titles).
+- The rule covers `<strong>` and `<b>` too: add `font-semibold` to override
+  the browser's default bold, or drop the tag if the emphasis is unnecessary.
+- Exceptions: deliberate display styling that predates the rule (auction
+  catalogue display type, the appointment-visit block family, which uses
+  `font-bold` throughout by design) and badge/chip emphasis.
+- When editing existing `font-bold` usage that violates this, change it to
+  `font-semibold` rather than adding a new exception.
