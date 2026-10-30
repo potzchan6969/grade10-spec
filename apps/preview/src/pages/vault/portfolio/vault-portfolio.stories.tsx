@@ -1,7 +1,7 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { expect, waitFor, within } from "storybook/test";
 import { activeIntakeSubmissionCount } from "../../intake-content";
 import { Badge } from "@grade10/design-system/components/display/badge";
@@ -22,6 +22,7 @@ import {
   vaultItemRelatedStoryId,
 } from "../../vault-content";
 import {
+  animateEnter,
   PAGE_ENTER_CLASS,
   PageHeader,
   StickyTabBar,
@@ -64,9 +65,18 @@ function VaultPortfolioPage({
   const holdingsLoading = loading || fetching;
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [pageTab, setPageTab] = useState<"assets" | "rewards">("assets");
+  const tabsRef = useRef<HTMLDivElement>(null);
   const openCashOuts = PAYOUT_REQUESTS.filter(
     (request) => request.status === "Pending review" || request.status === "Processing",
   ).length;
+
+  /* Enter: the active panel's sections rise in on each tab switch. */
+  useEffect(() => {
+    const panel = tabsRef.current?.querySelector(
+      '[role="tabpanel"][data-state="active"]',
+    ) as HTMLElement | null;
+    animateEnter(panel);
+  }, [pageTab, empty]);
 
   return (
     <VaultPageShell wide>
@@ -106,6 +116,7 @@ function VaultPortfolioPage({
 
         <Tabs
           className="gap-8"
+          ref={tabsRef as never}
           value={pageTab}
           onValueChange={(value) => setPageTab(value as "assets" | "rewards")}
         >

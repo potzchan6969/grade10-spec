@@ -18,6 +18,39 @@ import { VAULT_FOOTER, VAULT_SITE_HEADER } from "./vault-content";
 const PAGE_ENTER_CLASS =
   "animate-in fade-in-0 slide-in-from-bottom-2 blur-in-[2px] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] fill-mode-backwards motion-reduce:animate-none";
 
+/**
+ * Tab-switch entrance — each child rises `rise`px and fades in, staggered.
+ * Matches PAGE_ENTER_CLASS's feel; reduced-motion drops the rise, keeps
+ * the fade.
+ */
+function animateEnter(
+  container: HTMLElement | null,
+  { rise = 6, duration = 220, stagger = 50 }: {
+    rise?: number;
+    duration?: number;
+    stagger?: number;
+  } = {},
+) {
+  if (!container) return;
+  const reduce = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  for (const [i, el] of [...container.children].entries()) {
+    el.animate(
+      [
+        { opacity: 0, transform: reduce ? "none" : `translateY(${rise}px)` },
+        { opacity: 1, transform: "none" },
+      ],
+      {
+        delay: i * stagger,
+        duration,
+        easing: "cubic-bezier(0.23, 1, 0.32, 1)",
+        fill: "backwards",
+      },
+    );
+  }
+}
+
 function VaultPageShell({
   children,
   wide = false,
@@ -297,6 +330,7 @@ function PrototypeNote({
 export {
   AppointmentPageShell,
   FactRow,
+  animateEnter,
   PAGE_ENTER_CLASS,
   PageHeader,
   PageSection,

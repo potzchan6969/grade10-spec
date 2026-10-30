@@ -2,6 +2,7 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { cn } from "@grade10/design-system/lib/utils";
+import { ArrowUpRight } from "@phosphor-icons/react";
 import {
   formatHkd,
   formatUsd,
@@ -31,13 +32,24 @@ function CashOutRow({
   request: VaultPayoutRequest;
 }) {
   return (
-    <li
-      className="flex items-center justify-between gap-4 px-6 py-4"
-      key={request.id}
-    >
-      <div className="flex min-w-0 flex-col gap-0.5">
-        <Text className="tabular-nums" weight="medium">
-          {formatUsd(request.amountUsd)}
+    <li className="flex items-center gap-4 px-6 py-4" key={request.id}>
+      <span
+        aria-hidden
+        className="grid size-10 shrink-0 place-items-center rounded-full bg-muted text-foreground"
+      >
+        <ArrowUpRight size={16} />
+      </span>
+      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <Text weight="medium">
+          To {PAYOUT_METHOD.bankName} {PAYOUT_METHOD.maskedAccount}
+        </Text>
+        <Text size="sm" tone="secondary">
+          {request.requestedAt} · {request.currency}
+        </Text>
+      </div>
+      <div className="flex shrink-0 flex-col items-end gap-1">
+        <Text className="whitespace-nowrap tabular-nums" weight="medium">
+          −{formatUsd(request.amountUsd)}
           {request.currency === "HKD" && request.convertedHkd != null ? (
             <span className="text-secondary-foreground font-normal">
               {" "}
@@ -45,14 +57,10 @@ function CashOutRow({
             </span>
           ) : null}
         </Text>
-        <Text size="sm" tone="secondary">
-          {request.requestedAt} · To {PAYOUT_METHOD.bankName}{" "}
-          {PAYOUT_METHOD.maskedAccount} · {request.currency}
-        </Text>
+        <Badge size="sm" variant={STATUS_VARIANT[request.status]}>
+          {request.status}
+        </Badge>
       </div>
-      <Badge size="sm" variant={STATUS_VARIANT[request.status]}>
-        {request.status}
-      </Badge>
     </li>
   );
 }
