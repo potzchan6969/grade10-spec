@@ -15,6 +15,12 @@ a search surface, and no link points to a page the site does not hold. The
 header marks the item that owns the current address, and marks nothing when no
 item owns it.
 
+- **Not found in a section** — an address a listed surface owns that
+  answers Page not found, such as a lot no listing holds, marks no item, as the
+  site's own not-found page does; a not-found page that offers a way back into
+  its section, such as an unknown product's way back to the Store, keeps that
+  section marked
+
 - **Auction-first chrome** — until Store launches, the primary nav lists
   Auction (and the other surfaces that answer) without a Store entrance, and the
   cart stays absent
@@ -27,7 +33,8 @@ item owns it.
 - **Shows** — the primary nav lists Shows once the site answers `/shows`,
   after Store Locator when that item is present and after Auction on
   auction-first, ahead of Index and Help; the header marks it current on
-  `/shows` and the addresses beneath
+  `/shows` and the addresses beneath, except while Shows answers Page not found,
+  as Not found in a section says
 - **Company column** — the footer lists the company pages the site answers
   under a Company column ahead of Help and Legal: About, Shows, Press
   Releases, Media Coverage
@@ -150,6 +157,7 @@ documentation site in a new tab.
 | After the first answer | Decided | The placeholder does not come back. A later read keeps the entry already shown, a later read that fails keeps it too, and one that returns no session shows Sign In. Rejected showing the placeholder on every re-read, which turns a signed-out visitor's Sign In into the placeholder each time they return to the tab, and Sign In on any failed later read, which a signed-in collector on a weak connection would see. | Product |
 | A read that never answers | Decided | A first read that fails shows Sign In. The site sets no timer; the transport ends every read of the session two minutes after it starts, as a failed read, so no wait on it lasts for ever. Rejected a site timer, which could show Sign In to a slow but healthy read, no deadline, and a limit at each wait. | Product |
 | Controls beside the account entry | Decided | Only the language and search controls on the wide header move, by the change in the account entry's width; primary navigation, Cart and the compact bar stay. Rejected reserving Sign In's width, which would show the account icon in a wider space. | Product |
-| Company pages in the chrome | Decided | Shows joins the primary nav ahead of Index and Help — after Store Locator when present, after Auction on auction-first — and the header marks it current on `/shows` and beneath; About, Shows, Press Releases and Media Coverage form the footer's Company column ahead of Help and Legal. Rejected primary-nav seats for the three corporate pages — the bar stays task surfaces — and a grouped nav item, which the flat item list does not carry. | Product (@tangconst) |
+| Company pages in the chrome | Decided | Shows joins the primary nav ahead of Index and Help — after Store Locator when present, after Auction on auction-first — and the header marks it current on `/shows` and beneath; About, Shows, Press Releases and Media Coverage form the footer's Company column ahead of Help and Legal. Rejected primary-nav seats for the three corporate pages — the bar stays task surfaces — and a grouped nav item, which the flat item list does not carry.  A Shows that answers Page not found marks nothing, under the Not found in a section row.| Product (@tangconst) |
+| Not found in a section | Decided | An address a listed surface owns that answers Page not found marks no item, because that page offers only Back to Home and the store's not-found assembly marks none; a not-found page offering a way back into its own section (an unknown product's way back to the Store) keeps its section marked. Rejected marking the section the address sits under, which pointed a collector at a section the page gave them no way into. | Product (@tangconst) |
 | Index entry points | Decided | A single external Index item joins the primary nav after Shows, ahead of Help, opening the `index.grade10.com` hub in a new tab; the footer's Index column carries all four index pages — Hat Price Index, PTCG100, PTCG500, OPCG100 — each external. External primary items carry the arrow-up-right glyph after their label as the new-tab cue — Index and Help alike. Rejected four nav seats or a grouped item — the bar stays flat — and the Company column, since Index is a product, not a company page. | Product (@tangconst) |
 :::

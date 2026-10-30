@@ -516,8 +516,10 @@ docs.
 none marked when no item owns it,
 **so that** I can tell where I am in the site without guessing.
 
-<!-- trace:case id=g10.site-page-shell.TC-19q rev=1 covers=g10.site-page-shell.SC-q3w,g10.site-page-shell.SC-xiu -->
-### g10.site-page-shell.US5-TC1: A listed surface marks its navigation item
+<!-- trace:case id=g10.site-page-shell.TC-19q rev=2 covers=g10.site-page-shell.SC-q3w,g10.site-page-shell.SC-mf7 -->
+### g10.site-page-shell.US5-TC1: A listed surface, or an answering address beneath it, marks its item
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -533,18 +535,34 @@ none marked when no item owns it,
 
 **Pre-conditions:**
 
-* A collector opens the store, or an address beneath it.
+* `<site>` answers Store, Auction and Shows.
+* `<listing_1>` is the address name of a lot a published listing holds.
+* Shows has a show published.
+* `<unknown product>` is a Store product address whose handle no product holds.
+
+**Test data:**
+
+| `<address>` | `<page>` | `<item>` |
+| --- | --- | --- |
+| `<site>/store` | The Store front | Store |
+| `<site>/auction/listings/<listing_1>` | The lot's page | Auction |
+| `<site>/shows` | The Shows page | Shows |
+| `<unknown product>` | The unknown product's not-found page, with its way back to the Store | Store |
 
 **Steps:**
 
-1. Read the header navigation.
+1. Open `<address>`.
+2. Read the header navigation.
 
 **Expected Results:**
 
-* Store is marked as the current page.
+* `<page>` loads.
+* `<item>` is marked as the current page; no other item is.
 
-<!-- trace:case id=g10.site-page-shell.TC-pm3 rev=2 covers=g10.site-page-shell.SC-xiu -->
-### g10.site-page-shell.US5-TC2: An unlisted surface marks no navigation item
+<!-- trace:case id=g10.site-page-shell.TC-pm3 rev=3 covers=g10.site-page-shell.SC-xiu -->
+### g10.site-page-shell.US5-TC2: An unlisted surface, or Page not found in a listed section, marks nothing
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -560,15 +578,32 @@ none marked when no item owns it,
 
 **Pre-conditions:**
 
-* A signed-in collector on staging opens `/profile`.
+* customer is signed in.
+* `<site>` carries the account page and answers Auction and Shows.
+* `<missing listing>` is an address name no listing holds.
+* For the Shows row, nothing is published on Shows.
+* `<unrecognized address>` is an address beneath no surface the site carries.
+* `<missing press article>` is a press release's address, opened from Press Releases in the footer, with its last part changed to one no article holds.
+
+**Test data:**
+
+| `<address>` | `<page>` |
+| --- | --- |
+| `<site>/profile` | The account page |
+| `<site>/auction/listings/<missing listing>` | Page not found, offering only Back to Home |
+| `<site>/shows` | Page not found, offering only Back to Home |
+| `<missing press article>` | Page not found, offering only Back to Home |
+| `<site>/<unrecognized address>` | Page not found, offering only Back to Home |
 
 **Steps:**
 
-1. Read the header navigation.
+1. Open `<address>`.
+2. Read the header navigation.
 
 **Expected Results:**
 
-* No item is marked current.
+* `<page>` loads.
+* No navigation item is marked current.
 
 ---
 
@@ -1314,3 +1349,9 @@ Runs once per row of **Test data**.
 * The grade10 account menu offers no Submissions: the site supplies none, so the
   menu holds Profile, Membership, My Orders, My Auctions and Sign Out, each where
   its page is carried, and nothing else.
+* The compact menu drawer marks exactly what the wide bar marks: nothing on
+  Page not found in a listed section, and Store on the unknown product's
+  not-found page.
+* An address beneath a listed surface whose page fails to load for a reason
+  other than not found keeps its section marked; only a not-found answer
+  marks nothing.

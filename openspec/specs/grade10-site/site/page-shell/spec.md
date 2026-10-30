@@ -50,11 +50,12 @@ it.
     entries — primary-nav Help naming the documentation host, and primary-nav
     Index and the footer Index column naming the Grade10 Index hosts
   - Current-surface marking: the navigation item owning the current address is
-    marked, and none is when no item owns it
+    marked, and none is when no item owns it, or when an address an item owns
+    answers not found with no way back into that item's section
 - Company pages in the chrome
   - Primary-nav Shows: the primary navigation lists Shows once the site
     answers `/shows`, ahead of Index and Help; the item marks current on
-    `/shows` and the addresses beneath
+    `/shows` and the addresses beneath, unless Shows answers not found
   - Footer Company column: the footer lists the company pages the site
     answers under a Company column ahead of Help and Legal: About, Shows,
     Press Releases, Media Coverage
@@ -274,23 +275,40 @@ SHALL wait for a page the site answers.
 ### Requirement: The header marks the surface being viewed
 
 The site SHALL mark the navigation item matching the current surface, and
-SHALL mark none when the current address belongs to no navigation item.
+SHALL mark none when the current address belongs to no navigation item. An
+address a navigation item owns, the item's own address or one beneath it, that
+answers not found SHALL mark no item, unless its not-found page offers a way
+back into that item's section.
 
-<!-- trace:scenario id=g10.site-page-shell.SC-q3w rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-q3w rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-13 - A collector is on a listed surface
 **Serves:** grade10-site-site-page-shell-US-05 - Collector locates the current surface in the navigation
 
-- **GIVEN** a collector on a surface the navigation lists, or on any address beneath it
+- **GIVEN** a collector on a surface the navigation lists, or on an address
+  beneath it, that answers anything but a not-found page offering only Back to
+  Home
 - **WHEN** the header renders
 - **THEN** that navigation item is marked as the current page
 
-<!-- trace:scenario id=g10.site-page-shell.SC-xiu rev=2 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-xiu rev=3 -->
 #### Scenario: grade10-site-site-page-shell-SC-14 - A collector is on an unlisted surface
 **Serves:** grade10-site-site-page-shell-US-05 - Collector locates the current surface in the navigation
 
-- **GIVEN** a collector on the account page, sign-in, or an unrecognized address
+- **GIVEN** a collector on the account page, sign-in, an unrecognized address,
+  or an address a listed surface owns whose not-found page offers only Back to
+  Home, such as a lot no listing holds, a press article that does not
+  exist, or Shows while nothing is published on it
 - **WHEN** the header renders
 - **THEN** no navigation item is marked as the current page
+
+<!-- trace:scenario id=g10.site-page-shell.SC-mf7 rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-85 - A not-found page that leads back into its section
+**Serves:** grade10-site-site-page-shell-US-05 - Collector locates the current surface in the navigation
+
+- **GIVEN** a collector on a product address the Store holds no product for,
+  whose page offers a way back to the Store
+- **WHEN** the header renders
+- **THEN** Store is marked as the current page
 
 ### Requirement: The shell stays usable at small widths
 
