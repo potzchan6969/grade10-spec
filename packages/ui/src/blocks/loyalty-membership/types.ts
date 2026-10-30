@@ -135,6 +135,9 @@ type LedgerEntry = {
   /** Still on the way: lands when its order completes. Pending entries draw
    *  under the Pending card and never in a month group. */
   pending?: boolean;
+  /** Where the entry's receipt lives — a bought pack's provider receipt. The
+   *  whole entry opens it in a new tab. */
+  href?: string;
 };
 
 /** The three figures over the ledger, signed the way deltas are. */

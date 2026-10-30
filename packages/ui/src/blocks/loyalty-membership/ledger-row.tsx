@@ -36,7 +36,8 @@ function signed(delta: number) {
  * and context, and the signed delta with its unit. Internal to the ledger
  * blocks. A pending entry draws an hourglass on the brand tint and its
  * delta in the brand colour; the date is the day the points landed, so a
- * pending row carries none.
+ * pending row carries none. An entry with an `href` is one link, opening
+ * its receipt in a new tab.
  */
 function LedgerRow({
   entry,
@@ -52,7 +53,7 @@ function LedgerRow({
       ? ICONS[entry.icon]
       : null;
   const detail = [entry.channel, entry.context].filter(Boolean).join(" · ");
-  return (
+  const row = (
     <HStack
       align="center"
       className="w-full"
@@ -107,6 +108,18 @@ function LedgerRow({
         {signed(entry.delta)} {points}
       </Text>
     </HStack>
+  );
+  if (!entry.href) return row;
+  return (
+    <a
+      className="-mx-2 block rounded-md px-2 py-1 outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+      data-slot="point-history-link"
+      href={entry.href}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      {row}
+    </a>
   );
 }
 
