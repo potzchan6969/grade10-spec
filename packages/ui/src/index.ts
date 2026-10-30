@@ -532,10 +532,21 @@ export {
 } from "./blocks/loyalty-membership/wallet-pass-links";
 // shared-ui/loyalty-top-ups
 export {
+  TopUpConfirming,
+  type TopUpConfirmingCopy,
+  type TopUpConfirmingProps,
+} from "./blocks/loyalty-top-ups/top-up-confirming";
+export {
   TopUpPackCard,
   type TopUpPackCardCopy,
   type TopUpPackCardProps,
 } from "./blocks/loyalty-top-ups/top-up-pack-card";
+export {
+  TopUpPicker,
+  type TopUpPickerCopy,
+  type TopUpPickerPack,
+  type TopUpPickerProps,
+} from "./blocks/loyalty-top-ups/top-up-picker";
 // shared/ui/page-blocks
 export {
   FactCard,
