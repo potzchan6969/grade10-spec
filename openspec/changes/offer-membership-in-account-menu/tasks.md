@@ -1,4 +1,4 @@
-## 1. The site offers Membership (grade10)
+## 1. The site offers Membership (grade10) (owner: @seankcw)
 
 The pinned `external/grade10-spec` already draws Membership right after
 Profile, so no store work precedes it.
