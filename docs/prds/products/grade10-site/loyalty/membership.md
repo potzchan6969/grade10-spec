@@ -54,8 +54,9 @@ a Google account under it -
 - 🚧 **No points** — a site guest order earns nothing, joined or not.
 
 - 🚧 **A ticket bought on an email** — a ticket order asks no sign-in, so the
-  purchase earns under the buyer's address and lands on the member's ledger
-  once a sign-in proves it, dated to the purchase -
+  purchase earns at once to the account behind the buyer's address, made for
+  it where there is none, dated to the purchase; the member finds it there
+  the first time a sign-in proves the address -
   [Buying Tickets](/p/grade10-site/ticketing/buying)
 - **Customer on the sale** — a guest who gave the shop their email has a
   Shopify customer; when an account with that verified email is paired to

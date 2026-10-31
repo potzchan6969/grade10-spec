@@ -1,0 +1,737 @@
+{
+  "common": {
+    "passes": "Passes",
+    "yourOrder": "Your Order",
+    "total": "Total",
+    "free": "Free",
+    "fastPass": "Fast Pass",
+    "ticketCount": "{count, plural, one {# ticket} other {# tickets}}",
+    "dayCount": "{count, plural, one {# day} other {# days}}",
+    "peopleCount": "{count, plural, one {# person} other {# people}}",
+    "reference": "Reference {reference}",
+    "orderReference": "Order {reference}",
+    "lineQuantity": "{quantity} × {pass}",
+    "aDay": "{amount} a day",
+    "priceWas": "Was {amount}",
+    "was": "Was",
+    "minus": "−{amount}",
+    "signIn": "Sign In",
+    "signInWithEmail": "Sign In with Email",
+    "signOut": "Sign Out",
+    "seeTheShows": "See the Shows",
+    "tryAgain": "Try Again",
+    "close": "Close",
+    "edit": "Edit",
+    "termsOfSale": "Terms of Sale",
+    "card": "{brand} •• {last4}",
+    "wechatPay": "WeChat Pay",
+    "paidBy": "Paid by {method} on {date}"
+  },
+  "event": {
+    "badge": {
+      "onToday": "On Today",
+      "cancelled": "Cancelled",
+      "ended": "Ended"
+    },
+    "timesEachDay": "{start} to {end} each day",
+    "youHaveTickets": "You have tickets for this show.",
+    "viewYourTickets": "View Your Tickets",
+    "cancelledNotice": {
+      "title": "This event is cancelled.",
+      "body": "Every order is refunded in full to the card or WeChat Pay it was paid with. We’ve emailed everyone who bought tickets."
+    },
+    "endedNotice": {
+      "title": "This event has ended.",
+      "body": "Thanks to everyone who came. Your tickets stay in Your Tickets."
+    },
+    "passesLabel": "Passes",
+    "limit": "One email can buy up to {count} tickets for this event.",
+    "pass": {
+      "salesEnded": "Sales Ended",
+      "salesEndedNote": "Sales ended",
+      "salesEndedWhen": "Sales ended when {day} began",
+      "fastPassIncluded": "Fast Pass included",
+      "onSaleAt": "On sale {date}",
+      "opensIn": "Opens in {countdown}",
+      "earlyBird": "early bird",
+      "earlyBirdEnds": "Early bird ends {date}",
+      "soldOut": "Sold Out",
+      "joinWaitingLine": "Join the Waiting Line",
+      "joinWaitingLineFor": "Join the Waiting Line: {pass}",
+      "paused": "Paused",
+      "today": "Today, {date}",
+      "admitsAnyDays": "{count, plural, one {Any 1 day of the event} other {Any # days of the event, once a day}}",
+      "quantityLabel": "How many tickets: {pass}",
+      "decrement": "One fewer {pass}",
+      "increment": "One more {pass}"
+    },
+    "waitingLine": {
+      "note": "If tickets come back, we’ll email you and hold them for you.",
+      "quantityLabel": "How many tickets to wait for: {pass}",
+      "decrement": "Wait for one fewer: {pass}",
+      "increment": "Wait for one more: {pass}",
+      "offerEnded": "Your offer ended, and the tickets went to the next person. You can join again, at the back.",
+      "place": {
+        "title": "You’re in the waiting line",
+        "wanted": "Waiting for {count, plural, one {# ticket} other {# tickets}}",
+        "band": "{band, select, front {You’re near the front.} middle {Some people are ahead of you.} other {Many people are ahead of you.}}",
+        "leave": "Leave the Line"
+      },
+      "offer": {
+        "title": "Tickets are held for you",
+        "body": "{count, plural, one {# ticket is} other {# tickets are}} held for you until {deadline}. Pay before then to keep them.",
+        "bodyFree": "{count, plural, one {# ticket is} other {# tickets are}} held for you until {deadline}. Accept before then to keep them.",
+        "accept": "Accept",
+        "decline": "Decline"
+      }
+    },
+    "vip": {
+      "fastPassEveryDay": "Fast Pass every day, included.",
+      "skipQueue": "{days, plural, =2 {Skip the entrance queue both days.} other {Skip the entrance queue every day.}}",
+      "everyDay": "{days, plural, =2 {Both days} other {Every day}}, {dates}"
+    },
+    "earlyAccess": {
+      "badge": "Early Access",
+      "forYouNow": "For you now",
+      "opens": "Opens {date}",
+      "opensForYou": "Opens for you {date}",
+      "yoursToBuy": "Yours to buy: up to {count}",
+      "limitNote": "Your early access lets this email hold {count}.",
+      "publicSaleOpens": "Opens to everyone {date}"
+    },
+    "signInPrompt": "Early access? <signin>Sign in</signin> to see your passes.",
+    "lostTickets": "Lost your tickets? <signin>Sign in with the email you bought with</signin>.",
+    "fastPass": {
+      "title": "Fast Pass",
+      "body": "Skip the long entrance queue at the venue. One Fast Pass covers one person for one day.",
+      "everyoneGroup": "Fast Pass for everyone on this pass",
+      "eachGroup": "Fast Pass for each ticket",
+      "everyone": "Everyone",
+      "person": "{label} {ordinal}",
+      "add": "Fast Pass",
+      "addLabel": "Add Fast Pass for {who}, {days}",
+      "daysGroup": "Fast Pass days for {who}",
+      "oneMore": "One more Fast Pass day for {who}",
+      "oneFewer": "One fewer Fast Pass day for {who}",
+      "remove": "Remove Fast Pass for {who}",
+      "price": "+{amount}",
+      "sameForEveryone": "Same for everyone",
+      "choosePerPerson": "Choose per person",
+      "everyoneNeedsIt": "Everyone needs it?",
+      "notEveryoneNeedsIt": "Not everyone needs it?",
+      "summary": "{on} of {all, plural, one {# Fast Pass} other {# Fast Passes}}: {amount}.",
+      "nudge": "{missing, plural, one {# more covers everyone} other {# more cover everyone}}{everyDay, select, yes {, every day.} other {.}}",
+      "covered": "Everyone skips the queue.",
+      "fillAll": "Add for everyone (+{amount})"
+    },
+    "order": {
+      "title": "Your Order",
+      "intro": "Choose how many of each pass. You pay on the next step, by card or WeChat Pay.",
+      "fastPassLine": "Fast Pass × {count, plural, one {# day} other {# days}}",
+      "removeLine": "Remove {line}",
+      "addFastPassGroup": "Add Fast Pass",
+      "upsellTitle": "Skip the queue with Fast Pass",
+      "upsellSub": "{amount} a day for {people, plural, one {# person} other {# people}}",
+      "addOneDay": "Add 1 day",
+      "addBothDays": "Add both days",
+      "addEveryDay": "Add every day",
+      "addForEveryone": "Add for everyone",
+      "youSave": "You save {amount}",
+      "youSaveEarlyBird": "<strong>You save {amount}</strong> with the early bird price.",
+      "continue": "Continue",
+      "pointsAbout": "Earn about {points} points on this order.",
+      "pointsPaidOnly": "Paid tickets earn points.",
+      "totalLabel": "Order total",
+      "seeOrder": "{count, plural, one {# ticket} other {# tickets}}, see order"
+    },
+    "notOpen": {
+      "title": "This event isn’t open to you yet",
+      "body": "It’s on sale to a few people before the public sale. Check the shows for when it opens to everyone."
+    },
+    "notFound": {
+      "title": "We can’t find this event",
+      "body": "The link may be wrong, or the event has been taken down.",
+      "bodySignedOut": "If it was sent to you as a preview, sign in to see it. Otherwise the link may be wrong."
+    },
+    "restricted": {
+      "title": "Preview: only staff and listed addresses can buy.",
+      "body": "The public sale hasn’t started. Orders placed now are real."
+    },
+    "loading": "Loading the event",
+    "about": "About",
+    "gettingThere": {
+      "title": "Getting There",
+      "venue": "Venue",
+      "address": "Address",
+      "doors": "Doors"
+    },
+    "goodToKnow": {
+      "title": "Good to know",
+      "oneCode": "One code per ticket. It lets you in once on each day your pass covers.",
+      "pdf": "Your tickets arrive by email as one PDF. It works with no signal at the door.",
+      "fastPass": "Fast Pass skips the entrance queue on the days you use it. VIP includes it every day."
+    }
+  },
+  "summary": {
+    "title": "Your Order",
+    "line": "{pass} × {quantity}",
+    "earlyBird": "{amount}, early bird",
+    "was": "{amount}, was {was}",
+    "fastPass": "Fast Pass, {days, plural, one {# day} other {# days}}: {amount}",
+    "total": "Total",
+    "free": "Free",
+    "eventLine": "{event}: {dates}"
+  },
+  "details": {
+    "title": "Your Details",
+    "back": "Passes",
+    "buyerLabel": "Buyer",
+    "haveAccount": "Have an account?",
+    "signIn": "Sign In",
+    "accountLabel": "Account, signed in as {name}",
+    "name": {
+      "label": "Name on the tickets",
+      "placeholder": "Your full name",
+      "required": "Enter your name",
+      "hintSignedIn": "Printed on your tickets. Change it if a friend is coming.",
+      "hintNoName": "The name printed on your tickets"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "name@example.com",
+      "hint": "Your tickets go here. You check it before paying.",
+      "required": "Enter your email",
+      "invalid": "Enter an email like name@example.com",
+      "hintSignedIn": "Your tickets go here. It’s your account’s email.",
+      "notYou": "Not You?"
+    },
+    "botCheck": {
+      "label": "Bot check",
+      "checking": "Checking you’re not a bot…",
+      "checked": "You’re checked"
+    },
+    "fieldsWrong": "{count, plural, one {Check the field above.} other {Check the # fields above.}}",
+    "continue": "Continue",
+    "pointsAbout": "Earn about {points} points"
+  },
+  "review": {
+    "title": "Check Your Order",
+    "back": "Your Details",
+    "detailsLabel": "Your details",
+    "edit": "Edit",
+    "editDetails": "Edit your details",
+    "name": "Name on the tickets",
+    "email": "Email",
+    "emailNote": "Your tickets go here as one PDF. Check it’s right.",
+    "emailNoteSignedIn": "Your account’s email. Your tickets go here as one PDF.",
+    "agreementLabel": "Agreement",
+    "agreeSignedIn": "I agree to the <sale>Terms of Sale</sale>.",
+    "notAgreed": "Tick the box to agree before you pay.",
+    "notAgreedBar": "Tick the box to agree first.",
+    "pay": "Pay {amount}",
+    "getTickets": "Get Tickets",
+    "slow": "Lots of people are buying right now. Still trying.",
+    "opening": "Opening payment…",
+    "notes": {
+      "title": "Before you pay",
+      "stripe": "You pay on Stripe’s secure page, by card or WeChat Pay.",
+      "hold": "Your tickets are held for {minutes} minutes while you pay.",
+      "pdf": "They arrive by email as one PDF, with a link to your receipt.",
+      "pdfFree": "Your tickets arrive by email as one PDF.",
+      "nothingCharged": "Nothing is charged."
+    },
+    "priceChanged": {
+      "title": "The early-bird price ended at {time}.",
+      "body": "Your total is now {amount}. The lines below show the new prices."
+    }
+  },
+  "promo": {
+    "label": "Promo code",
+    "placeholder": "Enter a code",
+    "apply": "Apply",
+    "applied": "Promo {code}",
+    "freeWith": "Free with {code}",
+    "remove": "Remove",
+    "removeLabel": "Remove {code}",
+    "discount": {
+      "percentOff": "{percent}% off {passes}",
+      "percentOffAll": "{percent}% off",
+      "amountOffEach": "{amount} off each ticket",
+      "amountOffOrder": "{amount} off your order",
+      "allFree": "{count, plural, one {Your ticket is free} other {Your # tickets are free}}{fastPass, select, yes {, Fast Pass too.} other {.}}",
+      "someFree": "{free} of your {count, plural, one {# ticket} other {# tickets}} {free, plural, one {is} other {are}} free. {code} had {free} left."
+    },
+    "freeOrder": "This order is free with {code}. It earns no points.",
+    "errors": {
+      "notFound": "We can’t find this code. Check the spelling.",
+      "notStarted": "{code} starts on {date}.",
+      "expired": "{code} ended on {date}.",
+      "usedUp": "{code} has been used up.",
+      "alreadyUsed": "{code} was already used with {email}.",
+      "minTickets": "{code} needs at least {count, plural, one {# ticket} other {# tickets}}.",
+      "minAmount": "{code} needs an order of at least {amount}.",
+      "otherPasses": "{code} is for other passes.",
+      "emailsOnly": "{code} is only for the emails it was sent to.",
+      "tooManyTries": "Too many wrong codes. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+      "tooManyTriesAt": "Too many wrong codes. Try again at {time}."
+    },
+    "usedUpAtPay": {
+      "title": "The last use of {code} was just taken.",
+      "body": "The total is back to {amount}.",
+      "payFull": "Pay {amount}",
+      "removeCode": "Remove Code"
+    }
+  },
+  "refusals": {
+    "actions": {
+      "pay": "Pay",
+      "backToPasses": "Back to Passes",
+      "seeTheEvent": "See the Event",
+      "seeTheShows": "See the Shows",
+      "signIn": "Sign In",
+      "tryAgain": "Try Again",
+      "payFull": "Pay {amount}",
+      "removeCode": "Remove Code"
+    },
+    "checkoutBusy": {
+      "title": "Too many people are buying this second.",
+      "body": "Press Pay again."
+    },
+    "checkoutPending": {
+      "title": "We didn’t hear back.",
+      "body": "Press Pay again to continue the same order."
+    },
+    "soldOut": {
+      "title": "They sold out just now."
+    },
+    "soldOutSome": {
+      "title": "{count, plural, one {Only # is left.} other {Only # are left.}}",
+      "body": "Choose up to {count}."
+    },
+    "typeNotStarted": {
+      "title": "Sales for this pass open at {time} on {date}."
+    },
+    "typePaused": {
+      "title": "Sales for this pass are paused right now."
+    },
+    "typeEnded": {
+      "title": "Sales for this pass have ended."
+    },
+    "eventNotOnSale": {
+      "title": "This event isn’t on sale anymore."
+    },
+    "notFound": {
+      "title": "This pass isn’t available anymore."
+    },
+    "accountLimitGuest": {
+      "title": "One email can hold up to {limit} tickets for this event."
+    },
+    "accountLimitSignedIn": {
+      "title": "You hold {held} of the {limit} tickets one email can hold, so choose up to {left}."
+    },
+    "notOpenToYouYet": {
+      "title": "This pass isn’t open to you yet.",
+      "body": "It goes on sale to everyone at {time} on {date}.",
+      "bodyForYou": "Opens to you at {time} on {date}."
+    },
+    "signInRequired": {
+      "title": "Sign in to buy this pass.",
+      "body": "This pass is held for certain accounts. Sign in with yours to see if it’s open to you."
+    },
+    "notOpenToYou": {
+      "title": "This pass is only for some addresses, and this one isn’t."
+    },
+    "accessLimit": {
+      "title": "Your early access lets this address hold {count}."
+    },
+    "notInAudience": {
+      "title": "This event isn’t open to this account yet."
+    },
+    "fastPassUnavailable": {
+      "title": "Fast Pass isn’t available on this pass anymore."
+    },
+    "signedOut": {
+      "title": "You were signed out.",
+      "body": "Sign in again, or buy with your name and email."
+    },
+    "challengeFailed": {
+      "title": "We couldn’t check you’re not a bot.",
+      "body": "Press Pay again."
+    },
+    "checkoutUnavailable": {
+      "title": "We couldn’t open the payment page, and nothing is held."
+    },
+    "paymentUnavailable": {
+      "title": "Payment isn’t available right now.",
+      "body": "Nothing was charged."
+    },
+    "ticketingClosed": {
+      "title": "Ticket sales are closed right now."
+    },
+    "chooseAgain": {
+      "title": "Choose your tickets again."
+    },
+    "buyerDetailsRequired": {
+      "title": "Enter your name and email."
+    },
+    "noWaitingLine": {
+      "title": "This pass has no waiting line."
+    },
+    "ticketsLeft": {
+      "title": "{count, plural, one {# ticket is} other {# tickets are}} still on sale.",
+      "body": "Buy what’s left, or join the line once they sell out."
+    },
+    "offerEnded": {
+      "title": "This offer has ended.",
+      "body": "The tickets went to the next person in line."
+    },
+    "codeUsedUp": {
+      "title": "The last use of {code} was just taken.",
+      "body": "The total is back to {amount}."
+    },
+    "orderNotFound": {
+      "title": "We can’t find this order."
+    },
+    "orderNotPending": {
+      "title": "This order isn’t waiting for payment anymore."
+    },
+    "generic": {
+      "title": "Something went wrong.",
+      "body": "Try again in a moment."
+    }
+  },
+  "return": {
+    "confirming": {
+      "title": "Confirming your payment…",
+      "body": "Please keep this page open."
+    },
+    "stillConfirming": {
+      "title": "Still confirming your payment",
+      "body": "If you paid, your tickets arrive by email as soon as it lands. You can close this page."
+    },
+    "paid": {
+      "badge": "Confirmed",
+      "title": "You’re Going",
+      "body": "{count, plural, one {Your ticket is below} other {Your # tickets are below}}, and we sent them to {email} as one PDF."
+    },
+    "wentBack": {
+      "badge": "Not Paid",
+      "title": "Payment Not Completed",
+      "body": "We let the tickets go and nothing was charged.",
+      "action": "Choose Again"
+    },
+    "holdRanOut": {
+      "title": "Your {minutes} Minutes Ran Out",
+      "body": "The tickets went back on sale and nothing was charged."
+    },
+    "paidTooLate": {
+      "badge": "Refunding",
+      "title": "Your Payment Came Too Late",
+      "body": "It arrived after your {minutes} minutes ended and the tickets had gone, so we’re refunding {amount} in full.",
+      "where": "It lands on your {method} in 5 to 10 business days. We sent the details to {email}."
+    },
+    "otherBrowser": {
+      "title": "Your Tickets Are in Your Email",
+      "body": "Sign in with the email you bought with to see this order here.",
+      "note": "The PDF in your email works at the door on its own."
+    },
+    "notTheirs": {
+      "title": "This Order Isn’t on This Account",
+      "body": "You’re signed in as {email}. Sign in with the email you bought with to see it.",
+      "anotherEmail": "Sign In with Another Email"
+    }
+  },
+  "order": {
+    "breadcrumb": "Your Tickets",
+    "title": "Order {reference}",
+    "status": {
+      "held": "Waiting for Payment",
+      "checking": "Checking",
+      "confirmed": "Confirmed",
+      "offered": "Offered",
+      "expired": "Expired",
+      "refunding": "Refunding",
+      "refunded": "Refunded",
+      "partRefunded": "Partly Refunded",
+      "cancelled": "Cancelled",
+      "ended": "Ended",
+      "daysLeft": "{count, plural, one {# Day Left} other {# Days Left}}"
+    },
+    "bought": "Bought {date}",
+    "started": "Started {date}",
+    "ticket": {
+      "label": "Ticket {ordinal} of {count}",
+      "ofHolder": "Ticket {ordinal} of {count}. {name}",
+      "valid": "Valid",
+      "refunded": "Refunded",
+      "codeLabel": "Ticket code {code}",
+      "code": "Code {code}",
+      "admits": "Admits on {count, plural, one {# day} other {# days}}: {days}",
+      "fastPass": "Fast Pass on {count, plural, one {# day} other {# days}}",
+      "fastPassLeft": "Fast Pass on {count, plural, one {# day} other {# days}} left",
+      "used": "Used {when}. {left, plural, one {# day left} other {# days left}}",
+      "refundedNote": "Refunded on {date}. This code no longer lets anyone in.",
+      "followOne": "Ticket {ordinal} follows.",
+      "followMany": "Tickets {list} follow."
+    },
+    "noSignal": "No signal at the door? The same tickets are in your email as one PDF, and it opens without signal. Can’t scan? Give the reference {reference}.",
+    "lines": {
+      "title": "What You Bought",
+      "earlyBirdEach": "Early bird, {amount} each",
+      "earlyBird": "Early bird",
+      "each": "{amount} each",
+      "fastPassOn": "Fast Pass on {tickets} of them, {days, plural, one {# day} other {# days}}",
+      "fastPassDays": "Fast Pass, {days, plural, one {# day} other {# days}}",
+      "promo": "Promo {code}",
+      "refund": "Refund",
+      "totalAfterRefund": "Total after refund"
+    },
+    "points": {
+      "label": "Points",
+      "about": "About {points}",
+      "takenBack": "Taken back",
+      "partTakenBack": "{points} points were taken back with the refunded {count, plural, one {ticket} other {tickets}}.",
+      "allTakenBack": "The points this order earned were taken back.",
+      "free": "A free order earns no points."
+    },
+    "held": {
+      "label": "Your tickets are held",
+      "heldFor": "Held for",
+      "until": "{count, plural, one {# ticket} other {# tickets}}, until {time}. Pay before then to keep them.",
+      "continue": "Continue to Payment",
+      "note": "Nothing is charged until you pay. If the time runs out, the tickets go back on sale."
+    },
+    "checking": {
+      "label": "Checking your payment",
+      "body": "Your time ran out. We’re checking whether the payment arrived."
+    },
+    "partRefund": {
+      "title": "{amount} is on its way back",
+      "body": "We refunded {count, plural, one {# ticket} other {# tickets}} on {date}. It lands on your {method} in 5 to 10 business days. The other tickets still let you in."
+    },
+    "fullRefund": {
+      "title": "{amount} refunded on {date}",
+      "body": "The tickets no longer let anyone in. The money lands on your {method} in 5 to 10 business days."
+    },
+    "eventCancelled": {
+      "title": "This event is cancelled",
+      "body": "{event} won’t take place. Your order is refunded in full: {amount} lands on your {method} in 5 to 10 business days."
+    },
+    "lost": "Lost your tickets? Sign in with the email you bought with, and every order is in <link>Your Tickets</link>.",
+    "guest": {
+      "title": "See this order anywhere",
+      "body": "Sign in with {email} and every order you bought with it is in Your Tickets."
+    }
+  },
+  "myTickets": {
+    "title": "Your Tickets",
+    "intro": "Every order bought with {email}, newest first.",
+    "orderLabel": "Order {reference}",
+    "heldUntil": "Held until {time}.",
+    "continue": "Continue to Payment",
+    "viewTickets": "View Tickets",
+    "viewOrder": "View Order",
+    "viewTicket": "View Ticket",
+    "freeTicket": "{pass}. A free ticket from {event}.",
+    "empty": {
+      "title": "No Tickets Yet",
+      "body": "Tickets you buy with {email} show up here."
+    },
+    "signedOut": {
+      "title": "Sign In to See Your Tickets",
+      "body": "Use the email you bought with. Orders bought as a guest show up too.",
+      "note": "Bought as a guest? Your tickets are in your email as one PDF, and it works at the door on its own."
+    },
+    "loading": "Loading your tickets",
+    "failed": {
+      "title": "We couldn’t load your tickets",
+      "body": "Check your connection and try again."
+    },
+    "signedIn": {
+      "title": "You’re signed in",
+      "points": "{points} points from your ticket orders are now on your account."
+    }
+  },
+  "sharedTicket": {
+    "title": "Your Ticket",
+    "label": "Ticket {code}",
+    "free": "Free",
+    "doors": "Doors {start} to {end}",
+    "forGuest": "For {name}",
+    "codeLabel": "Ticket code {code}",
+    "showAtDoor": "Show this code at the door. It lets you in once on each day your pass covers.",
+    "downloadPdf": "Download PDF",
+    "save": "Save to My Tickets",
+    "note": "A free ticket from {event}. Anyone with this link can use it, so keep it to yourself.",
+    "saved": "Saved to My Tickets",
+    "view": "View",
+    "viewMyTickets": "View My Tickets",
+    "usedToday": "In {time}. See you {day}.",
+    "usedTodayLast": "In {time}.",
+    "dead": {
+      "cancelled": {
+        "badge": "Cancelled",
+        "title": "This ticket was cancelled.",
+        "body": "Ask whoever sent it to you."
+      },
+      "replaced": {
+        "title": "This link was replaced by a new one",
+        "body": "Ask whoever sent it to you."
+      },
+      "over": {
+        "title": "{event} has ended.",
+        "body": "Thanks for coming."
+      },
+      "overNoEvent": {
+        "title": "This event has ended.",
+        "body": "Thanks for coming."
+      },
+      "notFound": {
+        "title": "We can’t find this ticket",
+        "body": "Check the link."
+      }
+    }
+  },
+  "door": {
+    "signIn": {
+      "title": "Open the door",
+      "body": "Enter the passcode the door lead gave you. No account needed.",
+      "passcode": "Passcode",
+      "passcodePlaceholder": "6 digits",
+      "passcodeRequired": "Enter the passcode",
+      "deviceName": "This phone’s name",
+      "deviceHint": "Every ticket you let in is recorded with it.",
+      "devicePlaceholder": "Like Gate A phone 1",
+      "deviceRequired": "Give this phone a name",
+      "submit": "Open the Door",
+      "opens": "Works from {time} {date} to the end of the event.",
+      "wrong": "That passcode isn’t right. {left, plural, one {# try} other {# tries}} left before a short wait.",
+      "slowedTitle": "Too many tries.",
+      "slowedBody": "Wait {seconds, plural, one {# second} other {# seconds}}, then try again. Ask the door lead for the passcode.",
+      "notOpenTitle": "This passcode opens the door at {time} on {date}.",
+      "notOpenUntil": "until the door opens",
+      "checkAgain": "Check Again",
+      "notOpen": "Not open yet"
+    },
+    "passcodeChanged": {
+      "title": "The passcode was changed",
+      "body": "Every phone at the door was signed out. Ask the door lead for the new passcode.",
+      "action": "Enter the New Passcode"
+    },
+    "bar": {
+      "findLabel": "Find by reference",
+      "menuLabel": "Door menu: sign out",
+      "signOut": "Sign Out"
+    },
+    "scanner": {
+      "point": "Point at a code",
+      "countToday": "Let in today on this phone:",
+      "checking": "Checking",
+      "findByReference": "Find by reference",
+      "cameraWhy": "Allow the camera so this phone can read tickets. Nothing is recorded.",
+      "blocked": {
+        "title": "The camera is blocked",
+        "body": "This browser was told not to use the camera. Open Settings, then Safari, then Camera, and choose Allow. Then come back and tap Try Again.",
+        "action": "Find by Reference"
+      },
+      "noCamera": {
+        "title": "No camera found",
+        "body": "This device has no camera we can use, or another app is using it. Close other camera apps and try again, or plug in a handheld scanner."
+      },
+      "offline": "No connection. Every scan reads Not checked until it is back."
+    },
+    "answer": {
+      "admitted": {
+        "title": "Admitted",
+        "line": "Let them in."
+      },
+      "alreadyIn": {
+        "title": "Already in today",
+        "line": "Don’t let them in again.",
+        "note": "If they say they never came in, a supervisor checks the time and the gate in the console."
+      },
+      "noEntriesLeft": {
+        "title": "No entries left",
+        "line": "This ticket has been let in on every day it admits."
+      },
+      "void": {
+        "title": "Refunded or cancelled",
+        "line": "This ticket no longer lets anyone in.",
+        "note": "Send them to the help desk. The order’s other tickets may still be good."
+      },
+      "notATicket": {
+        "title": "Not valid",
+        "line": "This code isn’t a ticket for this event.",
+        "note": "Ask for the email with the tickets, or find the order by its reference."
+      },
+      "wrongEvent": {
+        "title": "Wrong event",
+        "line": "This ticket is for another event."
+      },
+      "notValidToday": {
+        "title": "Not valid today",
+        "line": "This ticket doesn’t let anyone in today."
+      },
+      "notChecked": {
+        "title": "Not checked",
+        "line": "Don’t let them in yet.",
+        "note": "No answer in {seconds} seconds, so we can’t tell if this ticket was used. Try again. If the connection stays down, write the reference on the paper list and wait for a supervisor."
+      },
+      "undone": {
+        "title": "Undone",
+        "line": "The ticket can be scanned again.",
+        "lineFastPass": "The ticket can be scanned again, and its Fast Pass use is given back.",
+        "entryNotUsed": "Entry not used",
+        "useGivenBack": "Use given back"
+      },
+      "facts": {
+        "name": "Name",
+        "pass": "Pass",
+        "ticket": "Ticket",
+        "today": "Today",
+        "dayOf": "Day {day} of {count} it admits",
+        "letIn": "Let in",
+        "by": "By",
+        "fastPass": "Fast Pass",
+        "usedThen": "Used then, {left} left",
+        "notUsedThen": "Not used then",
+        "daysLeft": "Days left",
+        "order": "Order",
+        "event": "Event",
+        "days": "Days",
+        "code": "Code",
+        "tried": "Tried",
+        "timeToday": "{time} today"
+      },
+      "fastPass": {
+        "left": "Fast Pass: {count} left",
+        "includedToday": "Fast Pass: included today",
+        "none": "Fast Pass: none",
+        "allUsed": "Fast Pass: all used",
+        "usedLeft": "Fast Pass used · {count} left",
+        "usedIncluded": "Fast Pass used · included",
+        "use": "Use Fast Pass",
+        "undo": "Undo Fast Pass"
+      },
+      "undo": "Undo",
+      "undoSeconds": "{seconds} s",
+      "scanNext": "Scan next",
+      "tryAgain": "Try Again",
+      "scan": "Scan"
+    },
+    "find": {
+      "title": "Find by reference",
+      "hint": "The six characters on the ticket or in the email.",
+      "label": "Reference",
+      "submit": "Find",
+      "results": "{count, plural, one {# ticket} other {# tickets}} on order {reference}",
+      "passFastPass": "{pass}, Fast Pass: {count} left",
+      "dayOfLeftToday": "Day {day} of {count} left today",
+      "admit": "Admit",
+      "letInBy": "Let in {time} by {device}",
+      "inToday": "In today",
+      "firstNamesOnly": "Only first names show here. Ask for the buyer’s name if you’re unsure.",
+      "notFound": "No order with that reference for this event. Check each character, or send them to the help desk."
+    }
+  }
+}

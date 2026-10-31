@@ -18,12 +18,36 @@ go to the line first, as offers to the collectors waiting in it.
   takes a line
 - **How many** — the collector says how many tickets they wait for, up to
   what the account may still hold on the event
+- **Fewer left than wanted** — the line stays shut while any ticket is
+  left, even for a group larger than what is left: the collector buys what
+  is left, or joins once the type sells out, so one large group never turns
+  the last tickets into the line's
 - **While anyone waits** — the type reads sold out to everyone else, even
   with tickets free, because those tickets are the line's
 - **Joining again** — answers the place or the offer the account already
   holds
 - **No line** — an invited type takes none, because its buyers are named
   already
+
+## What The Collector Meets
+
+| What is left | What they meet |
+| --- | --- |
+| Enough for what they want | Buy, as any sale |
+| Fewer than they want | Buy, for what is left; the line opens only once the type sells out |
+| None, or only the line's | Join the waiting line, for up to what the account may still hold |
+| Their place | Its band, how many it waits for, and Leave |
+| Their offer | Accept, Decline and when it ends |
+| An offer that ended | Join again, at the back |
+
+- **Fewer left** ❓ — how the page offers what is left against waiting for
+  the line, and the sentence for a join pressed while tickets are left,
+  which comes back with how many are left; Design
+- **Sold out on the press** ❓ — what the collector sees when the last
+  tickets went between reading the page and pressing Buy, now that the line
+  is open to them; Design
+- **An offer that ended** ❓ — how a lapsed or declined offer reads on the
+  event page, and what invites joining again; Design
 
 ## Your Place
 
@@ -75,6 +99,7 @@ back for a large group.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| The line opens at sold out | Decided | While any ticket is left the line stays shut, so the last tickets keep selling first-come. | Product |
 | First fit | Decided | The smaller group behind is served before tickets wait for a larger group ahead. | Product |
 | Position | Decided | Shown as a rough band, since first fit can move a place. | Product |
 | No mail when a place ends | Decided | Only an offer is mailed. | Product |

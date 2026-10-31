@@ -58,6 +58,21 @@ const WINNER_ORDER_REFUND_DETAILS_STORY_ID =
 const WINNER_ORDER_EMAIL_GRADE10_STORY_ID =
   "auction-post-bidding-screens-winner-order-email-grade10--payment-overdue";
 
+/** Ticketing story ids a click-through opens: the buying journey, the
+ * return from payment, the order and Your Tickets. */
+const TICKETING_STORY_IDS = {
+  event: "ticketing-buying-screens-event--early-bird",
+  eventChosen: "ticketing-buying-screens-event--chosen",
+  details: "ticketing-buying-screens-your-details--guest",
+  review: "ticketing-buying-screens-check-your-order--guest",
+  confirming: "ticketing-your-tickets-screens-return--confirming",
+  paid: "ticketing-your-tickets-screens-order--paid",
+  order: "ticketing-your-tickets-screens-order--confirmed",
+  yourTickets: "ticketing-your-tickets-screens-your-tickets--list",
+  yourTicketsSignedOut:
+    "ticketing-your-tickets-screens-your-tickets--signed-out",
+} as const;
+
 /** Manager href that opens a story in the workbench (`?path=/story/…`). */
 function storyHref(storyId: string): string {
   return `?path=/story/${storyId}`;
@@ -205,6 +220,7 @@ export {
   storyHref,
   TERMS_OF_SERVICE_HREF,
   TERMS_OF_SERVICE_STORY_ID,
+  TICKETING_STORY_IDS,
   WINNER_ORDER_AWAITING_ADDRESS_STORY_ID,
   WINNER_ORDER_CANCELLED_STORY_ID,
   WINNER_ORDER_DELIVERED_STORY_ID,

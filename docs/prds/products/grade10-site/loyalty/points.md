@@ -32,7 +32,7 @@ it: the whole discount sits on the goods, as Shopify allocates it.
 | Points packs | **No** — a pack earns nothing, and neither do its points when they pay — [Top-ups](/p/grade10-site/loyalty/top-ups) |
 | Grading fees | **No**, excluded as a product |
 | Auction wins | **No** today, a later-phase candidate |
-| Event tickets | **Yes** — bought on grade10's own ticketing; an email alone buys them, and the earn lands on the account that proves the address - [Buying Tickets](/p/grade10-site/ticketing/buying) |
+| 🚧 Event tickets | **Yes** — passes and Fast Pass, on what was paid, when the order is confirmed; an email alone buys them, and the earn lands on the account behind the address, made where none; a refund claws back - [Buying Tickets](/p/grade10-site/ticketing/buying) |
 
 A fully discounted order earns nothing and writes no ledger entry.
 
@@ -50,10 +50,13 @@ An order's earn is written once, the first time the order completes.
   so it earns on what it still holds and nothing is clawed back
 - 🚧 **Guest order** - never earns, joined to an account or not -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
-- 🚧 **Ticket order** - earns under the buyer's email alone: buying asks no
-  sign-in, and the earn reaches the member's ledger once a sign-in proves
-  that address, dated to the purchase -
-  [Buying Tickets](/p/grade10-site/ticketing/buying)
+- 🚧 **Ticket order** - earns when it is confirmed, under the buyer's email
+  alone: buying asks no sign-in, the earn goes to the account behind the
+  address, made at once where there is none, and the member sees it in their
+  history the first time a sign-in proves that address, dated to the
+  purchase; a refund takes it back. An address whose account was closed
+  earns nothing. A booth sale is not the system's and
+  earns nothing - [Buying Tickets](/p/grade10-site/ticketing/buying)
 - **Delivery** - retried until the programme takes it, and taken once, so
   a purchase during an outage still earns, and never twice
 
@@ -472,7 +475,7 @@ spend rather than lose a balance that was about to lapse.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | What counts as activity | Decided | A purchase — online, in store, or a ticket order — any amount, however tendered, including one paid partly or fully with points and one later refunded in full — and a points top-up, counted on the day it is credited, since payment and credit sit a gateway instant apart. Decided 2026-10-27 — `define-activity-for-point-expiry`; tickets added 2026-10-28. | Product |
-| Ticket orders earn | Decided | A ticket order earns on what was paid, like a store purchase, and counts as order activity for membership and the balance's date. Buying asks only an email — no sign-in — so the earn is recorded under the address and lands on the member's ledger once a sign-in proves it, dated to the purchase. Decided 2026-10-28. | Product |
+| Ticket orders earn | Decided | A ticket order earns on what was paid, like a store purchase, and counts as order activity for membership and the balance's date. Buying asks only an email — no sign-in — so the earn goes to the account behind the address, made for it at once where there is none and credited whether or not anyone has signed into it, since the tickets went to that mailbox too; the member sees it the first time a sign-in proves the address, dated to the purchase. Decided 2026-10-28. | Product |
 | Whether redeeming keeps the balance alive | ❓ Open | Proposal: it stops counting, so only money in extends the date; the running rule has it reset the window. PM to confirm — `define-activity-for-point-expiry`. | Product |
 | What a grant's points live for | Decided | On a balance with points still live, they take its date and push it no further. | Product |
 | A balance with nothing live | Decided | A grant or a correction lapses on the later of twelve months from its own day and the day still running, and moves that day out, never back (grade10 `packages/loyalty/backend/src/services/ledger/expiry.ts:74-83`, `packages/loyalty/backend/src/repositories/members.ts:27-45`); points a reversal gives back, or points paid at checkout that a refund or an operator returns, go back to the day still running (grade10 `packages/loyalty/backend/src/services/ledger/lots.ts:42`, `packages/loyalty/backend/src/services/ledger/expiry.ts:140`). | Product |

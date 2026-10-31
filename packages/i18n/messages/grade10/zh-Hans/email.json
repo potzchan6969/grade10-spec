@@ -1,5 +1,13 @@
 {
   "login": {
     "subject": "登录 Grade10"
+  },
+  "ticketing": {
+    "statement": "你的账单会显示 GRADE10 SHOW。",
+    "earnsPoints": "此订单的积分会存入 {email} 的 Grade10 账户。",
+    "lostEmail": "找不到此邮件？用 {email} 登录 grade10.com 即可查看你的门票。",
+    "boughtFooter": "Grade10，{address}。你收到此邮件，是因为你在 grade10.com 购买了门票。如有疑问，请直接回复此邮件。",
+    "issuedIntro": "{name} 你好，Grade10 已送你 {event} 的门票，已附在此邮件中，无需付款。",
+    "issuedFooter": "Grade10，{address}。你收到此邮件，是因为 Grade10 送了门票给你。如有疑问，请直接回复此邮件。"
   }
 }

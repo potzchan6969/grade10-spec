@@ -1,0 +1,30 @@
+{
+  "event": {
+    "order": {
+      "pointsSignedOut": "You will earn points in the Grade10 account for your email."
+    }
+  },
+  "details": {
+    "pointsGuest": "Earn points in the Grade10 account for your email"
+  },
+  "review": {
+    "pointsGuest": "Earn about {points} points. They go to the Grade10 account for {email}.",
+    "pointsSignedIn": "Earn about {points} points. They go to your Grade10 account.",
+    "agreeGuest": "I agree to the <sale>Terms of Sale</sale> and Grade10’s <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
+    "agreeGuestNote": "We keep your tickets and points in a Grade10 account for {email}, and make one if there isn’t one yet. Sign in with this email any time to see them.",
+    "agreeSignedInNote": "Your tickets and the points from this order go to your Grade10 account."
+  },
+  "return": {
+    "paid": {
+      "points": "About {points} points wait in your Grade10 account. Sign in with {email} to add them."
+    }
+  },
+  "order": {
+    "points": {
+      "aboutNote": "Points go to the Grade10 account for {email} once the order is recorded."
+    }
+  },
+  "door": {
+    "wordmark": "Grade10 door"
+  }
+}

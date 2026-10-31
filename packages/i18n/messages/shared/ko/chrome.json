@@ -45,5 +45,7 @@
     "help": "지원",
     "shipping": "배송",
     "orders": "주문 및 반품"
-  }
+  },
+  "myTickets": "내 티켓",
+  "myTicketsBadge": "NEW"
 }
