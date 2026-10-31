@@ -62,7 +62,7 @@ A page over the budget is the expansion, not the essence: `pnpm check:manual` wa
 Before proposing or implementing a feature, read in this order:
 
 1. the capability's PRD in `docs/prds/`, for what runs, what is coming, and the rationale;
-2. any active change in `openspec/changes/` touching that capability — every 🚧 line on the page belongs to one;
+2. any active change in `openspec/changes/` touching that capability — a 🚧 line may belong to one, or stand alone as its whole record;
 3. the capability in `openspec/specs/`, for the checkable form of what runs; and
 4. the design-system primitives in `packages/design-system/src/components/`, plus the component's implementation in the consuming application, when UI is involved.
 

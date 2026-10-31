@@ -1356,10 +1356,11 @@ SHALL earn nothing until the programme is specified to accept it.
 
 A ticket order asks no sign-in — the buyer's email is enough. The purchase
 SHALL be recorded under that address and SHALL earn for the member that
-address proves: at once where an account already holds it, and on the first
-sign-in that proves it otherwise, dated to the purchase and never to the
-sign-in. A ticket purchase counts as activity for the inactivity window like
-any other qualifying spend.
+address names, at once on confirmation: to the account that holds it, or to
+an unverified account made for it where none does, which the buyer sees once
+a sign-in proves the address. An address whose account was banned or
+deleted SHALL earn nothing. A ticket purchase counts as activity for the
+inactivity window like any other qualifying spend.
 
 Shipping charges, grading service fees, the purchase of a gift card, a credit
 top-up, an auction win, and any line in a category the programme does not list
@@ -1429,11 +1430,12 @@ defaults: a writer that names no channel is refused.
 - **AND** it counts as activity for the inactivity window
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-w6e rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-280 - A ticket bought on an email earns once that email signs in
+#### Scenario: grade10-site-loyalty-programme-SC-280 - A ticket bought on an email with no account earns at once
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
-- **WHEN** a ticket order placed under an email holding no account is followed by a sign-in that proves that address
-- **THEN** its earn reaches that member's ledger, dated to the purchase
+- **WHEN** a ticket order placed under an email holding no account is confirmed
+- **THEN** an unverified account is made for that email and the earn lands on its ledger at once, dated to the purchase
+- **AND** the first sign-in that proves the address shows the points already there
 
 ### Requirement: The programme owns balances and tiers, whatever channel sells
 

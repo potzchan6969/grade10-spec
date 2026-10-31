@@ -194,6 +194,58 @@ const storeCartNames = () =>
     .filter(Boolean)
     .sort();
 
+const TICKETING_BLOCKS = [
+  "DoorAnswer",
+  "DoorFind",
+  "DoorPasscodeChanged",
+  "DoorPhoneFrame",
+  "DoorRecentAdmissions",
+  "DoorScanner",
+  "DoorSignIn",
+  "DoorUndoBar",
+  "EventGoodToKnow",
+  "EventHeader",
+  "EventOrderSummary",
+  "EventPageBody",
+  "EventPageState",
+  "EventPassCard",
+  "EventPassPriceText",
+  "EventPassRow",
+  "EventPhoneOrderBar",
+  "FastPassControl",
+  "MyTicketsList",
+  "SharedTicket",
+  "TicketAgreementCheck",
+  "TicketCheckoutOrder",
+  "TicketCheckoutRefusalNotice",
+  "TicketCodeUsedUpNotice",
+  "TicketConfirmingDrawer",
+  "TicketDetailsStep",
+  "TicketDiscountLine",
+  "TicketOrderPage",
+  "TicketOrderStatusBanner",
+  "TicketPointsAbout",
+  "TicketPointsRow",
+  "TicketPromoCodeField",
+  "TicketQrCard",
+  "TicketReturnOutcome",
+  "TicketReviewStep",
+  "TicketWaitingLineJoin",
+  "TicketWaitingLineOffer",
+  "TicketWaitingLinePlace",
+];
+
+/* Every name the entry re-exports from the ticketing blocks. */
+const ticketingNames = () =>
+  [
+    ...entry.matchAll(
+      /export (?:type )?\{([^}]*)\} from "\.\/blocks\/ticketing-[^"]+";/g,
+    ),
+  ]
+    .flatMap((match) => (match[1] ?? "").split(","))
+    .map((name) => name.replace(/^\s*type\s+/, "").trim())
+    .filter(Boolean);
+
 /* The collector's vault screens left the site for a new design, and the
  * store's blocks for them went with them. */
 const RETIRED_VAULT_NAMES = [
@@ -272,6 +324,18 @@ describe("the package entry", () => {
     expect(STORE_CART_BLOCKS.filter((name) => !(name in publicEntry))).toEqual(
       [],
     );
+  });
+
+  it("exports the ticketing blocks, each name carrying its capability", () => {
+    expect(TICKETING_BLOCKS.filter((name) => !(name in publicEntry))).toEqual(
+      [],
+    );
+    expect(
+      ticketingNames().filter(
+        (name) =>
+          !/^(Door|Event|FastPass|MyTickets|SharedTicket|Ticket)/.test(name),
+      ),
+    ).toEqual([]);
   });
 
   it("exports no placeholder cart slot (shared-ui-store-cart-SC-43)", () => {

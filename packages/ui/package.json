@@ -20,6 +20,7 @@
     ".": "./src/index.ts",
     "./blocks/auction-invoice-and-receipt-pdf/pdf-preview": "./src/blocks/auction-invoice-and-receipt-pdf/pdf-preview.tsx",
     "./blocks/auction-invoice-and-receipt-pdf/*": "./src/blocks/auction-invoice-and-receipt-pdf/*.ts",
+    "./blocks/ticketing-ticket-pdf": "./src/blocks/ticketing-ticket-pdf/ticket-pdf.ts",
     "./blocks/*": "./src/blocks/*.tsx",
     "./bones/registry": "./src/bones/registry.ts",
     "./lib/*": "./src/lib/*.ts"
