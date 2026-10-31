@@ -163,9 +163,11 @@ export const SignInDialog: Story = {
     );
     const body = within(document.body);
     const dialog = await body.findByRole("dialog");
-    expect(
-      within(dialog).getByRole("heading", { name: SIGN_IN_TITLE }),
-    ).toBeVisible();
+    await waitFor(() =>
+      expect(
+        within(dialog).getByRole("heading", { name: SIGN_IN_TITLE }),
+      ).toBeVisible(),
+    );
     await userEvent.click(
       within(dialog).getByRole("button", { name: "Sign In with Email" }),
     );
