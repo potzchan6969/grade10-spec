@@ -13,8 +13,8 @@
      docs/prds/products/grade10-site/store/tests/, one per page, with a
      **Capabilities:** header line, ## sections named for PRD sections, and
      **Trace:** naming a PRD rule such as product-listing#filters/combining-options,
-     and no **Status:** on a case or in the header; a retired case carries
-     **Retired:** <YYYY-MM-DD> - <why>. New store case ids are g10.store-<page>.TC<n>. -->
+     a **Status:** on each case and in the header as everywhere else; a retired
+     case is deprecated and carries **Retired:** <YYYY-MM-DD> - <why>. New store case ids are g10.store-<page>.TC<n>. -->
 
 # <product>/<domain>/<capability> Test Cases
 

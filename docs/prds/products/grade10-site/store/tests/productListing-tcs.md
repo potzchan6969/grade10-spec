@@ -4,6 +4,7 @@ title: Store Product Listing Test Cases
 
 # grade10-site/store/product-listing Test Cases
 
+**Status:** pending-review · 0/35
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/product-listing, grade10-site/store/discounts
 
@@ -80,6 +81,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -114,6 +116,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -144,6 +147,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -186,6 +190,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -225,6 +230,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -259,6 +265,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -294,6 +301,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -331,6 +339,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -378,6 +387,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -418,6 +428,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -455,6 +466,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -492,6 +504,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -534,6 +547,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -570,6 +584,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -611,6 +626,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -650,6 +666,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -676,6 +693,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -706,6 +724,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -739,6 +758,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -771,6 +791,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -804,6 +825,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -834,6 +856,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -868,6 +891,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -898,6 +922,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -936,6 +961,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -966,6 +992,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1001,6 +1028,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1036,6 +1064,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1064,6 +1093,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1097,6 +1127,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -1134,6 +1165,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1173,6 +1205,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1211,6 +1244,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1238,6 +1272,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1265,6 +1300,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1297,6 +1333,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression

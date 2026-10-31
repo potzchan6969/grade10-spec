@@ -1,6 +1,6 @@
 ---
 name: tcs-review
-description: Review or walk a feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite. Review is journey-led: scan all non-deprecated cases for duplicate and merge candidates, prepare the suite, present cases, and record human verdicts. Walk mode is read-only and shows walks one by one, then ungrouped cases. Use when QA asks to review, approve, sign off, understand, or manually walk test cases. Invoke as /tcs-review [walk] <capability-or-change|domain|journey|tc>.
+description: Review or walk a feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite, or a Grade10 store page's cases. Review is journey-led: scan all non-deprecated cases for duplicate and merge candidates, prepare the suite, present cases, and record human verdicts. Walk mode is read-only and shows walks one by one, then ungrouped cases. Use when QA asks to review, approve, sign off, understand, or manually walk test cases. Invoke as /tcs-review [walk] <capability-or-change|domain|journey|tc>.
 ---
 
 # Reviewing Test Cases With QA
@@ -31,7 +31,8 @@ execution; a review classification is not a pass or fail result.
 
 1. **Get on a review branch before the first verdict.** Use
    `git switch -c tcs-review/<level>-<target>` from `main` whatever the suite
-   holds, with `<level>` one of `feature`, `domain`, `product`, `platform`.
+   holds, with `<level>` one of `feature`, `domain`, `product`, `platform`,
+   or `store` for a store page file.
    Use this skill's preparation and landing sequence, label the pull request
    `documentation`, and push the branch before the first verdict:
    the remote branch or its open pull request is the `in-review` signal. Never
@@ -40,7 +41,12 @@ execution; a review classification is not a pass or fail result.
 2. **Find the suites awaiting review.** Search `openspec/specs/**/feature-tcs.md`,
    `openspec/specs/**/domain-tcs.md`, `openspec/specs/*/product-tcs.md` and
    `openspec/specs/platform-tcs.md`, plus the first two under
-   `openspec/changes/*/specs/`, never `openspec/changes/archive/`. A suite is
+   `openspec/changes/*/specs/`, never `openspec/changes/archive/`, and the
+   store's page files, `docs/prds/products/grade10-site/store/tests/*-tcs.md`.
+   A store page has no journeys: read "journey" below as one PRD section, its
+   `## <page>#<section>` cases and the walks that reach them, and the page
+   under `docs/prds/products/grade10-site/store/` with Storybook as the spec.
+   The level stack (step 3) does not apply to it. A suite is
    awaiting review when its `**Status:**` is `pending-review` or any case is
    `**Status:** draft`. An explicit consolidation request also selects suites with only `actual` cases. Narrow to the argument when given. Before opening one,
    check `gh pr list --state open --search "<capability>"` or `git ls-remote

@@ -1,10 +1,16 @@
 // The Grade10 store's test cases (tcs-rules r7). The store's sources of truth
 // are its PRD pages and Storybook, so its cases live only in the PRD folder,
 // one file per page, and trace PRD rules or sections rather than openspec
-// anchors. A store case carries no review state.
+// anchors. A store case carries its review status like any other case.
 // docs/governance/specs-to-test-cases.md, **Store**.
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
+import {
+  formatSuiteStatus,
+  reviewProgress,
+  snapshotStatuses,
+  statusCounts,
+} from "./suites.mjs";
 
 export const STORE_PRD = join(
   "docs",
@@ -108,6 +114,7 @@ export function pageSections(root, page, cache = new Map()) {
 const REQUIRED = [
   "Severity",
   "Priority",
+  "Status",
   "Behaviour",
   "Type",
   "Suites",
@@ -194,11 +201,25 @@ export function checkStoreSuite(
           tc.line,
           `case \`${tc.id}\` is missing its **${name}** property`,
         );
-    if (tc.props.has("Status"))
+    const status = tc.props.get("Status");
+    const value = status?.value.toLowerCase();
+    if (status && !["draft", "actual", "deprecated"].includes(value))
       report(
-        "warning",
-        tc.props.get("Status").line,
-        `case \`${tc.id}\` carries a **Status:** line — a store case carries no review state; a retired one carries **Retired:** <date> - <why>`,
+        "error",
+        status.line,
+        `case \`${tc.id}\` has **Status:** \`${status.value}\` — a store case is \`draft\`, \`actual\` or \`deprecated\``,
+      );
+    if (value === "deprecated" && !tc.props.has("Retired"))
+      report(
+        "error",
+        status.line,
+        `case \`${tc.id}\` is deprecated but carries no **Retired:** <YYYY-MM-DD> - <why>`,
+      );
+    if (tc.props.has("Retired") && status && value !== "deprecated")
+      report(
+        "error",
+        tc.props.get("Retired").line,
+        `case \`${tc.id}\` carries **Retired:** but its status is \`${status.value}\` — a retired case is \`deprecated\``,
       );
     if (tc.props.has("Layer"))
       report(
@@ -277,14 +298,61 @@ export function checkStoreSuite(
     }
   }
 
-  const statusIndex = lines.findIndex((l) => /^\*\*Status:\*\*/.test(l));
-  if (statusIndex >= 0)
-    report(
-      "warning",
-      statusIndex + 1,
-      "store suite carries a `**Status:**` line — a store suite carries no review state; run results live in the run sheet",
-    );
+  checkHeader(lines, cases, report);
   return { rel, cases: cases.length };
+}
+
+/** The file header's computed lines, held to the cases the way every other
+ *  suite's are: the status and its `actual/(total - deprecated)` share, and
+ *  `**Drafts styled:**` exactly while a draft is left. */
+function checkHeader(lines, cases, report) {
+  const counts = statusCounts(
+    cases.map((tc) => ({
+      props: new Map([...tc.props].map(([k, v]) => [k, v.value])),
+    })),
+  );
+  const progress = reviewProgress(counts);
+  const allowed = snapshotStatuses(counts, cases.length);
+  const index = lines.findIndex((l) => /^\*\*Status:\*\*/.test(l));
+  const expected = allowed
+    .map((status) => `\`${formatSuiteStatus(status, progress)}\``)
+    .join(" or ");
+  if (index < 0)
+    report(
+      "error",
+      1,
+      `store suite carries no \`**Status:**\` line — write ${expected}`,
+    );
+  else if (
+    !allowed.some(
+      (status) => lines[index].trim() === formatSuiteStatus(status, progress),
+    )
+  )
+    report(
+      "error",
+      index + 1,
+      `store suite's status reads \`${lines[index].trim()}\`, but its cases make it ${expected}`,
+    );
+  const styled = lines.some((l) => /^\*\*Drafts styled:\*\*/.test(l));
+  if (counts.draft > 0 && !styled)
+    report(
+      "error",
+      1,
+      "has draft cases but no `**Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>` line",
+    );
+  if (counts.draft === 0 && styled)
+    report(
+      "error",
+      1,
+      "carries a `**Drafts styled:**` line but holds no draft case — drop it",
+    );
+  const reviewed = lines.find((l) => /^\*\*Reviewed:\*\*/.test(l));
+  if (allowed[0] === "approved" && !reviewed)
+    report(
+      "error",
+      1,
+      "is approved but carries no `**Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>` line",
+    );
 }
 
 /** Every named rule a live case does not trace, on a page that any case
