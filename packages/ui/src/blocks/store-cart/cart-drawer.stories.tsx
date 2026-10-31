@@ -568,7 +568,7 @@ export const ReadOnlyTenderContext: Story = {
         heldPromoCodes={SAMPLE_HELD_PROMO_CODES}
         selectedHeldPromoId={null}
         pointsState={points}
-        pointsBalanceLabel="You’ve 1,200 pts."
+        pointsBalanceLabel="You’ve 1,200 pts. Up to 600 pts. can be used for this basket."
         onPromoStateChange={setPromo}
         onPointsStateChange={setPoints}
       />
@@ -608,6 +608,9 @@ export const ReadOnlyTenderContext: Story = {
     await userEvent.click(canvas.getByRole("button", { name: /Use points/i }));
     expect(canvas.getByText(/1 pt = HK\$1\./)).toBeInTheDocument();
     expect(canvas.getByText(/You’ve 1,200 pts\./)).toBeInTheDocument();
+    expect(
+      canvas.getByText(/Up to 600 pts\. can be used for this basket\./),
+    ).toBeInTheDocument();
     expect(canvas.queryByPlaceholderText("0")).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("button", { name: "Apply" }),

@@ -177,7 +177,6 @@ export const AUCTION_SITE_HEADER = {
   ],
   onLocaleChange: noop,
   onSignIn: noop,
-  onProfile: noop,
   onMyAuctions: noop,
   onSignOut: noop,
 };

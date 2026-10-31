@@ -32,8 +32,10 @@ same header wear another brand's words without a fork.
   press and nothing read aloud
 - **Profile** — first in the menu, only when `onProfile` is supplied
 - **My Orders** — ahead of My Auctions, only when `onMyOrders` is supplied
-- **Membership** — after My Auctions, only when `onMembership` and
-  `copy.membership` are supplied
+- 🚧 **Membership** — right after Profile and ahead of My Orders, only when
+  `onMembership` and `copy.membership` are supplied - drawn; its contract is
+  specified by the follow-up site-chrome change, written after
+  `restrict-auctions-by-region` lands
 - 🚧 **No other item** — the menu offers nothing beyond these, KYC and a second
   orders item included
 - 🚧 **Profile image** — the menu's avatar shows the profile's image where the
