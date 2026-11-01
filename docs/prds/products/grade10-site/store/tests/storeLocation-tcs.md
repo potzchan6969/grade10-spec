@@ -178,6 +178,10 @@ Runs once per row of **Test data**.
 | `<g10url>/store/collections` | Store Locator in the footer's Help column | first, ahead of Docs | `<g10url>/store-locator` |
 | `<g10url>/tc/store/products/<pickup product>` | the store name in the free pick-up line | - | `<g10url>/tc/store-locator`, in the same tab, the name matching the page's |
 
+| Field | Value |
+| --- | --- |
+| pickup product | A product for sale whose page shows the free pick-up line |
+
 **Steps:**
 
 1. Read the row's link and where it sits.
@@ -270,12 +274,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on the home page of a site that does not carry the store, such as production today.
+* customer is on `<site without store url>`, the home page of a site that does not carry the store, such as an auction-first one.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| site without store url | The home address of a Grade10 site that does not carry the store |
 
 **Steps:**
 
 1. Read the header and the footer.
-2. Open `/store-locator` on that site.
+2. Open `<site without store url>/store-locator`.
 
 **Expected Results:**
 
