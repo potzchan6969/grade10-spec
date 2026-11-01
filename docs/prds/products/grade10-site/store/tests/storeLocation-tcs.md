@@ -4,8 +4,8 @@ title: Store Location Test Cases
 
 # grade10-site/store/store-locator Test Cases
 
-**Status:** pending-review · 6/7
-**Drafts styled:** 2026-10-24, tcs-rules r7
+**Status:** approved · 7/7
+**Reviewed:** 2026-11-01, tcs-rules r7
 **Capabilities:** grade10-site/store/store-locator
 
 ## Walk 1: Find the shop from the header
@@ -235,7 +235,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
