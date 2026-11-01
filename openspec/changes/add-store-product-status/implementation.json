@@ -1,0 +1,101 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "923a990ed6330b277aa6ca5ad1230fa9821f69074dc4618c2cd27a917428e33e"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "b8747f05151bb971525503211dee5f1584a60988",
+    "capturedAt": "2026-11-01T13:29:37.981Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-store-product-status/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/commerce/product-status/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/commerce/product-status/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A browse surface communicates no quantity beyond whether a variant can be bought",
+          "Requirement: A card's listing availability is that of its most available variant",
+          "Requirement: A variant's availability is the shop's answer for it",
+          "Requirement: An unpublished product is absent from browsing rather than marked",
+          "Requirement: Availability is also answerable for a requested quantity",
+          "Requirement: Every surface communicates the same availability"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/commerce/product-status/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-validation/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A cart the checkout read contradicts is not offered for checkout unresolved",
+          "Requirement: A line the store cannot fill in full is reduced to what remains",
+          "Requirement: A line whose price changed is shown at the current price before checkout",
+          "Requirement: A line whose product was withdrawn from sale leaves the cart and is named",
+          "Requirement: The store re-reads availability and price for cart lines at two moments",
+          "Requirement: The store's read is advisory and the shop remains the authority"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-validation/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The browse listing holds a collector to the shop's count",
+          "Requirement: The browse listing says how many are left when that is news"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A card answers at its own address",
+          "Requirement: A card is added to the cart from its own page",
+          "Requirement: A card nobody can buy says so where the buying happens",
+          "Requirement: A card's one item is added to the cart from its own page",
+          "Requirement: A card's page holds a collector to the shop's count",
+          "Requirement: A card's page says how many are left when that is news",
+          "Requirement: Signed-out Add to cart adds to the cart this browser holds"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Cart item status includes unavailable",
+          "Requirement: Unavailable items are removed silently after open loading"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
