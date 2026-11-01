@@ -4,7 +4,7 @@ title: Store Location Test Cases
 
 # grade10-site/store/store-locator Test Cases
 
-**Status:** pending-review · 0/7
+**Status:** pending-review · 3/7
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/store-locator
 
@@ -36,7 +36,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -77,7 +77,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -94,8 +94,8 @@ Runs once per row of **Test data**.
 | Map |
 | --- |
 | Google's map loaded |
-| Google's map blocked, UI matching store-store-locator-screens-store-locator--map-not-loaded |
-| page scripts off |
+| Google's map blocked: in the browser's developer tools, block requests to `maps.googleapis.com`, then reload; UI matching store-store-locator-screens-store-locator--map-not-loaded |
+| page scripts off: JavaScript turned off in the browser's settings, then reload |
 
 **Steps:**
 
@@ -205,7 +205,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
