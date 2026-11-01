@@ -1,6 +1,8 @@
+import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
+import { TicketAgreementCheck } from "../ticketing-checkout/ticket-agreement-check";
 import { EventPassCard } from "../ticketing-event-page/event-pass-card";
 import { VIP_PERKS, WAS } from "../ticketing-event-page/fixtures";
 import {
@@ -189,6 +191,50 @@ export const Offer: Story = {
     await expect(
       within(offer).getByRole("button", { name: "Decline" }),
     ).toBeEnabled();
+  },
+};
+
+/** The name the tickets print and the tick, asked in the offer before Accept. */
+export const OfferWithTerms: Story = {
+  name: "Offer With Terms",
+  render: function Render() {
+    const [name, setName] = useState("Ada Lovelace");
+    const [agreed, setAgreed] = useState(false);
+    return (
+      <TicketWaitingLineOffer
+        copy={OFFER_COPY}
+        onAccept={fn()}
+        onDecline={fn()}
+      >
+        <TextInput
+          label="Name on the tickets"
+          onChange={(change) => setName(change.target.value)}
+          value={name}
+        />
+        <TicketAgreementCheck
+          checked={agreed}
+          copy={{
+            label: "Agreement",
+            detail:
+              "Your tickets and the points from this order go to your Grade10 account.",
+            required: "Tick the box to agree first.",
+          }}
+          onCheckedChange={setAgreed}
+          statement="I agree to the Terms of Sale."
+        />
+      </TicketWaitingLineOffer>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const offer = within(canvasElement).getByRole("region", {
+      name: OFFER_COPY.title,
+    });
+    await expect(
+      within(offer).getByRole("textbox", { name: "Name on the tickets" }),
+    ).toHaveValue("Ada Lovelace");
+    const tick = within(offer).getByRole("checkbox");
+    await userEvent.click(tick);
+    await expect(tick).toBeChecked();
   },
 };
 

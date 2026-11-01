@@ -84,6 +84,9 @@ type TicketWaitingLineOfferProps = {
   refusal?: TicketWaitingLineRefusal;
   onAccept: () => void;
   onDecline: () => void;
+  /** What the taker fills before Accept, as at Check Your Order: the name
+   * the tickets print and the agreement's tick. */
+  children?: ReactNode;
   className?: string;
 };
 
@@ -254,6 +257,7 @@ function TicketWaitingLineOffer({
   refusal,
   onAccept,
   onDecline,
+  children,
   className,
 }: TicketWaitingLineOfferProps) {
   return (
@@ -265,6 +269,9 @@ function TicketWaitingLineOffer({
       tone="offer"
     >
       <span className="text-sm leading-5">{copy.body}</span>
+      {children ? (
+        <div className="mt-2 flex flex-col gap-3">{children}</div>
+      ) : null}
       <div className="mt-2 flex flex-col items-start gap-3">
         <div className="flex flex-wrap gap-2">
           <Button
