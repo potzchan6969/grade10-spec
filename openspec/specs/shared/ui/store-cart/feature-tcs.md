@@ -1,7 +1,7 @@
 # shared/ui/store-cart Test Cases
 
-**Status:** pending-review · 0/9
-**Drafts styled:** 2026-10-27, tcs-rules r7
+**Status:** pending-review · 0/15
+**Drafts styled:** 2026-10-30, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
 **Out of suite (non-GUI):** shared-ui-store-cart-SC-01, shared-ui-store-cart-SC-22, shared-ui-store-cart-SC-43 - the export set, its types and the retired slot exports, held by `packages/ui/src/index.test.ts` and `pnpm run typecheck`
@@ -144,6 +144,230 @@ sells.
 
 ---
 
+## shared.ui-store-cart.US9: Shopper reads tender options without applying them
+
+**As a** shopper,
+**I want** to inspect the promo and points context for my cart without applying
+either tender,
+**so that** I can understand my available options without encountering an action
+that cannot change the cart.
+
+<!-- trace:case id=g10.shared-store-cart.TC-p7m rev=1 covers=g10.shared-store-cart.SC-ka5 -->
+### shared.ui-store-cart.US9-TC1: Read-only promo context stays visible without actions
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-ui-store-cart-US-09
+
+**Pre-conditions:**
+
+* The CartDrawer ReadOnlyTenderContext story in `<storybook>` supplies applicable and inapplicable held codes with their labels, details and refusal reasons; promo-state change is supplied to open the view, while typed promo-apply and held-code-selection callbacks are omitted.
+
+**Steps:**
+
+1. Open the CartDrawer ReadOnlyTenderContext story on `<storybook>`.
+2. Open the promo-code view; read an applicable code, an inapplicable code, their supplied details and the inapplicable reason.
+
+**Expected Results:**
+
+* The applicable and inapplicable held-code labels and details remain visible, including the inapplicable code's refusal reason.
+* Typed promo entry and typed-code Apply are absent, and the applicable held code has no Apply control.
+
+<!-- trace:case id=g10.shared-store-cart.TC-t8c rev=1 covers=g10.shared-store-cart.SC-rxp -->
+### shared.ui-store-cart.US9-TC2: Supplied promo callbacks expose and record actions
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-ui-store-cart-US-09
+
+**Pre-conditions:**
+
+* The CartDrawerFooter interactive promo story in `<storybook>` supplies an applicable held code and both promo callbacks.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<typed code>` | SAVE-472 (test input) |
+
+**Steps:**
+
+1. Open the interactive promo story on `<storybook>`.
+2. Read the typed promo controls, held-code ticket and Actions panel.
+3. Enter `<typed code>` in the typed promo entry.
+4. Select the typed promo Apply control.
+5. Select the held-code Apply control.
+
+**Expected Results:**
+
+* The typed promo entry and held-code Apply control are available.
+* Applying the typed code records only the typed promo callback with `<typed code>`.
+* Applying the held code records only held-code selection for the supplied code.
+
+<!-- trace:case id=g10.shared-store-cart.TC-x4j rev=2 covers=g10.shared-store-cart.SC-x7g -->
+### shared.ui-store-cart.US9-TC3: Read-only points context stays visible without actions
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-ui-store-cart-US-09
+
+**Pre-conditions:**
+
+* The CartDrawer ReadOnlyTenderContext story in `<storybook>` supplies points balance, a distinct basket ceiling and conversion-rate context; points-state change is supplied to open the disclosure, while points-apply and Use max callbacks are omitted.
+
+**Steps:**
+
+1. Open the CartDrawer ReadOnlyTenderContext story on `<storybook>` and record the displayed cart summary.
+2. Open the points disclosure; read the supplied points context and available controls.
+
+**Expected Results:**
+
+* The points entry, its Apply control and Use max are absent; no points amount is applied.
+* The supplied balance, distinct basket ceiling and conversion rate remain visible, and the cart summary is unchanged.
+
+<!-- trace:case id=g10.shared-store-cart.TC-v2n rev=1 covers=g10.shared-store-cart.SC-q34 -->
+### shared.ui-store-cart.US9-TC4: Supplied points callbacks expose and record actions
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-ui-store-cart-US-09
+
+**Pre-conditions:**
+
+* The CartDrawerFooter interactive points story in `<storybook>` supplies a balance and ceiling above `<points amount>`, a rate, and points-apply and Use max callbacks.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<points amount>` | 30 points (fixed test input; balance and ceiling exceed it) |
+
+**Steps:**
+
+1. Open the interactive points story on `<storybook>`.
+2. Read the points controls and Actions panel.
+3. Enter `<points amount>` in the points entry.
+4. Select the points Apply control.
+5. Select Use max.
+
+**Expected Results:**
+
+* The points entry, its Apply control and Use max are available.
+* The Actions panel records only points-apply with `<points amount>` after Apply.
+* The Actions panel records only the Use max callback after Use max.
+* The supplied points balance and conversion-rate context remain visible after both actions.
+
+<!-- trace:case id=g10.shared-store-cart.TC-h5q rev=1 covers=g10.shared-store-cart.SC-ufi -->
+### shared.ui-store-cart.US9-TC5: A missing callback hides only its owned action
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-ui-store-cart-US-09
+
+**Pre-conditions:**
+
+* The CartDrawer callback-matrix story in `<storybook>` supplies an applicable held code with eligibility details, refusal information, points balance, ceiling and rate, and an applied tender.
+* For each run, only `<missing callback>` is omitted; all other tender callbacks are supplied.
+
+**Test data:**
+
+| `<missing callback>` | `<owned action>` |
+| --- | --- |
+| typed promo-apply callback | typed promo entry and its Apply |
+| held-code selection callback | held-code Apply |
+| points-apply callback | points entry and Apply |
+| Use max callback | Use max |
+| promo-removal callback | applied promo Remove |
+| points-removal callback | applied points Remove |
+| promo-state-change callback | promo disclosure trigger |
+| points-state-change callback | points disclosure trigger |
+
+**Steps:**
+
+1. Open the callback-matrix story on `<storybook>` with `<missing callback>` omitted.
+2. Read the tender controls and supplied promo and points context.
+3. Activate one unrelated action whose callback is supplied in that row, where the story provides one, and inspect the Actions panel.
+
+**Expected Results:**
+
+* Only `<owned action>` is absent; actions whose callbacks are supplied remain available.
+* The supplied promo and points context remains visible.
+* Where an unrelated action is activated, only its matching callback is recorded; the omitted callback has no invocation.
+
+<!-- trace:case id=g10.shared-store-cart.TC-d9b rev=1 -->
+### shared.ui-store-cart.US9-TC6: Tender removal records its supplied callback
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-ui-store-cart-US-09
+
+**Pre-conditions:**
+
+* The CartDrawer story in `<storybook>` has an applied tender and supplies the tender-removal callback.
+
+**Steps:**
+
+1. Open the CartDrawer story on `<storybook>`.
+2. Read the applied tender and its available controls.
+3. Select the tender-removal control.
+
+**Expected Results:**
+
+* The tender-removal control is available.
+* The Actions panel records the tender-removal callback.
+
+---
+
 ## shared.ui-store-cart.US13: Shopper reads a site sale on the cart lines
 
 **As a** shopper,
@@ -174,7 +398,7 @@ at the prices I see on them.
 
 **Steps:**
 
-1. Open the story, and read the line's prices.
+1. Open the story on `<storybook>`, and read the line's prices.
 
 **Expected Results:**
 
@@ -381,6 +605,7 @@ Runs once per row of **Test data**.
 - **A line both repriced and on sale** - not the drawer's: it strikes the list price it is given; which price Grade10 supplies is open on the Grade10 Cart Drawer page
 - **Whitespace-only alt text** - Q7 retains the supplied non-empty string; only absent or empty alt text uses the item name.
 - **Empty picture source** - Q8 uses the existing placeholder.
+- **Status-only order-line strikes (Q5)** - a refunded or cancelled line's strike marks its status, not a sale; its status badge explains it and it gets no `Sale price` or `Was` words.
 
 ## Reconciliation
 
@@ -389,3 +614,9 @@ Runs once per row of **Test data**.
 | Manual | Why |
 | --- | --- |
 | `shared.ui-store-cart.US22-TC1` | To be walked in the controlled shared UI Storybook after the shared contract and Grade10 mapper land. |
+| `shared.ui-store-cart.US9-TC1` | A person checks the supplied held-code labels, details and refusal in the shared UI Storybook. |
+| `shared.ui-store-cart.US9-TC2` | A person enters a typed promo and applies a held code while checking the corresponding callback records. |
+| `shared.ui-store-cart.US9-TC3` | A person opens the read-only points disclosure and checks its display context and unchanged summary. |
+| `shared.ui-store-cart.US9-TC4` | A person applies points and uses the maximum while checking the corresponding callback records. |
+| `shared.ui-store-cart.US9-TC5` | A person walks each missing-callback row and checks action availability and callback isolation. |
+| `shared.ui-store-cart.US9-TC6` | A person removes a supplied applied tender in the full drawer and checks its callback record. |
