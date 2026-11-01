@@ -11,6 +11,7 @@ import {
   inReadingOrder,
   readCandidates,
 } from "./select-cases.mjs";
+import { isStoreSuite, STORE_TESTS } from "./store-suites.mjs";
 
 export const RECORD_TAB = "_Run records";
 export const RECORD_HEADERS = ["Run ID", "Record"];
@@ -291,16 +292,30 @@ export function mergedRecord(root, spreadsheetId, runId, ref = "origin/main") {
 }
 
 /** Read accepted suites from a Git snapshot, never from uncommitted files. */
+/** Where a run's cases live: the durable suites, and the store's page files
+ *  (tcs-rules r7). */
+const SOURCE_PATHS = ["openspec/specs", STORE_TESTS];
+
 export function candidatesAt(root, ref) {
   const scratch = mkdtempSync(join(tmpdir(), "run-sheet-source-"));
   try {
-    const archive = execFileSync("git", ["archive", ref, "openspec/specs"], {
+    // A source pinned before the store's cases moved holds no store folder,
+    // and `git archive` refuses a path the tree does not hold.
+    const paths = SOURCE_PATHS.filter((path) =>
+      execFileSync("git", ["ls-tree", "-d", "--name-only", ref, path], {
+        cwd: root,
+        encoding: "utf8",
+      }).trim(),
+    );
+    const archive = execFileSync("git", ["archive", ref, ...paths], {
       cwd: root,
       maxBuffer: 64 * 1024 * 1024,
     });
     execFileSync("tar", ["-x", "-C", scratch], { input: archive });
-    return readCandidates(scratch).filter((one) =>
-      one.read.rel.startsWith("openspec/specs/"),
+    return readCandidates(scratch).filter(
+      (one) =>
+        one.read.rel.startsWith("openspec/specs/") ||
+        isStoreSuite(one.read.rel),
     );
   } finally {
     rmSync(scratch, { recursive: true, force: true });

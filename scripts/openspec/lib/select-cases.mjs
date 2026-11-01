@@ -10,7 +10,9 @@
  * the steps the validator judged.
  */
 
+import { relative } from "node:path";
 import { COLUMNS } from "./run-sheet-layout.mjs";
+import { isStoreSuite, readStoreSuite, storeSuites } from "./store-suites.mjs";
 import { isAutomated, prop, readAllSuites } from "./suites.mjs";
 
 /** `grade10-site/store/home` → product, domain, capability. A domain suite
@@ -31,7 +33,9 @@ const list = (value) =>
     .filter(Boolean);
 
 function durableSuite(one) {
-  return one.read.rel.startsWith("openspec/specs/");
+  return (
+    one.read.rel.startsWith("openspec/specs/") || isStoreSuite(one.read.rel)
+  );
 }
 
 /**
@@ -51,6 +55,10 @@ function suiteScope(read) {
 
 export function matchesChangedScope(read, changedPaths) {
   if (!changedPaths || changedPaths.length === 0) return true;
+  if (isStoreSuite(read.rel))
+    return changedPaths.some(
+      (path) => path === read.rel || read.pages.includes(path),
+    );
   if (read.level === "platform")
     return changedPaths.some(
       (path) => path.startsWith("openspec/") || path.startsWith("docs/prds/"),
@@ -71,7 +79,10 @@ export function matchesChangedScope(read, changedPaths) {
 /** Everything the store holds, as one flat list of candidates. */
 export function readCandidates(root, scope = null) {
   const out = [];
-  for (const read of readAllSuites(root, scope)) {
+  const store = storeSuites(root)
+    .filter((path) => (scope ? relative(root, path).includes(scope) : true))
+    .map((path) => readStoreSuite(root, path));
+  for (const read of [...readAllSuites(root, scope), ...store]) {
     for (const tc of read.cases) out.push({ read, tc });
   }
   return out;

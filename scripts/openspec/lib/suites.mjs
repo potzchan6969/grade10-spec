@@ -637,14 +637,71 @@ export function parseWalks(text) {
   return walks;
 }
 
+/** A store page's section heading, `## <page>#<section>: Title`, or
+ *  `### ...` under `## Ungrouped`; and its case, `g10.store-<page>.TC<n>`
+ *  (tcs-rules r7, **Store**). */
+const STORE_GROUP = /^##\s+([a-z0-9-]+(?:#[\p{L}\p{N}-]+)?):\s*(.+?)\s*$/u;
+const STORE_UNGROUPED_GROUP =
+  /^###\s+([a-z0-9-]+(?:#[\p{L}\p{N}-]+)?):\s*(.+?)\s*$/u;
+const STORE_CASE = /^(###|####)\s+(\S+\.TC(\d+)):\s*(.+?)\s*$/;
+
+/** A case as the parse first meets it: its heading, then empty fields the
+ *  lines below it fill. */
+function newCase({
+  caseMarker,
+  version = null,
+  modern = true,
+  journeyScoped = true,
+  hyphenated = false,
+  ...heading
+}) {
+  return {
+    ...heading,
+    markerId: caseMarker?.id ?? null,
+    markerRev: caseMarker?.rev ?? null,
+    version,
+    modern,
+    journeyScoped,
+    hyphenated,
+    props: new Map(),
+    propOrder: [],
+    preconditions: "",
+    testData: [],
+    tables: [],
+    stepTexts: [],
+    expectedTexts: [],
+    steps: 0,
+    expected: 0,
+    perRow: false,
+    // The test file(s) a store unit or script test - or the walk that
+    // drives it - decides this case from: `{ path, line }` per path, in
+    // the order written, empty when the case carries no such line
+    // (`docs/governance/specs-to-test-cases.md`, Fixed points).
+    decidedBy: [],
+    // One entry per `**Decided by:**` line the case carries, whatever
+    // shape it is in, so the caller can refuse what the parse cannot
+    // silently fix: a second line (repeated), a line anywhere but
+    // directly after the classification block (misplaced), an empty
+    // element, and the pre-r3 `*` bullet inside the block. A line read
+    // into `decidedBy` and reported here is a line nobody dropped.
+    decidedByLines: [],
+    // The last classification bullet seen, which is what "directly after
+    // the classification block" is measured from.
+    propLine: null,
+  };
+}
+
 /** Split a suite into its header, journey sections and cases. Current format only;
  *  older shapes are detected and reported rather than parsed into silence.
  *
  *  A case carries both a count and the text of its steps and expected results:
  *  the validator judges that there is something to verify, and the run sheet
  *  carries what a tester reads. */
-export function parseSuite(text) {
+export function parseSuite(text, { store = false } = {}) {
   const lines = text.split("\n");
+  // A store page's sections, in the order the file first names them, so its
+  // Ungrouped cases rejoin the section their grouped cases sit under.
+  const storeGroups = new Map();
   const suite = {
     title: null,
     status: null,
@@ -769,6 +826,44 @@ export function parseSuite(text) {
       }
     }
 
+    if (store) {
+      const group = (ungrouped ? STORE_UNGROUPED_GROUP : STORE_GROUP).exec(
+        line,
+      );
+      if (group) {
+        pushJourney();
+        if (!storeGroups.has(group[1]))
+          storeGroups.set(group[1], storeGroups.size + 1);
+        journey = {
+          capability: group[1].split("#")[0],
+          num: storeGroups.get(group[1]),
+          raw: group[1],
+          hyphenated: false,
+          title: group[2],
+          line: i + 1,
+          story: [],
+          cases: [],
+          ungrouped,
+        };
+        continue;
+      }
+      const sc = STORE_CASE.exec(line);
+      if (sc) {
+        pushCase();
+        tc = newCase({
+          id: sc[2],
+          caseMarker,
+          capability: sc[2].replace(/\.TC\d+$/, ""),
+          journeyNum: journey?.num ?? null,
+          tcNum: Number(sc[3]),
+          title: sc[4],
+          line: i + 1,
+        });
+        caseMarker = null;
+        continue;
+      }
+    }
+
     const jh = line.match(
       /^##\s+(([\w.-]+)-US-?(\d+)|([\w.-]+)\.US-?(\d+)):\s*(.+?)\s*$/,
     );
@@ -843,10 +938,9 @@ export function parseSuite(text) {
           : id.match(/^([\w-]+)-US-?(\d+)-TC-?(\d+)(?:-(\d+))?$/);
       if (!journeyScoped)
         suite.legacy.add("case ids that are not `<scope>.US<n>-TC<m>`");
-      tc = {
+      tc = newCase({
         id,
-        markerId: caseMarker?.id ?? null,
-        markerRev: caseMarker?.rev ?? null,
+        caseMarker,
         capability: journeyScoped?.[1] ?? null,
         journeyNum: journeyScoped ? Number(journeyScoped[2]) : null,
         tcNum: journeyScoped ? Number(journeyScoped[3]) : null,
@@ -860,32 +954,7 @@ export function parseSuite(text) {
         hyphenated: !modern && !display && /-US-\d+-TC-\d+/.test(id),
         title: modern ? modern[5] : display ? display[5] : legacy[2],
         line: i + 1,
-        props: new Map(),
-        propOrder: [],
-        preconditions: "",
-        testData: [],
-        tables: [],
-        stepTexts: [],
-        expectedTexts: [],
-        steps: 0,
-        expected: 0,
-        perRow: false,
-        // The test file(s) a store unit or script test - or the walk that
-        // drives it - decides this case from: `{ path, line }` per path, in
-        // the order written, empty when the case carries no such line
-        // (`docs/governance/specs-to-test-cases.md`, Fixed points).
-        decidedBy: [],
-        // One entry per `**Decided by:**` line the case carries, whatever
-        // shape it is in, so the caller can refuse what the parse cannot
-        // silently fix: a second line (repeated), a line anywhere but
-        // directly after the classification block (misplaced), an empty
-        // element, and the pre-r3 `*` bullet inside the block. A line read
-        // into `decidedBy` and reported here is a line nobody dropped.
-        decidedByLines: [],
-        // The last classification bullet seen, which is what "directly after
-        // the classification block" is measured from.
-        propLine: null,
-      };
+      });
       caseMarker = null;
       continue;
     }

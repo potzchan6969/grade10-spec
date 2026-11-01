@@ -25,6 +25,7 @@ normalize to `staging-1` and `prod` for new selections.
 
 - **Property filters** — `--suites`, `--priority` and `--level` intersect. A comma-separated value matches any value of that property
 - **Scope** — `--scope <path>` selects eligible cases whose suite path contains that capability or domain path. It also narrows property filters and explicit ids
+- **Store** — the store's page files under `docs/prds/products/grade10-site/store/tests/` are read beside the suites under `openspec/specs/`; `--scope docs/prds/products/grade10-site/store/tests/` takes them all. A page's `## <page>#<section>` heading stands where a journey does, its Ungrouped cases rejoin it, and a changed-since selection takes a page file when it or a PRD page its cases trace changed
 - **Explicit ids** — `--cases` or `--cases-file` wins over property filters. Repeated ids print once. A missing, deprecated or otherwise ineligible explicit id stops the run
 - **Changed scope** — `--changed-since <sha>` selects whole suites affected by changed specs, PRDs or suites. It cannot combine with explicit ids. It is a scope hint, not proof each case changed
 - **Eligibility** — `actual` cases, automated included. Add `--include-draft` only when requested; drafts are grey. `deprecated` never prints. Use `--exclude-automated` only when requested

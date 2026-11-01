@@ -7,6 +7,9 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import {
   formatSuiteStatus,
+  levelOf,
+  parseSuite,
+  prop,
   reviewProgress,
   snapshotStatuses,
   statusCounts,
@@ -34,6 +37,47 @@ export function storeSuites(root) {
     .filter((name) => name.endsWith("-tcs.md"))
     .sort()
     .map((name) => join(dir, name));
+}
+
+/** Whether a repository-relative path is a store page file. */
+export const isStoreSuite = (rel) =>
+  rel.startsWith(`${STORE_TESTS}/`) && rel.endsWith("-tcs.md");
+
+/** One store page file read the way `readSuite` reads any other suite, for
+ *  the run sheet: its sections stand where a suite's journeys do, and its
+ *  capability is the path its title names, `grade10-site/store/cart`. `pages`
+ *  are the PRD pages its cases trace, which a changed-since selection reads. */
+export function readStoreSuite(root, file) {
+  const suite = parseSuite(readFileSync(file, "utf8"), { store: true });
+  const capabilityId =
+    /^(\S+)\s+Test Cases$/.exec(suite.title ?? "")?.[1] ?? relative(root, file);
+  const cases = [];
+  for (const j of suite.journeys)
+    for (const tc of j.cases) cases.push({ ...tc, journey: j });
+  const pages = new Set(
+    cases.flatMap((tc) =>
+      prop(tc, "Trace")
+        .split(",")
+        .map((target) => target.trim().split("#")[0])
+        .filter(Boolean),
+    ),
+  );
+  const counts = statusCounts(cases);
+  return {
+    path: file,
+    rel: relative(root, file),
+    level: levelOf(file),
+    capability: capabilityId,
+    capabilityId,
+    change: null,
+    spec: null,
+    suite,
+    cases,
+    counts,
+    progress: reviewProgress(counts),
+    status: suite.status,
+    pages: [...pages].map((page) => join(STORE_PRD, `${page}.md`)),
+  };
 }
 
 /** A heading's anchor, the way the manual and GitHub write one. */

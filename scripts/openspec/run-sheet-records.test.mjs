@@ -472,6 +472,7 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
     "scripts/openspec/lib/decided-by.mjs",
     "scripts/openspec/lib/feature-set.mjs",
     "scripts/openspec/lib/select-cases.mjs",
+    "scripts/openspec/lib/store-suites.mjs",
     "scripts/openspec/lib/run-sheet-layout.mjs",
     "scripts/openspec/lib/run-sheet-records.mjs",
     "scripts/openspec/lib/printed-run-message.mjs",
