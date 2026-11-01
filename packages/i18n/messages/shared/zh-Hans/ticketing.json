@@ -597,7 +597,7 @@
       "title": "开启入口",
       "body": "输入入口负责人给你的密码，不需要账户。",
       "passcode": "密码",
-      "passcodePlaceholder": "6 位数字",
+      "passcodePlaceholder": "英文字母和数字",
       "passcodeRequired": "请输入密码",
       "deviceName": "此手机的名称",
       "deviceHint": "你放行的每张门票都会记录此名称。",

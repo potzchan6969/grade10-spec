@@ -597,7 +597,7 @@
       "title": "Open the door",
       "body": "Enter the passcode the door lead gave you. No account needed.",
       "passcode": "Passcode",
-      "passcodePlaceholder": "6 digits",
+      "passcodePlaceholder": "Letters and numbers",
       "passcodeRequired": "Enter the passcode",
       "deviceName": "This phone’s name",
       "deviceHint": "Every ticket you let in is recorded with it.",

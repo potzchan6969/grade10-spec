@@ -16,7 +16,7 @@ type DoorSignInCopy = {
   description: string;
   /** "Passcode" */
   passcodeLabel: string;
-  /** "6 digits" */
+  /** "Letters and numbers" */
   passcodePlaceholder: string;
   /** "This phone’s name" */
   deviceNameLabel: string;

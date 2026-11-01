@@ -21,7 +21,7 @@ export const signInCopy: DoorSignInCopy = {
   title: "Open the door",
   description: "Enter the passcode the door lead gave you. No account needed.",
   passcodeLabel: "Passcode",
-  passcodePlaceholder: "6 digits",
+  passcodePlaceholder: "Letters and numbers",
   deviceNameLabel: "This phone’s name",
   deviceNameHint: "Every ticket you let in is recorded with it.",
   submit: "Open the Door",
