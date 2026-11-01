@@ -1306,7 +1306,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-listing#catalogue-source/waits-for-shopify
+* **Trace:** product-listing#catalogue-source/waits-for-shopify, product-listing#catalogue-source/read-from-shopify
 
 **Pre-conditions:**
 

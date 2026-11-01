@@ -484,7 +484,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#where-each-shows/named, product-page#product-card/sale-price, product-page#product-card/badges
+* **Trace:** discounts#where-each-shows/named, product-page#product-card/sale-price, product-page#product-card/badges, discounts#a-product-discount-beside-a-sale-price/the-struck-price, discounts#order-of-application/sale-price
 
 **Pre-conditions:**
 
