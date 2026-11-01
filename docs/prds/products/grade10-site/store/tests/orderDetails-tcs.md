@@ -4,9 +4,15 @@ title: Store Order Detail Test Cases
 
 # grade10-site/store/order-detail Test Cases
 
-**Status:** pending-review · 0/23
+**Status:** pending-review · 4/23
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/order-detail
+
+## Background
+
+* `<order id>` is `<order>`'s id in the shop.
+* `<product A>` and `<product B>` are products for sale on the store.
+* `<test card>` is the payment provider's published test card that succeeds.
 
 ## Walk 1: A guest back from checkout
 
@@ -23,7 +29,7 @@ title: Store Order Detail Test Cases
 
 ### Route
 
-1. Check out as a guest under `<order email>`, pay with the payment provider's published test card that succeeds, then select Continue on Shopify's thank-you page.
+1. Check out as a guest under `<order email>`, pay with `<test card>`, then select Continue on Shopify's thank-you page.
    - The private order page opens `g10.store-order-detail.TC12`
 2. Read the placed-on line and the toast.
    - The receipt line and the account ask `g10.store-order-detail.TC13`
@@ -43,7 +49,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** smoke, regression
@@ -82,7 +88,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -121,7 +127,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -164,7 +170,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -227,7 +233,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<order id>`.
+1. Open `<g10url>/store/my-orders/<order id>`.
 
 **Expected Results:**
 
@@ -263,7 +269,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<row's id>`.
+1. Open `<g10url>/store/my-orders/<row's id>`.
 
 **Expected Results:**
 
@@ -290,7 +296,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<order id>` and sign in.
+1. Open `<g10url>/store/my-orders/<order id>` and sign in.
 
 **Expected Results:**
 
@@ -317,7 +323,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<order id>`.
+1. Open `<g10url>/store/my-orders/<order id>`.
 
 **Expected Results:**
 
@@ -343,7 +349,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<order id>`.
+1. Open `<g10url>/store/my-orders/<order id>`.
 2. Select Retry.
 
 **Expected Results:**
@@ -386,7 +392,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<order id>` and read the badge and Delivery Status.
+1. Open `<g10url>/store/my-orders/<order id>` and read the badge and Delivery Status.
 2. Select Track Order, where offered.
 
 **Expected Results:**
@@ -498,8 +504,8 @@ Runs once per row of **Test data**.
 
 | Link |
 | --- |
-| `/store/orders/<an id no order has>#<any secret>` |
-| `/store/orders/<a real order id>#<a different secret>` |
+| `<g10url>/store/orders/<an id no order has>#<any secret>` |
+| `<g10url>/store/orders/<a real order id>#<a different secret>` |
 
 **Steps:**
 
@@ -539,7 +545,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Check out and pay with the payment provider's published test card that succeeds.
+1. Check out and pay with `<test card>`.
 2. Open Shopify's order confirmation and select View order in a private window.
 3. Read the mailbox after 5 minutes.
 
@@ -568,7 +574,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<order id>`.
+1. Open `<g10url>/store/my-orders/<order id>`.
 
 **Expected Results:**
 
@@ -639,7 +645,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/orders/latest`.
+1. Open `<g10url>/orders/latest`.
 
 **Expected Results:**
 
@@ -670,7 +676,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<order id>` and read the summary.
+1. Open `<g10url>/store/my-orders/<order id>` and read the summary.
 
 **Expected Results:**
 
@@ -706,7 +712,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<order id>` and read the summary and the points section.
+1. Open `<g10url>/store/my-orders/<order id>` and read the summary and the points section.
 
 **Expected Results:**
 
@@ -743,7 +749,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<order id>` and read the summary and the points section.
+1. Open `<g10url>/store/my-orders/<order id>` and read the summary and the points section.
 
 **Expected Results:**
 
@@ -770,7 +776,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Refund `<product B>` in the shop's admin.
+1. Refund `<product B>` in the store's Shopify admin.
 2. Wait 60 seconds, then read the member's points balance.
 
 **Expected Results:**
@@ -797,7 +803,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Refund the delivery fee alone in the shop's admin.
+1. Refund the delivery fee alone in the store's Shopify admin.
 2. Wait 60 seconds, then read the member's points balance.
 
 **Expected Results:**
@@ -823,7 +829,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed-in member) owns `<order>`: `<product A>` HKD780 and `<product B>` HKD105, paid HKD885; admin refunded the row's lines in the shop's admin.
+* customer(signed-in member) owns `<order>`: `<product A>` HKD780 and `<product B>` HKD105, paid HKD885; admin refunded the row's lines in the store's Shopify admin.
 
 **Test data:**
 
@@ -834,7 +840,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `/store/my-orders/<order id>` and read the summary and the badge.
+1. Open `<g10url>/store/my-orders/<order id>` and read the summary and the badge.
 
 **Expected Results:**
 
