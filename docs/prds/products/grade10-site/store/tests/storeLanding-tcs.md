@@ -4,8 +4,8 @@ title: Store Landing Test Cases
 
 # grade10-site/store/home Test Cases
 
-**Status:** pending-review · 8/11
-**Drafts styled:** 2026-10-24, tcs-rules r7
+**Status:** approved · 11/11
+**Reviewed:** 2026-11-01, tcs-rules r7
 **Capabilities:** grade10-site/store/home
 
 ## Background
@@ -316,7 +316,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -354,7 +354,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -392,12 +392,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** home#loading-and-errors/nothing-to-show
 
 **Pre-conditions:**
