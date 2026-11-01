@@ -46,7 +46,7 @@ function BookingNotice({
         <Warning size={20} />
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className="text-sm leading-5 font-bold tabular-nums">
+        <span className="text-sm leading-5 font-semibold tabular-nums">
           {title}
         </span>
         {body ? (
