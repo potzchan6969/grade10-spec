@@ -1,4 +1,3 @@
-import type { BatchReestimatedProps } from "@/emails/grading/batch-reestimated";
 import type { BatchShippedProps } from "@/emails/grading/batch-shipped";
 import type { CardNotBackProps } from "@/emails/grading/card-not-back";
 import type { CardWithdrawnProps } from "@/emails/grading/card-withdrawn";
@@ -6,9 +5,6 @@ import type { CheckedInProps } from "@/emails/grading/checked-in";
 import type { CollectedProps } from "@/emails/grading/collected";
 import type { GradesPostedProps } from "@/emails/grading/grades-posted";
 import type { NoticePostedProps } from "@/emails/grading/notice-posted";
-import type { PlanExpiredProps } from "@/emails/grading/plan-expired";
-import type { PlanNudgedProps } from "@/emails/grading/plan-nudged";
-import type { PlanSavedProps } from "@/emails/grading/plan-saved";
 import type { ReadyProps } from "@/emails/grading/ready";
 import type { StorageStartedProps } from "@/emails/grading/storage-started";
 import type { UncollectedReminderProps } from "@/emails/grading/uncollected-reminder";
@@ -56,15 +52,10 @@ export const previewSubmission = {
   complaintsContact: "complaints@grade10.com",
   whatsapp: "+852 9123 4567",
 
-  plannedAt: "2026-10-24T11:25:00Z",
-  keptUntil: "2026-11-23T03:00:00Z",
-  nudgeDay: "2026-11-14T03:00:00Z",
-
   batchCutOff: "2026-10-29T11:00:00Z",
   batchShipDay: "2026-10-30T03:00:00Z",
   batchId: "B-2026-41",
   estimatedBack: "2026-12-04T03:00:00Z",
-  reestimatedBack: "2026-12-11T03:00:00Z",
 
   declaredTotalMinor: 1_520_000,
   feeTotalMinor: 240_000,
@@ -187,12 +178,8 @@ export const previewHandedBackCards = [
  * entry here; its second preview is a state variant, not a second kind).
  */
 export type NotifyKind =
-  | "plan_saved"
-  | "plan_nudged"
-  | "plan_expired"
   | "checked_in"
   | "batch_shipped"
-  | "batch_reestimated"
   | "grades_posted"
   | "card_not_back"
   | "ready"
@@ -209,12 +196,8 @@ export type NotifyKind =
  * a failure in that repository.
  */
 export type GradingLetterFacts = {
-  plan_saved: Required<PlanSavedProps>;
-  plan_nudged: Required<PlanNudgedProps>;
-  plan_expired: Required<PlanExpiredProps>;
   checked_in: Required<CheckedInProps>;
   batch_shipped: Required<BatchShippedProps>;
-  batch_reestimated: Required<BatchReestimatedProps>;
   grades_posted: Required<GradesPostedProps>;
   card_not_back: Required<CardNotBackProps>;
   ready: Required<ReadyProps>;
@@ -231,28 +214,11 @@ export type GradingLetterFacts = {
  * render test supplies those three the same way for every kind.
  */
 export const GRADING_FIXTURES: GradingLetterFacts = {
-  plan_saved: {
-    plannedAt: previewSubmission.plannedAt,
-    keptUntil: previewSubmission.keptUntil,
-    nudgeDay: previewSubmission.nudgeDay,
-  },
-  plan_nudged: {
-    plannedAt: previewSubmission.plannedAt,
-    keptUntil: previewSubmission.keptUntil,
-  },
-  plan_expired: {
-    plannedAt: previewSubmission.plannedAt,
-    keptDays: 30,
-  },
   checked_in: {
     paidAt: previewSubmission.paidAt,
   },
   batch_shipped: {
     shippedOn: previewSubmission.batchShipDay,
-  },
-  batch_reestimated: {
-    estimatedBack: previewSubmission.estimatedBack,
-    reestimatedBack: previewSubmission.reestimatedBack,
   },
   grades_posted: {
     gradesPostedAt: previewSubmission.gradesPostedAt,
