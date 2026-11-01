@@ -46,4 +46,3 @@ verdict: Ready to accept
 | Existing checkout metric evidence | App `origin/main` `6897dc37891d453b30594bdb9789ff2afb8d847f` | `checkout.ts:280-283` emits `store.checkout.outcome` with the outcome tag; the Commerce board at `scripts/datadog/boards/commerce.mjs:194-197` groups that metric by outcome and reason. Supports Q26's existing-metric basis. | Rechecked on unchanged app baseline |
 
 Ready to accept
-
