@@ -4,8 +4,8 @@ title: Store Location Test Cases
 
 # grade10-site/store/store-locator Test Cases
 
-**Status:** pending-review · 0/7
-**Drafts styled:** 2026-10-24, tcs-rules r7
+**Status:** approved · 7/7
+**Reviewed:** 2026-11-01, tcs-rules r7
 **Capabilities:** grade10-site/store/store-locator
 
 ## Walk 1: Find the shop from the header
@@ -36,7 +36,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -77,7 +77,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -94,8 +94,8 @@ Runs once per row of **Test data**.
 | Map |
 | --- |
 | Google's map loaded |
-| Google's map blocked, UI matching store-store-locator-screens-store-locator--map-not-loaded |
-| page scripts off |
+| Google's map blocked: in the browser's developer tools, block requests to `maps.googleapis.com`, then reload; UI matching store-store-locator-screens-store-locator--map-not-loaded |
+| page scripts off: JavaScript turned off in the browser's settings, then reload |
 
 **Steps:**
 
@@ -120,7 +120,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -158,7 +158,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -177,6 +177,10 @@ Runs once per row of **Test data**.
 | `<g10url>/store/collections` | Store Locator in the header's primary nav | directly before Help, which ends the nav | `<g10url>/store-locator` |
 | `<g10url>/store/collections` | Store Locator in the footer's Help column | first, ahead of Docs | `<g10url>/store-locator` |
 | `<g10url>/tc/store/products/<pickup product>` | the store name in the free pick-up line | - | `<g10url>/tc/store-locator`, in the same tab, the name matching the page's |
+
+| Field | Value |
+| --- | --- |
+| pickup product | A product for sale whose page shows the free pick-up line |
 
 **Steps:**
 
@@ -201,7 +205,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -231,7 +235,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -260,7 +264,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -270,12 +274,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on the home page of a site that does not carry the store, such as production today.
+* customer is on `<site without store url>`, the home page of a site that does not carry the store, such as an auction-first one.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| site without store url | The home address of a Grade10 site that does not carry the store |
 
 **Steps:**
 
 1. Read the header and the footer.
-2. Open `/store-locator` on that site.
+2. Open `<site without store url>/store-locator`.
 
 **Expected Results:**
 
