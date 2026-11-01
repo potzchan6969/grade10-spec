@@ -68,7 +68,7 @@
       "email": "Email",
       "phone": "Phone",
       "signedInLine": "Filled from your account when you are signed in; change them for this submission here.",
-      "emailLine": "We email the link to this submission to this address by tomorrow, so you can finish on any device — no account needed."
+      "emailLine": "We keep the list under this address. Sign in with it on any device to finish — no password."
     },
     "card": {
       "matched": "{set} · {number} · matched in the catalogue",
@@ -92,7 +92,7 @@
     "overCap": "{bulk, plural, one {# card} other {# cards}} is the most one submission takes. The rest go in a second submission, another day.",
     "continueWithCount": "Continue · {count, plural, one {# card} other {# cards}}",
     "finishLater": "Finish later",
-    "finishLaterEmail": "Tell us where to email the link, and we keep the list.",
+    "finishLaterEmail": "Tell us your email, and we keep the list under it.",
     "pasteSheet": {
       "title": "Paste a list",
       "labels": {
@@ -189,7 +189,7 @@
       "saveForLater": "Save and book later",
       "saveChanges": "Save changes",
       "expired": "This list has expired. Prices and references move, so start again from the price sheet.",
-      "noEmail": "We need an email to keep the list. Add yours under About you, and we send the list’s link there.",
+      "noEmail": "We need an email to keep the list. Add yours under About you; signing in with it brings the list back.",
       "noCards": "There are no cards on the list yet. Add a card, then book or save.",
       "withoutValue": "Every card needs a declared value before the list is kept. Edit the list to add the missing ones.",
       "failed": "We could not save this just now. Try again in a moment.",
@@ -205,7 +205,7 @@
       "body": "Add a card by its name, or paste a list of them."
     },
     "withoutValue": "{count, plural, one {One card is} other {# cards are}} still without a declared value.",
-    "kept": "Your list is kept. We email its link to {email} by tomorrow, so you can finish on any device.",
+    "kept": "Your list is kept under {email}. Sign in with that email on any device to finish.",
     "keepFailed": "We could not keep your list just now. Try again in a moment.",
     "backToSubmission": "Back to the submission"
   },
