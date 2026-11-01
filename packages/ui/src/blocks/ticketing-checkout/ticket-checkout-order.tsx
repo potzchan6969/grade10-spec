@@ -71,7 +71,7 @@ function TicketCheckoutOrder({
       {promo}
       <div className="flex items-baseline justify-between gap-3 pt-3">
         <span className="text-base leading-6 font-bold">{copy.total}</span>
-        <span className="text-xl leading-7 font-bold tabular-nums">
+        <span className="text-xl leading-7 font-semibold tabular-nums">
           {total}
         </span>
       </div>

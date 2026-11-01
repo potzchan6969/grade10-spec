@@ -102,7 +102,7 @@ function ServiceLines({ service }: { service: BookingService }) {
       {fit ? <span className="text-sm leading-5">{fit}</span> : null}
       {service.charge ? (
         <span
-          className="inline-flex h-6.5 items-center gap-1.5 self-start rounded-full bg-primary-muted px-2.5 text-[13px] font-bold text-(--orange-700) tabular-nums"
+          className="inline-flex h-6.5 items-center gap-1.5 self-start rounded-full bg-primary-muted px-2.5 text-[13px] font-semibold text-(--orange-700) tabular-nums"
           data-slot="booking-service-charge"
         >
           <CreditCard aria-hidden size={14} />
