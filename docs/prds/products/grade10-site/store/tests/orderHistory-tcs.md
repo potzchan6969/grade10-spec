@@ -4,13 +4,15 @@ title: Store Order History Test Cases
 
 # grade10-site/store/order-history Test Cases
 
-**Status:** pending-review · 0/13
-**Drafts styled:** 2026-10-24, tcs-rules r7
+**Status:** approved · 13/13
+**Reviewed:** 2026-11-01, tcs-rules r7
 **Capabilities:** grade10-site/store/order-history, grade10-site/store/checkout
 
 ## Background
 
 * `<my orders url>` is `<g10url>/store/my-orders`.
+* `<product A>` is a product for sale on the store, with stock.
+* `<test card>` is the payment provider's published test card that succeeds.
 
 ## Walk 1: Read My Orders
 
@@ -45,7 +47,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -70,6 +72,11 @@ Runs once per row of **Test data**.
 | refunded in full | Past |
 | refunded in part, every item fulfilled | Past |
 
+| Field | Value |
+| --- | --- |
+| order | A web order of the member, in the row's state |
+| newer order | A web order of the member, in the row's state, placed after `<order>` |
+
 **Steps:**
 
 1. Open `<my orders url>`.
@@ -87,7 +94,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -121,7 +128,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -148,7 +155,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -177,7 +184,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -191,7 +198,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Pay with the payment provider's published test card that succeeds.
+1. Pay with `<test card>`.
 2. Open `<my orders url>`.
 
 **Expected Results:**
@@ -206,12 +213,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** order-history#orders/recorded-orders
 
 **Pre-conditions:**
@@ -222,8 +229,12 @@ Runs once per row of **Test data**.
 
 | Checkout ends |
 | --- |
-| paid with the provider's published test card that is declined |
+| paid with `<declined test card>` |
 | left unpaid until the invoice expires |
+
+| Field | Value |
+| --- | --- |
+| declined test card | The payment provider's published test card that is declined |
 
 **Steps:**
 
@@ -241,7 +252,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -267,7 +278,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -296,7 +307,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -327,7 +338,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -374,7 +385,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -415,7 +426,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -435,11 +446,17 @@ Runs once per row of **Test data**.
 | made later | a sign-in link sent to `<order email>` |
 | made later | a Google account under `<order email>` |
 
+| Field | Value |
+| --- | --- |
+| order email | A test mailbox |
+| guest order A | A paid guest order under `<order email>` |
+| guest order B | A second paid guest order under `<order email>` |
+
 **Steps:**
 
 1. Sign in as the row says.
 2. Open `<my orders url>`.
-3. Complete `<guest order A>` in the shop's admin, then read the points balance and open the order.
+3. Complete `<guest order A>` in the store's Shopify admin, then read the points balance and open the order.
 
 **Expected Results:**
 
@@ -455,12 +472,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation
 * **Trace:** checkout#guest-checkout/joining-an-account
 
 **Pre-conditions:**
@@ -473,6 +490,12 @@ Runs once per row of **Test data**.
 | --- | --- |
 | an email no account of `<member>` holds | `<member>`'s own sign-in |
 | the new email of `<member>`'s Google account, the account still holding the old one | Google, as `<member>` |
+
+| Field | Value |
+| --- | --- |
+| member | A member whose account holds `<account email>` |
+| account email | The email `<member>`'s account holds |
+| guest order | A paid guest order under the row's email |
 
 **Steps:**
 
