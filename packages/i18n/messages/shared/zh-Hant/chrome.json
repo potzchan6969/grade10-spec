@@ -45,5 +45,7 @@
     "help": "協助",
     "shipping": "運送",
     "orders": "訂單與退換"
-  }
+  },
+  "myTickets": "我的門票",
+  "myTicketsBadge": "新"
 }

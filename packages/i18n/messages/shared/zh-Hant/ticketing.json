@@ -1,0 +1,737 @@
+{
+  "common": {
+    "passes": "票種",
+    "yourOrder": "你的訂單",
+    "total": "總計",
+    "free": "免費",
+    "fastPass": "快速通道",
+    "ticketCount": "{count, plural, other {# 張門票}}",
+    "dayCount": "{count, plural, other {# 天}}",
+    "peopleCount": "{count, plural, other {# 人}}",
+    "reference": "參考編號 {reference}",
+    "orderReference": "訂單 {reference}",
+    "lineQuantity": "{pass} × {quantity}",
+    "aDay": "每天 {amount}",
+    "priceWas": "原價 {amount}",
+    "was": "原價",
+    "minus": "−{amount}",
+    "signIn": "登入",
+    "signInWithEmail": "以電郵登入",
+    "signOut": "登出",
+    "seeTheShows": "查看活動",
+    "tryAgain": "再試一次",
+    "close": "關閉",
+    "edit": "修改",
+    "termsOfSale": "銷售條款",
+    "card": "{brand} •• {last4}",
+    "wechatPay": "WeChat Pay",
+    "paidBy": "已於 {date} 以 {method} 付款"
+  },
+  "event": {
+    "badge": {
+      "onToday": "今日舉行",
+      "cancelled": "已取消",
+      "ended": "已結束"
+    },
+    "timesEachDay": "每天 {start} 至 {end}",
+    "youHaveTickets": "你已有此活動的門票。",
+    "viewYourTickets": "查看你的門票",
+    "cancelledNotice": {
+      "title": "此活動已取消。",
+      "body": "所有訂單會全數退回付款所用的信用卡或 WeChat Pay。我們已電郵通知所有購票人。"
+    },
+    "endedNotice": {
+      "title": "此活動已結束。",
+      "body": "感謝每位到場的朋友。你的門票會一直保留在「你的門票」。"
+    },
+    "passesLabel": "票種",
+    "limit": "每個電郵最多可購買此活動 {count} 張門票。",
+    "pass": {
+      "salesEnded": "已停售",
+      "salesEndedNote": "已停售",
+      "salesEndedWhen": "{day} 開始時已停售",
+      "fastPassIncluded": "已包括快速通道",
+      "onSaleAt": "{date} 開售",
+      "opensIn": "{countdown} 後開售",
+      "earlyBird": "早鳥",
+      "earlyBirdEnds": "早鳥價 {date} 結束",
+      "soldOut": "已售罄",
+      "joinWaitingLine": "加入輪候",
+      "joinWaitingLineFor": "加入候補名單：{pass}",
+      "paused": "暫停發售",
+      "today": "今天，{date}",
+      "admitsAnyDays": "{count, plural, other {活動期間任何 # 天，每天一次}}",
+      "quantityLabel": "門票數量：{pass}",
+      "decrement": "減少一張 {pass}",
+      "increment": "增加一張 {pass}"
+    },
+    "waitingLine": {
+      "note": "如有門票釋出，我們會以電郵通知你，並為你保留。",
+      "quantityLabel": "候補門票數量：{pass}",
+      "decrement": "少候補一張：{pass}",
+      "increment": "多候補一張：{pass}",
+      "offerEnded": "你的保留已結束，門票已釋出。你可以重新加入，排在最後。",
+      "place": {
+        "title": "你已在候補名單中",
+        "wanted": "候補 {count, plural, other {# 張門票}}",
+        "band": "{band, select, front {你接近前列。} middle {你前面還有一些人。} other {你前面還有很多人。}}",
+        "leave": "退出候補"
+      },
+      "offer": {
+        "title": "門票已為你保留",
+        "body": "{count, plural, other {# 張門票}}為你保留至 {deadline}。請在此之前付款以保留門票。",
+        "bodyFree": "{count, plural, other {# 張門票}}為你保留至 {deadline}。請在此之前接受以保留門票。",
+        "accept": "接受",
+        "decline": "拒絕"
+      }
+    },
+    "vip": {
+      "fastPassEveryDay": "每天的快速通道，已包括。",
+      "skipQueue": "{days, plural, =2 {兩天都不用排入場隊。} other {每天都不用排入場隊。}}",
+      "everyDay": "{days, plural, =2 {兩天} other {每一天}}，{dates}"
+    },
+    "earlyAccess": {
+      "badge": "優先購票",
+      "forYouNow": "現可購買",
+      "opens": "{date} 開售",
+      "opensForYou": "{date} 為你開售",
+      "yoursToBuy": "你可購買：最多 {count} 張",
+      "limitNote": "你的優先購票資格讓此電郵最多持有 {count} 張。",
+      "publicSaleOpens": "{date} 公開發售"
+    },
+    "signInPrompt": "有優先購票資格？<signin>登入</signin>查看你的票種。",
+    "lostTickets": "找不到門票？<signin>以購票時的電郵登入</signin>。",
+    "fastPass": {
+      "title": "快速通道",
+      "body": "不用在場地排長長的入場隊。一個快速通道供一人使用一天。",
+      "everyoneGroup": "此票種所有人的快速通道",
+      "eachGroup": "每張門票的快速通道",
+      "everyone": "所有人",
+      "person": "{label} {ordinal}",
+      "add": "快速通道",
+      "addLabel": "為{who}加快速通道，{days}",
+      "daysGroup": "{who}的快速通道日數",
+      "oneMore": "為{who}多加一天快速通道",
+      "oneFewer": "為{who}減少一天快速通道",
+      "remove": "移除{who}的快速通道",
+      "price": "+{amount}",
+      "sameForEveryone": "所有人相同",
+      "choosePerPerson": "逐人選擇",
+      "everyoneNeedsIt": "人人都需要？",
+      "notEveryoneNeedsIt": "不是人人都需要？",
+      "summary": "{all, plural, other {# 個快速通道}}中的 {on} 個：{amount}。",
+      "nudge": "再加 {missing, plural, other {#}} 個就人人都有{everyDay, select, yes {，每一天。} other {。}}",
+      "covered": "人人都不用排隊。",
+      "fillAll": "為所有人加上（+{amount}）"
+    },
+    "order": {
+      "title": "你的訂單",
+      "intro": "選擇每種票的數量。下一步以信用卡或 WeChat Pay 付款。",
+      "fastPassLine": "快速通道 × {count, plural, other {# 天}}",
+      "removeLine": "移除{line}",
+      "addFastPassGroup": "加快速通道",
+      "upsellTitle": "用快速通道免排隊",
+      "upsellSub": "{people, plural, other {# 人}}每天 {amount}",
+      "addOneDay": "加 1 天",
+      "addBothDays": "加兩天",
+      "addEveryDay": "每天都加",
+      "addForEveryone": "為所有人加上",
+      "youSave": "節省 {amount}",
+      "youSaveEarlyBird": "早鳥價讓你<strong>節省 {amount}</strong>。",
+      "continue": "繼續",
+      "pointsAbout": "此訂單約可賺取 {points} 積分。",
+      "pointsPaidOnly": "付費門票可賺取積分。",
+      "totalLabel": "訂單總額",
+      "seeOrder": "{count, plural, other {# 張門票}}，查看訂單"
+    },
+    "notOpen": {
+      "title": "此活動暫未向你開放",
+      "body": "公開發售前，只有少數人可以購買。請留意活動頁，查看何時公開發售。"
+    },
+    "notFound": {
+      "title": "找不到此活動",
+      "body": "連結可能有誤，或活動已下架。",
+      "bodySignedOut": "如果這是發給你的預覽，請登入查看；否則連結可能有誤。"
+    },
+    "restricted": {
+      "title": "預覽：只有職員及名單上的地址可以購買。",
+      "body": "公開發售尚未開始。現在下的訂單是真實訂單。"
+    },
+    "loading": "正在載入活動",
+    "about": "關於",
+    "gettingThere": {
+      "title": "交通",
+      "venue": "場地",
+      "address": "地址",
+      "doors": "開放時間"
+    },
+    "goodToKnow": {
+      "title": "購票須知",
+      "oneCode": "每張門票一個二維碼，可於門票涵蓋的每一天入場一次。",
+      "pdf": "門票會以一份 PDF 電郵給你，入場時沒有網絡也能使用。",
+      "fastPass": "使用快速通道的日子不用排入場隊。VIP 每天已包括。"
+    }
+  },
+  "summary": {
+    "title": "你的訂單",
+    "line": "{pass} × {quantity}",
+    "earlyBird": "{amount}，早鳥價",
+    "was": "{amount}，原價 {was}",
+    "fastPass": "快速通道，{days, plural, other {# 天}}：{amount}",
+    "total": "總計",
+    "free": "免費",
+    "eventLine": "{event}：{dates}"
+  },
+  "details": {
+    "title": "你的資料",
+    "back": "票種",
+    "buyerLabel": "購票人",
+    "haveAccount": "已有帳戶？",
+    "signIn": "登入",
+    "accountLabel": "帳戶，已以 {name} 登入",
+    "name": {
+      "label": "門票上的姓名",
+      "placeholder": "你的全名",
+      "required": "請輸入你的姓名",
+      "hintSignedIn": "會印在門票上。如由朋友到場，可以修改。",
+      "hintNoName": "印在門票上的姓名"
+    },
+    "email": {
+      "label": "電郵",
+      "placeholder": "name@example.com",
+      "hint": "門票會寄到這裡。付款前你會再核對一次。",
+      "required": "請輸入你的電郵",
+      "invalid": "請輸入有效電郵，例如 name@example.com",
+      "hintSignedIn": "門票會寄到這裡，即你帳戶的電郵。",
+      "notYou": "不是你？"
+    },
+    "botCheck": {
+      "label": "機械人檢查",
+      "checking": "正在確認你不是機械人…",
+      "checked": "已通過檢查"
+    },
+    "fieldsWrong": "{count, plural, other {請檢查上面的 # 個欄位。}}",
+    "continue": "繼續",
+    "pointsAbout": "約可賺取 {points} 積分"
+  },
+  "review": {
+    "title": "核對訂單",
+    "back": "你的資料",
+    "detailsLabel": "你的資料",
+    "edit": "修改",
+    "editDetails": "修改你的資料",
+    "name": "門票上的姓名",
+    "email": "電郵",
+    "emailNote": "門票會以一份 PDF 寄到這裡。請確認無誤。",
+    "emailNoteSignedIn": "你帳戶的電郵。門票會以一份 PDF 寄到這裡。",
+    "agreementLabel": "同意條款",
+    "agreeSignedIn": "我同意<sale>銷售條款</sale>。",
+    "notAgreed": "付款前請剔選方格表示同意。",
+    "notAgreedBar": "請先剔選方格表示同意。",
+    "pay": "支付 {amount}",
+    "getTickets": "領取門票",
+    "slow": "現在很多人正在購票，仍在嘗試。",
+    "opening": "正在開啟付款頁面…",
+    "notes": {
+      "title": "付款前",
+      "stripe": "你會在 Stripe 的安全頁面以信用卡或 WeChat Pay 付款。",
+      "hold": "付款期間，門票會為你保留 {minutes} 分鐘。",
+      "pdf": "門票會以一份 PDF 電郵給你，並附收據連結。",
+      "pdfFree": "門票會以一份 PDF 電郵給你。",
+      "nothingCharged": "不會收取任何費用。"
+    },
+    "priceChanged": {
+      "title": "早鳥價已於 {time} 結束。",
+      "body": "你的總額現為 {amount}。下面各項顯示新價格。"
+    }
+  },
+  "promo": {
+    "label": "優惠碼",
+    "placeholder": "輸入優惠碼",
+    "apply": "使用",
+    "applied": "優惠碼 {code}",
+    "freeWith": "使用 {code} 免費",
+    "remove": "移除",
+    "removeLabel": "移除 {code}",
+    "discount": {
+      "percentOff": "{passes}減 {percent}%",
+      "percentOffAll": "減 {percent}%",
+      "amountOffEach": "每張門票減 {amount}",
+      "amountOffOrder": "訂單減 {amount}",
+      "allFree": "你的 {count, plural, other {#}} 張門票免費{fastPass, select, yes {，快速通道亦然。} other {。}}",
+      "someFree": "你的 {count, plural, other {#}} 張門票中有 {free} 張免費。{code} 只剩 {free} 張。"
+    },
+    "freeOrder": "使用 {code} 後此訂單免費，不會賺取積分。",
+    "errors": {
+      "notFound": "找不到此優惠碼，請檢查拼寫。",
+      "notStarted": "{code} 於 {date} 起生效。",
+      "expired": "{code} 已於 {date} 結束。",
+      "usedUp": "{code} 已用完。",
+      "alreadyUsed": "{code} 已用於 {email}。",
+      "minTickets": "{code} 需購買最少 {count, plural, other {#}} 張門票。",
+      "minAmount": "{code} 需訂單滿 {amount}。",
+      "otherPasses": "{code} 只適用於其他票種。",
+      "emailsOnly": "{code} 只限獲發的電郵使用。",
+      "tooManyTries": "輸入錯誤次數太多，請於 {minutes, plural, other {#}} 分鐘後再試。",
+      "tooManyTriesAt": "輸入錯誤次數太多，請於 {time} 再試。"
+    },
+    "usedUpAtPay": {
+      "title": "{code} 的最後一次使用剛被用去。",
+      "body": "總額已回復至 {amount}。",
+      "payFull": "支付 {amount}",
+      "removeCode": "移除優惠碼"
+    }
+  },
+  "refusals": {
+    "actions": {
+      "pay": "付款",
+      "backToPasses": "返回票種",
+      "seeTheEvent": "查看活動",
+      "seeTheShows": "查看活動",
+      "signIn": "登入",
+      "tryAgain": "再試一次",
+      "payFull": "支付 {amount}",
+      "removeCode": "移除優惠碼"
+    },
+    "checkoutBusy": {
+      "title": "這一刻太多人在購票。",
+      "body": "請再按付款。"
+    },
+    "checkoutPending": {
+      "title": "我們未收到回覆。",
+      "body": "請再按付款，繼續同一張訂單。"
+    },
+    "soldOut": {
+      "title": "剛剛售罄了。"
+    },
+    "soldOutSome": {
+      "title": "{count, plural, other {只剩 # 張。}}",
+      "body": "最多可選 {count} 張。"
+    },
+    "typeNotStarted": {
+      "title": "此票種於 {date} {time} 開售。"
+    },
+    "typePaused": {
+      "title": "此票種暫停發售。"
+    },
+    "typeEnded": {
+      "title": "此票種已停售。"
+    },
+    "eventNotOnSale": {
+      "title": "此活動已不再發售。"
+    },
+    "notFound": {
+      "title": "此票種已無法購買。"
+    },
+    "accountLimitGuest": {
+      "title": "每個電郵最多可持有此活動 {limit} 張門票。"
+    },
+    "accountLimitSignedIn": {
+      "title": "每個電郵最多可持有 {limit} 張，你已持有 {held} 張，最多可再選 {left} 張。"
+    },
+    "notOpenToYouYet": {
+      "title": "此票種暫未向你開放。",
+      "body": "此票種於 {date} {time} 公開發售。",
+      "bodyForYou": "此票種於 {date} {time} 向你開放。"
+    },
+    "signInRequired": {
+      "title": "請登入以購買此票種。",
+      "body": "此票種只供特定帳戶購買。請以你的帳戶登入，看看是否向你開放。"
+    },
+    "notOpenToYou": {
+      "title": "此票種只限部分地址購買，此地址不在其中。"
+    },
+    "accessLimit": {
+      "title": "你的優先購票資格讓此地址最多持有 {count} 張。"
+    },
+    "notInAudience": {
+      "title": "此活動暫未向此帳戶開放。"
+    },
+    "fastPassUnavailable": {
+      "title": "此票種已不再提供快速通道。"
+    },
+    "signedOut": {
+      "title": "你已被登出。",
+      "body": "請重新登入，或以姓名及電郵購買。"
+    },
+    "challengeFailed": {
+      "title": "我們無法確認你不是機械人。",
+      "body": "請再按付款。"
+    },
+    "checkoutUnavailable": {
+      "title": "我們無法開啟付款頁面，門票沒有為你保留。"
+    },
+    "paymentUnavailable": {
+      "title": "現在無法付款。",
+      "body": "沒有收取任何費用。"
+    },
+    "ticketingClosed": {
+      "title": "現在暫停售票。"
+    },
+    "chooseAgain": {
+      "title": "請重新選擇門票。"
+    },
+    "buyerDetailsRequired": {
+      "title": "請輸入你的姓名及電郵。"
+    },
+    "noWaitingLine": {
+      "title": "此票種沒有候補名單。"
+    },
+    "ticketsLeft": {
+      "title": "仍有 {count, plural, other {# 張門票}}發售中。",
+      "body": "購買餘下的門票，或在售罄後加入候補。"
+    },
+    "offerEnded": {
+      "title": "這次保留已結束。",
+      "body": "門票已釋出。"
+    },
+    "codeUsedUp": {
+      "title": "{code} 的最後一次使用剛被用去。",
+      "body": "總額已回復至 {amount}。"
+    },
+    "orderNotFound": {
+      "title": "找不到此訂單。"
+    },
+    "orderNotPending": {
+      "title": "此訂單已不再等待付款。"
+    },
+    "generic": {
+      "title": "出了點問題。",
+      "body": "請稍後再試。"
+    }
+  },
+  "return": {
+    "confirming": {
+      "title": "正在確認你的付款…",
+      "body": "請保持此頁面開啟。"
+    },
+    "stillConfirming": {
+      "title": "仍在確認你的付款",
+      "body": "如你已付款，款項一到，門票便會電郵給你。你可以關閉此頁面。"
+    },
+    "paid": {
+      "badge": "已確認",
+      "title": "你將會出席",
+      "body": "你的 {count, plural, other {#}} 張門票在下面，我們亦已把它們以一份 PDF 寄到 {email}。"
+    },
+    "wentBack": {
+      "badge": "未付款",
+      "title": "付款未完成",
+      "body": "門票已釋出，沒有收取任何費用。",
+      "action": "重新選擇"
+    },
+    "holdRanOut": {
+      "title": "你的 {minutes} 分鐘已用完",
+      "body": "門票已重新發售，沒有收取任何費用。"
+    },
+    "paidTooLate": {
+      "badge": "退款中",
+      "title": "你的付款太遲到達",
+      "body": "款項在你的 {minutes} 分鐘結束後才到達，門票已售出，所以我們會全數退回 {amount}。",
+      "where": "款項會在 5 至 10 個工作天內退回你的 {method}。詳情已寄到 {email}。"
+    },
+    "otherBrowser": {
+      "title": "你的門票在你的電郵裡",
+      "body": "以購票時的電郵登入，即可在這裡查看此訂單。",
+      "note": "電郵中的 PDF 可直接用於入場。"
+    },
+    "notTheirs": {
+      "title": "此訂單不屬於此帳戶",
+      "body": "你已以 {email} 登入。請以購票時的電郵登入查看。",
+      "anotherEmail": "以另一個電郵登入"
+    }
+  },
+  "order": {
+    "breadcrumb": "你的門票",
+    "title": "訂單 {reference}",
+    "status": {
+      "held": "等待付款",
+      "checking": "確認中",
+      "confirmed": "已確認",
+      "offered": "可購買",
+      "expired": "已失效",
+      "refunding": "退款中",
+      "refunded": "已退款",
+      "partRefunded": "已部分退款",
+      "cancelled": "已取消",
+      "ended": "已結束",
+      "daysLeft": "{count, plural, other {尚餘 # 天}}"
+    },
+    "bought": "於 {date} 購買",
+    "started": "於 {date} 開始",
+    "ticket": {
+      "label": "第 {ordinal} 張，共 {count} 張",
+      "ofHolder": "第 {ordinal} 張，共 {count} 張。{name}",
+      "valid": "有效",
+      "refunded": "已退款",
+      "codeLabel": "門票二維碼 {code}",
+      "code": "編號 {code}",
+      "admits": "可入場 {count, plural, other {#}} 天：{days}",
+      "fastPass": "快速通道 {count, plural, other {# 天}}",
+      "fastPassLeft": "快速通道尚餘 {count, plural, other {# 天}}",
+      "used": "已於 {when} 使用。尚餘 {left, plural, other {# 天}}",
+      "refundedNote": "已於 {date} 退款。此二維碼已不能入場。",
+      "followOne": "第 {ordinal} 張在下面。",
+      "followMany": "第 {list} 張在下面。"
+    },
+    "noSignal": "入口沒有網絡？同一批門票已以一份 PDF 寄到你的電郵，沒有網絡也能開啟。無法掃描？請提供參考編號 {reference}。",
+    "lines": {
+      "title": "你購買的項目",
+      "earlyBirdEach": "早鳥價，每張 {amount}",
+      "earlyBird": "早鳥價",
+      "each": "每張 {amount}",
+      "fastPassOn": "其中 {tickets} 張加快速通道，{days, plural, other {# 天}}",
+      "fastPassDays": "快速通道，{days, plural, other {# 天}}",
+      "promo": "優惠碼 {code}",
+      "refund": "退款",
+      "totalAfterRefund": "退款後總額"
+    },
+    "points": {
+      "label": "積分",
+      "about": "約 {points}",
+      "takenBack": "已收回",
+      "partTakenBack": "已隨退款的 {count, plural, other {#}} 張門票收回 {points} 積分。",
+      "allTakenBack": "此訂單賺取的積分已收回。",
+      "free": "免費訂單不會賺取積分。"
+    },
+    "held": {
+      "label": "你的門票已保留",
+      "heldFor": "保留時間",
+      "until": "{count, plural, other {# 張門票}}，保留至 {time}。請在此之前付款。",
+      "continue": "繼續付款",
+      "note": "付款前不會收取任何費用。如時間用完，門票會重新發售。"
+    },
+    "checking": {
+      "label": "正在確認你的付款",
+      "body": "你的時間已用完。我們正在確認款項是否已到達。"
+    },
+    "partRefund": {
+      "title": "{amount} 正在退回",
+      "body": "我們已於 {date} 退款 {count, plural, other {#}} 張門票，款項會在 5 至 10 個工作天內退回你的 {method}。其他門票仍可入場。"
+    },
+    "fullRefund": {
+      "title": "已於 {date} 退款 {amount}",
+      "body": "門票已不能入場。款項會在 5 至 10 個工作天內退回你的 {method}。"
+    },
+    "eventCancelled": {
+      "title": "此活動已取消",
+      "body": "{event} 將不會舉行。你的訂單已全數退款：{amount} 會在 5 至 10 個工作天內退回你的 {method}。"
+    },
+    "lost": "找不到門票？以購票時的電郵登入，所有訂單都在<link>你的門票</link>。",
+    "guest": {
+      "title": "隨時隨地查看此訂單",
+      "body": "以 {email} 登入，用它購買的所有訂單都在「你的門票」。"
+    }
+  },
+  "myTickets": {
+    "title": "你的門票",
+    "intro": "以 {email} 購買的所有訂單，最新的在前。",
+    "orderLabel": "訂單 {reference}",
+    "heldUntil": "保留至 {time}。",
+    "continue": "繼續付款",
+    "viewTickets": "查看門票",
+    "viewOrder": "查看訂單",
+    "viewTicket": "查看門票",
+    "freeTicket": "{pass}。{event} 送出的免費門票。",
+    "empty": {
+      "title": "暫時未有門票",
+      "body": "以 {email} 購買的門票會顯示在這裡。"
+    },
+    "signedOut": {
+      "title": "登入查看你的門票",
+      "body": "請用購票時的電郵。以訪客身分購買的訂單也會顯示。",
+      "note": "以訪客身分購買？門票已以一份 PDF 寄到你的電郵，可直接用於入場。"
+    },
+    "loading": "正在載入你的門票",
+    "failed": {
+      "title": "無法載入你的門票",
+      "body": "請檢查網絡連線後再試。"
+    },
+    "signedIn": {
+      "title": "你已登入",
+      "points": "你門票訂單的 {points} 積分已存入你的帳戶。"
+    }
+  },
+  "sharedTicket": {
+    "title": "你的門票",
+    "label": "門票 {code}",
+    "free": "免費",
+    "doors": "開放時間 {start} 至 {end}",
+    "forGuest": "致 {name}",
+    "codeLabel": "門票二維碼 {code}",
+    "showAtDoor": "入場時出示此二維碼。可於門票涵蓋的每一天入場一次。",
+    "downloadPdf": "下載 PDF",
+    "save": "儲存至我的門票",
+    "note": "{event} 送出的免費門票。任何人持有此連結都可以使用，請勿外傳。",
+    "saved": "已儲存至我的門票",
+    "view": "查看",
+    "viewMyTickets": "查看我的門票",
+    "usedToday": "已於 {time} 入場。{day}見。",
+    "usedTodayLast": "已於 {time} 入場。",
+    "dead": {
+      "cancelled": {
+        "badge": "已取消",
+        "title": "此門票已取消。",
+        "body": "請向發送者查詢。"
+      },
+      "replaced": {
+        "title": "此連結已被新連結取代",
+        "body": "請向發送者查詢。"
+      },
+      "over": {
+        "title": "{event} 已結束。",
+        "body": "感謝你的到來。"
+      },
+      "overNoEvent": {
+        "title": "活動已結束。",
+        "body": "感謝你的到來。"
+      },
+      "notFound": {
+        "title": "找不到此門票",
+        "body": "請檢查連結。"
+      }
+    }
+  },
+  "door": {
+    "signIn": {
+      "title": "開啟入口",
+      "body": "輸入入口負責人給你的密碼，不需要帳戶。",
+      "passcode": "密碼",
+      "passcodePlaceholder": "英文字母及數字",
+      "passcodeRequired": "請輸入密碼",
+      "deviceName": "此手機的名稱",
+      "deviceHint": "你放行的每張門票都會記錄此名稱。",
+      "devicePlaceholder": "例如 A 閘手機 1",
+      "deviceRequired": "請為此手機命名",
+      "submit": "開啟入口",
+      "opens": "由 {date} {time} 起至活動結束可用。",
+      "wrong": "密碼不正確。再錯 {left, plural, other {#}} 次便需稍候。",
+      "slowedTitle": "嘗試次數太多。",
+      "slowedBody": "請等 {seconds, plural, other {#}} 秒後再試。可向入口負責人查詢密碼。",
+      "notOpenTitle": "此密碼於 {date} {time} 開啟入口。",
+      "notOpenUntil": "後開啟入口",
+      "checkAgain": "再檢查",
+      "notOpen": "尚未開放"
+    },
+    "passcodeChanged": {
+      "title": "密碼已更改",
+      "body": "入口所有手機已被登出。請向入口負責人查詢新密碼。",
+      "action": "輸入新密碼"
+    },
+    "bar": {
+      "findLabel": "以參考編號查找",
+      "menuLabel": "入口選單：登出",
+      "signOut": "登出"
+    },
+    "scanner": {
+      "point": "對準二維碼",
+      "countToday": "此手機今日已放行：",
+      "checking": "確認中",
+      "findByReference": "以參考編號查找",
+      "cameraWhy": "請允許使用相機，讓此手機讀取門票。不會錄下任何內容。",
+      "blocked": {
+        "title": "相機已被封鎖",
+        "body": "此瀏覽器已被設定為不使用相機。請開啟「設定」>「Safari」>「相機」，選擇「允許」，然後返回並點按「再試一次」。",
+        "action": "以參考編號查找"
+      },
+      "noCamera": {
+        "title": "找不到相機",
+        "body": "此裝置沒有可用的相機，或相機正被其他應用程式使用。請關閉其他相機應用程式後再試，或接上手持掃描器。"
+      },
+      "offline": "沒有網絡連線。連線恢復前，每次掃描都會顯示「未確認」。"
+    },
+    "answer": {
+      "admitted": {
+        "title": "已入場",
+        "line": "請放行。"
+      },
+      "alreadyIn": {
+        "title": "今日已入場",
+        "line": "請勿再次放行。",
+        "note": "如對方表示從未入場，請主管在控制台核對時間及閘口。"
+      },
+      "noEntriesLeft": {
+        "title": "沒有剩餘入場次數",
+        "line": "此門票已在所有可入場的日子入場。"
+      },
+      "void": {
+        "title": "已退款或取消",
+        "line": "此門票已不能入場。",
+        "note": "請帶對方到服務台。同一訂單的其他門票可能仍然有效。"
+      },
+      "notATicket": {
+        "title": "無效",
+        "line": "此二維碼不是此活動的門票。",
+        "note": "請對方出示附有門票的電郵，或以參考編號查找訂單。"
+      },
+      "wrongEvent": {
+        "title": "活動不符",
+        "line": "此門票屬於另一個活動。"
+      },
+      "notValidToday": {
+        "title": "今日無效",
+        "line": "此門票今日不能入場。"
+      },
+      "notChecked": {
+        "title": "未確認",
+        "line": "暫時不要放行。",
+        "note": "{seconds} 秒內沒有回應，無法確認此門票是否已使用。請再試一次。如連線一直中斷，請在紙本名單上寫下參考編號，並等候主管。"
+      },
+      "undone": {
+        "title": "已撤銷",
+        "line": "此門票可以再次掃描。",
+        "lineFastPass": "此門票可以再次掃描，快速通道次數亦已退回。",
+        "entryNotUsed": "入場未使用",
+        "useGivenBack": "次數已退回"
+      },
+      "facts": {
+        "name": "姓名",
+        "pass": "票種",
+        "ticket": "門票",
+        "today": "今日",
+        "dayOf": "可入場 {count} 天中的第 {day} 天",
+        "letIn": "入場時間",
+        "by": "經由",
+        "fastPass": "快速通道",
+        "usedThen": "當時已使用，尚餘 {left}",
+        "notUsedThen": "當時未使用",
+        "daysLeft": "剩餘日子",
+        "order": "訂單",
+        "event": "活動",
+        "days": "日期",
+        "code": "二維碼",
+        "tried": "嘗試時間",
+        "timeToday": "今日 {time}"
+      },
+      "fastPass": {
+        "left": "快速通道：尚餘 {count}",
+        "includedToday": "快速通道：今日已包括",
+        "none": "快速通道：沒有",
+        "allUsed": "快速通道：已全部使用",
+        "usedLeft": "已使用快速通道 · 尚餘 {count}",
+        "usedIncluded": "已使用快速通道 · 已包括",
+        "use": "使用快速通道",
+        "undo": "撤銷快速通道"
+      },
+      "undo": "撤銷",
+      "undoSeconds": "{seconds} 秒",
+      "scanNext": "掃描下一張",
+      "tryAgain": "再試一次",
+      "scan": "掃描"
+    },
+    "find": {
+      "title": "以參考編號查找",
+      "hint": "門票上或電郵中的六個字元。",
+      "label": "參考編號",
+      "submit": "查找",
+      "results": "訂單 {reference} 共 {count, plural, other {#}} 張門票",
+      "passFastPass": "{pass}，快速通道：尚餘 {count}",
+      "dayOfLeftToday": "今日為剩餘 {count} 天中的第 {day} 天",
+      "admit": "放行",
+      "letInBy": "{time} 經 {device} 入場",
+      "inToday": "今日已入場",
+      "firstNamesOnly": "這裡只顯示名字。如不確定，請詢問購票人姓名。",
+      "notFound": "此活動沒有該參考編號的訂單。請逐個字元核對，或帶對方到服務台。"
+    }
+  }
+}

@@ -79,12 +79,6 @@ for.
 - **Bio field** - several lines, in the design system's own multi-line
   field; the read view shows the lines as typed
 
-::story{id="account-profile-blocks-profilecard--default" title="The profile, read"}
-
-::story{id="account-profile-blocks-profilecard--editing-body" title="The profile, being edited"}
-
-::story{id="account-profile-blocks-profilecard--error-state" title="A read that failed"}
-
 :::detail{title="Test cases" for="qa"}
 [Test cases · grade10-site/store/account-profile](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/account-profile)
 :::

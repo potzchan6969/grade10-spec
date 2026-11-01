@@ -22,6 +22,10 @@ import { isValidElement, type ReactNode } from "react";
 // translate transition at 150ms ease-out — tens-of-times-a-day feedback, named
 // properties, no `transition-all`. Reduced motion keeps the color change and
 // drops the shift.
+//
+// Labels use Title Case ("Submit to Vault", "Cash Out"), matching Figma —
+// title-cased by the consumer, never by CSS; acronyms and brand spellings
+// (HKD, eSIM) keep their own case as the exception.
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) border border-transparent bg-clip-padding font-medium whitespace-nowrap [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 motion-reduce:transition-[background-color,border-color,color,box-shadow,opacity] motion-reduce:active:translate-y-0 aria-invalid:border-destructive-border aria-invalid:ring-3 aria-invalid:ring-destructive-ring [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {

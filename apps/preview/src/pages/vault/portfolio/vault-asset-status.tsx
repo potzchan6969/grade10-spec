@@ -19,7 +19,11 @@ function VaultAssetStatus({
 
   return (
     <Badge
-      className={cn("absolute top-3 left-3", className)}
+      className={cn(
+        "absolute top-3 left-3",
+        status === "Live Auction" && "bg-foreground text-primary-foreground",
+        className,
+      )}
       size="sm"
       variant={
         status === "Retrieval Pending" ? "outline" : statusBadgeVariant(status)

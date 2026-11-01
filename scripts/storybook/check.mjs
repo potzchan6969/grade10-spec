@@ -40,7 +40,7 @@ const PROTOTYPES = "apps/preview/src/prototypes/";
 const BLOCKS = "packages/ui/src/blocks/";
 const PRIMITIVES = "packages/design-system/src/components/";
 /** Manual applications whose domains the workbench draws, in lookup order. */
-const APPS = ["grade10-site", "shared"];
+const APPS = ["grade10-site", "shared", "grade10-admin"];
 
 export const pascalCase = (basename) =>
   basename

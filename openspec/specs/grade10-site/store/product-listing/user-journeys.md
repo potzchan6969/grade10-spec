@@ -38,14 +38,6 @@ pick one,
 than the ones already on screen,
 **so that** the cheapest card I could buy is the one I am shown first.
 
-### grade10-site-store-product-listing-US-06: Collector takes the last of a card from the listing
-
-**As a** collector,
-**I want** a card's quantity to stop where the shop runs out, and to be told
-how many are left when it does,
-**so that** I buy the number the shop will actually send me rather than
-finding out at the order.
-
 ### grade10-site-store-product-listing-US-07: Collector reads past the first page of the listing
 
 **As a** collector,
@@ -112,3 +104,4 @@ has left behind.
 ## Retired
 
 - `grade10-site-store-product-listing-US-13` - Retired by the guest cart: Add to cart asks nobody to sign in.
+- `grade10-site-store-product-listing-US-06` - Retired by add-store-product-status.

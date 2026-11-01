@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "33b3f3eb1afb3872387a909797627f49ce8e2a94f8758b321f4c21429d310170"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "4f0ca8d4e51a4d8a7e590ae4a9eb45aab2d9ed40",
+    "capturedAt": "2026-10-30T09:21:51.398Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Signed-in collectors open what the build carries from the account menu"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

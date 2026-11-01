@@ -1,0 +1,32 @@
+{
+  "event": {
+    "order": {
+      "pointsSignedOut": "你會在你電郵的 Grade10 帳戶賺取積分。"
+    }
+  },
+  "details": {
+    "pointsGuest": "在你電郵的 Grade10 帳戶賺取積分"
+  },
+  "review": {
+    "pointsGuest": "約可賺取 {points} 積分，存入 {email} 的 Grade10 帳戶。",
+    "pointsSignedIn": "約可賺取 {points} 積分，存入你的 Grade10 帳戶。",
+    "agreeGuest": "我同意<sale>銷售條款</sale>及 Grade10 的<terms>條款</terms>和<privacy>私隱政策</privacy>。",
+    "agreeGuestNote": "我們會把你的門票及積分保存在 {email} 的 Grade10 帳戶；如未有帳戶，我們會為你建立。隨時以此電郵登入即可查看。",
+    "agreeSignedInNote": "你的門票及此訂單的積分會存入你的 Grade10 帳戶。",
+    "agreeGuestNoteFree": "我們會把你的門票保存在 {email} 的 Grade10 帳戶；如未有帳戶，我們會為你建立。隨時以此電郵登入即可查看。",
+    "agreeSignedInNoteFree": "此訂單的門票會存入你的 Grade10 帳戶。"
+  },
+  "return": {
+    "paid": {
+      "points": "約 {points} 積分正在你的 Grade10 帳戶等你。以 {email} 登入即可加入。"
+    }
+  },
+  "order": {
+    "points": {
+      "aboutNote": "訂單記錄後，積分會存入 {email} 的 Grade10 帳戶。"
+    }
+  },
+  "door": {
+    "wordmark": "Grade10 入口"
+  }
+}

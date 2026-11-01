@@ -54,6 +54,13 @@ and the rails — and the shape the `stage-changes-and-notify-hands` and
 `run-a-round-on-every-artifact` changes and their follow-on changes build
 from.
 
+[`ticketing-show-sale-brief.md`](ticketing-show-sale-brief.md) is the
+owner's brief for selling the next show's tickets — guest buying, card and
+WeChat Pay, five passes, Fast Pass, early bird, points to the address given
+and PDF tickets by mail, and a rehearsal closed to staff — with the
+owner's answers, the six phases that build it for any later event, and the
+Stripe webhook check against g10-gems.
+
 [`cross-sell-walkthrough.md`](cross-sell-walkthrough.md) is one feature walked
 through every role of that workflow with an agent standing in for each hand —
 what each step cost, what the readers caught and what refused — and the source

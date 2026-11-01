@@ -1,0 +1,88 @@
+{
+  "version": 2,
+  "change": "guard-cart-drawer-read-only-tender",
+  "baseline": "f4dd503a2778ff1f59981e89d099c33127e61204afd608525a92729bc9391418",
+  "fingerprint": "f39ab0d528d4cdbfc0cdbc0374bcb5c1bb593110e64c34bb57857096e33b3a89",
+  "reviewedBy": "Kin Chan",
+  "acceptedAt": "2026-11-01T08:01:00.386Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/shared/ui/store-cart.md#tender-actions",
+      "sha256": "b113a48dcc752d74d1bd36cbced1e71c41dede7bc2f262dc96d71850cca8cea7",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/guard-cart-drawer-read-only-tender/decisions.md",
+      "sha256": "d3d6943ac39011aed4bf0af48b58b34297e02e78eef82eefd89e11ec17a5d4d2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/guard-cart-drawer-read-only-tender/proposal.md",
+      "sha256": "c75c772766bbe2c56051082f59a54b8e457f6988b5d246370902a6b78e61b199",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/guard-cart-drawer-read-only-tender/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "f3466b49890f970886031056bee9ab7f32bcf734082592063dd9721cda78431e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/guard-cart-drawer-read-only-tender/specs/shared/ui/store-cart/spec.md",
+      "sha256": "1393d10b2fb9dccb369e4ce154568bd3af51dc09bdcbaab478711cea8a81dfb4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/guard-cart-drawer-read-only-tender/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "8a75a2baa799c5e38d480fa8cd205c94f2ce1e7fa8ce9583385b51629a794799",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/guard-cart-drawer-read-only-tender/tech-design.md",
+      "sha256": "c648db44299b87f034104637a1df61f1007042d9cba13ac86d057cb7f3ce70e3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/guard-cart-drawer-read-only-tender/ui-design.md",
+      "sha256": "db1856f08a25cc4ccc15afb50aaa3b28112d728188686a2d1a04ab22ad264ce3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "620d48bc40784b714896c8879035ea018162cea6920a11fb520e21ba964b689f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "sha256": "1b4a1a91e4e8cbf65295b88edd82b33e736ab19115d3558a2da27386115ca623",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "992799b8ff8c226ef59a50ef18cf41152a486aa1c4220c61dafc0489488b66fc",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/guard-cart-drawer-read-only-tender/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Points actions render only when they can act",
+        "Requirement: Promo actions render only when they can act",
+        "Requirement: Tender actions are gated independently"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

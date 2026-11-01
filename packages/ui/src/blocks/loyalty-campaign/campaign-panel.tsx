@@ -40,7 +40,7 @@ function CampaignDates({ dates }: { dates: readonly CampaignDate[] }) {
           data-past={date.past ? "" : undefined}
           key={`${date.day}-${date.text}`}
         >
-          <span className="font-bold tabular-nums">{date.day}</span>
+          <span className="font-semibold tabular-nums">{date.day}</span>
           <span
             aria-hidden
             className={cn(

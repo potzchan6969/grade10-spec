@@ -127,7 +127,7 @@ function BookingDayStrip({
       <div className="flex items-center gap-1">
         <span
           aria-live="polite"
-          className="flex-1 text-sm leading-5 font-bold tabular-nums"
+          className="flex-1 text-sm leading-5 font-semibold tabular-nums"
         >
           {title}
         </span>
@@ -186,7 +186,7 @@ function BookingDayStrip({
               </span>
               <span
                 className={cn(
-                  "text-[15px] leading-5 font-bold tabular-nums",
+                  "text-[15px] leading-5 font-semibold tabular-nums",
                   day.date === today &&
                     "underline decoration-2 underline-offset-[3px]",
                 )}

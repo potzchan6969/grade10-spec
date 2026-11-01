@@ -1,5 +1,13 @@
 {
   "login": {
     "subject": "Sign In to Grade10"
+  },
+  "ticketing": {
+    "statement": "Your statement shows GRADE10 SHOW.",
+    "earnsPoints": "This order earns points in the Grade10 account for {email}.",
+    "lostEmail": "Lost this email? Sign in at grade10.com with {email} to see your tickets.",
+    "boughtFooter": "Grade10, {address}. You get this email because you bought tickets on grade10.com. Questions? Reply to this email.",
+    "issuedIntro": "Hi {name}, Grade10 has sent you tickets for {event}. They’re attached. Nothing to pay.",
+    "issuedFooter": "Grade10, {address}. You get this email because Grade10 sent you tickets. Questions? Reply to this email."
   }
 }

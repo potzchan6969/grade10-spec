@@ -43,8 +43,6 @@
 * The filter row shows no image and no trailing content: none is invented.
 * No row appears that the story did not supply.
 
----
-
 <!-- trace:case id=g10.shared-store-product-listing.TC-mwm rev=1 -->
 ### g10.shared-store-product-listing.US1-TC22: Typing is reported and the field keeps the supplied query
 
@@ -75,8 +73,6 @@
 
 * The field still shows `pi`, because the story supplies no new query.
 * The Actions panel shows one draft change, carrying the typed value.
-
----
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-7aw rev=1 -->
 ### g10.shared-store-product-listing.US1-TC23: Committing with no row picked reports a search commit
@@ -109,8 +105,6 @@
 * The Actions panel shows one search commit carrying `pi`.
 * The field still shows `pi` until the story supplies another query.
 * No selection is reported.
-
----
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-lj8 rev=1 -->
 ### g10.shared-store-product-listing.US1-TC24: A field with nothing to offer still commits
@@ -153,8 +147,6 @@ Runs once per row of **Test data**.
 * The field shows what the row's **Panel** says before the commit.
 * The Actions panel shows one search commit carrying `pi`.
 
----
-
 <!-- trace:case id=g10.shared-store-product-listing.TC-zl0 rev=1 -->
 ### g10.shared-store-product-listing.US1-TC25: Picking a row reports the pick and does nothing else
 
@@ -186,8 +178,6 @@ Runs once per row of **Test data**.
 * The Actions panel shows one selection, naming that row's suggestion.
 * No search commit is reported.
 * The address does not change and no filter is applied by the surface.
-
----
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-h22 rev=1 -->
 ### g10.shared-store-product-listing.US1-TC26: Every row is reachable and activated by keyboard, with a visible focus
@@ -223,8 +213,6 @@ Runs once per row of **Test data**.
 * The focused row is visibly marked at each stop.
 * Enter on the last row reports one selection naming it.
 
----
-
 <!-- trace:case id=g10.shared-store-product-listing.TC-g4v rev=1 -->
 ### g10.shared-store-product-listing.US1-TC27: Pending hits show the searching line and invent no row
 
@@ -259,10 +247,8 @@ Runs once per row of **Test data**.
 
 ## Settled
 
+- **Sale tile labels (Q6)** - `ProductCardCopy` may keep the words optional; Grade10 Store supplies both on every sale tile.
+
 ## Reconciliation
 
-**Run:** 2026-10-26, drafted after accept-review of `listing-search-suggestions` found the suite absent; read the change's delta, `ui-design.md` and its State table. Not a blind pass.
-
 - **Assumed** - the capability's one section is US1, as `activate-listing-tile-by-name` has it; QA renumbers the cases when both suites fold, since each starts at TC1
-- **Walked** - `shared-ui-store-product-listing-SC-67` and `shared-ui-store-product-listing-SC-73` by US1-TC21; `shared-ui-store-product-listing-SC-68` by US1-TC22; `shared-ui-store-product-listing-SC-69` by US1-TC23; `shared-ui-store-product-listing-SC-71` and `shared-ui-store-product-listing-SC-94` by US1-TC24; `shared-ui-store-product-listing-SC-70` by US1-TC25; `shared-ui-store-product-listing-SC-72` by US1-TC26; `shared-ui-store-product-listing-SC-74` by US1-TC27
-- **Covers pending** - the delta's SC-67 to SC-74 and SC-94 carry no trace marker yet, so the cases are anchor-only until QA2 mints them

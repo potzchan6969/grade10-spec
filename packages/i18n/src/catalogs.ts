@@ -40,6 +40,7 @@ import grade10EnSignIn from "../messages/grade10/en/signIn.json";
 import grade10EnStore from "../messages/grade10/en/store.json";
 import grade10EnStoreHome from "../messages/grade10/en/storeHome.json";
 import grade10EnStoreLocator from "../messages/grade10/en/storeLocator.json";
+import grade10EnTicketing from "../messages/grade10/en/ticketing.json";
 import grade10ZhHansAuctionListing from "../messages/grade10/zh-Hans/auctionListing.json";
 import grade10ZhHansAuctionOrders from "../messages/grade10/zh-Hans/auctionOrders.json";
 import grade10ZhHansChrome from "../messages/grade10/zh-Hans/chrome.json";
@@ -56,6 +57,7 @@ import grade10ZhHansSignIn from "../messages/grade10/zh-Hans/signIn.json";
 import grade10ZhHansStore from "../messages/grade10/zh-Hans/store.json";
 import grade10ZhHansStoreHome from "../messages/grade10/zh-Hans/storeHome.json";
 import grade10ZhHansStoreLocator from "../messages/grade10/zh-Hans/storeLocator.json";
+import grade10ZhHansTicketing from "../messages/grade10/zh-Hans/ticketing.json";
 import grade10ZhHantAuctionListing from "../messages/grade10/zh-Hant/auctionListing.json";
 import grade10ZhHantAuctionOrders from "../messages/grade10/zh-Hant/auctionOrders.json";
 import grade10ZhHantChrome from "../messages/grade10/zh-Hant/chrome.json";
@@ -72,6 +74,7 @@ import grade10ZhHantSignIn from "../messages/grade10/zh-Hant/signIn.json";
 import grade10ZhHantStore from "../messages/grade10/zh-Hant/store.json";
 import grade10ZhHantStoreHome from "../messages/grade10/zh-Hant/storeHome.json";
 import grade10ZhHantStoreLocator from "../messages/grade10/zh-Hant/storeLocator.json";
+import grade10ZhHantTicketing from "../messages/grade10/zh-Hant/ticketing.json";
 import sharedEnAppointment from "../messages/shared/en/appointment.json";
 import sharedEnAuction from "../messages/shared/en/auction.json";
 import sharedEnAuctionAvailability from "../messages/shared/en/auctionAvailability.json";
@@ -101,6 +104,7 @@ import sharedEnProfile from "../messages/shared/en/profile.json";
 import sharedEnSignIn from "../messages/shared/en/signIn.json";
 import sharedEnStore from "../messages/shared/en/store.json";
 import sharedEnStoreHome from "../messages/shared/en/storeHome.json";
+import sharedEnTicketing from "../messages/shared/en/ticketing.json";
 import sharedEnVault from "../messages/shared/en/vault.json";
 import sharedEnVerification from "../messages/shared/en/verification.json";
 import sharedKoAppointment from "../messages/shared/ko/appointment.json";
@@ -132,6 +136,7 @@ import sharedKoProfile from "../messages/shared/ko/profile.json";
 import sharedKoSignIn from "../messages/shared/ko/signIn.json";
 import sharedKoStore from "../messages/shared/ko/store.json";
 import sharedKoStoreHome from "../messages/shared/ko/storeHome.json";
+import sharedKoTicketing from "../messages/shared/ko/ticketing.json";
 import sharedKoVault from "../messages/shared/ko/vault.json";
 import sharedKoVerification from "../messages/shared/ko/verification.json";
 import sharedZhHansAppointment from "../messages/shared/zh-Hans/appointment.json";
@@ -163,6 +168,7 @@ import sharedZhHansProfile from "../messages/shared/zh-Hans/profile.json";
 import sharedZhHansSignIn from "../messages/shared/zh-Hans/signIn.json";
 import sharedZhHansStore from "../messages/shared/zh-Hans/store.json";
 import sharedZhHansStoreHome from "../messages/shared/zh-Hans/storeHome.json";
+import sharedZhHansTicketing from "../messages/shared/zh-Hans/ticketing.json";
 import sharedZhHansVault from "../messages/shared/zh-Hans/vault.json";
 import sharedZhHansVerification from "../messages/shared/zh-Hans/verification.json";
 import sharedZhHantAppointment from "../messages/shared/zh-Hant/appointment.json";
@@ -194,6 +200,7 @@ import sharedZhHantProfile from "../messages/shared/zh-Hant/profile.json";
 import sharedZhHantSignIn from "../messages/shared/zh-Hant/signIn.json";
 import sharedZhHantStore from "../messages/shared/zh-Hant/store.json";
 import sharedZhHantStoreHome from "../messages/shared/zh-Hant/storeHome.json";
+import sharedZhHantTicketing from "../messages/shared/zh-Hant/ticketing.json";
 import sharedZhHantVault from "../messages/shared/zh-Hant/vault.json";
 import sharedZhHantVerification from "../messages/shared/zh-Hant/verification.json";
 
@@ -238,6 +245,7 @@ export const sharedEn = {
   signIn: sharedEnSignIn,
   store: sharedEnStore,
   storeHome: sharedEnStoreHome,
+  ticketing: sharedEnTicketing,
   vault: sharedEnVault,
   verification: sharedEnVerification,
 };
@@ -272,6 +280,7 @@ export const sharedZhHant = {
   signIn: sharedZhHantSignIn,
   store: sharedZhHantStore,
   storeHome: sharedZhHantStoreHome,
+  ticketing: sharedZhHantTicketing,
   vault: sharedZhHantVault,
   verification: sharedZhHantVerification,
 };
@@ -306,6 +315,7 @@ export const sharedZhHans = {
   signIn: sharedZhHansSignIn,
   store: sharedZhHansStore,
   storeHome: sharedZhHansStoreHome,
+  ticketing: sharedZhHansTicketing,
   vault: sharedZhHansVault,
   verification: sharedZhHansVerification,
 };
@@ -340,6 +350,7 @@ export const sharedKo = {
   signIn: sharedKoSignIn,
   store: sharedKoStore,
   storeHome: sharedKoStoreHome,
+  ticketing: sharedKoTicketing,
   vault: sharedKoVault,
   verification: sharedKoVerification,
 };
@@ -362,6 +373,7 @@ export const grade10En = {
   store: grade10EnStore,
   storeHome: grade10EnStoreHome,
   storeLocator: grade10EnStoreLocator,
+  ticketing: grade10EnTicketing,
 };
 
 export const grade10ZhHant = {
@@ -381,6 +393,7 @@ export const grade10ZhHant = {
   store: grade10ZhHantStore,
   storeHome: grade10ZhHantStoreHome,
   storeLocator: grade10ZhHantStoreLocator,
+  ticketing: grade10ZhHantTicketing,
 };
 
 export const grade10ZhHans = {
@@ -400,6 +413,7 @@ export const grade10ZhHans = {
   store: grade10ZhHansStore,
   storeHome: grade10ZhHansStoreHome,
   storeLocator: grade10ZhHansStoreLocator,
+  ticketing: grade10ZhHansTicketing,
 };
 
 export const zzzKo = {

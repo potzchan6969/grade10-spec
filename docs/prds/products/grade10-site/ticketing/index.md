@@ -4,9 +4,27 @@ icon: ticket
 ---
 
 Tickets to grade10's own events: a show, a signing, a launch. A collector
-buys on Stripe's hosted page with an email alone — no sign-in — gets a QR
-code per ticket, and shows it at the door. One ticketing service runs each
-brand's events, so another brand sells with the same screens.
+buys on Stripe's hosted page — signed in, or with a name and an email
+alone, no sign-in — gets a QR code per ticket, and shows it at the door. One
+ticketing service runs each brand's events, so another brand sells with the
+same screens, and every value an event needs is set in the console.
+
+- 🚧 **Buying as a guest** — a name and an email, no sign-in; the tickets
+  arrive by mail as a PDF, and the points land on the account behind the
+  email, made if there is none —
+  [Buying Tickets](/p/grade10-site/ticketing/buying#buying)
+- 🚧 **Check Your Order** — the order, the total, the points and a required
+  agreement read back before paying —
+  [Buying Tickets](/p/grade10-site/ticketing/buying#buying)
+- 🚧 **Promo codes** — one code an order, made per event in the console —
+  [Promo Codes](/p/grade10-admin/ticketing/promo-codes)
+- 🚧 **Free tickets** — staff give tickets at no charge by email, or as
+  private links that each open one ticket —
+  [Free Tickets](/p/grade10-admin/ticketing/free-tickets)
+- 🚧 **Who may buy** — anyone, or only console staff and addresses matching
+  a pattern such as `*@9gag.com`, so a rehearsal runs on the real site before
+  the public sees the show —
+  [Events and Ticket Types](/p/grade10-admin/ticketing/events#an-event)
 
 - **Events** — a title, a venue, a start and an end, in every language the
   site speaks; listed once an operator puts it on sale, and a cancelled event
@@ -16,15 +34,29 @@ brand's events, so another brand sells with the same screens.
   1. On sale in their window, for anyone signed in
   2. Paused — listed, selling none
   3. Invited — listed only to the addresses an operator invited
+- 🚧 **Access rules** — replacing invited: a type also sells to the
+  addresses and `*@` domains its rules name, each in its own window, before
+  or instead of its public sale; a signed-in buyer proves the address
+- 🚧 **On sale to guests** — replacing signed-in only: a type on sale sells
+  to anyone, signed in or a guest; an invited type still asks a sign-in
 - **Entry** — a single-entry ticket admits once; a day pass admits once on
   each day it is valid
+- 🚧 **Entries** — replacing the two: a ticket admits on as many days as
+  its type's entries, once a day, on any day its type admits on — a
+  two-day pass on two, a one-day pass on one
+- 🚧 **Fast Pass** — an upgrade per day that skips the entrance queue;
+  a type can include it on every day it admits
+- 🚧 **Early bird** — a type's price changes on dates the operator sets
 - **Orders** — one checkout on one event, with a six-character reference a
   collector can read out at the door
 - **Tickets** — one per person admitted, each with its own QR code
-- **Points** — a paid ticket order earns in the
-  [loyalty programme](/p/grade10-site/loyalty/points) under the buyer's
-  email, lands on the member's ledger once a sign-in proves that address,
-  and counts as activity for the balance's expiry
+- **Points** — a paid ticket order earns 1 point per HKD 10 paid, after
+  discounts, in the [loyalty programme](/p/grade10-site/loyalty/points)
+  under the buyer's email, lands on the member's ledger once a sign-in
+  proves that address, and counts as activity for the balance's expiry
+- 🚧 **Points at once** — replacing the wait for a sign-in: the points land
+  at once on the account behind the email, made for it where there is none,
+  and a refund takes them back
 
 ## Where It Is Open
 
@@ -61,9 +93,10 @@ and a wallet pass.
 
 | User | Job |
 | --- | --- |
-| Collector | Buy a few tickets to a show quickly, and get in with a phone |
+| Collector | Buy a few tickets to a show quickly, skip the entrance queue on the days they choose, and get in with a phone |
+| Guest buyer | Buy without making an account, find the tickets in the mail, and find the orders and points waiting at the first sign-in |
 | Invited guest | Claim the tickets they were promised, without a code to type |
-| Operator | Put an event on sale, answer a buyer, give money back |
+| Operator | Set up an event without code, rehearse it on the real site before the public, answer a buyer, give money back |
 | Door staff | Let the right people in fast, and know why when not |
 
 | Measure | Counts |
@@ -80,14 +113,17 @@ shape:
 | --- | --- | --- |
 | First come | Supply meets demand over time | Built |
 | Invitations | Comps, press, partners, a presale to a named list | Built |
+| Access rules | Early access for partners or a domain, and a type only some may buy | 🚧 Replacing invitations |
 | Waiting line | A type that sold out, with tickets coming back | Built |
 | Waiting room | Shielding the service at one on-sale instant | Added only when a sale's figures show the service saturating |
 | Ballot | A drop many times outnumbering its supply | ❓ Open |
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Email-keyed buying | Decided | Buying asks only an email — no sign-in — so the press stays short; the order belongs to that address and joins the account a later sign-in proves, its points dated to the purchase. Decided 2026-10-28; supersedes signed-in buying. | Product |
-| Payment | Decided | Stripe's hosted page, card only, on the g10-gems account; no card form on the site. | Engineering |
+| Email-keyed buying | Decided | Buying asks only a name and an email — no sign-in — so the press stays short; the order belongs to that address and joins the account behind it, made for the address at once where there is none, so its points are on the ledger the first time a sign-in proves the address, dated to the purchase. An invited type, the waiting line and a restricted event still need a sign-in, which proves the address. Decided 2026-10-28; supersedes signed-in buying. | Product |
+| Payment | Decided | Stripe's hosted page, card and WeChat Pay, on the g10-gems account; no card form on the site. WeChat Pay added 2026-10-28. | Engineering |
+| Independent of g10-gems | Decided | The two systems share one Stripe account and nothing else; g10-gems ignores a dispute or a failed refund on a ticket's payment, and ticketing ignores everything of g10-gems'. | Engineering |
+| Booth sales | Decided | Selling on site is staff's, by hand, at a member and a non-member price; it is not the system's, earns no points and shows in no history. | Product |
 | Busy, never queued | Decided | A press that meets a crowd is answered busy in seconds rather than held waiting. | Engineering |
 | Ballot | ❓ Open | Whether a drop that a crowd outnumbers many times sells by ballot — entries, a logged draw, a window to pay each win — decided before the first such drop. | Product |
 | Loyalty share of a ballot | ❓ Open | Whether top-tier members get a share; decided with the ballot. | Product |

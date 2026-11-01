@@ -11,6 +11,7 @@ vault's daily incentive and consignment sale proceeds -
 ## Wallet
 
 - 🚧 **Available Amount** — incentive and sale proceeds posted, less cash-outs; all of it cashable
+  - **Denominated in US Dollars** — everything in the wallet reads US$; decided by the owner, 2026-10-30
   - **Incentive** — posted daily, after the card's vesting - [Incentive](/p/grade10-site/vault/incentive#reaching-the-wallet)
   - **Sale Proceeds** — posted 3 business days after the buyer pays
   - **Vesting** — shown beside it, with its release date; not part of the wallet
@@ -34,7 +35,8 @@ vault's daily incentive and consignment sale proceeds -
 
 ## Cash-Out
 
-- 🚧 **Request** — at least HKD 500, one every 7 days
+- 🚧 **Request** — at least US$65, one every 7 days
+  - **Currency** — cashed out in Hong Kong dollars or US dollars; an HKD request pays the day's converted amount, and a USD or overseas-bank request is handled manually by our team - decided by the owner, 2026-10-30
   - **Built** — staff-side only: the collector's page to see the wallet, save a payout account and ask for a cash-out is not built yet
 - 🚧 **Paid** — within 3 business days, by FPS or bank transfer
   - **Built** — by bank transfer, to a payout account whose name matches the verified identity
@@ -44,7 +46,7 @@ vault's daily incentive and consignment sale proceeds -
 - **Held** — while the collector has a debt
 
 :::callout{kind="note"}
-- ❓ **Cash-out maximum** — HKD 50,000 a request, or no maximum with a manual review above a threshold. Finance confirms before Phase 2, 6 December
+- ❓ **Cash-out maximum** — US$6,500 (≈ HKD 50,000) a request, or no maximum with a manual review above a threshold. Finance confirms before Phase 2, 6 December
 - ❓ **Where proceeds go by default** — recommended the wallet; built as a bank account kept on the consignor's list. Owner confirms
 :::
 
@@ -87,7 +89,7 @@ intake itself stays light.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | KYC | ❓ | When identity is asked for is still being discussed; today's rule stands at deposit, and cash-out and sale proceeds ask always until it is | Owner |
-| Cash-out | ❓ | At least HKD 500, every 7 days, to an account in the owner's verified name, a debt blocking it, a batch approved by a second treasurer | Owner |
+| Cash-out | ❓ | At least US$65, every 7 days, paid in HKD or USD, to an account in the owner's verified name, a debt blocking it, a batch approved by a second treasurer | Owner |
 | The payout flow | ❓ Open | One brand setting, pinned at sealing: a bank account named for the consignment alone, the same account kept on the consignor's list, or the person's wallet; a partner is always paid by bank. Which is the default is open - owner, 2026-10-27; built as the account kept on the consignor's list until the owner decides, 2026-10-29 | Owner |
 :::
 

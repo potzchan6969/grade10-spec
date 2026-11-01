@@ -156,7 +156,7 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   refundDetails: "Refund Details",
   winningBid: "Winning bid",
   bank: "Bank",
-  bankDetailsClose: "Close",
+  bankDetailsDone: "Done",
   bankDetailsQrAlt: "FPS payment QR code for this order",
 };
 

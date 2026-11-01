@@ -4,6 +4,7 @@ title: Store Landing Test Cases
 
 # grade10-site/store/home Test Cases
 
+**Status:** pending-review · 0/11
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/home
 
@@ -47,6 +48,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -84,6 +86,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -110,7 +113,7 @@ Runs once per row of **Test data**.
 
 * Every card belongs to the collection listed first; none only in the second shows.
 
-<!-- trace:case id=g10.store-home.TC-l20 rev=1 -->
+<!-- trace:case id=g10.store-home.TC-l20 rev=2 -->
 ### g10.store-home.TC6: Each card says sold out, and shows its earlier price where marked down
 
 Runs once per row of **Test data**.
@@ -119,6 +122,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -128,7 +132,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<status product>` is in the merchandised row, by the recipe "Put a card in the Main Page's merchandised row", in the row's state.
+* The customer is on the English store page; `<status product>` is in the merchandised row, by the recipe "Put a card in the Main Page's merchandised row", in the row's state.
 
 **Test data:**
 
@@ -142,10 +146,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open `<g10url>/store` and read `<status product>`'s card.
+2. For a row with an earlier price, read the card's prices with a screen reader.
 
 **Expected Results:**
 
 * The row's card, said the way the browse listing says it.
+* For either row with an earlier price, the screen reader says `Sale price` before the current price and `Was` before the earlier price; neither label appears on screen.
 
 <!-- trace:case id=g10.store-home.TC-egn rev=1 -->
 ### g10.store-home.TC7: A card opens the product's own page and offers no cart
@@ -156,6 +162,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -199,6 +206,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -235,6 +243,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -268,6 +277,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -299,6 +309,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -336,6 +347,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -373,6 +385,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -406,6 +419,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression

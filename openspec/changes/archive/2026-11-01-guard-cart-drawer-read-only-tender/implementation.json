@@ -1,0 +1,50 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "f39ab0d528d4cdbfc0cdbc0374bcb5c1bb593110e64c34bb57857096e33b3a89"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "8b11a40fee15c3e1b4c25b914426763497c4be20",
+    "capturedAt": "2026-11-01T08:20:42.636Z",
+    "targets": [
+      {
+        "path": "openspec/changes/guard-cart-drawer-read-only-tender/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Points actions render only when they can act",
+          "Requirement: Promo actions render only when they can act",
+          "Requirement: Tender actions are gated independently"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "0b20a3a6d9cf6a6d6b17bc206372a60f707f1280",
+      "components": [
+        "web"
+      ]
+    },
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "e3f06c7f1c7bf6503e2ef802819bc76fdb10c8a0",
+      "components": [],
+      "scope": "no-runtime",
+      "reason": "The shared Cart Drawer callback gating and Storybook coverage are maintained in this repository; Grade10 web consumes the shared UI through its pinned submodule, and this repository has no separate runtime deployment for this change."
+    }
+  ]
+}

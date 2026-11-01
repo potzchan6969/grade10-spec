@@ -1,0 +1,152 @@
+{
+  "version": 2,
+  "change": "redraw-store-cart-frames",
+  "baseline": "f359a53d474162bba5faaab03e054f5defb59b6ac4a3b31adabb8bdd5f5e3aff",
+  "fingerprint": "4519d99264f66c42b6ff434c4d4477e897b04f54ac62724f2192a853e1d9acea",
+  "reviewedBy": "Kin Chan",
+  "acceptedAt": "2026-11-01T08:02:33.827Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/shared/ui/store-cart.md#site-sale-and-promo-codes",
+      "sha256": "2dbc77036aa60086ee9e5f5855dae8f132da4494fecfa401ea2a48209e4eb820",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/decisions.md",
+      "sha256": "ce4667dbd8c8d32dcce939b9294eca74d0a745de541495e27127a89fb3083bc4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/proposal.md",
+      "sha256": "f7d1b732f6a9f116ceb0d922ecd672aeadf4db340a0ab5d0610a1df5f7dbdfd9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "83ede106205e6152a0eb28b4082a5cbafd6661307a95cbde840a9f75ef22cbec",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "fd132d69c65b1d1a37e5484522e9f933d689f6266fd5ce20c2fd19bec841b2fd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "7a1122b40db3bad82e7bf28b1698742dd3d2eba7d2793592f652ff5fb4c0e4af",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/specs/shared/ui/store-cart/spec.md",
+      "sha256": "547e0b2b7d2c27c85a0f6209011928cbe1df72902d055396bd1d114b1094769d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "17e67c600fecc87bbb175378e5284b80aab028ea5f3988c4a6445bdbddcbbed6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "d456a8b45f2ce17d3c53de7ae35d664f6102c451a520351c39ad5af64fac0f19",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "7f426b4e8004f6dbe258073303a5ad60892cb2e582ba754c5af34e82aaf2716c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "3613387b6d818dd2f50fdd6fc5ffc60afbb9f2a8343ce887a6e6c79d76e29a5f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redraw-store-cart-frames/tech-design.md",
+      "sha256": "61ba0776a0ca402326c28d9715906895d7a6735e340d50ba74a971b442d0dadb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "c2c2fed91054f62a1ee44257688819f449ce1e85a7fd08c998fe8784ca214e99",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "022c165c53403d09e88b629cbeab0902ca018f7c792752880a679405072f4e3a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "f7e1e0db08673e59a2c6de4be2dd26537b2c12f11199e25dd417ca3a0536944a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "sha256": "fa4b1b37209787eaef82739ca100438b05380d8c3e9241cf2ca7477d5ed5196d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "992799b8ff8c226ef59a50ef18cf41152a486aa1c4220c61dafc0489488b66fc",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "599fe811be634a55f05711b4a1d24c7b7ae6e88a82eb8206e5eef8743b7288dd",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "966baf9ffe3cff7373f5ccac6144a3f8e47631c961521d803cd8bf9951c97b30",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "e559465a238193f9dcc56c616a625f40d558f6ef1a26e9f015caf1c889aa4cfb",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "anchors": [
+        "Requirement: The page's struck price says which price is charged"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A struck price says which price is charged"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A tile's struck price says which price is charged"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

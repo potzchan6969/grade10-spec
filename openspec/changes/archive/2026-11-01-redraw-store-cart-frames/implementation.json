@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "4519d99264f66c42b6ff434c4d4477e897b04f54ac62724f2192a853e1d9acea"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "37bbae17769bcdbec0d9b7f4af50faa77b562bd5",
+    "capturedAt": "2026-11-01T08:20:56.983Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+        "anchors": [
+          "Requirement: The page's struck price says which price is charged"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A struck price says which price is charged"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A tile's struck price says which price is charged"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "0b20a3a6d9cf6a6d6b17bc206372a60f707f1280",
+      "components": [
+        "web"
+      ]
+    },
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "da8e6c4d2ac4d2fba15283b91f72bd01ee4c071a",
+      "components": [],
+      "scope": "no-runtime",
+      "reason": "The shared price-label components, locale catalogue and Storybook coverage are maintained in this repository; Grade10 web consumes the shared UI through its pinned submodule, and this repository has no separate runtime deployment for this change."
+    }
+  ]
+}

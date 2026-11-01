@@ -1,0 +1,737 @@
+{
+  "common": {
+    "passes": "패스",
+    "yourOrder": "내 주문",
+    "total": "합계",
+    "free": "무료",
+    "fastPass": "패스트 패스",
+    "ticketCount": "{count, plural, other {티켓 #장}}",
+    "dayCount": "{count, plural, other {#일}}",
+    "peopleCount": "{count, plural, other {#명}}",
+    "reference": "참조 번호 {reference}",
+    "orderReference": "주문 {reference}",
+    "lineQuantity": "{pass} × {quantity}",
+    "aDay": "하루 {amount}",
+    "priceWas": "정가 {amount}",
+    "was": "정가",
+    "minus": "−{amount}",
+    "signIn": "로그인",
+    "signInWithEmail": "이메일로 로그인",
+    "signOut": "로그아웃",
+    "seeTheShows": "공연 보기",
+    "tryAgain": "다시 시도",
+    "close": "닫기",
+    "edit": "수정",
+    "termsOfSale": "판매 약관",
+    "card": "{brand} •• {last4}",
+    "wechatPay": "WeChat Pay",
+    "paidBy": "{date}에 {method}(으)로 결제"
+  },
+  "event": {
+    "badge": {
+      "onToday": "오늘 진행",
+      "cancelled": "취소됨",
+      "ended": "종료"
+    },
+    "timesEachDay": "매일 {start}~{end}",
+    "youHaveTickets": "이 공연의 티켓이 있어요.",
+    "viewYourTickets": "내 티켓 보기",
+    "cancelledNotice": {
+      "title": "이 행사는 취소되었어요.",
+      "body": "모든 주문은 결제한 카드나 WeChat Pay로 전액 환불돼요. 티켓을 산 모든 분께 이메일을 보냈어요."
+    },
+    "endedNotice": {
+      "title": "이 행사는 끝났어요.",
+      "body": "와 주신 모든 분께 감사드려요. 티켓은 내 티켓에 그대로 남아 있어요."
+    },
+    "passesLabel": "패스",
+    "limit": "이메일 하나로 이 행사의 티켓을 최대 {count}장까지 살 수 있어요.",
+    "pass": {
+      "salesEnded": "판매 종료",
+      "salesEndedNote": "판매 종료",
+      "salesEndedWhen": "{day} 시작과 함께 판매 종료",
+      "fastPassIncluded": "패스트 패스 포함",
+      "onSaleAt": "{date} 판매 시작",
+      "opensIn": "{countdown} 후 판매 시작",
+      "earlyBird": "얼리버드",
+      "earlyBirdEnds": "얼리버드 {date} 종료",
+      "soldOut": "매진",
+      "joinWaitingLine": "대기 줄 서기",
+      "joinWaitingLineFor": "대기 명단 등록: {pass}",
+      "paused": "판매 일시 중지",
+      "today": "오늘, {date}",
+      "admitsAnyDays": "{count, plural, other {행사 기간 중 아무 날 #일, 하루 한 번}}",
+      "quantityLabel": "티켓 수량: {pass}",
+      "decrement": "{pass} 한 장 빼기",
+      "increment": "{pass} 한 장 더하기"
+    },
+    "waitingLine": {
+      "note": "티켓이 다시 나오면 이메일로 알려 드리고 보관해 드려요.",
+      "quantityLabel": "대기할 티켓 수: {pass}",
+      "decrement": "한 장 덜 대기: {pass}",
+      "increment": "한 장 더 대기: {pass}",
+      "offerEnded": "보관 기간이 끝나 티켓이 풀렸어요. 맨 뒤로 다시 등록할 수 있어요.",
+      "place": {
+        "title": "대기 명단에 있어요",
+        "wanted": "{count, plural, other {티켓 #장}} 대기 중",
+        "band": "{band, select, front {거의 앞쪽이에요.} middle {앞에 몇 분이 있어요.} other {앞에 많은 분이 있어요.}}",
+        "leave": "대기 취소"
+      },
+      "offer": {
+        "title": "티켓을 보관하고 있어요",
+        "body": "{count, plural, other {티켓 #장}}을 {deadline}까지 보관해요. 그 전에 결제해야 티켓을 받을 수 있어요.",
+        "bodyFree": "{count, plural, other {티켓 #장}}을 {deadline}까지 보관해요. 그 전에 수락해야 티켓을 받을 수 있어요.",
+        "accept": "수락",
+        "decline": "거절"
+      }
+    },
+    "vip": {
+      "fastPassEveryDay": "매일 패스트 패스 포함.",
+      "skipQueue": "{days, plural, =2 {이틀 모두 입장 줄을 건너뛰어요.} other {매일 입장 줄을 건너뛰어요.}}",
+      "everyDay": "{days, plural, =2 {이틀 모두} other {매일}}, {dates}"
+    },
+    "earlyAccess": {
+      "badge": "선예매",
+      "forYouNow": "지금 구매 가능",
+      "opens": "{date} 판매 시작",
+      "opensForYou": "{date}에 판매 시작",
+      "yoursToBuy": "구매 가능: 최대 {count}장",
+      "limitNote": "선예매로 이 이메일은 최대 {count}장까지 가질 수 있어요.",
+      "publicSaleOpens": "{date} 일반 판매 시작"
+    },
+    "signInPrompt": "선예매 대상인가요? <signin>로그인</signin>하면 패스가 보여요.",
+    "lostTickets": "티켓을 잃어버렸나요? <signin>구매한 이메일로 로그인</signin>하세요.",
+    "fastPass": {
+      "title": "패스트 패스",
+      "body": "현장의 긴 입장 줄을 건너뛰어요. 패스트 패스 하나로 한 사람이 하루 이용해요.",
+      "everyoneGroup": "이 패스 전원의 패스트 패스",
+      "eachGroup": "티켓별 패스트 패스",
+      "everyone": "모두",
+      "person": "{label} {ordinal}",
+      "add": "패스트 패스",
+      "addLabel": "{who}에게 패스트 패스 추가, {days}",
+      "daysGroup": "{who}의 패스트 패스 일수",
+      "oneMore": "{who}의 패스트 패스 하루 더하기",
+      "oneFewer": "{who}의 패스트 패스 하루 빼기",
+      "remove": "{who}의 패스트 패스 삭제",
+      "price": "+{amount}",
+      "sameForEveryone": "모두 같게",
+      "choosePerPerson": "사람별로 고르기",
+      "everyoneNeedsIt": "모두 필요한가요?",
+      "notEveryoneNeedsIt": "모두 필요하진 않나요?",
+      "summary": "패스트 패스 {all, plural, other {#개}} 중 {on}개: {amount}.",
+      "nudge": "{missing, plural, other {#개}} 더 있으면 모두{everyDay, select, yes { 매일} other {}} 이용할 수 있어요.",
+      "covered": "모두 줄을 건너뛰어요.",
+      "fillAll": "모두에게 추가 (+{amount})"
+    },
+    "order": {
+      "title": "내 주문",
+      "intro": "패스별 수량을 고르세요. 다음 단계에서 카드나 WeChat Pay로 결제해요.",
+      "fastPassLine": "패스트 패스 × {count, plural, other {#일}}",
+      "removeLine": "{line} 삭제",
+      "addFastPassGroup": "패스트 패스 추가",
+      "upsellTitle": "패스트 패스로 줄 건너뛰기",
+      "upsellSub": "{people, plural, other {#명}} 하루 {amount}",
+      "addOneDay": "1일 추가",
+      "addBothDays": "이틀 모두 추가",
+      "addEveryDay": "매일 추가",
+      "addForEveryone": "모두에게 추가",
+      "youSave": "{amount} 절약",
+      "youSaveEarlyBird": "얼리버드 가격으로 <strong>{amount} 절약</strong>해요.",
+      "continue": "계속",
+      "pointsAbout": "이 주문으로 약 {points}포인트를 적립해요.",
+      "pointsPaidOnly": "유료 티켓은 포인트가 적립돼요.",
+      "totalLabel": "주문 합계",
+      "seeOrder": "티켓 {count, plural, other {#장}}, 주문 보기"
+    },
+    "notOpen": {
+      "title": "이 행사는 아직 열리지 않았어요",
+      "body": "일반 판매 전에 일부에게만 판매 중이에요. 모두에게 열리는 시기는 공연 페이지에서 확인하세요."
+    },
+    "notFound": {
+      "title": "행사를 찾을 수 없어요",
+      "body": "링크가 잘못되었거나 행사가 내려갔을 수 있어요.",
+      "bodySignedOut": "미리보기로 받은 링크라면 로그인해서 확인하세요. 아니라면 링크가 잘못되었을 수 있어요."
+    },
+    "restricted": {
+      "title": "미리보기: 직원과 등록된 주소만 살 수 있어요.",
+      "body": "일반 판매는 아직 시작 전이에요. 지금 하는 주문은 실제 주문이에요."
+    },
+    "loading": "행사를 불러오는 중",
+    "about": "소개",
+    "gettingThere": {
+      "title": "오시는 길",
+      "venue": "장소",
+      "address": "주소",
+      "doors": "입장 시간"
+    },
+    "goodToKnow": {
+      "title": "알아 두세요",
+      "oneCode": "티켓마다 코드가 하나예요. 패스가 포함하는 날마다 한 번씩 입장할 수 있어요.",
+      "pdf": "티켓은 PDF 한 개로 이메일로 와요. 입구에서 신호가 없어도 쓸 수 있어요.",
+      "fastPass": "패스트 패스를 쓰는 날에는 입장 줄을 건너뛰어요. VIP는 매일 포함돼요."
+    }
+  },
+  "summary": {
+    "title": "내 주문",
+    "line": "{pass} × {quantity}",
+    "earlyBird": "{amount}, 얼리버드",
+    "was": "{amount}, 기존 {was}",
+    "fastPass": "패스트 패스, {days, plural, other {#일}}: {amount}",
+    "total": "합계",
+    "free": "무료",
+    "eventLine": "{event}: {dates}"
+  },
+  "details": {
+    "title": "내 정보",
+    "back": "패스",
+    "buyerLabel": "구매자",
+    "haveAccount": "계정이 있나요?",
+    "signIn": "로그인",
+    "accountLabel": "계정, {name}(으)로 로그인됨",
+    "name": {
+      "label": "티켓에 적힐 이름",
+      "placeholder": "이름(전체)",
+      "required": "이름을 입력하세요",
+      "hintSignedIn": "티켓에 인쇄돼요. 친구가 간다면 바꾸세요.",
+      "hintNoName": "티켓에 인쇄될 이름"
+    },
+    "email": {
+      "label": "이메일",
+      "placeholder": "name@example.com",
+      "hint": "티켓이 여기로 가요. 결제 전에 한 번 더 확인해요.",
+      "required": "이메일을 입력하세요",
+      "invalid": "name@example.com 형식의 이메일을 입력하세요",
+      "hintSignedIn": "티켓이 여기로 가요. 계정의 이메일이에요.",
+      "notYou": "본인이 아닌가요?"
+    },
+    "botCheck": {
+      "label": "봇 확인",
+      "checking": "봇이 아닌지 확인하는 중…",
+      "checked": "확인 완료"
+    },
+    "fieldsWrong": "{count, plural, other {위의 항목 #개를 확인하세요.}}",
+    "continue": "계속",
+    "pointsAbout": "약 {points}포인트 적립"
+  },
+  "review": {
+    "title": "주문 확인",
+    "back": "내 정보",
+    "detailsLabel": "내 정보",
+    "edit": "수정",
+    "editDetails": "내 정보 수정",
+    "name": "티켓에 적힐 이름",
+    "email": "이메일",
+    "emailNote": "티켓이 PDF 한 개로 여기로 가요. 맞는지 확인하세요.",
+    "emailNoteSignedIn": "계정의 이메일이에요. 티켓이 PDF 한 개로 여기로 가요.",
+    "agreementLabel": "약관 동의",
+    "agreeSignedIn": "<sale>판매 약관</sale>에 동의해요.",
+    "notAgreed": "결제하기 전에 체크해서 동의해 주세요.",
+    "notAgreedBar": "먼저 체크해서 동의해 주세요.",
+    "pay": "{amount} 결제",
+    "getTickets": "티켓 받기",
+    "slow": "지금 구매하는 사람이 많아요. 계속 시도하는 중이에요.",
+    "opening": "결제 페이지를 여는 중…",
+    "notes": {
+      "title": "결제 전에",
+      "stripe": "Stripe의 안전한 페이지에서 카드나 WeChat Pay로 결제해요.",
+      "hold": "결제하는 동안 티켓을 {minutes}분 동안 잡아 둬요.",
+      "pdf": "티켓은 영수증 링크와 함께 PDF 한 개로 이메일로 와요.",
+      "pdfFree": "티켓은 PDF 한 개로 이메일로 와요.",
+      "nothingCharged": "결제되는 금액은 없어요."
+    },
+    "priceChanged": {
+      "title": "얼리버드 가격이 {time}에 끝났어요.",
+      "body": "합계가 이제 {amount}예요. 아래 항목에 새 가격이 나와요."
+    }
+  },
+  "promo": {
+    "label": "프로모션 코드",
+    "placeholder": "코드 입력",
+    "apply": "적용",
+    "applied": "프로모션 {code}",
+    "freeWith": "{code}로 무료",
+    "remove": "삭제",
+    "removeLabel": "{code} 삭제",
+    "discount": {
+      "percentOff": "{passes} {percent}% 할인",
+      "percentOffAll": "{percent}% 할인",
+      "amountOffEach": "티켓마다 {amount} 할인",
+      "amountOffOrder": "주문에서 {amount} 할인",
+      "allFree": "티켓 {count, plural, other {#장}}이 무료예요{fastPass, select, yes {. 패스트 패스도요.} other {.}}",
+      "someFree": "티켓 {count, plural, other {#장}} 중 {free}장이 무료예요. {code}는 {free}장 남아 있었어요."
+    },
+    "freeOrder": "{code}로 이 주문은 무료예요. 포인트는 적립되지 않아요.",
+    "errors": {
+      "notFound": "이 코드를 찾을 수 없어요. 철자를 확인하세요.",
+      "notStarted": "{code}는 {date}부터 쓸 수 있어요.",
+      "expired": "{code}는 {date}에 끝났어요.",
+      "usedUp": "{code}는 모두 사용되었어요.",
+      "alreadyUsed": "{code}는 이미 {email}(으)로 사용되었어요.",
+      "minTickets": "{code}는 티켓 {count, plural, other {#장}} 이상이 필요해요.",
+      "minAmount": "{code}는 {amount} 이상 주문해야 해요.",
+      "otherPasses": "{code}는 다른 패스용이에요.",
+      "emailsOnly": "{code}는 받은 이메일만 쓸 수 있어요.",
+      "tooManyTries": "잘못된 코드를 너무 많이 입력했어요. {minutes, plural, other {#분}} 후에 다시 시도하세요.",
+      "tooManyTriesAt": "잘못된 코드를 너무 많이 입력했어요. {time}에 다시 시도하세요."
+    },
+    "usedUpAtPay": {
+      "title": "{code}의 마지막 사용 기회가 방금 사용되었어요.",
+      "body": "합계가 {amount}(으)로 돌아갔어요.",
+      "payFull": "{amount} 결제",
+      "removeCode": "코드 삭제"
+    }
+  },
+  "refusals": {
+    "actions": {
+      "pay": "결제",
+      "backToPasses": "패스로 돌아가기",
+      "seeTheEvent": "행사 보기",
+      "seeTheShows": "공연 보기",
+      "signIn": "로그인",
+      "tryAgain": "다시 시도",
+      "payFull": "{amount} 결제",
+      "removeCode": "코드 삭제"
+    },
+    "checkoutBusy": {
+      "title": "지금 이 순간 구매하는 사람이 너무 많아요.",
+      "body": "결제를 다시 누르세요."
+    },
+    "checkoutPending": {
+      "title": "응답을 받지 못했어요.",
+      "body": "같은 주문을 이어가려면 결제를 다시 누르세요."
+    },
+    "soldOut": {
+      "title": "방금 매진되었어요."
+    },
+    "soldOutSome": {
+      "title": "{count, plural, other {#장만 남았어요.}}",
+      "body": "최대 {count}장까지 고르세요."
+    },
+    "typeNotStarted": {
+      "title": "이 패스는 {date} {time}에 판매를 시작해요."
+    },
+    "typePaused": {
+      "title": "이 패스는 지금 판매가 일시 중지되었어요."
+    },
+    "typeEnded": {
+      "title": "이 패스의 판매가 끝났어요."
+    },
+    "eventNotOnSale": {
+      "title": "이 행사는 더 이상 판매하지 않아요."
+    },
+    "notFound": {
+      "title": "이 패스는 더 이상 구매할 수 없어요."
+    },
+    "accountLimitGuest": {
+      "title": "이메일 하나로 이 행사의 티켓을 최대 {limit}장까지 가질 수 있어요."
+    },
+    "accountLimitSignedIn": {
+      "title": "이메일 하나로 {limit}장까지 가질 수 있는데 {held}장을 갖고 있어요. 최대 {left}장까지 고르세요."
+    },
+    "notOpenToYouYet": {
+      "title": "이 패스는 아직 구매할 수 없어요.",
+      "body": "{date} {time}에 모두에게 판매를 시작해요.",
+      "bodyForYou": "{date} {time}에 회원님께 판매를 시작해요."
+    },
+    "signInRequired": {
+      "title": "이 패스를 사려면 로그인하세요.",
+      "body": "이 패스는 일부 계정만 살 수 있어요. 내 계정으로 로그인해 구매할 수 있는지 확인하세요."
+    },
+    "notOpenToYou": {
+      "title": "이 패스는 일부 주소만 살 수 있는데, 이 주소는 해당되지 않아요."
+    },
+    "accessLimit": {
+      "title": "선예매로 이 주소는 최대 {count}장까지 가질 수 있어요."
+    },
+    "notInAudience": {
+      "title": "이 행사는 아직 이 계정에 열리지 않았어요."
+    },
+    "fastPassUnavailable": {
+      "title": "이 패스에서는 더 이상 패스트 패스를 이용할 수 없어요."
+    },
+    "signedOut": {
+      "title": "로그아웃되었어요.",
+      "body": "다시 로그인하거나 이름과 이메일로 구매하세요."
+    },
+    "challengeFailed": {
+      "title": "봇이 아닌지 확인하지 못했어요.",
+      "body": "결제를 다시 누르세요."
+    },
+    "checkoutUnavailable": {
+      "title": "결제 페이지를 열지 못했고, 잡아 둔 티켓은 없어요."
+    },
+    "paymentUnavailable": {
+      "title": "지금은 결제할 수 없어요.",
+      "body": "결제된 금액은 없어요."
+    },
+    "ticketingClosed": {
+      "title": "지금은 티켓 판매가 닫혀 있어요."
+    },
+    "chooseAgain": {
+      "title": "티켓을 다시 고르세요."
+    },
+    "buyerDetailsRequired": {
+      "title": "이름과 이메일을 입력하세요."
+    },
+    "noWaitingLine": {
+      "title": "이 패스는 대기 줄이 없어요."
+    },
+    "ticketsLeft": {
+      "title": "{count, plural, other {티켓 #장}}이 아직 판매 중이에요.",
+      "body": "남은 티켓을 구매하거나, 매진된 뒤에 대기 명단에 등록하세요."
+    },
+    "offerEnded": {
+      "title": "보관 기간이 끝났어요.",
+      "body": "티켓이 풀렸어요."
+    },
+    "codeUsedUp": {
+      "title": "{code}의 마지막 사용 기회가 방금 사용되었어요.",
+      "body": "합계가 {amount}(으)로 돌아갔어요."
+    },
+    "orderNotFound": {
+      "title": "이 주문을 찾을 수 없어요."
+    },
+    "orderNotPending": {
+      "title": "이 주문은 더 이상 결제를 기다리지 않아요."
+    },
+    "generic": {
+      "title": "문제가 생겼어요.",
+      "body": "잠시 후 다시 시도하세요."
+    }
+  },
+  "return": {
+    "confirming": {
+      "title": "결제를 확인하는 중…",
+      "body": "이 페이지를 열어 두세요."
+    },
+    "stillConfirming": {
+      "title": "아직 결제를 확인하는 중",
+      "body": "결제했다면 결제가 확인되는 대로 티켓이 이메일로 와요. 이 페이지를 닫아도 돼요."
+    },
+    "paid": {
+      "badge": "확정",
+      "title": "참석 확정",
+      "body": "티켓 {count, plural, other {#장}}이 아래에 있고, {email}(으)로 PDF 한 개로 보냈어요."
+    },
+    "wentBack": {
+      "badge": "미결제",
+      "title": "결제가 완료되지 않았어요",
+      "body": "티켓은 풀렸고 결제된 금액은 없어요.",
+      "action": "다시 고르기"
+    },
+    "holdRanOut": {
+      "title": "{minutes}분이 지났어요",
+      "body": "티켓은 다시 판매되고 결제된 금액은 없어요."
+    },
+    "paidTooLate": {
+      "badge": "환불 중",
+      "title": "결제가 너무 늦게 도착했어요",
+      "body": "{minutes}분이 끝난 뒤에 결제가 도착했고 티켓이 이미 팔려서, {amount}을(를) 전액 환불해요.",
+      "where": "영업일 기준 5~10일 안에 {method}(으)로 들어가요. 자세한 내용은 {email}(으)로 보냈어요."
+    },
+    "otherBrowser": {
+      "title": "티켓은 이메일에 있어요",
+      "body": "구매한 이메일로 로그인하면 여기서 이 주문을 볼 수 있어요.",
+      "note": "이메일의 PDF만으로 입장할 수 있어요."
+    },
+    "notTheirs": {
+      "title": "이 주문은 이 계정의 주문이 아니에요",
+      "body": "{email}(으)로 로그인되어 있어요. 구매한 이메일로 로그인해서 확인하세요.",
+      "anotherEmail": "다른 이메일로 로그인"
+    }
+  },
+  "order": {
+    "breadcrumb": "내 티켓",
+    "title": "주문 {reference}",
+    "status": {
+      "held": "결제 대기",
+      "checking": "확인 중",
+      "confirmed": "확정",
+      "offered": "구매 가능",
+      "expired": "만료",
+      "refunding": "환불 중",
+      "refunded": "환불됨",
+      "partRefunded": "부분 환불됨",
+      "cancelled": "취소됨",
+      "ended": "종료",
+      "daysLeft": "{count, plural, other {#일 남음}}"
+    },
+    "bought": "{date} 구매",
+    "started": "{date} 시작",
+    "ticket": {
+      "label": "티켓 {count}장 중 {ordinal}번째",
+      "ofHolder": "티켓 {count}장 중 {ordinal}번째. {name}",
+      "valid": "유효",
+      "refunded": "환불됨",
+      "codeLabel": "티켓 코드 {code}",
+      "code": "코드 {code}",
+      "admits": "{count, plural, other {#일}} 입장: {days}",
+      "fastPass": "패스트 패스 {count, plural, other {#일}}",
+      "fastPassLeft": "패스트 패스 {count, plural, other {#일}} 남음",
+      "used": "{when}에 사용. {left, plural, other {#일}} 남음",
+      "refundedNote": "{date}에 환불되었어요. 이 코드로는 더 이상 입장할 수 없어요.",
+      "followOne": "{ordinal}번째 티켓이 이어져요.",
+      "followMany": "{list}번째 티켓이 이어져요."
+    },
+    "noSignal": "입구에 신호가 없나요? 같은 티켓이 PDF 한 개로 이메일에 있고, 신호 없이도 열려요. 스캔이 안 되면 참조 번호 {reference}을(를) 알려 주세요.",
+    "lines": {
+      "title": "구매 내역",
+      "earlyBirdEach": "얼리버드, 장당 {amount}",
+      "earlyBird": "얼리버드",
+      "each": "장당 {amount}",
+      "fastPassOn": "그중 {tickets}장에 패스트 패스, {days, plural, other {#일}}",
+      "fastPassDays": "패스트 패스, {days, plural, other {#일}}",
+      "promo": "프로모션 {code}",
+      "refund": "환불",
+      "totalAfterRefund": "환불 후 합계"
+    },
+    "points": {
+      "label": "포인트",
+      "about": "약 {points}",
+      "takenBack": "회수됨",
+      "partTakenBack": "환불된 티켓 {count, plural, other {#장}}과 함께 {points}포인트가 회수되었어요.",
+      "allTakenBack": "이 주문으로 적립된 포인트가 회수되었어요.",
+      "free": "무료 주문은 포인트가 적립되지 않아요."
+    },
+    "held": {
+      "label": "티켓을 잡아 뒀어요",
+      "heldFor": "남은 시간",
+      "until": "티켓 {count, plural, other {#장}}, {time}까지. 그 전에 결제해야 유지돼요.",
+      "continue": "결제 계속하기",
+      "note": "결제하기 전에는 아무것도 청구되지 않아요. 시간이 지나면 티켓은 다시 판매돼요."
+    },
+    "checking": {
+      "label": "결제 확인 중",
+      "body": "시간이 지났어요. 결제가 도착했는지 확인하고 있어요."
+    },
+    "partRefund": {
+      "title": "{amount} 환불이 진행 중이에요",
+      "body": "{date}에 티켓 {count, plural, other {#장}}을 환불했어요. 영업일 기준 5~10일 안에 {method}(으)로 들어가요. 다른 티켓으로는 계속 입장할 수 있어요."
+    },
+    "fullRefund": {
+      "title": "{date}에 {amount} 환불",
+      "body": "티켓으로는 더 이상 입장할 수 없어요. 영업일 기준 5~10일 안에 {method}(으)로 들어가요."
+    },
+    "eventCancelled": {
+      "title": "이 행사는 취소되었어요",
+      "body": "{event}은(는) 열리지 않아요. 주문은 전액 환불돼요: 영업일 기준 5~10일 안에 {amount}이(가) {method}(으)로 들어가요."
+    },
+    "lost": "티켓을 잃어버렸나요? 구매한 이메일로 로그인하면 모든 주문이 <link>내 티켓</link>에 있어요.",
+    "guest": {
+      "title": "어디서나 이 주문 보기",
+      "body": "{email}(으)로 로그인하면 이 이메일로 산 모든 주문이 내 티켓에 있어요."
+    }
+  },
+  "myTickets": {
+    "title": "내 티켓",
+    "intro": "{email}(으)로 산 모든 주문, 최신순.",
+    "orderLabel": "주문 {reference}",
+    "heldUntil": "{time}까지 잡아 둠.",
+    "continue": "결제 계속하기",
+    "viewTickets": "티켓 보기",
+    "viewOrder": "주문 보기",
+    "viewTicket": "티켓 보기",
+    "freeTicket": "{pass}. {event}에서 보낸 무료 티켓.",
+    "empty": {
+      "title": "아직 티켓이 없어요",
+      "body": "{email}(으)로 산 티켓이 여기에 나와요."
+    },
+    "signedOut": {
+      "title": "로그인하고 티켓 보기",
+      "body": "구매한 이메일을 쓰세요. 비회원으로 산 주문도 나와요.",
+      "note": "비회원으로 샀나요? 티켓은 PDF 한 개로 이메일에 있고, 그것만으로 입장할 수 있어요."
+    },
+    "loading": "티켓을 불러오는 중",
+    "failed": {
+      "title": "티켓을 불러오지 못했어요",
+      "body": "연결을 확인하고 다시 시도하세요."
+    },
+    "signedIn": {
+      "title": "로그인되었어요",
+      "points": "티켓 주문의 {points}포인트가 이제 계정에 있어요."
+    }
+  },
+  "sharedTicket": {
+    "title": "내 티켓",
+    "label": "티켓 {code}",
+    "free": "무료",
+    "doors": "입장 {start}~{end}",
+    "forGuest": "{name} 님",
+    "codeLabel": "티켓 코드 {code}",
+    "showAtDoor": "입구에서 이 코드를 보여 주세요. 패스가 포함하는 날마다 한 번씩 입장할 수 있어요.",
+    "downloadPdf": "PDF 다운로드",
+    "save": "내 티켓에 저장",
+    "note": "{event}에서 보낸 무료 티켓이에요. 이 링크가 있으면 누구나 쓸 수 있으니 혼자만 간직하세요.",
+    "saved": "내 티켓에 저장됨",
+    "view": "보기",
+    "viewMyTickets": "내 티켓 보기",
+    "usedToday": "{time} 입장. {day}에 만나요.",
+    "usedTodayLast": "{time} 입장.",
+    "dead": {
+      "cancelled": {
+        "badge": "취소됨",
+        "title": "이 티켓은 취소되었어요.",
+        "body": "보낸 분께 문의하세요."
+      },
+      "replaced": {
+        "title": "이 링크는 새 링크로 바뀌었어요",
+        "body": "보낸 분께 문의하세요."
+      },
+      "over": {
+        "title": "{event}이(가) 끝났어요.",
+        "body": "와 주셔서 감사해요."
+      },
+      "overNoEvent": {
+        "title": "이벤트가 끝났어요.",
+        "body": "와 주셔서 감사해요."
+      },
+      "notFound": {
+        "title": "티켓을 찾을 수 없어요",
+        "body": "링크를 확인하세요."
+      }
+    }
+  },
+  "door": {
+    "signIn": {
+      "title": "입구 열기",
+      "body": "입구 책임자에게 받은 비밀번호를 입력하세요. 계정은 필요 없어요.",
+      "passcode": "비밀번호",
+      "passcodePlaceholder": "숫자 6자리",
+      "passcodeRequired": "비밀번호를 입력하세요",
+      "deviceName": "이 휴대폰의 이름",
+      "deviceHint": "입장시킨 모든 티켓이 이 이름으로 기록돼요.",
+      "devicePlaceholder": "예: A 게이트 휴대폰 1",
+      "deviceRequired": "이 휴대폰의 이름을 입력하세요",
+      "submit": "입구 열기",
+      "opens": "{date} {time}부터 행사가 끝날 때까지 쓸 수 있어요.",
+      "wrong": "비밀번호가 맞지 않아요. {left, plural, other {#번}} 더 틀리면 잠시 기다려야 해요.",
+      "slowedTitle": "시도 횟수가 너무 많아요.",
+      "slowedBody": "{seconds, plural, other {#초}} 기다린 뒤 다시 시도하세요. 비밀번호는 입구 책임자에게 물어보세요.",
+      "notOpenTitle": "이 비밀번호로 {date} {time}에 입구가 열려요.",
+      "notOpenUntil": "후 입구가 열려요",
+      "checkAgain": "다시 확인",
+      "notOpen": "아직 열리지 않았어요"
+    },
+    "passcodeChanged": {
+      "title": "비밀번호가 바뀌었어요",
+      "body": "입구의 모든 휴대폰이 로그아웃되었어요. 새 비밀번호는 입구 책임자에게 물어보세요.",
+      "action": "새 비밀번호 입력"
+    },
+    "bar": {
+      "findLabel": "참조 번호로 찾기",
+      "menuLabel": "입구 메뉴: 로그아웃",
+      "signOut": "로그아웃"
+    },
+    "scanner": {
+      "point": "코드에 맞추세요",
+      "countToday": "오늘 이 휴대폰으로 입장:",
+      "checking": "확인 중",
+      "findByReference": "참조 번호로 찾기",
+      "cameraWhy": "이 휴대폰이 티켓을 읽을 수 있게 카메라를 허용하세요. 아무것도 녹화되지 않아요.",
+      "blocked": {
+        "title": "카메라가 차단되었어요",
+        "body": "이 브라우저는 카메라를 쓰지 않도록 설정되어 있어요. 설정 > Safari > 카메라에서 허용을 고른 뒤 돌아와서 다시 시도를 누르세요.",
+        "action": "참조 번호로 찾기"
+      },
+      "noCamera": {
+        "title": "카메라를 찾을 수 없어요",
+        "body": "쓸 수 있는 카메라가 없거나 다른 앱이 쓰고 있어요. 다른 카메라 앱을 닫고 다시 시도하거나 핸드헬드 스캐너를 연결하세요."
+      },
+      "offline": "연결이 없어요. 연결될 때까지 모든 스캔은 확인 안 됨으로 나와요."
+    },
+    "answer": {
+      "admitted": {
+        "title": "입장 완료",
+        "line": "들여보내세요."
+      },
+      "alreadyIn": {
+        "title": "오늘 이미 입장",
+        "line": "다시 들여보내지 마세요.",
+        "note": "들어온 적이 없다고 하면 관리자가 콘솔에서 시간과 게이트를 확인해요."
+      },
+      "noEntriesLeft": {
+        "title": "남은 입장 없음",
+        "line": "이 티켓은 입장 가능한 모든 날에 입장했어요."
+      },
+      "void": {
+        "title": "환불 또는 취소됨",
+        "line": "이 티켓으로는 더 이상 입장할 수 없어요.",
+        "note": "안내 데스크로 보내 주세요. 같은 주문의 다른 티켓은 아직 유효할 수 있어요."
+      },
+      "notATicket": {
+        "title": "유효하지 않음",
+        "line": "이 코드는 이 행사의 티켓이 아니에요.",
+        "note": "티켓이 있는 이메일을 보여 달라고 하거나, 참조 번호로 주문을 찾으세요."
+      },
+      "wrongEvent": {
+        "title": "다른 행사",
+        "line": "이 티켓은 다른 행사 티켓이에요."
+      },
+      "notValidToday": {
+        "title": "오늘은 유효하지 않음",
+        "line": "이 티켓으로는 오늘 입장할 수 없어요."
+      },
+      "notChecked": {
+        "title": "확인 안 됨",
+        "line": "아직 들여보내지 마세요.",
+        "note": "{seconds}초 안에 응답이 없어서 이 티켓이 사용되었는지 알 수 없어요. 다시 시도하세요. 연결이 계속 끊기면 종이 명단에 참조 번호를 적고 관리자를 기다리세요."
+      },
+      "undone": {
+        "title": "취소됨",
+        "line": "이 티켓을 다시 스캔할 수 있어요.",
+        "lineFastPass": "이 티켓을 다시 스캔할 수 있고, 패스트 패스 사용도 돌려받았어요.",
+        "entryNotUsed": "입장 미사용",
+        "useGivenBack": "사용 반환됨"
+      },
+      "facts": {
+        "name": "이름",
+        "pass": "패스",
+        "ticket": "티켓",
+        "today": "오늘",
+        "dayOf": "입장 가능한 {count}일 중 {day}일째",
+        "letIn": "입장",
+        "by": "입장 기기",
+        "fastPass": "패스트 패스",
+        "usedThen": "그때 사용, {left}회 남음",
+        "notUsedThen": "그때 미사용",
+        "daysLeft": "남은 날",
+        "order": "주문",
+        "event": "행사",
+        "days": "날짜",
+        "code": "코드",
+        "tried": "시도",
+        "timeToday": "오늘 {time}"
+      },
+      "fastPass": {
+        "left": "패스트 패스: {count}회 남음",
+        "includedToday": "패스트 패스: 오늘 포함",
+        "none": "패스트 패스: 없음",
+        "allUsed": "패스트 패스: 모두 사용",
+        "usedLeft": "패스트 패스 사용 · {count}회 남음",
+        "usedIncluded": "패스트 패스 사용 · 포함",
+        "use": "패스트 패스 사용",
+        "undo": "패스트 패스 취소"
+      },
+      "undo": "취소",
+      "undoSeconds": "{seconds}초",
+      "scanNext": "다음 스캔",
+      "tryAgain": "다시 시도",
+      "scan": "스캔"
+    },
+    "find": {
+      "title": "참조 번호로 찾기",
+      "hint": "티켓이나 이메일에 있는 여섯 글자예요.",
+      "label": "참조 번호",
+      "submit": "찾기",
+      "results": "주문 {reference}의 티켓 {count, plural, other {#장}}",
+      "passFastPass": "{pass}, 패스트 패스: {count}회 남음",
+      "dayOfLeftToday": "남은 {count}일 중 오늘 {day}일째",
+      "admit": "입장",
+      "letInBy": "{time} {device}에서 입장",
+      "inToday": "오늘 입장",
+      "firstNamesOnly": "여기에는 이름만 나와요. 확실하지 않으면 구매자 이름을 물어보세요.",
+      "notFound": "이 행사에 그 참조 번호의 주문이 없어요. 한 글자씩 확인하거나 안내 데스크로 보내 주세요."
+    }
+  }
+}

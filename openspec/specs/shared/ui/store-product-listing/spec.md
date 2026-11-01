@@ -34,6 +34,7 @@ more can be loaded are decided by the application.
   - Loading more: the wait for the next products is shown without disturbing the ones already read
 - Accessibility
   - Keyboard and announcements: controls are operable without a pointer; busy and count changes are announced
+  - Struck price words: a discounted tile says which price is charged, in words the consumer supplies
 - No defaulted content
   - Application-owned copy: nothing visible is invented by the listing
 - Stock is a ceiling
@@ -1103,3 +1104,20 @@ copy.
 - **WHEN** a shopper focuses the search field and commits it
 - **THEN** no suggestion panel opens
 - **AND** the search commit is reported once with that draft
+
+### Requirement: A tile's struck price says which price is charged
+
+Where a tile strikes a list price, it SHALL read the copy's `salePriceLabel`
+before the price charged and `listPriceLabel` before the struck list price,
+both visually hidden, wherever the consumer supplies them. The tile supplies no
+word of its own; nothing on screen changes.
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-w4t rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-102 - A discounted tile names the price charged
+**Serves:** Accessibility - a discounted tile names the price charged
+
+- **GIVEN** a tile with a `price` and an `originalPrice`, and copy whose
+  `salePriceLabel` is `Sale price` and `listPriceLabel` is `Was`
+- **WHEN** a screen reader reads the tile
+- **THEN** it reads `Sale price` before the price and `Was` before the struck
+  list price, and neither word shows on screen

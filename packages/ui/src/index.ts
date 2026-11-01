@@ -883,23 +883,253 @@ export type {
   SortOption,
   UtilityLink,
 } from "./blocks/store-product-listing/types";
-// shared/ui/store-profile
+// grade10-site/ticketing/buying - checkout
 export {
-  ProfileCard,
-  type ProfileCardCopy,
-  type ProfileCardProps,
-} from "./blocks/store-profile/profile-card";
+  TicketAgreementCheck,
+  type TicketAgreementCheckCopy,
+  type TicketAgreementCheckProps,
+} from "./blocks/ticketing-checkout/ticket-agreement-check";
 export {
-  ProfileDetails,
-  type ProfileDetailsCopy,
-  type ProfileDetailsProps,
-} from "./blocks/store-profile/profile-details";
+  TicketCheckoutOrder,
+  type TicketCheckoutOrderCopy,
+  type TicketCheckoutOrderProps,
+} from "./blocks/ticketing-checkout/ticket-checkout-order";
 export {
-  ProfileForm,
-  type ProfileFormCopy,
-  type ProfileFormProps,
-} from "./blocks/store-profile/profile-form";
-export type { ProfileFormValues } from "./blocks/store-profile/types";
+  TicketCheckoutRefusalNotice,
+  type TicketCheckoutRefusalNoticeAction,
+  type TicketCheckoutRefusalNoticeCopy,
+  type TicketCheckoutRefusalNoticeProps,
+} from "./blocks/ticketing-checkout/ticket-checkout-refusal-notice";
+export {
+  TicketCodeUsedUpNotice,
+  type TicketCodeUsedUpNoticeCopy,
+  type TicketCodeUsedUpNoticeProps,
+} from "./blocks/ticketing-checkout/ticket-code-used-up-notice";
+export {
+  TicketDetailsStep,
+  type TicketDetailsStepBuyer,
+  type TicketDetailsStepCopy,
+  type TicketDetailsStepProps,
+  type TicketDetailsStepValues,
+} from "./blocks/ticketing-checkout/ticket-details-step";
+export {
+  TicketDiscountLine,
+  type TicketDiscountLineCopy,
+  type TicketDiscountLineProps,
+} from "./blocks/ticketing-checkout/ticket-discount-line";
+export {
+  TicketPointsAbout,
+  type TicketPointsAboutCopy,
+  type TicketPointsAboutProps,
+} from "./blocks/ticketing-checkout/ticket-points-about";
+export {
+  TicketPromoCodeField,
+  type TicketPromoCodeFieldCopy,
+  type TicketPromoCodeFieldProps,
+} from "./blocks/ticketing-checkout/ticket-promo-code-field";
+export {
+  TicketReviewStep,
+  type TicketReviewStepCopy,
+  type TicketReviewStepProps,
+} from "./blocks/ticketing-checkout/ticket-review-step";
+export type {
+  TicketCheckoutLine,
+  TicketCheckoutPayState,
+  TicketPromoCodeFieldStatus,
+} from "./blocks/ticketing-checkout/types";
+// grade10-admin/ticketing/door
+export {
+  DoorAnswer,
+  type DoorAnswerCopy,
+  type DoorAnswerFastPass,
+  type DoorAnswerProps,
+} from "./blocks/ticketing-door/door-answer";
+export {
+  DoorFind,
+  type DoorFindCopy,
+  type DoorFindProps,
+  type DoorFindResult,
+  type DoorFindTicket,
+} from "./blocks/ticketing-door/door-find";
+export {
+  DoorPasscodeChanged,
+  type DoorPasscodeChangedCopy,
+  type DoorPasscodeChangedProps,
+} from "./blocks/ticketing-door/door-passcode-changed";
+export {
+  DoorPhoneFrame,
+  type DoorPhoneFrameCopy,
+  type DoorPhoneFrameProps,
+} from "./blocks/ticketing-door/door-phone-frame";
+export {
+  type DoorRecentAdmission,
+  DoorRecentAdmissions,
+  type DoorRecentAdmissionsCopy,
+  type DoorRecentAdmissionsProps,
+} from "./blocks/ticketing-door/door-recent-admissions";
+export {
+  DoorScanner,
+  type DoorScannerCopy,
+  type DoorScannerProps,
+  type DoorScannerStatus,
+} from "./blocks/ticketing-door/door-scanner";
+export {
+  DoorSignIn,
+  type DoorSignInCopy,
+  type DoorSignInEvent,
+  type DoorSignInProps,
+  type DoorSignInStatus,
+} from "./blocks/ticketing-door/door-sign-in";
+export {
+  DoorUndoBar,
+  type DoorUndoBarCopy,
+  type DoorUndoBarProps,
+} from "./blocks/ticketing-door/door-undo-bar";
+export type {
+  DoorAnswerKind,
+  DoorDetail,
+  DoorLayout,
+} from "./blocks/ticketing-door/types";
+// grade10-site/ticketing/buying - the event page
+export {
+  EventGoodToKnow,
+  type EventGoodToKnowCopy,
+  type EventGoodToKnowHint,
+  type EventGoodToKnowProps,
+} from "./blocks/ticketing-event-page/event-good-to-know";
+export {
+  EventHeader,
+  type EventHeaderBadge,
+  type EventHeaderNotice,
+  type EventHeaderProps,
+} from "./blocks/ticketing-event-page/event-header";
+export {
+  type EventOrderFastPassPrompt,
+  type EventOrderLine,
+  EventOrderSummary,
+  type EventOrderSummaryCopy,
+  type EventOrderSummaryProps,
+} from "./blocks/ticketing-event-page/event-order-summary";
+export {
+  EventPageBody,
+  type EventPageBodyCopy,
+  type EventPageBodyProps,
+} from "./blocks/ticketing-event-page/event-page-body";
+export {
+  type EventPageMessageCopy,
+  EventPageState,
+  type EventPageStateProps,
+} from "./blocks/ticketing-event-page/event-page-state";
+export {
+  EventPassCard,
+  type EventPassCardCopy,
+  type EventPassCardProps,
+  type EventPassCardRowsProps,
+  type EventPassCardVipProps,
+} from "./blocks/ticketing-event-page/event-pass-card";
+export {
+  EventPassPriceText,
+  type EventPassPriceTextProps,
+} from "./blocks/ticketing-event-page/event-pass-price";
+export {
+  EventPassRow,
+  type EventPassRowCopy,
+  type EventPassRowProps,
+} from "./blocks/ticketing-event-page/event-pass-row";
+export {
+  EventPhoneOrderBar,
+  type EventPhoneOrderBarCopy,
+  type EventPhoneOrderBarProps,
+} from "./blocks/ticketing-event-page/event-phone-order-bar";
+export {
+  FastPassControl,
+  type FastPassControlCopy,
+  type FastPassControlProps,
+  type FastPassLine,
+  type FastPassSelection,
+} from "./blocks/ticketing-event-page/fast-pass-control";
+export type {
+  EventPassBadge,
+  EventPassOpening,
+  EventPassPerk,
+  EventPassPrice,
+  EventPassQuantity,
+} from "./blocks/ticketing-event-page/types";
+// grade10-site/ticketing/your-tickets
+export {
+  MyTicketsList,
+  type MyTicketsListCopy,
+  type MyTicketsListProps,
+  type MyTicketsListState,
+} from "./blocks/ticketing-orders/my-tickets-list";
+export {
+  TicketConfirmingDrawer,
+  type TicketConfirmingDrawerCopy,
+  type TicketConfirmingDrawerProps,
+  type TicketConfirmingDrawerStage,
+} from "./blocks/ticketing-orders/ticket-confirming-drawer";
+export {
+  TicketOrderPage,
+  type TicketOrderPageCopy,
+  type TicketOrderPageProps,
+  type TicketOrderPageTicket,
+} from "./blocks/ticketing-orders/ticket-order-page";
+export {
+  TicketOrderStatusBanner,
+  type TicketOrderStatusBannerCopy,
+  type TicketOrderStatusBannerKind,
+  type TicketOrderStatusBannerProps,
+} from "./blocks/ticketing-orders/ticket-order-status-banner";
+export {
+  TicketOrderSummary,
+  type TicketOrderSummaryCopy,
+  type TicketOrderSummaryProps,
+} from "./blocks/ticketing-orders/ticket-order-summary";
+export {
+  TicketPointsRow,
+  type TicketPointsRowCopy,
+  type TicketPointsRowKind,
+  type TicketPointsRowProps,
+} from "./blocks/ticketing-orders/ticket-points-row";
+export {
+  TicketQrCard,
+  type TicketQrCardCopy,
+  type TicketQrCardProps,
+  type TicketQrCardState,
+} from "./blocks/ticketing-orders/ticket-qr-card";
+export {
+  TicketReturnOutcome,
+  type TicketReturnOutcomeCopy,
+  type TicketReturnOutcomeKind,
+  type TicketReturnOutcomeProps,
+} from "./blocks/ticketing-orders/ticket-return-outcome";
+export type {
+  MyTicketsOrder,
+  TicketAct,
+  TicketOrderLine,
+  TicketTone,
+} from "./blocks/ticketing-orders/types";
+export {
+  SharedTicket,
+  type SharedTicketCopy,
+  type SharedTicketDeadCopy,
+  type SharedTicketProps,
+  type SharedTicketStatus,
+  type SharedTicketView,
+} from "./blocks/ticketing-shared-ticket/shared-ticket";
+// grade10-site/ticketing/waiting-line
+export {
+  TicketWaitingLineJoin,
+  type TicketWaitingLineJoinCopy,
+  type TicketWaitingLineJoinProps,
+  TicketWaitingLineOffer,
+  type TicketWaitingLineOfferCopy,
+  type TicketWaitingLineOfferProps,
+  TicketWaitingLinePlace,
+  type TicketWaitingLinePlaceCopy,
+  type TicketWaitingLinePlaceProps,
+  type TicketWaitingLineRefusal,
+} from "./blocks/ticketing-waiting-line/ticket-waiting-line";
 export {
   currencyExponent,
   DEFAULT_LISTING_CURRENCY,

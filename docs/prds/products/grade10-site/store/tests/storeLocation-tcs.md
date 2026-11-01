@@ -4,6 +4,7 @@ title: Store Location Test Cases
 
 # grade10-site/store/store-locator Test Cases
 
+**Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/store-locator
 
@@ -35,6 +36,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -75,6 +77,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -117,6 +120,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -154,6 +158,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -196,6 +201,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -225,6 +231,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -253,6 +260,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression

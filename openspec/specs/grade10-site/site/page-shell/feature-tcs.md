@@ -1,15 +1,13 @@
 # grade10-site/site/page-shell Test Cases
 
-**Status:** pending-review · 0/32
-**Drafts styled:** 2026-10-26, tcs-rules r7
+**Status:** pending-review · 0/34
+**Drafts styled:** 2026-10-30, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
 ## Background
 
-* `<site>` is the Grade10 site: staging answers Store and carries the account page; UAT and production, the auction launch, carry neither Store, the account page nor the membership page. A wide viewport is 1280 CSS pixels; a narrow one 375.
+* `<site>` is the Grade10 site: staging answers Store and carries the account page and the membership page; UAT and production, the auction launch, carry neither Store, the account page nor the membership page. A wide viewport is 1280 CSS pixels; a narrow one 375.
 * A held session read is the session request paused by the tester until released; a cart review is the basket read the header's count waits on.
-
-* `<site>` is the Grade10 site: staging answers Store and carries the account page; UAT and production, the auction launch, carry neither Store, the account page nor the membership page. A wide viewport is 1280 CSS pixels; a narrow one 375.
 
 ## g10.site-page-shell.US1: Collector opens any surface inside the site shell
 
@@ -179,8 +177,9 @@ Runs once per row of **Test data**.
 menu that shows my sign-in email with my avatar - my profile image where I
 chose one, else the initial of my email - above My
 Auctions and Sign Out on auction launch, with Profile first wherever the
-account page is carried and My Orders ahead of My Auctions once Store
-answers, and no item whose page the site withholds,
+account page is carried, Membership next wherever the membership page is
+carried, and My Orders ahead of My Auctions once Store answers, and no item
+whose page the site withholds,
 **so that** one place in the header takes me where I can go for this launch.
 
 <!-- trace:case id=g10.site-page-shell.TC-eek rev=1 covers=g10.site-page-shell.SC-0ao -->
@@ -210,7 +209,7 @@ answers, and no item whose page the site withholds,
 
 * It is a primary Sign In button, with no account icon; sign-in opens.
 
-<!-- trace:case id=g10.site-page-shell.TC-1su rev=2 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-79q,g10.site-page-shell.SC-o1v -->
+<!-- trace:case id=g10.site-page-shell.TC-1su rev=3 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-79q,g10.site-page-shell.SC-o1v,g10.site-page-shell.SC-90t,g10.site-page-shell.SC-3sh -->
 ### g10.site-page-shell.US3-TC6: The account menu shows the email and avatar, offering only what this build carries
 
 Runs once per row of **Test data**.
@@ -230,26 +229,32 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * A collector with no profile image is signed in on `<build>`.
+* The site's language is `<language>`, chosen in the language control.
 
 **Test data:**
 
-| `<build>` | `<items>` |
-| --- | --- |
-| UAT | My Auctions, Sign Out |
-| production | My Auctions, Sign Out |
-| staging | Profile, My Orders, My Auctions, Sign Out |
+| `<build>` | `<language>` | `<items>` | `<membership>` |
+| --- | --- | --- | --- |
+| UAT | English | My Auctions, Sign Out | not offered |
+| production | English | My Auctions, Sign Out | not offered |
+| staging | English | Profile, Membership, My Orders, My Auctions, Sign Out | labelled "Membership" |
+| staging | Traditional Chinese | Profile, Membership, My Orders, My Auctions, Sign Out | labelled 會員 |
+| staging | Simplified Chinese | Profile, Membership, My Orders, My Auctions, Sign Out | labelled 会员 |
 
 **Steps:**
 
-1. Click the account control, and read the menu.
-2. Open the store, then an auction listing, then Profile where offered, and read the account control on each.
+1. Open the auction.
+2. Select the account control, and read the menu.
+3. Open an auction listing, then the store where carried, then select Profile and Membership in the account menu where offered, reading the account control on each page.
 
 **Expected Results:**
 
-* A small avatar showing the initial of the sign-in email sits above the sign-in email, both above `<items>`, in that order and nothing else: no KYC, no Membership; the last reads Sign Out, in Title Case.
-* Step 2 names the same collector on every page, Profile with their name and email, and no other person.
+* Step 2 shows a small avatar with the sign-in email's initial, above the sign-in email.
+* Both sit above `<items>`, in that order and nothing else: no KYC.
+* Every item reads in `<language>`, and Membership is `<membership>`; in English the last reads Sign Out, in Title Case.
+* Step 3 names the same collector on every page, Profile with their name and email, and no other person.
 
-<!-- trace:case id=g10.site-page-shell.TC-asx rev=1 covers=g10.site-page-shell.SC-70a,g10.site-page-shell.SC-lcs,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-04a -->
+<!-- trace:case id=g10.site-page-shell.TC-asx rev=1 covers=g10.site-page-shell.SC-70a,g10.site-page-shell.SC-lcs,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-vsh -->
 ### g10.site-page-shell.US3-TC4: Each account menu item opens its destination
 
 Runs once per row of **Test data**.
@@ -275,13 +280,14 @@ Runs once per row of **Test data**.
 | `<item>` | `<opens>` |
 | --- | --- |
 | Profile | the account page at `/profile`, which also offers Sign Out |
+| Membership | the membership page at `/membership` |
 | My Orders | `/store/my-orders` |
 | My Auctions | `/auction/my-auctions` |
 | Sign Out | sign-out, the header then showing Sign In |
 
 **Steps:**
 
-1. Click `<item>`.
+1. Select `<item>` in the account menu.
 
 **Expected Results:**
 
@@ -324,6 +330,88 @@ Runs once per row of **Test data**.
 
 * The avatar above `<email_1>` shows `<image_1>`, both above the items, with no initial drawn over it.
 * The avatar shows the initial of `<email_1>` once `<image_1>` is removed.
+
+<!-- trace:case id=g10.site-page-shell.TC-k3w rev=1 covers=g10.site-page-shell.SC-gnd,g10.site-page-shell.SC-th1,g10.site-page-shell.SC-agf -->
+### g10.site-page-shell.US3-TC8: Each gated account item is omitted on its own, the order kept
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* The site is a build made to carry `<carried>` and withhold `<withheld>`, a set no lane carries.
+* A collector with no profile image is signed in on that build.
+
+**Test data:**
+
+| `<carried>` | `<withheld>` | `<items>` | `<first opens>` |
+| --- | --- | --- | --- |
+| the membership page and Store | the account page | Membership, My Orders, My Auctions, Sign Out | the membership page at `/membership` |
+| the account page and Store | the membership page | Profile, My Orders, My Auctions, Sign Out | the account page at `/profile` |
+| Store | the account page and the membership page | My Orders, My Auctions, Sign Out | My Orders at `/store/my-orders` |
+| the account page and the membership page | Store | Profile, Membership, My Auctions, Sign Out | the account page at `/profile` |
+
+**Steps:**
+
+1. Open the auction.
+2. Select the account control, and read the menu.
+3. Select the first item under the email.
+
+**Expected Results:**
+
+* Step 2 lists `<items>` under the email, in that order and nothing else.
+* Step 3 opens `<first opens>`, not the not-found surface.
+
+<!-- trace:case id=g10.site-page-shell.TC-r8d rev=1 covers=g10.site-page-shell.SC-ju2 -->
+### g10.site-page-shell.US3-TC9: Membership stays offered and opens while the loyalty programme cannot answer
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* A collector is signed in on staging.
+* Every read of the loyalty programme answers `<failure>`.
+
+**Test data:**
+
+| `<failure>` |
+| --- |
+| a 500 server error |
+| a dropped connection |
+
+**Steps:**
+
+1. Open the auction.
+2. Select the account control, and read the menu.
+3. Select Membership.
+
+**Expected Results:**
+
+* Step 2 lists Profile, Membership, My Orders, My Auctions, Sign Out, as when the programme answers.
+* Step 3 opens the membership page at `/membership`, not the not-found surface.
 
 ---
 
@@ -428,8 +516,10 @@ docs.
 none marked when no item owns it,
 **so that** I can tell where I am in the site without guessing.
 
-<!-- trace:case id=g10.site-page-shell.TC-19q rev=1 covers=g10.site-page-shell.SC-q3w,g10.site-page-shell.SC-xiu -->
-### g10.site-page-shell.US5-TC1: A listed surface marks its navigation item
+<!-- trace:case id=g10.site-page-shell.TC-19q rev=2 covers=g10.site-page-shell.SC-q3w,g10.site-page-shell.SC-mf7 -->
+### g10.site-page-shell.US5-TC1: A listed surface, or an answering address beneath it, marks its item
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -445,18 +535,34 @@ none marked when no item owns it,
 
 **Pre-conditions:**
 
-* A collector opens the store, or an address beneath it.
+* `<site>` answers Store, Auction and Shows.
+* `<listing_1>` is the address name of a lot a published listing holds.
+* Shows has a show published.
+* `<unknown product>` is a Store product address whose handle no product holds.
+
+**Test data:**
+
+| `<address>` | `<page>` | `<item>` |
+| --- | --- | --- |
+| `<site>/store` | The Store front | Store |
+| `<site>/auction/listings/<listing_1>` | The lot's page | Auction |
+| `<site>/shows` | The Shows page | Shows |
+| `<unknown product>` | The unknown product's not-found page, with its way back to the Store | Store |
 
 **Steps:**
 
-1. Read the header navigation.
+1. Open `<address>`.
+2. Read the header navigation.
 
 **Expected Results:**
 
-* Store is marked as the current page.
+* `<page>` loads.
+* `<item>` is marked as the current page; no other item is.
 
-<!-- trace:case id=g10.site-page-shell.TC-pm3 rev=2 covers=g10.site-page-shell.SC-xiu -->
-### g10.site-page-shell.US5-TC2: An unlisted surface marks no navigation item
+<!-- trace:case id=g10.site-page-shell.TC-pm3 rev=3 covers=g10.site-page-shell.SC-xiu -->
+### g10.site-page-shell.US5-TC2: An unlisted surface, or Page not found in a listed section, marks nothing
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -472,15 +578,32 @@ none marked when no item owns it,
 
 **Pre-conditions:**
 
-* A signed-in collector on staging opens `/profile`.
+* customer is signed in.
+* `<site>` carries the account page and answers Auction and Shows.
+* `<missing listing>` is an address name no listing holds.
+* For the Shows row, nothing is published on Shows.
+* `<unrecognized address>` is an address beneath no surface the site carries.
+* `<missing press article>` is a press release's address, opened from Press Releases in the footer, with its last part changed to one no article holds.
+
+**Test data:**
+
+| `<address>` | `<page>` |
+| --- | --- |
+| `<site>/profile` | The account page |
+| `<site>/auction/listings/<missing listing>` | Page not found, offering only Back to Home |
+| `<site>/shows` | Page not found, offering only Back to Home |
+| `<missing press article>` | Page not found, offering only Back to Home |
+| `<site>/<unrecognized address>` | Page not found, offering only Back to Home |
 
 **Steps:**
 
-1. Read the header navigation.
+1. Open `<address>`.
+2. Read the header navigation.
 
 **Expected Results:**
 
-* No item is marked current.
+* `<page>` loads.
+* No navigation item is marked current.
 
 ---
 
@@ -1195,14 +1318,6 @@ Runs once per row of **Test data**.
 * The header count is one per distinct active line in the reviewed basket, whatever its quantity: adjusted lines count, sold-out and unavailable lines do not, and checkout eligibility does not decide it.
 * The count refreshes when the member's cart loads, when a cart change settles, saved or failed, when the drawer opens, and on Retry, with the drawer open or closed; nothing polls, and a change from another device shows after the next of these.
 * The author chose to retain the last verified same-member count while a refresh is pending, including after failed cart updates; failed review hides the badge. Initial unknown counts and previous-member counts remain hidden.
-* Signed-in account entry opens a menu, the sign-in email with its small
-  initial avatar above the items, offering My Auctions and Sign Out on auction
-  launch, Profile first wherever the account page is carried, and My Orders
-  ahead of My Auctions once Store answers - not the account page directly;
-  Sign Out is offered from that menu and from the account page wherever it is
-  carried.
-* Membership follows the membership page by the rule Profile follows, and a
-  later change offers it; until then the menu never offers it.
 * The menu offers no item whose page the site withholds: My Orders, Profile or
   Membership.
 * The account label in place of the sign-in email is `SiteHeader`'s alone: a
@@ -1219,3 +1334,24 @@ Runs once per row of **Test data**.
 * An image that fails to load leaves the initial in the avatar and no broken image.
 * The initial is drawn as the header's avatar draws it today; this change does not set its casing or a rule for a first character outside Latin script.
 * A changed or removed profile image shows in the menu the next time it opens in the same session, with no reload; the header and the account page share one profile read.
+* Signed-in account entry opens a menu, the sign-in email with its small avatar
+  above the items, offering My Auctions and Sign Out on auction launch, Profile
+  first wherever the account page is carried, Membership right after it
+  wherever the membership page is carried, and My Orders ahead of My Auctions
+  once Store answers - not the account page directly; Sign Out is offered from
+  that menu and from the account page wherever it is carried.
+* Membership follows the membership page by the rule Profile follows: the menu
+  offers it wherever that page is carried, whatever the loyalty programme
+  answers, and opens on it where the account page is withheld.
+* Membership opens `/membership` for every signed-in collector: every account is
+  a member, so no collector is sent to a join page or elsewhere, and the page
+  shows its own state.
+* The grade10 account menu offers no Submissions: the site supplies none, so the
+  menu holds Profile, Membership, My Orders, My Auctions and Sign Out, each where
+  its page is carried, and nothing else.
+* The compact menu drawer marks exactly what the wide bar marks: nothing on
+  Page not found in a listed section, and Store on the unknown product's
+  not-found page.
+* An address beneath a listed surface whose page fails to load for a reason
+  other than not found keeps its section marked; only a not-found answer
+  marks nothing.

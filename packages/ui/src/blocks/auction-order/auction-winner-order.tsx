@@ -7,6 +7,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { Stack } from "@grade10/design-system/components/layout/stack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
@@ -15,6 +16,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
+  DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { toast } from "@grade10/design-system/components/overlays/toast";
@@ -501,51 +503,133 @@ function BankDetailsDialog({
   onOpenChange,
   open,
 }: BankDetailsDialogProps) {
+  const { amountDue, qr } = bankDetails;
+  const details = (className?: string) => (
+    <VStack
+      className={cn("min-w-0 flex-1", className)}
+      gap="sm"
+      hAlign="stretch"
+    >
+      {bankDetails.rows.map((row) =>
+        isBankPair(row) ? (
+          <div
+            className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2"
+            data-slot="winner-order-bank-pair"
+            key={`${row[0].label}-${row[1].label}`}
+          >
+            <BankDetailRow row={row[0]} />
+            <BankDetailRow row={row[1]} />
+          </div>
+        ) : (
+          <BankDetailRow key={row.label} row={row} />
+        ),
+      )}
+      <VStack className="w-full min-w-0" gap="xs" hAlign="stretch">
+        <BankDetailRow row={bankDetails.reference} />
+        <Text className="text-secondary-foreground" size="sm">
+          {bankDetails.reference.warning}
+        </Text>
+      </VStack>
+      {bankDetails.alert ? (
+        <Alert
+          dismissible={false}
+          layout="inline"
+          status="warning"
+          title={bankDetails.alert}
+        />
+      ) : null}
+    </VStack>
+  );
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent
-        className="max-h-[min(640px,calc(100dvh-2rem))] min-h-0"
-        showCloseButton
-      >
-        <DialogHeader>
+      <DialogContent className="max-w-xl gap-4" showCloseButton={false}>
+        <DialogHeader showCloseButton={false}>
           <DialogTitle>{bankDetails.title}</DialogTitle>
+          {bankDetails.invoice ? (
+            <DialogSubtext>{bankDetails.invoice}</DialogSubtext>
+          ) : null}
         </DialogHeader>
-        <DialogBody>
-          {bankDetails.qrSrc ? (
-            <img
-              alt={copy.bankDetailsQrAlt}
-              className="mx-auto size-40 rounded-lg border border-border object-contain"
-              src={bankDetails.qrSrc}
-            />
-          ) : null}
-          <dl className="grid w-full gap-3">
-            {bankDetails.rows.map((row) => (
-              <div
-                className="grid gap-1 sm:grid-cols-[minmax(0,12rem)_minmax(0,1fr)] sm:gap-4"
-                key={`${row.label}-${row.value}`}
+        <DialogBody tabIndex={0}>
+          <VStack className="w-full shrink-0" gap="xs" hAlign="stretch">
+            <span className="text-sm leading-5 text-secondary-foreground">
+              {amountDue.label}
+            </span>
+            <span className="text-xl leading-6 font-semibold tracking-tight text-foreground tabular-nums">
+              {amountDue.value}
+            </span>
+          </VStack>
+          <VStack
+            className="w-full rounded-xl border border-border bg-muted/40 p-4"
+            gap="md"
+            hAlign="stretch"
+          >
+            {qr ? (
+              <Stack
+                className="w-full sm:flex-row sm:gap-5"
+                gap="md"
+                align="stretch"
               >
-                <dt className="text-sm font-medium text-secondary-foreground">
-                  {row.label}
-                </dt>
-                <dd className="break-words text-sm text-foreground">
-                  {row.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-          {bankDetails.note ? (
-            <p className="text-sm leading-5 text-secondary-foreground">
-              {bankDetails.note}
-            </p>
-          ) : null}
+                <VStack
+                  className="w-full shrink-0 sm:w-auto"
+                  gap="sm"
+                  hAlign="center"
+                  vAlign="center"
+                >
+                  <img
+                    alt={copy.bankDetailsQrAlt}
+                    className="size-32 rounded-xl border border-border bg-background object-contain"
+                    src={qr.src}
+                  />
+                  <Text
+                    className="text-center text-secondary-foreground sm:max-w-36"
+                    size="sm"
+                  >
+                    {qr.hint}
+                  </Text>
+                </VStack>
+                {details(
+                  "border-t border-border pt-4 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5",
+                )}
+              </Stack>
+            ) : (
+              details()
+            )}
+          </VStack>
         </DialogBody>
         <DialogFooter>
-          <DialogClose render={<Button size="md" variant="outline" />}>
-            {copy.bankDetailsClose}
+          <DialogClose
+            render={
+              <Button
+                className="w-full sm:w-auto"
+                size="md"
+                variant="outline"
+              />
+            }
+          >
+            {copy.bankDetailsDone}
           </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+type BankRow = AuctionWinnerOrderBankDetails["rows"][number];
+
+function isBankPair(row: BankRow): row is Extract<BankRow, readonly unknown[]> {
+  return Array.isArray(row);
+}
+
+function BankDetailRow({ row }: { row: { label: string; value: string } }) {
+  return (
+    <VStack className="w-full min-w-0" gap="xs" hAlign="stretch">
+      <span className="text-sm leading-5 text-secondary-foreground">
+        {row.label}
+      </span>
+      <span className="text-sm leading-5 font-medium break-all text-foreground">
+        {row.value}
+      </span>
+    </VStack>
   );
 }
 

@@ -18,7 +18,7 @@ export const COPY: AuctionWinnerOrderProps["copy"] = {
   refundDetails: "Refund Details",
   winningBid: "Winning bid",
   bank: "Bank",
-  bankDetailsClose: auctionOrders.bankDetails.close,
+  bankDetailsDone: auctionOrders.bankDetails.done,
   bankDetailsQrAlt: auctionOrders.bankDetails.qrAlt,
 };
 

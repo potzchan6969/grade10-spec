@@ -1,7 +1,7 @@
 /*
  * tcs-rules r7 checks in `validate-test-cases.mjs`: the Grade10 store's cases
- * live only in its PRD folder, trace PRD rules or sections, carry no review
- * state, and every named rule of a page traced by rule has a case; a walk saves setup
+ * live only in its PRD folder, trace PRD rules or sections, carry their
+ * review status, and every named rule of a page traced by rule has a case; a walk saves setup
  * across cases along one route; `UI matching <story-id>` names a real story.
  */
 import assert from "node:assert/strict";
@@ -55,8 +55,12 @@ const PROPS = (trace, status = "draft") => [
   "",
 ];
 
-const STORE_PROPS = (trace) =>
-  PROPS(trace).filter((line) => !line.startsWith("* **Status:**"));
+const STORE_PROPS = PROPS;
+
+const STORE_HEADER = (drafts) => [
+  `**Status:** pending-review · 0/${drafts}`,
+  "**Drafts styled:** 2026-10-23, tcs-rules r7",
+];
 
 const PRD = "docs/prds/products/grade10-site/store";
 const PAGE = [
@@ -105,6 +109,7 @@ test("a store suite traces PRD sections and names its capabilities", () => {
     "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
     [`${PRD}/order-detail.md`]: PAGE,
     [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+      ...STORE_HEADER(1),
       "**Capabilities:** grade10-site/store/order-detail",
       "",
       "## order-detail#product-pictures: Product Pictures",
@@ -333,22 +338,34 @@ const RULES_PAGE = [
   "",
 ].join("\n");
 
+const retired = (extra) =>
+  extra.some((line) => line.startsWith("* **Retired:**"));
+
 const rulesStore = (cases) =>
   store({
     "openspec/specs/grade10-site/store/product-listing/spec.md": "# x\n",
     [`${PRD}/product-listing.md`]: RULES_PAGE,
     [`${PRD}/tests/productListing-tcs.md`]: storeSuite([
+      ...STORE_HEADER(
+        cases.filter(([, , extra = []]) => !retired(extra)).length,
+      ),
       "**Capabilities:** grade10-site/store/product-listing",
       "",
       "## product-listing#filters: Filters",
       "",
-      ...cases.flatMap(([n, trace, extra = []]) => [
-        `### g10.store-product-listing.TC${n}: Case ${n}`,
-        "",
-        ...STORE_PROPS(trace).slice(0, -12),
-        ...extra,
-        ...STORE_PROPS(trace).slice(-12),
-      ]),
+      ...cases.flatMap(([n, trace, extra = []]) => {
+        const props = STORE_PROPS(
+          trace,
+          retired(extra) ? "deprecated" : "draft",
+        );
+        return [
+          `### g10.store-product-listing.TC${n}: Case ${n}`,
+          "",
+          ...props.slice(0, -12),
+          ...extra,
+          ...props.slice(-12),
+        ];
+      }),
     ]),
   });
 
@@ -399,23 +416,93 @@ test("a retired case covers nothing", () => {
   assert.match(text, /rule \*\*Empty Option\*\* .* has no case/);
 });
 
-test("a store case or suite that carries a status warns", () => {
+test("a store case carries its review status, and its file the share", () => {
   const root = rulesStore([[1, "product-listing#filters"]]);
   const file = join(root, PRD, "tests/productListing-tcs.md");
-  const text0 = readFileSync(file, "utf8")
-    .replace(
-      "**Capabilities:**",
-      "**Status:** pending-review · 0/1\n**Capabilities:**",
-    )
-    .replace("* **Behaviour:**", "* **Status:** draft\n* **Behaviour:**");
-  writeFileSync(file, text0);
-  const { status, text } = out(root);
-  assert.equal(status, 0, text);
-  assert.match(
-    text,
-    /case `g10\.store-product-listing\.TC1` carries a \*\*Status:\*\* line/,
+  const ok = out(root);
+  assert.equal(ok.status, 0, ok.text);
+
+  writeFileSync(
+    file,
+    readFileSync(file, "utf8").replace("* **Status:** draft\n", ""),
   );
-  assert.match(text, /store suite carries a `\*\*Status:\*\*` line/);
+  const missing = out(root);
+  assert.notEqual(missing.status, 0, missing.text);
+  assert.match(
+    missing.text,
+    /case `g10\.store-product-listing\.TC1` is missing its \*\*Status\*\* property/,
+  );
+});
+
+test("a store file's status follows its cases", () => {
+  const root = rulesStore([[1, "product-listing#filters"]]);
+  const file = join(root, PRD, "tests/productListing-tcs.md");
+  writeFileSync(
+    file,
+    readFileSync(file, "utf8").replace(
+      "* **Status:** draft",
+      "* **Status:** actual",
+    ),
+  );
+  const stale = out(root);
+  assert.notEqual(stale.status, 0, stale.text);
+  assert.match(
+    stale.text,
+    /reads `\*\*Status:\*\* pending-review · 0\/1`, but its cases make it `\*\*Status:\*\* approved · 1\/1`/,
+  );
+  assert.match(stale.text, /holds no draft case/);
+  assert.match(stale.text, /is approved but carries no `\*\*Reviewed:\*\*/);
+
+  writeFileSync(
+    file,
+    readFileSync(file, "utf8")
+      .replace("pending-review · 0/1", "approved · 1/1")
+      .replace(
+        /\*\*Drafts styled:\*\*.*\n/,
+        "**Reviewed:** 2026-10-31, tcs-rules r7\n",
+      ),
+  );
+  const approved = out(root);
+  assert.equal(approved.status, 0, approved.text);
+});
+
+test("a retired store case is deprecated, and only a retired one", () => {
+  const root = rulesStore([
+    [1, "product-listing#filters"],
+    [2, "product-listing#filters", ["* **Retired:** 2026-10-27 - gone"]],
+  ]);
+  const file = join(root, PRD, "tests/productListing-tcs.md");
+  assert.equal(out(root).status, 0);
+
+  writeFileSync(
+    file,
+    readFileSync(file, "utf8").replace(
+      "* **Status:** deprecated",
+      "* **Status:** draft",
+    ),
+  );
+  const live = out(root);
+  assert.notEqual(live.status, 0, live.text);
+  assert.match(live.text, /carries \*\*Retired:\*\* but its status is `draft`/);
+
+  const bare = rulesStore([[1, "product-listing#filters"]]);
+  const bareFile = join(bare, PRD, "tests/productListing-tcs.md");
+  writeFileSync(
+    bareFile,
+    readFileSync(bareFile, "utf8")
+      .replace("* **Status:** draft", "* **Status:** deprecated")
+      .replace(
+        "**Status:** pending-review · 0/1",
+        "**Status:** pending-review · 0/0",
+      )
+      .replace(/\*\*Drafts styled:\*\*.*\n/, ""),
+  );
+  const unexplained = out(bare);
+  assert.notEqual(unexplained.status, 0, unexplained.text);
+  assert.match(
+    unexplained.text,
+    /is deprecated but carries no \*\*Retired:\*\*/,
+  );
 });
 
 test("a case sits under the heading of something it traces", () => {
@@ -424,6 +511,7 @@ test("a case sits under the heading of something it traces", () => {
       "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
       [`${PRD}/order-detail.md`]: `${PAGE}\n## Order Link\n\nIt opens.\n`,
       [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+        ...STORE_HEADER(1),
         "**Capabilities:** grade10-site/store/order-detail",
         "",
         "## Ungrouped",
@@ -509,6 +597,7 @@ test("a section trace warns where the section names rules", () => {
       "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
       [`${PRD}/order-detail.md`]: `${PAGE}\n- ${rule}**Picture** — the item's photo\n`,
       [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+        ...STORE_HEADER(1),
         "**Capabilities:** grade10-site/store/order-detail",
         "",
         "## order-detail#product-pictures: Product Pictures",
@@ -532,6 +621,7 @@ test("a numbered item's bold name is a rule, so its order can be the rule", () =
     "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
     [`${PRD}/order-detail.md`]: `${PAGE}\n1. **Picture** — the item's photo\n2. **Name** — the item's title\n`,
     [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+      ...STORE_HEADER(1),
       "**Capabilities:** grade10-site/store/order-detail",
       "",
       "## order-detail#product-pictures: Product Pictures",
@@ -552,6 +642,7 @@ test("a row of a table headed Rule is a rule", () => {
     "openspec/specs/grade10-site/store/order-detail/spec.md": "# x\n",
     [`${PRD}/order-detail.md`]: `${PAGE}\n| Rule | Value |\n| --- | --- |\n| Picture | **1** per item |\n| ❓ Zoom | TBC |\n\n| Item | Note |\n| --- | --- |\n| Not a rule | x |\n`,
     [`${PRD}/tests/orderDetails-tcs.md`]: storeSuite([
+      ...STORE_HEADER(1),
       "**Capabilities:** grade10-site/store/order-detail",
       "",
       "## order-detail#product-pictures: Product Pictures",

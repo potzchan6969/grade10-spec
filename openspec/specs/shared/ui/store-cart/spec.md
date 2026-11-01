@@ -11,7 +11,7 @@ collapsible promo code redemption and a checkout CTA.
 - Drawer export contract
   - Cart drawer components: one cart surface every store application imports rather than builds
   - Cart drawer types: names the props, copy, item, and promo shapes an application supplies
-  - Unavailable status: marks a line whose product is no longer in the store catalogue, distinct from sold out and adjusted
+  - Unavailable status: marks a line whose product left the store's sales channel or whose variant no longer exists, distinct from sold out and adjusted
   - Toast copy field: carries the removal message on drawer copy the consumer supplies
   - Empty copy fields: carries the empty-cart title and optional description on the drawer copy and body props the consumer supplies
 - Cart contents
@@ -49,6 +49,7 @@ collapsible promo code redemption and a checkout CTA.
   - Removed: the code's discount leaves, and the sale returns to lines the code had taken it from while it still runs
   - Held, cannot apply: a held code that cannot apply is listed apart from the ones that can, muted with its reason and no Apply
   - Near-expiry detail: lets a consumer mark an expiry detail line for the shared promo ticket's existing emphasis treatment
+  - Which price is charged: hidden words say which of a struck list price and the price charged is which
 - Product pictures
   - Supplied picture: shows the consumer's picture using existing optional props
   - Missing alt text: retains the item-name fallback
@@ -58,6 +59,11 @@ collapsible promo code redemption and a checkout CTA.
   - Current display: retain accepted figures and entered values while waiting
   - Recovery: restore permitted actions without replaying callbacks
   - Dismissal: leave through Close, backdrop click or Escape
+- Tender action gating
+  - Typed promo entry: exposes code entry only when the application can apply a typed code
+  - Held-code selection: exposes selection only when the application can apply a held code
+  - Points entry: exposes points entry only when the application can apply points
+  - Tender removal: exposes removal only when the application can remove applied tender
 
 ## Requirements
 
@@ -112,14 +118,15 @@ SHALL take the same `emptyTitle` and optional `emptyDescription`.
 ### Requirement: Cart item status includes unavailable
 
 `CartItemStatus` SHALL be exactly `default`, `adjusted`, `soldOut`, and
-`unavailable`.
+`unavailable`. The consumer SHALL assign each line the status its cart review
+answers; for Grade10, `grade10-site/store/cart-validation` decides it.
 
 | Status | Meaning |
 | --- | --- |
-| `default` | Line is active and sellable as shown |
-| `adjusted` | Quantity was reduced for low stock; row stays visible |
-| `soldOut` | Variant has no stock; row stays visible with sold-out treatment |
-| `unavailable` | Product is no longer in the store catalogue; removed after open loading |
+| `default` | The shop can fill the line as it stands |
+| `adjusted` | The quantity was reduced to what the shop can fill; the row stays visible |
+| `soldOut` | The shop no longer offers the variant for sale; the row stays visible with sold-out treatment |
+| `unavailable` | The product left the store's sales channel, or the variant no longer exists; removed after open loading |
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-0wv rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-12 - Status values are the four named states
@@ -257,8 +264,8 @@ SHALL show exactly one toast whose message is the consumer-supplied
 `unavailableItemsRemoved` copy. When no line is `unavailable`, `CartDrawer`
 SHALL NOT show that toast.
 
-`unavailable` means the product is no longer in the store catalogue (taken off
-sale). It is not `soldOut` and not `adjusted`.
+`unavailable` means what `Cart item status includes unavailable` states. It is
+not `soldOut` and not `adjusted`.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-jbs rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-10 - Delisted items clear after loading with one toast
@@ -942,3 +949,115 @@ for applicable and inapplicable tickets without changing their supplied copy.
 - **THEN** the ticket keeps its existing muted treatment and refusal reason
 - **AND** it offers no Apply control while the expiry detail uses the existing emphasis treatment
 - **AND** the title, detail text, code and list position remain unchanged
+
+### Requirement: Promo actions render only when they can act
+
+The cart drawer SHALL render typed promo-code entry and its Apply control only
+when the consumer supplies `onApplyPromo`. It SHALL render an applicable held
+promo code's Apply control only when the consumer supplies
+`onSelectHeldPromo`. A missing callback SHALL make the corresponding action
+absent, not present and inert or visibly disabled. Supplied held-code labels,
+eligibility details, and refusal reasons SHALL remain visible.
+
+When the matching callbacks are supplied, the drawer SHALL preserve the
+existing interactive behavior and state-specific disabled and loading rules.
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-ka5 rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-32 - Promo context is display-only without callbacks
+**Serves:** shared-ui-store-cart-US-09 - the promo context is display-only without callbacks
+
+- **GIVEN** an open cart drawer with one applicable and one inapplicable held promo code
+- **AND** the consumer supplies no typed-code apply or held-code selection callback
+- **WHEN** the shopper opens the promo-code view
+- **THEN** both held codes remain visible with their supplied labels and details
+- **AND** the inapplicable code's refusal reason remains visible
+- **AND** the typed-code input and Apply control are absent
+- **AND** the applicable held code has no Apply control
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-rxp rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-33 - Promo callbacks expose the matching actions
+**Serves:** shared-ui-store-cart-US-09 - promo callbacks expose the matching actions
+
+- **GIVEN** an open cart drawer with an applicable held promo code
+- **AND** the consumer supplies typed-code apply and held-code selection callbacks
+- **WHEN** the shopper opens the promo-code view
+- **THEN** the typed-code input and Apply control are present
+- **AND** the applicable held code has an Apply control
+- **AND** activating each action invokes only its matching callback
+
+### Requirement: Points actions render only when they can act
+
+The cart drawer SHALL preserve supplied points balance, basket ceiling, and
+conversion-rate context whenever points context is supplied. It SHALL render
+the points amount input and Apply control only when the consumer supplies
+`onApplyPoints`. It SHALL render Use max only when the consumer supplies
+`onUseMaxPoints`. A missing callback SHALL make the corresponding action
+absent, not present and inert or visibly disabled. The drawer SHALL keep the
+reviewed cart summary unchanged when no points-apply callback is supplied.
+
+When the matching callbacks are supplied, the drawer SHALL preserve the
+existing interactive behavior and state-specific disabled and loading rules.
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-x7g rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-34 - Points context is display-only without callbacks
+**Serves:** shared-ui-store-cart-US-09 - the points context is display-only without callbacks
+
+- **GIVEN** an open cart drawer with supplied points balance, basket ceiling, and conversion-rate context
+- **AND** the consumer supplies no points-apply or Use max callback
+- **WHEN** the shopper opens the points disclosure
+- **THEN** the supplied points context remains visible
+- **AND** the points amount input, Apply control, and Use max control are absent
+- **AND** no points amount is applied and the cart summary is unchanged
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-q34 rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-35 - Points callbacks expose the matching actions
+**Serves:** shared-ui-store-cart-US-09 - points callbacks expose the matching actions
+
+- **GIVEN** an open cart drawer with supplied points balance, basket ceiling, and conversion-rate context
+- **AND** the consumer supplies points-apply and Use max callbacks
+- **WHEN** the shopper opens the points disclosure
+- **THEN** the points amount input, Apply control, and Use max control are present
+- **AND** activating Apply or Use max invokes only its matching callback
+- **AND** the supplied points context remains visible
+
+### Requirement: Tender actions are gated independently
+
+The drawer SHALL evaluate each tender callback independently. The presence or
+absence of one callback SHALL NOT add, remove, or disable an unrelated tender
+action. Applied promo and points values SHALL remain displayable without their
+matching removal callbacks, but the corresponding Remove control SHALL be
+absent when that callback is missing. Promo and points disclosure controls
+SHALL likewise be absent when their matching state-change callbacks are
+missing.
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-ufi rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-36 - One missing callback removes only its action
+**Serves:** shared-ui-store-cart-US-09 - one missing callback removes only its action
+
+- **GIVEN** an open cart drawer with all tender context and callbacks supplied except one callback
+- **WHEN** the drawer renders the tender controls
+- **THEN** only the action owned by the missing callback is absent
+- **AND** unrelated supplied actions remain available under their normal state rules
+- **AND** rendering or activating an unrelated action does not invoke the missing callback
+
+### Requirement: A struck price says which price is charged
+
+Wherever a cart line strikes a list price, the line SHALL read
+`CartItemCopy.salePriceLabel` before the price charged and
+`CartItemCopy.listPriceLabel` before the struck list price, both visually
+hidden, so a screen reader says which price the shopper pays. Both words are
+required on `CartItemCopy`; the block supplies no word of its own. A line with
+no list price reads its price alone, with neither word. Nothing on screen
+changes.
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-h7q rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-67 - A struck line names the price charged
+**Serves:** shared-ui-store-cart-US-13 - Shopper reads a site sale on the cart lines
+
+- **GIVEN** a line with a `price` and an `originalPrice`, and copy whose
+  `salePriceLabel` is `Sale price` and `listPriceLabel` is `Was`
+- **WHEN** a screen reader reads the line
+- **THEN** it reads `Sale price` before the price and `Was` before the struck
+  list price
+- **AND** neither word shows on screen
+- **AND** a line with no `originalPrice` reads its price with neither word

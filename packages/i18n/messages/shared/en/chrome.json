@@ -45,5 +45,7 @@
     "help": "Help",
     "shipping": "Shipping",
     "orders": "Orders & Returns"
-  }
+  },
+  "myTickets": "My Tickets",
+  "myTicketsBadge": "New"
 }
