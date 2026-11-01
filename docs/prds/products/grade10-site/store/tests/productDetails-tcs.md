@@ -11,6 +11,7 @@ title: Store Product Details Test Cases
 ## Background
 
 * `<page url>` is `<g10url>/store/products/<page product handle>`.
+* `<page product>` is a product for sale on the store; `<page product handle>` is its handle in the shop.
 
 ## Walk 1: Read and buy one product
 
@@ -130,6 +131,13 @@ Runs once per row of **Test data**.
 
 * `<product>` is for sale, its title typed in English in the shop, with no translation anywhere.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| product | A product for sale whose title is typed in English in the shop, with no translation |
+| handle | `<product>`'s handle in the shop |
+
 **Steps:**
 
 1. Open `<g10url>/tc/store/products/<handle>` and read the title.
@@ -168,10 +176,15 @@ Runs once per row of **Test data**.
 | none |
 | `/tc` |
 
+| Field | Value |
+| --- | --- |
+| other product | A second product for sale, other than `<page product>` |
+| other product handle | `<other product>`'s handle in the shop |
+
 **Steps:**
 
-1. Open `<prefix>/store/products/<page product handle>` and read the shipping and pick-up lines.
-2. Open `<prefix>/store/products/<other product handle>` and read them again.
+1. Open `<g10url><prefix>/store/products/<page product handle>` and read the shipping and pick-up lines.
+2. Open `<g10url><prefix>/store/products/<other product handle>` and read them again.
 3. Select the store name in the pick-up line.
 
 **Expected Results:**
@@ -253,7 +266,7 @@ Runs once per row of **Test data**.
 
 * Headed You may also like, holding the row's cards, UI matching store-cross-sell-blocks-storeproductrelatedrail--picks-and-similar.
 * `<page product>` is not in it, and nothing names a card as chosen or similar.
-* The screen reader says `Sale price` before the first pick's current price and `Was` before its earlier price; neither label appears on screen.
+* The screen reader says `store.salePriceLabel` ("Sale price") before the first pick's current price and `store.listPriceLabel` ("Was") before its earlier price; neither label appears on screen.
 
 <!-- trace:case id=g10.store-product-page.TC-6cv rev=1 -->
 ### g10.store-product-page.TC12: A rail card opens its own page and offers no cart
@@ -273,6 +286,13 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<page product>` shows a rail holding `<rail product>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| rail product | A card in `<page product>`'s rail |
+| rail product handle | `<rail product>`'s handle in the shop |
 
 **Steps:**
 
@@ -309,9 +329,16 @@ Runs once per row of **Test data**.
 
 * `<sold-out product>` has nothing for sale, by the recipe "Sell a card out".
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| sold-out product | A product with nothing for sale, by the recipe "Sell a card out" |
+| sold-out product handle | `<sold-out product>`'s handle in the shop |
+
 **Steps:**
 
-1. Open `/store/products/<sold-out product handle>` and read the card and its purchase controls.
+1. Open `<g10url>/store/products/<sold-out product handle>` and read the card and its purchase controls.
 2. Try to add it, then open Cart from the header.
 
 **Expected Results:**
@@ -383,8 +410,8 @@ Runs once per row of **Test data**.
 
 | Address | Shown | Its action |
 | --- | --- | --- |
-| `/store/products/no-such-card-<today's date>` | the store's not-found state inside the store's frame, in the page's language, UI matching store-product-page-screens-product-detail--unknown-product-address | Browse the store opens the product listing in the same tab |
-| `/no-such-page-<today's date>`, outside any owned surface | the site's not-found page | Home |
+| `<g10url>/store/products/no-such-card-<today's date>` | the store's not-found state inside the store's frame, in the page's language, UI matching store-product-page-screens-product-detail--unknown-product-address | Browse the store opens the product listing in the same tab |
+| `<g10url>/no-such-page-<today's date>`, outside any owned surface | the site's not-found page | Home |
 
 **Steps:**
 
@@ -416,7 +443,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed out) is on `/store/products/<short product handle>`, with an empty cart; `<short product>` has 2 for sale.
+* customer(signed out) is on `<g10url>/store/products/<short product handle>`, with an empty cart; `<short product>` has 2 for sale.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| short product | A product for sale with exactly 2 in stock (fixed: one less than the quantity added) |
+| short product handle | `<short product>`'s handle in the shop |
 
 **Steps:**
 
@@ -511,7 +545,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The row's price, strike and badge.
-* For each row with a struck price, the screen reader says `Sale price` before the current price and `Was` before the struck price; neither label appears on screen.
+* For each row with a struck price, the screen reader says `store.salePriceLabel` ("Sale price") before the current price and `store.listPriceLabel` ("Was") before the struck price; neither label appears on screen.
 
 ---
 
@@ -635,6 +669,13 @@ Runs once per row of **Test data**.
 
 * `<page product>` is sold out, by the recipe "Sell a card out"; `<sold-out pick>`, one of its picks, is sold out too.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| sold-out pick | One of `<page product>`'s picks, sold out by the recipe "Sell a card out" |
+| sold-out pick handle | `<sold-out pick>`'s handle in the shop |
+
 **Steps:**
 
 1. Open `<page url>` and read the rail.
@@ -664,7 +705,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<page product>` has picks `<pick A>` and `<pick B>`, in that order; admin is in the shop's admin.
+* `<page product>` has picks `<pick A>` and `<pick B>`, in that order; admin is in the store's Shopify admin.
 
 **Test data:**
 
