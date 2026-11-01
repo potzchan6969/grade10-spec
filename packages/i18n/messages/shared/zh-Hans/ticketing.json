@@ -70,7 +70,7 @@
       "quantityLabel": "候补门票数量：{pass}",
       "decrement": "少候补一张：{pass}",
       "increment": "多候补一张：{pass}",
-      "offerEnded": "你的保留已结束，门票已给下一位。你可以重新加入，排在最后。",
+      "offerEnded": "你的保留已结束，门票已释出。你可以重新加入，排在最后。",
       "place": {
         "title": "你已在候补名单中",
         "wanted": "候补 {count, plural, other {# 张门票}}",
@@ -383,7 +383,7 @@
     },
     "offerEnded": {
       "title": "这次保留已结束。",
-      "body": "门票已给候补名单上的下一位。"
+      "body": "门票已释出。"
     },
     "codeUsedUp": {
       "title": "{code} 的最后一次使用刚被用掉。",

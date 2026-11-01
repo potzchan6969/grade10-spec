@@ -70,7 +70,7 @@
       "quantityLabel": "대기할 티켓 수: {pass}",
       "decrement": "한 장 덜 대기: {pass}",
       "increment": "한 장 더 대기: {pass}",
-      "offerEnded": "보관 기간이 끝나 티켓이 다음 분께 넘어갔어요. 맨 뒤로 다시 등록할 수 있어요.",
+      "offerEnded": "보관 기간이 끝나 티켓이 풀렸어요. 맨 뒤로 다시 등록할 수 있어요.",
       "place": {
         "title": "대기 명단에 있어요",
         "wanted": "{count, plural, other {티켓 #장}} 대기 중",
@@ -383,7 +383,7 @@
     },
     "offerEnded": {
       "title": "보관 기간이 끝났어요.",
-      "body": "티켓이 다음 대기자에게 넘어갔어요."
+      "body": "티켓이 풀렸어요."
     },
     "codeUsedUp": {
       "title": "{code}의 마지막 사용 기회가 방금 사용되었어요.",
