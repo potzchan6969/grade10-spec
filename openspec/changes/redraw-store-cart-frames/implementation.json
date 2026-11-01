@@ -57,6 +57,13 @@
       "components": [
         "web"
       ]
+    },
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "da8e6c4d2ac4d2fba15283b91f72bd01ee4c071a",
+      "components": [],
+      "scope": "no-runtime",
+      "reason": "The shared price-label components, locale catalogue and Storybook coverage are maintained in this repository; Grade10 web consumes the shared UI through its pinned submodule, and this repository has no separate runtime deployment for this change."
     }
   ]
 }

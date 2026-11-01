@@ -31,5 +31,20 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "0b20a3a6d9cf6a6d6b17bc206372a60f707f1280",
+      "components": [
+        "web"
+      ]
+    },
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "e3f06c7f1c7bf6503e2ef802819bc76fdb10c8a0",
+      "components": [],
+      "scope": "no-runtime",
+      "reason": "The shared Cart Drawer callback gating and Storybook coverage are maintained in this repository; Grade10 web consumes the shared UI through its pinned submodule, and this repository has no separate runtime deployment for this change."
+    }
+  ]
 }
