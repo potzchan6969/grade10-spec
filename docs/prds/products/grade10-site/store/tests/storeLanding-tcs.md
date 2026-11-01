@@ -4,8 +4,8 @@ title: Store Landing Test Cases
 
 # grade10-site/store/home Test Cases
 
-**Status:** pending-review · 0/11
-**Drafts styled:** 2026-10-24, tcs-rules r7
+**Status:** approved · 11/11
+**Reviewed:** 2026-11-01, tcs-rules r7
 **Capabilities:** grade10-site/store/home
 
 ## Background
@@ -48,12 +48,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** home#collection-grid/tiles
 
 **Pre-conditions:**
@@ -86,12 +86,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** home#merchandised-row/cards
 
 **Pre-conditions:**
@@ -122,12 +122,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** home#merchandised-row/card-status
 
 **Pre-conditions:**
@@ -151,7 +151,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The row's card, said the way the browse listing says it.
-* For either row with an earlier price, the screen reader says `Sale price` before the current price and `Was` before the earlier price; neither label appears on screen.
+* For either row with an earlier price, the screen reader says `store.salePriceLabel` ("Sale price") before the current price and `store.listPriceLabel` ("Was") before the earlier price; neither label appears on screen.
 
 <!-- trace:case id=g10.store-home.TC-egn rev=1 -->
 ### g10.store-home.TC7: A card opens the product's own page and offers no cart
@@ -162,7 +162,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -206,12 +206,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation
 * **Trace:** home#hero/before-any-script, home#hero/hero
 
 **Pre-conditions:**
@@ -243,7 +243,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -253,7 +253,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on a site that carries the store, such as staging.
+* customer is signed out on a site that carries the store.
 
 **Test data:**
 
@@ -277,7 +277,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -290,10 +290,17 @@ Runs once per row of **Test data**.
 * The catalogue publishes `<existing collection>`; `<new collection>` is ready and not yet published; the site deployment stays fixed throughout.
 * admin can open the shop's admin.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| existing collection | A collection the shop already publishes |
+| new collection | A collection with at least one product for sale, saved but not yet published |
+
 **Steps:**
 
 1. Open `<g10url>/store` and read the grid.
-2. Publish `<new collection>` in the shop's admin, wait 60 seconds, then reload `<g10url>/store`.
+2. Publish `<new collection>` in the store's Shopify admin, wait 60 seconds, then reload `<g10url>/store`.
 
 **Expected Results:**
 
@@ -309,7 +316,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -347,7 +354,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -385,12 +392,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** home#loading-and-errors/nothing-to-show
 
 **Pre-conditions:**
@@ -419,7 +426,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -429,11 +436,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on a site where the store is not public, such as production today.
+* customer is signed out on `<site without public store url>`, a site where the store is not public.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| site without public store url | The address of a Grade10 site where the store is not public |
 
 **Steps:**
 
-1. Open `/store` on that site.
+1. Open `<site without public store url>/store`.
 
 **Expected Results:**
 
