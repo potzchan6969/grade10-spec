@@ -17,3 +17,4 @@ tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 5.1;
 hands:
   pm: "@ecchochan"
   design: "@tangconst"
+  dev: "@kinisworking"
