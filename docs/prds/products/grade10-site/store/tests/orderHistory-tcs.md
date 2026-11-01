@@ -4,7 +4,7 @@ title: Store Order History Test Cases
 
 # grade10-site/store/order-history Test Cases
 
-**Status:** pending-review · 10/13
+**Status:** pending-review · 11/13
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/order-history, grade10-site/store/checkout
 
@@ -385,7 +385,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
