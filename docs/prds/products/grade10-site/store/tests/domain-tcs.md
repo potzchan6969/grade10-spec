@@ -4,7 +4,7 @@ title: Store Test Cases
 
 # grade10-site/store Test Cases
 
-**Status:** pending-review · 4/7
+**Status:** pending-review · 6/7
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/home, grade10-site/store/product-listing, grade10-site/store/product-page, grade10-site/store/cart-drawer, grade10-site/store/checkout, grade10-site/store/order-detail, grade10-site/store/order-history
 
@@ -200,7 +200,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -239,7 +239,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
