@@ -4,7 +4,7 @@ title: Store Test Cases
 
 # grade10-site/store Test Cases
 
-**Status:** pending-review · 0/7
+**Status:** pending-review · 4/7
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/home, grade10-site/store/product-listing, grade10-site/store/product-page, grade10-site/store/cart-drawer, grade10-site/store/checkout, grade10-site/store/order-detail, grade10-site/store/order-history
 
@@ -31,13 +31,13 @@ title: Store Test Cases
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-listing#collection-page/entry, product-listing#links-and-back-button/address, product-listing#filters/narrowings-in-force, product-page
+* **Trace:** home#collection-grid/tiles, product-listing#collection-page/entry, product-listing#links-and-back-button/address, product-listing#filters/narrowings-in-force, product-page#product-card/card
 
 **Pre-conditions:**
 
@@ -73,13 +73,13 @@ title: Store Test Cases
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-page#buy/signed-out, cart#checkout/guest, order-detail#order-link/added, order-detail#order-link/receipt-line, order-detail#order-link/account-toast, checkout#guest-checkout/joining-an-account, checkout#guest-checkout/post-checkout-account, checkout#guest-checkout/no-points
+* **Trace:** home#merchandised-row/opens-never-sells, product-page#buy/signed-out, cart#checkout/guest, order-detail#order-link/added, order-detail#order-link/receipt-line, order-detail#order-link/account-toast, checkout#guest-checkout/joining-an-account, checkout#guest-checkout/post-checkout-account, checkout#guest-checkout/no-points
 
 **Pre-conditions:**
 
@@ -118,13 +118,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-listing#products-display/sale-price, product-page, cart#reviewing-the-cart/current-read
+* **Trace:** home#merchandised-row/card-status, product-listing#products-display/sale-price, product-page#product-card/sale-price, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
@@ -158,13 +158,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** home, product-listing#products-display/stock, product-page, cart#reviewing-the-cart/lines-whose-product-left-the-shop, cart#reviewing-the-cart/current-read
+* **Trace:** home#merchandised-row/card-status, product-listing#products-display/stock, product-page#buy/sold-out, cart#reviewing-the-cart/lines-whose-product-left-the-shop, cart#reviewing-the-cart/current-read
 
 **Pre-conditions:**
 
