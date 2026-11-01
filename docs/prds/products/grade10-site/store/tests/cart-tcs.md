@@ -61,7 +61,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#reviewing-the-cart/unresolved, cart#reviewing-the-cart/current-read
+* **Trace:** cart#reviewing-the-cart/unresolved, cart#reviewing-the-cart/current-read, discounts#cart-footer/shipping
 
 **Pre-conditions:**
 
@@ -104,7 +104,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code/typed
+* **Trace:** cart#promo-code/typed, discounts#kinds-of-discount/codes, discounts#kinds-of-discount/public-code
 
 **Pre-conditions:**
 
@@ -140,7 +140,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code/picked, cart#promo-code/public-codes, cart#promo-code/held-codes
+* **Trace:** cart#promo-code/picked, cart#promo-code/public-codes, cart#promo-code/held-codes, discounts#public-codes/order-beside-wallet-codes, discounts#public-codes/shown-in-the-drawer
 
 **Pre-conditions:**
 
@@ -288,7 +288,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#points/applied, cart#points/offered, cart#points/rate, cart#points/removing-points
+* **Trace:** cart#points/applied, cart#points/offered, cart#points/rate, cart#points/removing-points, discounts#kinds-of-discount/points, discounts#order-of-application/points
 
 **Pre-conditions:**
 
@@ -359,7 +359,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#checkout/created-from-the-drawer, cart#checkout/sent
+* **Trace:** cart#checkout/created-from-the-drawer, cart#checkout/sent, checkout#proceed-to-checkout/pay, checkout#proceed-to-checkout/price-check, checkout#on-shopifys-page/the-cart, discounts#online-checkout/points, discounts#online-checkout/what-a-checkout-carries
 
 **Pre-conditions:**
 
@@ -906,7 +906,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#struck-price-on-a-cart-line/cut-by-the-shop, discounts#struck-price-on-a-cart-line/on-sale, discounts#cart-footer/order-discount
+* **Trace:** discounts#struck-price-on-a-cart-line/cut-by-the-shop, discounts#struck-price-on-a-cart-line/on-sale, discounts#cart-footer/order-discount, discounts#cart-footer/subtotal, discounts#kinds-of-discount/buy-x-get-y, discounts#kinds-of-discount/product-discount, discounts#kinds-of-discount/sale-price, discounts#kinds-of-discount/site-discounts
 
 **Pre-conditions:**
 
@@ -987,7 +987,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#cart-footer/order-discount, discounts#cart-footer/code, discounts#cart-footer/points, discounts#cart-footer/estimated-total, discounts#order-of-application/minimum
+* **Trace:** discounts#cart-footer/order-discount, discounts#cart-footer/code, discounts#cart-footer/points, discounts#cart-footer/estimated-total, discounts#order-of-application/minimum, discounts#one-discount-at-a-time/outside-the-count
 
 **Pre-conditions:**
 
@@ -1210,7 +1210,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** cart#promo-code/gift
+* **Trace:** cart#promo-code/gift, discounts#kinds-of-discount/gift
 
 **Pre-conditions:**
 
@@ -1225,6 +1225,36 @@ Runs once per row of **Test data**.
 
 * Step 1: `<gift product>` as a line at no charge, and the total unchanged by it.
 * Step 2: no code row, and `<gift code>` listed again.
+
+---
+
+<!-- trace:case id=g10.store-cart.TC-9px rev=1 -->
+#### g10.store-cart.TC29: A percentage code takes what Shopify's checkout takes, rounded the shop's way
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cart#promo-code/the-shops-figure, discounts#online-checkout/discount-code
+
+**Pre-conditions:**
+
+* customer(signed-in member) holds `<percent code>`, 10% off the order; the cart holds `<odd product>` × 1, priced HKD99.95, and no site discount applies.
+
+**Steps:**
+
+1. Open Cart, wait for the read, apply `<percent code>`, and read its row and the total.
+2. Select Proceed to Checkout and read the discount on Shopify's page.
+
+**Expected Results:**
+
+* Step 1's code row equals step 2's discount, and the total is HKD99.95 less it.
 
 ---
 
@@ -1245,7 +1275,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#order-of-application/larger-wins, discounts#one-discount-at-a-time/set-aside, cart#promo-code/set-aside-for-a-site-discount
+* **Trace:** discounts#order-of-application/larger-wins, discounts#one-discount-at-a-time/set-aside, cart#promo-code/set-aside-for-a-site-discount, discounts#kinds-of-discount/order-coupon
 
 **Pre-conditions:**
 
@@ -1287,7 +1317,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** discounts#order-of-application/minimum, discounts#order-of-application/larger-wins
+* **Trace:** discounts#order-of-application/minimum, discounts#order-of-application/larger-wins, discounts#kinds-of-discount/product-coupon
 
 **Pre-conditions:**
 
@@ -1308,36 +1338,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The row's rows and total.
-
-<!-- trace:case id=g10.store-cart.TC-9px rev=1 -->
-#### g10.store-cart.TC29: A percentage code takes what Shopify's checkout takes, rounded the shop's way
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** cart#promo-code/the-shops-figure, discounts#order-of-application
-
-**Pre-conditions:**
-
-* customer(signed-in member) holds `<percent code>`, 10% off the order; the cart holds `<odd product>` × 1, priced HKD99.95, and no site discount applies.
-
-**Steps:**
-
-1. Open Cart, wait for the read, apply `<percent code>`, and read its row and the total.
-2. Select Proceed to Checkout and read the discount on Shopify's page.
-
-**Expected Results:**
-
-* Step 1's code row equals step 2's discount, and the total is HKD99.95 less it.
-
----
 
 ### cart#points: Points
 
@@ -1422,7 +1422,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** cart#estimated-total/discounts-on-a-line-and-below-it, cart#estimated-total/estimated-total
+* **Trace:** cart#estimated-total/discounts-on-a-line-and-below-it, cart#estimated-total/estimated-total, discounts#kinds-of-discount/order-discount
 
 **Pre-conditions:**
 
@@ -1707,7 +1707,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout/gateway, checkout#guest-checkout/a-public-code
+* **Trace:** checkout#guest-checkout/gateway, checkout#guest-checkout/a-public-code, checkout#guest-checkout/email-on-shopifys-page
 
 **Pre-conditions:**
 

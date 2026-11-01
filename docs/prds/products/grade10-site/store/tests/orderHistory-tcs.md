@@ -421,7 +421,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout/joining-an-account, checkout#guest-checkout/no-points
+* **Trace:** checkout#guest-checkout/joining-an-account, checkout#guest-checkout/no-points, order-history#guest-orders/joined-guest-orders, order-history#guest-orders/no-points
 
 **Pre-conditions:**
 
