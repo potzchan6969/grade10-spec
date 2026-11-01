@@ -160,7 +160,7 @@ export function validateRecord(record) {
     if (
       !one.id ||
       ids.has(one.id) ||
-      !one.path?.startsWith("openspec/specs/") ||
+      !isSourcePath(one.path ?? "") ||
       !/^[0-9a-f]{64}$/.test(one.digest)
     )
       throw new Error("Invalid or duplicate selected case");
@@ -296,6 +296,10 @@ export function mergedRecord(root, spreadsheetId, runId, ref = "origin/main") {
  *  (tcs-rules r7). */
 const SOURCE_PATHS = ["openspec/specs", STORE_TESTS];
 
+/** Whether a case's file is one a run may print from. */
+export const isSourcePath = (rel) =>
+  rel.startsWith("openspec/specs/") || isStoreSuite(rel);
+
 export function candidatesAt(root, ref) {
   const scratch = mkdtempSync(join(tmpdir(), "run-sheet-source-"));
   try {
@@ -312,11 +316,7 @@ export function candidatesAt(root, ref) {
       maxBuffer: 64 * 1024 * 1024,
     });
     execFileSync("tar", ["-x", "-C", scratch], { input: archive });
-    return readCandidates(scratch).filter(
-      (one) =>
-        one.read.rel.startsWith("openspec/specs/") ||
-        isStoreSuite(one.read.rel),
-    );
+    return readCandidates(scratch).filter((one) => isSourcePath(one.read.rel));
   } finally {
     rmSync(scratch, { recursive: true, force: true });
   }

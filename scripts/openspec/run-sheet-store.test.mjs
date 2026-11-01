@@ -13,7 +13,11 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 
-import { candidatesAt } from "./lib/run-sheet-records.mjs";
+import {
+  candidatesAt,
+  selectionSnapshot,
+  validateRecord,
+} from "./lib/run-sheet-records.mjs";
 import {
   buildGrid,
   inReadingOrder,
@@ -231,5 +235,29 @@ test("a pinned source reads its store folder, and one from before it still reads
       "g10.store-cart.TC10",
       "g10.store-cart.TC1",
     ],
+  );
+});
+
+test("a run record of store cases is a valid receipt", (t) => {
+  const root = repo(t, { [STORE_FILE]: PAGE });
+  const { picked } = selectCases(readCandidates(root), { includeDraft: true });
+  const record = {
+    version: 1,
+    state: "trial",
+    spreadsheetId: "production-sheet",
+    runId: 5,
+    sheetId: 42,
+    tab: "5-store-stage1",
+    sourceCommit: "a".repeat(40),
+    snapshot: selectionSnapshot(picked, {
+      name: "store-stage1",
+      env: "staging-1",
+    }),
+    copiedFrom: null,
+  };
+  assert.equal(validateRecord(record), record);
+  assert.deepEqual(
+    record.snapshot.selected.map((one) => one.path),
+    [STORE_FILE, STORE_FILE, STORE_FILE],
   );
 });

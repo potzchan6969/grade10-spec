@@ -1257,6 +1257,20 @@ try {
       `Temporary tab '${temporaryTab}' already exists`,
       printRegister(titles, summaryValues),
     );
+  const trial = (sheetId) => ({
+    version: 1,
+    state: "trial",
+    spreadsheetId: args.sheet,
+    runId,
+    sheetId,
+    tab,
+    sourceCommit: sha,
+    snapshot,
+    copiedFrom: copiedFrom ?? current?.copiedFrom ?? null,
+  });
+  // Refused before the tab exists: a receipt the registry would refuse must
+  // not leave a tab no Summary row names.
+  if (!args.sandbox) validateRecord(trial(0));
   const sheetId = await writeRunTab(
     token,
     args.sheet,
@@ -1273,19 +1287,7 @@ try {
     env: args.env,
     sha,
   });
-  const record = args.sandbox
-    ? null
-    : validateRecord({
-        version: 1,
-        state: "trial",
-        spreadsheetId: args.sheet,
-        runId,
-        sheetId,
-        tab,
-        sourceCommit: sha,
-        snapshot,
-        copiedFrom: copiedFrom ?? current?.copiedFrom ?? null,
-      });
+  const record = args.sandbox ? null : validateRecord(trial(sheetId));
   const requests = [];
   if (found) {
     const old = sheets.find((one) => one.properties.title === found.tab);
