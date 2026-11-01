@@ -127,3 +127,11 @@ after the Subtotal, with no line struck and no Remove,
 **As a** shopper,
 **I want** the promo-code picker to list the public codes the consumer passes in their own section,
 **so that** I can pick a code open to everyone beside whatever codes are mine.
+
+### shared-ui-store-cart-US-09: Shopper reads tender options without applying them
+
+**As a** shopper,
+**I want** to inspect the promo and points context for my cart without applying
+either tender,
+**so that** I can understand my available options without encountering an action
+that cannot change the cart.
