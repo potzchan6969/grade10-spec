@@ -173,6 +173,21 @@ describe("the ticketing words", () => {
     },
   );
 
+  /* The site, the mails and the product record call it the waiting line,
+     and Traditional Chinese 候補名單: a mail never names it otherwise. */
+  it.each([
+    ["en", /waiting ?list|wait-?list/i],
+    ["zh-Hant", /輪候名單/],
+  ] as const)("names the waiting line one way in %s", (locale, other) => {
+    const words = [
+      ...Object.entries(sharedTicketing(locale)),
+      ...Object.entries(sharedMail(locale)),
+      ...Object.entries(brandTicketing(locale)),
+      ...Object.entries(brandMail(locale)),
+    ];
+    expect(words.filter(([, sentence]) => other.test(sentence))).toEqual([]);
+  });
+
   it("reads a door answer and a promo refusal in English", () => {
     const { door, promo } = getMessages("grade10", "en").ticketing;
     expect(door.answer.admitted.title).toBe("Admitted");

@@ -375,7 +375,7 @@
       "title": "請輸入你的姓名及電郵。"
     },
     "noWaitingLine": {
-      "title": "此票種沒有輪候名單。"
+      "title": "此票種沒有候補名單。"
     },
     "ticketsLeft": {
       "title": "仍有 {count, plural, other {# 張門票}}發售中。",
