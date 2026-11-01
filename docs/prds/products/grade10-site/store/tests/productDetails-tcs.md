@@ -4,7 +4,7 @@ title: Store Product Details Test Cases
 
 # grade10-site/store/product-page Test Cases
 
-**Status:** pending-review · 7/20
+**Status:** pending-review · 11/20
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/product-page, grade10-site/store/cross-sell, grade10-site/store/discounts
 
@@ -157,7 +157,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -354,7 +354,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -394,7 +394,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -512,12 +512,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** discounts#where-each-shows/named, product-page#product-card/sale-price, product-page#product-card/badges, discounts#a-product-discount-beside-a-sale-price/the-struck-price, discounts#order-of-application/sale-price
 
 **Pre-conditions:**
