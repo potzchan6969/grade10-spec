@@ -55,6 +55,17 @@ an intention until the shop answers what it can sell now.
   unavailable; the drawer names no line and never says the cart is empty, as
   [Store Cart](/p/shared/ui/store-cart) shows a cart not yet read
 
+## Measurement
+
+- **Preventable checkout refusal share** — for Grade10 production checkouts,
+  count checkout-time `contradicted` outcomes in `store.checkout.outcome`
+  divided by all counts of that metric. A `contradicted` outcome means the
+  checkout-time availability or price read moved a line from the facts the
+  cart had presented. The first 30 full days after production release establish
+  the baseline; report the numerator, denominator and share from the Grade10
+  Commerce checkout-outcome data. The metric already records one outcome per
+  checkout request, so this measure needs no new metric.
+
 :::detail{title="Product decisions" for="pm"}
 A collector should learn about a moved cart line while they can still fix it,
 not only after asking to pay. The store therefore treats a recorded line as an
@@ -63,5 +74,4 @@ intent and the shop's current answer as evidence.
 - **No stale fallback** — a failed read blocks a current claim and checkout rather than falling back to the line's recorded facts
 - **Distinct outcomes** — reduced quantity, sold out, withdrawn and repriced are different facts, because the collector resolves them differently
 - **Not in scope** — the Cart Drawer's layout; browse refresh cadence; checkout creation and the hosted-checkout lifecycle; overriding the shop's inventory policy
-- ❓ **Unmeasured** — preventable checkout refusals, for a line the open cart had presented as current; nothing records them yet. Product confirms
 :::

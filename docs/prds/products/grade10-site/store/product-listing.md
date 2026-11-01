@@ -16,7 +16,7 @@ order: 2
     - **Signed Out** — the cart is kept in the browser and joins the member's cart on sign-in — [Cart Drawer](/p/grade10-site/store/cart#reviewing-the-cart)
 
 :::callout{kind="note"}
-- ❓ **Draft and unpublished products** — left out of the cards, the counts and search. Product confirms
+- **Draft and unpublished products** — left out of the cards, the counts and search
 - ❓ **Offers with no single price** — spend $100, buy 3, buy one get one: named on the product page, not yet on the card. Design confirms
 :::
 

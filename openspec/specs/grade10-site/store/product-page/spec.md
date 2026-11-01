@@ -14,8 +14,8 @@ per card rather than per page.
 ## Feature set
 
 - Card page
-  - Server-rendered card: name, description and every variant's price in the
-    response HTML before any script runs
+  - Server-rendered card: name, description, and the one item's price and
+    availability in the response HTML before any script runs
   - One address, one card: two product addresses answer with their own card,
     title and share metadata
 - Unknown handles
@@ -29,26 +29,16 @@ per card rather than per page.
     load
   - Sitemap honesty: the sitemap lists only addresses a collector can fetch,
     never an unfilled pattern
-- Buying from the page
-  - Variant choice: the page opens on the variant it prices and adds whichever
-    one the collector chose
+- Buying the one item
+  - One item: the page offers one sellable item, the first variant for sale or
+    else the first listed, with no size, option or variant choice
   - Add in place: the collector stays on that card and what the site says the
     cart holds accounts for the add
-  - One line per variant: adding the same variant again carries the quantity on
-    one line
-- Sold-out cards
-  - Per-variant availability: each variant reads as for sale or sold out on its
-    own, and only the ones for sale can be added
-  - Priced but unbuyable: a card nobody can buy keeps its prices and offers
-    nothing to press
-- Held to the shop's count
-  - Ceiling from the shop: the page stops a collector at what the shop has of
-    the chosen variant
-  - Silent where unknown: a shop exposing no count puts no ceiling on the page
-- Said when it is news
-  - Few left: the page says how many remain once the shop is nearly out
-  - All of them asked for: the page says the same when the collector has taken
-    the last one
+  - One line per item: adding the same item again carries the quantity on one
+    line
+- Sold-out item
+  - Priced but unbuyable: an item nobody can buy keeps its price, reads Sold
+    out, and nothing that adds it can be pressed
 - Shared link picture
   - First image: a product address unfurls with the card's first catalogue
     image
@@ -67,19 +57,25 @@ per card rather than per page.
 ### Requirement: A card answers at its own address
 
 The site SHALL answer a product address with that card's page: its name, its
-description, what each variant it lists costs, and which of them can be
-bought — in the response HTML without any script executing.
+description, and the price and availability of the one Shopify sale identity
+the page uses for the sellable product item, in the response HTML without any
+script executing. The rendered page SHALL NOT show other variants' prices,
+availability or names, and SHALL NOT render the internal sale identity as a
+product choice or label.
 
 Two product addresses SHALL answer with their own card — the page a collector
 reads is the one the address names, not the catalogue it came from.
 
-<!-- trace:scenario id=g10.store-product-page.SC-b5k rev=1 -->
+<!-- trace:scenario id=g10.store-product-page.SC-b5k rev=2 -->
 #### Scenario: grade10-site-store-product-page-SC-01 - A card answers whole
 **Serves:** grade10-site-store-product-page-US-01 - Collector reads a card at its own address
 
-- **WHEN** a product address is fetched and no script executes
-- **THEN** the response HTML contains that card's name, its description, and
-  a price for every variant it lists
+- **GIVEN** a card with more than one Shopify variant
+- **WHEN** its product address is fetched and no script executes
+- **THEN** the response HTML contains that card's name and description and the
+  price and availability of only the one item the page uses
+- **AND** the rendered page shows no other variants' prices, availability, or
+  names, and does not show the internal sale identity as a choice or label
 
 <!-- trace:scenario id=g10.store-product-page.SC-ok3 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-02 - Two cards, two pages
@@ -164,160 +160,44 @@ in place of them.
 - **THEN** every entry is an address a collector can fetch
 - **AND** none of them carries an unfilled parameter
 
-### Requirement: A card is added to the cart from its own page
-
-A card's page SHALL let a collector add a variant it lists to the storefront's
-cart, without leaving the page and without returning to the grid.
-
-The page SHALL open with the variant it prices already chosen, so a card
-listing one thing to buy needs no choice made. A collector SHALL be able to
-choose any other variant the page lists, and what is added SHALL be the one
-chosen — never whichever the catalogue listed first.
-
-After a card is added the collector SHALL still be on that card, and what the
-site says the cart holds SHALL account for what was added.
-
-<!-- trace:scenario id=g10.store-product-page.SC-jt1 rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-07 - A collector adds the grade they chose
-**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
-
-- **GIVEN** a card whose page lists more than one variant for sale
-- **WHEN** a collector chooses one that is not the one the page opened with,
-  and adds it
-- **THEN** the cart holds that variant, and not the one the page opened with
-
-<!-- trace:scenario id=g10.store-product-page.SC-b7g rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-08 - A card with one thing to buy needs no choice
-**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
-
-- **GIVEN** a card whose page lists one variant for sale
-- **WHEN** a collector adds it without choosing anything
-- **THEN** the cart holds that variant
-
-<!-- trace:scenario id=g10.store-product-page.SC-qmb rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-09 - The collector keeps their place
-**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
-
-- **WHEN** a collector adds a card from its page
-- **THEN** they are still on that card's address, reading that card
-- **AND** what the site says the cart holds has changed to account for it
-
-<!-- trace:scenario id=g10.store-product-page.SC-tl5 rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-10 - The same card twice
-**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
-
-- **GIVEN** a collector who has already added a variant from a card's page
-- **WHEN** they add the same variant again
-- **THEN** the cart holds the quantity they added, as one line rather than two
-
 ### Requirement: A card nobody can buy says so where the buying happens
 
-A card the catalogue lists with nothing for sale SHALL say so on its page, in
-the place a collector would otherwise buy from. It SHALL NOT show a control
-that cannot be used, and it SHALL NOT hide the price it lists — a sold-out
+A card whose one item is sold out SHALL say so on its page, in the place a
+collector would otherwise buy it. It SHALL NOT offer anything that can be
+pressed to add the item, and it SHALL NOT hide the item's price — a sold-out
 card still costs what it costs, and a page with nothing where the buying goes
 reads as a page that failed rather than a card that sold.
 
-A card listing some variants for sale and others not SHALL offer the ones for
-sale and refuse the ones not, each said per variant. A variant that cannot be
-bought SHALL NOT become what is added by being chosen.
+The item is sold out only when no variant the card lists is for sale. While
+any is, the page offers that one, and shows no other variant as sold out or as
+a choice.
 
-<!-- trace:scenario id=g10.store-product-page.SC-prx rev=1 -->
+<!-- trace:scenario id=g10.store-product-page.SC-prx rev=2 -->
 #### Scenario: grade10-site-store-product-page-SC-11 - Nothing on the card is for sale
-**Serves:** grade10-site-store-product-page-US-04 - Collector meets a card with nothing for sale
+**Serves:** grade10-site-store-product-page-US-04 - Collector meets a product that cannot be bought
 
 - **GIVEN** a card the catalogue lists with no variant for sale
 - **WHEN** a collector opens its page
-- **THEN** the page says the card cannot be bought
-- **AND** every variant it lists is still priced
+- **THEN** the page says the card is sold out
+- **AND** the first listed variant's price is still shown
 - **AND** there is nothing to press that would add it
 
-<!-- trace:scenario id=g10.store-product-page.SC-1p0 rev=1 -->
+<!-- trace:scenario id=g10.store-product-page.SC-1p0 rev=2 -->
 #### Scenario: grade10-site-store-product-page-SC-12 - One grade sold, another still for sale
-**Serves:** grade10-site-store-product-page-US-04 - Collector meets a card with nothing for sale
+**Serves:** grade10-site-store-product-page-US-04 - Collector meets a product that cannot be bought
 
-- **GIVEN** a card listing one variant for sale and one sold out
+- **GIVEN** a card listing one sold-out variant followed by one for sale
 - **WHEN** a collector opens its page
-- **THEN** each variant reads as for sale or sold out on its own
-- **AND** adding is offered for the one for sale
-- **AND** choosing the sold-out one offers no add
-
-### Requirement: A card's page holds a collector to the shop's count
-
-The page SHALL NOT let a collector ask for more of the chosen variant than the
-shop has left of it. Where the shop exposes no count for that variant, the
-page SHALL put no ceiling on what a collector asks for.
-
-The ceiling is what the shop last said, so it is advisory: the cart's own
-review remains what decides a quantity, and goes on reducing a line the shop
-can no longer fill.
-
-Choosing a different variant SHALL bring that variant's ceiling with it, since
-one grade of a card selling out says nothing about another.
-
-<!-- trace:scenario id=g10.store-product-page.SC-yw4 rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-19 - The page stops at what the shop has
-**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
-
-- **GIVEN** a card whose chosen variant the shop has three of
-- **WHEN** a collector raises the quantity past three
-- **THEN** the quantity stays at three
-
-<!-- trace:scenario id=g10.store-product-page.SC-1e2 rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-20 - A shop that counts nothing stops nothing
-**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
-
-- **GIVEN** a card whose chosen variant the shop exposes no count for
-- **WHEN** a collector raises the quantity above three
-- **THEN** the quantity rises as asked
-
-<!-- trace:scenario id=g10.store-product-page.SC-yyk rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-21 - Another grade brings its own ceiling
-**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
-
-- **GIVEN** a card listing one variant the shop has two of and another it has ten of
-- **WHEN** a collector chooses the one the shop has ten of and raises the quantity to ten
-- **THEN** the quantity rises to ten
-
-### Requirement: A card's page says how many are left when that is news
-
-The page SHALL say how many the shop has left of the chosen variant when the
-shop has three or fewer of it, and when the collector has asked for every one
-there is. It SHALL say nothing about what is left at any other time.
-
-Three or fewer is what counts as nearly out across this store, and the page
-SHALL NOT hold its own number.
-
-<!-- trace:scenario id=g10.store-product-page.SC-vkx rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-22 - Nearly out is said on the page
-**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
-
-- **GIVEN** a card whose chosen variant the shop has three of
-- **WHEN** the page renders
-- **THEN** the page says three are left
-
-<!-- trace:scenario id=g10.store-product-page.SC-hvy rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-23 - Asking for the last one is answered
-**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
-
-- **GIVEN** a card whose chosen variant the shop has forty-one of
-- **WHEN** a collector raises the quantity to forty-one
-- **THEN** the page says forty-one are left
-- **AND** the quantity does not rise past forty-one
-
-<!-- trace:scenario id=g10.store-product-page.SC-82g rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-24 - A well-stocked card says nothing
-**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
-
-- **GIVEN** a card whose chosen variant the shop has forty-one of
-- **WHEN** the page renders
-- **THEN** the page says nothing about how many are left
+- **THEN** the page reads for sale, with the price of the variant for sale
+- **AND** adding is offered for that variant
+- **AND** the sold-out variant is shown neither as a choice nor as sold out
 
 ### Requirement: Signed-out Add to cart adds to the cart this browser holds
 
 When a collector is signed out, activating Add to cart on a product page that
-offers it SHALL add the chosen variant and quantity to the cart this browser
-holds and SHALL NOT ask for sign-in. When the collector signs in, the lines
+offers it SHALL add its one item, at the quantity asked for whatever the shop's
+count, to the cart this browser holds, and SHALL NOT ask for sign-in; the
+cart's review answers that quantity. When the collector signs in, the lines
 this browser holds SHALL move into the signed-in member's cart.
 
 <!-- trace:scenario id=g10.store-product-page.SC-za5 rev=2 -->
@@ -330,13 +210,15 @@ this browser holds SHALL move into the signed-in member's cart.
   they chose
 - **AND** no sign-in dialog opens
 
-<!-- trace:scenario id=g10.store-product-page.SC-0j7 rev=2 -->
+<!-- trace:scenario id=g10.store-product-page.SC-0j7 rev=4 -->
 #### Scenario: grade10-site-store-product-page-SC-28 - Signing in keeps the product page's add
 **Serves:** grade10-site-store-product-page-US-11 - Collector adds from the product page without signing in
 
-- **GIVEN** a signed-out collector who added a line from a product page
+- **GIVEN** a signed-out collector who added 5 of a product whose one item the
+  shop counts at 2, from its page
 - **WHEN** they sign in
-- **THEN** the signed-in member's cart holds that line
+- **THEN** the signed-in member's cart holds 5 of that item, for the cart's
+  review to answer
 
 ### Requirement: A shared card link unfurls with the card's picture
 
@@ -433,3 +315,57 @@ language. Nothing on screen changes.
 - **WHEN** a screen reader reads the page's prices in English
 - **THEN** it reads `Sale price` before the price and `Was` before the struck
   list price, and neither word shows on screen
+
+### Requirement: A card's one item is added to the cart from its own page
+
+A card's page SHALL let a collector choose a quantity and add that many of
+its one sellable item to the storefront's cart, without leaving the page and
+without returning to the grid. The item is the one
+`grade10-site/commerce/product-status` names. The page SHALL NOT render or
+require a choice among sizes, options or variants, and SHALL NOT show the
+internal Shopify sale identity as a product choice or label.
+
+After a card is added the collector SHALL still be on that card, and what the
+site says the cart holds SHALL account for what was added. Adding the same
+item again SHALL carry the quantity on one cart line.
+
+<!-- trace:scenario id=g10.store-product-page.SC-fpg rev=1 -->
+#### Scenario: grade10-site-store-product-page-SC-33 - A card with several variants offers one item
+**Serves:** grade10-site-store-product-page-US-03 - Collector adds the product from its page
+
+- **GIVEN** a card listing a sold-out variant followed by two variants for sale
+- **WHEN** a collector opens its page and adds without choosing anything
+- **THEN** the page offers no size, option or variant choice
+- **AND** the cart holds the first variant for sale
+
+<!-- trace:scenario id=g10.store-product-page.SC-b01 rev=1 -->
+#### Scenario: grade10-site-store-product-page-SC-34 - A card with one item adds it
+**Serves:** grade10-site-store-product-page-US-03 - Collector adds the product from its page
+
+- **GIVEN** a card with one variant for sale
+- **WHEN** a collector adds it without choosing anything
+- **THEN** the cart holds that item
+
+<!-- trace:scenario id=g10.store-product-page.SC-y8c rev=1 -->
+#### Scenario: grade10-site-store-product-page-SC-35 - The collector keeps their place
+**Serves:** grade10-site-store-product-page-US-03 - Collector adds the product from its page
+
+- **WHEN** a collector adds a card from its page
+- **THEN** they are still on that card's address, reading that card
+- **AND** what the site says the cart holds has changed to account for it
+
+<!-- trace:scenario id=g10.store-product-page.SC-o6j rev=1 -->
+#### Scenario: grade10-site-store-product-page-SC-36 - The same item twice
+**Serves:** grade10-site-store-product-page-US-03 - Collector adds the product from its page
+
+- **GIVEN** a collector who has already added a card's item from its page
+- **WHEN** they add it again
+- **THEN** the cart holds the quantity they added, as one line rather than two
+
+<!-- trace:scenario id=g10.store-product-page.SC-gvt rev=1 -->
+#### Scenario: grade10-site-store-product-page-SC-37 - A chosen quantity is added
+**Serves:** grade10-site-store-product-page-US-03 - Collector adds the product from its page
+
+- **GIVEN** a card with one variant for sale and an empty cart
+- **WHEN** a collector sets the quantity to 3 on its page and adds
+- **THEN** the cart holds 3 of that item, on one line

@@ -1,0 +1,259 @@
+{
+  "version": 2,
+  "change": "add-store-product-status",
+  "baseline": "07c43fb80818a56da52659a29f6b2ce52be821e6fa878c546da0a4787005dd87",
+  "fingerprint": "923a990ed6330b277aa6ca5ad1230fa9821f69074dc4618c2cd27a917428e33e",
+  "reviewedBy": "kinisworking",
+  "acceptedAt": "2026-11-01T12:12:26.458Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/commerce/product-status.md#browsing-limits",
+      "sha256": "f493ac21f573868a9cf8566851b3bffa8601a7f3e13ae8377a631cd373980489",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/commerce/product-status.md#quantity-requests",
+      "sha256": "5baeaa4cf1e8186b389de38165f403ec34d4011647778a8e59404f74e43b2016",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/site/crawlable-pages.md#structured-data",
+      "sha256": "2b6df19cafcc7995218a8dbc15f0584bc6d756d878df88d81eb8de9cff6a0512",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/decisions.md",
+      "sha256": "8dd7c15bcd839b721f032dafd15965783c702037301d9b5814e3c93dfff37d87",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/proposal.md",
+      "sha256": "22d283a084626d0218663350ebfa86686345cfd672a0fc5b3090875fd582b3a6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/grade10-site/commerce/product-status/feature-tcs.md",
+      "sha256": "0ca4045d3578bd5c4deec0788215ae9eb17cafa6f012349e7045ebaea13c5447",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/grade10-site/commerce/product-status/spec.md",
+      "sha256": "a06d1d45d3e808a9d3ce19df6ca6a1f99cac08e7f60cc77362456ede7babdea7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/grade10-site/commerce/product-status/user-journeys.md",
+      "sha256": "8777a9339a7c1cd741c5fe623755bd1b65eabf3710b310b43139a8e80e41e591",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/grade10-site/store/cart-validation/spec.md",
+      "sha256": "78757f811b1af467edcc0bb9df263705c94befc411489120a0d64cab3331cf9f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/grade10-site/store/cart-validation/user-journeys.md",
+      "sha256": "e645f558177e187d068288cfa6eaac36ec1af260ce1c68005b6fa98489962954",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/grade10-site/store/product-listing/spec.md",
+      "sha256": "afb88d364f7f2744bcbc5d04be155bc8aeb7562d324f39ffafacc45893e294d0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/grade10-site/store/product-listing/user-journeys.md",
+      "sha256": "f61d3eb7887fa67e7b09e337f68721635341011db07557e031be7d249935f701",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "e2bd0ce93066de159bf89319c0559dd326d45ec232855ecf0cbdd78f2ee6fbac",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "a981303ebe3c37413d6c8de1c58ef773e597c5509e8ac858c438f431976eca77",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/grade10-site/store/user-journeys.md",
+      "sha256": "982a523ac9736ee86bb04c28606cb7632da46c44e0b75d93245df5bbf302b092",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "09a1419a61ff8fe1d576f2eed92f7eb8d7b64578d5f06bb3491dea94474307b0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/shared/ui/store-cart/spec.md",
+      "sha256": "5b0170a2f6c65cd06c1876b471d3088d28620a3bfc8876a49e4e9692a4603b14",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "4abab6c2e9a780fdb939957d448a6626f47ee14a741a808ba4608d22de3bcafd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/tech-design.md",
+      "sha256": "9aad5481dd9160e075f9aa8ecf328279c1f76f6d078e8a79e1c3a29689017085",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-status/ui-design.md",
+      "sha256": "da2830fc1b8f2cc1250ac178a10222bc18cf7b3a0b3b083d2a3a42af30f76892",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/product-status/feature-tcs.md",
+      "sha256": "0ca4045d3578bd5c4deec0788215ae9eb17cafa6f012349e7045ebaea13c5447",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/product-status/spec.md",
+      "sha256": "74f85d55f95adee7ea880b8150fa0feac9d0f57fce5395a5ff8e326473cfbc4a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/product-status/user-journeys.md",
+      "sha256": "8777a9339a7c1cd741c5fe623755bd1b65eabf3710b310b43139a8e80e41e591",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-validation/spec.md",
+      "sha256": "e3ca79395ed0a03dee3ab4dfbfc3568baf0195e5a81e7f264e4addae0027ab31",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-validation/user-journeys.md",
+      "sha256": "e645f558177e187d068288cfa6eaac36ec1af260ce1c68005b6fa98489962954",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+      "sha256": "b4c2368aa86dc02377390b4c3926f37262bf0f364946819c5c8cacb434fd04f3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+      "sha256": "45c56ea3299fc7310110f5f8b29e20441a29f85a51b9f646ee63f2994f9ccf5e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "594fa55cb63807ae7307354177a552d663e4f79871ec6ef86c5c054de44ec450",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "1322c749bdf65edb474b4fcddfd0803dfec0a263ceee70a509cfaacd5418cfe8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "32dfd8a7608e815d88807dc2a4363335899cab23cdcfcb31f5d942a5afccd5c8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "sha256": "fc0cf9801c66338ae960f084fca24832c3311bb78bf732a0e9f25c393e9fc16f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "992799b8ff8c226ef59a50ef18cf41152a486aa1c4220c61dafc0489488b66fc",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-store-product-status/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/product-status/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/product-status/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A browse surface communicates no quantity beyond whether a variant can be bought",
+        "Requirement: A card's listing availability is that of its most available variant",
+        "Requirement: A variant's availability is the shop's answer for it",
+        "Requirement: An unpublished product is absent from browsing rather than marked",
+        "Requirement: Availability is also answerable for a requested quantity",
+        "Requirement: Every surface communicates the same availability"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/product-status/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-validation/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A cart the checkout read contradicts is not offered for checkout unresolved",
+        "Requirement: A line the store cannot fill in full is reduced to what remains",
+        "Requirement: A line whose price changed is shown at the current price before checkout",
+        "Requirement: A line whose product was withdrawn from sale leaves the cart and is named",
+        "Requirement: The store re-reads availability and price for cart lines at two moments",
+        "Requirement: The store's read is advisory and the shop remains the authority"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-validation/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The browse listing holds a collector to the shop's count",
+        "Requirement: The browse listing says how many are left when that is news"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A card answers at its own address",
+        "Requirement: A card is added to the cart from its own page",
+        "Requirement: A card nobody can buy says so where the buying happens",
+        "Requirement: A card's one item is added to the cart from its own page",
+        "Requirement: A card's page holds a collector to the shop's count",
+        "Requirement: A card's page says how many are left when that is news",
+        "Requirement: Signed-out Add to cart adds to the cart this browser holds"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Cart item status includes unavailable",
+        "Requirement: Unavailable items are removed silently after open loading"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

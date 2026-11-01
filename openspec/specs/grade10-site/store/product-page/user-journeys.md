@@ -15,26 +15,19 @@ product page.
 **so that** the card I opened is the one I land on, at an address that answers
 on its own.
 
-### grade10-site-store-product-page-US-03: Collector adds a variant to the cart
+### grade10-site-store-product-page-US-03: Collector adds the product from its page
 
 **As a** collector,
-**I want** to add the variant I chose from the card's own page,
-**so that** I can buy the grade I picked without leaving the card or returning
-to the grid.
+**I want** to choose a quantity and add the product's one sellable item from
+its own page,
+**so that** I can buy the quantity I chose without leaving the product page.
 
-### grade10-site-store-product-page-US-04: Collector meets a card with nothing for sale
-
-**As a** collector,
-**I want** a card that cannot be bought to say so where the buying happens,
-still carrying its prices,
-**so that** I can tell a card that sold from a page that failed.
-
-### grade10-site-store-product-page-US-05: Collector takes the last of a grade from its page
+### grade10-site-store-product-page-US-04: Collector meets a product that cannot be bought
 
 **As a** collector,
-**I want** the page to stop me at what the shop has of the grade I chose, and
-to say how many that is,
-**so that** the quantity I take to the cart is one the shop can fill.
+**I want** a product whose one sellable item cannot be bought to say so where
+the buying happens, while keeping its price visible,
+**so that** I can tell a sold-out product from a page that failed.
 
 ### grade10-site-store-product-page-US-11: Collector adds from the product page without signing in
 
@@ -60,3 +53,4 @@ Store Locator,
 ## Retired
 
 - `grade10-site-store-product-page-US-12` - Retired by the guest cart: Add to cart asks nobody to sign in.
+- `grade10-site-store-product-page-US-05` - Retired by add-store-product-status.

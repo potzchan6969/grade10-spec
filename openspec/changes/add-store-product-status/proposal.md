@@ -65,8 +65,11 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   order from an earlier read, however recent.
 - **A line that cannot be filled in full is reduced to what remains** and
   reported as adjusted; one that cannot be filled at all is reported out of
-  stock and left for the collector to remove, and checkout waits until they
-  do. A line is never grown.
+  stock and left for the collector to remove. An open read leaves a sold-out
+  line in the cart but excludes it from totals and checkout; the collector can
+  proceed when at least one line remains for sale, while an all-sold-out cart
+  waits for removal. A checkout-time read that contradicts the cart blocks the
+  handoff until the collector resolves it. A line is never grown.
 - **A withdrawn product leaves the cart and is named.** When the cart opens or
   checkout finds it, a line whose product left the channel, or whose variant
   no longer exists, is removed and one notice names every line removed; a
