@@ -11,7 +11,7 @@ collapsible promo code redemption and a checkout CTA.
 - Drawer export contract
   - Cart drawer components: one cart surface every store application imports rather than builds
   - Cart drawer types: names the props, copy, item, and promo shapes an application supplies
-  - Unavailable status: marks a line whose product is no longer in the store catalogue, distinct from sold out and adjusted
+  - Unavailable status: marks a line whose product left the store's sales channel or whose variant no longer exists, distinct from sold out and adjusted
   - Toast copy field: carries the removal message on drawer copy the consumer supplies
   - Empty copy fields: carries the empty-cart title and optional description on the drawer copy and body props the consumer supplies
 - Cart contents
@@ -118,14 +118,15 @@ SHALL take the same `emptyTitle` and optional `emptyDescription`.
 ### Requirement: Cart item status includes unavailable
 
 `CartItemStatus` SHALL be exactly `default`, `adjusted`, `soldOut`, and
-`unavailable`.
+`unavailable`. The consumer SHALL assign each line the status its cart review
+answers; for Grade10, `grade10-site/store/cart-validation` decides it.
 
 | Status | Meaning |
 | --- | --- |
-| `default` | Line is active and sellable as shown |
-| `adjusted` | Quantity was reduced for low stock; row stays visible |
-| `soldOut` | Variant has no stock; row stays visible with sold-out treatment |
-| `unavailable` | Product is no longer in the store catalogue; removed after open loading |
+| `default` | The shop can fill the line as it stands |
+| `adjusted` | The quantity was reduced to what the shop can fill; the row stays visible |
+| `soldOut` | The shop no longer offers the variant for sale; the row stays visible with sold-out treatment |
+| `unavailable` | The product left the store's sales channel, or the variant no longer exists; removed after open loading |
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-0wv rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-12 - Status values are the four named states
@@ -263,8 +264,8 @@ SHALL show exactly one toast whose message is the consumer-supplied
 `unavailableItemsRemoved` copy. When no line is `unavailable`, `CartDrawer`
 SHALL NOT show that toast.
 
-`unavailable` means the product is no longer in the store catalogue (taken off
-sale). It is not `soldOut` and not `adjusted`.
+`unavailable` means what `Cart item status includes unavailable` states. It is
+not `soldOut` and not `adjusted`.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-jbs rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-10 - Delisted items clear after loading with one toast
