@@ -10,14 +10,12 @@ sale a collector can add.
 ## Product Card
 
 - **Card** — name, pictures, description and price of the one item for sale
+  - **Media Gallery** — every supplied catalogue picture in order with descriptive alt text; an accessible placeholder when there are none
   - **One Item to Buy** — no size, option or variant to choose
   - **Sale Price** — struck through as on the listing — [Discounts](/p/grade10-site/store/discounts#where-each-shows)
   - **Badges** — where the catalogue gives them, with the site's discounts named among them — [Discounts](/p/grade10-site/store/discounts#where-each-shows)
-  - **Description** — a long one shows three lines, with a button to read it in full without leaving the page
-
-:::callout{kind="note"}
-- ❓ **Short description** — one that fits in three lines shows whole, with no button. Design confirms
-:::
+  - **SKU** — shown below the fulfilment copy only when the catalogue supplies it
+  - **Description** — a long one shows three lines, with a button to read it in full without leaving the page; one that fits within three lines shows whole, without a button
 
 ::story{id="store-product-page-screens-product-detail--docs" title="Product details"}
 
@@ -29,7 +27,7 @@ sale a collector can add.
   - **Added** — the cart drawer opens, the quantity resets and the cart total updates
   - **Adding Again** — the same product stays one line in the cart
   - **Signed Out** — adds to the cart this browser holds, with no sign-in; signing in later moves those lines into the member's cart — [Cart Drawer](/p/grade10-site/store/cart#reviewing-the-cart)
-- 🚧 **Stock** — whether the item can be bought, with no count left or scarcity cue; the quantity isn't capped by it, and the cart explains a short fill
+- **Stock** — whether the item can be bought, with no count left or scarcity cue; the quantity isn't capped by it, and the cart explains a short fill
 - **Sold Out** — says so and can't be added; its price stays
 
 :::detail{title="One item to buy" for="engineer"}
@@ -53,7 +51,7 @@ sale a collector can add.
 
 ## Unknown Product Address
 
-- 🚧 **Not-Found State** — `grade10.com/store/products/<handle>` with no card for the handle shows the Store's own not-found state, in the page's language, still answering 404; its one action returns to the product listing in the same tab
+- **Not-Found State** — `grade10.com/store/products/<handle>` with no card for the handle shows the Store's own not-found state, in the page's language, still answering 404; its one action returns to the product listing in the same tab
   - **Other Addresses** — one outside an owned surface keeps the site's generic not-found page and its Home action
 
 ::story{id="store-product-page-screens-product-detail--unknown-product-address" title="Unknown product address"}
@@ -68,6 +66,7 @@ the preview is all the receiver sees before deciding to open it.
 - **One sizing rail** — the size is asked of the shop's CDN by address, so one catalogue image serves the preview, the grid and the gallery
 - **Large card on X** — X sizes the card from the named shape alone and defaults to the small square
 - **Originals under the box are enlarged** — a small picture reads soft rather than small, and the declared size is always the delivered one
+- **Product-detail add rate** — the redesign's outcome is the share of product-detail sessions that add to cart, by product; current Product Viewed and Product Added events do not capture device width, and this change adds no tracking
 - **No `Only X left`** — the Product Detail frame's Low inventory indicator is superseded by the no-scarcity rule; the stories are the agreed look
 - **Remaining count stays in the shared blocks** — Grade10 supplies none of the header's or listing card's remaining count, nor a stepper ceiling from stock, but the blocks keep all three as optional props
 - ❓ **A catalogue image that fails to transform** — whether a card whose image exists but fails to load or resize from the CDN falls back to no `og:image`, as with no image, or something else. Engineering confirms

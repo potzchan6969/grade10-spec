@@ -15,9 +15,9 @@ The design system already publishes the components used by the frame:
 the application shell. No design-system gap requires a new component or
 token.
 
-The remaining delivery work is the description disclosure: group 5 replaces
-the character-count estimate with a post-layout overflow decision while
-keeping server rendering and hydration deterministic.
+Group 5 replaces the character-count estimate with a post-layout overflow
+decision while keeping server rendering and hydration deterministic; tasks 5.1
+and 5.2 record that work as complete.
 
 The page shows no remaining count and puts no stock ceiling on the stepper:
 `add-store-product-status` removed both from the product page, and owns the
@@ -194,21 +194,22 @@ accepts a fabricated default label.
 - Layout measurement can briefly precede the overflow decision → keep the
   control in the SSR-safe initial render and hide it only after a measured
   collapsed region proves that no disclosure is needed.
-- Two changes move the product page → `add-store-product-status` accepts
-  first. This change's requirements already state only what that change does
-  not; once it folds, SC-17 and SC-18 move to serve US-03 and US-04, their
-  cases join those journeys' folded suites, and US-08 and US-09 retire.
+- `add-store-product-status` is archived. SC-17 and SC-18 serve the existing
+  durable journeys US-03 and US-04; this delta carries no duplicate US-08 or
+  US-09 journeys.
 
 ## Migration Plan
 
-1. Land the shared product copy in the `grade10-spec` main branch.
-2. Bump `external/grade10-spec` in `grade10`.
-3. Complete the description disclosure group with layout measurement and
+1. Landed the shared product copy in `grade10-spec` main before the frontend
+   consumed it.
+2. Updated `external/grade10-spec` in `grade10` before the frontend copy was
+   consumed.
+3. Completed the description disclosure group with layout measurement and
    serving, hydration, package, and application coverage.
-4. Rebase this delta against the product page `add-store-product-status`
-   folds, adding no stock helper here.
-5. Run the remaining product-page acceptance checks on the chosen integration
-   build.
+4. Aligned this delta to the archived `add-store-product-status` fold, with no
+   stock helper added here.
+5. Recorded the implementation checks in completed tasks 3.5 and 5.2. The
+   product-detail manual cases remain pending review in the PRD test suite.
 
 ## Open Questions
 

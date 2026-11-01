@@ -17,12 +17,12 @@ title: Store Product Details Test Cases
 
 **Starting state:**
 
-- customer(signed out) on `<page url>`, with an empty cart in this browser; `<page product>` is for sale, has a description longer than three lines, at least 3 for sale, and 2 picks, by the recipe "Choose picks on a staging-shop card"
+- customer(signed out) on `<page url>`, with an empty cart in this browser; `<page product>` is for sale, has a description longer than three lines, at least 3 for sale, and 2 picks, by the recipe "Choose picks on a staging-shop card"; each case uses its stated catalogue facts
 
 ### Route
 
 1. Read the card from its name to the pick-up line.
-   - The name, images, price, badges and one item to buy `g10.store-product-page.TC1`
+   - The card, one item to buy, media and supplied facts `g10.store-product-page.TC1`
 2. Select the button under the description.
    - The whole description, on the same page `g10.store-product-page.TC2`
 3. Read the shipping and pick-up lines, then select the store name.
@@ -36,7 +36,7 @@ title: Store Product Details Test Cases
 
 ## product-page: Product Details
 
-<!-- trace:case id=g10.store-product-page.TC-xpc rev=1 -->
+<!-- trace:case id=g10.store-product-page.TC-xpc rev=2 -->
 ### g10.store-product-page.TC1: The page shows the card and its one item to buy
 
 Runs once per row of **Test data**.
@@ -51,18 +51,18 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-page#product-card/card, product-page#product-card/one-item-to-buy, product-page#product-card/badges, product-page#buy/stock
+* **Trace:** product-page#product-card/card, product-page#product-card/media-gallery, product-page#product-card/one-item-to-buy, product-page#product-card/badges, product-page#product-card/sku, product-page#buy/stock
 
 **Pre-conditions:**
 
-* `<page product>` is for sale, with images and badges in the catalogue, and the row's variants.
+* `<page product>` is for sale and has the row's catalogue facts and variants.
 
 **Test data:**
 
-| Variants |
-| --- |
-| one, for sale |
-| three in the shop, at least one for sale |
+| Variants | Catalogue facts |
+| --- | --- |
+| one, for sale | Two images with distinct descriptive alt text; type, world, language and SKU supplied |
+| three in the shop, at least one for sale | No images; type supplied; world and language absent; no SKU |
 
 **Steps:**
 
@@ -70,11 +70,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The name, description, images, one price and the catalogue's badges, UI matching store-product-page-screens-product-detail--default.
+* The name, description, current price and supplied badges appear. For the two-image row, both images appear in catalogue order with descriptive alt text, UI matching store-product-page-screens-product-detail--default; for the no-image row, one accessible placeholder appears with no empty image or page-invented URL, UI matching store-product-page-screens-product-detail--no-media.
+* Supplied badges are non-interactive labels, absent product facts are omitted, and a supplied SKU appears below the fulfilment copy while an absent SKU is not shown.
 * No size, option or variant choice, and no remaining count or scarcity cue.
 
-<!-- trace:case id=g10.store-product-page.TC-vcs rev=1 -->
-### g10.store-product-page.TC2: A long description opens in full on the same page
+<!-- trace:case id=g10.store-product-page.TC-vcs rev=2 -->
+### g10.store-product-page.TC2: The description uses a disclosure only when it overflows
 
 Runs once per row of **Test data**.
 
@@ -99,17 +100,19 @@ Runs once per row of **Test data**.
 | Description | First shown |
 | --- | --- |
 | longer than three lines at the page's width | three lines, and a button to read it in full |
-| ❓ one line - design confirms | the whole description, no button, UI matching store-product-page-blocks-storeproductdescription--short |
+| fits within three lines | the whole description, no button, UI matching store-product-page-blocks-storeproductdescription--short |
 
 **Steps:**
 
 1. Open `<page url>` and read the description.
-2. Select the read-in-full button, where one shows.
+2. For the long-description row, select the read-in-full button.
+3. For the long-description row, select `Show less`.
 
 **Expected Results:**
 
-* Step 1: the row's first view.
-* Step 2 shows the whole description, UI matching store-product-page-screens-product-detail--description-expanded, and the address is unchanged.
+* Step 1: a long description begins collapsed to three lines with a `Show more` button whose `aria-expanded` is false and whose `aria-controls` points to the description region; a description that fits within three lines appears whole without a button. UI matching store-product-page-blocks-storeproductdescription--short.
+* Step 2 shows the full long description and a `Show less` button with `aria-expanded` true, UI matching store-product-page-screens-product-detail--description-expanded; the address is unchanged.
+* Step 3 restores the three-line collapsed description and `aria-expanded` false; the address is unchanged.
 
 ---
 
@@ -196,7 +199,7 @@ Runs once per row of **Test data**.
 
 ## product-page#buy: Buy
 
-<!-- trace:case id=g10.store-product-page.TC-mkn rev=2 -->
+<!-- trace:case id=g10.store-product-page.TC-mkn rev=3 -->
 ### g10.store-product-page.TC6: Add to cart shows Adding…, opens the drawer, and adding again keeps one line
 
 **Classification:**
@@ -218,11 +221,11 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Set the quantity to 2 and select Add to cart.
-2. Close the drawer, set the quantity to 1 and select Add to cart.
+2. Close the drawer, confirm the page shows no added confirmation, set the quantity to 1 and select Add to cart.
 
 **Expected Results:**
 
-* Step 1 asks for no sign-in; the controls read Adding… while it is pending, UI matching store-product-page-screens-product-detail--add-quantity-pending-then-drawer-opens; then the drawer opens with `<page product>` at 2, the page's quantity resets, and the total includes it.
+* Step 1 asks for no sign-in; while the add is pending, the stepper and add action are disabled and the action reads Adding…; UI matching store-product-page-screens-product-detail--add-quantity-pending-then-drawer-opens. Then the drawer opens with `<page product>` at 2, the page's quantity resets, and no on-page added confirmation appears.
 * Step 2: one line for `<page product>`, at 3.
 
 ---

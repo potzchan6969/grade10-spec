@@ -59,11 +59,12 @@ opens Store Locator, per `Free pick-up opens Store Locator`.
 ### Requirement: A product description can be disclosed in place
 
 The product page SHALL render a long description collapsed to at most three
-lines by default and SHALL provide a button labelled for expansion. The button
-SHALL expose its state through `aria-expanded` and SHALL reference the
-description region with `aria-controls`. Activating it SHALL expand the full
-description and change the button to the collapse action; activating it again
-SHALL restore the collapsed state without navigating away.
+lines by default and SHALL provide a button labelled for expansion. A
+description that fits within three lines SHALL be shown in full without a
+disclosure button. The button SHALL expose its state through `aria-expanded`
+and SHALL reference the description region with `aria-controls`. Activating it
+SHALL expand the full description and change the button to the collapse action;
+activating it again SHALL restore the collapsed state without navigating away.
 
 <!-- trace:scenario id=g10.store-product-page.SC-yaj rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-16 - A collector expands and collapses the description
@@ -89,7 +90,7 @@ out.
 
 <!-- trace:scenario id=g10.store-product-page.SC-lqp rev=2 -->
 #### Scenario: grade10-site-store-product-page-SC-17 - A collector adds a chosen quantity in place
-**Serves:** grade10-site-store-product-page-US-08 - Collector adds a product quantity from the product page
+**Serves:** grade10-site-store-product-page-US-03 - Collector adds the product from its page
 
 - **GIVEN** a product with one available sellable item
 - **WHEN** a collector changes the stepper to 2 and activates Add to cart
@@ -102,7 +103,7 @@ out.
 
 <!-- trace:scenario id=g10.store-product-page.SC-xny rev=2 -->
 #### Scenario: grade10-site-store-product-page-SC-18 - A sold-out product's add reads Sold out and cannot be pressed
-**Serves:** grade10-site-store-product-page-US-09 - Collector meets a sold-out product
+**Serves:** grade10-site-store-product-page-US-04 - Collector meets a product that cannot be bought
 
 - **GIVEN** a product whose one sellable item is sold out
 - **WHEN** a collector opens the product page
