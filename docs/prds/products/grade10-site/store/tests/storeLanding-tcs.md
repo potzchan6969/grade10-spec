@@ -4,7 +4,7 @@ title: Store Landing Test Cases
 
 # grade10-site/store/home Test Cases
 
-**Status:** pending-review · 3/11
+**Status:** pending-review · 5/11
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/home
 
@@ -48,12 +48,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** home#collection-grid/tiles
 
 **Pre-conditions:**
@@ -277,7 +277,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
