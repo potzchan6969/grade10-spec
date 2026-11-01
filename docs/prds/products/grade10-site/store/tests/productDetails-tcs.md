@@ -4,8 +4,9 @@ title: Store Product Details Test Cases
 
 # grade10-site/store/product-page Test Cases
 
-**Status:** approved · 20/20
-**Reviewed:** 2026-11-01, tcs-rules r7
+**Status:** reopened · 17/20
+**Reviewed:** 2026-11-01, tcs-rules r7, lapsed 2026-11-02
+**Drafts styled:** 2026-11-02, tcs-rules r7
 **Capabilities:** grade10-site/store/product-page, grade10-site/store/cross-sell, grade10-site/store/discounts
 
 ## Background
@@ -45,7 +46,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -83,7 +84,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -206,7 +207,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
