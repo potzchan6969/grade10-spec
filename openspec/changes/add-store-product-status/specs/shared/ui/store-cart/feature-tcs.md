@@ -1,6 +1,6 @@
 # shared/ui/store-cart Test Cases
 
-**Status:** pending-review · 0/5
+**Status:** pending-review · 0/4
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## Background
@@ -8,7 +8,7 @@
 * `<shared ui storybook url>` is the shared UI Storybook, served by `pnpm storybook:ui`; the drawer's stories sit under Store Cart.
 * The Controls panel changes the props of a story that passes its args straight to the drawer, such as Loading No Lines. `Default` keeps its lines in its own state, so a step there changes them through the drawer's own controls.
 
-## shared-ui-store-cart-US6: Shopper opens a cart that held a delisted product
+## shared.ui-store-cart.US6: Shopper opens a cart that held a delisted product
 
 **As a** shopper,
 **I want** a product that left the catalogue to disappear after the drawer
@@ -182,52 +182,14 @@ sells.
 * Footer shows the price summary and Checkout.
 * Exactly one removal toast shows.
 
-<!-- trace:case id=g10.shared-store-cart.TC-kad rev=1 covers=g10.shared-store-cart.SC-sol,g10.shared-store-cart.SC-0wv,g10.shared-store-cart.SC-fy2,g10.shared-store-cart.SC-jbs,g10.shared-store-cart.SC-pvs,g10.shared-store-cart.SC-psl -->
-### shared-ui-store-cart-US6-TC6-1: An unavailable line the application still passes shows in neither the rows nor the count
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-ui-store-cart-US-06
-
-**Pre-conditions:**
-
-* The Mixed Line States story renders `<cart_9>`, loaded, and keeps every line when the drawer asks to remove one.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<cart_9>` | `<active line>`, `<sold-out line>` and `<delisted line>` |
-| `<active line>` | an active line |
-| `<sold-out line>` | a line marked sold out |
-| `<delisted line>` | a line marked unavailable |
-
-**Steps:**
-
-1. Navigate to the Store/Cart/Blocks/CartDrawer Mixed Line States story at `<shared ui storybook url>`.
-2. Look at the drawer body.
-3. Look at the drawer title.
-
-**Expected Results:**
-
-* Step 2: `<active line>` and `<sold-out line>` show, the second marked sold out.
-* `<delisted line>` does not show.
-* Step 3: the count beside the drawer title reads `1`.
-
 ## Reconciliation
 
-- **Carried for its requirement** - `Cart item status includes unavailable` now states what each status means as `grade10-site/store/cart-validation` answers it: `adjusted` a quantity reduced to what the shop can fill, `soldOut` a variant the shop no longer offers, `unavailable` a product that left the channel or a variant that no longer exists. Its scenario, `shared-ui-store-cart-SC-12`, is unchanged. US6-TC1-1 to US6-TC6-1 are `cart-drawer-empty-state`'s US-06 cases as that change folds them, their id, revision and `covers` unchanged, so the fold keeps them whole
-- **Contradicted** - none
-- **Uncovered anchors** - none. US-06 keeps every case; US6-TC3-1 walks `shared-ui-store-cart-SC-12`
+- **Status contract source** - `Cart item status includes unavailable` follows the [Cart Validation PRD](../../../../../../../docs/prds/products/grade10-site/store/cart-validation.md): `adjusted` is reduced to what the shop can fill, `soldOut` is a variant the shop no longer offers, and `unavailable` is a product that left the channel or a variant that no longer exists. The status-value scenario `shared-ui-store-cart-SC-12` is unchanged.
+- **Already live; duplicate removed** - `shared-ui-store-cart-US6-TC6-1` duplicated the live `shared-ui-store-cart-US6-TC6` (`g10.shared-store-cart.TC-kad@1`) in the [current durable suite](../../../../../../specs/shared/ui/store-cart/feature-tcs.md). Both use the Mixed Line States story and assert that the active and sold-out rows remain, the unavailable row is hidden, and the count reads `1`. It adds no new assertion or row, so its duplicate definition is removed from this delta; the durable case remains live and unchanged. The corresponding count outcome is `shared-ui-store-cart-SC-49` in the [durable spec](../../../../../../specs/shared/ui/store-cart/spec.md).
+- **New, not an extension** - `shared-ui-store-cart-US6-TC1-1` - no live case walks the Unavailable Items Removed story or checks the cleanup toast while an active line remains; the durable Mixed Line States case only checks its rows and count. This is the distinct cleanup path in `shared-ui-store-cart-SC-10` ([delta spec](spec.md#requirement-unavailable-items-are-removed-silently-after-open-loading)).
+- **New, not an extension** - `shared-ui-store-cart-US6-TC2-1` - it starts with no unavailable line and asserts no toast or removal request, the opposite condition and outcome from the live case, which starts with an unavailable line. It covers the negative path in `shared-ui-store-cart-SC-11` ([delta spec](spec.md#requirement-unavailable-items-are-removed-silently-after-open-loading)).
+- **New, not an extension** - `shared-ui-store-cart-US6-TC4-1` - no live case starts with only unavailable lines and checks that cleanup reaches the empty state, hides the count and footer, and shows one toast; the live case keeps active and sold-out rows. This is the all-unavailable path in `shared-ui-store-cart-SC-42` ([durable spec](../../../../../../specs/shared/ui/store-cart/spec.md)).
+- **New, not an extension** - `shared-ui-store-cart-US6-TC5-1` - no live case checks a cart where cleanup leaves only sold-out lines, with no empty state or count but with the footer; the live case retains an active line and count `1`. The distinct post-cleanup result follows the unavailable cleanup and sold-out cart requirements in the [durable spec](../../../../../../specs/shared/ui/store-cart/spec.md).
+- **Anchor coverage** - the US-06 journey has four distinct delta cases and the existing live TC6. The prior reference to `US6-TC3-1` walking `shared-ui-store-cart-SC-12` was stale: neither this delta nor the current durable suite defines that case.
 
-**Run:** QA2 on 2026-10-07, in a fresh context after QA1's blind re-run. Read the anchors, these cases, the delta's scenarios, `cart-drawer-empty-state`'s US-06 scenarios, `decisions.md` and the Store Cart and Cart Validation pages. QA1 widened the delisted line in US6-TC1-1 and US6-TC5-1 to a product that left the channel or a variant that no longer exists, which the restated status table and SC-10 state; what the stories show is unchanged, so the drafts keep rev 1, and the fold carries this change's wording over `cart-drawer-empty-state`'s. Every case folds, SC-12 is walked by US6-TC3-1, and nothing was raised.
-
-**Run:** Update on 2026-10-07, from `add-store-product-status`'s sixth acceptance review. QA2 reruns on this suite.
+**Run:** QA2 rerun on 2026-11-02 after the settled answers were recorded in `decisions.md`. Read this suite's cases and anchors, its `spec.md` and `user-journeys.md`, the updated `decisions.md`, the Product Listing and Cart Validation PRDs, `docs/governance/specs-to-test-cases.md`, and the current durable Store Cart spec and feature suite from `origin/main` at `877943c1d`. The archived `cart-drawer-empty-state` suite was consulted only to check the old carry-forward note; the current durable suite determines whether a case is live. No anchors or scenario requirements changed. QA2 found TC6 duplicates the live `TC-kad@1` case and removed it from this delta; TC1, TC2, TC4 and TC5 remain new for the distinct routes and outcomes above.
