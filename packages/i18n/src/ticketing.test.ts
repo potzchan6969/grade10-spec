@@ -188,6 +188,27 @@ describe("the ticketing words", () => {
     expect(words.filter(([, sentence]) => other.test(sentence))).toEqual([]);
   });
 
+  /* A mail fills names, references and amounts that are often Latin into a
+     Chinese sentence: every one sits between spaces where it meets Chinese,
+     "你在 {event} 的訂單 {reference}，", never "你在{event}的訂單{reference}". */
+  it.each(["zh-Hant", "zh-Hans"] as const)(
+    "spaces every value a %s mail fills from the Chinese around it",
+    (locale) => {
+      const han = /\p{Script=Han}/u;
+      const tight = [
+        ...Object.entries(sharedMail(locale)),
+        ...Object.entries(brandMail(locale)),
+      ].filter(([, sentence]) =>
+        [...sentence.matchAll(/\{\w+\}/g)].some(
+          ({ index, 0: slot }) =>
+            han.test(sentence[index - 1] ?? "") ||
+            han.test(sentence[index + slot.length] ?? ""),
+        ),
+      );
+      expect(tight).toEqual([]);
+    },
+  );
+
   it("reads a door answer and a promo refusal in English", () => {
     const { door, promo } = getMessages("grade10", "en").ticketing;
     expect(door.answer.admitted.title).toBe("Admitted");
