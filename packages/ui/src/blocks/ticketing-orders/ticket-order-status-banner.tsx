@@ -110,7 +110,10 @@ function TicketOrderStatusBanner({
       {held && countdown ? (
         <>
           {" "}
-          <span className="font-semibold tabular-nums" data-slot="ticket-countdown">
+          <span
+            className="font-semibold tabular-nums"
+            data-slot="ticket-countdown"
+          >
             {countdown}
           </span>
         </>

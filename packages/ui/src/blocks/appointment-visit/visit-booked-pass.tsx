@@ -167,7 +167,9 @@ function VisitBookedPass({
               >
                 <span className="flex justify-between gap-3 text-sm leading-5">
                   <span className={INK_2}>{paid.label}</span>
-                  <span className="font-semibold tabular-nums">{paid.value}</span>
+                  <span className="font-semibold tabular-nums">
+                    {paid.value}
+                  </span>
                 </span>
                 {paid.refund ? (
                   <span className="text-[13px] leading-[18px] text-secondary-foreground">
