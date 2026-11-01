@@ -70,7 +70,7 @@
       "quantityLabel": "候補門票數量：{pass}",
       "decrement": "少候補一張：{pass}",
       "increment": "多候補一張：{pass}",
-      "offerEnded": "你的保留已結束，門票已給下一位。你可以重新加入，排在最後。",
+      "offerEnded": "你的保留已結束，門票已釋出。你可以重新加入，排在最後。",
       "place": {
         "title": "你已在候補名單中",
         "wanted": "候補 {count, plural, other {# 張門票}}",
@@ -375,7 +375,7 @@
       "title": "請輸入你的姓名及電郵。"
     },
     "noWaitingLine": {
-      "title": "此票種沒有輪候名單。"
+      "title": "此票種沒有候補名單。"
     },
     "ticketsLeft": {
       "title": "仍有 {count, plural, other {# 張門票}}發售中。",
@@ -383,7 +383,7 @@
     },
     "offerEnded": {
       "title": "這次保留已結束。",
-      "body": "門票已給候補名單上的下一位。"
+      "body": "門票已釋出。"
     },
     "codeUsedUp": {
       "title": "{code} 的最後一次使用剛被用去。",

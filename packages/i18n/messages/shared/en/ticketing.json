@@ -70,7 +70,7 @@
       "quantityLabel": "How many tickets to wait for: {pass}",
       "decrement": "Wait for one fewer: {pass}",
       "increment": "Wait for one more: {pass}",
-      "offerEnded": "Your offer ended, and the tickets went to the next person. You can join again, at the back.",
+      "offerEnded": "Your offer ended, and the tickets were released. You can join again, at the back.",
       "place": {
         "title": "You’re in the waiting line",
         "wanted": "Waiting for {count, plural, one {# ticket} other {# tickets}}",
@@ -383,7 +383,7 @@
     },
     "offerEnded": {
       "title": "This offer has ended.",
-      "body": "The tickets went to the next person in line."
+      "body": "The tickets were released."
     },
     "codeUsedUp": {
       "title": "The last use of {code} was just taken.",
