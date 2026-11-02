@@ -85,5 +85,97 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@kinisworking",
+    "reviewedAt": "2026-11-02T00:37:31Z",
+    "changes": [
+      {
+        "path": "openspec/changes/add-grade10-customer-order-pages/ui-design.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The design artifact renames Your Orders to My Orders and shortens the not-found state label; these wording edits do not change route or presentation behavior."
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The Store's durable OpenSpec domain suite was intentionally retired during the Store test-suite migration. This acknowledges the suite removal and does not claim that every deleted case was replaced.",
+        "evidence": [
+          "grade10-spec commit 2c89e48b12bfe0872d2441d40f55398d10d91bb3 explicitly deleted the Store suites under openspec and states that cases not retained in the PRD suites were not carried.",
+          "The customer order implementation evidence is recorded in this change's rounds.md: focused service, projection, page and browser tests in rounds 1 through 4."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-detail/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The draft durable order-detail suite was intentionally retired during the Store test-suite migration. This records the changed test scope without asserting that the deleted suite is fully replaced.",
+        "evidence": [
+          "grade10-spec commit 2c89e48b12bfe0872d2441d40f55398d10d91bb3 explicitly deleted this change's order-detail suite and states that cases not retained in the PRD suites were not carried.",
+          "This change's rounds.md records focused order-detail projection, page and private-link browser coverage for the implemented behavior."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-detail/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: One private address shows one owned order",
+          "Requirement: The detail preserves the order facts the Store supplies"
+        ],
+        "classification": "semantic",
+        "reason": "The current contract scopes this page to Store orders, uses the delivered /store/my-orders route, and includes refund and points presentation while retaining the owner-only and supplied-facts boundaries.",
+        "evidence": [
+          "This change's tasks 3.1, 5.3, 5.6 and rounds.md record route tests, typed order projections, refund and points coverage, and the private-link browser walk.",
+          "Focused coverage is recorded at grade10:packages/grade10-store/frontend/src/features/orders/checkout/presentation/projections.test.ts and grade10:apps/frontend/grade10/src/pages/orders/OrderDetailsPage.test.tsx.",
+          "The browser walks recorded in rounds.md are grade10:apps/frontend/grade10/e2e/tests/order-history.spec.ts and grade10:apps/frontend/grade10/e2e/tests/store/guest-checkout.spec.ts."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-history/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The draft durable order-history suite was intentionally retired during the Store test-suite migration. This records the changed test scope without asserting that the deleted suite is fully replaced.",
+        "evidence": [
+          "grade10-spec commit 2c89e48b12bfe0872d2441d40f55398d10d91bb3 explicitly deleted this change's order-history suite and states that cases not retained in the PRD suites were not carried.",
+          "This change's rounds.md records focused history projection, page and browser coverage for the delivered order-history behavior."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-history/spec.md",
+        "anchors": [
+          "Purpose",
+          "Requirement: A collector reaches their orders at one private address",
+          "Requirement: Current product pictures identify recorded purchases",
+          "Requirement: Order actions use settled Grade10 and carrier addresses",
+          "Requirement: The page distinguishes loading, failure, and no orders",
+          "Requirement: My Orders presents newest active and past orders"
+        ],
+        "classification": "semantic",
+        "reason": "The current contract names the My Orders route, limits the page to Store orders, uses the customer-facing status badge for active/past grouping, and specifies current pictures, safe actions and distinct query states; the implementation uses the typed Store order read and preserves recorded purchase facts.",
+        "evidence": [
+          "This change's tasks 2.2 through 3.4 and rounds.md record typed projections, status grouping, route tests, safe tracking targets, query states and page behavior.",
+          "Focused coverage is recorded at grade10:packages/grade10-store/frontend/src/features/orders/checkout/presentation/projections.test.ts, grade10:apps/frontend/grade10/src/pages/orders/OrderHistoryPage.test.tsx, and grade10:apps/frontend/grade10/src/pages/orders/OrderDetailsPage.test.tsx.",
+          "Order-picture service and browser evidence is recorded in rounds.md at grade10:packages/grade10-store/backend/test/services/orders/orderPictures.test.ts and grade10:apps/frontend/grade10/e2e/tests/order-history.spec.ts."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-history/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The signed-out journey changes the surface name from Your Orders to My Orders to match the accepted route and product wording; its sign-in return behavior is unchanged."
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-order-detail/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The draft durable shared-component suite was intentionally retired during the test-case migration. This records the changed test scope without asserting that the deleted suite is fully replaced.",
+        "evidence": [
+          "grade10-spec commit 1d943096c343652db8ae5bfe0be7a2d795763e31 deletes the durable shared Order Details suite as part of the GUI-walk test-case migration.",
+          "This change's tasks 1.2, 4.1 and 4.3 record focused shared UI Storybook and contract checks; rounds.md records the consuming page and browser evidence."
+        ]
+      }
+    ]
+  }
 }
