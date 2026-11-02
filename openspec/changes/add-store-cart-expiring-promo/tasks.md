@@ -34,7 +34,7 @@ or a service call.
 - [ ] 5.2 Recheck the accepted delta, linked journeys, UI design and durable target paths with the repository planning/manual checks after the PRD record and spec-submodule revision are aligned.
 - [ ] 5.3 Verify: run `pnpm run plan:review-preflight add-store-cart-expiring-promo`, the strict change validator and the Store test-case validator; record any unrelated existing warnings separately.
 
-## 6. Spec-submodule boundary (grade10)
+## 6. Spec-submodule boundary (grade10) (owner: @kinisworking)
 
 - [ ] 6.1 After the accepted `grade10-spec` revision is published, update only the `external/grade10-spec` gitlink through the supported submodule workflow. Preserve unrelated nested work, record the accepted revision, and make the application submodule check pass before consuming `detailEmphasis`.
 - [ ] 6.2 Verify: run the application submodule/status check and confirm the gitlink points to the accepted `grade10-spec` revision with no unrelated nested changes.
