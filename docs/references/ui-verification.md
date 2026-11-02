@@ -17,6 +17,7 @@
 - **Identity** - A story carries a permanent verification `caseId`; application declarations add the target and capture point, so the same story can serve several sites.
 - **History** - Saved reference and site PNGs stay immutable in the archive, independently of what the latest Storybook renders.
 - **Two tabs** - Approve, where a designer approves the Storybook reference, and Site Compare, where the site is held to the approved reference.
+- **Dashboard** - The UI Verification Dashboard, a page of its own, reads the same archive across every story.
 
 ## How It Flows
 
@@ -27,6 +28,7 @@
 5. **Capture every reference** - Within an hour of each Storybook deploy, or on request from the Reference captures page, the deployed Worker captures every case's reference, at most once every six hours. Nothing runs in CI. The Reference captures page shows each run as it goes.
 6. **Site Compare** - The Site Compare tab holds each site capture to the last approved reference, and flags how far the run's own reference has drifted from it.
 7. **Compare pixels** - Runs in the browser on the archived PNGs. It writes nothing.
+8. **See every story** - The UI Verification Dashboard ranks the approvals waiting and the site drifts across all stories.
 
 ## Set Up Locally
 
@@ -94,6 +96,20 @@ pnpm storybook:workbench
 - **Run history** - Every finished run: its lane and trigger, who asked, its state and message, its commit, and its shots.
 - **Live** - While a run goes or a request waits, the page refreshes every five seconds.
 
+## UI Verification Dashboard
+
+- **Where** - A page of its own, not a panel. Open it from Dashboard in the Approve or Site Compare tab, on the Reference captures page, or at `?path=/verification-dashboard/`.
+- **Reads** - Every site run, reference and approval through the workbench's `/api/*` routes. A row is one case at the newest run that holds evidence for it, in the chosen locale. A failed read shows nothing, so a partial list cannot look complete.
+- **Stores nothing** - Pixel diffs are worked out in the browser. Pairs with the same bytes and pairs with boxes of another size settle without a download; the rest run a few at a time, across every row, because the ranking needs every number.
+- **Stories** - Every count is of stories, not cases or sizes. A flow's steps are one story.
+- **Story status** - Approved when every size is. Otherwise Pending Comments when any size has a change request, No baseline when no size was ever approved, and Not approved for the rest. Each story has one status, so the four boxes add up to the total.
+- **Tolerance** - Reference drift and site drift share one line: past 10% of the region, or a region of another size. The Approve and Site Compare tabs use the same line.
+- **Approvals tab** - Reference drift only, in three sections: unapproved references past the tolerance, worst first; stories with no baseline; the other unapproved references. Pressing the Approved box lists the approved stories.
+- **Site drift tab** - One list, the highest site drift between the sizes first. A screen size filter ranks by that size alone. Compare the site with Last approved, where a size with no approved reference has nothing to compare and shows `-`, or Current reference, the reference the run recorded, where a compact label says when that reference is approved.
+- **Domain filter** - Choosing a domain groups either tab by Storybook path, each path keeping its tab's order and ranking from 1.
+- **Story dialog** - Row Approve only opens the dialog, so a person sees the images first. Approve all sizes makes the focused capture the Approve tab makes. Request changes needs one size and a comment. On the Site drift tab there is no approval: nobody approves a site capture.
+- **Fix prompts** - On the Site drift tab, Copy prompt copies one story's drift report with a sample prompt to fix the site. The button above the table copies every drift past the tolerance in the current filters as one batch prompt. The page shows what it copied.
+
 ## Where Captures And Approvals Live
 
 - **Coordinator** - One capture coordinator owns the schedule, the live runs and every approval. Hosted, it is one Cloudflare Durable Object, `ReferenceCaptures`, and its alarm drives a full capture. Locally, the workbench runs it in-process, with JSON files beside the archive and a timer for the alarm.
@@ -111,7 +127,7 @@ pnpm storybook:workbench
 - **Evidence** - One row per size: Reference, Site and Pixel diff.
 - **All recordings** - Opens the story list of the chosen version, to review stories other than the open one.
 - **Compare the site with** - Last approved reference, the default, or Current reference: the reference the run recorded. A size with no approved reference uses the run's reference, and the panel says so.
-- **Drift flag** - When the run's reference differs from the last approved one by more than 20% of the reference region, the toggle says by how much. A reference region that changed size is flagged too.
+- **Drift flag** - When the run's reference differs from the last approved one by more than 10% of the reference region, the toggle says by how much. A reference region that changed size is flagged too.
 - **Approval flag** - Beside the toggle, the story reference's approval at the chosen size, as the Approve tab shows it: Reference approved, Reference not approved, Changes requested, or No approved reference. A size tab names its flag too.
 
 ## Compare Pixels
