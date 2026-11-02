@@ -163,10 +163,9 @@ function VaultAssetList({
           "flex flex-wrap items-center justify-between gap-3 delay-[90ms]",
         )}
       >
-        <div
+        <fieldset
           aria-label="Filter holdings"
           className="flex flex-wrap items-center gap-2"
-          role="group"
         >
           {visibleTabs.map((t) => (
             <Button
@@ -180,7 +179,7 @@ function VaultAssetList({
               {t.label}
             </Button>
           ))}
-        </div>
+        </fieldset>
         <DropdownMenu>
           <DropdownMenuTrigger
             render={

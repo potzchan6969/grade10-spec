@@ -1066,6 +1066,103 @@ test("approving captures the live reference and Site Compare holds the site to i
   await page.close();
 });
 
+test("the dashboard ranks every story and holds an approval behind its images", {
+  timeout: 180_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-preview-"));
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  await publishRun(archive, browser, {
+    runId: "dashboard-run",
+    createdAt: "2026-10-09T10:01:00.000Z",
+    storyId: STORY_ID,
+  });
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  const context = await browser.newContext({
+    permissions: ["clipboard-read", "clipboard-write"],
+    viewport: { width: 1440, height: 1000 },
+  });
+  const page = await context.newPage();
+  await page.goto(`${server.origin}/?path=/verification-dashboard/`, {
+    waitUntil: "domcontentloaded",
+  });
+
+  const dashboard = page.locator(".vd-page");
+  await dashboard
+    .getByRole("heading", { name: "UI Verification Dashboard" })
+    .waitFor();
+  const noBaseline = dashboard.locator(".vd-tile", { hasText: "No baseline" });
+  await noBaseline.waitFor();
+  assert.match(await noBaseline.innerText(), /^1 \/ 1/);
+
+  const queue = dashboard.getByRole("table");
+  await queue
+    .getByRole("button", { name: /Not Found/ })
+    .first()
+    .waitFor();
+  assert.equal(await queue.getByRole("row").count(), 4);
+  assert.equal(
+    await dashboard
+      .getByRole("button", { name: /Copy .* as a prompt/ })
+      .count(),
+    0,
+  );
+
+  await dashboard.getByRole("tab", { name: /Site drift/ }).click();
+  await dashboard
+    .getByRole("group", { name: "Compare the site with" })
+    .getByRole("button", { name: "Current reference" })
+    .click();
+  const copyAll = dashboard.getByRole("button", { name: /as a prompt$/ });
+  await waitForCondition(
+    async () => (await copyAll.innerText()).startsWith("Copy 2 drifts"),
+    "the pixel pass to find the drifts",
+    30_000,
+  );
+  await copyAll.click();
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  assert.match(copied, /^Fix these \d+ layout drifts/);
+  assert.match(
+    await dashboard.getByRole("status", { name: "Copied prompt" }).innerText(),
+    /Copied to clipboard/,
+  );
+
+  await dashboard.getByRole("tab", { name: /Approvals/ }).click();
+  await queue
+    .getByRole("button", { name: /Review the images of .* to approve/ })
+    .first()
+    .click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("button", { name: "Approve all sizes" }).waitFor();
+  assert.match(
+    await noBaseline.innerText(),
+    /^1 \/ 1/,
+    "the row button approves nothing",
+  );
+  await dialog.getByRole("button", { name: "Approve all sizes" }).click();
+  await dialog.waitFor({ state: "detached", timeout: CAPTURE_TIMEOUT_MS });
+  assert.match(
+    await dashboard.locator(".vd-note").innerText(),
+    /^Approved .* at desktop, tablet and mobile in en\./,
+  );
+  assert.match(
+    await dashboard
+      .getByRole("button", { name: /Not approved at least/ })
+      .innerText(),
+    /^1 \/ 1/,
+    "a flow-like story with one case still waiting stays not approved",
+  );
+});
+
 test("the captures page requests a full capture, follows it, and holds the next one", {
   timeout: 240_000,
 }, async (t) => {

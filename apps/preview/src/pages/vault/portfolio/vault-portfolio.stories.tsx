@@ -32,12 +32,13 @@ import {
   VaultPageShell,
 } from "../../vault-shared";
 import { navigateToStory } from "../../workbench-story-nav";
-import { RewardsLedger } from "../rewards-ledger";
-import { WalletSummary } from "../wallet-summary";
-import { WithdrawalDetails } from "../withdrawal-details";
-import { WithdrawalDialog } from "../withdrawal-dialog";
+import { WithdrawalDetails } from "./withdrawal-details";
+import { WithdrawalDialog } from "./withdrawal-dialog";
 import { ActiveIntakeAlert } from "./active-intake-alert";
+import { RewardsLedger } from "./rewards-ledger";
 import { VaultAssetList } from "./vault-asset-list";
+import { WalletSummary } from "./wallet-summary";
+import { WithdrawalDialog } from "./withdrawal-dialog";
 
 /** Simulated holdings fetch — the workbench recipe's ready beat. */
 const HOLDINGS_LOAD_MS = 350;
@@ -80,6 +81,7 @@ function VaultPortfolioPage({
   ).length;
 
   /* Enter: the active panel's sections rise in on each tab switch. */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: pageTab and empty are what re-run the rise
   useEffect(() => {
     const panel = tabsRef.current?.querySelector(
       '[role="tabpanel"][data-state="active"]',

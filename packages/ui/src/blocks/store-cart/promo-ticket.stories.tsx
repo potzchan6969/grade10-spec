@@ -71,6 +71,7 @@ export const ExpiringSoon: Story = {
     },
   },
   play: async ({ canvasElement }) => {
+    // g10.shared-store-cart.SC70: consumer-supplied true emphasizes the detail only.
     const canvas = within(canvasElement);
     expect(canvas.getByText("Use by 8 Nov 2026")).toHaveClass(
       "text-accent-foreground",
@@ -151,6 +152,8 @@ export const ContractStates: Story = {
     </div>
   ),
   play: async ({ canvasElement, userEvent }) => {
+    // g10.shared-store-cart.SC71: false and omitted stay plain.
+    // g10.shared-store-cart.SC72: copy, ticket order, refusal and Apply behavior stay intact.
     const canvas = within(canvasElement);
     const tickets = canvas.getAllByRole("group");
 

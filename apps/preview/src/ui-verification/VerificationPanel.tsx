@@ -143,7 +143,7 @@ function localeLabel(value: string): string {
   return language ? `${language} (${value})` : value;
 }
 
-function localeShortLabel(value: string): string {
+export function localeShortLabel(value: string): string {
   return LOCALE_SHORT_LABELS[localeKey(value)] ?? value;
 }
 
@@ -270,7 +270,7 @@ function isCaseOnlyVerification(value: unknown, caseId: string): boolean {
   );
 }
 
-async function listAllRuns(
+export async function listAllRuns(
   base: string,
   caseId: string,
   signal: AbortSignal,
@@ -295,7 +295,7 @@ async function listAllRuns(
   );
 }
 
-async function listEvery<T>(
+export async function listEvery<T>(
   list: (
     base: string,
     caseId: string,
@@ -1440,6 +1440,12 @@ export function VerificationPanel({
       <header className="verification-panel-header">
         <h2>{mode === "approve" ? "Approve" : "Site Compare"}</h2>
         <div className="verification-inline-actions">
+          <button
+            onClick={() => managerApi.navigate("/verification-dashboard/")}
+            type="button"
+          >
+            Dashboard
+          </button>
           {mode === "approve" ? (
             <button
               onClick={() => managerApi.navigate("/reference-captures/")}

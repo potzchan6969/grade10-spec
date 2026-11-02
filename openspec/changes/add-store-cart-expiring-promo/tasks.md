@@ -30,9 +30,9 @@ or a service call.
 
 ## 5. Grade10 product record (grade10-spec) (owner: @kinisworking)
 
-- [ ] 5.1 Verify and land the Grade10 Cart Drawer PRD update for “Running out reads louder” and the `Expiring promo detail` decision, keeping the discount title and expiry/conditions detail as separate slots and adding no scenario ids, new wording or duplicate product rule.
-- [ ] 5.2 Recheck the accepted delta, linked journeys, UI design and durable target paths with the repository planning/manual checks after the PRD record and spec-submodule revision are aligned.
-- [ ] 5.3 Verify: run `pnpm run plan:review-preflight add-store-cart-expiring-promo`, the strict change validator and the Store test-case validator; record any unrelated existing warnings separately.
+- [x] 5.1 Verify and land the Grade10 Cart Drawer PRD update for “Running out reads louder” and the `Expiring promo detail` decision, keeping the discount title and expiry/conditions detail as separate slots and adding no scenario ids, new wording or duplicate product rule.
+- [x] 5.2 Recheck the accepted delta, linked journeys, UI design and durable target paths with the repository planning/manual checks after the PRD record and spec-submodule revision are aligned.
+- [x] 5.3 Verify: run `pnpm run plan:review-preflight add-store-cart-expiring-promo`, the strict change validator and the Store test-case validator; record any unrelated existing warnings separately.
 
 ## 6. Spec-submodule boundary (grade10) (owner: @kinisworking)
 

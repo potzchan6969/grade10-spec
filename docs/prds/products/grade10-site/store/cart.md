@@ -151,6 +151,7 @@ considering. Its value is a total they can trust before they go to pay.
 - **Dismissible while pending** — close, backdrop and Escape stay available, so a slow request does not trap the collector; chosen over disabling dismissal
 - **The product's first picture** — as the collection card shows it, from the current read; variant pictures, or pictures held with the cart, can differ from the catalogue
 - **Closes when the session ends** — chosen over leaving it open and empty, which reads as a cart with nothing in it beside a header that says Sign In
+- **Expiring promo detail** — collectors weigh a code's value against its conditions before applying it; we chose to make the time limit easier to notice without rewriting the offer or adding urgency copy
 - **Another member's code** — answered as a code nobody minted, so a typed code tells nobody whose wallet it is in
 - **Priced by the shop's rules** — a basket the shop's proven rules cover is worked out without asking, chosen over asking on every edit because asking took a code mint and a draft-order call; the checkout still asks, so a rule the shop moves shows as a different figure at checkout, never a different charge
 - **Priced by the shop** — the shop prices the basket as its checkout will, so a code shown as applied is applied at checkout; the held list stays on the store's own rules, because asking the shop once per held code on every edit is too many calls

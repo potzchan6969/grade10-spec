@@ -14,7 +14,7 @@ import {
   PAYOUT_METHOD,
   type VaultPayoutRequest,
   WITHDRAWAL_PROCESSING_DAYS,
-} from "../vault-content";
+} from "../../vault-content";
 
 function DetailRow({
   label,

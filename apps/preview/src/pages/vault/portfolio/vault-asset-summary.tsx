@@ -17,6 +17,20 @@ import {
   type VaultAsset,
 } from "../../vault-content";
 
+/** What the headline shows: a sale's own price while listed, else the estimate. */
+function headlinePrice(asset: VaultAsset): {
+  label: string;
+  amountHkd: number;
+} {
+  if (asset.status === "Live Auction" && asset.currentBidHkd != null) {
+    return { label: "Bid price", amountHkd: asset.currentBidHkd };
+  }
+  if (asset.status === "Listed" && asset.listedHkd != null) {
+    return { label: "Listed price", amountHkd: asset.listedHkd };
+  }
+  return { label: "Estimated value", amountHkd: asset.estimateHkd };
+}
+
 type VaultAssetSummaryProps = {
   asset: VaultAsset;
   /** Feature flag: show the change-since-intake figure. Soft launch leaves it off even when the data exists. */
@@ -57,18 +71,7 @@ function VaultAssetSummary({
   const liveListing =
     asset.status === "Live Auction" || asset.status === "Listed";
   const locked = liveListing || asset.status === "Retrieval Pending";
-  const priceLabel =
-    asset.status === "Live Auction"
-      ? "Bid price"
-      : asset.status === "Listed"
-        ? "Listed price"
-        : "Estimated value since intake";
-  const priceHkd =
-    asset.status === "Live Auction"
-      ? (asset.currentBidHkd ?? asset.estimateHkd)
-      : asset.status === "Listed"
-        ? (asset.listedHkd ?? asset.estimateHkd)
-        : asset.estimateHkd;
+  const price = headlinePrice(asset);
   const showListings = !locked && Boolean(onListForAuction || onListForSale);
   const valuePotentialDescription = valuePotential
     ? `Est. Graded PSA Value: ${formatHkd(valuePotential.gradedEstimateHkd)} (+${valuePotential.upsidePercent}%)`
@@ -99,14 +102,14 @@ function VaultAssetSummary({
       <Card className="bg-background-subtle">
         <CardHeader className="gap-2">
           <CardDescription className="text-xs font-medium uppercase text-secondary-foreground">
-            {priceLabel}
+            {liveListing ? price.label : "Estimated value since intake"}
           </CardDescription>
           <div className="flex flex-wrap items-baseline gap-1">
             <Text className="font-heading" size="lg" weight="medium">
               HK$
             </Text>
             <CardTitle className="font-heading text-3xl font-medium tabular-nums">
-              {priceHkd.toLocaleString("en-HK")}
+              {price.amountHkd.toLocaleString("en-HK")}
             </CardTitle>
             {showEstimateChange && asset.estimateChangePercent != null ? (
               <Text

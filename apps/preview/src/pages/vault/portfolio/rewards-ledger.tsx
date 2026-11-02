@@ -102,6 +102,7 @@ function RewardsLedger({
   const groupsRef = useRef<HTMLDivElement>(null);
 
   /* Enter: the month groups rise in on each tab switch. */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: activeTab is what re-runs the rise
   useEffect(() => {
     animateEnter(groupsRef.current, { duration: 160, rise: 4 });
   }, [activeTab]);
@@ -168,10 +169,9 @@ function RewardsLedger({
       className={cn("flex flex-col gap-6", className)}
       data-slot="rewards-ledger"
     >
-      <div
+      <fieldset
         aria-label="Activity filters"
         className="flex flex-wrap items-center gap-2"
-        role="group"
       >
         {(["all", "incentives", "withdrawal"] as const).map((key) => (
           <Button
@@ -189,7 +189,7 @@ function RewardsLedger({
                 : "All"}
           </Button>
         ))}
-      </div>
+      </fieldset>
 
       <div className="flex flex-col gap-6" ref={groupsRef}>
         {months.map((group) => (

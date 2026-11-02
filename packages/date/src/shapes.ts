@@ -70,6 +70,18 @@ export function formatWeekdayMoment(
   return render(at, PATTERNS.weekdayMoment, opts);
 }
 
+/**
+ * A near time something runs out at, by its weekday, the hour first since it
+ * is what runs out: `14:47, Sat 28 Nov`. A hold's end, on the clock the page
+ * already states.
+ */
+export function formatWeekdayCutoff(
+  at: Instant,
+  opts: DateFormat = {},
+): string {
+  return render(at, PATTERNS.weekdayCutoff, opts);
+}
+
 /** A day in the reader's current year, the year unsaid: `9 Oct`. */
 export function formatShortDay(at: Instant, opts: DateFormat = {}): string {
   return render(at, PATTERNS.shortDay, opts);

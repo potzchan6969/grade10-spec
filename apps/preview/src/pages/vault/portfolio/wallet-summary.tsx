@@ -10,7 +10,11 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info } from "@phosphor-icons/react";
+<<<<<<<< HEAD:apps/preview/src/pages/vault/wallet-summary.tsx
 import { formatHkd, formatUsd } from "../vault-content";
+========
+import { formatUsd } from "../../vault-content";
+>>>>>>>> origin/main:apps/preview/src/pages/vault/portfolio/wallet-summary.tsx
 
 /**
  * The collector's vault wallet — withdrawal stats over the portfolio. Left:

@@ -12,6 +12,7 @@ import {
   formatMonthNameAlone,
   formatShortDay,
   formatTimeOfDay,
+  formatWeekdayCutoff,
   formatWeekdayDay,
   formatWeekdayMoment,
   formatZone,
@@ -84,6 +85,17 @@ describe("the shapes", () => {
         timeZone: "Asia/Hong_Kong",
       }),
     ).toBe("Fri 30 Oct, 14:30");
+  });
+
+  it("puts the hour first on a time something runs out at", () => {
+    const at = new Date("2026-11-28T06:47:00Z");
+    const hk = { timeZone: "Asia/Hong_Kong" };
+    expect(formatWeekdayCutoff(at, { ...hk, locale: "en" })).toBe(
+      "14:47, Sat 28 Nov",
+    );
+    expect(formatWeekdayCutoff(at, { ...hk, locale: "zh-Hant" })).toBe(
+      "11月28日 週六 14:47",
+    );
   });
 });
 
