@@ -594,6 +594,10 @@
     }
   },
   "door": {
+    "environment": {
+      "name": "{env, select, development {개발} uat {UAT} other {스테이징}}",
+      "text": ": 테스트 티켓 전용"
+    },
     "signIn": {
       "title": "입구 열기",
       "body": "입구 책임자에게 받은 비밀번호를 입력하세요. 계정은 필요 없어요.",

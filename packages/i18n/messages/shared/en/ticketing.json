@@ -594,6 +594,10 @@
     }
   },
   "door": {
+    "environment": {
+      "name": "{env, select, development {Development} uat {UAT} other {Staging}}",
+      "text": ": test tickets only"
+    },
     "signIn": {
       "title": "Open the door",
       "body": "Enter the passcode the door lead gave you. No account needed.",
