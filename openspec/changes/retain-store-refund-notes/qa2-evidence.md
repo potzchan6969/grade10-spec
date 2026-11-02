@@ -88,3 +88,7 @@ This is planning reconciliation, not implementation acceptance or a `Ready to ac
 [erasure]: specs/grade10-site/store/order-detail/spec.md#requirement-refund-reason-text-stays-within-the-existing-erasure-boundary
 [journey]: specs/grade10-site/store/order-detail/user-journeys.md#grade10-site-store-order-detail-us-01-collector-inspects-one-owned-order
 [tasks]: tasks.md
+
+## Preflight source repair
+
+Acceptance preflight found that the delta's narrow Purpose would replace the whole durable capability Purpose. The coordinator restored the existing durable Purpose verbatim. Frozen journey and Feature set roots and all thirteen scenarios are unchanged; this non-anchor repair preserves the existing capability scope and requires no blind-case regeneration. The initial snapshot hashes in planning-inputs.json remain historical input evidence.
