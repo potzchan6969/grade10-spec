@@ -1817,7 +1817,9 @@ field. Live account details come from Finance-owned configuration. Grade10
 snapshots the picked rail's approved instructions on the issued bank-transfer
 invoice; the preview uses Grade10 Finance Limited and HSBC Hong Kong samples.
 Grade10 generates the FPS QR for each order from the FPS ID, the beneficiary
-name (shown as the account name), the amount and the payment reference.
+name (shown as the account name) and the amount. The QR carries no payment
+reference: the winner types it in the memo field, which a banking app may label
+"Message to payee".
 
 | Rail picked | Details shown |
 | --- | --- |
