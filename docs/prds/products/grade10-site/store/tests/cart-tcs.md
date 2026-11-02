@@ -1634,9 +1634,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** checkout#paying-again/recovery, checkout#paying-again/lost-answer, checkout#paying-again/another-pay, cart#checkout/created-from-the-drawer
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/store/cart-checkout.spec.ts`
 
 **Pre-conditions:**
 
@@ -1774,9 +1776,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** cart#pending-operations/wait-before-another-action, checkout#proceed-to-checkout/closing-during-pay, checkout#proceed-to-checkout/one-pay-at-a-time
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/store/cart-review.spec.ts`
 
 **Pre-conditions:**
 
@@ -1939,3 +1943,4 @@ Runs once per row of **Test data**.
 ## Settled
 
 - A discounted cart line's hidden labels identify the charged and struck prices to a screen reader; a line without a struck price has neither label.
+- **Checkout automation disposition:** `g10.store-cart.TC39` is automated by `grade10:apps/frontend/grade10/e2e/tests/store/cart-checkout.spec.ts`; `g10.store-cart.TC42` is automated by `grade10:apps/frontend/grade10/e2e/tests/store/cart-review.spec.ts`. Live-Shopify cases remain manual: `g10.store-cart.TC35`, `TC36`, `TC37`, `TC38`, `TC40`, `TC43`, `TC44`, `TC45`, `TC46` and `TC47`. TC35–TC38, TC40, TC43, TC45–TC47 need hosted-checkout, payment or order-status behavior the local fixture does not prove; TC44 needs live shop price or stock changes. `g10.store-cart.TC41` remains manual for sign-in and cart ownership, outside provider scope.

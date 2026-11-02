@@ -1242,11 +1242,11 @@ export function readAllSuites(root, scope = null) {
   return findSuites(root, scope).map((p) => readSuite(root, p));
 }
 
-/** Every case in the store as `id -> { level, traces }`, read straight from the
- *  text so a sweep is checked against what the files say rather than against a
- *  parse that a sweep might itself have changed. Case ids are permanent and
- *  unique store-wide, so this survives a file being renamed or a case moving
- *  between levels. */
+/** Every case in the supplied suites as `id -> { level, traces }`, read
+ *  straight from the text so a sweep is checked against what the files say
+ *  rather than against a parse that a sweep might itself have changed. Case
+ *  ids are permanent and unique store-wide, so this survives a file being
+ *  renamed or a case moving between levels. */
 export function caseIndex(root, paths) {
   const index = new Map();
   for (const p of paths) {
@@ -1259,23 +1259,28 @@ export function caseIndex(root, paths) {
       const h = line.match(
         /^(?:###|####)\s+((?:\S+\.US-?\d+-TC-?\d+)|(?:\S+\.TC-[0-9a-z]+)|(?:\S+-TC\d+(?:-\d+)?))(?:\s+\(US-?(\d+)-TC-?(\d+)\))?:/,
       );
-      if (h) {
-        id = h[1];
+      const storeCase = h ? null : STORE_CASE.exec(line);
+      if (h || storeCase) {
+        id = h?.[1] ?? storeCase[2];
+        const journeyMatch = /\.US-?(\d+)-TC-?\d+$/.exec(id);
+        const tcMatch = /\.US-?\d+-TC-?(\d+)$/.exec(id);
         if (!index.has(id))
           index.set(id, {
             level,
             rel,
             line: lineNo,
-            journeyNum: h[2]
+            journeyNum: h?.[2]
               ? Number(h[2])
-              : /\.US-?(\d+)-TC-?\d+$/.exec(h[1])
-                ? Number(/\.US-?(\d+)-TC-?\d+$/.exec(h[1])[1])
+              : journeyMatch
+                ? Number(journeyMatch[1])
                 : null,
-            tcNum: h[3]
+            tcNum: h?.[3]
               ? Number(h[3])
-              : /\.US-?\d+-TC-?(\d+)$/.exec(h[1])
-                ? Number(/\.US-?\d+-TC-?(\d+)$/.exec(h[1])[1])
-                : null,
+              : tcMatch
+                ? Number(tcMatch[1])
+                : storeCase
+                  ? Number(storeCase[3])
+                  : null,
             traces: [],
             status: null,
             layer: null,
