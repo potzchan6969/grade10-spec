@@ -22,6 +22,7 @@ vault's daily incentive and consignment sale proceeds -
 ## Sale Proceeds
 
 - 🚧 **When** — 3 business days after the buyer pays, without waiting for delivery
+- 🚧 **Into the Wallet** — always; the counter asks for no payout account, and the collector names one at cash-out
   - **In the Store** — from payment at the shop's counter
   - **At Auction** — from the winner's payment
   - **Built** — one setting for the brand picks where a person's proceeds go, and the consignment agreement pins it when it seals; a partner is always paid by bank. Paid after the return window by default
@@ -47,7 +48,6 @@ vault's daily incentive and consignment sale proceeds -
 
 :::callout{kind="note"}
 - ❓ **Cash-out maximum** — US$6,500 (≈ HKD 50,000) a request, or no maximum with a manual review above a threshold. Finance confirms before Phase 2, 6 December
-- ❓ **Where proceeds go by default** — recommended the wallet; built as a bank account kept on the consignor's list. Owner confirms
 :::
 
 ## Payouts
@@ -62,9 +62,9 @@ What finance does with the requests.
 
 ## Identity Check
 
-- 🚧 **When** — where money leaves Grade10: before the first cash-out, before the first sale payout, and when the cash-out account changes - [KYC](/p/grade10-site/account/kyc)
+- 🚧 **When** — where money leaves Grade10: when the first cash-out is requested, and when the cash-out account changes; never at a consignment intake - [KYC](/p/grade10-site/account/kyc)
   - **Mail-In** — before staff approve a mailed-in card, since no staff see the collector - [Mail-In](/p/grade10-site/vault/intake#mail-in)
-  - **Proceeds Held** — sale proceeds wait in the wallet until the check passes
+  - **Proceeds Held** — sale proceeds reach the wallet unchecked, and can't be cashed out until the check passes
   - **Not for a Retrieval** — staff check the ID at the counter against the one recorded at intake - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#collection)
   - **Built** — at every cash-out and before sale proceeds reach the wallet; each point is an admin setting - [Identity Check](/p/grade10-site/finance/identity-check#gate)
 - 🚧 **Verified Name** — every cash-out goes only to the verified collector
@@ -88,9 +88,9 @@ intake itself stays light.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| KYC | ❓ | When identity is asked for is still being discussed; today's rule stands at deposit, and cash-out and sale proceeds ask always until it is | Owner |
+| KYC | ❓ | When identity is asked for is still being discussed; today's rule stands at deposit, and cash-out and sale proceeds ask always until it is. The counter review of 2026-11-02 took it off consignment intake and sale proceeds, leaving the cash-out | Owner |
 | Cash-out | ❓ | At least US$65, every 7 days, paid in HKD or USD, to an account in the owner's verified name, a debt blocking it, a batch approved by a second treasurer | Owner |
-| The payout flow | ❓ Open | One brand setting, pinned at sealing: a bank account named for the consignment alone, the same account kept on the consignor's list, or the person's wallet; a partner is always paid by bank. Which is the default is open - owner, 2026-10-27; built as the account kept on the consignor's list until the owner decides, 2026-10-29 | Owner |
+| The payout flow | 🚧 | Proceeds go to the wallet, and the account is named at cash-out, not at the counter - the counter review, 2026-11-02, settling the brand setting left open on 2026-10-27; a partner is always paid by bank | Owner |
 :::
 
 :::detail{title="Code map" for="engineer"}

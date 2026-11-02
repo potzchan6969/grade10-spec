@@ -10,7 +10,10 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 
 - 🚧 **Daily Incentive** — market price × liquidity factor × yearly rate ÷ 365
   - **Built** — the same formula, the factor's model still the owner's draft; each day's price, rate of exchange, factor, rate and settings are kept with its amount, so a changed setting never changes an amount already credited
-- 🚧 **Market Price** — the median of the card's sales on SNKRDUNK over 30 days, outliers removed; staff never enter a price by hand
+- 🚧 **Market Price** — the median of the card's sales on SNKRDUNK over 30 days, outliers removed
+  - **SNKRDUNK Card Required** — every card taken at the counter names its SNKRDUNK card, kept in Inventory and remembered on its catalogue product for the next copy
+  - **Fixed Price** — an admin may enter a fixed price in place of the SNKRDUNK card
+  - **Estimate at Intake** — the counter shows each card's estimated incentive, worked out by this formula on the day's figures, for the collector to see
   - **A Day's Price** — the window's median is of every SNKRDUNK sale in it, each dated at +08:00; a day older than SNKRDUNK's week counts its one daily average; the day still in progress counts none
   - **Evidence** — each SNKRDUNK answer is kept as it came, and a price shows every sale behind it: counted, an outlier, or excluded by staff
   - **In Another Currency** — a dollar price is converted at the European Central Bank's daily reference rate
@@ -57,7 +60,8 @@ reach the wallet together on day 30, and each day's amount drips in after that.
   - **Rejected or Held** — stays in the vault without earning; the collector sees why
   - **Built** — no approval step: a card earns from the day it is vaulted, its own effective start date, once it passes authentication; a card that fails never earns
   - **Skipped at Intake** — staff who already authenticated the card and verified its value tick Skip Incentive Approval on the intake form; the card is approved when the intake is submitted, and the skip is recorded with the staff member - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
-- 🚧 **Eligible on the Day** — checked every day; a card earns on a day it has a market price, its tier's minimum sales, a liquidity factor of 0.2 or more, an eligible product, and no pause
+- 🚧 **Eligible on the Day** — checked every day; a card earns on a day it has a market price, its tier's minimum sales, a liquidity factor of 0.2 or more, an eligible product, Earns Incentive ticked, and no pause
+  - **Earns Incentive** — staff set it per card at intake, on by default, and may change it later; each change logged - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
   - **Not Eligible** — earns nothing that day and is not paid later; it earns again the next day it qualifies, and the dashboard says why
   - **Vesting Still Releases** — what vested before stays on the card and is released on its day; what is in the wallet stays there
   - **Built** — no tiers: at least **5** sales in 30 days for every card, every product eligible and no cap
@@ -74,6 +78,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 - ❓ **Liquidity model, tiers and grace days** — the formula, the tier figures and 3 grace days are drafts. Product confirms before Phase 1, mid November
 - ❓ **Eligible products** — which products, grades or value ranges earn. Product confirms before Phase 1, mid November
 - ❓ **Caps** — the most value counted per card, and the most incentive per account a month. Product confirms before Phase 2, 6 December
+- ❓ **Fixed price** — who may enter one, and whether it prices the card every day until a SNKRDUNK card is linked; recommended: an admin with `consignment:approve`, standing until linked and flagged for staff. Owner confirms, since a price staff type in was out of scope until the counter review, 2026-11-02
 - ❓ **A late pass** — whether a card that passes authentication after it was vaulted earns from its start date; built as earning from the start date. Owner confirms
 :::
 
@@ -121,7 +126,7 @@ vault, cash out and leave.
 - **Approved before earning** — an internal check of the price match before a card costs anything; staff who already checked it at the counter may skip it, and the skip is recorded
 - **Vest on the card, not in the wallet** — the wallet only ever holds cashable money, and nothing in it is clawed back
 - **One rate for every card** — vault-only and consigned cards earn the same, so consigning never costs the collector the incentive
-- **Not in scope** — a rate that steps down over time; a price staff type in
+- **Not in scope** — a rate that steps down over time
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

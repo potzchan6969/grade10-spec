@@ -18,15 +18,19 @@ the financed lane is unchanged - [Case Lifecycle](/p/grade10-site/finance/case-l
 Staff register the cards on the intake form, at a card event or the shop's counter.
 
 1. 🚧 **Location** — the card event, or the shop in Causeway Bay from Phase 2
+   - **Optional at the Counter** — where the cards were taken and where they go next, each optional - [Consignment Console](/p/grade10-site/consignment/counter)
 2. 🚧 **Collector** — found by email, or a new account created and an invite sent
    - **Phone Number** — taken if the account has none; not confirmed by a code
    - **ID** — staff read the collector's ID document in hand: the legal name as shown, the ID type, the ID number, and a tick that the collector is 18 or over
+     - **Any Hong Kong or Taiwan ID** — an HKID, a Taiwan national ID or resident certificate, or a passport, each checked against its own format
      - **Number Kept Masked** — typed once, and kept only as a mask (A1****6(7)) and a one-way digest; the full number and the date of birth are never stored
    - **Ownership Declaration** — the collector declares they own every card
 3. 🚧 **Cards** — card, condition or certificate, front and back photos; a label printed for each
    - **Market Price** — the card's 30-day price, shown to the collector
    - **Sales and Liquidity** — the card's sales count and liquidity, in the staff's detail view
    - **Estimated Daily Incentive** — or Not Eligible, for a card that earns nothing
+   - **Earns Incentive** — a tick on each card, on by default; staff untick a card that should earn nothing - [Incentive](/p/grade10-site/vault/incentive#earning)
+   - **Photos** — several per card, kept on that card, not on its catalogue product
    - **Skip Incentive Approval** — a checkbox on each card, unticked by default; staff tick it when they have already authenticated the card and verified its value on the spot, so it needn't wait for approval - [Incentive](/p/grade10-site/vault/incentive#earning)
 4. 🚧 **Consign Now** — optional, per card; the card is registered into the vault first, then consigned in the same visit: the store, the auction or both, the lowest acceptable price (required for the store or both, optional for the auction), price-checked as on the consign form, and the commission; Grade10 sets the list or starting price at approval - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
 5. 🚧 **Sign** — on the shop's tablet, or by a link emailed to the collector
@@ -35,7 +39,7 @@ Staff register the cards on the intake form, at a card event or the shop's count
    - **Custody Receipt** — confirmed
 
 :::callout{kind="note"}
-- ❓ **ID at intake** — whether 18 is the minimum age to vault, and whether intake may collect the HKID number, kept only as a mask and digest, under the Privacy Commissioner's Code of Practice on the ID Card Number; recommended: 18, and the number kept as a mask and digest. Product confirms before Phase 1, mid November
+- ❓ **ID number kept** — the counter review of 2026-11-02 confirmed the ID number and the 18-or-over tick; whether the number is kept only as a mask and digest, under the Privacy Commissioner's Code of Practice on the ID Card Number, is open; recommended: the mask and digest. Product confirms before Phase 1, mid November
 :::
 
 ## Authentication

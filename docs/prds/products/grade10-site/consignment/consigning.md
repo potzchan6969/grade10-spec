@@ -46,7 +46,7 @@ goes below. Grade10 prices the listing at approval.
 
 On the intake form's Consign Now, on the consign form, and whenever the lowest price is changed.
 
-- 🚧 **Market Price** — the card's 30-day SNKRDUNK median; a card with no market price has no check
+- 🚧 **Market Price** — the card's 30-day SNKRDUNK median, or the fixed price an admin entered in its place; a card with no market price has no check
 - 🚧 **The Check** — how far the lowest acceptable price sits from the market price:
 
 ```text
