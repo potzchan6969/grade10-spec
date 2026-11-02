@@ -39,6 +39,7 @@ pnpm storybook:workbench
 
 - **Open** - Open a Flows story, such as Auction / Flows / Bid And Win A Lot, then the Approve or Site Compare tab. Site Compare compares flows only.
 - **Archive** - Development mounts the filesystem archive at the Storybook origin. The default is `.cache/ui-verification` in this checkout, or in the consuming app root when this checkout is its submodule. Set `UI_VERIFICATION_ARCHIVE` to an absolute directory before startup for another one.
+- **Hosted data, locally** - Set `UI_VERIFICATION_REMOTE` to the hosted Storybook origin, such as `https://storybook.grade10-stg.com`, to read its runs, references and approvals instead. Sign in once with `cloudflared access login <origin>`; the workbench asks `cloudflared access token` for each read and sends it as `cf-access-token`, so the Worker sees you. `UI_VERIFICATION_REMOTE_TOKEN` gives a token instead. It only reads: approve, capture and request changes are refused, because they would judge the hosted Storybook's reference, not this checkout's. It cannot be set beside `UI_VERIFICATION_ARCHIVE`.
 - **No data yet** - Both tabs stay empty until the application has captured a site run, which names the story's cases. Capture from the application repository, then press Refresh.
 - **Reference capture** - Approving uses the preview app's Playwright, launched by the workbench itself. `packages/ui-verification/src/reference-capture.mjs` renders the story from this Storybook: fixed sizes, scale 1, reduced motion, `en-US`, `Asia/Hong_Kong`, light. The application's site runs draw their reference with the same module.
 - **Capture** - Run `pnpm ui:verify capture` in the application repository. It captures every flow, starting the local stack and this Storybook when they are not running; `tools/ui-verification/README.md` there has the rest.
@@ -74,6 +75,7 @@ pnpm storybook:workbench
 - **What an approval judges** - One captured reference image, tied to its SHA-256. A later capture of the same PNG carries the approval. A capture that changes one pixel is not approved.
 - **Newest wins** - Approvals are never edited or deleted. A new one on the same image replaces the shown one; the history lists every decision at that size and locale.
 - **First baseline** - With no approval yet there is nothing to diff. Approve to start one.
+- **Loading** - Until a story's references and approvals load, the Approve and Site Compare tabs say so: the size tabs, the flag and the image slots wait, nothing is compared, and Approve, Request changes and Capture are off. An empty list is never shown as "no reference" before it has loaded.
 - **Commit** - Each capture records the commit it drew. Hosted, that is the deploy's build receipt. Locally, it is this checkout's commit, flagged when the checkout had uncommitted changes.
 - **Who** - Hosted, the approver is the Cloudflare Access identity, never a name typed in the panel. The publisher token cannot approve. Locally, every approval is `local-development`.
 
@@ -100,6 +102,7 @@ pnpm storybook:workbench
 
 - **Where** - A page of its own, not a panel. Open it from Dashboard in the Approve or Site Compare tab, on the Reference captures page, or at `?path=/verification-dashboard/`.
 - **Reads** - Every site run, reference and approval through the workbench's `/api/*` routes. A row is one case at the newest run that holds evidence for it, in the chosen locale. A failed read shows nothing, so a partial list cannot look complete.
+- **Loading** - The site runs draw the rows first, in name order. Each value the references or approvals decide - a status, a reference drift, a site drift against Last approved, a thumbnail, a rank - shows a skeleton until both lists are in. Its box cannot be pressed and its story cannot be approved until then. Site drift against Current reference needs only the runs.
 - **Stores nothing** - Pixel diffs are worked out in the browser. Pairs with the same bytes and pairs with boxes of another size settle without a download; the rest run a few at a time, across every row, because the ranking needs every number.
 - **Stories** - Every count is of stories, not cases or sizes. A flow's steps are one story.
 - **Story status** - Approved when every size is. Otherwise Pending Comments when any size has a change request, No baseline when no size was ever approved, and Not approved for the rest. Each story has one status, so the four boxes add up to the total.

@@ -32,6 +32,7 @@ Published from `main` at
 | **Block** | `<Domain>/<Feature>/Blocks/<Component>[/<Aspect>]` | `packages/ui/src/blocks/<dir>/` |
 | **Primitive** | `Design System/<Group>/<Component>[/<Aspect>]` | `packages/design-system/src/components/<group>/` |
 | **Guide** | `Start Here` | `apps/preview/src/start-here.mdx` |
+| **Dashboard** | `Dashboard` | `apps/preview/src/ui-verification/dashboard.mdx` |
 
 - **Domain** — a folder under `docs/prds/products/grade10-site/`, or
   `shared/auth`, in Title Case: `post-bidding` is `Post Bidding`, `kyc` is
@@ -54,7 +55,10 @@ Published from `main` at
   by what they vary, so related states sit together — e.g. the drawer's
   `Header`, `Body` and `Footer` inside `CartDrawer`. Retitle with
   `pnpm storybook:rename <map>` so every cited id is rewritten with the move
-- **Order** — Start Here, the domains in `docs/prds/manual.yaml` order, then
+- **Dashboard** — a docs entry for the workbench's UI Verification Dashboard,
+  a page Storybook's sidebar cannot list. Selecting it opens the page;
+  `DOCS_PAGES` in `scripts/storybook/grammar.mjs` names every MDX page
+- **Order** — Start Here, Dashboard, the domains in `docs/prds/manual.yaml` order, then
   Design System; inside a domain, its Flows, then features in the manual's nav order, by each
   page's `order:` then its title; inside a feature, Screens, Prototypes, Parts
   and Blocks

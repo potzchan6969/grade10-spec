@@ -6,7 +6,12 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
-import { DESIGN_SYSTEM, START_HERE, titleCase } from "./grammar.mjs";
+import {
+  DESIGN_SYSTEM,
+  START_HERE,
+  titleCase,
+  VERIFICATION_DASHBOARD,
+} from "./grammar.mjs";
 import { rootDirectory } from "./story-index.mjs";
 
 export const WORKBENCH_PREVIEW =
@@ -64,15 +69,16 @@ function manualDomains(root) {
 }
 
 /**
- * `{ root: [feature, …] }` in the manual's nav order: Start Here, the domains,
- * each with its features by `order:` then page title, then the design system.
+ * `{ root: [feature, …] }` in the manual's nav order: Start Here, the
+ * Dashboard, the domains, each with its features by `order:` then page title,
+ * then the design system.
  */
 export function sidebar(root = rootDirectory) {
   const features = manualFeatures(root).sort(
     (left, right) =>
       left.order - right.order || left.heading.localeCompare(right.heading),
   );
-  const tree = { [START_HERE]: [] };
+  const tree = { [START_HERE]: [], [VERIFICATION_DASHBOARD]: [] };
   for (const domain of manualDomains(root))
     tree[titleCase(domain)] = features
       .filter((feature) => feature.domain === domain)

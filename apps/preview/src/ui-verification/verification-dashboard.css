@@ -668,19 +668,39 @@
   font-weight: 800;
 }
 
-.vd-state ul {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: min(420px, 100%);
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* A value the references decide, while they are still loading. */
+.vd-skeleton {
+  display: inline-block;
+  width: 6ch;
+  max-width: 100%;
+  height: 0.9em;
+  border-radius: 4px;
+  vertical-align: middle;
+  background: var(--vp-border);
+  animation: vd-skeleton-pulse 1.4s ease-in-out infinite;
 }
 
-.vd-state li {
-  display: flex;
-  justify-content: space-between;
+.vd-thumb[data-loading],
+.vd-shot[data-loading] {
+  animation: vd-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.vd-tile:disabled {
+  cursor: progress;
+}
+
+@keyframes vd-skeleton-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vd-skeleton,
+  .vd-thumb[data-loading],
+  .vd-shot[data-loading] {
+    animation: none;
+  }
 }
 
 /* A modal dialog sits in the top layer, centred, with the page dimmed behind. */
@@ -825,6 +845,25 @@
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+
+/* The whole shot is the button, so any click on the image opens it. */
+.vd-page .vd-shot-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.vd-page .vd-shot-open:focus-visible {
+  outline: 2px solid var(--vp-accent);
+  outline-offset: -2px;
 }
 
 .vd-page .vd-shot-note {

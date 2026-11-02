@@ -7,6 +7,11 @@ import { fileURLToPath } from "node:url";
 import { createArchive } from "../src/archive.mjs";
 import { createArchiveHandler } from "../src/archive-api.mjs";
 import { createLocalCoordinator } from "./local-coordinator.mjs";
+import {
+  createAccessTokenSource,
+  createRemoteArchiveHandler,
+  remoteOrigin,
+} from "./remote-archive.mjs";
 
 const SPEC_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 const HOP_BY_HOP_HEADERS = new Set([
@@ -200,10 +205,34 @@ export function createNodeArchiveMiddleware(handler) {
   };
 }
 
+/**
+ * `UI_VERIFICATION_REMOTE` reads the hosted archive instead of a local one,
+ * as the person signed in with `cloudflared access login`, and writes nothing.
+ * `UI_VERIFICATION_REMOTE_TOKEN` gives an Access token instead of cloudflared.
+ */
+function remoteArchiveHandler(env) {
+  if (env.UI_VERIFICATION_ARCHIVE !== undefined) {
+    throw new TypeError(
+      "Set UI_VERIFICATION_REMOTE or UI_VERIFICATION_ARCHIVE, not both",
+    );
+  }
+  const origin = remoteOrigin(env.UI_VERIFICATION_REMOTE);
+  return createRemoteArchiveHandler({
+    origin,
+    accessToken: createAccessTokenSource(origin, {
+      staticToken: env.UI_VERIFICATION_REMOTE_TOKEN ?? "",
+    }),
+  });
+}
+
 export function installUiVerificationArchive(
   app,
   { specRoot = SPEC_ROOT, env = process.env } = {},
 ) {
+  if (env.UI_VERIFICATION_REMOTE) {
+    app.use(createNodeArchiveMiddleware(remoteArchiveHandler(env)));
+    return;
+  }
   const archiveRoot = resolveArchiveRoot({ specRoot, env });
   const archive = createArchive(archiveRoot);
   // The workbench captures with the preview app's Playwright, from this

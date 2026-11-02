@@ -12,6 +12,7 @@ import { caseIdErrors } from "./case-ids.mjs";
 import { COVERAGE_FILE, declared, featureCoverage } from "./coverage.mjs";
 import {
   DESIGN_SYSTEM,
+  DOCS_PAGES,
   FLOWS,
   KINDS,
   START_HERE,
@@ -79,9 +80,11 @@ export function placementErrors(root, path, file) {
   const parts = title.split("/");
 
   if (path.endsWith(".mdx")) {
-    if (title !== START_HERE || path !== "apps/preview/src/start-here.mdx")
+    if (DOCS_PAGES[path] !== title)
       errors.push(
-        `docs page "${title}" - the one MDX page is ${START_HERE}, at apps/preview/src/start-here.mdx`,
+        `docs page "${title}" - the MDX pages are ${Object.entries(DOCS_PAGES)
+          .map(([file, name]) => `${name}, at ${file}`)
+          .join("; ")}`,
       );
     return errors;
   }

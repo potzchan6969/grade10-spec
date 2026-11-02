@@ -279,6 +279,27 @@
   object-fit: contain;
 }
 
+/* A reference record still loading: the frame pulses, and claims nothing. */
+.verification-image-frame[data-loading] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vp-muted, #5c6370);
+  animation: verification-pending-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes verification-pending-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verification-image-frame[data-loading] {
+    animation: none;
+  }
+}
+
 .verification-image-frame--crop img {
   position: absolute;
   max-width: none;
@@ -1039,7 +1060,8 @@
 }
 
 .verification-flag[data-flag="running"],
-.verification-flag[data-flag="queued"] {
+.verification-flag[data-flag="queued"],
+.verification-flag[data-flag="pending"] {
   border-color: var(--vp-accent, #0b6fbf);
   color: var(--vp-accent, #0b6fbf);
 }

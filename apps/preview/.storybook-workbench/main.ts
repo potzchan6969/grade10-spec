@@ -15,6 +15,7 @@ const config: StorybookConfig = {
   ...base,
   stories: [
     "../src/start-here.mdx",
+    "../src/ui-verification/dashboard.mdx",
     ...(base.stories as string[]),
     "../../../packages/ui/src/**/*.stories.@(ts|tsx)",
     "../../../packages/design-system/src/**/*.stories.@(ts|tsx)",

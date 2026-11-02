@@ -49,13 +49,21 @@ function statusLine(status: ReferenceStatus): string {
   return "No reference captured yet. Approve captures the live story at every size and approves it.";
 }
 
+const PENDING_LINES = {
+  loading: "Loading the reference and its approvals…",
+  failed: "The reference and its approvals did not load. Refresh to retry.",
+} as const;
+
 export function ReferenceApproval({
   status,
+  pending: recordsPending,
   onCapture,
   onApprove,
   onRequestChanges,
 }: {
   status: ReferenceStatus;
+  /** The records are not in, so the status is unknown and nothing is offered. */
+  pending?: keyof typeof PENDING_LINES;
   onCapture: () => Promise<void>;
   onApprove: (comment: string) => Promise<void>;
   onRequestChanges: (comment: string) => Promise<void>;
@@ -64,6 +72,7 @@ export function ReferenceApproval({
   const [pending, setPending] = useState<Pending>(null);
   const [error, setError] = useState("");
   const trimmed = comment.trim();
+  const busy = pending !== null || recordsPending !== undefined;
   const currentHash = status.current?.image.sha256 ?? "";
 
   async function run(
@@ -88,11 +97,12 @@ export function ReferenceApproval({
     <section className="verification-approval" aria-label="Approval">
       <h4>Approve the reference</h4>
       <p
+        aria-busy={recordsPending === "loading" || undefined}
         className="verification-approval-status"
-        data-flag={status.flag}
+        data-flag={recordsPending ? "pending" : status.flag}
         role="status"
       >
-        {statusLine(status)}
+        {recordsPending ? PENDING_LINES[recordsPending] : statusLine(status)}
       </p>
       {status.currentApproval?.comment ? (
         <blockquote>{status.currentApproval.comment}</blockquote>
@@ -112,7 +122,7 @@ export function ReferenceApproval({
       <div className="verification-inline-actions">
         <button
           className="verification-primary"
-          disabled={pending !== null}
+          disabled={busy}
           onClick={() => void run("approve", () => onApprove(trimmed))}
           type="button"
         >
@@ -121,14 +131,14 @@ export function ReferenceApproval({
             : "Approve all sizes"}
         </button>
         <button
-          disabled={pending !== null || !status.current || trimmed === ""}
+          disabled={busy || !status.current || trimmed === ""}
           onClick={() => void run("changes", () => onRequestChanges(trimmed))}
           type="button"
         >
           {pending === "changes" ? "Saving…" : "Request changes"}
         </button>
         <button
-          disabled={pending !== null}
+          disabled={busy}
           onClick={() => void run("capture", onCapture)}
           type="button"
         >

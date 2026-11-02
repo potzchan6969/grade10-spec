@@ -284,6 +284,7 @@ describe("checkStories", () => {
       "apps/preview/.storybook-workbench/preview.tsx": `storySort: (a, b) => {\n${renderSidebar(
         {
           "Start Here": [],
+          Dashboard: [],
           Store: ["Cart"],
           "Post Bidding": [],
           "Design System": [],
@@ -333,6 +334,7 @@ ${story("Store/Flows")}`,
       "apps/preview/.storybook-workbench/preview.tsx": `storySort: (a, b) => {\n${renderSidebar(
         {
           "Start Here": [],
+          Dashboard: [],
           Store: ["Cart"],
           "Post Bidding": [],
           "Design System": [],

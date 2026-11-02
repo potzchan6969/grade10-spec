@@ -880,6 +880,140 @@ async function openPanel(browser, server, tab) {
   return page;
 }
 
+// The references list is held until `release`, so the panel draws first.
+async function openPanelHoldingReferences(browser, server, tab) {
+  const page = await browser.newPage();
+  let release = () => {};
+  const held = new Promise((resolve) => {
+    release = resolve;
+  });
+  await page.route(/\/api\/references\?/, async (route) => {
+    await held;
+    await route.continue();
+  });
+  await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("tab", { name: tab }).click();
+  await selectFirstTarget(page);
+  return { page, release };
+}
+
+test("the panels claim no reference status while the records load", {
+  timeout: 180_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-records-"));
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  await publishRun(archive, browser, {
+    runId: "records-0001",
+    createdAt: "2026-10-30T10:01:00.000Z",
+    storyId: STORY_ID,
+  });
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+  const flag = (page) =>
+    page.locator(
+      '.verification-reference-bar > .verification-flag:not([data-flag="drift"])',
+    );
+
+  let { page, release } = await openPanelHoldingReferences(
+    browser,
+    server,
+    "Approve",
+  );
+  let desktop = page.getByRole("region", { name: "Desktop evidence" });
+  const approval = desktop.getByRole("region", { name: "Approval" });
+  await approval.waitFor();
+  assert.equal(
+    await approval.locator(".verification-approval-status").innerText(),
+    "Loading the reference and its approvals…",
+  );
+  assert.equal(await flag(page).innerText(), "Loading reference status…");
+  assert.equal(
+    await page.getByText(/No reference captured yet/).count(),
+    0,
+    "an unloaded list is not an empty one",
+  );
+  assert.equal(
+    await desktop
+      .getByRole("region", { name: "Last approved evidence" })
+      .getAttribute("aria-busy"),
+    "true",
+  );
+  assert.equal(
+    await approval
+      .getByRole("button", { name: "Approve all sizes" })
+      .isDisabled(),
+    true,
+    "nothing is approved before its status is known",
+  );
+  release();
+  await waitForCondition(
+    async () => (await flag(page).innerText()) === "No approved reference",
+    "the records to load",
+    30_000,
+  );
+  assert.match(
+    await approval.locator(".verification-approval-status").innerText(),
+    /^No reference captured yet/,
+  );
+  assert.equal(
+    await approval
+      .getByRole("button", { name: "Approve all sizes" })
+      .isDisabled(),
+    false,
+  );
+  await page.close();
+
+  ({ page, release } = await openPanelHoldingReferences(
+    browser,
+    server,
+    "Site Compare",
+  ));
+  desktop = page.getByRole("region", { name: "Desktop evidence" });
+  await desktop
+    .getByRole("region", { name: "Reference, last approved evidence" })
+    .waitFor();
+  assert.equal(await flag(page).innerText(), "Loading reference status…");
+  assert.equal(
+    await page
+      .getByText(
+        "No approved reference at this size, so the site is compared with the current reference.",
+      )
+      .count(),
+    0,
+    "the fallback is not announced before the records say nothing is approved",
+  );
+  assert.equal(
+    await desktop
+      .getByRole("img", { name: "Pixel difference overlay" })
+      .count(),
+    0,
+    "nothing is compared before the base is known",
+  );
+  release();
+  await page
+    .getByText(
+      "No approved reference at this size, so the site is compared with the current reference.",
+    )
+    .waitFor();
+  assert.equal(
+    await page
+      .getByRole("button", { name: "Current reference" })
+      .getAttribute("aria-pressed"),
+    "true",
+  );
+  await page.close();
+});
+
 test("approving captures the live reference and Site Compare holds the site to it", {
   timeout: 240_000,
 }, async (t) => {
@@ -1092,6 +1226,15 @@ test("the dashboard ranks every story and holds an approval behind its images", 
     viewport: { width: 1440, height: 1000 },
   });
   const page = await context.newPage();
+  // The references list is held, so the rows the runs settle draw first.
+  let releaseReferences = () => {};
+  const referencesHeld = new Promise((resolve) => {
+    releaseReferences = resolve;
+  });
+  await page.route(/\/api\/references\?/, async (route) => {
+    await referencesHeld;
+    await route.continue();
+  });
   await page.goto(`${server.origin}/?path=/verification-dashboard/`, {
     waitUntil: "domcontentloaded",
   });
@@ -1101,10 +1244,35 @@ test("the dashboard ranks every story and holds an approval behind its images", 
     .getByRole("heading", { name: "UI Verification Dashboard" })
     .waitFor();
   const noBaseline = dashboard.locator(".vd-tile", { hasText: "No baseline" });
-  await noBaseline.waitFor();
+  const queue = dashboard.getByRole("table");
+  await queue
+    .getByRole("button", { name: /Not Found/ })
+    .first()
+    .waitFor();
+  assert.equal(await dashboard.getByText("Reading the archive").count(), 0);
+  assert.equal(await queue.getAttribute("aria-busy"), "true");
+  assert.equal(
+    await noBaseline.isDisabled(),
+    true,
+    "a status tile waits for the references",
+  );
+  assert.equal(await noBaseline.locator(".vd-skeleton").count(), 1);
+  assert.equal(
+    await queue
+      .getByRole("button", { name: /Review the images of .* to approve/ })
+      .count(),
+    0,
+    "nothing is offered for approval before its status is known",
+  );
+  releaseReferences();
+
+  await waitForCondition(
+    async () => (await queue.getAttribute("aria-busy")) === null,
+    "the references to load",
+    30_000,
+  );
   assert.match(await noBaseline.innerText(), /^1 \/ 1/);
 
-  const queue = dashboard.getByRole("table");
   await queue
     .getByRole("button", { name: /Not Found/ })
     .first()
@@ -1141,8 +1309,22 @@ test("the dashboard ranks every story and holds an approval behind its images", 
     .getByRole("button", { name: /Review the images of .* to approve/ })
     .first()
     .click();
-  const dialog = page.getByRole("dialog");
+  const dialog = page.getByRole("dialog", { name: /Not Found/ });
   await dialog.getByRole("button", { name: "Approve all sizes" }).waitFor();
+  await dialog
+    .getByRole("button", { name: /^Open Current reference at Desktop/ })
+    .click();
+  const fullSize = page.getByRole("dialog", {
+    name: "Current reference at Desktop, full size",
+  });
+  await fullSize.getByRole("img").waitFor();
+  await page.keyboard.press("Escape");
+  await fullSize.waitFor({ state: "detached" });
+  assert.equal(
+    await dialog.isVisible(),
+    true,
+    "closing the full-size image leaves the story open",
+  );
   assert.match(
     await noBaseline.innerText(),
     /^1 \/ 1/,
