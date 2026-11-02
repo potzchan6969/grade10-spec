@@ -48,6 +48,7 @@ own - [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval)
 - 🚧 **Period and Amount** — admin settings, 30 days from Earning Starts and HKD 0 by default; the period is the vault's own, set apart from the vesting days
   - **Pinned to the Card** — signed with its Vault Terms; a change reaches only the next card - [Incentive](/p/grade10-site/vault/incentive#settings)
   - **Fixed on the Request** — owed when the request is made inside the period, at the card's pinned amount
+- 🚧 **Either or Both** — the vault's fee and consignment's fee for ending early are separate settings; a card that ends its consignment and then goes home inside both periods owes both, and an admin sets either to 0 to charge only the other
 - 🚧 **Only the Owner's Own Retrieval** — a sale, a card that fails authentication, or any return Grade10 starts owes no fee
 - 🚧 **Paid by Card on an Invoice** — one Shopify invoice per request, paid from its link or loaded at the shop's till; the retrieval paper prints the link, and the card is not handed back until it is paid
 - 🚧 **Never From the Wallet** — recorded on the vault's money register as paid by card
