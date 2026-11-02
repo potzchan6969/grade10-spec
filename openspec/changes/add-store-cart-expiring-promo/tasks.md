@@ -28,7 +28,7 @@ or a service call.
 - [ ] 4.2 Run the focused Grade10 cart/host checks and affected typecheck/lint/build checks. Confirm the mapper adds no API, backend, database, persistence, checkout or translation changes, and preserve the existing public-code merge and inapplicable-ticket treatment.
 - [ ] 4.3 Verify: inspect the application diff and run the repository-defined affected frontend validation commands; confirm no backend, API, database, checkout or translation files changed.
 
-## 5. Grade10 product record (grade10-spec)
+## 5. Grade10 product record (grade10-spec) (owner: @kinisworking)
 
 - [ ] 5.1 Verify and land the Grade10 Cart Drawer PRD update for “Running out reads louder” and the `Expiring promo detail` decision, keeping the discount title and expiry/conditions detail as separate slots and adding no scenario ids, new wording or duplicate product rule.
 - [ ] 5.2 Recheck the accepted delta, linked journeys, UI design and durable target paths with the repository planning/manual checks after the PRD record and spec-submodule revision are aligned.
