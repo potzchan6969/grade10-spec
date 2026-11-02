@@ -2,10 +2,11 @@ import { describe, expect, it } from "vitest";
 import { diffLabel, diffTone } from "./FlowPanel";
 
 describe("flow scores", () => {
-  it("reads blue under 0.5%, orange up to 20% and red over it", () => {
+  it("reads blue under 0.5%, orange up to 10% and red over it", () => {
     expect(diffTone(0.004)).toBe("ok");
     expect(diffTone(0.005)).toBe("warn");
-    expect(diffTone(0.2)).toBe("warn");
+    expect(diffTone(0.1)).toBe("warn");
+    expect(diffTone(0.101)).toBe("high");
     expect(diffTone(0.246)).toBe("high");
   });
 

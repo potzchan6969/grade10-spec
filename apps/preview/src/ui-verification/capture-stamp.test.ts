@@ -174,9 +174,9 @@ describe("reference drift", () => {
     diffUrl: "",
   });
 
-  it("stays quiet up to 20% and flags past it", () => {
+  it("stays quiet up to 10% and flags past it", () => {
     expect(driftNotice(undefined)).toBe("");
-    expect(driftNotice(compared(0.2))).toBe("");
+    expect(driftNotice(compared(0.1))).toBe("");
     expect(driftNotice(compared(0.246))).toBe(
       "Reference drifted 24.6% since approval",
     );

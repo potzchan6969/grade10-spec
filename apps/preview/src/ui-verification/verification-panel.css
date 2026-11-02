@@ -557,7 +557,7 @@
   padding: 0;
 }
 
-/* Scores: blue under 0.5%, orange up to 20%, red over 20% */
+/* Scores: blue under 0.5%, orange up to 10%, red over 10% */
 .verification-panel [data-tone="ok"] {
   --vp-score: var(--vp-score-ok);
 }

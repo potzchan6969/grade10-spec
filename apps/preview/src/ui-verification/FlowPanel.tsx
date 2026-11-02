@@ -15,7 +15,7 @@ void React;
 /** A pixel diff under this share of the region reads as a match. */
 const MATCH_RATIO = 0.005;
 /** Over this share the screen reads as broken, in red. */
-const HIGH_RATIO = 0.2;
+export const HIGH_RATIO = 0.1;
 
 export type DiffTone = "ok" | "warn" | "high";
 
@@ -311,7 +311,9 @@ export function FlowOverview({
         </div>
         <div data-tone={high > 0 ? "high" : "warn"}>
           <dd>{ratios.filter((ratio) => ratio >= MATCH_RATIO).length}</dd>
-          <dt>{high > 0 ? `Differ, ${high} over 20%` : "Differ"}</dt>
+          <dt>
+            {high > 0 ? `Differ, ${high} over ${HIGH_RATIO * 100}%` : "Differ"}
+          </dt>
         </div>
         <div>
           <dd>{missing}</dd>
