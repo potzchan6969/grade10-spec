@@ -56,37 +56,37 @@ function LinkedCard({ asset }: { asset: VaultAsset }) {
   );
 }
 
-/** Vaulted holding — no status badge; intake estimate on the price line. */
+/** Vaulted holding — no status badge and no price line. */
 export const InVault: Story = {
   args: { asset: assetWithStatus("In Vault") },
   render: ({ asset }) => <LinkedCard asset={asset} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("In Vault")).toBeNull();
-    expect(canvas.getByText("Intake estimate")).toBeVisible();
+    expect(canvas.queryByText("Intake estimate")).toBeNull();
     expect(canvas.getByRole("link", { name: "Vault Portfolio" })).toBeVisible();
   },
 };
 
-/** Fixed-price store listing — brand badge, LISTED PRICE. */
+/** Fixed-price store listing — brand badge. */
 export const Listed: Story = {
   args: { asset: assetWithStatus("Listed") },
   render: ({ asset }) => <LinkedCard asset={asset} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Listed")).toBeVisible();
-    expect(canvas.getByText("Listed price")).toBeVisible();
+    expect(canvas.queryByText("Listed price")).toBeNull();
   },
 };
 
-/** Bidding in progress — brand badge, BID PRICE. */
+/** Bidding in progress — brand badge. */
 export const LiveAuction: Story = {
   args: { asset: assetWithStatus("Live Auction") },
   render: ({ asset }) => <LinkedCard asset={asset} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Live Auction")).toBeVisible();
-    expect(canvas.getByText("Bid price")).toBeVisible();
+    expect(canvas.queryByText("Bid price")).toBeNull();
   },
 };
 
@@ -101,13 +101,13 @@ export const BoneyardCapture: Story = {
   args: { asset: assetWithStatus("In Vault"), loading: true },
 };
 
-/** Withdrawal requested, admin approval pending — intake estimate stays. */
+/** Withdrawal requested, admin approval pending — badge, no price line. */
 export const RetrievalPending: Story = {
   args: { asset: assetWithStatus("Retrieval Pending") },
   render: ({ asset }) => <LinkedCard asset={asset} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Retrieval Pending")).toBeVisible();
-    expect(canvas.getByText("Intake estimate")).toBeVisible();
+    expect(canvas.queryByText("Intake estimate")).toBeNull();
   },
 };

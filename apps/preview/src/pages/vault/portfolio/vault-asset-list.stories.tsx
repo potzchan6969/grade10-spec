@@ -47,21 +47,25 @@ export const AllAssets: Story = {
   args: listArgs,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("tab", { name: /All Assets 6/ })).toHaveAttribute(
-      "data-active",
+    expect(canvas.getByRole("button", { name: "All" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
     );
     await waitFor(() => {
-      expect(canvas.getByRole("tab", { name: /In Vault 2/ })).toBeVisible();
-      expect(canvas.getByRole("tab", { name: /Live Auction 2/ })).toBeVisible();
-      expect(canvas.getByRole("tab", { name: /Listed 2/ })).toBeVisible();
+      expect(canvas.getByRole("button", { name: "In Vault" })).toBeVisible();
       expect(
-        canvas.getByRole("button", { name: "Highest est. value" }),
+        canvas.getByRole("button", { name: "Live Auction" }),
+      ).toBeVisible();
+      expect(canvas.getByRole("button", { name: "Listed" })).toBeVisible();
+      expect(
+        canvas.getByRole("button", { name: "Highest Est. Value" }),
       ).toBeVisible();
     });
     // Highest estimate first — 1986 Fleer Michael Jordan at 156,000.
     const cards = canvasElement.querySelectorAll(
       '[data-slot="vault-asset-card"]',
     );
+    expect(cards.length).toBe(6);
     expect(cards[0]?.textContent).toContain("1986 Fleer Michael Jordan");
   },
 };
@@ -72,7 +76,7 @@ export const InVault: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     await step("Open the In Vault tab", async () => {
-      await userEvent.click(canvas.getByRole("tab", { name: /In Vault 2/ }));
+      await userEvent.click(canvas.getByRole("button", { name: "In Vault" }));
     });
     const cards = canvasElement.querySelectorAll(
       '[data-slot="vault-asset-card"]',
@@ -82,7 +86,8 @@ export const InVault: Story = {
       expect(canvas.getByText("Retrieval Pending")).toBeVisible(),
     );
     // In Vault card carries no badge.
-    expect(canvas.queryByText("In Vault", { selector: "span" })).toBeNull();
+    expect(cards[0]?.textContent).not.toContain("In Vault");
+    expect(cards[1]?.textContent).not.toContain("In Vault");
   },
 };
 
@@ -93,7 +98,7 @@ export const LiveAuction: Story = {
     const canvas = within(canvasElement);
     await step("Open the Live Auction tab", async () => {
       await userEvent.click(
-        canvas.getByRole("tab", { name: /Live Auction 2/ }),
+        canvas.getByRole("button", { name: "Live Auction" }),
       );
     });
     await waitFor(() =>
@@ -107,7 +112,6 @@ export const LiveAuction: Story = {
     expect(cards.length).toBe(2);
     // Ending soonest first — va-004 ends 24 Oct before va-005 on 27 Oct.
     expect(cards[0]?.textContent).toContain("Pocket Monsters");
-    expect(cards[0]?.textContent).toContain("Bid price");
     await step("Switch sort to Highest Bid", async () => {
       await userEvent.click(
         canvas.getByRole("button", { name: "Ending Soonest" }),
@@ -141,7 +145,7 @@ export const Listed: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     await step("Open the Listed tab", async () => {
-      await userEvent.click(canvas.getByRole("tab", { name: /Listed 2/ }));
+      await userEvent.click(canvas.getByRole("button", { name: "Listed" }));
     });
     await waitFor(() =>
       expect(
@@ -153,7 +157,6 @@ export const Listed: Story = {
     );
     // Most recently listed first — va-006 (25 Oct) before va-002 (20 Oct).
     expect(cards[0]?.textContent).toContain("Illustrator");
-    expect(cards[0]?.textContent).toContain("Listed price");
   },
 };
 
@@ -167,10 +170,10 @@ export const VaultedOnly: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.queryByRole("tab", { name: /Live Auction/ })).toBeNull();
-    expect(canvas.queryByRole("tab", { name: /Listed/ })).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Live Auction" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Listed" })).toBeNull();
     await waitFor(() =>
-      expect(canvas.getByRole("tab", { name: /In Vault 2/ })).toBeVisible(),
+      expect(canvas.getByRole("button", { name: "In Vault" })).toBeVisible(),
     );
   },
 };
