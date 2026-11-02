@@ -84,9 +84,10 @@ if (suiteFile) {
     rel.startsWith("../") ||
     !/^docs\/prds\/products\/.+\/tests\/[^/]+-tcs\.md$/.test(rel)
   )
-    fail("--suite-file must name a PRD suite under docs/prds/products/**/tests/*-tcs.md");
-  if (!existsSync(suiteFile))
-    fail(`--suite-file does not exist: ${rel}`);
+    fail(
+      "--suite-file must name a PRD suite under docs/prds/products/**/tests/*-tcs.md",
+    );
+  if (!existsSync(suiteFile)) fail(`--suite-file does not exist: ${rel}`);
 }
 
 const asked = flags["decided-by"] !== undefined;
