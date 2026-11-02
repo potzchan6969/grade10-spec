@@ -29,7 +29,7 @@ part on one question: do the points count toward the tier?
 
 ## Restarting the Expiry
 
-An operator gives a balance more time without the member buying or redeeming.
+An operator gives a balance more time without the member buying.
 
 - **From today** — the window runs again from the day the operator restarts
   it, never a day they pick

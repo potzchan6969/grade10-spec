@@ -291,7 +291,7 @@ as spent, and the balance stays at 0.
 | Step | Event | Points | Balance |
 | --- | --- | --- | --- |
 | Earns | 13 pts × 1.2 | +15 | 15 |
-| Lapses | a year on, nothing bought or redeemed | −15 | 0 |
+| Lapses | a year on, nothing bought | −15 | 0 |
 | Refunds | the single and the shipping, $169 | 0 | 0 |
 
 Nothing is held from the order, so nothing comes back. The missing 15 are
@@ -333,8 +333,8 @@ lapse that has happened is never undone.
 tickets to grade10's own events — any amount, even one too small to earn a
 point, even one paid partly or fully with points, and it still counts if the
 order is later refunded in full — or a points pack on the day it is
-credited. Whether redeeming still keeps the balance alive is open: the
-proposal is that it stops counting — ❓ PM to confirm.
+credited. 🚧 Redeeming does not count: spending points, on a reward or at
+checkout, moves no date.
 
 Every point a member holds lapses on the same day, whatever recorded it.
 
@@ -342,7 +342,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
 | --- | --- |
 | 🚧 A purchase, even one too small to earn a point, even paid with points, even refunded in full after | Twelve months from that day |
 | A points pack credited | Twelve months from that day, as a purchase moves it — [Top-ups](/p/grade10-site/loyalty/top-ups#bought-points) |
-| ❓ A redemption | Twelve months from that day under the running rule; the proposal is that it moves nothing — PM to confirm |
+| 🚧 A redemption | Unchanged; spending points moves no date |
 | A grant or a correction | Unchanged; those points take the date the balance already has |
 | A grant or a correction with nothing live to join | The later of twelve months from its own day and the day still running, which moves out to it; with neither ahead, it is written already lapsed |
 | Points a reversal gives back, or points paid at checkout that a refund or an operator returns | Unchanged; they go back to the day still running, even onto a balance brought to nothing |
@@ -363,19 +363,19 @@ Every point a member holds lapses on the same day, whatever recorded it.
 - **Dead at once** — points past the date stop counting the instant they are
   read, with nothing waiting on a nightly pass
 
-:::example{title="Buying keeps the balance alive — redeeming may stop counting ❓"}
+:::example{title="Buying keeps the balance alive — redeeming moves nothing 🚧"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
 | 2026/06/01 | earn → lapses 2027/06/01 | +10 | 25 |
-| 2026/11/20 | redeem → lapses 2027/11/20 | −5 | 20 |
-| 2027/01/03 | first earn's own year ends · date stays 2027/11/20 | 0 | 20 |
-| 2027/11/20 | lapse | −20 | 0 |
+| 2026/11/20 | redeem · date stays 2027/06/01 | −5 | 20 |
+| 2027/01/03 | first earn's own year ends · date stays 2027/06/01 | 0 | 20 |
+| 2027/06/01 | lapse | −20 | 0 |
 
 Every purchase moves one date for the whole balance. The November row is a
-redemption, which moves the date under the running rule and would move
-nothing under the proposal — ❓ PM to confirm. The date after the arrow is
-when the balance lapses if nothing else happens.
+redemption: it spends points and moves nothing, so the balance still lapses
+on the June date the last purchase set. The date after the arrow is when
+the balance lapses if nothing else happens.
 :::
 
 :::example{title="A spend too small to earn still counts"}
@@ -432,7 +432,7 @@ the later of that and 2027/01/03.
 | 2027/06/01 | lapse, all of it | −115 | 0 |
 
 The restart moves the whole balance, the grant and the earn alike. Nothing
-else moves a live balance's date without the member buying or redeeming.
+else moves a live balance's date without the member buying.
 :::
 
 :::example{title="A late record shortens nothing"}
@@ -476,7 +476,7 @@ spend rather than lose a balance that was about to lapse.
 | --- | --- | --- | --- |
 | What counts as activity | Decided | A purchase — online, in store, or a ticket order — any amount, however tendered, including one paid partly or fully with points and one later refunded in full — and a points top-up, counted on the day it is credited, since payment and credit sit a gateway instant apart. Decided 2026-10-27 — `define-activity-for-point-expiry`; tickets added 2026-10-28. | Product |
 | Ticket orders earn | Decided | A ticket order earns on what was paid, like a store purchase, and counts as order activity for membership and the balance's date. Buying asks only an email — no sign-in — so the earn goes to the account behind the address, made for it at once where there is none and credited whether or not anyone has signed into it, since the tickets went to that mailbox too; the member sees it the first time a sign-in proves the address, dated to the purchase. Decided 2026-10-28. | Product |
-| Whether redeeming keeps the balance alive | ❓ Open | Proposal: it stops counting, so only money in extends the date; the running rule has it reset the window. PM to confirm — `define-activity-for-point-expiry`. | Product |
+| Whether redeeming keeps the balance alive | Decided | No — a redemption spends points without money coming in, so it moves no date; only money in extends it. A reward redemption is a redemption, not a purchase, and follows the same rule. Confirmed by the PM 2026-11-02 — `define-activity-for-point-expiry`. | Product |
 | What a grant's points live for | Decided | On a balance with points still live, they take its date and push it no further. | Product |
 | A balance with nothing live | Decided | A grant or a correction lapses on the later of twelve months from its own day and the day still running, and moves that day out, never back (grade10 `packages/loyalty/backend/src/services/ledger/expiry.ts:74-83`, `packages/loyalty/backend/src/repositories/members.ts:27-45`); points a reversal gives back, or points paid at checkout that a refund or an operator returns, go back to the day still running (grade10 `packages/loyalty/backend/src/services/ledger/lots.ts:42`, `packages/loyalty/backend/src/services/ledger/expiry.ts:140`). | Product |
 | Points that should outlive the balance | Decided | An operator restarts the window instead, on the record. | Product |
