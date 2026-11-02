@@ -10,7 +10,7 @@ const meta = {
   argTypes: {
     state: {
       control: "inline-radio",
-      options: ["upcoming", "progress", "completed"],
+      options: ["upcoming", "progress", "completed", "error"],
     },
   },
   args: {
@@ -46,6 +46,21 @@ export const Completed: Story = {
     await expect(ring).toBeInstanceOf(HTMLElement);
     await expect(ring).not.toBeDisabled();
     await expect(ring).toHaveAttribute("data-checked");
+  },
+};
+
+/**
+ * Destructive cross for a step that failed — appended outside the Figma
+ * set, sized to match the checkbox ring.
+ */
+export const ErrorState: Story = {
+  name: "Error",
+  args: { state: "error" },
+  play: async ({ canvasElement }) => {
+    const indicator = canvasElement.querySelector(
+      '[data-slot="step-indicator"][data-state="error"]',
+    );
+    await expect(indicator).toBeInstanceOf(HTMLElement);
   },
 };
 
