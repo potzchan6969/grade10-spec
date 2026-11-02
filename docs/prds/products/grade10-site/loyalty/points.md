@@ -333,8 +333,9 @@ lapse that has happened is never undone.
 tickets to grade10's own events — any amount, even one too small to earn a
 point, even one paid partly or fully with points, and it still counts if the
 order is later refunded in full — or a points pack on the day it is
-credited. Whether redeeming still keeps the balance alive is open: the
-proposal is that it stops counting — ❓ PM to confirm.
+credited. Whether spending the balance still keeps it alive — redeeming a
+reward, or paying with points at checkout — is open: the proposal is that
+neither counts — ❓ PM to confirm.
 
 Every point a member holds lapses on the same day, whatever recorded it.
 
@@ -342,7 +343,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
 | --- | --- |
 | 🚧 A purchase, even one too small to earn a point, even paid with points, even refunded in full after | Twelve months from that day |
 | A points pack credited | Twelve months from that day, as a purchase moves it — [Top-ups](/p/grade10-site/loyalty/top-ups#bought-points) |
-| ❓ A redemption | Twelve months from that day under the running rule; the proposal is that it moves nothing — PM to confirm |
+| ❓ Spending the balance — a reward redeemed, or points paid at checkout | Twelve months from that day under the running rule; the proposal is that spending moves nothing — PM to confirm |
 | A grant or a correction | Unchanged; those points take the date the balance already has |
 | A grant or a correction with nothing live to join | The later of twelve months from its own day and the day still running, which moves out to it; with neither ahead, it is written already lapsed |
 | Points a reversal gives back, or points paid at checkout that a refund or an operator returns | Unchanged; they go back to the day still running, even onto a balance brought to nothing |
@@ -363,7 +364,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
 - **Dead at once** — points past the date stop counting the instant they are
   read, with nothing waiting on a nightly pass
 
-:::example{title="Buying keeps the balance alive — redeeming may stop counting ❓"}
+:::example{title="Buying keeps the balance alive — spending may stop counting ❓"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |

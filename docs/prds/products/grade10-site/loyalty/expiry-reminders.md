@@ -57,13 +57,16 @@ reminder.
 
 ## Delivery
 
-A reminder says that one is owed; it is not a message. Nothing reads it
-yet, so no member is told anything.
+🚧 **Carried by email** - the owed reminder is sent to the member's email
+address, once per member, day and lead time, with the day and the points
+it names; one send per owed reminder, dropped unsent if it stops being
+owed. The letters live in `apps/emails/emails/loyalty`.
 
 ## Carrying a Reminder
 
-- ❓ **Which channel carries it** - email, a push notification, the member card
-  in a wallet, the site itself, or more than one. Product
+- 🚧 **Email carries it** - the first channel is email; a push notification,
+  the member card in a wallet or the site itself can read the same owed
+  reminder later. Product
 - ❓ **Declining reminders** - whether a member can turn them off, and where.
   Product
 
@@ -89,6 +92,6 @@ without the rule for who is owed one changing again.
 | How lead times are set | Decided | As a set the programme carries, so one reminder or a ladder is a value rather than a rule; a programme without a lead-time setting owes no reminder and still starts. | Product |
 | Lead times | Decided | One reminder, 30 days before the day, so it starts with the profile's warning and a channel added later inherits one value; a ladder is a value added later with no rule change. | Product |
 | Smallest balance reminded about | Decided | Any balance of 1 point or more: 1 point pays $1 at checkout, so no balance is too small to spend, and the profile already warns on any balance. | Product |
-| Which channel carries it | ❓ Open | Email, push, the wallet card, the site, or more than one. | Product |
+| Which channel carries it | Decided | Email first; the owed reminder names no channel, so a push, the wallet card or the site can read it later. | Product |
 | Declining reminders | ❓ Open | Whether a member can turn them off, and where. | Product |
 :::
