@@ -39,7 +39,7 @@ or a service call.
 - [ ] 6.1 After the accepted `grade10-spec` revision is published, update only the `external/grade10-spec` gitlink through the supported submodule workflow. Preserve unrelated nested work, record the accepted revision, and make the application submodule check pass before consuming `detailEmphasis`.
 - [ ] 6.2 Verify: run the application submodule/status check and confirm the gitlink points to the accepted `grade10-spec` revision with no unrelated nested changes.
 
-## 7. The walk (grade10)
+## 7. The walk (grade10) (owner: @kinisworking)
 
 - [ ] 7.1 Run the final local cart-picker walk at the supported narrow and wide widths for a member and a guest: cover a held code at the inclusive near-expiry boundary, a distant code, a code with no expiry, a public code in the guest and merged member lists, and refused held and public codes. Check that only the existing expiry/conditions detail is emphasized, with title, copy, code, refusal, Apply behavior and order unchanged. `g10.store-cart-drawer.SC59`, `g10.store-cart-drawer.SC60`, `g10.store-cart-drawer.SC61`, `g10.store-cart-drawer.SC62`, `g10.store-cart-drawer.SC63`, `g10.store-cart-drawer.SC64`, `g10.shared-store-cart.SC70`, `g10.shared-store-cart.SC71`, `g10.shared-store-cart.SC72`
 - [ ] 7.2 Verify: capture the final walk evidence for each required state and record the Storybook expiring-soon reference plus any failed or unavailable manual gate.
