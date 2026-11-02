@@ -40,5 +40,13 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "09f432bea8da80159d8b33d2936e3322d2789e89",
+      "components": [
+        "web"
+      ]
+    }
+  ]
 }
