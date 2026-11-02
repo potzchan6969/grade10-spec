@@ -4,8 +4,8 @@ title: Store Cart Test Cases
 
 # grade10-site/store/cart Test Cases
 
-**Status:** pending-review · 0/54
-**Drafts styled:** 2026-10-24, tcs-rules r7
+**Status:** approved · 54/54
+**Reviewed:** 2026-11-02, tcs-rules r7
 **Capabilities:** grade10-site/store/cart-drawer, grade10-site/store/checkout, grade10-site/store/discounts
 
 ## Background
@@ -22,6 +22,8 @@ title: Store Cart Test Cases
 | `<member code>` | a store code minted to the member: HKD50 off any order, combining with order discounts |
 | `<public code>` | a public Shopify code, tagged `public`: HKD20 off the order |
 | `<spend code>` | a code: HKD200 off, spend HKD1,000 or more |
+| `<test card>` | the payment provider's published test card that succeeds |
+| `<declined card>` | the payment provider's published test card that is declined |
 
 ## Walk 1: A member's code and points to checkout
 
@@ -55,12 +57,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** cart#reviewing-the-cart/unresolved, cart#reviewing-the-cart/current-read, discounts#cart-footer/shipping
 
 **Pre-conditions:**
@@ -98,7 +100,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -134,7 +136,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -171,12 +173,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** cart#promo-code/running-out-reads-louder
 
 **Pre-conditions:**
@@ -207,12 +209,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** cart#promo-code/running-out-reads-louder, cart#promo-code/picked
 
 **Pre-conditions:**
@@ -242,12 +244,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** cart#promo-code/running-out-reads-louder
 
 **Pre-conditions:**
@@ -282,7 +284,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -321,7 +323,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -353,7 +355,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -390,7 +392,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
@@ -433,7 +435,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -473,7 +475,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -483,7 +485,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<product A>` is in the cart; admin has since changed its images in the shop's admin as the row says, and a minute has passed.
+* `<product A>` is in the cart; admin has since changed its images in the store's Shopify admin as the row says, and a minute has passed.
 
 **Test data:**
 
@@ -510,12 +512,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** cart#reviewing-the-cart/when-the-session-ends
 
 **Pre-conditions:**
@@ -545,7 +547,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -572,7 +574,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -599,7 +601,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -629,7 +631,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -665,7 +667,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -696,7 +698,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -734,7 +736,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -772,12 +774,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** cart#reviewing-the-cart/unresolved
 
 **Pre-conditions:**
@@ -807,7 +809,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -833,7 +835,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -863,7 +865,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -900,7 +902,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -929,7 +931,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: the row's line and footer.
-* Step 2: on each line with a struck list price, the screen reader says `Sale price` before the charged price and `Was` before the list price; neither label appears on screen. On a line with no struck price, it reads the price alone.
+* Step 2: on each line with a struck list price, the screen reader says `store.salePriceLabel` ("Sale price") before the charged price and `store.listPriceLabel` ("Was") before the list price; neither label appears on screen. On a line with no struck price, it reads the price alone.
 
 #### g10.store-cart.TC51: A code beside a sale line keeps or takes the line's cut, and Remove gives the sale back
 
@@ -939,7 +941,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -981,7 +983,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1015,7 +1017,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1025,7 +1027,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* As above, with `<product A>` and `<product C>` in the cart: HKD940, HKD890 after the code.
+* customer(signed-in member) holds 600 points and `<member code>`; the shop has the order discount Spend HKD1,000, save HKD100, read on the goods after the code; the cart holds `<product A>` and `<product C>`: HKD940, HKD890 after the code, with `<member code>` and 100 points applied.
 
 **Steps:**
 
@@ -1047,7 +1049,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1083,7 +1085,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1110,7 +1112,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1139,7 +1141,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1175,7 +1177,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1204,7 +1206,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1235,7 +1237,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1269,7 +1271,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1311,7 +1313,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1350,12 +1352,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** cart#points/not-offered
 
 **Pre-conditions:**
@@ -1385,7 +1387,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1416,7 +1418,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1444,7 +1446,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1484,7 +1486,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1520,7 +1522,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1537,7 +1539,7 @@ Runs once per row of **Test data**.
 | Step |
 | --- |
 | increase `<product A>` to 2 |
-| admin cancels the purchase's order in the shop's admin |
+| admin cancels the purchase's order in the store's Shopify admin |
 
 **Steps:**
 
@@ -1559,7 +1561,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -1580,7 +1582,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Pay with the payment provider's published test card that succeeds.
+1. Pay with `<test card>`.
 2. Return to `<listing url>` and open Cart.
 
 **Expected Results:**
@@ -1595,7 +1597,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1630,7 +1632,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1664,7 +1666,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1703,7 +1705,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -1733,7 +1735,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1772,7 +1774,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1809,7 +1811,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1847,7 +1849,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1861,7 +1863,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Fill in the shipping address and the test card that succeeds, and pay.
+1. Fill in the shipping address and `<test card>`, and pay.
 
 **Expected Results:**
 
@@ -1876,7 +1878,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1897,15 +1899,15 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Pay with the payment provider's published test card that is declined.
-2. Return to `<listing url>`, open Cart, select Proceed to Checkout and pay with the test card that succeeds.
+1. Pay with `<declined card>`.
+2. Return to `<listing url>`, open Cart, select Proceed to Checkout and pay with `<test card>`.
 3. Read the orders for this purchase.
 
 **Expected Results:**
 
 * Step 1 refuses the payment and places no order.
 * ❓ Step 2: the cart still holds `<product A>`, and paying places the order - product confirms.
-* ❓ Step 3: exactly one order for `<product A>`.
+* ❓ Step 3: exactly one order for `<product A>` - product confirms.
 
 ---
 
@@ -1918,7 +1920,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1932,7 +1934,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Pay with the test card that succeeds and read the thank-you page.
+1. Pay with `<test card>` and read the thank-you page.
 2. Select its Grade10 My Orders link.
 
 **Expected Results:**
