@@ -1,2 +1,4 @@
 schema: grade10-planning
 created: 2026-11-02
+hands:
+  dev: "@htonyl"
