@@ -12,7 +12,7 @@ Add the shared boundary coverage before changing or repinning any consumer.
 - [ ] 2.2 Confirm the shared component never receives or derives `expiresAt`, reads the clock or computes the 14-day window; retain plain rendering when the field is false or omitted. `g10.shared-store-cart.SC71`
 - [ ] 2.3 Verify: inspect the shared diff and rerun the focused `@grade10/ui` checks to confirm the change remains a render-only contract seam.
 
-## 3. Grade10 frontend mapper tests (grade10)
+## 3. Grade10 frontend mapper tests (grade10) (owner: @kinisworking)
 
 Write and run these tests before changing the quote-to-ticket mapping. Use a
 fixed consumer clock and decoded quote fixtures; do not add a backend fixture
