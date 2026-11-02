@@ -231,12 +231,12 @@ observations are 5.6 and 5.7.
 
 These retired addresses are not completed tasks and are never reused.
 
-## 13. The walk (grade10)
+## 13. The walk (grade10) (owner: @kinisworking)
 
 Uses the current Store PRD suite after Group 11 lands. This group updates automation disposition only; QA owns case Status.
 
 - [ ] 13.1 Keep one end-to-end actor walk for each frozen journey through the drawer, My Orders and the Shopify return link; US-05 walks one Pay at a time and older and lost answers, not invoice reuse or recovery: `grade10-site-store-checkout-US-01`, `grade10-site-store-checkout-US-02`, `grade10-site-store-checkout-US-03`, `grade10-site-store-checkout-US-04`, `grade10-site-store-checkout-US-05`, `grade10-site-store-checkout-US-06`. — blocked: the walk exists (`apps/frontend/grade10/e2e/tests/store/checkout-integration.spec.ts`) but the isolated e2e stack needs Docker, which this sandbox lacks - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
-- [ ] 13.2 In the walks' own commit, use `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path> --suite-file docs/prds/products/grade10-site/store/tests/cart-tcs.md` only for cases the walks decide. Name remaining manual provider cases in the suite and rounds row. — disposition recorded 2026-11-02: `g10.store-cart.TC39` is decided by `cart-checkout.spec.ts`, `g10.store-cart.TC42` by `cart-review.spec.ts`; live-Shopify cases `TC35`–`TC38`, `TC40`, `TC43`–`TC47` stay manual (see `rounds.md`).
+- [x] 13.2 In the walks' own commit, use `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path> --suite-file docs/prds/products/grade10-site/store/tests/cart-tcs.md` only for cases the walks decide. Name remaining manual provider cases in the suite and rounds row. — disposition recorded 2026-11-02: `g10.store-cart.TC39` is decided by `cart-checkout.spec.ts`, `g10.store-cart.TC42` by `cart-review.spec.ts`; live-Shopify cases `TC35`–`TC38`, `TC40`, `TC43`–`TC47` stay manual (see `rounds.md`).
 - [ ] 13.3 Verify Playwright and authorized staging evidence separately; record unrun gates and receipts without treating fixtures as live Shopify proof. Backend guarantees are evidenced by `add-checkout-purchase-safety`. — blocked: needs the walks run and authorized staging - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived
 
 ## 14. Checkout pending product record (grade10-spec)
