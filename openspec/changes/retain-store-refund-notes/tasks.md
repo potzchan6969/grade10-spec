@@ -4,7 +4,7 @@
 - [ ] 1.2 Update `docs/prds/products/grade10-site/store/order-detail.md` only if implementation clarification is needed; retain the backend-scope and direct-text decisions, and leave 🚧 removal to archive.
 - [ ] 1.3 Verify: run the store's focused `pnpm check:manual` and strict change validation; keep frontend follow-on scope distinct.
 
-## 2. Add the optional refund metadata contracts (grade10)
+## 2. Add the optional refund metadata contracts (grade10) (owner: @kinisworking)
 
 - [ ] 2.1 First commit failing contract/decoder tests for omitted collection, optional reason, exact literal strings, explicit null versus omitted source fields, and source-line identity; tick this test task last. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC21`.
 - [ ] 2.2 Add the optional customer detail refund collection and backend metadata input contract defined in `tech-design.md`; retain old decoder compatibility and keep monetary refund inputs and idempotency semantics unchanged. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC21`.

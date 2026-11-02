@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "432c8e63aee0f15545b25afa443437d4fe695484db75b6e19e72828f2fff37fc"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "3fc745a50c3a27d0470b50eaca400a674e3f3209",
+    "capturedAt": "2026-11-02T11:07:03.126Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/store/order-detail/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Existing authorized detail reads carry retained reasons",
+          "Requirement: Refund metadata retains the supplied source facts",
+          "Requirement: Refund reason text stays within the existing erasure boundary",
+          "Requirement: Retained refund records expose optional reasons and precise attribution"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-detail/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
