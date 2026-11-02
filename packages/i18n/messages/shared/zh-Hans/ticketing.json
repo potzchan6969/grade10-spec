@@ -63,7 +63,8 @@
       "admitsAnyDays": "{count, plural, other {活动期间任意 # 天，每天一次}}",
       "quantityLabel": "门票数量：{pass}",
       "decrement": "减少一张 {pass}",
-      "increment": "增加一张 {pass}"
+      "increment": "增加一张 {pass}",
+      "oneKind": "门票"
     },
     "waitingLine": {
       "note": "如有门票释出，我们会发邮件通知你，并为你保留。",

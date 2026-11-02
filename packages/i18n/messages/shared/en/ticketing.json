@@ -63,7 +63,8 @@
       "admitsAnyDays": "{count, plural, one {Any 1 day of the event} other {Any # days of the event, once a day}}",
       "quantityLabel": "How many tickets: {pass}",
       "decrement": "One fewer {pass}",
-      "increment": "One more {pass}"
+      "increment": "One more {pass}",
+      "oneKind": "Ticket"
     },
     "waitingLine": {
       "note": "If tickets come back, we’ll email you and hold them for you.",

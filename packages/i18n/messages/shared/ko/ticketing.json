@@ -63,7 +63,8 @@
       "admitsAnyDays": "{count, plural, other {행사 기간 중 아무 날 #일, 하루 한 번}}",
       "quantityLabel": "티켓 수량: {pass}",
       "decrement": "{pass} 한 장 빼기",
-      "increment": "{pass} 한 장 더하기"
+      "increment": "{pass} 한 장 더하기",
+      "oneKind": "티켓"
     },
     "waitingLine": {
       "note": "티켓이 다시 나오면 이메일로 알려 드리고 보관해 드려요.",
