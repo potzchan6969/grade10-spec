@@ -594,6 +594,10 @@
     }
   },
   "door": {
+    "environment": {
+      "name": "{env, select, development {開發環境} uat {UAT} other {測試環境}}",
+      "text": "：只限測試門票"
+    },
     "signIn": {
       "title": "開啟入口",
       "body": "輸入入口負責人給你的密碼，不需要帳戶。",

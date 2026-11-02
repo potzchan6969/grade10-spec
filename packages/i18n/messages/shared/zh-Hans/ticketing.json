@@ -594,6 +594,10 @@
     }
   },
   "door": {
+    "environment": {
+      "name": "{env, select, development {开发环境} uat {UAT} other {测试环境}}",
+      "text": "：仅限测试门票"
+    },
     "signIn": {
       "title": "开启入口",
       "body": "输入入口负责人给你的密码，不需要账户。",
