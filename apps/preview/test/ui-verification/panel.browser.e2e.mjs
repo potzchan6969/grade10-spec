@@ -216,9 +216,10 @@ async function publishRun(
     includeReferenceRegion = true,
     locales,
     referenceEveryProfile = true,
+    declarations = DECLARATIONS,
   },
 ) {
-  const catalogue = DECLARATIONS.map((declaration) => ({
+  const catalogue = declarations.map((declaration) => ({
     ...declaration,
     storyId,
     reference: { ...declaration.reference, storyId: referenceStoryId },
@@ -1343,6 +1344,93 @@ test("the dashboard ranks every story and holds an approval behind its images", 
     /^1 \/ 1/,
     "a flow-like story with one case still waiting stays not approved",
   );
+});
+
+test("the dashboard has the coordinator store what it cannot settle, and ranks by it next time", {
+  timeout: 180_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-scores-"));
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  // Whole screenshots of one size, so every site pair needs its pixels, and
+  // twelve steps, so the table pages.
+  await publishRun(archive, browser, {
+    runId: "scores-run",
+    createdAt: "2026-10-31T10:01:00.000Z",
+    storyId: STORY_ID,
+    includeReferenceRegion: false,
+    declarations: Array.from({ length: 12 }, (_, step) => ({
+      ...DECLARATIONS[0],
+      capturePointId: `step-${String(step).padStart(2, "0")}`,
+      label: `Pages/Not Found/Step ${step}`,
+    })),
+  });
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+  const open = async () => {
+    const page = await browser.newPage({
+      viewport: { width: 1440, height: 1000 },
+    });
+    await page.goto(`${server.origin}/?path=/verification-dashboard/`, {
+      waitUntil: "domcontentloaded",
+    });
+    const dashboard = page.locator(".vd-page");
+    await dashboard.getByRole("tab", { name: /Site drift/ }).click();
+    await dashboard
+      .getByRole("group", { name: "Compare the site with" })
+      .getByRole("button", { name: "Current reference" })
+      .click();
+    return { page, dashboard };
+  };
+
+  let { page, dashboard: first } = await open();
+  const rows = first.locator(".vd-table tbody tr.vd-row");
+  const more = first.getByRole("button", { name: "Show 2 more" });
+  await more.waitFor();
+  assert.equal(await rows.count(), 10, "ten rows at a time");
+  assert.match(await first.locator(".vd-more").innerText(), /10 of 12 rows/);
+  await more.click();
+  assert.equal(await rows.count(), 12);
+  assert.equal(await first.locator(".vd-more").count(), 0);
+  await first.getByRole("tab", { name: /Approvals/ }).click();
+  await waitForCondition(
+    async () => (await rows.count()) === 10,
+    "a new view to start from ten rows again",
+  );
+  await waitForCondition(
+    async () => {
+      const { stored, queued } = await server.coordinator.scoreCounts();
+      return stored > 0 && queued === 0;
+    },
+    "the coordinator to store the scores the dashboard asked for",
+    60_000,
+  );
+  await page.close();
+
+  const before = server.apiRequests.length;
+  let dashboard;
+  ({ page, dashboard } = await open());
+  await waitForCondition(
+    async () =>
+      /\d+\.\d%/.test(await dashboard.locator(".vd-table tbody").innerText()),
+    "the site drift to read from the stored scores",
+    30_000,
+  );
+  assert.deepEqual(
+    server.apiRequests
+      .slice(before)
+      .filter((request) => request.includes("site.png")),
+    [],
+    "no site image is downloaded to rank",
+  );
+  await page.close();
 });
 
 test("the captures page requests a full capture, follows it, and holds the next one", {

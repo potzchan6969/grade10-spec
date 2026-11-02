@@ -15,6 +15,8 @@ import {
   createApproval,
   listApprovals,
   listReferences,
+  queueScores,
+  readScores,
   verifiedPngUrl,
 } from "./archive-client";
 import type { ReferenceFlag } from "./capture-stamp";
@@ -79,6 +81,12 @@ const ARCHIVE_BASE =
   typeof window === "undefined" ? "" : window.location.origin;
 /** Two PNG downloads and a canvas per pair, so only a few run at once. */
 const COMPARE_CONCURRENCY = 4;
+/** Rows drawn at a time, worst first; the rest wait for Show more. */
+const PAGE_ROWS = 10;
+/** Pairs per request asking the coordinator to score them. */
+const SCORE_QUEUE_CHUNK = 200;
+/** Pair keys per request reading their stored scores. */
+const SCORE_READ_CHUNK = 500;
 const TOLERANCE_LABEL = `${HIGH_RATIO * 100}%`;
 
 const FLAG_SHORT: Readonly<Record<ReferenceFlag, string>> = {
@@ -229,12 +237,16 @@ async function comparePair(
   }
 }
 
-// Ranking needs every number, so the pass covers all pairs rather than the rows
-// on screen. A pair is named by its hashes, so a result never goes stale.
-function usePairResults(pairs: readonly ImagePair[]) {
-  const [results, setResults] = useState<ReadonlyMap<string, PairResult>>(
-    new Map(),
-  );
+// The coordinator stores most scores, so the browser compares only the rows on
+// screen that it has not scored yet. A pair is named by its hashes, so a
+// result never goes stale.
+function useBrowserComparisons(
+  pairs: readonly ImagePair[],
+  results: ReadonlyMap<string, PairResult>,
+  setResults: React.Dispatch<
+    React.SetStateAction<ReadonlyMap<string, PairResult>>
+  >,
+) {
   const known = useRef(results);
   known.current = results;
   const pairsKey = pairs.map((pair) => pair.key).join("\n");
@@ -272,7 +284,6 @@ function usePairResults(pairs: readonly ImagePair[]) {
     }
     return () => controller.abort();
   }, [pairsKey]);
-  return results;
 }
 
 /** A dialog image that opens at full size when pressed. */
@@ -1080,6 +1091,15 @@ export function VerificationDashboardPage() {
   const [attention, setAttention] = useState(false);
   const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(new Set());
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [stored, setStored] = useState<ReadonlyMap<string, PairResult>>(
+    new Map(),
+  );
+  const [computed, setComputed] = useState<ReadonlyMap<string, PairResult>>(
+    new Map(),
+  );
+  const [shown, setShown] = useState(PAGE_ROWS);
+  // The archive whose stored scores are read; ranking waits for them.
+  const [scoresFor, setScoresFor] = useState<Archive | null>(null);
   const [note, setNote] = useState("");
   const [prompt, setPrompt] = useState<{
     title: string;
@@ -1143,7 +1163,58 @@ export function VerificationDashboardPage() {
     [archive, index, locale],
   );
   const pairs = useMemo(() => pairsToCompare(cases, mode), [cases, mode]);
-  const results = usePairResults(pairs);
+  const results = useMemo(
+    () => new Map([...stored, ...computed]),
+    [stored, computed],
+  );
+
+  // Once the cases are built, read the stored scores of exactly their pairs,
+  // then ask the coordinator to score the rest, so the next visit ranks them
+  // at once. A read-only workbench refuses the ask, and nothing else changes;
+  // an archive with no coordinator has no scores, and the browser compares.
+  useEffect(() => {
+    if (!archive || referencesLoading) return;
+    const controller = new AbortController();
+    const wanted = new Map<string, ImagePair>();
+    for (const both of [
+      pairsToCompare(cases, "approved"),
+      pairsToCompare(cases, "run"),
+    ])
+      for (const pair of both)
+        if (!settledWithoutPixels(pair)) wanted.set(pair.key, pair);
+    const keys = [...wanted.keys()];
+    void (async () => {
+      const found: Record<string, PairResult> = {};
+      for (let start = 0; start < keys.length; start += SCORE_READ_CHUNK) {
+        try {
+          Object.assign(
+            found,
+            await readScores(
+              ARCHIVE_BASE,
+              keys.slice(start, start + SCORE_READ_CHUNK),
+              controller.signal,
+            ),
+          );
+        } catch (error) {
+          if (isAbort(error)) return;
+          break;
+        }
+      }
+      if (controller.signal.aborted) return;
+      setStored((previous) => new Map([...previous, ...Object.entries(found)]));
+      setScoresFor(archive);
+      const missing = [...wanted.values()].filter((pair) => !found[pair.key]);
+      for (let start = 0; start < missing.length; start += SCORE_QUEUE_CHUNK)
+        void queueScores(
+          ARCHIVE_BASE,
+          missing.slice(start, start + SCORE_QUEUE_CHUNK),
+        ).catch(() => {});
+    })();
+    return () => controller.abort();
+  }, [archive, cases, referencesLoading]);
+  // Stored scores never go stale, so only the first read holds the ranking;
+  // a refresh or an approval ranks on what is known while it reads again.
+  const scoresRead = scoresFor !== null;
 
   const locales = useMemo(() => {
     const unique = new Map<string, string>([["en", "en"]]);
@@ -1178,7 +1249,8 @@ export function VerificationDashboardPage() {
     storyCount(scoped.filter((item) => matchesTile(item, key)));
 
   const runsLoading = archive === null;
-  const loading = runsLoading || referencesLoading;
+  // Ranking also waits for the stored scores, read once the cases exist.
+  const loading = runsLoading || referencesLoading || !scoresRead;
   // Only the site tiles held to the run's own reference need no reference.
   const tileLoading = (key: Tile) =>
     runsLoading ||
@@ -1286,6 +1358,25 @@ export function VerificationDashboardPage() {
             },
           ];
 
+  // Worst first, PAGE_ROWS at a time; the browser compares only rows it draws.
+  const openRows = sections.flatMap((section) =>
+    collapsed.has(section.key) ? [] : section.rows,
+  );
+  const shownCases = openRows.slice(0, shown);
+  const shownKey = shownCases.map((item) => item.key).join("\n");
+  // cases is a dependency too: the same rows gain pairs when references load.
+  // The browser waits for the stored scores before it compares anything.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: shownKey stands for the rows drawn
+  const browserPairs = useMemo(
+    () => (scoresRead ? pairsToCompare(shownCases, mode) : []),
+    [shownKey, mode, cases, scoresRead],
+  );
+  useBrowserComparisons(browserPairs, results, setComputed);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a new view starts from its worst rows again
+  useEffect(() => {
+    setShown(PAGE_ROWS);
+  }, [tab, tile, query, domain, target, locale, mode, sizeFocus, attention]);
+
   const perSize = tab === "site" && mode === "approved" ? 1 : 2;
   const cellColumns =
     tab === "site" && mode === "run"
@@ -1389,8 +1480,8 @@ export function VerificationDashboardPage() {
           <h2>UI Verification Dashboard</h2>
           <p>
             Every story's approval and layout changes, from the newest site run
-            of each version. Pixel diffs are worked out in this browser and
-            never stored.
+            of each version. Drift scores are stored as each pair is first
+            scored; diff images are worked out in this browser and never stored.
           </p>
         </div>
         <div className="verification-inline-actions">
@@ -1764,9 +1855,14 @@ export function VerificationDashboardPage() {
                   : null}
                 {(() => {
                   let running = 0;
+                  let budget = shown;
                   return sections.map((section) => {
                     if (section.restartRank) running = 0;
                     const open = !collapsed.has(section.key);
+                    const rows = open ? section.rows.slice(0, budget) : [];
+                    budget -= rows.length;
+                    // A section past the page waits for Show more, header too.
+                    if (open && rows.length === 0) return null;
                     return (
                       <React.Fragment key={section.key}>
                         {section.header ? (
@@ -1794,7 +1890,7 @@ export function VerificationDashboardPage() {
                           </tr>
                         ) : null}
                         {open
-                          ? section.rows.map((item) => {
+                          ? rows.map((item) => {
                               running += 1;
                               return (
                                 <Row
@@ -1825,6 +1921,19 @@ export function VerificationDashboardPage() {
                 })()}
               </tbody>
             </table>
+            {openRows.length > shown ? (
+              <div className="vd-more">
+                <button
+                  onClick={() => setShown((value) => value + PAGE_ROWS)}
+                  type="button"
+                >
+                  Show {Math.min(PAGE_ROWS, openRows.length - shown)} more
+                </button>
+                <span>
+                  {shown} of {openRows.length} rows
+                </span>
+              </div>
+            ) : null}
             {!runsLoading && order.length === 0 ? (
               <div className="vd-empty">
                 <p>No story matches these filters.</p>

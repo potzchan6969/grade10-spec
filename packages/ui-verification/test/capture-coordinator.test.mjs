@@ -141,9 +141,16 @@ function memoryStorage() {
     async delete(key) {
       values.delete(key);
     },
-    async list({ prefix = "" } = {}) {
+    async list({ prefix = "", startAfter, limit } = {}) {
       return new Map(
-        [...values].filter(([key]) => key.startsWith(prefix)).sort(),
+        [...values]
+          .filter(
+            ([key]) =>
+              key.startsWith(prefix) &&
+              (startAfter === undefined || key > startAfter),
+          )
+          .sort(([left], [right]) => (left < right ? -1 : 1))
+          .slice(0, limit ?? Number.POSITIVE_INFINITY),
       );
     },
   };

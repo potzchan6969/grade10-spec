@@ -1,5 +1,83 @@
 const MAX_YIQ_DELTA = 35215;
 
+/**
+ * The box a capture is compared inside: its recorded region kept within the
+ * image, or the whole image when none was recorded. Both sides of a diff
+ * crop to their own box and align at its top-left corner.
+ */
+export function anchorOf(region, image) {
+  if (!region) return { x: 0, y: 0, width: image.width, height: image.height };
+  const x = Math.max(0, Math.min(region.x, image.width - 1));
+  const y = Math.max(0, Math.min(region.y, image.height - 1));
+  return {
+    x,
+    y,
+    width: Math.max(1, Math.min(region.width, image.width - x)),
+    height: Math.max(1, Math.min(region.height, image.height - y)),
+  };
+}
+
+function boxOf(side) {
+  return side.region
+    ? `${side.region.x},${side.region.y},${side.region.width},${side.region.height}`
+    : "whole";
+}
+
+/**
+ * A pair's name: both hashes and both recorded boxes. The browser and the
+ * coordinator key stored scores by it, so both lowercase the hashes.
+ */
+export function pairKey(reference, other) {
+  return [
+    reference.artifact.sha256.toLowerCase(),
+    boxOf(reference),
+    other.artifact.sha256.toLowerCase(),
+    boxOf(other),
+  ].join("|");
+}
+
+/**
+ * What the hashes alone settle: the same bytes cropped to the same recorded
+ * box differ nowhere. It trusts no recorded size, so the coordinator may
+ * store it.
+ */
+export function settledByHashes(pair) {
+  return pair.reference.artifact.sha256.toLowerCase() ===
+    pair.other.artifact.sha256.toLowerCase() &&
+    boxOf(pair.reference) === boxOf(pair.other)
+    ? { kind: "compared", ratio: 0 }
+    : null;
+}
+
+/**
+ * What the archive's metadata settles for a viewer: the same bytes in boxes
+ * of one size differ nowhere, and boxes of another size are never compared.
+ * It trusts each artifact's recorded size, so only the reader uses it.
+ */
+export function settledWithoutPixels(pair) {
+  const reference = anchorOf(pair.reference.region, pair.reference.artifact);
+  const other = anchorOf(pair.other.region, pair.other.artifact);
+  if (reference.width !== other.width || reference.height !== other.height)
+    return { kind: "size-mismatch" };
+  return pair.reference.artifact.sha256.toLowerCase() ===
+    pair.other.artifact.sha256.toLowerCase()
+    ? { kind: "compared", ratio: 0 }
+    : null;
+}
+
+/** The RGBA pixels of `anchor` inside a decoded image. */
+export function cropPixels(image, anchor) {
+  const out = new Uint8ClampedArray(anchor.width * anchor.height * 4);
+  for (let row = 0; row < anchor.height; row += 1) {
+    const from = ((anchor.y + row) * image.width + anchor.x) * 4;
+    out.set(
+      image.data.subarray(from, from + anchor.width * 4),
+      row * anchor.width * 4,
+    );
+  }
+  return out;
+}
+
 function blend(channel, alpha) {
   return 255 + (channel - 255) * alpha;
 }

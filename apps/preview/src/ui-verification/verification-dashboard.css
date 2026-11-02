@@ -638,6 +638,17 @@
   white-space: nowrap;
 }
 
+.vd-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px;
+  border-top: 1px solid var(--vp-border);
+  color: var(--vp-muted);
+  font-size: 13px;
+}
+
 .vd-empty {
   display: flex;
   flex-direction: column;

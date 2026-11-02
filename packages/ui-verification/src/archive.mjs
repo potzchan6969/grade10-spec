@@ -284,7 +284,7 @@ function parsePng(value) {
   return { width, height };
 }
 
-async function sha256(bytes) {
+export async function sha256(bytes) {
   const digest = await globalThis.crypto.subtle.digest(
     "SHA-256",
     asBytes(bytes),

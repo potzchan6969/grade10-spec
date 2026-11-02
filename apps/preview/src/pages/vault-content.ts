@@ -1052,8 +1052,11 @@ const VISIT_FIXTURE = {
   bringTips: VISIT_PREP_TIPS,
 };
 
+// Cents show as two digits, as every other HKD amount in the preview does;
+// a whole amount keeps none.
 function formatHkd(amount: number): string {
-  return `HK$${amount.toLocaleString("en-HK", { maximumFractionDigits: 2 })}`;
+  const cents = Number.isInteger(amount) ? 0 : 2;
+  return `HK$${amount.toLocaleString("en-HK", { minimumFractionDigits: cents, maximumFractionDigits: 2 })}`;
 }
 
 function formatUsd(amount: number): string {

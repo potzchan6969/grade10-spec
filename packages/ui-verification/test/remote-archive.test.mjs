@@ -87,6 +87,42 @@ test("a write never reaches the hosted Worker", async () => {
   assert.equal(called, false);
 });
 
+test("reading scores is the one POST that reaches the hosted Worker", async () => {
+  const calls = [];
+  const handler = createRemoteArchiveHandler({
+    origin: ORIGIN,
+    accessToken: async () => "person-token",
+    fetcher: async (url, init) => {
+      calls.push({ url: String(url), init });
+      return new Response('{"scores":{}}', {
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+  });
+  const body = JSON.stringify({ keys: ["a|whole|b|whole"] });
+  const response = await handler(
+    new Request("http://localhost:6006/api/scores/read", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+    }),
+  );
+  assert.equal(response.status, 200);
+  assert.equal(calls[0].url, `${ORIGIN}/api/scores/read`);
+  assert.equal(calls[0].init.method, "POST");
+  assert.equal(calls[0].init.body, body);
+  assert.equal(calls[0].init.headers.get("content-type"), "application/json");
+
+  const queue = await handler(
+    new Request("http://localhost:6006/api/scores", {
+      method: "POST",
+      body: body,
+    }),
+  );
+  assert.equal(queue.status, 405, "asking for scores still writes");
+  assert.equal(calls.length, 1);
+});
+
 test("a refused token is fetched again once, then the person is told to sign in", async () => {
   const refreshes = [];
   const statuses = [302, 200];

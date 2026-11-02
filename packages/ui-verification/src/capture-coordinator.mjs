@@ -1,4 +1,11 @@
 import { ArchiveError } from "./archive.mjs";
+import {
+  pairKey,
+  pairOf,
+  SCORE_QUEUE_LIMIT,
+  scorePair,
+  settledByHashes,
+} from "./drift-scores.mjs";
 import { captureLocale, PROFILES } from "./model.mjs";
 
 // One coordinator owns every reference capture and approval: a Durable
@@ -19,6 +26,22 @@ const SCHEDULE_KEY = "schedule";
 const RUN_PREFIX = "run:";
 const TARGETS_PREFIX = "targets:";
 const APPROVAL_PREFIX = "approval:";
+// The coordinator indexes every reference by case, so a story's references
+// are one storage list, not a scan of the whole archive. The index is filled
+// from the archive once, then kept as each capture lands.
+const REFERENCE_PREFIX = "reference:";
+const INDEX_KEY = "reference-index";
+const INDEX_PAGE = 50;
+const REFERENCE_PAGE = 100;
+// Each pair's drift score, by its key, and the pairs waiting to be scored.
+const SCORE_PREFIX = "score:";
+const QUEUE_PREFIX = "score-queue:";
+/** Pairs scored per alarm, so a wake stays well inside its CPU limit. */
+export const SCORE_BATCH = 4;
+/** Tries per pair before its failure is stored. */
+export const SCORE_ATTEMPTS = 3;
+/** A stored failure is tried again when a client asks after this long. */
+export const SCORE_ERROR_RETRY_MS = 6 * 60 * 60 * 1000;
 const PROFILE_IDS = Object.keys(PROFILES);
 const TRIGGERS = ["deploy", "manual"];
 
@@ -123,9 +146,11 @@ export function createCaptureCoordinator({
     );
   }
 
+  // A window nobody has used is open from the start of time: reading the
+  // clock here as well would race the caller's own reading by a millisecond.
   function windowOpensAt(state) {
     return state.lastFullStartedAt === null
-      ? now()
+      ? 0
       : state.lastFullStartedAt + FULL_INTERVAL_MS;
   }
 
@@ -144,6 +169,162 @@ export function createCaptureCoordinator({
       await storage.delete(`${RUN_PREFIX}${run.runId}`);
       await storage.delete(`${TARGETS_PREFIX}${run.runId}`);
     }
+  }
+
+  async function indexReference(reference) {
+    await storage.put(
+      `${REFERENCE_PREFIX}${reference.caseId}:${reference.referenceId}`,
+      reference,
+    );
+  }
+
+  // A page of the index in key order, one storage list per page; null until
+  // the index is filled, so the caller reads the archive instead. Readers
+  // order references themselves, as they did the archive's pages.
+  async function listReferences({
+    caseId,
+    cursor,
+    limit = REFERENCE_PAGE,
+  } = {}) {
+    const index = await storage.get(INDEX_KEY);
+    if (index?.state !== "ready") {
+      // The first read after a deploy starts the fill.
+      if (!(await schedule()).activeFullRunId) await setAlarm(now());
+      return null;
+    }
+    const prefix = caseId
+      ? `${REFERENCE_PREFIX}${text(caseId, "caseId", 128)}:`
+      : REFERENCE_PREFIX;
+    if (cursor !== undefined) text(cursor, "cursor", 512);
+    const entries = [
+      ...(await storage.list({
+        prefix,
+        limit: limit + 1,
+        ...(cursor ? { startAfter: `${prefix}${cursor}` } : {}),
+      })),
+    ];
+    const page = entries.slice(0, limit);
+    return {
+      references: page.map(([, reference]) => reference),
+      ...(entries.length > limit
+        ? { cursor: page[page.length - 1][0].slice(prefix.length) }
+        : {}),
+    };
+  }
+
+  // One page of the archive into the index; true while pages remain.
+  async function stepIndex() {
+    const index = (await storage.get(INDEX_KEY)) ?? { state: "filling" };
+    if (index.state === "ready") return false;
+    const page = await archive.listReferences({
+      ...(index.cursor ? { cursor: index.cursor } : {}),
+      limit: INDEX_PAGE,
+    });
+    for (const reference of page.references) await indexReference(reference);
+    await storage.put(
+      INDEX_KEY,
+      page.cursor
+        ? { state: "filling", cursor: page.cursor }
+        : { state: "ready", readyAt: iso() },
+    );
+    return Boolean(page.cursor);
+  }
+
+  // A client names the pairs it shows. Only the hashes settle a pair at once;
+  // every other pair waits for the alarm, which reads the archived bytes, so a
+  // size a client sent never becomes a stored score.
+  async function queueScores({ pairs } = {}) {
+    if (
+      !Array.isArray(pairs) ||
+      pairs.length === 0 ||
+      pairs.length > SCORE_QUEUE_LIMIT
+    )
+      throw new TypeError(`pairs must hold 1 to ${SCORE_QUEUE_LIMIT} pairs`);
+    let queued = 0;
+    let settled = 0;
+    for (const [position, value] of pairs.entries()) {
+      const pair = pairOf(value, `pairs[${position}]`);
+      const key = pairKey(pair.reference, pair.other);
+      const stored = await storage.get(`${SCORE_PREFIX}${key}`);
+      if (
+        stored &&
+        !(
+          stored.kind === "error" &&
+          now() - Date.parse(stored.scoredAt) >= SCORE_ERROR_RETRY_MS
+        )
+      )
+        continue;
+      const known = settledByHashes(pair);
+      if (known) {
+        await storage.put(`${SCORE_PREFIX}${key}`, {
+          ...known,
+          scoredAt: iso(),
+        });
+        settled += 1;
+      } else if (!(await storage.get(`${QUEUE_PREFIX}${key}`))) {
+        await storage.put(`${QUEUE_PREFIX}${key}`, { pair, attempts: 0 });
+        queued += 1;
+      }
+    }
+    if (queued > 0 && !(await schedule()).activeFullRunId)
+      await setAlarm(now());
+    return { queued, settled };
+  }
+
+  // The stored scores of the pairs a client names, and nothing else, so a
+  // read stays the size of what it shows however many scores accumulate.
+  async function readScores({ keys } = {}) {
+    if (
+      !Array.isArray(keys) ||
+      keys.length === 0 ||
+      keys.length > SCORE_QUEUE_LIMIT
+    )
+      throw new TypeError(`keys must hold 1 to ${SCORE_QUEUE_LIMIT} pair keys`);
+    const scores = {};
+    const values = await Promise.all(
+      keys.map((key) => storage.get(`${SCORE_PREFIX}${text(key, "key", 512)}`)),
+    );
+    for (const [position, value] of values.entries())
+      if (value) scores[keys[position]] = value;
+    return { scores };
+  }
+
+  /** How many scores are stored and queued; a scan, for tests and operators. */
+  async function scoreCounts() {
+    return {
+      stored: (await storage.list({ prefix: SCORE_PREFIX })).size,
+      queued: (await storage.list({ prefix: QUEUE_PREFIX })).size,
+    };
+  }
+
+  // A few queued pairs per wake. A failure is tried again on later wakes, then
+  // stored, so one bad pair cannot hold the queue; the browser compares it,
+  // and a client asking after SCORE_ERROR_RETRY_MS queues it again.
+  async function stepScores() {
+    const queue = [
+      ...(await storage.list({
+        prefix: QUEUE_PREFIX,
+        limit: SCORE_BATCH + 1,
+      })),
+    ];
+    for (const [key, entry] of queue.slice(0, SCORE_BATCH)) {
+      let score;
+      try {
+        score = await scorePair(archive, entry.pair);
+      } catch (error) {
+        if (entry.attempts + 1 < SCORE_ATTEMPTS) {
+          await storage.put(key, { ...entry, attempts: entry.attempts + 1 });
+          continue;
+        }
+        score = { kind: "error", message: messageOf(error) };
+      }
+      await storage.put(`${SCORE_PREFIX}${key.slice(QUEUE_PREFIX.length)}`, {
+        ...score,
+        scoredAt: iso(),
+      });
+      await storage.delete(key);
+    }
+    return queue.length > 0;
   }
 
   async function finish(run, state, message) {
@@ -299,6 +480,7 @@ export function createCaptureCoordinator({
             bytes,
             current.requestedBy,
           );
+          await indexReference(reference);
           current = {
             ...current,
             done: current.done + 1,
@@ -353,15 +535,22 @@ export function createCaptureCoordinator({
       if (result.state === "succeeded" || result.state === "failed") {
         const after = await schedule();
         await storage.put(SCHEDULE_KEY, { ...after, activeFullRunId: null });
-        if (after.pending)
-          await setAlarm(Math.max(now(), windowOpensAt(after)));
+        // Wake again at once: the index and the scores wait for a full run.
+        await setAlarm(now());
       }
       return;
     }
     if (state.pending) {
-      if (now() >= windowOpensAt(state)) await startFull(state, state.pending);
-      else await setAlarm(windowOpensAt(state));
+      if (now() >= windowOpensAt(state)) {
+        await startFull(state, state.pending);
+        return;
+      }
+      await setAlarm(windowOpensAt(state));
     }
+    // Between full runs the alarm fills the index, then scores queued pairs.
+    // A wake only ever moves sooner, so a pending run is never skipped: the
+    // next wake sets its window again.
+    if ((await stepIndex()) || (await stepScores())) await setAlarm(now());
   }
 
   // A focused capture renders a few stories at every size in one locale and
@@ -457,26 +646,26 @@ export function createCaptureCoordinator({
     }
     const references = [];
     for (const { shot, bytes, region } of shots) {
-      references.push(
-        await archive.createReference(
-          {
-            caseId: shot.caseId,
-            targetId: shot.targetId,
-            capturePointId: shot.capturePointId,
-            profileId: shot.profileId,
-            locale: shot.locale,
-            storyId: shot.storyId,
-            selector: shot.selector,
-            region,
-            commit: run.commit,
-            ref: run.ref,
-            verified: run.verified,
-            browser: run.browser,
-          },
-          bytes,
-          requestedBy,
-        ),
+      const reference = await archive.createReference(
+        {
+          caseId: shot.caseId,
+          targetId: shot.targetId,
+          capturePointId: shot.capturePointId,
+          profileId: shot.profileId,
+          locale: shot.locale,
+          storyId: shot.storyId,
+          selector: shot.selector,
+          region,
+          commit: run.commit,
+          ref: run.ref,
+          verified: run.verified,
+          browser: run.browser,
+        },
+        bytes,
+        requestedBy,
       );
+      await indexReference(reference);
+      references.push(reference);
     }
     const approvals = [];
     if (approve) {
@@ -588,6 +777,10 @@ export function createCaptureCoordinator({
     alarm,
     createApproval,
     listApprovals,
+    listReferences,
+    queueScores,
+    readScores,
+    scoreCounts,
     status,
   };
 }

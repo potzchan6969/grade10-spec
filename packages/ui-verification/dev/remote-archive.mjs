@@ -10,6 +10,8 @@ import { isIP } from "node:net";
 import { promisify } from "node:util";
 
 const run = promisify(execFile);
+/** Requests that only read, though they send a body. */
+const READING_POSTS = new Set(["/api/scores/read"]);
 /** A token this close to its expiry is fetched again first. */
 const EXPIRY_MARGIN_MS = 60 * 1000;
 const FORWARDED_REQUEST_HEADERS = ["accept", "if-none-match", "range"];
@@ -129,15 +131,17 @@ export function createRemoteArchiveHandler({
   const remote = remoteOrigin(origin);
   return async function handleRemoteArchive(request) {
     const method = request.method.toUpperCase();
-    if (method !== "GET" && method !== "HEAD") {
+    const incoming = new URL(request.url);
+    const reading = method === "POST" && READING_POSTS.has(incoming.pathname);
+    if (method !== "GET" && method !== "HEAD" && !reading) {
       return jsonResponse(
         405,
         "REMOTE_READ_ONLY",
         `This workbench reads the hosted archive at ${remote} and changes nothing there. Approve, capture and request changes on ${remote}.`,
       );
     }
-    const incoming = new URL(request.url);
     const target = new URL(`${incoming.pathname}${incoming.search}`, remote);
+    const body = reading ? await request.text() : undefined;
     const send = async (refresh) => {
       const headers = new Headers({
         "cf-access-token": await accessToken({ refresh }),
@@ -146,7 +150,13 @@ export function createRemoteArchiveHandler({
         const value = request.headers.get(name);
         if (value) headers.set(name, value);
       }
-      return fetcher(target, { method, headers, redirect: "manual" });
+      if (reading) headers.set("content-type", "application/json");
+      return fetcher(target, {
+        method,
+        headers,
+        redirect: "manual",
+        ...(body === undefined ? {} : { body }),
+      });
     };
 
     let response;

@@ -103,7 +103,8 @@ pnpm storybook:workbench
 - **Where** - A page of its own, not a panel. Open it from Dashboard in the Approve or Site Compare tab, on the Reference captures page, or at `?path=/verification-dashboard/`.
 - **Reads** - Every site run, reference and approval through the workbench's `/api/*` routes. A row is one case at the newest run that holds evidence for it, in the chosen locale. A failed read shows nothing, so a partial list cannot look complete.
 - **Loading** - The site runs draw the rows first, in name order. Each value the references or approvals decide - a status, a reference drift, a site drift against Last approved, a thumbnail, a rank - shows a skeleton until both lists are in. Its box cannot be pressed and its story cannot be approved until then. Site drift against Current reference needs only the runs.
-- **Stores nothing** - Pixel diffs are worked out in the browser. Pairs with the same bytes and pairs with boxes of another size settle without a download; the rest run a few at a time, across every row, because the ranking needs every number.
+- **Stored scores** - The coordinator stores each pair's drift score the first time anyone asks, by the pair's two hashes and boxes, so a score never goes stale. The dashboard reads the scores of exactly the pairs it shows, ranks by them, and never downloads an image to rank. Only the same bytes in the same box settle without a download; the coordinator takes every size from the archived images, never from what a client sent. A pair it cannot read is tried three times, then stored as unread for six hours, and the browser compares it meanwhile.
+- **Ten at a time** - Rows draw worst first, ten at a time; Show more adds ten. The browser compares only the rows it draws that have no stored score yet, and asks the coordinator to score every unscored pair, so the next load ranks them at once. Diff images are never stored.
 - **Stories** - Every count is of stories, not cases or sizes. A flow's steps are one story.
 - **Story status** - Approved when every size is. Otherwise Pending Comments when any size has a change request, No baseline when no size was ever approved, and Not approved for the rest. Each story has one status, so the four boxes add up to the total.
 - **Tolerance** - Reference drift and site drift share one line: past 10% of the region, or a region of another size. The Approve and Site Compare tabs use the same line.
@@ -115,7 +116,7 @@ pnpm storybook:workbench
 
 ## Where Captures And Approvals Live
 
-- **Coordinator** - One capture coordinator owns the schedule, the live runs and every approval. Hosted, it is one Cloudflare Durable Object, `ReferenceCaptures`, and its alarm drives a full capture. Locally, the workbench runs it in-process, with JSON files beside the archive and a timer for the alarm.
+- **Coordinator** - One capture coordinator owns the schedule, the live runs, every approval, an index of every reference by case, and the drift scores. Between full captures its alarm fills the index from the archive once, then scores queued pairs a few per wake. `/api/references` answers from the index once it is filled, so a story's references are one lookup, not a scan of the archive. Hosted, it is one Cloudflare Durable Object, `ReferenceCaptures`, and its alarm drives a full capture. Locally, the workbench runs it in-process, with JSON files beside the archive and a timer for the alarm.
 - **Archive** - Holds what never changes: each captured reference as a record under `ui-verification/v1/references/` with its PNG under `ui-verification/<referenceId>/`, and each finished run under `ui-verification/v1/reference-runs/`.
 - **Approvals** - Live in the coordinator, one record per decision, keyed by case. They are never edited.
 - **Browser** - Hosted, Cloudflare Browser Rendering draws each reference. Locally, the preview app's Playwright does. The two never meet: each writes its own archive.
@@ -139,7 +140,7 @@ pnpm storybook:workbench
 - **Equal size** - Both anchors must have the same size. If not, the panel says so and does not resize either image. Fix the layout before comparing pixels.
 - **Difference** - A pixel differs when its colour distance passes a fixed threshold, so small anti-aliasing noise is ignored. Differences are boxed on the overlay as regions.
 - **Colour cue** - Under 0.5% differing shows green. It is a reading aid, not a pass or fail gate.
-- **Where it runs** - In the browser, from the archived PNGs after their SHA-256 check. Nothing is stored. Recompare gives the same result.
+- **Where it runs** - In the browser, from the archived PNGs after their SHA-256 check, and in the coordinator for stored scores, with the same crop and the same diff. The coordinator stores the ratio only. Recompare gives the same result.
 
 ## Set Up Hosted Operation
 

@@ -1,5 +1,5 @@
 import type { ImageRegion } from "@grade10/ui-verification/model";
-import { diffPixels } from "@grade10/ui-verification/pixel-diff";
+import { anchorOf, diffPixels } from "@grade10/ui-verification/pixel-diff";
 
 export interface PixelSize {
   width: number;
@@ -26,20 +26,8 @@ interface Cropped {
 // The anchor is the component box: the recorded region when there is one,
 // otherwise the whole image. Both sides are cropped to their own anchor and
 // aligned at its top-left corner, so unrelated page chrome cannot move the diff.
-export function anchorOf(
-  region: ImageRegion | undefined,
-  image: PixelSize,
-): ImageRegion {
-  if (!region) return { x: 0, y: 0, width: image.width, height: image.height };
-  const x = Math.max(0, Math.min(region.x, image.width - 1));
-  const y = Math.max(0, Math.min(region.y, image.height - 1));
-  return {
-    x,
-    y,
-    width: Math.max(1, Math.min(region.width, image.width - x)),
-    height: Math.max(1, Math.min(region.height, image.height - y)),
-  };
-}
+// The server crops stored scores with the same rule, so both read one box.
+export { anchorOf };
 
 export function describeAnchor(
   region: ImageRegion | undefined,
