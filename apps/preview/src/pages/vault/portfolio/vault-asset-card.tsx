@@ -74,7 +74,7 @@ function VaultAssetCard({
         darkColor="rgba(249, 250, 250, 0.05)"
         loading
         name="vault-asset-card"
-        snapshotConfig={{ excludeSelectors: ["[aria-hidden]"] }}
+        snapshotConfig={{ excludeSelectors: [] }}
         transition={300}
       >
         <article

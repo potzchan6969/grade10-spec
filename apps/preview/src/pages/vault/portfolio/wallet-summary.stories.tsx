@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { PORTFOLIO_SUMMARY } from "../../vault-content";
+import { PORTFOLIO_SUMMARY } from "../vault-content";
 import { WalletSummary } from "./wallet-summary";
 
 /**
- * Rewards wallet above the holdings. Rewards accrue daily
+ * Incentive wallet above the holdings. Incentives accrue daily
  * while items stay in custody; the Withdraw CTA unlocks at the minimum.
  */
 const meta = {
