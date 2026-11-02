@@ -129,6 +129,8 @@ back to that page.
 
 :::detail{title="How the total is priced" for="engineer"}
 - **The Quote** — the store asks the shop to price the basket the same way the checkout's promise is priced, so the drawer and the checkout agree
+  - **By the Shop's Rules** — where every live site discount and the one code are kinds the shop's rules are proven on, the drawer works the basket out by those rules rather than asking: a percentage or fixed amount off the order, products or variants, with a spend floor, and what it combines with. A member's coupon is read as the code it would ride. Anything else — an app's discount, one kept to some customers or counting its uses, a collection read short, or a basket shape the shop was never seen to price (one product on two lines, a buy-x-get-y over lines of one price, two product discounts too close to call, a stack wider than two of a kind) — is asked of the shop
+  - **Checkout Asks** — the checkout's promise is always the shop's own figure
 - **The Held Choice** — the code and the points are stored with the cart and changed together, as one choice
 - **The Wallet Read** — the loyalty programme lists the member's coupons that fit the cart, on the store's own rules rather than the shop's
 - **The Drawer** — one drawer in the site's shell, over the store's shared cart and checkout state
@@ -150,6 +152,7 @@ considering. Its value is a total they can trust before they go to pay.
 - **The product's first picture** — as the collection card shows it, from the current read; variant pictures, or pictures held with the cart, can differ from the catalogue
 - **Closes when the session ends** — chosen over leaving it open and empty, which reads as a cart with nothing in it beside a header that says Sign In
 - **Another member's code** — answered as a code nobody minted, so a typed code tells nobody whose wallet it is in
+- **Priced by the shop's rules** — a basket the shop's proven rules cover is worked out without asking, chosen over asking on every edit because asking took a code mint and a draft-order call; the checkout still asks, so a rule the shop moves shows as a different figure at checkout, never a different charge
 - **Priced by the shop** — the shop prices the basket as its checkout will, so a code shown as applied is applied at checkout; the held list stays on the store's own rules, because asking the shop once per held code on every edit is too many calls
 - **Not in scope** — a dedicated cart page; variant-specific pictures; shipping and tax before the invoice; a second code on one cart
 - **Measured by** — drawer-to-checkout sessions, as Cart Opened then Checkout Started — [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events)
