@@ -64,6 +64,11 @@
       "type": "array",
       "items": { "$ref": "#/$defs/followup" }
     },
+    "scopes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/scope" },
+      "description": "The scopes the cards and follow-ups name, in the order the page groups them: written by checkpoint-digest's scopes.mjs fill from docs/prds/manual.yaml."
+    },
     "engineers": { "$ref": "#/$defs/engineers" },
     "extra": { "$ref": "#/$defs/extra" }
   },
@@ -297,7 +302,11 @@
         },
         "phase": {
           "$ref": "#/$defs/text",
-          "description": "The area or stage it groups under."
+          "description": "The area or stage it groups under; with a scope, the kind of work it is, shown on the card."
+        },
+        "scope": {
+          "$ref": "#/$defs/text",
+          "description": "The id of one entry in data.scopes, such as grade10-site/vault; the page groups by scope over phase."
         },
         "who": { "$ref": "#/$defs/who" },
         "title": { "$ref": "#/$defs/words" },
@@ -376,7 +385,28 @@
         "title": { "$ref": "#/$defs/words" },
         "why": { "$ref": "#/$defs/words" },
         "owner": { "$ref": "#/$defs/words" },
-        "due": { "$ref": "#/$defs/words" }
+        "due": { "$ref": "#/$defs/words" },
+        "scope": {
+          "$ref": "#/$defs/text",
+          "description": "The id of one entry in data.scopes the follow-up belongs to."
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "group", "title"],
+      "properties": {
+        "id": { "$ref": "#/$defs/text" },
+        "group": {
+          "$ref": "#/$defs/text",
+          "description": "The manual group it sits under, such as Grade10, Admin or Platform."
+        },
+        "title": { "$ref": "#/$defs/words" },
+        "href": {
+          "anyOf": [{ "$ref": "#/$defs/href" }, { "type": "null" }],
+          "description": "Its manual page."
+        }
       }
     },
     "engineers": {

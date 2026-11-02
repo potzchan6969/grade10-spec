@@ -471,6 +471,41 @@
   .g-phase {
     padding: 12px 18px 4px;
   }
+  .glance.scoped .g-group + .g-group {
+    margin-top: 6px;
+    border-top: 1px solid var(--line-strong);
+  }
+  .g-scope-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 8px;
+    padding: 6px 18px 2px 12px;
+  }
+  .g-scope-title {
+    color: var(--fg);
+    font-weight: 720;
+    text-decoration: none;
+  }
+  .g-scope-title:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .view-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+  }
+  .view-hint {
+    padding: 0 18px 6px;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  .audience label[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   .g-list {
     margin: 0;
     padding: 0;
@@ -701,8 +736,12 @@
     }
     .glance-head,
     .g-phase,
+    .view-hint,
     .g-proof {
       padding-inline: 14px;
+    }
+    .g-scope-head {
+      padding-inline: 8px 14px;
     }
     .g-proof {
       grid-template-columns: 76px minmax(0, 1fr) auto;
@@ -895,6 +934,11 @@
     font-size: 13.5px;
     font-weight: 500;
   }
+  .outline .sub2 a {
+    padding-left: 34px;
+    font-size: 13px;
+    font-weight: 480;
+  }
   .outline .to-top {
     border-left-color: transparent;
     font-size: 13px;
@@ -948,6 +992,126 @@
     gap: 4px 10px;
     font-size: 18px;
     font-weight: 720;
+  }
+
+  /* A filtered-out card, product or group: an author display rule never wins over hidden */
+  .card[hidden],
+  .fu[hidden],
+  .g-group[hidden],
+  .g-scope[hidden],
+  .g-list li[hidden],
+  .phase-group[hidden],
+  .scope-band[hidden],
+  .scope-group[hidden],
+  .outline li[hidden] {
+    display: none;
+  }
+
+  /* Scopes: What changed grouped as the manual groups its pages, a band per group and a heading per product */
+  .scope-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    min-width: 0;
+    scroll-margin-top: 72px;
+  }
+  .scope-band + .scope-band {
+    margin-top: 26px;
+  }
+  .scope-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--line-strong);
+    font-size: 20px;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+  }
+  .scope-group {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    min-width: 0;
+    scroll-margin-top: 72px;
+  }
+  .scope-group + .scope-group {
+    margin-top: 10px;
+  }
+  .scope-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 10px;
+  }
+  .scope-head h4 {
+    font-size: 17px;
+    font-weight: 720;
+  }
+  .scope-link {
+    color: var(--accent);
+    font-size: 13.5px;
+    font-weight: 620;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .scope-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .scope-head .scope-link {
+    margin-left: auto;
+  }
+  .g-phase .count {
+    margin-left: 8px;
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .g-scope-head .count {
+    font-size: 13.5px;
+  }
+  .star {
+    display: inline-grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .star:hover {
+    border-color: var(--line);
+    background: var(--sunk);
+    color: var(--fg);
+  }
+  .star[aria-pressed="true"] {
+    color: var(--accent);
+  }
+  .star:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .c-phase {
+    padding: 0 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 12.5px;
+    font-weight: 650;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+  .fu-scope {
+    color: var(--accent);
+    font-weight: 650;
   }
 
   .card {
@@ -2577,6 +2741,16 @@
     const PHASES = [...new Set(CH.map((c) => c.phase).filter(Boolean))];
     const AUDIENCES = [...new Set(CH.flatMap((c) => list(c.who)))];
     const FILTER = CH.length >= 4 && AUDIENCES.length >= 2;
+    // Scopes: the manual's groups and products. With them the page groups by where in the product a change lands,
+    // and a reader stars the products they work on, so Following shows only those on every day's page.
+    const SCOPES = DATA.scopes ?? [];
+    const SCOPE = new Map(SCOPES.map((s) => [s.id, s]));
+    const SCOPED = CH.some((c) => SCOPE.has(c.scope));
+    const ACROSS = "Across the day";
+    const scopeId = (id) => `scope-${slug(id)}`;
+    const groupId = (g) => `group-${slug(g)}`;
+    const FOLLOW = "digest-follow";
+    const view = { who: "", follow: new Set(), only: false, linked: [] };
 
     function h(tag, props, ...kids) {
       const el = document.createElement(tag);
@@ -3161,39 +3335,58 @@
       if (CH.length < 2) return null;
       const kinded = CH.some((c) => KIND[c.kind]);
       const pictured = CH.some((c) => list(c.picture).some((p) => THUMBS[p?.kind]));
-      const el = h(
-        "section",
-        { class: `glance${kinded ? "" : " plain"}${pictured ? " pictured" : ""}`, id: "glance", "aria-labelledby": "glance-h" },
-        h("div", { class: "glance-head" }, h("h2", { id: "glance-h" }, "At a glance"), FILTER ? audience() : null),
-      );
-      for (const [phase, items] of groups()) {
-        el.append(
+      const item = (c) => {
+        const [word, tone] = KIND[c.kind] ?? [];
+        return h(
+          "li",
+          { "data-for": list(c.who).join("|"), "data-scope": c.scope ?? "" },
           h(
-            "div",
-            { class: "g-group", "data-group": phase },
-            phase ? h("p", { class: "g-phase" }, phase) : null,
-            h(
-              "ul",
-              { class: "g-list" },
-              items.map((c) => {
-                const [word, tone] = KIND[c.kind] ?? [];
-                return h(
-                  "li",
-                  { "data-for": list(c.who).join("|") },
-                  h(
-                    "a",
-                    { href: `#${c.id}` },
-                    pictured ? thumb(c) : null,
-                    kinded ? h("span", {}, word ? h("span", { class: `chip tone-${tone}` }, word) : null) : null,
-                    h("span", { class: "g-title", html: mdText(c.title) }),
-                    list(c.who).length ? h("span", { class: "g-for" }, list(c.who).join(", ")) : null,
-                  ),
-                );
-              }),
-            ),
+            "a",
+            { href: `#${c.id}` },
+            pictured ? thumb(c) : null,
+            kinded ? h("span", {}, word ? h("span", { class: `chip tone-${tone}` }, word) : null) : null,
+            h("span", { class: "g-title", html: mdText(c.title) }),
+            list(c.who).length ? h("span", { class: "g-for" }, list(c.who).join(", ")) : null,
           ),
         );
-      }
+      };
+      const el = h(
+        "section",
+        { class: `glance${kinded ? "" : " plain"}${pictured ? " pictured" : ""}${SCOPED ? " scoped" : ""}`, id: "glance", "aria-labelledby": "glance-h" },
+        h("div", { class: "glance-head" }, h("h2", { id: "glance-h" }, SCOPED ? "Where things moved" : "At a glance"), viewBar()),
+        SCOPED ? h("p", { class: "view-hint", id: "view-hint" }, "Star ☆ the products you work on; Following then shows only them, on every day's digest.") : null,
+      );
+      if (SCOPED) {
+        for (const [g, scopes] of scopeTree(CH)) {
+          const n = scopes.reduce((k, [, cards]) => k + cards.length, 0);
+          el.append(
+            h(
+              "div",
+              { class: "g-group", "data-group": g },
+              h("p", { class: "g-phase" }, h("a", { class: "g-scope-title", href: `#${groupId(g)}` }, g), h("span", { class: "count", "data-tally": "" }, plural(n, "change"))),
+              scopes.map(([sc, cards]) =>
+                h(
+                  "div",
+                  { class: "g-scope", "data-box": "" },
+                  sc
+                    ? h(
+                        "div",
+                        { class: "g-scope-head" },
+                        star(sc),
+                        h("a", { class: "g-scope-title", href: `#${scopeId(sc.id)}` }, sc.title),
+                        h("span", { class: "count" }, kinds(cards) || plural(cards.length, "change")),
+                      )
+                    : null,
+                  h("ul", { class: "g-list" }, cards.map(item)),
+                ),
+              ),
+            ),
+          );
+        }
+      } else
+        for (const [phase, items] of groups()) {
+          el.append(h("div", { class: "g-group", "data-group": phase }, phase ? h("p", { class: "g-phase" }, phase) : null, h("ul", { class: "g-list" }, items.map(item))));
+        }
       if (PR.length) {
         el.append(
           h(
@@ -3206,6 +3399,24 @@
         );
       }
       return el;
+    }
+
+    // [group, [[scope, cards]]] in the manual's order; the cards no scope claims close the list as one group.
+    function scopeTree(items) {
+      const tree = [];
+      for (const g of [...new Set(SCOPES.map((sc) => sc.group))]) {
+        const scopes = SCOPES.filter((sc) => sc.group === g)
+          .map((sc) => [sc, items.filter((c) => c.scope === sc.id)])
+          .filter(([, cards]) => cards.length);
+        if (scopes.length) tree.push([g, scopes]);
+      }
+      const rest = items.filter((c) => !SCOPE.has(c.scope));
+      if (rest.length) tree.push([ACROSS, [[null, rest]]]);
+      return tree;
+    }
+
+    function star(sc) {
+      return h("button", { type: "button", class: "star", "data-star": sc.id, "aria-pressed": "false", "aria-label": `Follow ${sc.title}`, title: `Follow ${sc.title}`, onclick: () => toggleFollow(sc.id) }, "☆");
     }
 
     function groups() {
@@ -3234,17 +3445,113 @@
       );
     }
 
+    function viewBar() {
+      if (!FILTER && !SCOPED) return null;
+      return h(
+        "div",
+        { class: "view-bar" },
+        FILTER ? audience() : null,
+        SCOPED
+          ? h(
+              "div",
+              { class: "audience areas", role: "radiogroup", "aria-label": "Show the products" },
+              h("label", {}, h("input", { type: "radio", name: "areas", value: "all", onchange: () => showOnly(false) }), "All products"),
+              h("label", { id: "areas-mine" }, h("input", { type: "radio", name: "areas", value: "mine", onchange: () => showOnly(true) }), "Following", h("span", { class: "n", id: "follow-n" })),
+            )
+          : null,
+      );
+    }
+
     function showFor(who) {
-      const a = AUDIENCES.includes(who) ? who : "";
-      writeLocal("handoff-for", a);
+      view.who = AUDIENCES.includes(who) ? who : "";
+      writeLocal("handoff-for", view.who);
+      applyView();
+    }
+
+    function showOnly(on) {
+      view.only = on && view.follow.size > 0;
+      view.linked = [];
+      writeLocal(`${FOLLOW}-only`, view.only ? "1" : "");
+      applyView();
+    }
+
+    function toggleFollow(id) {
+      if (view.follow.has(id)) view.follow.delete(id);
+      else view.follow.add(id);
+      if (!view.follow.size) view.only = false;
+      writeLocal(FOLLOW, JSON.stringify([...view.follow]));
+      applyView();
+    }
+
+    function showAll() {
+      view.who = "";
+      view.only = false;
+      view.linked = [];
+      writeLocal("handoff-for", "");
+      writeLocal(`${FOLLOW}-only`, "");
+      applyView();
+    }
+
+    // The reader's view: a role from the audience pills, the starred products, and ?scope= on a shared link, which wins for that visit.
+    function loadView() {
+      const params = (() => {
+        try {
+          return new URLSearchParams(location.search);
+        } catch {
+          return new URLSearchParams();
+        }
+      })();
+      const who = params.get("for") ?? readLocal("handoff-for") ?? "";
+      view.who = AUDIENCES.includes(who) ? who : "";
+      try {
+        for (const id of JSON.parse(readLocal(FOLLOW) ?? "[]")) if (typeof id === "string") view.follow.add(id);
+      } catch {}
+      view.only = readLocal(`${FOLLOW}-only`) === "1" && view.follow.size > 0;
+      view.linked = params
+        .getAll("scope")
+        .flatMap((v) => v.split(","))
+        .filter((id) => SCOPE.has(id));
+    }
+
+    function applyView() {
+      const only = view.linked.length ? new Set(view.linked) : view.only ? view.follow : null;
+      const a = view.who;
       for (const r of document.querySelectorAll('input[name="audience"]')) r.checked = r.value === a;
-      for (const el of document.querySelectorAll("[data-for]")) el.hidden = !!a && !!el.dataset.for && !el.dataset.for.split("|").includes(a);
-      for (const g of document.querySelectorAll("[data-group]")) g.hidden = ![...g.querySelectorAll("[data-for]")].some((el) => !el.hidden);
+      for (const r of document.querySelectorAll('input[name="areas"]')) {
+        r.checked = (r.value === "mine") === (view.only && !view.linked.length);
+        if (r.value === "mine") {
+          r.disabled = !view.follow.size;
+          r.parentElement.setAttribute("aria-disabled", String(!view.follow.size));
+        }
+      }
+      for (const b of document.querySelectorAll("[data-star]")) {
+        const on = view.follow.has(b.dataset.star);
+        b.setAttribute("aria-pressed", String(on));
+        b.textContent = on ? "★" : "☆";
+      }
+      const count = document.getElementById("follow-n");
+      if (count) count.textContent = view.follow.size ? ` ${view.follow.size}` : "";
+      const hint = document.getElementById("view-hint");
+      if (hint) hint.hidden = view.follow.size > 0;
+      for (const el of document.querySelectorAll("[data-for]")) {
+        const off = (!!a && !!el.dataset.for && !el.dataset.for.split("|").includes(a)) || (!!only && !!el.dataset.scope && !only.has(el.dataset.scope));
+        el.hidden = off;
+      }
+      for (const box of document.querySelectorAll("[data-box], [data-group]")) box.hidden = ![...box.querySelectorAll("[data-for]")].some((el) => !el.hidden);
+      for (const n of document.querySelectorAll("[data-tally]")) n.textContent = plural(n.parentElement.parentElement.querySelectorAll("li[data-for]:not([hidden])").length, "change");
+      for (const link of document.querySelectorAll(".outline [data-spy]")) {
+        const target = document.getElementById(link.dataset.spy);
+        if (target?.matches(".scope-band, .scope-group, .phase-group")) link.parentElement.hidden = target.hidden;
+      }
       const note = document.getElementById("filter-note");
       if (note) {
-        const shown = CH.filter((c) => !a || !list(c.who).length || list(c.who).includes(a)).length;
-        note.hidden = !a;
-        note.firstChild.textContent = `Showing ${shown} of ${CH.length} changes, those for ${a}.`;
+        const shown = CH.filter((c) => !document.getElementById(c.id)?.hidden).length;
+        const parts = [
+          a ? `for ${a}` : null,
+          view.linked.length ? `in ${plural(view.linked.length, "product")} from the link` : only ? `in the ${plural(only.size, "product")} you follow` : null,
+        ].filter(Boolean);
+        note.hidden = !parts.length;
+        note.firstChild.textContent = `Showing ${shown} of ${CH.length} changes, ${parts.join(" and ")}.`;
       }
       spy();
     }
@@ -3413,8 +3720,36 @@
     function changedSection() {
       if (!CH.length) return null;
       const sec = section("changed", DECISION ? "What is settled" : "What changed", kinds(CH));
-      if (FILTER) sec.body.append(h("p", { class: "filter-note", id: "filter-note", hidden: true }, h("span", {}), h("button", { type: "button", class: "link-btn", onclick: () => showFor("") }, "Show every change")));
-      if (PHASES.length) {
+      if (FILTER || SCOPED) sec.body.append(h("p", { class: "filter-note", id: "filter-note", hidden: true }, h("span", {}), h("button", { type: "button", class: "link-btn", onclick: showAll }, "Show every change")));
+      if (SCOPED) {
+        for (const [g, scopes] of scopeTree(CH)) {
+          const all = scopes.flatMap(([, cards]) => cards);
+          sec.body.append(
+            h(
+              "div",
+              { class: "scope-band", id: groupId(g), "data-group": g },
+              h("h3", { class: "scope-title" }, g, h("span", { class: "count" }, kinds(all) || plural(all.length, "change"))),
+              scopes.map(([sc, cards]) =>
+                h(
+                  "div",
+                  { class: "scope-group", id: sc ? scopeId(sc.id) : null, "data-box": "" },
+                  sc
+                    ? h(
+                        "div",
+                        { class: "scope-head" },
+                        h("h4", {}, sc.title),
+                        h("span", { class: "count" }, kinds(cards) || plural(cards.length, "change")),
+                        sc.href ? h("a", { class: "scope-link", href: sc.href, target: "_blank", rel: "noopener" }, "Manual page ↗") : null,
+                        star(sc),
+                      )
+                    : null,
+                  cards.map((c) => changeCard(c, sc ? "h5" : "h4")),
+                ),
+              ),
+            ),
+          );
+        }
+      } else if (PHASES.length) {
         for (const [phase, items] of groups()) {
           sec.body.append(
             h(
@@ -3446,11 +3781,12 @@
       const proofs = PR.map((p, i) => [p, i]).filter(([p]) => p.change === c.id);
       return h(
         "article",
-        { class: "card change", id: c.id, "data-for": who.join("|") },
+        { class: "card change", id: c.id, "data-for": who.join("|"), "data-scope": c.scope ?? "" },
         h(
           "div",
           { class: "c-head" },
           word ? h("span", { class: `chip tone-${tone}` }, word) : null,
+          SCOPED && c.phase ? h("span", { class: "c-phase" }, c.phase) : null,
           who.length ? h("span", { class: "c-for" }, `For ${who.join(", ")}`) : null,
           h("a", { class: "anchor", href: `#${c.id}`, "aria-label": `Link to ${plain(c.title)}` }, "#"),
         ),
@@ -3624,11 +3960,16 @@
           FU.map((f) =>
             h(
               "div",
-              { class: "fu", id: `fu-${f.id}` },
+              { class: "fu", id: `fu-${f.id}`, "data-for": "", "data-scope": f.scope ?? "" },
               h("input", { type: "checkbox", id: `fu-${f.id}-done`, "aria-label": `Done: ${plain(f.title)}`, onchange: (e) => tick(f.id, e.target.checked) }),
               h("span", { class: "fu-title", html: md(f.title) }),
               f.why ? h("span", { class: "fu-why", html: md(f.why) }) : null,
-              h("span", { class: "fu-owner" }, [f.owner, f.due].filter(Boolean).join(" · ")),
+              h(
+                "span",
+                { class: "fu-owner" },
+                SCOPE.has(f.scope) ? [h("span", { class: "fu-scope" }, SCOPE.get(f.scope).title), " · "] : null,
+                [f.owner, f.due].filter(Boolean).join(" · "),
+              ),
             ),
           ),
         ),
@@ -3808,14 +4149,17 @@
     // The section the reader is in lights up in the pills and the outline.
     let current = null;
     function spy() {
-      const marks = [...document.querySelectorAll(".main .sec[id], .main .phase-group[id]")].filter((el) => !el.hidden && document.querySelector(`[data-spy="${el.id}"]`));
+      const marks = [...document.querySelectorAll(".main .sec[id], .main .phase-group[id], .main .scope-band[id], .main .scope-group[id]")].filter(
+        (el) => !el.hidden && document.querySelector(`[data-spy="${el.id}"]`),
+      );
       let here = null;
       for (const el of marks) if (el.getBoundingClientRect().top < 120) here = el.id;
       if (here === current) return;
       current = here;
-      const section = here?.startsWith("area-") ? "changed" : here;
+      const section = /^(area|group|scope)-/.test(here ?? "") ? "changed" : here;
+      const band = here?.startsWith("scope-") ? document.getElementById(here)?.closest(".scope-band")?.id : null;
       for (const a of document.querySelectorAll("[data-spy]")) {
-        if (a.dataset.spy === here || a.dataset.spy === section) a.setAttribute("aria-current", "true");
+        if (a.dataset.spy === here || a.dataset.spy === section || a.dataset.spy === band) a.setAttribute("aria-current", "true");
         else a.removeAttribute("aria-current");
       }
       const pills = document.querySelector(".pills");
@@ -3832,7 +4176,7 @@
       const id = decodeURIComponent(location.hash.slice(1));
       const target = id && document.getElementById(id);
       if (!target) return;
-      if (target.closest("[hidden]")) showFor("");
+      if (target.closest("[hidden]")) showAll();
       target.scrollIntoView({ block: "start" });
     }
 
@@ -3876,7 +4220,28 @@
                       "li",
                       {},
                       navLink(sec, counts),
-                      sec.el.id === "changed" && PHASES.length > 1
+                      sec.el.id === "changed" && SCOPED
+                        ? h(
+                            "ul",
+                            { class: "sub" },
+                            scopeTree(CH).map(([g, scopes]) =>
+                              h(
+                                "li",
+                                {},
+                                h("a", { href: `#${groupId(g)}`, "data-spy": groupId(g) }, g),
+                                scopes.some(([sc]) => sc)
+                                  ? h(
+                                      "ul",
+                                      { class: "sub2" },
+                                      scopes
+                                        .filter(([sc]) => sc)
+                                        .map(([sc]) => h("li", {}, h("a", { href: `#${scopeId(sc.id)}`, "data-spy": scopeId(sc.id) }, sc.title))),
+                                    )
+                                  : null,
+                              ),
+                            ),
+                          )
+                        : sec.el.id === "changed" && PHASES.length > 1
                         ? h(
                             "ul",
                             { class: "sub" },
@@ -3894,7 +4259,10 @@
       loadLocal();
       lightbox();
       refresh();
-      if (FILTER) showFor(readLocal("handoff-for") ?? "");
+      if (FILTER || SCOPED) {
+        loadView();
+        applyView();
+      }
       reveal();
       spy();
       let ticking = false;

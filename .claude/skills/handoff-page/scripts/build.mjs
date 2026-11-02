@@ -78,9 +78,9 @@ const RESERVED = [
   "filter-note",
   "lightbox",
 ];
-// Ids the page gives its own parts: questions, blockers, proof rows, follow-ups, areas and controls.
+// Ids the page gives its own parts: questions, blockers, proof rows, follow-ups, areas, scopes and controls.
 const RESERVED_PREFIX =
-  /^(q\d|b\d|proof-\d|fu-|area-|for-\d|try-role-|answer-|lightbox-|handoff-)/;
+  /^(q\d|b\d|proof-\d|fu-|area-|scope-|group-|for-\d|try-role-|answer-|lightbox-|handoff-)/;
 const SHAPES = { data: Object.keys(SCHEMA.properties) };
 for (const [name, def] of Object.entries(SCHEMA.$defs))
   if (def.properties) SHAPES[name] = Object.keys(def.properties);
@@ -789,6 +789,40 @@ items(data.followups, "data.followups").forEach((f, i) => {
   need(f, "owner", at, "who takes it");
   if (!isText(f.why)) warn(`${at}.why`, "why it is left");
 });
+
+// Scopes: the manual's groups and products the cards sit under; every scope a card or follow-up names is defined once.
+const scopeIds = new Set();
+items(data.scopes, "data.scopes").forEach((s, i) => {
+  const at = `data.scopes[${i}]`;
+  if (!shape(s, SHAPES.scope, at)) return;
+  need(s, "id", at, "the manual id, such as grade10-site/vault");
+  need(s, "group", at, "the manual group, such as Grade10");
+  need(s, "title", at, "the manual's words for it, such as Vault");
+  if (s.href != null) link(s.href, `${at}.href`);
+  if (scopeIds.has(s.id)) fail(`${at}.id`, `"${s.id}" appears twice`);
+  scopeIds.add(s.id);
+});
+const fillHint = digest
+  ? "run node .claude/skills/checkpoint-digest/scripts/scopes.mjs fill on the data"
+  : "add it to data.scopes";
+const scoped = [
+  ...changes.map((c, i) => [c, `data.changes[${i}].scope`]),
+  ...items(data.followups).map((f, i) => [f, `data.followups[${i}].scope`]),
+];
+for (const [x, at] of scoped)
+  if (isObject(x) && x.scope != null && !scopeIds.has(x.scope))
+    fail(at, `"${x.scope}" is in no data.scopes entry: ${fillHint}`);
+for (const id of scopeIds)
+  if (!scoped.some(([x]) => x?.scope === id))
+    warn("data.scopes", `no card or follow-up names "${id}"; ${fillHint}`);
+if (digest)
+  changes.forEach((c, i) => {
+    if (isObject(c) && c.kind != null && c.scope == null)
+      fail(
+        `data.changes[${i}].scope`,
+        "a digest card sits under the manual scope it changes, such as grade10-site/vault; node .claude/skills/checkpoint-digest/scripts/scopes.mjs list names them",
+      );
+  });
 
 if (data.engineers == null)
   warn("data.engineers", "add For engineers: commits, files and links");
