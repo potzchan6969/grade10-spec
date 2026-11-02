@@ -12,8 +12,8 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
   - **Built** — the same formula, the factor's model still the owner's draft; each day's price, rate of exchange, factor, rate and settings are kept with its amount, so a changed setting never changes an amount already credited
 - 🚧 **Market Price** — the median of the card's sales on SNKRDUNK over 30 days, outliers removed; staff never enter a price by hand
   - **A Day's Price** — the window's median is of every SNKRDUNK sale in it, each dated at +08:00; a day older than SNKRDUNK's week counts its one daily average; the day still in progress counts none
-  - **Evidence** — each SNKRDUNK answer is kept as it came, and a price shows every sale behind it: counted, an outlier, or excluded by staff
-  - **In Another Currency** — a dollar price is converted at the European Central Bank's daily reference rate
+  - **Evidence** — each SNKRDUNK answer and each ECB answer is kept as it came, and a price shows every sale behind it: counted, an outlier, or excluded by staff
+  - **In Another Currency** — SNKRDUNK is read in yen, its listing currency, and converted at the European Central Bank's daily reference rate; a SNKRDUNK session answering in another currency is set to yen and asked again
   - **Unlikely Data** — a price or a rate of exchange that jumps too far from the day before is used all the same and flagged for staff; a figure staff find wrong is corrected in Inventory's market prices — re-read from SNKRDUNK, or a wrong sale excluded — and every day priced from it is worked again, the difference credited or taken back
   - **Built** — a deployed environment imports rates of exchange but prices no card until the price worker that supplies the sales is connected, so no card earns there yet
 - 🚧 **Liquidity Factor** — how easily the card sells, from 0.2 to 1: velocity × price stability
@@ -128,7 +128,7 @@ vault, cash out and leave.
 | The vault earns, finance lends | Decided | One vaulting base: a case is everything handed in on one visit, made of one-card contracts, each with its own incentive rate, and a financed card is its own financed contract | Owner |
 | The clock is the card's | Decided | Per card from its contract's effective start date, not per case, so cards in one case unlock on their own days | Owner |
 | Credited while locked | Decided | The incentive accrues from day one; the vesting days only stop it being cashed out. The held-then-posted reading is a way of showing it, never a second way of crediting it | Owner |
-| Prices in yen | Decided | Converted at the ECB's daily reference rate; a rate outside its bounds, or moving too far in a day, is flagged for staff - decided by the owner, 2026-10-27, flagged rather than held on 2026-10-28 | Owner |
+| Prices in yen | Decided | Converted at the ECB's daily reference rate; a rate outside its bounds, or moving too far in a day, is flagged for staff - decided by the owner, 2026-10-27, flagged rather than held on 2026-10-28; SNKRDUNK read in yen rather than its own dollar conversion, which moved between reads, on 2026-11-03 | Owner |
 | Where prices come from | Decided | A separate price worker, reached by a service binding; its answer's shape is assumed until it exists - decided by the owner, 2026-10-27 | Owner |
 | Nothing is held | Decided | An unlikely price or rate is used and flagged, never held, because a credit stays locked until vesting ends and nothing is cashed out without a second treasurer; a wrong one is corrected in Inventory and the days it priced are worked again with no second approver - decided by the owner, 2026-10-28 | Owner |
 | A late fact waits | Decided | A day whose price or rate has not arrived waits and is paid in full, rather than earning nothing after 3 days - decided by the owner, 2026-10-28 | Owner |
