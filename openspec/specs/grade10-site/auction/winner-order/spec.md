@@ -1813,10 +1813,11 @@ picked, and SHALL name no other rail and offer no tabs. It SHALL show that
 rail's fields as labelled detail rows without copy controls, then the invoice's
 bank reference as a labelled detail row without a copy control, and a warning
 that the winner must enter the reference in the bank app's memo or remarks
-field. Live account details and the FPS QR come from Finance-owned
-configuration. Grade10 snapshots the picked rail's approved instructions on
-the issued bank-transfer invoice; the preview uses Grade10 Finance Limited and
-HSBC Hong Kong samples.
+field. Live account details come from Finance-owned configuration. Grade10
+snapshots the picked rail's approved instructions on the issued bank-transfer
+invoice; the preview uses Grade10 Finance Limited and HSBC Hong Kong samples.
+Grade10 generates the FPS QR for each order from the FPS ID, the beneficiary
+name (shown as the account name), the amount and the payment reference.
 
 | Rail picked | Details shown |
 | --- | --- |
