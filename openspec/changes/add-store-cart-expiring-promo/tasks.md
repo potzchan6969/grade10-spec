@@ -36,8 +36,8 @@ or a service call.
 
 ## 6. Spec-submodule boundary (grade10) (owner: @kinisworking)
 
-- [ ] 6.1 After the accepted `grade10-spec` revision is published, update only the `external/grade10-spec` gitlink through the supported submodule workflow. Preserve unrelated nested work, record the accepted revision, and make the application submodule check pass before consuming `detailEmphasis`.
-- [ ] 6.2 Verify: run the application submodule/status check and confirm the gitlink points to the accepted `grade10-spec` revision with no unrelated nested changes.
+- [x] 6.1 After the accepted `grade10-spec` revision is published, update only the `external/grade10-spec` gitlink through the supported submodule workflow. Preserve unrelated nested work, record the accepted revision, and make the application submodule check pass before consuming `detailEmphasis`.
+- [x] 6.2 Verify: run the application submodule/status check and confirm the gitlink points to the accepted `grade10-spec` revision with no unrelated nested changes.
 
 ## 7. The walk (grade10) (owner: @kinisworking)
 
