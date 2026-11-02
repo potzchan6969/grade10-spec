@@ -6,7 +6,7 @@ Add the shared boundary coverage before changing or repinning any consumer.
 - [ ] 1.2 Verify the shared type/export surface and existing `ExpiringSoon` story through the focused `@grade10/ui` checks, with no clock, date parsing, timer or new token in the component. `g10.shared-store-cart.SC70`, `g10.shared-store-cart.SC71`, `g10.shared-store-cart.SC72`
 - [ ] 1.3 Verify: run the focused shared UI test, typecheck and Storybook checks, and record that `SC70`–`SC72` pass.
 
-## 2. Shared UI contract implementation (grade10-spec)
+## 2. Shared UI contract implementation (grade10-spec) (owner: @kinisworking)
 
 - [ ] 2.1 Keep `HeldPromoCode.detailEmphasis?: boolean` as the additive consumer-owned state and make `PromoTicket` apply the existing emphasis treatment only to the expiry/conditions detail slot. Preserve the discount title, supplied detail text, code, refusal treatment, Apply availability, selection callback and ordering. `g10.shared-store-cart.SC70`, `g10.shared-store-cart.SC72`
 - [ ] 2.2 Confirm the shared component never receives or derives `expiresAt`, reads the clock or computes the 14-day window; retain plain rendering when the field is false or omitted. `g10.shared-store-cart.SC71`
