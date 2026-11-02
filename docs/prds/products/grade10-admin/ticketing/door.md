@@ -80,5 +80,5 @@ and re-entry on the same day.
 | A door without the console | Decided | Volunteers at a crowded gate need no staff account; a passcode per event, per-device names and finding by reference only keep a leaked passcode from reaching refunds or who bought. | Product |
 | No wristbands | Decided | The service neither sets nor shows a wristband; a venue that hands them out does so by its own rule. | Product |
 | Admit on scan | Decided | A scan admits at once, with Undo for 10 seconds, rather than asking staff to confirm each guest. | Product |
-| Offline door | ❓ Open | Whether the door admits without a connection, and on what trust. | Operations |
+| Online-only door | Decided | The door admits only on the service's answer; without a connection a scan shows Not checked and admits no one. Only the service can tell a code already used at another gate, so offline admits would let one ticket in twice. A venue plans its own connection. | Product |
 :::
