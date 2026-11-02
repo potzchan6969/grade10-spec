@@ -1,6 +1,6 @@
 ## 1. Shared product copy (grade10-spec) (owner: @kinisworking)
 
-- [x] 1.1 Make `grade10-site-store-product-page-SC-13`, `grade10-site-store-product-page-SC-15`, and `grade10-site-store-product-page-SC-16` pass: add the product-detail labels and pluralized low-inventory copy to the shared English product/store catalogs, preserving fallback behavior for other locales
+- [x] 1.1 Make `grade10-site-store-product-page-SC-13`, `grade10-site-store-product-page-SC-15`, and `grade10-site-store-product-page-SC-16` pass: add the product-detail labels to the shared English catalogs and retain the pluralized low-inventory key required by the shared Store UI contract, preserving fallback behavior for other locales; do not render a remaining count or scarcity cue on the detail page
 - [x] 1.2 Verify the i18n catalog resolution and type checks for the updated message vocabulary
 
 ## 2. Catalogue contracts and provider projection (grade10) (owner: @kinisworking)

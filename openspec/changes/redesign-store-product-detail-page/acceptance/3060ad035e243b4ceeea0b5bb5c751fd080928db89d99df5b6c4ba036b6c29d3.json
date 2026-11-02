@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "change": "redesign-store-product-detail-page",
+  "baseline": "44dba4d7b7771a5d45f3eb70410e232840e4400bc48ca11a315e6515292730ca",
+  "fingerprint": "3060ad035e243b4ceeea0b5bb5c751fd080928db89d99df5b6c4ba036b6c29d3",
+  "reviewedBy": "@kinisworking",
+  "acceptedAt": "2026-11-01T15:07:10.449Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/redesign-store-product-detail-page/decisions.md",
+      "sha256": "c0e33a6d00e303472ed7ae96420c5437c41740f0085233913e9c6644c998b722",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-store-product-detail-page/proposal.md",
+      "sha256": "930de54d81ce2a6686e92a8c73dfb15a9d99a5d6514ac66f49ff4038227887bf",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-store-product-detail-page/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "a36655e091544d83cfb4ede0f3dc587d86de261d974c2158706d23bd07a702f4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-store-product-detail-page/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "130dc2e32696d25b7df330688cbf0604608132858f5c662e668cae8d875407c8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-store-product-detail-page/tech-design.md",
+      "sha256": "9aca709301fb1d30ae02209f5a9b32028aa2a95d4003dad53d0e6c78a2caa7de",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/redesign-store-product-detail-page/ui-design.md",
+      "sha256": "866418c112eba378d7770290f7f52b8041d8aa13b50d90fd6d8f7d290501ece2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "43d79171fe520e448321b0f3390a4566cd4bef505b43c9f8ad512c4ec334b4eb",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "73490eba74772ebad199e3c80ba8cf7b0d1ff95377f663d5025dba4c7ad8b350",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/redesign-store-product-detail-page/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A product description can be disclosed in place",
+        "Requirement: A product detail page presents complete catalogue context",
+        "Requirement: A product page adds a chosen quantity in place"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

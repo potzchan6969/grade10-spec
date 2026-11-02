@@ -9,9 +9,10 @@ gap makes the product page harder to scan and leaves important catalogue facts
 such as compare-at pricing and product facets unavailable at the point of
 purchase.
 
-The metric is the percentage of product-detail sessions that add an item to
-the cart, segmented by product and device width; the redesign should improve
-that rate without changing which product item or price the Store accepts.
+The intended outcome is a higher product-detail add rate by product, without
+changing which product item or price the Store accepts. This change adds no
+analytics instrumentation; the existing event contract does not support
+device-width segmentation.
 
 ## What Changes
 
@@ -34,15 +35,7 @@ that rate without changing which product item or price the Store accepts.
 
 ## Non-Goals
 
-- New product routes, checkout flows, wishlist behavior, image zoom, or a
-  lightbox.
-- A product or inventory mirror in Postgres.
-- Inventing product type, world, language, or dynamic shipping and pickup facts
-  when the catalogue does not provide them. Version 1 uses the approved static
-  fulfilment copy from the design for every product.
-- New design-system components, variants, or tokens.
-- Changes to the archived product-page routing, sitemap, or not-found
-  behavior.
+See [Non-Goals](decisions.md#non-goals).
 
 ## Capabilities
 
