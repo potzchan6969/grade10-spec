@@ -50,7 +50,7 @@ back to that page.
     [Discounts](/p/grade10-site/store/discounts#public-codes)
   - **Refused by the Shop** — a code the store holds but the shop would not
     apply to this basket, listed with that reason; the total does not move
-  - 🚧 **Running Out Reads Louder** — a live code in its last 14 days keeps
+  - **Running Out Reads Louder** — a live code in its last 14 days keeps
     its title and detail, with only its use-by date emphasised
   - 🚧 **Wallet Not Answered** — the codes the store minted still listed and
     a typed code still applies; the drawer says the programme's rewards could
