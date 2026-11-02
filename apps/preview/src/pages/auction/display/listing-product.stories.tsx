@@ -36,7 +36,7 @@ import { ListingAuctionBidCardLoading } from "./fixtures";
  * page story.
  */
 const meta = {
-  title: "Auction/Display/Parts/ListingProduct",
+  title: "Auction/Display/Blocks/ListingProduct",
   parameters: {
     layout: "padded",
     docs: {

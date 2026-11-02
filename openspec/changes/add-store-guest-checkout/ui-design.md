@@ -32,7 +32,7 @@
   ada@example.com".
 - `OrderHistory`, `SiteHeader`, `SignInCard`, `SignInEmailForm` — composed
   unchanged.
-- Parts drawn for the features, promotion candidates for `@grade10/ui`:
+- Blocks drawn beside the features' screens, promotion candidates for `@grade10/ui`:
   `GuestBarSignInAsk`.
 - Design reference (workbench): `store-cart-blocks-cartdrawerfooter-guest--guest`,
   `store-cart-blocks-cartdrawerfooter-guest--guest-with-public-code`,

@@ -10,14 +10,14 @@ The design reference is the Figma file `Grade10-DS-2026` and the Storybook workb
 - Raw: [7054:7072](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7054-7072)
 - Blocks: [7025:2](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7025-2), with annotated sub-frames Asset Summary `7054:6854`, Asset Details `7054:6185`, Asset Custody & Documents `7054:5063`
 - Gallery annotation: [7029:76](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7029-76)
-- Stories: `vault-portfolio-screens-asset-detail--graded`, `vault-portfolio-screens-asset-detail--raw`; block stories `vault-portfolio-parts-vaultassetsummary--*`, `vault-portfolio-parts-vaultassetdetails--*`, `vault-portfolio-parts-vaultassetcustodydocuments--default`
+- Stories: `vault-portfolio-screens-asset-detail--graded`, `vault-portfolio-screens-asset-detail--raw`; block stories `vault-portfolio-blocks-vaultassetsummary--*`, `vault-portfolio-blocks-vaultassetdetails--*`, `vault-portfolio-blocks-vaultassetcustodydocuments--default`
 
 ### Portfolio
 
 - Page: [7068:7718](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7068-7718)
 - Stats card: `7102:1514` — provisional; the stats treatment is still being designed.
 - Blocks: Vault Asset Card [7068:10249](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7068-10249) with Vault Asset status [7068:9960](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7068-9960), Vault Asset List [7077:10911](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7077-10911)
-- Stories: `vault-portfolio-screens-portfolio--*`; block stories `vault-portfolio-parts-vaultassetstatus--*`, `vault-portfolio-parts-vaultassetcard--*`, `vault-portfolio-parts-vaultassetlist--*`, `vault-portfolio-parts-vaultportfoliostats--*`
+- Stories: `vault-portfolio-screens-portfolio--*`; block stories `vault-portfolio-blocks-vaultassetstatus--*`, `vault-portfolio-blocks-vaultassetcard--*`, `vault-portfolio-blocks-vaultassetlist--*`, `vault-portfolio-blocks-vaultportfoliostats--*`
 
 ### Request Retrieval
 

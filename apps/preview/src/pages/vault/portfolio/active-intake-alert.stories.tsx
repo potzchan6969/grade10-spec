@@ -15,7 +15,7 @@ import { ActiveIntakeAlert } from "./active-intake-alert";
  * submissions. Track Progress opens Submissions.
  */
 const meta = {
-  title: "Vault/Portfolio/Parts/ActiveIntakeAlert",
+  title: "Vault/Portfolio/Blocks/ActiveIntakeAlert",
   component: ActiveIntakeAlert,
   parameters: { layout: "padded" },
   decorators: [

@@ -8,7 +8,7 @@ export const DOCS_PAGES = {
   "apps/preview/src/ui-verification/dashboard.mdx": VERIFICATION_DASHBOARD,
 };
 export const DESIGN_SYSTEM = "Design System";
-export const KINDS = ["Screens", "Prototypes", "Parts", "Blocks"];
+export const KINDS = ["Screens", "Prototypes", "Blocks"];
 /** A domain's own folder, before its features: journeys walked across them. */
 export const FLOWS = "Flows";
 /** Where a domain slug is not its Title Case words. */

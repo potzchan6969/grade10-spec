@@ -152,18 +152,18 @@ export function placementErrors(root, path, file) {
   }
 
   const featureFolder = `${sanitize(domain)}/${sanitize(feature)}/`;
+  // A block is an `@grade10/ui` export, or drawn beside its feature's screens.
   const expected = {
-    Screens: PAGES + featureFolder,
-    Parts: PAGES + featureFolder,
-    Prototypes: PROTOTYPES + featureFolder,
-    Blocks: BLOCKS,
+    Screens: [PAGES + featureFolder],
+    Prototypes: [PROTOTYPES + featureFolder],
+    Blocks: [BLOCKS, PAGES + featureFolder],
   }[kind];
-  if (!path.startsWith(expected))
+  if (!expected.some((folder) => path.startsWith(folder)))
     errors.push(
-      `"${title}" - a story under ${kind} lives in ${expected}, not ${path}`,
+      `"${title}" - a story under ${kind} lives in ${expected.join(" or ")}, not ${path}`,
     );
   if (!fourth) errors.push(`"${title}" - name what sits under ${kind}`);
-  if ((kind === "Parts" || kind === "Blocks") && fourth) {
+  if (kind === "Blocks" && fourth) {
     const leaf = leafError(fourth);
     if (leaf) errors.push(leaf);
   }

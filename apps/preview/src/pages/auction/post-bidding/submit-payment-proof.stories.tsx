@@ -68,7 +68,7 @@ function SubmitPaymentProofDemo({
 }
 
 const meta = {
-  title: "Auction/Post Bidding/Parts/SubmitPaymentProof",
+  title: "Auction/Post Bidding/Blocks/SubmitPaymentProof",
   component: SubmitPaymentProofDemo,
   tags: ["autodocs"],
   parameters: {

@@ -60,13 +60,13 @@ const VAULT_RETRIEVAL_STORY_ID =
   "vault-portfolio-screens-asset-detail-retrieval-dialog--default";
 /** Storybook ids for vault item-card assemblies (workbench deep links). */
 const VAULT_ASSET_CARD_IN_VAULT_STORY_ID =
-  "vault-portfolio-parts-vaultassetcard--in-vault";
+  "vault-portfolio-blocks-vaultassetcard--in-vault";
 const VAULT_ASSET_CARD_LIVE_AUCTION_STORY_ID =
-  "vault-portfolio-parts-vaultassetcard--live-auction";
+  "vault-portfolio-blocks-vaultassetcard--live-auction";
 const VAULT_ASSET_CARD_LISTED_STORY_ID =
-  "vault-portfolio-parts-vaultassetcard--listed";
+  "vault-portfolio-blocks-vaultassetcard--listed";
 const VAULT_ASSET_CARD_RETRIEVAL_STORY_ID =
-  "vault-portfolio-parts-vaultassetcard--retrieval-pending";
+  "vault-portfolio-blocks-vaultassetcard--retrieval-pending";
 /** Detail variants for listed and auction-bound assets. */
 const VAULT_ITEM_DETAIL_LISTED_STORY_ID =
   "vault-portfolio-screens-asset-detail--listed";
@@ -80,7 +80,7 @@ const AUCTION_LOT_LIVE_STORY_ID =
 const STORE_PRODUCT_DETAIL_STORY_ID =
   "store-product-page-screens-product-detail--default";
 const ACTIVE_INTAKE_ALERT_STORY_ID =
-  "vault-portfolio-parts-activeintakealert--with-submissions";
+  "vault-portfolio-blocks-activeintakealert--with-submissions";
 
 const VAULT_SUBMIT_STORY_ID = VAULT_BOOK_VISIT_STORY_ID;
 

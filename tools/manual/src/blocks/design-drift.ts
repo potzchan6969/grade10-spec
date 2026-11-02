@@ -80,13 +80,13 @@ export function setForStory(
     key: parts.slice(i).join(""),
     ahead: i,
   }));
-  // The workbench names the component right after `Blocks`, `Parts` or a
+  // The workbench names the component right after `Blocks` or a
   // design-system group (`docs/governance/storybook.md`), so the run that
   // starts there is the name, however deep the title.
   const named =
     parts[0] === "design" && parts[1] === "system"
       ? 3
-      : Math.max(parts.lastIndexOf("blocks"), parts.lastIndexOf("parts")) + 1;
+      : parts.lastIndexOf("blocks") + 1;
 
   let best: string | undefined;
   for (const name of Object.keys(report.sets)) {

@@ -37,11 +37,11 @@ describe("the set a story card belongs to", () => {
     );
   });
 
-  it("joins a one-word set to the name after Blocks, Parts or a design-system group", () => {
+  it("joins a one-word set to the name after Blocks or a design-system group", () => {
     const r = report({ Nav: "fail", Toast: "warn" });
     expect(classOf(r, "design-system-layout-nav--narrow")).toBe("fail");
     expect(classOf(r, "site-page-shell-blocks-nav--default")).toBe("fail");
-    expect(classOf(r, "store-cart-parts-toast--x")).toBe("warn");
+    expect(classOf(r, "store-cart-blocks-toast--x")).toBe("warn");
     expect(classOf(r, "store-cart-blocks-cartdrawer-nav--x")).toBeUndefined();
   });
 

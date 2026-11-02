@@ -8,7 +8,7 @@ import { ManualDocsContainer } from "./manual-link";
  * like the manual (`docs/governance/storybook.md`): Start Here, the manual's
  * domains in `docs/prds/manual.yaml` order with their features in the manual's
  * nav order after the domain's Flows, then the design system; inside a
- * feature, Screens, Prototypes, Parts and Blocks.
+ * feature, Screens, Prototypes and Blocks.
  *
  * Storybook evaluates this comparator on its own, so it imports nothing and
  * carries no types; `pnpm storybook:sort` writes `sidebar` from the manual and
@@ -46,7 +46,7 @@ const preview: Preview = {
           "Design System": [],
         };
         const roots = Object.keys(sidebar);
-        const kinds = ["Screens", "Prototypes", "Parts", "Blocks"];
+        const kinds = ["Screens", "Prototypes", "Blocks"];
         const left = a.title.split("/");
         const right = b.title.split("/");
         const rank = (list, item) =>

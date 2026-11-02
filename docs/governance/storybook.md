@@ -28,8 +28,7 @@ Published from `main` at
 | **Screen** | `<Domain>/<Feature>/Screens/<Screen>[/<Aspect>]` | `apps/preview/src/pages/<domain>/<feature>/` |
 | **Flow** | `<Domain>/Flows`, one story per flow | `apps/preview/src/pages/<domain>/flows/` |
 | **Prototype** | `<Domain>/<Feature>/Prototypes/<Piece>` | `apps/preview/src/prototypes/<domain>/<feature>/` |
-| **Part** | `<Domain>/<Feature>/Parts/<Component>[/<Aspect>]` | beside the screens |
-| **Block** | `<Domain>/<Feature>/Blocks/<Component>[/<Aspect>]` | `packages/ui/src/blocks/<dir>/` |
+| **Block** | `<Domain>/<Feature>/Blocks/<Component>[/<Aspect>]` | `packages/ui/src/blocks/<dir>/`, or beside the screens |
 | **Primitive** | `Design System/<Group>/<Component>[/<Aspect>]` | `packages/design-system/src/components/<group>/` |
 | **Guide** | `Start Here` | `apps/preview/src/start-here.mdx` |
 | **Dashboard** | `Dashboard` | `apps/preview/src/ui-verification/dashboard.mdx` |
@@ -42,14 +41,14 @@ Published from `main` at
 - **Screen** — the name at the top of the screen, or in the change's
   `ui-design.md` Screens; no `Page` suffix. A dialog open on a screen is an
   aspect of it: `Vault/Portfolio/Screens/Asset Detail/Retrieval Dialog`
-- **Component** — the meta's `component`, or the file's name in PascalCase.
-  A part promoted to `@grade10/ui` swaps `Parts` for `Blocks` and nothing else
-- **Part or Block** — a Block is an `@grade10/ui` export an application can
-  import; a Part is drawn for this feature only and lives in `apps/preview`
+- **Component** — the meta's `component`, or the file's name in PascalCase
+- **Block** — every component a feature composes its screens from, whether
+  `@grade10/ui` exports it or the feature draws it beside its screens in
+  `apps/preview`. Moving one into `@grade10/ui` changes its file, not its title
 - **Group** — the primitive's folder: Display, Forms, Layout, Overlays,
   Providers
-- **Folders** — a feature holds only `Screens`, `Prototypes`, `Parts` and
-  `Blocks`; nothing sits loose beside them
+- **Folders** — a feature holds only `Screens`, `Prototypes` and `Blocks`;
+  nothing sits loose beside them
 - **Crowding** — five or more loose stories under one `<Component>` (or one
   `<Aspect>`) deserve a subgroup: split them into named `<Aspect>` folders
   by what they vary, so related states sit together — e.g. the drawer's
@@ -60,8 +59,8 @@ Published from `main` at
   `DOCS_PAGES` in `scripts/storybook/grammar.mjs` names every MDX page
 - **Order** — Start Here, Dashboard, the domains in `docs/prds/manual.yaml` order, then
   Design System; inside a domain, its Flows, then features in the manual's nav order, by each
-  page's `order:` then its title; inside a feature, Screens, Prototypes, Parts
-  and Blocks
+  page's `order:` then its title; inside a feature, Screens, Prototypes and
+  Blocks
 
 A story id is its title and export, sanitized:
 `Appointment/Booking/Screens/Book Visit` →
@@ -72,8 +71,8 @@ Storybook holds it.
 
 ## Files
 
-- **One feature, one folder** — a screen's content, stand-in data and parts
-  sit beside its stories in `pages/<domain>/<feature>/`
+- **One feature, one folder** — a screen's content, stand-in data and the
+  blocks only it draws sit beside its stories in `pages/<domain>/<feature>/`
 - **Shared files** — a file several features use sits in the nearest folder
   above all of them: the domain, or `pages/` for what crosses domains
   (`workbench-story-nav.ts`, `store-content.ts`)
@@ -186,7 +185,7 @@ a combination behaves without a staging order, and checks staging against it.
 - **Outside the agreed look** — `apps/preview/src/prototypes/` is not under
   Design Override, so trying and deleting stops nothing
 - **Promote, then delete** — the picked direction, or the agreed design of a
-  wireframe, folds into the screen, part or block; the prototype file goes in
+  wireframe, folds into the screen or block; the prototype file goes in
   the same commit
 
 ## Coverage
