@@ -5,7 +5,7 @@ import {
   DAILY_INCENTIVES,
   PAYOUT_REQUESTS,
   type VaultPayoutRequest,
-} from "../vault-content";
+} from "../../vault-content";
 import { RewardsLedger } from "./rewards-ledger";
 import { WithdrawalDetails } from "./withdrawal-details";
 

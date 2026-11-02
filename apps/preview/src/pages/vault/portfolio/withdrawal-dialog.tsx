@@ -20,7 +20,7 @@ import {
   formatHkd,
   formatUsd,
   WITHDRAWAL_PROCESSING_DAYS,
-} from "../vault-content";
+} from "../../vault-content";
 
 type PayoutMethod = {
   bankName: string;

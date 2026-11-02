@@ -4,7 +4,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { PAYOUT_METHOD, PORTFOLIO_SUMMARY } from "../vault-content";
+import { PAYOUT_METHOD, PORTFOLIO_SUMMARY } from "../../vault-content";
 import { type PayoutMethod, WithdrawalDialog } from "./withdrawal-dialog";
 
 function WithdrawalDialogDemo({

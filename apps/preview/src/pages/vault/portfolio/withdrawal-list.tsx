@@ -9,7 +9,7 @@ import {
   PAYOUT_METHOD,
   type VaultPayoutRequest,
   type VaultPayoutStatus,
-} from "../vault-content";
+} from "../../vault-content";
 
 const STATUS_VARIANT: Record<
   VaultPayoutStatus,

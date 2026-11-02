@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { PAYOUT_REQUESTS } from "../vault-content";
+import { PAYOUT_REQUESTS } from "../../vault-content";
 import { WithdrawalList } from "./withdrawal-list";
 
 /**

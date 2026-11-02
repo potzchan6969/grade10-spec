@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { PORTFOLIO_SUMMARY } from "../vault-content";
+import { PORTFOLIO_SUMMARY } from "../../vault-content";
 import { WalletSummary } from "./wallet-summary";
 
 /**

@@ -4,8 +4,8 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretRight, HandCoins } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
-import { formatUsd, type VaultPayoutRequest } from "../vault-content";
-import { animateEnter } from "../vault-shared";
+import { formatUsd, type VaultPayoutRequest } from "../../vault-content";
+import { animateEnter } from "../../vault-shared";
 import { WithdrawalRow } from "./withdrawal-list";
 
 type LedgerTab = "all" | "incentives" | "withdrawal";

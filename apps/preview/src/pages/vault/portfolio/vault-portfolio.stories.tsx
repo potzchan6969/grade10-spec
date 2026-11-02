@@ -37,7 +37,7 @@ import { RewardsLedger } from "./rewards-ledger";
 import { VaultAssetList } from "./vault-asset-list";
 import { WalletSummary } from "./wallet-summary";
 import { WithdrawalDetails } from "./withdrawal-details";
-import { WithdrawalDialog, WithdrawalDialog } from "./withdrawal-dialog";
+import { WithdrawalDialog } from "./withdrawal-dialog";
 
 /** Simulated holdings fetch — the workbench recipe's ready beat. */
 const HOLDINGS_LOAD_MS = 350;
