@@ -8,7 +8,7 @@ import { RewardsLedger } from "./rewards-ledger";
  * request with its approval status under Withdrawal.
  */
 const meta = {
-  title: "Vault/Wallet/Parts/RewardsLedger",
+  title: "Vault/Portfolio/Parts/RewardsLedger",
   component: RewardsLedger,
   parameters: { layout: "padded" },
 } satisfies Meta<typeof RewardsLedger>;

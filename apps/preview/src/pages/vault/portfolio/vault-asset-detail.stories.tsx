@@ -145,7 +145,7 @@ type DetailFlags = {
 };
 
 const meta = {
-  title: "Vault/Asset Detail/Screens/Asset Detail",
+  title: "Vault/Portfolio/Screens/Asset Detail",
   component: VaultAssetDetailPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

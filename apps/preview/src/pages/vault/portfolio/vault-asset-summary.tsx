@@ -12,11 +12,24 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Gavel, ShieldCheck, Storefront, TrendUp } from "@phosphor-icons/react";
 import {
-  assetPrice,
   formatHkd,
   statusBadgeVariant,
   type VaultAsset,
 } from "../../vault-content";
+
+/** What the headline shows: a sale's own price while listed, else the estimate. */
+function headlinePrice(asset: VaultAsset): {
+  label: string;
+  amountHkd: number;
+} {
+  if (asset.status === "Live Auction" && asset.currentBidHkd != null) {
+    return { label: "Bid price", amountHkd: asset.currentBidHkd };
+  }
+  if (asset.status === "Listed" && asset.listedHkd != null) {
+    return { label: "Listed price", amountHkd: asset.listedHkd };
+  }
+  return { label: "Estimated value", amountHkd: asset.estimateHkd };
+}
 
 type VaultAssetSummaryProps = {
   asset: VaultAsset;
@@ -58,7 +71,7 @@ function VaultAssetSummary({
   const liveListing =
     asset.status === "Live Auction" || asset.status === "Listed";
   const locked = liveListing || asset.status === "Retrieval Pending";
-  const price = assetPrice(asset);
+  const price = headlinePrice(asset);
   const showListings = !locked && Boolean(onListForAuction || onListForSale);
   const valuePotentialDescription = valuePotential
     ? `Est. Graded PSA Value: ${formatHkd(valuePotential.gradedEstimateHkd)} (+${valuePotential.upsidePercent}%)`

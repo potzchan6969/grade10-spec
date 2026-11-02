@@ -151,7 +151,7 @@ function WithdrawalDialog({
                     key={code}
                     size="sm"
                     type="button"
-                    variant={currency === code ? "primary" : "outline"}
+                    variant={currency === code ? "default" : "outline"}
                     onClick={() => setCurrency(code)}
                   >
                     {code}
@@ -249,12 +249,9 @@ function WithdrawalDialog({
 
           {step === "submitted" ? (
             <VStack gap="sm" hAlign="center">
-              <CheckCircle
-                aria-hidden
-                className="text-success"
-                size={48}
-                weight="fill"
-              />
+              <span className="text-success">
+                <CheckCircle aria-hidden size={48} weight="fill" />
+              </span>
               <Text weight="medium">
                 Withdrawal of {formatHkd(amount)} requested
               </Text>

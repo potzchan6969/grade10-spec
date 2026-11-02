@@ -43,7 +43,7 @@ function WithdrawalDialogDemo({
 }
 
 const meta = {
-  title: "Vault/Wallet/Screens/Withdraw Dialog",
+  title: "Vault/Portfolio/Screens/Withdraw Dialog",
   component: WithdrawalDialogDemo,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

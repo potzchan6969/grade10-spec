@@ -8,7 +8,7 @@ import { WithdrawalList } from "./withdrawal-list";
  * sets on each request, from Pending review to Paid.
  */
 const meta = {
-  title: "Vault/Wallet/Parts/WithdrawalList",
+  title: "Vault/Portfolio/Parts/WithdrawalList",
   component: WithdrawalList,
   parameters: { layout: "padded" },
 } satisfies Meta<typeof WithdrawalList>;
