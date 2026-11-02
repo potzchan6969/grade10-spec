@@ -60,10 +60,9 @@ one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-ty
   opens, and duplicates, as a Free item
 - **A new choice starts empty** - moving to another of the three carries
   nothing over from the one before
-- **Online only by product or filter** - the form saves such a reward for
-  online alone, one stored for the till as well included; moving its scope to
-  named variants or the whole order shows the channels it was stored with
-  again - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types)
+- 🚧 **Any scope, any channel** - a reward scoped to named products or a
+  filter keeps the channels the operator chose, the till included; a gift
+  stays at the till alone - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types)
 - **Retired handovers** - a reward stored as a manual handover or a counter
   collection keeps how it is handed over, unchanged, while the fields beside
   it are edited, until the operator picks one of the three choices; a

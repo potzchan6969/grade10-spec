@@ -25,14 +25,19 @@ so redefining the reward never rewrites a coupon a member already holds —
 | What it takes off | What that definition says |
 | Uses | **One** |
 | Who | The member who redeemed it |
-| Channels | The selling channels the definition names, online alone for a scope the till cannot match, and the till alone for a gift, whatever channels it names - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types) |
+| Channels | The selling channels the definition names, and the till alone for a gift, whatever channels it names - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types) |
 | Runs from | The redemption, for the whole days the reward states |
 | Expiry | Read off the clock, never written down |
 
 - **Expired is spent** — an unused coupon past its end returns nothing, and is counted as breakage
-- **Birthday month** `TBC` — a definition can hold a coupon to the month of
-  the member's birthday; loyalty holds no birthday, so every coupon asking
-  for one is refused
+- **Birthday month** — a definition can hold a coupon to the month of the
+  member's birthday, in Hong Kong time; a member with no birthday on file is
+  refused it
+- 🚧 **A member's birthday** — optional, a month and a day with no year; the
+  member gives it once and cannot change it, and staff correct or clear it,
+  audited
+- ❓ **Where a member gives it** — no screen asks for it yet; the owner
+  decides where
 
 - **The picture** — the coupon list shown here draws a code only where the
   coupon is passed one; 🚧 a money-off redemption mints one member-readable
@@ -195,7 +200,6 @@ The member reads which refusal answered; no basket quietly loses a coupon.
 | Not standing | Already spent, or otherwise not available |
 | Expired | Its own validity passed |
 | Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; on the member's phone it carries no Use now, and a presentation that reaches the store anyway reads `This coupon cannot be used on this sale.` |
-| Online only by scope | A coupon scoped to named products or a catalog filter, whatever channels it names; at the till it reads as Wrong channel does |
 | Not eligible | The definition's eligibility is not met |
 | An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
 | Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |
