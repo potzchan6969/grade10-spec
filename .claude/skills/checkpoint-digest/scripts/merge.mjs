@@ -3,10 +3,11 @@
 // A chunk's file is {"changes": [...], "followups": [...], "plan": [...]}: cards, follow-ups and shots as data.json and
 // shoot.mjs take them. Its cards take the chunk's place in data.json's changes, in chunks.json's order, ahead of the cards
 // the lead wrote itself; merging again replaces them, so a redrawn chunk never doubles. A card may list only its own
-// chunk's commits: a change that spans chunks is the lead's to draw.
+// chunk's commits: a change that spans chunks is the lead's to draw. It then writes data.scopes as scopes.mjs fill does.
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
+import { fill, manualScopes } from "./scopes.mjs";
 
 export function merge(plan, parts, data) {
   const errors = [];
@@ -81,6 +82,12 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
     if (existsSync(path)) parts[c.id] = read(path);
   }
   const out = merge(plan, parts, read(join(day, "data.json")));
+  const scoped = fill(out.data, manualScopes());
+  out.data = scoped.data;
+  for (const id of scoped.unknown)
+    out.errors.push(
+      `scope "${id}" is no scope of the manual: node scopes.mjs list names them`,
+    );
   for (const line of out.report) console.log(line);
   if (out.errors.length) {
     for (const e of out.errors) console.error(`FAIL ${e}`);

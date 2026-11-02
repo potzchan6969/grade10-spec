@@ -10,6 +10,7 @@ const API = "https://slack.com/api";
 const MAX_TEXT = 2900;
 const MAX_CHANGES = 12;
 const KIND = { new: "New", changed: "Changed", removed: "Removed" };
+const ACROSS = "Across the day";
 
 const args = process.argv.slice(2);
 const option = (name) => {
@@ -100,21 +101,23 @@ function blocks() {
 
   const all = data.changes?.length ?? 0;
   const shown = changes.slice(0, MAX_CHANGES);
-  const phases = [...new Set(shown.map((c) => c.phase).filter(Boolean))];
-  const groups = [
-    ...phases.map((p) => [p, shown.filter((c) => c.phase === p)]),
-    ["", shown.filter((c) => !c.phase)],
-  ].filter(([, items]) => items.length);
+  const groups = grouped(shown);
   out.push(
     { type: "divider" },
     context(
       `*${changes.length} new* since the last post${all > changes.length ? `, of ${all} on the day` : ""}`,
     ),
   );
-  for (const [phase, items] of groups)
+  for (const [group, items, anchor] of groups)
     out.push(
       section(
-        [phase && `*${mrkdwn(phase)}*`, ...items.map(line)]
+        [
+          group &&
+            (anchor
+              ? `*<${page}#${anchor}|${label(group)}>*`
+              : `*${mrkdwn(group)}*`),
+          ...items.map(line),
+        ]
           .filter(Boolean)
           .join("\n"),
       ),
@@ -144,6 +147,40 @@ function blocks() {
   return out.slice(0, 50);
 }
 
+// The page's groups: the manual's, each opening its band on the page, with the cards no scope claims last; else the
+// page's phases. Each scoped line names its product, so a reader sees at once whether it is theirs.
+function grouped(shown) {
+  const scopes = new Map((data.scopes ?? []).map((sc) => [sc.id, sc]));
+  if (shown.some((c) => scopes.has(c.scope))) {
+    const order = [...new Set((data.scopes ?? []).map((sc) => sc.group))];
+    const rank = new Map((data.scopes ?? []).map((sc, i) => [sc.id, i]));
+    const of = (c) => scopes.get(c.scope)?.group ?? ACROSS;
+    return [...order, ACROSS]
+      .map((g) => [
+        g,
+        shown
+          .filter((c) => of(c) === g)
+          .sort(
+            (a, z) => (rank.get(a.scope) ?? 1e9) - (rank.get(z.scope) ?? 1e9),
+          ),
+        `group-${slug(g)}`,
+      ])
+      .filter(([, items]) => items.length);
+  }
+  const phases = [...new Set(shown.map((c) => c.phase).filter(Boolean))];
+  return [
+    ...phases.map((p) => [p, shown.filter((c) => c.phase === p)]),
+    ["", shown.filter((c) => !c.phase)],
+  ].filter(([, items]) => items.length);
+}
+
+function slug(s) {
+  return String(s)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 // The commits this run brought, in both repositories: the run's range, never the day's, so an earlier post is not repeated.
 function brought() {
   const fresh = option("range")
@@ -161,7 +198,9 @@ function line(c) {
   const kind = KIND[c.kind] ? `${KIND[c.kind]}: ` : "";
   const who = [c.who ?? []].flat().filter(Boolean);
   const now = c.now ? ` - ${mrkdwn(c.now)}` : "";
-  return `• ${kind}*<${page}#${c.id}|${label(c.title)}>*${who.length ? ` · _${mrkdwn(who.join(", "))}_` : ""}${now}`;
+  const scope = (data.scopes ?? []).find((sc) => sc.id === c.scope);
+  const where = scope ? `${mrkdwn(scope.title)} · ` : "";
+  return `• ${where}${kind}*<${page}#${c.id}|${label(c.title)}>*${who.length ? ` · _${mrkdwn(who.join(", "))}_` : ""}${now}`;
 }
 
 // The days the digest covers, as the page writes them: the year once, on the last day.

@@ -5,7 +5,7 @@ description: "Tell the team in Slack what moved on a branch since its last check
 
 # Checkpoint digest
 
-One page per day of what moved on a branch, in the spec store and in the application built from it (`9gag/grade10`), and a Slack post whenever a run brings something new: the changes a reader would notice, listed by area, each linked to the card that draws it. A change follows its work across both: proposed and accepted here, built there. The page sits behind the team's Cloudflare login, like a handoff page. The checkpoint, the commit the last digest was drawn to, lives in the repository as `refs/checkpoints/<branch>`, so every run starts where the last one stopped, on any machine. A push or a schedule runs it unattended; nobody answers anything on the page.
+One page per day of what moved on a branch, in the spec store and in the application built from it (`9gag/grade10`), and a Slack post whenever a run brings something new: the changes a reader would notice, grouped the way the manual groups its pages, each linked to the card that draws it. A change follows its work across both: proposed and accepted here, built there. The page sits behind the team's Cloudflare login, like a handoff page. The checkpoint, the commit the last digest was drawn to, lives in the repository as `refs/checkpoints/<branch>`, so every run starts where the last one stopped, on any machine. A push or a schedule runs it unattended; nobody answers anything on the page.
 
 The page is a `handoff-page` page of kind `digest`: you write the facts as one data file, and that skill's builder draws and checks it. Read `.claude/skills/handoff-page/SKILL.md` for Principles, Data, Pictures and Check; this skill names only what a digest does differently.
 
@@ -17,7 +17,7 @@ The page is a `handoff-page` page of kind `digest`: you write the facts as one d
 2. **Facts** - for each day in `days`, `node <skill>/scripts/checkpoint.mjs facts --branch <branch> --build <build> --day <day> > <scratchpad>/digest/<day>/facts.json`, then read what Gather names; the facts cover the whole day in both repositories, and `fresh` marks the commits this run brings
 3. **Chunk** - for each day, `node <skill>/scripts/chunks.mjs <scratchpad>/digest/<day>/facts.json > <scratchpad>/digest/<day>/chunks.json`; with `split` false, draw the day yourself and skip to step 5
 4. **Dispatch** - with `split` true, dispatch one `digest-chunk` agent per chunk, all in one message so they run at once: give each its chunk's `id`, `spec` and `build` commits, the day's folder, its `facts.json` and `--build`'s checkout; each writes `<scratchpad>/digest/<day>/chunks/<id>.json`. While they run, read the day's head yourself: the reason, the numbers and what spans chunks
-5. **Write the data** - for each day, copy `<skill>/assets/example.json` to `<scratchpad>/digest/<day>/data.json`, replace every value with your own, and delete `"example"`. On a split day write the head, the cards that span chunks, the Where the work landed card and For engineers, then `node <skill>/scripts/merge.mjs <scratchpad>/digest/<day>`: it folds every chunk's cards and follow-ups into `data.json` and their shots into `plan.json`, and refuses a missing chunk, a card listing another chunk's commit, or an id two chunks share
+5. **Write the data** - for each day, copy `<skill>/assets/example.json` to `<scratchpad>/digest/<day>/data.json`, replace every value with your own, give each card its `scope`, delete `"example"`, then `node <skill>/scripts/scopes.mjs fill <scratchpad>/digest/<day>/data.json`, which writes the page's `scopes` from the manual. On a split day write the head, the cards that span chunks, the Where the work landed card and For engineers, then `node <skill>/scripts/merge.mjs <scratchpad>/digest/<day>`: it folds every chunk's cards and follow-ups into `data.json`, fills its `scopes` and folds their shots into `plan.json`, and refuses a missing chunk, a card listing another chunk's commit, or an id two chunks share
 6. **Capture** - for each screen a change shows, find its story with `node .claude/skills/handoff-page/scripts/shoot.mjs --find <words>` and capture it into the day's folder with `shoot.mjs <scratchpad>/digest/<day> --plan <plan.json> --at <the day's last commit>`, so a past day shows its screens as they stood then; a split day captures the merged `plan.json` and any shot of your own in one run; a screen with no story gets no picture
 7. **Build and check** - `node .claude/skills/handoff-page/scripts/build.mjs <scratchpad>/digest/<day>/data.json`, then the `next:` line it prints, from `apps/preview` or any folder where Playwright resolves; fix every `FAIL`, and look at `check/page-1280-light-changed.png`
 8. **Verify** - dispatch the `page-verifier` agent with the day's `data.json`, `facts.json`, `shots/` and `check/`, and `--build`'s checkout; fix every finding, build, and verify again until it returns `clean`; fix a chunk's card in its `chunks/<id>.json` and merge again, so a later merge does not undo the fix
@@ -31,7 +31,7 @@ The workflow uploads each day, posts what the run brought, then moves both check
 
 A busy day is too much for one reader: past 30 commits or 4,000 lines, its cards are drawn by agents that each read one focused part of it.
 
-- **Groups** - `chunks.mjs` puts each commit with the OpenSpec change it moves or builds, else its commit scope, else the first area it touches, so a change proposed here and built in the application is one group
+- **Groups** - `chunks.mjs` puts each commit with the OpenSpec change it moves or builds, else the one manual scope it touches, else its commit scope, else the first area it touches, so a change proposed here and built in the application is one group
 - **Chunks** - a group of half a chunk or more keeps a chunk of its own; smaller groups, ordered by the area they touch most, share chunks of up to 30 commits, or the day's commits over 8 when that is more
 - **At most 8** - a day never dispatches more than 8 agents; with several days to draw, dispatch them day by day
 - **The lead** - you write the head, the cards that span chunks, the build, the capture, the verify and the post; a `digest-chunk` agent writes only its chunk's file and captures nothing, so the workbench starts once a day
@@ -59,6 +59,7 @@ A busy day is too much for one reader: past 30 commits or 4,000 lines, its cards
 
 ## Gather
 
+- **Scopes** - `facts.json`'s `scopes` lists the manual scopes the day touched, with each repository's commits, and each commit names its own `scopes`; see Scopes
 - **Facts** - `facts.json` holds the commits, the merged pull requests, lines per area, the OpenSpec changes that moved, token and catalog values before and now, and the primitives and blocks added or removed; `build` holds the application's commits, pull requests and lines per area; each commit names the areas it touches, the changes it moves or builds, and its lines, which `chunks.mjs` groups by
 - **Links** - `build.links` names the changes whose work landed in the application that day: `recorded` where a change's `implementation.json` names the commit, `named` where a commit message names the change. Match the rest, `build.unlinked`, by reading the pull requests' titles and diffs; a commit that builds no change is drawn on its own when a reader would notice it
 - **Read the source** - a commit subject says what someone meant; the diff says what happened. Read `git diff <from>..<to> -- <path>` for every change you draw, with `git -C <build>` for the application, and the PRD page or OpenSpec change it names
@@ -73,7 +74,7 @@ The post repeats the top of the day's page, then lists what the run brought, in 
 
 - **Post head** - the title; the day, the repository and branch, and the day's range, which opens GitHub's comparison of the two commits
 - **Post lead** - the reason, the numbers and an Open the digest button, which opens the branch's one link
-- **Post changes** - how many are new since the last post, of how many on the day, then the new ones grouped by area as on the page: each change's kind, its title linking to its card, who notices it, and its `now` line, so the post reads as results without opening the page; past 12 changes, one link to the rest
+- **Post changes** - how many are new since the last post, of how many on the day, then the new ones grouped by the manual's groups as on the page, each group opening its part of the page: each change's product, its kind, its title linking to its card, who notices it, and its `now` line, so the post reads as results without opening the page; past 12 changes, one link to the rest
 - **Post follow-ups** - one link to the page's follow-ups, with their count; listing them in every post would repeat them each hour
 - **Page** - every change of the day drawn, at `reports/grade10-spec/digest/<branch>/<day>/` on the reports host, behind the team's Cloudflare login; the host drops it 30 days after its last upload
 - **One link** - `reports/grade10-spec/digest/<branch>/index.html` always opens the newest day; the run keeps `days.json` beside it (`scripts/days.mjs`), one entry per day for the last 29 days, newest first
@@ -82,9 +83,23 @@ The post repeats the top of the day's page, then lists what the run brought, in 
 - **Reason** - the two or three moves that matter most, in one line: `3 site pages proposed, the Accounts pages rewritten, and the company site catalogs added`
 - **Numbers** - the day's counts a reader would quote, four at most, each recounted from `facts.json`: commits and pull requests merged across both repositories (`pulls`, merged or squashed), changes proposed, changes built or archived
 
-### What Changed, by Area
+### Scopes
 
-Each change is one card with a `phase` naming its area; the page groups and counts them. Draw what a reader would act on, not every commit.
+A reader opens the digest for what they work on: the vault, the store, the shared UI. So the page groups the day as the manual's nav does, from `docs/prds/manual.yaml`, and each reader keeps to their part.
+
+- **Scope** - each card names one: a manual product such as `grade10-site/vault`, a platform page such as `platform/backup` or `platform/shared/money-amounts`, `design-system` for tokens and primitives, `work/guides` for the manual's guides and `work/tooling` for skills, tooling, CI and governance; `node <skill>/scripts/scopes.mjs list` names every one
+- **Which** - the product whose page, requirement, block or catalog the change moves; a commit's `scopes` in `facts.json` suggest it, and one change that moves two products gets the one a reader would look for it under
+- **Phase** - stays the kind of work, `Requirements`, `Blocks`, `Copy`: a tag on the card, no longer its group
+- **Across the day** - an overview card, such as the OpenSpec board or Where the work landed, names no scope and closes the page under Across the day; a card with a `kind` always names one, and the build refuses it otherwise
+- **Groups** - the manual's groups in its order (Grade10, ZZZ, Shared, Admin, Platform with its platform pages and the design system, Shopify), then How we work, then Across the day
+- **Where things moved** - the page's top lists every card under its group and product, with a star beside each product; a reader stars what they work on, and Following then shows only those, on every day's page, kept in that browser
+- **Readers** - the `who` pills still narrow it by role, alongside Following
+- **A product's link** - `?scope=grade10-site/vault` (repeat it, or join ids with commas) opens the page showing only those products, for a team's bookmark or a thread
+- **Follow-ups** - may name a `scope` too, shown beside their owner, and Following narrows them with the cards
+
+### What Changed, by Scope
+
+Each change is one card under its `scope`, with a `phase` naming the kind of work; the page groups and counts them by group and product. Draw what a reader would act on, not every commit.
 
 Every card leads with a picture, and At a glance shows that picture as the card's thumbnail, so the day reads at a glance before a word of it. The build refuses a card without one. Pick by what the reader would recognise first:
 
@@ -106,7 +121,7 @@ Every card leads with a picture, and At a glance shows that picture as the card'
 | Token values | A `diff` of each token, before and now, where a colour shows its swatch; a `shot` of a story that shows them when a reader would see them |
 | Catalog words | A `diff` of each key's words where they changed; a `table` of key and each language where they are new |
 | A primitive or block added or removed | A `shot` of its story |
-| Where the work landed | `bars` of lines or commits per area, as the last card |
+| Where the work landed | `bars` of lines or commits per area, as the last card, with no scope |
 | Tooling, CI and agent skills | One card each for what changes how the team works, with a `flow` or `table` of how it now runs; the rest goes in For engineers |
 
 - **Kind** - `new`, `changed` or `removed` when the change is one; leave it out for an overview card
