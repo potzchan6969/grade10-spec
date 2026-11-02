@@ -8,7 +8,9 @@ A coupon is Grade10's own instrument: what a redemption leaves the member
 holding, and what an order carries to spend it. Grade10 decides whether the
 member may spend it on the order's lines; online, the shop prices it, from a
 Shopify discount code carrying the coupon's own value — a 10% coupon is a 10%
-code — and the cut the buyer pays is the shop's own figure.
+code — and the cut the buyer pays is the shop's own figure. The cart drawer
+works that figure out by the shop's own rules where they reach the basket —
+[Cart](/p/grade10-site/store/cart#checkout).
 
 ::image{src="assets/diagrams/coupon-life.svg" alt="A coupon from redeemed or granted, to available, to claimed by a sale, to used when that order is paid, with the Shopify discount code a claim mints above it"}
 
