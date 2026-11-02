@@ -7,19 +7,9 @@ import {
   formatHkd,
   formatUsd,
   PAYOUT_METHOD,
+  PAYOUT_STATUS_VARIANT,
   type VaultPayoutRequest,
-  type VaultPayoutStatus,
 } from "../../vault-content";
-
-const STATUS_VARIANT: Record<
-  VaultPayoutStatus,
-  "outline" | "success" | "error"
-> = {
-  Pending: "outline",
-  Processing: "outline",
-  Completed: "success",
-  Declined: "error",
-};
 
 /**
  * The collector's payout requests, latest first — destination, the status
@@ -50,7 +40,7 @@ function WithdrawalRow({
           To {PAYOUT_METHOD.bankName} {PAYOUT_METHOD.maskedAccount}
         </Text>
         <div className="flex items-center gap-2">
-          <Badge size="sm" variant={STATUS_VARIANT[request.status]}>
+          <Badge size="sm" variant={PAYOUT_STATUS_VARIANT[request.status]}>
             {request.status}
           </Badge>
           <Text size="sm" tone="secondary">

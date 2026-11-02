@@ -453,9 +453,24 @@ const WITHDRAWAL_PROCESSING_DAYS = "3 business days";
 
 type VaultPayoutStatus = "Pending" | "Processing" | "Completed" | "Declined";
 
+/** Badge variant each payout status wears, in the list and the details drawer. */
+const PAYOUT_STATUS_VARIANT: Record<
+  VaultPayoutStatus,
+  "outline" | "success" | "error"
+> = {
+  Pending: "outline",
+  Processing: "outline",
+  Completed: "success",
+  Declined: "error",
+};
+
 type VaultPayoutRequest = {
   id: string;
   requestedAt: string;
+  /** Set once Grade10 approves the request. */
+  approvedAt?: string;
+  /** Set once the transfer has been sent. */
+  sentAt?: string;
   /** Incentive wallet is denominated in USD. */
   amountUsd: number;
   /** Bank currency the collector asked for. */
@@ -467,7 +482,7 @@ type VaultPayoutRequest = {
 
 const PAYOUT_REQUESTS: VaultPayoutRequest[] = [
   {
-    id: "po-5",
+    id: "WD-24518",
     requestedAt: "28 Oct 2026",
     amountUsd: 83,
     currency: "HKD",
@@ -475,29 +490,34 @@ const PAYOUT_REQUESTS: VaultPayoutRequest[] = [
     status: "Pending",
   },
   {
-    id: "po-4",
+    id: "WD-24497",
     requestedAt: "1 Oct 2026",
+    approvedAt: "4 Oct 2026",
     amountUsd: 64,
     currency: "USD",
     status: "Processing",
   },
   {
-    id: "po-3",
+    id: "WD-24511",
     requestedAt: "3 Oct 2026",
-    amountUsd: 41,
+    approvedAt: "6 Oct 2026",
+    sentAt: "8 Oct 2026",
+    amountUsd: 40,
     currency: "HKD",
-    convertedHkd: 320,
+    convertedHkd: 312.4,
     status: "Completed",
   },
   {
-    id: "po-2",
+    id: "WD-24380",
     requestedAt: "12 Sep 2026",
+    approvedAt: "14 Sep 2026",
+    sentAt: "16 Sep 2026",
     amountUsd: 120,
     currency: "USD",
     status: "Completed",
   },
   {
-    id: "po-1",
+    id: "WD-24352",
     requestedAt: "5 Sep 2026",
     amountUsd: 95,
     currency: "HKD",
@@ -513,7 +533,7 @@ const PORTFOLIO_SUMMARY = {
   rewardsAvailableUsd: 160,
   earnedAllTimeUsd: 285,
   inCashOutUsd: 83,
-  cashedOutUsd: 41,
+  cashedOutUsd: 40,
   minWithdrawalUsd: 65,
   /** Reference conversion for HKD withdrawals. */
   hkdPerUsd: 7.76,
@@ -1107,6 +1127,7 @@ export {
   NEXT_AVAILABLE_VISIT_DATE,
   PAYOUT_METHOD,
   PAYOUT_REQUESTS,
+  PAYOUT_STATUS_VARIANT,
   PORTFOLIO_ASSETS,
   PORTFOLIO_HOLDING_STATUSES,
   PORTFOLIO_SUMMARY,
