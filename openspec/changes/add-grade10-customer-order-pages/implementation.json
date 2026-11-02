@@ -150,7 +150,7 @@
           "Requirement: Current product pictures identify recorded purchases",
           "Requirement: Order actions use settled Grade10 and carrier addresses",
           "Requirement: The page distinguishes loading, failure, and no orders",
-          "Requirement: My Orders presents newest active and past orders"
+          "Requirement: Your Orders presents newest active and past orders"
         ],
         "classification": "semantic",
         "reason": "The current contract names the My Orders route, limits the page to Store orders, uses the customer-facing status badge for active/past grouping, and specifies current pictures, safe actions and distinct query states; the implementation uses the typed Store order read and preserves recorded purchase facts.",
