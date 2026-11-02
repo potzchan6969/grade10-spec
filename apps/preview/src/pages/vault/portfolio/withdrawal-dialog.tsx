@@ -6,7 +6,9 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { Link } from "@grade10/design-system/components/forms/link";
+import { NumberInput } from "@grade10/design-system/components/forms/number-input";
 import { RadioButton } from "@grade10/design-system/components/forms/radio-button";
+import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { SegmentedControl } from "@grade10/design-system/components/forms/segmented-control";
 import { SegmentedControlItem } from "@grade10/design-system/components/forms/segmented-control-item";
@@ -94,13 +96,7 @@ const HK_BANKS = [
 
 const FPS_ID_TYPES = ["Mobile number", "Email address", "FPS ID"] as const;
 
-const MANUAL_CURRENCIES = [
-  "US dollar",
-  "Euro",
-  "British pound",
-  "Singapore dollar",
-  "Other",
-] as const;
+const MANUAL_CURRENCIES = ["US dollar", "Hong Kong dollar"] as const;
 
 const MANUAL_BANK_COUNTRIES = [
   "United States",
@@ -119,7 +115,6 @@ const FPS_PLACEHOLDER: Record<(typeof FPS_ID_TYPES)[number], string> = {
   "FPS ID": "e.g. 123456789",
 };
 
-const MANUAL_VALUE = "manual_request";
 const DRAFT_VALUE = "draft_method";
 
 const SM_UP_MQ = "(min-width: 640px)";
@@ -247,28 +242,6 @@ function ActionRow({
   );
 }
 
-function StepRail({ step }: { step: WithdrawalStep }) {
-  const current = stepIndex(step);
-  return (
-    <div className="flex w-full items-center gap-3">
-      <div aria-hidden className="flex flex-1 items-center gap-1">
-        {[1, 2, 3].map((index) => (
-          <span
-            className={cn(
-              "h-1 flex-1 rounded-(--radius-full)",
-              index <= current ? "bg-primary" : "bg-muted",
-            )}
-            key={index}
-          />
-        ))}
-      </div>
-      <span className="text-sm text-secondary-foreground">
-        Step {current} of 3
-      </span>
-    </div>
-  );
-}
-
 /**
  * Withdrawal — the stepped payout request: amount with `Max` and the
  * receive-in currency, the destination picker drawn like the winner-order
@@ -288,6 +261,7 @@ function WithdrawalDialog({
   onSubmit,
   onViewWithdrawal,
   requestId = "WD-24818",
+  initialStep = "amount",
 }: {
   availableUsd: number;
   minWithdrawalUsd: number;
@@ -304,16 +278,21 @@ function WithdrawalDialog({
   onViewWithdrawal?: () => void;
   /** Reference shown on the submitted beat. */
   requestId?: string;
+  /** Step the dialog opens on — workbench stories only; defaults to `amount`. */
+  initialStep?: WithdrawalStep;
 }) {
-  const [step, setStep] = useState<WithdrawalStep>("amount");
-  const [amountInput, setAmountInput] = useState("");
+  const [step, setStep] = useState<WithdrawalStep>(initialStep);
+  const [amountInput, setAmountInput] = useState(String(availableUsd));
   const [methods, setMethods] = useState<WithdrawalMethod[]>(() => [
     ...(payoutMethods ?? []),
   ]);
   const [selection, setSelection] = useState(
     () => payoutMethods?.[0]?.id ?? "",
   );
-  const [manualRequest, setManualRequest] = useState(false);
+  const [manualRequest, setManualRequest] = useState(
+    initialStep === "manual-request",
+  );
+  const [receiveIn, setReceiveIn] = useState<"HKD" | "USD">("HKD");
   const [methodKind, setMethodKind] = useState<MethodKind>("bank");
   const [bankName, setBankName] = useState<string>(HK_BANKS[0]);
   const [fpsIdType, setFpsIdType] =
@@ -333,16 +312,18 @@ function WithdrawalDialog({
   const [manualBank, setManualBank] = useState("");
   const [manualAccount, setManualAccount] = useState("");
   const [manualSwift, setManualSwift] = useState("");
+  const [manualHolder, setManualHolder] = useState("");
 
   const [wasOpen, setWasOpen] = useState(open);
   if (open !== wasOpen) {
     setWasOpen(open);
     if (open) {
-      setStep("amount");
-      setAmountInput("");
+      setStep(initialStep);
+      setAmountInput(String(availableUsd));
       setMethods([...(payoutMethods ?? [])]);
       setSelection(payoutMethods?.[0]?.id ?? "");
-      setManualRequest(false);
+      setManualRequest(initialStep === "manual-request");
+      setReceiveIn(initialStep === "manual-request" ? "USD" : "HKD");
       setAccountNumber("");
       setAccountHolder(collectorName);
       setSaveForFuture(true);
@@ -351,11 +332,14 @@ function WithdrawalDialog({
       setManualBank("");
       setManualAccount("");
       setManualSwift("");
+      setManualHolder("");
     }
   }
 
   const amount = Number(amountInput) || 0;
   const amountValid = amount >= minWithdrawalUsd && amount <= availableUsd;
+  const amountTooHigh = amount > availableUsd;
+  const amountTooLow = amountInput.trim() !== "" && amount < minWithdrawalUsd;
   const convertedHkd = Math.round(amount * hkdPerUsd * 100) / 100;
   const balanceAfter = availableUsd - amount;
   const methodDetailsValid =
@@ -366,7 +350,7 @@ function WithdrawalDialog({
     manualBank.trim() !== "" &&
     manualAccount.trim() !== "" &&
     manualSwift.trim() !== "" &&
-    accountHolder.trim() !== "";
+    manualHolder.trim() !== "";
   const hasMethods = methods.length > 0;
 
   const destination =
@@ -374,22 +358,14 @@ function WithdrawalDialog({
     methods.find((method) => method.id === DRAFT_VALUE);
 
   const TITLE: Record<WithdrawalStep, string> = {
-    amount: "Withdraw Rewards",
+    amount: "Withdraw Incentives",
     destination: "Withdraw To",
     "add-method": "Add Withdrawal Method",
     "manual-request": "Manual Withdrawal Request",
     review: "Review Withdrawal",
-    submitted: `Withdrawal of ${formatUsd(amount)} Requested`,
-  };
-
-  const SUBTEXT: Record<WithdrawalStep, string> = {
-    amount: `Available to withdraw: ${formatUsd(availableUsd)}`,
-    destination: `Withdrawing ${formatUsd(amount)} · ≈ ${formatHkd(convertedHkd)}`,
-    "add-method": "Hong Kong accounts only, in HK$.",
-    "manual-request":
-      "For US$ withdrawals or overseas bank accounts. Our team handles these one by one.",
-    review: "Grade10 reviews every request before sending it.",
-    submitted: "We’ll email you once Grade10 approves the payout.",
+    submitted: manualRequest
+      ? "Manual Request Submitted"
+      : `Withdrawal of ${formatUsd(amount)} Requested`,
   };
 
   function requestManually(from: WithdrawalStep) {
@@ -417,18 +393,17 @@ function WithdrawalDialog({
 
   const next = () => {
     if (step === "amount") {
-      setStep(hasMethods ? "destination" : "add-method");
-    } else if (step === "destination") {
-      if (selection === MANUAL_VALUE) {
-        requestManually("destination");
+      if (receiveIn === "USD") {
+        requestManually("amount");
       } else {
-        setStep("review");
+        setStep(hasMethods ? "destination" : "add-method");
       }
+    } else if (step === "destination") {
+      setStep("review");
     } else if (step === "add-method") {
       saveMethod();
     } else if (step === "manual-request") {
-      onSubmit?.(amount, "USD");
-      setStep("submitted");
+      setStep("review");
     } else if (step === "review") {
       onSubmit?.(amount, manualRequest ? "USD" : "HKD");
       setStep("submitted");
@@ -441,7 +416,13 @@ function WithdrawalDialog({
       setStep(hasMethods ? "destination" : "amount");
     else if (step === "manual-request") setStep(manualReturnStep);
     else if (step === "review")
-      setStep(manualRequest || !hasMethods ? "amount" : "destination");
+      setStep(
+        manualRequest
+          ? "manual-request"
+          : hasMethods
+            ? "destination"
+            : "amount",
+      );
   };
 
   const primaryDisabled =
@@ -453,7 +434,7 @@ function WithdrawalDialog({
   const primaryLabel =
     step === "add-method"
       ? "Save & Use"
-      : step === "review" || step === "manual-request"
+      : step === "review"
         ? "Submit Request"
         : "Continue";
 
@@ -476,73 +457,61 @@ function WithdrawalDialog({
     <>
       {step === "amount" ? (
         <VStack gap="md" hAlign="start">
-          <div className="flex w-full flex-col items-end gap-2">
-            <TextInput
-              aria-label="Withdrawal amount"
-              className="w-full font-heading text-2xl font-medium tabular-nums"
-              inputMode="decimal"
-              prefix="US$"
-              size="lg"
-              value={amountInput}
-              onChange={(event) =>
-                setAmountInput(event.target.value.replace(/[^0-9.]/g, ""))
-              }
-            />
-            <Button
-              size="sm"
-              type="button"
-              variant="outline"
-              onClick={() => setAmountInput(String(availableUsd))}
-            >
-              Max
-            </Button>
-          </div>
-          <Text size="sm" tone="secondary">
-            {formatUsd(Math.max(0, balanceAfter))} stays in your balance and
-            keeps growing · Minimum {formatUsd(minWithdrawalUsd)} · One
-            withdrawal every 7 days
-          </Text>
+          <NumberInput
+            className="[&_[data-slot=input]]:font-heading [&_[data-slot=input]]:text-2xl [&_[data-slot=input]]:font-medium [&_[data-slot=input]]:tabular-nums [&_[data-slot=input]]:[appearance:textfield] [&_[data-slot=input]::-webkit-inner-spin-button]:appearance-none [&_[data-slot=input]::-webkit-outer-spin-button]:appearance-none"
+            inputMode="decimal"
+            label="Withdraw Amount"
+            message={
+              <span>
+                {amountTooLow
+                  ? `The min. withdrawal is ${formatUsd(minWithdrawalUsd)}. `
+                  : `Available: ${formatUsd(availableUsd)}. `}
+                {amount !== availableUsd ? (
+                  <Link
+                    render={
+                      <button
+                        type="button"
+                        onClick={() => setAmountInput(String(availableUsd))}
+                      />
+                    }
+                    size="xs"
+                    variant="secondary"
+                  >
+                    Use max
+                  </Link>
+                ) : (
+                  <span aria-hidden className="invisible">
+                    Use max
+                  </span>
+                )}
+              </span>
+            }
+            prefix="US$"
+            size="lg"
+            status={amountTooHigh || amountTooLow ? "error" : "default"}
+            value={amountInput}
+            onChange={(event) => setAmountInput(event.target.value)}
+          />
           <RadioList
             aria-label="Receive in"
             className="gap-3"
             label="Receive in"
-            onValueChange={() => undefined}
-            value="HKD"
+            onValueChange={(value) => {
+              if (value === "HKD" || value === "USD") setReceiveIn(value);
+            }}
+            value={receiveIn}
           >
             <div className="flex w-full flex-col gap-2">
-              <DestinationOption
-                detail={`≈ ${formatHkd(convertedHkd)} · US$1 = HK$${hkdPerUsd}`}
-                icon={<span className="text-sm font-medium">HK$</span>}
-                title="Hong Kong dollar"
+              <RadioCard
+                description={`≈ ${formatHkd(convertedHkd)} (US$1 = HK$${hkdPerUsd})`}
+                title="Hong Kong Dollar"
                 value="HKD"
               />
-              <div className="flex w-full items-center gap-3 rounded-(--radius-2xl) border border-border bg-card p-4">
-                <span
-                  aria-hidden
-                  className="flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) bg-muted text-foreground"
-                >
-                  <span className="text-sm font-medium">US$</span>
-                </span>
-                <span className="flex min-w-0 flex-1 flex-col items-start opacity-50">
-                  <span className="text-sm leading-6 font-medium text-secondary-foreground">
-                    US dollar
-                  </span>
-                  <span className="text-sm text-secondary-foreground">
-                    Not available yet
-                  </span>
-                </span>
-                <Link
-                  render={
-                    <button
-                      type="button"
-                      onClick={() => requestManually("amount")}
-                    />
-                  }
-                  size="sm"
-                >
-                  Request manually
-                </Link>
-              </div>
+              <RadioCard
+                description="Not available now. By request only"
+                title="US Dollar"
+                value="USD"
+              />
             </div>
           </RadioList>
         </VStack>
@@ -718,14 +687,7 @@ function WithdrawalDialog({
       {step === "manual-request" ? (
         <VStack gap="md" hAlign="stretch">
           <div className="grid w-full grid-cols-2 gap-3">
-            <TextInput
-              label="Amount (US$)"
-              inputMode="decimal"
-              value={amountInput}
-              onChange={(event) =>
-                setAmountInput(event.target.value.replace(/[^0-9.]/g, ""))
-              }
-            />
+            <TextInput label="Amount (US$)" readOnly value={amountInput} />
             <div className="flex w-full flex-col gap-2">
               <label
                 className="text-sm font-medium text-secondary-foreground"
@@ -810,21 +772,10 @@ function WithdrawalDialog({
               }
             />
           </div>
-          <div className="flex w-full flex-col gap-2">
-            <TextInput
-              label="Account Holder Name"
-              value={accountHolder}
-              onChange={(event) => setAccountHolder(event.target.value)}
-            />
-            <Text size="sm" tone="secondary">
-              Taken from your verified Grade10 profile.
-            </Text>
-          </div>
-          <Alert
-            description="We email you to confirm details before sending. The amount is held from your balance meanwhile, and you can cancel before it’s approved."
-            icon={<Info aria-hidden weight="regular" />}
-            status="default"
-            title="Manual review"
+          <TextInput
+            label="Account Holder Name"
+            value={manualHolder}
+            onChange={(event) => setManualHolder(event.target.value)}
           />
         </VStack>
       ) : null}
@@ -856,10 +807,16 @@ function WithdrawalDialog({
               </span>
               <VStack className="min-w-0" gap="xs" hAlign="start">
                 <Text as="span" weight="medium">
-                  US$ or overseas bank
+                  {manualBank.trim() || "US$ or overseas bank"}
                 </Text>
                 <Text as="span" className="text-secondary-foreground" size="sm">
-                  Our team arranges this payout manually
+                  {[
+                    manualCountry,
+                    manualAccount.trim() && `••• ${manualAccount.slice(-4)}`,
+                    "Manual request",
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
                 </Text>
               </VStack>
             </div>
@@ -1057,21 +1014,18 @@ function WithdrawalDialog({
           style={{ "--drawer-content-max-height": "92dvh" } as CSSProperties}
         >
           <DrawerHeader>
-            {step !== "submitted" && step !== "manual-request" ? (
-              <StepRail step={step} />
-            ) : null}
             <DrawerTitle
               className={step === "submitted" ? "sr-only" : undefined}
             >
               {TITLE[step]}
             </DrawerTitle>
-            {step !== "submitted" ? (
+            {step !== "submitted" && step !== "manual-request" ? (
               <p className="text-sm text-secondary-foreground">
-                {SUBTEXT[step]}
+                Step {stepIndex(step)} of 3
               </p>
             ) : null}
             <DrawerDescription className="sr-only">
-              {SUBTEXT[step]}
+              {TITLE[step]}
             </DrawerDescription>
           </DrawerHeader>
           <DrawerBody className="gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
@@ -1089,20 +1043,17 @@ function WithdrawalDialog({
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogContent className="max-w-lg">
-        {step !== "submitted" && step !== "manual-request" ? (
-          <StepRail step={step} />
-        ) : null}
         <DialogHeader>
           <DialogTitle className={step === "submitted" ? "sr-only" : undefined}>
             {TITLE[step]}
           </DialogTitle>
-          {step !== "submitted" ? (
-            <DialogSubtext>{SUBTEXT[step]}</DialogSubtext>
+          {step !== "submitted" && step !== "manual-request" ? (
+            <DialogSubtext>Step {stepIndex(step)} of 3</DialogSubtext>
           ) : null}
         </DialogHeader>
         <DialogBody className="gap-6" tabIndex={0}>
           <DialogDescription className="sr-only">
-            {SUBTEXT[step]}
+            {TITLE[step]}
           </DialogDescription>
           {stepBody}
         </DialogBody>

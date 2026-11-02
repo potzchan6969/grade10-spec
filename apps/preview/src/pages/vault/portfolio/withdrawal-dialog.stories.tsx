@@ -2,14 +2,16 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { type ComponentProps, useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { PAYOUT_METHODS, PORTFOLIO_SUMMARY } from "../../vault-content";
-import { type WithdrawalMethod, WithdrawalDialog } from "./withdrawal-dialog";
+import { WithdrawalDialog, type WithdrawalMethod } from "./withdrawal-dialog";
 
 function WithdrawalDialogDemo({
+  initialStep,
   payoutMethods,
 }: {
+  initialStep?: ComponentProps<typeof WithdrawalDialog>["initialStep"];
   payoutMethods?: WithdrawalMethod[];
 }) {
   const [open, setOpen] = useState(true);
@@ -35,6 +37,7 @@ function WithdrawalDialogDemo({
         hkdPerUsd={PORTFOLIO_SUMMARY.hkdPerUsd}
         minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
         payoutMethods={payoutMethods}
+        initialStep={initialStep}
         open={open}
         onOpenChange={setOpen}
       />
@@ -66,7 +69,6 @@ async function openDialog(canvasElement: HTMLElement) {
 }
 
 async function enterMaxAndContinue(dialog: ReturnType<typeof within>) {
-  await userEvent.click(dialog.getByRole("button", { name: "Max" }));
   await userEvent.click(dialog.getByRole("button", { name: "Continue" }));
 }
 
@@ -75,15 +77,20 @@ export const Amount: Story = {
   args: { payoutMethods: PAYOUT_METHODS },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
-    expect(dialog.getByText("Withdraw Rewards")).toBeVisible();
-    expect(dialog.getAllByText(/Available to withdraw/).length).toBeGreaterThan(
-      0,
-    );
-    expect(dialog.getByText("Hong Kong dollar")).toBeVisible();
-    expect(dialog.getByText(/Not available yet/)).toBeVisible();
-    expect(dialog.getByRole("button", { name: "Continue" })).toBeDisabled();
-    await userEvent.click(dialog.getByRole("button", { name: "Max" }));
+    expect(
+      dialog.getByRole("heading", { name: "Withdraw Incentives" }),
+    ).toBeVisible();
+    expect(dialog.getAllByText(/Available: US\$160/).length).toBeGreaterThan(0);
+    expect(dialog.getByText("Hong Kong Dollar")).toBeVisible();
+    expect(dialog.getByText("US Dollar")).toBeVisible();
+    expect(dialog.getByText(/By request only/)).toBeVisible();
+    expect(dialog.getByLabelText("Withdraw Amount")).toHaveValue(160);
     expect(dialog.getByRole("button", { name: "Continue" })).toBeEnabled();
+    const field = dialog.getByLabelText("Withdraw Amount");
+    await userEvent.clear(field);
+    await userEvent.type(field, "100");
+    await userEvent.click(dialog.getByRole("button", { name: "Use max" }));
+    expect(field).toHaveValue(160);
   },
 };
 
@@ -94,7 +101,9 @@ export const Destination: Story = {
     const dialog = await openDialog(canvasElement);
     await enterMaxAndContinue(dialog);
     await waitFor(() =>
-      expect(dialog.getByText("Withdraw To")).toBeVisible(),
+      expect(
+        dialog.getByRole("heading", { name: "Withdraw To" }),
+      ).toBeVisible(),
     );
     expect(dialog.getByText("HSBC ••• 8304")).toBeVisible();
     expect(dialog.getByText(/FPS · \+852 9123/)).toBeVisible();
@@ -109,20 +118,18 @@ export const AddMethod: Story = {
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
     await enterMaxAndContinue(dialog);
-    await userEvent.click(
-      await dialog.findByText("Add Hong Kong bank or FPS"),
-    );
+    await userEvent.click(await dialog.findByText("Add Hong Kong bank or FPS"));
     await waitFor(() =>
-      expect(dialog.getByText("Add Withdrawal Method")).toBeVisible(),
+      expect(
+        dialog.getByRole("heading", { name: "Add Withdrawal Method" }),
+      ).toBeVisible(),
     );
     expect(dialog.getByLabelText("Bank")).toBeVisible();
     expect(dialog.getByLabelText("Account Number")).toBeVisible();
     expect(dialog.getByLabelText("Account Holder Name")).toHaveValue(
       "Chan Tai Man",
     );
-    expect(
-      dialog.getByText("Save for future withdrawals"),
-    ).toBeVisible();
+    expect(dialog.getByText("Save for future withdrawals")).toBeVisible();
   },
 };
 
@@ -133,33 +140,57 @@ export const FirstPayout: Story = {
     const dialog = await openDialog(canvasElement);
     await enterMaxAndContinue(dialog);
     await waitFor(() =>
-      expect(dialog.getByText("Add Withdrawal Method")).toBeVisible(),
+      expect(
+        dialog.getByRole("heading", { name: "Add Withdrawal Method" }),
+      ).toBeVisible(),
     );
   },
 };
 
 /** Manual request — US$/overseas banks get their own form, no step rail. */
 export const ManualRequest: Story = {
-  args: { payoutMethods: PAYOUT_METHODS },
+  args: { initialStep: "manual-request", payoutMethods: PAYOUT_METHODS },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
-    await enterMaxAndContinue(dialog);
-    await waitFor(() => expect(dialog.getByText("Withdraw To")).toBeVisible());
-    await userEvent.click(dialog.getByText("US$ or overseas bank"));
     await waitFor(() =>
-      expect(dialog.getByText("Manual Withdrawal Request")).toBeVisible(),
+      expect(
+        dialog.getByRole("heading", { name: "Manual Withdrawal Request" }),
+      ).toBeVisible(),
     );
     expect(dialog.getByLabelText("Amount (US$)")).toHaveValue("160");
+    expect(dialog.getByLabelText("Amount (US$)")).toHaveAttribute("readonly");
     expect(dialog.getByLabelText("Bank country / region")).toBeVisible();
     expect(dialog.getByLabelText("Bank name")).toBeVisible();
     expect(dialog.getByLabelText("SWIFT / BIC")).toBeVisible();
-    expect(
-      dialog.getByLabelText("Account Holder Name"),
-    ).toHaveValue("Chan Tai Man");
-    expect(
-      dialog.getByRole("button", { name: "Submit Request" }),
-    ).toBeDisabled();
+    expect(dialog.getByLabelText("Account Holder Name")).toHaveValue("");
+    expect(dialog.getByRole("button", { name: "Continue" })).toBeDisabled();
     expect(dialog.queryByText(/Step \d of 3/)).toBeNull();
+    await userEvent.type(dialog.getByLabelText("Bank name"), "Chase");
+    await userEvent.type(
+      dialog.getByLabelText("Account number / IBAN"),
+      "987654321",
+    );
+    await userEvent.type(dialog.getByLabelText("SWIFT / BIC"), "CHASUS33");
+    await userEvent.type(
+      dialog.getByLabelText("Account Holder Name"),
+      "Chan Tai Man",
+    );
+    await userEvent.click(dialog.getByRole("button", { name: "Continue" }));
+    await waitFor(() =>
+      expect(
+        dialog.getByRole("heading", { name: "Review Withdrawal" }),
+      ).toBeVisible(),
+    );
+    expect(dialog.getByText(/Chase/)).toBeVisible();
+    expect(dialog.getAllByText(/Manual request/).length).toBeGreaterThan(0);
+    await userEvent.click(
+      dialog.getByRole("button", { name: "Submit Request" }),
+    );
+    await waitFor(() =>
+      expect(
+        dialog.getByRole("heading", { name: "Manual Request Submitted" }),
+      ).toBeVisible(),
+    );
   },
 };
 
@@ -170,11 +201,15 @@ export const Review: Story = {
     const dialog = await openDialog(canvasElement);
     await enterMaxAndContinue(dialog);
     await waitFor(() =>
-      expect(dialog.getByText("Withdraw To")).toBeVisible(),
+      expect(
+        dialog.getByRole("heading", { name: "Withdraw To" }),
+      ).toBeVisible(),
     );
     await userEvent.click(dialog.getByRole("button", { name: "Continue" }));
     await waitFor(() =>
-      expect(dialog.getByText("Review Withdrawal")).toBeVisible(),
+      expect(
+        dialog.getByRole("heading", { name: "Review Withdrawal" }),
+      ).toBeVisible(),
     );
     expect(dialog.getByText(/HK\$1,241/)).toBeVisible();
     expect(dialog.getByText("HSBC ••• 8304")).toBeVisible();
@@ -203,9 +238,7 @@ export const Submitted: Story = {
       dialog.getByRole("button", { name: "Submit Request" }),
     );
     await waitFor(() =>
-      expect(
-        dialog.getByText(/Withdrawal of US\$160 requested/),
-      ).toBeVisible(),
+      expect(dialog.getByText(/Withdrawal of US\$160 requested/)).toBeVisible(),
     );
     expect(dialog.getByText("Request submitted")).toBeVisible();
     expect(dialog.getByText("Grade10 review")).toBeVisible();
@@ -223,6 +256,8 @@ export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
-    expect(dialog.getByText("Withdraw Rewards")).toBeVisible();
+    expect(
+      dialog.getByRole("heading", { name: "Withdraw Incentives" }),
+    ).toBeVisible();
   },
 };
