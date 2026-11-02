@@ -30,17 +30,13 @@ Staff register the cards on the intake form, at a card event or the shop's count
    - **Sales and Liquidity** — the card's sales count and liquidity, in the staff's detail view
    - **Estimated Daily Incentive** — or Not Eligible, for a card that earns nothing
    - **Earns Incentive** — a tick on each card, on by default; staff untick a card that should earn nothing - [Incentive](/p/grade10-site/vault/incentive#earning)
-   - **Photos** — several per card, kept on that card, not on its catalogue product
+   - **Photos** — front and back required, and more as staff choose; kept on that card, not on its catalogue product
    - **Skip Incentive Approval** — a checkbox on each card, unticked by default; staff tick it when they have already authenticated the card and verified its value on the spot, so it needn't wait for approval - [Incentive](/p/grade10-site/vault/incentive#earning)
 4. 🚧 **Consign Now** — optional, per card at an event; at the consignment counter every card is consigned, into a vault case - [Consignment Counter](/p/grade10-site/consignment/counter); the card is registered into the vault first, then consigned in the same visit: the store, the auction or both, the lowest acceptable price (required for the store or both, optional for the auction), price-checked as on the consign form, and the commission; Grade10 sets the list or starting price at approval - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
 5. 🚧 **Sign** — on the shop's tablet, or by a link emailed to the collector
    - **Vault Terms** — signed
    - **Consignment Agreement** — signed only where a card is consigned now
    - **Custody Receipt** — confirmed
-
-:::callout{kind="note"}
-- ❓ **ID number kept** — the counter review of 2026-11-02 confirmed the ID number and the 18-or-over tick; whether the number is kept only as a mask and digest, under the Privacy Commissioner's Code of Practice on the ID Card Number, is open; recommended: the mask and digest. Product confirms before Phase 1, mid November
-:::
 
 ## Authentication
 
@@ -121,6 +117,6 @@ can: an account, a phone number, a declaration and the ID staff read in hand.
 - **Events first, then the shop, then the post** — Phase 1 takes cards in person at card events, where staff reach collectors; the shop's counter joins in Phase 2 on the same form; mail-in waits for Phase 3, once the business settles how parcels are handled
 - **Storage at nothing for now, as a setting** — a fee would turn away the intakes the incentive is paying for, and a setting leaves room to charge one later without a rebuild; pinned to the Vault Terms, so a fee is never added to terms a collector already signed
 - **Checked at the counter, or later** — the counter check is the usual way, but an intake shouldn't wait for a professional to be free; a card kept unchecked earns and sells nothing until it passes, so taking it early costs nothing
-- **The ID read at intake, kept masked** — a retrieval is matched against it at the counter, so no identity check is needed to take a card home, and no usable ID number is stored
+- **The ID read at intake, kept masked** — a retrieval is matched against it at the counter, so no identity check is needed to take a card home, and no usable ID number is stored, under the Privacy Commissioner's Code of Practice on the ID Card Number; confirmed with the 18-or-over tick and IDs in any Hong Kong or Taiwan format in the counter review, 2026-11-02
 - **A phone number captured, not confirmed** — it serves contact and abuse checks and proves no identity
 :::
