@@ -7,19 +7,9 @@ import {
   formatHkd,
   formatUsd,
   PAYOUT_METHOD,
+  PAYOUT_STATUS_VARIANT,
   type VaultPayoutRequest,
-  type VaultPayoutStatus,
 } from "../../vault-content";
-
-const STATUS_VARIANT: Record<
-  VaultPayoutStatus,
-  "outline" | "success" | "error"
-> = {
-  Pending: "outline",
-  Processing: "outline",
-  Completed: "success",
-  Declined: "error",
-};
 
 /**
  * The collector's payout requests, latest first — destination, the status
@@ -50,7 +40,7 @@ function WithdrawalRow({
           To {PAYOUT_METHOD.bankName} {PAYOUT_METHOD.maskedAccount}
         </Text>
         <div className="flex items-center gap-2">
-          <Badge size="sm" variant={STATUS_VARIANT[request.status]}>
+          <Badge size="sm" variant={PAYOUT_STATUS_VARIANT[request.status]}>
             {request.status}
           </Badge>
           <Text size="sm" tone="secondary">
@@ -61,7 +51,7 @@ function WithdrawalRow({
       <div
         className={cn(
           "flex shrink-0 flex-col items-end gap-1 whitespace-nowrap tabular-nums",
-          declined && "line-through",
+          declined && "line-through decoration-muted-foreground",
         )}
       >
         <Text tone={declined ? "muted" : "primary"} weight="medium">
@@ -73,7 +63,7 @@ function WithdrawalRow({
           </Text>
         ) : null}
       </div>
-      <span aria-hidden className="shrink-0 text-secondary-foreground">
+      <span aria-hidden className="shrink-0 text-muted-foreground">
         <CaretRight size={16} />
       </span>
     </>
@@ -83,7 +73,7 @@ function WithdrawalRow({
       {onOpen ? (
         <button
           aria-label={`View withdrawal details, ${request.status}`}
-          className="flex w-full cursor-pointer items-center gap-4 p-4 text-left transition-colors hover:bg-background-subtle"
+          className="flex w-full cursor-pointer items-center gap-4 p-4 text-left transition-colors hover:bg-background-subtle active:bg-background-subtle"
           type="button"
           onClick={() => onOpen(request)}
         >

@@ -39,10 +39,11 @@ function LedgerWithDetails(args: Story["args"]) {
   );
 }
 
-export const All: Story = {
+export const Incentives: Story = {
   args: {
     dailyIncentives: DAILY_INCENTIVES,
     payoutRequests: PAYOUT_REQUESTS,
+    tab: "incentives",
   },
   render: (args) => <LedgerWithDetails {...args} />,
   play: async ({ canvasElement }) => {
@@ -51,27 +52,15 @@ export const All: Story = {
       DAILY_INCENTIVES.length,
     );
     expect(canvas.getAllByText("+US$16").length).toBeGreaterThan(0);
-    await waitFor(() => expect(canvas.getByText("Pending")).toBeVisible());
-  },
-};
-
-export const Incentives: Story = {
-  ...All,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "Incentives" }));
-    expect(canvas.getAllByText("Daily Incentives").length).toBe(
-      DAILY_INCENTIVES.length,
-    );
     expect(canvas.queryByText("Pending")).toBeNull();
   },
 };
 
 export const Withdrawal: Story = {
   ...Incentives,
+  args: { ...Incentives.args, tab: "withdrawal" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "Withdrawal" }));
     await waitFor(() => {
       expect(canvas.getByText("Pending")).toBeVisible();
       expect(canvas.getAllByText("Completed").length).toBeGreaterThan(0);
@@ -83,12 +72,14 @@ export const Withdrawal: Story = {
     );
     const page = within(canvasElement.ownerDocument.body);
     await waitFor(() =>
-      expect(page.getByText("Processing time")).toBeVisible(),
+      expect(
+        page.getByRole("dialog", { name: "Withdrawal Details" }),
+      ).toBeVisible(),
     );
   },
 };
 
 export const Narrow: Story = {
-  ...All,
+  ...Incentives,
   globals: { viewport: { value: "mobile1" } },
 };

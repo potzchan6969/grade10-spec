@@ -1,14 +1,13 @@
 import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
-import { CaretRight, HandCoins } from "@phosphor-icons/react";
-import { useEffect, useRef, useState } from "react";
+import { HandCoins } from "@phosphor-icons/react";
+import { useEffect, useRef } from "react";
 import { formatUsd, type VaultPayoutRequest } from "../../vault-content";
 import { animateEnter } from "../../vault-shared";
 import { WithdrawalRow } from "./withdrawal-list";
 
-type LedgerTab = "all" | "incentives" | "withdrawal";
+type LedgerTab = "incentives" | "withdrawal";
 
 type IncentiveEntry = { date: string; amountUsd: number };
 
@@ -43,9 +42,6 @@ function IncentiveRow({ entry }: { entry: IncentiveEntry }) {
       <Text className="shrink-0 whitespace-nowrap tabular-nums" weight="medium">
         +{formatUsd(entry.amountUsd)}
       </Text>
-      <span aria-hidden className="size-4 shrink-0 opacity-0">
-        <CaretRight size={16} />
-      </span>
     </li>
   );
 }
@@ -71,55 +67,33 @@ function MonthGroup({
 }
 
 /**
- * Incentive and withdrawal activity under one heading — All reads the two
- * kinds on one timeline, Incentives lists each day's incentive sum,
- * Withdrawal lists every request with the status Grade10's approval sets.
- * Entries are grouped by month and year, like the points history ledger.
+ * Incentive and withdrawal activity under one heading — Incentives lists
+ * each day's incentive sum, Withdrawal lists every request with the status
+ * Grade10's approval sets. Entries are grouped by month and year, like the
+ * points history ledger.
  */
 function RewardsLedger({
   dailyIncentives,
   payoutRequests,
   onOpenWithdrawal,
   tab,
-  onTabChange,
   className,
 }: {
   dailyIncentives: IncentiveEntry[];
   /** Opens a withdrawal request's details in the right-side drawer. */
   onOpenWithdrawal?: (request: VaultPayoutRequest) => void;
   payoutRequests: VaultPayoutRequest[];
-  /** Controlled tab; defaults to All internally. */
-  tab?: LedgerTab;
-  onTabChange?: (tab: LedgerTab) => void;
+  /** Which kind the list draws — the parent tab bar owns the switch. */
+  tab: LedgerTab;
   className?: string;
 }) {
-  const [internalTab, setInternalTab] = useState<LedgerTab>("all");
-  const activeTab = tab ?? internalTab;
-  const setTab = (value: LedgerTab) => {
-    setInternalTab(value);
-    onTabChange?.(value);
-  };
   const groupsRef = useRef<HTMLDivElement>(null);
 
   /* Enter: the month groups rise in on each tab switch. */
-  // biome-ignore lint/correctness/useExhaustiveDependencies: activeTab is what re-runs the rise
+  // biome-ignore lint/correctness/useExhaustiveDependencies: tab is what re-runs the rise
   useEffect(() => {
     animateEnter(groupsRef.current, { duration: 160, rise: 4 });
-  }, [activeTab]);
-
-  /* All: the two kinds merged on one timeline, latest date first. */
-  const merged = [
-    ...dailyIncentives.map((entry) => ({
-      kind: "incentive" as const,
-      date: entry.date,
-      entry,
-    })),
-    ...payoutRequests.map((request) => ({
-      kind: "withdrawal" as const,
-      date: request.requestedAt,
-      request,
-    })),
-  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [tab]);
 
   const months: { month: string; nodes: React.ReactNode[] }[] = [];
   const push = (month: string, node: React.ReactNode) => {
@@ -128,22 +102,7 @@ function RewardsLedger({
     else months.push({ month, nodes: [node] });
   };
 
-  if (activeTab === "all") {
-    for (const item of merged) {
-      push(
-        monthKey(item.date),
-        item.kind === "incentive" ? (
-          <IncentiveRow entry={item.entry} key={`r-${item.date}`} />
-        ) : (
-          <WithdrawalRow
-            key={item.request.id}
-            request={item.request}
-            onOpen={onOpenWithdrawal}
-          />
-        ),
-      );
-    }
-  } else if (activeTab === "incentives") {
+  if (tab === "incentives") {
     for (const entry of dailyIncentives) {
       push(
         monthKey(entry.date),
@@ -169,28 +128,6 @@ function RewardsLedger({
       className={cn("flex flex-col gap-6", className)}
       data-slot="rewards-ledger"
     >
-      <fieldset
-        aria-label="Activity filters"
-        className="flex flex-wrap items-center gap-2"
-      >
-        {(["all", "incentives", "withdrawal"] as const).map((key) => (
-          <Button
-            aria-pressed={key === activeTab}
-            key={key}
-            size="md"
-            type="button"
-            variant={key === activeTab ? "secondary" : "outline"}
-            onClick={() => setTab(key)}
-          >
-            {key === "withdrawal"
-              ? "Withdrawal"
-              : key === "incentives"
-                ? "Incentives"
-                : "All"}
-          </Button>
-        ))}
-      </fieldset>
-
       <div className="flex flex-col gap-6" ref={groupsRef}>
         {months.map((group) => (
           <MonthGroup key={group.month} month={group.month}>

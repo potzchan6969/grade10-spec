@@ -1,17 +1,21 @@
 import { CheckboxButton } from "@grade10/design-system/components/forms/checkbox-button";
 import { cn } from "@grade10/design-system/lib/utils";
+import { X } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 
 // Figma set `Step Indicator` (`5010:5570`). Axis: `states`
 // (`upcoming` | `progress` | `completed`). Upcoming and completed nest
 // Checkbox Button (`2176:4089`); progress draws concentric rings with ping.
+// `error` is appended outside the Figma set for a step that failed — a
+// destructive circle with a cross, sized to match the checkbox ring.
 const stepIndicatorVariants = cva("relative shrink-0", {
   variants: {
     state: {
       upcoming: "inline-flex",
       progress: "size-4",
       completed: "inline-flex",
+      error: "inline-flex",
     },
   },
   defaultVariants: {
@@ -59,6 +63,24 @@ function StepIndicator({
           aria-hidden
           className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary"
         />
+      </span>
+    );
+  }
+
+  if (state === "error") {
+    return (
+      <span
+        aria-hidden
+        className={cn(
+          stepIndicatorVariants({ state }),
+          "flex size-4 items-center justify-center rounded-(--radius-full) bg-destructive text-destructive-foreground",
+          className,
+        )}
+        data-slot="step-indicator"
+        data-state={state}
+        {...props}
+      >
+        <X size={12} weight="bold" />
       </span>
     );
   }
