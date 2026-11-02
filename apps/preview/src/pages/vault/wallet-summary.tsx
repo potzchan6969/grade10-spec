@@ -10,7 +10,7 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info } from "@phosphor-icons/react";
-import { formatHkd, formatUsd } from "../../vault-content";
+import { formatHkd, formatUsd } from "../vault-content";
 
 /**
  * The collector's vault wallet — withdrawal stats over the portfolio. Left:
@@ -64,7 +64,7 @@ function WalletSummary({
 
   return (
     <Card
-      aria-label="Rewards wallet"
+      aria-label="Incentive wallet"
       className={cn(
         "grid grid-cols-1 gap-0 overflow-clip p-0 sm:grid-cols-2",
         className,

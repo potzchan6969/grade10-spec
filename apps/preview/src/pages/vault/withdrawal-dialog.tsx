@@ -20,7 +20,7 @@ import {
   formatHkd,
   formatUsd,
   WITHDRAWAL_PROCESSING_DAYS,
-} from "../../vault-content";
+} from "../vault-content";
 
 type PayoutMethod = {
   bankName: string;
@@ -105,7 +105,7 @@ function WithdrawalDialog({
   const SUBTEXT: Record<CashOutStep, string> = {
     amount: `Available to withdraw: ${formatUsd(availableUsd)}`,
     "bank-details":
-      "In your verified name and saved to your profile — where rewards go on your first withdrawal.",
+      "In your verified name and saved to your profile — where incentives go on your first withdrawal.",
     review: `Grade10 reviews every request — paid by bank transfer within ${WITHDRAWAL_PROCESSING_DAYS} once approved.`,
     submitted: "We’ll email you once Grade10 approves the payout.",
   };
@@ -259,10 +259,10 @@ function WithdrawalDialog({
                 Withdrawal of {formatHkd(amount)} requested
               </Text>
               <Text className="text-center text-secondary-foreground" size="sm">
-                Your request shows Pending review on the portfolio until Grade10
+                Your request shows Pending on the portfolio until Grade10
                 approves it.
               </Text>
-              <Badge variant="outline">Pending review</Badge>
+              <Badge variant="outline">Pending</Badge>
             </VStack>
           ) : null}
         </DialogBody>

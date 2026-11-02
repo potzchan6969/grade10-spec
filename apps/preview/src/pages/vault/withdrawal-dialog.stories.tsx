@@ -4,7 +4,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { PAYOUT_METHOD, PORTFOLIO_SUMMARY } from "../../vault-content";
+import { PAYOUT_METHOD, PORTFOLIO_SUMMARY } from "../vault-content";
 import { type PayoutMethod, WithdrawalDialog } from "./withdrawal-dialog";
 
 function WithdrawalDialogDemo({
@@ -71,7 +71,9 @@ export const Amount: Story = {
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
     expect(dialog.getByText("Withdraw")).toBeVisible();
-    expect(dialog.getByText(/Available to withdraw/)).toBeVisible();
+    expect(dialog.getAllByText(/Available to withdraw/).length).toBeGreaterThan(
+      0,
+    );
     expect(dialog.getByText(/Minimum US\$65/)).toBeVisible();
     expect(dialog.getByRole("button", { name: "Continue" })).toBeDisabled();
     await userEvent.click(dialog.getByRole("button", { name: "Max" }));
@@ -104,17 +106,17 @@ export const Review: Story = {
     await waitFor(() =>
       expect(dialog.getByText("Review Withdraw")).toBeVisible(),
     );
-    expect(dialog.getByText("$1,240")).toBeVisible();
+    expect(dialog.getByText(/HK\$1,242/)).toBeVisible();
     expect(dialog.getByText("HSBC ••• 8304")).toBeVisible();
     expect(dialog.getByText("Chan Tai Man")).toBeVisible();
-    expect(dialog.getByText(/business days/)).toBeVisible();
+    expect(dialog.getAllByText(/business days/).length).toBeGreaterThan(0);
     expect(
       dialog.getByRole("button", { name: "Submit Request" }),
     ).toBeVisible();
   },
 };
 
-/** Submitted — the request lands as Pending review on the portfolio. */
+/** Submitted — the request lands as Pending on the portfolio. */
 export const Submitted: Story = {
   args: { payoutMethod: PAYOUT_METHOD },
   play: async ({ canvasElement }) => {
@@ -132,7 +134,7 @@ export const Submitted: Story = {
     await waitFor(() =>
       expect(dialog.getByText("Request Submitted")).toBeVisible(),
     );
-    expect(dialog.getByText("Pending review")).toBeVisible();
+    expect(dialog.getByText("Pending")).toBeVisible();
     expect(dialog.getByRole("button", { name: "Done" })).toBeVisible();
   },
 };

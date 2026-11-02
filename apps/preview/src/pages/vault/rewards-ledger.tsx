@@ -2,15 +2,15 @@ import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
-import { Plus } from "@phosphor-icons/react";
+import { CaretRight, HandCoins } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
-import { formatUsd, type VaultPayoutRequest } from "../../vault-content";
-import { animateEnter } from "../../vault-shared";
+import { formatUsd, type VaultPayoutRequest } from "../vault-content";
+import { animateEnter } from "../vault-shared";
 import { WithdrawalRow } from "./withdrawal-list";
 
-type LedgerTab = "all" | "rewards" | "withdrawal";
+type LedgerTab = "all" | "incentives" | "withdrawal";
 
-type RewardEntry = { date: string; amountUsd: number };
+type IncentiveEntry = { date: string; amountUsd: number };
 
 /** "29 Oct 2026" → "Oct 2026". */
 function monthKey(date: string) {
@@ -18,30 +18,34 @@ function monthKey(date: string) {
   return `${parts[1]} ${parts[2]}`;
 }
 
-function RewardRow({ entry }: { entry: RewardEntry }) {
+/**
+ * One day's incentive sum — the credit variant of the withdrawal row: a
+ * primary-muted coin icon, no status pill, no chevron and no hover, since
+ * there is no request to open.
+ */
+function IncentiveRow({ entry }: { entry: IncentiveEntry }) {
   return (
-    <li className="flex items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4">
+    <li className="flex items-center gap-4 p-4">
       <span
         aria-hidden
-        className="grid size-10 shrink-0 place-items-center rounded-full bg-muted text-foreground"
+        className="grid size-10 shrink-0 place-items-center rounded-full bg-primary-muted text-(--orange-600)"
       >
-        <Plus size={16} />
+        <HandCoins size={16} />
       </span>
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
         <Text className="truncate" weight="medium">
-          Daily incentive
+          Daily Incentives
         </Text>
         <Text size="sm" tone="secondary">
           {entry.date}
         </Text>
       </div>
-      <Text
-        className="shrink-0 whitespace-nowrap tabular-nums"
-        tone="success"
-        weight="medium"
-      >
+      <Text className="shrink-0 whitespace-nowrap tabular-nums" weight="medium">
         +{formatUsd(entry.amountUsd)}
       </Text>
+      <span aria-hidden className="size-4 shrink-0 opacity-0">
+        <CaretRight size={16} />
+      </span>
     </li>
   );
 }
@@ -67,19 +71,22 @@ function MonthGroup({
 }
 
 /**
- * Rewards and withdrawal activity under one heading — All reads the two
- * kinds on one timeline, Rewards lists each day's incentive sum, Withdrawal
- * lists every request with the status Grade10's approval sets. Entries are
- * grouped by month and year, like the points history ledger.
+ * Incentive and withdrawal activity under one heading — All reads the two
+ * kinds on one timeline, Incentives lists each day's incentive sum,
+ * Withdrawal lists every request with the status Grade10's approval sets.
+ * Entries are grouped by month and year, like the points history ledger.
  */
 function RewardsLedger({
   dailyIncentives,
   payoutRequests,
+  onOpenWithdrawal,
   tab,
   onTabChange,
   className,
 }: {
-  dailyIncentives: RewardEntry[];
+  dailyIncentives: IncentiveEntry[];
+  /** Opens a withdrawal request's details in the right-side drawer. */
+  onOpenWithdrawal?: (request: VaultPayoutRequest) => void;
   payoutRequests: VaultPayoutRequest[];
   /** Controlled tab; defaults to All internally. */
   tab?: LedgerTab;
@@ -102,7 +109,7 @@ function RewardsLedger({
   /* All: the two kinds merged on one timeline, latest date first. */
   const merged = [
     ...dailyIncentives.map((entry) => ({
-      kind: "reward" as const,
+      kind: "incentive" as const,
       date: entry.date,
       entry,
     })),
@@ -124,29 +131,40 @@ function RewardsLedger({
     for (const item of merged) {
       push(
         monthKey(item.date),
-        item.kind === "reward" ? (
-          <RewardRow entry={item.entry} key={`r-${item.date}`} />
+        item.kind === "incentive" ? (
+          <IncentiveRow entry={item.entry} key={`r-${item.date}`} />
         ) : (
-          <WithdrawalRow key={item.request.id} request={item.request} />
+          <WithdrawalRow
+            key={item.request.id}
+            request={item.request}
+            onOpen={onOpenWithdrawal}
+          />
         ),
       );
     }
-  } else if (activeTab === "rewards") {
+  } else if (activeTab === "incentives") {
     for (const entry of dailyIncentives) {
-      push(monthKey(entry.date), <RewardRow entry={entry} key={entry.date} />);
+      push(
+        monthKey(entry.date),
+        <IncentiveRow entry={entry} key={entry.date} />,
+      );
     }
   } else {
     for (const request of payoutRequests) {
       push(
         monthKey(request.requestedAt),
-        <WithdrawalRow key={request.id} request={request} />,
+        <WithdrawalRow
+          key={request.id}
+          request={request}
+          onOpen={onOpenWithdrawal}
+        />,
       );
     }
   }
 
   return (
     <section
-      aria-label="Rewards and withdrawal activity"
+      aria-label="Incentive and withdrawal activity"
       className={cn("flex flex-col gap-6", className)}
       data-slot="rewards-ledger"
     >
@@ -155,7 +173,7 @@ function RewardsLedger({
         className="flex flex-wrap items-center gap-2"
         role="group"
       >
-        {(["all", "rewards", "withdrawal"] as const).map((key) => (
+        {(["all", "incentives", "withdrawal"] as const).map((key) => (
           <Button
             aria-pressed={key === activeTab}
             key={key}
@@ -166,8 +184,8 @@ function RewardsLedger({
           >
             {key === "withdrawal"
               ? "Withdrawal"
-              : key === "rewards"
-                ? "Rewards"
+              : key === "incentives"
+                ? "Incentives"
                 : "All"}
           </Button>
         ))}

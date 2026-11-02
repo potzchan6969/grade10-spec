@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { PAYOUT_REQUESTS } from "../../vault-content";
+import { PAYOUT_REQUESTS } from "../vault-content";
 import { WithdrawalList } from "./withdrawal-list";
 
 /**
  * Withdrawal requests — the status Grade10's approval
- * sets on each request, from Pending review to Paid.
+ * sets on each request, from Pending to Completed.
  */
 const meta = {
   title: "Vault/Wallet/Parts/WithdrawalList",
@@ -21,13 +21,13 @@ export const Filled: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Withdrawal requests")).toBeVisible();
-    expect(canvas.getByText("Pending review")).toBeVisible();
+    expect(canvas.getByText("Pending")).toBeVisible();
     expect(canvas.getByText("Processing")).toBeVisible();
-    expect(canvas.getByText("Paid")).toBeVisible();
+    expect(canvas.getAllByText("Completed").length).toBe(2);
   },
 };
 
-/** A request Grade10 turned down — the rejection reads in the row. */
+/** A request Grade10 turned down — struck-through muted amounts. */
 export const Declined: Story = {
   args: {
     requests: [
@@ -46,7 +46,7 @@ export const Declined: Story = {
   },
 };
 
-/** Below `sm` the rows wrap: amount and destination lead, badge trails. */
+/** Below `sm` the rows keep their shape: icon, destination, amount, chevron. */
 export const Narrow: Story = {
   ...Filled,
   globals: { viewport: { value: "mobile1" } },

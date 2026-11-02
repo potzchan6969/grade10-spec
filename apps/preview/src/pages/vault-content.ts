@@ -451,7 +451,7 @@ const PAYOUT_METHOD = {
 
 const WITHDRAWAL_PROCESSING_DAYS = "3 business days";
 
-type VaultPayoutStatus = "Pending review" | "Processing" | "Paid" | "Declined";
+type VaultPayoutStatus = "Pending" | "Processing" | "Completed" | "Declined";
 
 type VaultPayoutRequest = {
   id: string;
@@ -467,27 +467,42 @@ type VaultPayoutRequest = {
 
 const PAYOUT_REQUESTS: VaultPayoutRequest[] = [
   {
-    id: "po-3",
+    id: "po-5",
     requestedAt: "28 Oct 2026",
     amountUsd: 83,
     currency: "HKD",
     convertedHkd: 650,
-    status: "Pending review",
+    status: "Pending",
   },
   {
-    id: "po-2",
+    id: "po-4",
     requestedAt: "1 Oct 2026",
     amountUsd: 64,
     currency: "USD",
     status: "Processing",
   },
   {
-    id: "po-1",
+    id: "po-3",
     requestedAt: "3 Oct 2026",
     amountUsd: 41,
     currency: "HKD",
     convertedHkd: 320,
-    status: "Paid",
+    status: "Completed",
+  },
+  {
+    id: "po-2",
+    requestedAt: "12 Sep 2026",
+    amountUsd: 120,
+    currency: "USD",
+    status: "Completed",
+  },
+  {
+    id: "po-1",
+    requestedAt: "5 Sep 2026",
+    amountUsd: 95,
+    currency: "HKD",
+    convertedHkd: 738,
+    status: "Declined",
   },
 ];
 
@@ -513,6 +528,9 @@ const DAILY_INCENTIVES: { date: string; amountUsd: number }[] = [
   { date: "26 Oct 2026", amountUsd: 15 },
   { date: "25 Oct 2026", amountUsd: 14 },
   { date: "24 Oct 2026", amountUsd: 14 },
+  { date: "30 Sep 2026", amountUsd: 13 },
+  { date: "29 Sep 2026", amountUsd: 13 },
+  { date: "28 Sep 2026", amountUsd: 12 },
 ];
 
 const VAULT_SITE_HEADER = {
@@ -991,11 +1009,11 @@ const VISIT_FIXTURE = {
 };
 
 function formatHkd(amount: number): string {
-  return `HK$${amount.toLocaleString("en-HK")}`;
+  return `HK$${amount.toLocaleString("en-HK", { maximumFractionDigits: 2 })}`;
 }
 
 function formatUsd(amount: number): string {
-  return `US$${amount.toLocaleString("en-HK")}`;
+  return `US$${amount.toLocaleString("en-HK", { maximumFractionDigits: 2 })}`;
 }
 
 function assetSubtitle(asset: VaultAsset): string {
