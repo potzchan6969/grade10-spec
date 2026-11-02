@@ -35,8 +35,9 @@ an address.
 | Expected arrival | a day |
 | For | the service that asked: a grading batch, an auction order, a consignment's return, a transfer, a mail-in |
 
-- ❓ Product — **Who carries a staff run** - a staff run opened on the
-  console names the staff member who opens it as its carrier, 2026-10-10
+- 🚧 **Who Carries a Staff Run** - a named staff member, the one who opens
+  it by default, changeable until it is sent; whoever marks it Sent is
+  recorded as carrying it
 - **Preparing** - items are scanned into the parcel and the packing list
   prints
 - **Sent** - handed to the carrier, on a day never in the future
