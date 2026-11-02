@@ -509,6 +509,15 @@ export async function getImageObject(
   return response.blob();
 }
 
+/** A plain link to an archived PNG, for a thumbnail that loads as it scrolls in. */
+export function archiveImageUrl(base: string, artifact: ImageArtifact): string {
+  return apiUrl(
+    base,
+    "/api/objects",
+    new URLSearchParams({ key: validateObjectKey(artifact.key) }),
+  ).toString();
+}
+
 /** An archived PNG as an object URL, once its bytes match the sealed hash. */
 export async function verifiedPngUrl(
   base: string,

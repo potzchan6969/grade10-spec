@@ -185,6 +185,12 @@ export function ReferenceCapturesPage() {
             Back to stories
           </button>
           <button
+            onClick={() => managerApi.navigate("/verification-dashboard/")}
+            type="button"
+          >
+            Dashboard
+          </button>
+          <button
             onClick={() => setRefresh((value) => value + 1)}
             type="button"
           >
