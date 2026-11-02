@@ -39,6 +39,7 @@ Restart the preview server after pulling so discovery refreshes.
 | Vault case | `/preview/vault/case/offer-made` |
 | Vault item | `/preview/vault/item/item-vaulted` |
 | Store | `/preview/store/order-confirmation` |
+| Loyalty | `/preview/loyalty/points-expiring` |
 
 This same preview app — sidebar, linter, spam/compatibility checks — is
 published as a static site on every push to `main` (and on demand) to
@@ -96,6 +97,11 @@ emails/
     _components/           StoreLetter, OrderLines, OrderTotals,
                            ShippingAddress, Tracking
     fixtures.ts            order preview fixture (#1042)
+  loyalty/                 the membership reminders — the points-expiry
+                           letter the spec owes, and a proposed tier-ending
+                           letter (no spec yet)
+    _components/           LoyaltyLetter
+    fixtures.ts            member preview fixture
 ```
 
 `LetterShell` is the one shell both products write in: heading, greeting,

@@ -62,8 +62,8 @@ export type LetterShellProps = {
   lang?: string;
   preheader: string;
   heading: string;
-  /** `Hi Jasmine,` — the reader's own name. */
-  greeting: string;
+  /** `Hi Jasmine,` — the reader's own name. Omit for a letter that opens on the lead. */
+  greeting?: string;
   /** The lead: one paragraph, or several short ones rendered in order. */
   lead: string | string[];
   /** The blocks this letter carries after the lead, in the order it carries them. */
@@ -105,9 +105,11 @@ export function LetterShell({
       <Heading as="h1" className="mb-4 mt-0 text-heading font-bold text-fg">
         {heading}
       </Heading>
-      <Text className="mb-3 mt-0 text-lg leading-base text-fg-2">
-        {greeting}
-      </Text>
+      {greeting ? (
+        <Text className="mb-3 mt-0 text-lg leading-base text-fg-2">
+          {greeting}
+        </Text>
+      ) : null}
       {leadParagraphs.map((paragraph) => (
         <Text
           className="mb-3 mt-0 text-lg leading-base text-fg-2"
