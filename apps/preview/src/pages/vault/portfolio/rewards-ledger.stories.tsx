@@ -74,9 +74,7 @@ export const Withdrawal: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "Withdrawal" }));
     await waitFor(() => {
       expect(canvas.getByText("Pending")).toBeVisible();
-      expect(
-        canvas.getAllByText("Completed").length,
-      ).toBeGreaterThan(0);
+      expect(canvas.getAllByText("Completed").length).toBeGreaterThan(0);
       expect(canvas.getByText("Declined")).toBeVisible();
     });
     // The whole row is the trigger — clicking it opens the details drawer.

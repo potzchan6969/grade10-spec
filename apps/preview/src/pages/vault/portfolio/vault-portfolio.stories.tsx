@@ -32,13 +32,12 @@ import {
   VaultPageShell,
 } from "../../vault-shared";
 import { navigateToStory } from "../../workbench-story-nav";
-import { WithdrawalDetails } from "./withdrawal-details";
-import { WithdrawalDialog } from "./withdrawal-dialog";
 import { ActiveIntakeAlert } from "./active-intake-alert";
 import { RewardsLedger } from "./rewards-ledger";
 import { VaultAssetList } from "./vault-asset-list";
 import { WalletSummary } from "./wallet-summary";
-import { WithdrawalDialog } from "./withdrawal-dialog";
+import { WithdrawalDetails } from "./withdrawal-details";
+import { WithdrawalDialog, WithdrawalDialog } from "./withdrawal-dialog";
 
 /** Simulated holdings fetch — the workbench recipe's ready beat. */
 const HOLDINGS_LOAD_MS = 350;
