@@ -4,8 +4,8 @@ title: Store Order Detail Test Cases
 
 # grade10-site/store/order-detail Test Cases
 
-**Status:** pending-review · 4/23
-**Drafts styled:** 2026-10-24, tcs-rules r7
+**Status:** approved · 23/23
+**Reviewed:** 2026-11-02, tcs-rules r7
 **Capabilities:** grade10-site/store/order-detail
 **Out of suite (api):** Refund-note persistence and additive owner/private-link response data, including source fidelity, empty notes, refund/line association, metadata replay and backfill, access boundaries and erasure — `order-detail#items/refund-reason-data`; frontend display is follow-on work.
 
@@ -14,6 +14,7 @@ title: Store Order Detail Test Cases
 * `<order id>` is `<order>`'s id in the shop.
 * `<product A>` and `<product B>` are products for sale on the store.
 * `<test card>` is the payment provider's published test card that succeeds.
+* `<order email>` is a test mailbox no Grade10 account holds.
 
 ## Walk 1: A guest back from checkout
 
@@ -26,7 +27,6 @@ title: Store Order Detail Test Cases
 | Field | Value |
 | --- | --- |
 | `<guest product>` | a card for sale |
-| `<order email>` | a test mailbox no Grade10 account holds |
 
 ### Route
 
@@ -213,12 +213,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** order-detail#order/known-facts
 
 **Pre-conditions:**
@@ -249,7 +249,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -283,7 +283,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -310,7 +310,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -336,7 +336,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -371,12 +371,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** order-detail#delivery-status/steps, order-detail#delivery-status/order-placed, order-detail#delivery-status/shipping, order-detail#delivery-status/completed, order-detail#delivery-status/status-badge, order-detail#delivery-status/step-not-reached, order-detail#delivery-status/track-order
 
 **Pre-conditions:**
@@ -387,9 +387,10 @@ Runs once per row of **Test data**.
 
 | `<order>` | Badge | Steps |
 | --- | --- | --- |
-| ❓ paid, not yet fulfilled - design confirms | Processing | Order Placed reached, with its date; Shipping and Completed with no date |
-| ❓ fulfilled with an `https` carrier address, not completed - design confirms | Shipped | Order Placed and Shipping (in progress) reached, each with its date; Track Order opens the carrier's page |
+| paid, not yet fulfilled | Processing | Order Placed reached, with its date; Shipping with no date; Completed with no date, or only its estimate labelled as an estimate; UI matching store-order-detail-blocks-orderdetailsdeliverystatus--parcel-not-shipped |
+| fulfilled with an `https` carrier address, not completed | Shipped | Order Placed and Shipping (in progress) reached, each with its date; Completed shows the latest estimate labelled as an estimate; Track Order opens the carrier's page; UI matching store-order-detail-blocks-orderdetailsdeliverystatus--parcel-in-transit |
 | completed | Completed | all three reached |
+| fulfilled with a `javascript:` carrier address, not completed | Shipped | Order Placed and Shipping reached; no Track Order; UI matching store-order-detail-blocks-orderdetailsdeliverystatus--shipped-delivery-without-track |
 
 **Steps:**
 
@@ -398,7 +399,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The row's badge and steps, UI matching store-order-detail-blocks-orderdetailsdeliverystatus--shipped-delivery for the shipped row.
+* The row's badge and steps.
 
 ---
 
@@ -412,7 +413,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -453,7 +454,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -489,12 +490,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** order-detail#order-link/wrong-link
 
 **Pre-conditions:**
@@ -525,13 +526,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** checkout#guest-checkout/order-link, order-detail#order-link/link, order-detail#order-link/secret, order-detail#order-link/signed-out
+* **Trace:** order-detail#order-link/link, order-detail#order-link/secret, order-detail#order-link/signed-out, checkout#guest-checkout/order-link
 
 **Pre-conditions:**
 
@@ -561,7 +562,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -588,7 +589,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -623,12 +624,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** order-detail#back-from-checkout/nothing-remembered, order-detail#back-from-checkout/one-day, order-detail#back-from-checkout/another-device
 
 **Pre-conditions:**
@@ -663,12 +664,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** order-detail#order-summary/amount-marks
 
 **Pre-conditions:**
@@ -692,7 +693,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -727,12 +728,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** order-detail#order-summary/no-points-row, order-detail#order-summary/no-points-section
 
 **Pre-conditions:**
@@ -747,6 +748,8 @@ Runs once per row of **Test data**.
 | canceled | no points section |
 | refunded in full | no points section |
 | a guest order joined to the account | no points section |
+| its goods still held earn nothing | no points section |
+| the points programme cannot say its points right now | no points section |
 
 **Steps:**
 
@@ -763,7 +766,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -783,6 +786,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The balance is lower by the points `<product B>` earned.
+* The order's Points Earned is lower by the same points.
 
 #### g10.store-order-detail.TC23: A delivery-only refund leaves the points as they were
 
@@ -790,7 +794,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -810,6 +814,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The balance is unchanged.
+* The order's Points Earned is unchanged.
 
 <!-- trace:case id=g10.store-order-detail.TC-fbs rev=1 -->
 #### g10.store-order-detail.TC21: A refund shows its amount beside what was paid
@@ -820,7 +825,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -836,8 +841,8 @@ Runs once per row of **Test data**.
 
 | Refunded | Summary |
 | --- | --- |
-| `<product B>`, HKD105 | Total HKD885; a Refund row of −HKD105, UI matching store-order-detail-screens-order-details--partial-refund |
-| ❓ both lines, HKD885 - design confirms | Total HKD885; a Refund row of −HKD885 |
+| `<product B>`, HKD105 | Total `HK$885.00`; a Refund row of `−$105.00`, UI matching store-order-detail-screens-order-details--partial-refund |
+| both lines, HKD885 | Total `HK$885.00`; a Refund row of `−$885.00`, UI matching store-order-detail-screens-order-details--full-refund |
 
 **Steps:**
 
