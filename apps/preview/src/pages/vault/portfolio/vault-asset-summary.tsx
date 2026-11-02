@@ -12,7 +12,6 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Gavel, ShieldCheck, Storefront, TrendUp } from "@phosphor-icons/react";
 import {
-  assetPrice,
   formatHkd,
   statusBadgeVariant,
   type VaultAsset,
@@ -58,7 +57,18 @@ function VaultAssetSummary({
   const liveListing =
     asset.status === "Live Auction" || asset.status === "Listed";
   const locked = liveListing || asset.status === "Retrieval Pending";
-  const price = assetPrice(asset);
+  const priceLabel =
+    asset.status === "Live Auction"
+      ? "Bid price"
+      : asset.status === "Listed"
+        ? "Listed price"
+        : "Estimated value since intake";
+  const priceHkd =
+    asset.status === "Live Auction"
+      ? (asset.currentBidHkd ?? asset.estimateHkd)
+      : asset.status === "Listed"
+        ? (asset.listedHkd ?? asset.estimateHkd)
+        : asset.estimateHkd;
   const showListings = !locked && Boolean(onListForAuction || onListForSale);
   const valuePotentialDescription = valuePotential
     ? `Est. Graded PSA Value: ${formatHkd(valuePotential.gradedEstimateHkd)} (+${valuePotential.upsidePercent}%)`
@@ -89,14 +99,14 @@ function VaultAssetSummary({
       <Card className="bg-background-subtle">
         <CardHeader className="gap-2">
           <CardDescription className="text-xs font-medium uppercase text-secondary-foreground">
-            {liveListing ? price.label : "Estimated value since intake"}
+            {priceLabel}
           </CardDescription>
           <div className="flex flex-wrap items-baseline gap-1">
             <Text className="font-heading" size="lg" weight="medium">
               HK$
             </Text>
             <CardTitle className="font-heading text-3xl font-medium tabular-nums">
-              {price.amountHkd.toLocaleString("en-HK")}
+              {priceHkd.toLocaleString("en-HK")}
             </CardTitle>
             {showEstimateChange && asset.estimateChangePercent != null ? (
               <Text
