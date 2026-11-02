@@ -101,7 +101,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
   - **Release** — on the last vesting day everything vested is posted at once; daily drips follow
   - **Once an Intake** — vesting runs once, not again on every stretch
   - **Shown Beside the Wallet** — "Vesting: US$ X", with its release date; not cashable
-  - **Retrieved Early** — a card its owner takes back before release forfeits what is vesting, as its signed terms say; it is the only penalty for leaving early
+  - **Retrieved Early** — a card its owner takes back before release forfeits what is vesting, as its signed terms say, and pays the early retrieval fee inside its period - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#early-retrieval-fee)
     - **Never Forfeits** — a pause, a Not Eligible day, a card that fails authentication, or any return Grade10 starts
   - **Sold Early** — a sale is not a retrieval: the card's vested days are paid on its own release day, with the sale proceeds paid as usual
   - **Built** — credited every day and locked until day N, or shown as one held figure posted on day N; an admin setting switches the view, every amount and unlock day the same either way, so it may be flipped at any time
@@ -115,10 +115,9 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 
 ## Settings
 
-- 🚧 **Admin Settings** — the rate, the liquidity settings, the liquidity factor on a fixed price, the earning rules, the value cap and the account review threshold; every change logged
-- 🚧 **Pinned to the Card** — the rate, the vesting days, the forfeit rule, the value cap and Earning Starts are pinned when the card's Vault Terms are prepared; a later change reaches only the next card
-  - **Unset Refuses** — the paper is not prepared while the rate or the vesting days is unset
-  - **No Early Retrieval Fee** — forfeiting what is vesting is the only cost of leaving early - the counter review, round 3, 2026-11-02
+- 🚧 **Admin Settings** — the rate, the liquidity settings, the liquidity factor on a fixed price, the earning rules, the value cap, the early retrieval fee's period and amount, and the account review threshold; every change logged
+- 🚧 **Pinned to the Card** — the rate, the vesting days, the forfeit rule, the value cap, Earning Starts, and the early retrieval fee's period and amount are pinned when the card's Vault Terms are prepared; a later change reaches only the next card
+  - **Unset Refuses** — the paper is not prepared while the rate, the vesting days or the fee's period is unset
 - 🚧 **Pause and the Daily Run** — staff pause incentive, the price import and the drip run daily - [Vault Operations](/p/grade10-site/vault/operations#daily-run)
 
 :::detail{title="Product decisions" for="pm"}
@@ -147,7 +146,7 @@ vault, cash out and leave.
 | A day's SNKRDUNK price | Decided | The median counts every sale in the window, each on its date at +08:00, read from a kept snapshot of SNKRDUNK's answer; a day past SNKRDUNK's week counts its daily average. SNKRDUNK's week holds each sale and its longer history one average per Japan day, so neither is merged into the other - decided by the owner, 2026-11-02, in place of the day taking its last point (2026-10-30) | Owner |
 | A sold card stops on the sale | Decided | It stops earning on the day it is marked sold, not at the delivery or the settlement, so a card earns nothing while its sale is being completed - decided by the owner, 2026-10-29 | Owner |
 | A sale is not an early retrieval | Decided | A card sold through consignment forfeits nothing; its vested days are paid on its own release day - built so, 2026-10-27; confirmed in the counter review, round 3, 2026-11-02 | Product |
-| The earnings model | Decided | Five terms signed per card - the rate, 30 vesting days, forfeit on the owner's early retrieval, a value cap, Earning Starts; a late pass backdates; earning rules are a deny-list; no account cap, a review instead; vesting always shown beside the wallet, so there is no view to choose; liquidity is the drafted formula with its tiers in US dollars - the counter review, round 3, 2026-11-02 | Product |
+| The earnings model | Decided | Terms signed per card - the rate, 30 vesting days, forfeit on the owner's early retrieval, a value cap, Earning Starts, and the early retrieval fee's period and amount; a late pass backdates; earning rules are a deny-list; no account cap, a review instead; vesting always shown beside the wallet, so there is no view to choose; liquidity is the drafted formula with its tiers in US dollars - the counter review, round 3, 2026-11-02 | Product |
 | The wallet in US dollars from the start | Decided | The wallet holds US dollars from Phase 1, so its ledger never needs converting; SNKRDUNK prices are US dollars already and a fixed price is entered in them - the counter review, round 3, 2026-11-02 | Product |
 :::
 

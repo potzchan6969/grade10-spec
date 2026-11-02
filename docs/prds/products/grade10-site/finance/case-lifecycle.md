@@ -27,9 +27,11 @@ against it.
   start date, incentive rate and, on a financed card, its own loan, while
   staff open, prepare, vault and authenticate the case in one act each —
   [Incentive](/p/grade10-site/vault/incentive)
-- 🚧 **An early retrieval pays no fee** — a card taken back early forfeits
-  what is vesting and nothing more —
-  [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#no-retrieval-fee)
+- 🚧 **An early retrieval pays its fee** — a card taken back inside the
+  vault's early-retrieval period is released only once its fee is paid by
+  card on its Shopify invoice, online or at the shop's till; the refusal names
+  the fee outstanding, and a request called off voids the invoice —
+  [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#early-retrieval-fee)
 - 🚧 **Released to its buyer** — a storage card sold through consignment is
   released to its buyer on delivery under the consignment agreement, with no
   release paper and no early retrieval fee —
