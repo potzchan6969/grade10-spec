@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "3060ad035e243b4ceeea0b5bb5c751fd080928db89d99df5b6c4ba036b6c29d3"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "ca0ebf793feacde0216dc988e931177f0c363421",
+    "capturedAt": "2026-11-02T00:04:43.044Z",
+    "targets": [
+      {
+        "path": "openspec/changes/redesign-store-product-detail-page/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A product description can be disclosed in place",
+          "Requirement: A product detail page presents complete catalogue context",
+          "Requirement: A product page adds a chosen quantity in place"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
