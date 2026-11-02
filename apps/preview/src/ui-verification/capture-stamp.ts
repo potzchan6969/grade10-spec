@@ -91,7 +91,7 @@ export function referenceStatus(
   return { flag, current, currentApproval, approved, history };
 }
 
-// The same red line as a flow screen: past 20% the current reference no
+// The same red line as a flow screen: past 10% the current reference no
 // longer reads as the design that was approved.
 export function driftNotice(comparison: PixelComparison | undefined): string {
   if (comparison?.kind === "size-mismatch") {
