@@ -82,7 +82,9 @@ export function dayStamp(
   // Chinese dates breathe: `12 月 14 日`, `2027 年 1 月 14 日`.
   return lang === "en"
     ? formatted
-    : formatted.replace(/(\d)([^\d])/g, "$1 $2").replace(/([^\d])(\d)/g, "$1 $2");
+    : formatted
+        .replace(/(\d)([^\d])/g, "$1 $2")
+        .replace(/([^\d])(\d)/g, "$1 $2");
 }
 
 export type Fact = {
