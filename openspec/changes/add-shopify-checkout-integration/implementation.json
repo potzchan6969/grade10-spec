@@ -41,6 +41,130 @@
       "components": [
         "web"
       ]
+    },
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "927e5d09f534c2b348fe80eafb34663733a54e53",
+      "components": [],
+      "scope": "no-runtime",
+      "reason": "The landing records the pending-Pay TCS disposition in the change task and rounds files; it changes no runtime component."
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "Codex on behalf of @kinisworking",
+    "reviewedAt": "2026-11-02T08:16:36.000Z",
+    "changes": [
+      {
+        "path": "openspec/changes/add-shopify-checkout-integration/ui-design.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The design scope now covers the Cart Drawer, Orders and pending-Pay states as well as Shopify confirmation. The existing shared drawer and order surfaces implement those states, including dismissal without canceling the sent Pay.",
+        "evidence": [
+          "apps/frontend/grade10/src/chrome/cart/CartDrawer.test.tsx covers one pending Pay, disabled drawer actions, dismissal, stale answers and deliberate retry.",
+          "apps/frontend/grade10/e2e/tests/store/cart-review.spec.ts carries g10.store-cart.TC42 for the held Pay and close flow.",
+          "openspec/changes/add-shopify-checkout-integration/tasks.md records the verified frontend suites in 11.11 and pending-Pay implementation checks in 15.3."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The durable feature suite was retired in the Store suite migration; the current Store PRD cart suite owns the checkout cases. Round 16 adds no new automation status because TC42 was already automated in round 13; provider cases remain manual.",
+        "evidence": [
+          "docs/prds/products/grade10-site/store/tests/cart-tcs.md records TC42 as automated and decided by cart-review.spec.ts, while provider cases remain manual.",
+          "openspec/changes/add-shopify-checkout-integration/rounds.md records the TC39 and TC42 dispositions and the remaining manual cases in rounds 13 and 16.",
+          "pnpm run test:openspec passed 478 Node tests and 184 store tests; pnpm run tcs:validate completed with existing non-blocking warnings."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The current feature set adds guest checkout and purchase-identity recovery. Guest behavior is delivered by the guest-checkout implementation; durable identity, replay and recovery are owned by add-checkout-purchase-safety, while this change records its frontend checkout and pending-Pay scope.",
+        "evidence": [
+          "openspec/changes/add-store-guest-checkout/tasks.md records the guest drawer, order, link, joining and no-points implementation in tasks 1.1-1.7.",
+          "apps/frontend/grade10/src/chrome/cart/CartDrawer.test.tsx covers guest checkout and pending Pay; packages/grade10-store/backend/test/services/checkoutIntent.test.ts covers identity reuse and recovery.",
+          "openspec/changes/add-checkout-purchase-safety/tasks.md assigns purchase identity and recovery to its groups 1-4."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/spec.md",
+        "anchors": [
+          "Purpose"
+        ],
+        "classification": "semantic",
+        "reason": "The purpose now includes guest checkout alongside member tender. The member checkout remains in this change's frontend scope and guest checkout is covered by the later guest-checkout implementation.",
+        "evidence": [
+          "apps/frontend/grade10/src/chrome/cart/CartDrawer.test.tsx covers member and guest checkout from the drawer.",
+          "packages/grade10-store/backend/test/services/checkout.test.ts and apps/frontend/grade10/src/pages/orders/OrderLinkPage.test.tsx cover guest order creation and access.",
+          "openspec/changes/add-store-guest-checkout/tasks.md records the guest checkout implementation in tasks 1.1-1.7."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/spec.md",
+        "anchors": [
+          "Requirement: A checkout intent is safe to repeat"
+        ],
+        "classification": "semantic",
+        "reason": "The current durable requirement makes identity, replay, provider dispatch recovery and changed-purchase retirement explicit. This change's task record moved that backend work to add-checkout-purchase-safety and does not claim those guarantees as its frontend implementation.",
+        "evidence": [
+          "openspec/changes/add-shopify-checkout-integration/tasks.md groups 8-10 move purchase identity, dispatch recovery and settlement work to add-checkout-purchase-safety.",
+          "openspec/changes/add-checkout-purchase-safety/tasks.md tasks 1.1-4.2 and packages/grade10-store/backend/test/services/checkoutIntent.test.ts cover repeat, concurrency, lost-answer recovery and terminal replay."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/spec.md",
+        "anchors": [
+          "Requirement: A signed-in member receives one Shopify hosted checkout"
+        ],
+        "classification": "semantic",
+        "reason": "The member flow remains, and the storefront boundary now also permits guests. The existing member request path and later guest flow both use the current drawer checkout surface.",
+        "evidence": [
+          "apps/frontend/grade10/src/chrome/cart/CartDrawer.test.tsx covers member checkout creation and guest checkout from the drawer.",
+          "apps/frontend/grade10/e2e/tests/store/guest-checkout.spec.ts defines the guest drawer and Shopify handoff journey; hosted walks remain subject to the recorded waiver.",
+          "openspec/changes/add-shopify-checkout-integration/tasks.md records the member frontend request and answer behavior in groups 11 and 15."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/spec.md",
+        "anchors": [
+          "Requirement: Checkout reviews the current member basket before payment"
+        ],
+        "classification": "semantic",
+        "reason": "The current review contract removes the sold-out case from the changed-line scenario and permits guest checkout; the implementation still waits for a current cart review and keeps stale or changed answers from opening Shopify.",
+        "evidence": [
+          "apps/frontend/grade10/src/chrome/cart/CartDrawer.test.tsx covers checkout review, changed or sold-out lines, pending Pay and stale answers.",
+          "packages/grade10-store/backend/test/services/cart/review.test.ts and packages/grade10-store/backend/test/services/checkout.test.ts cover current shop review and checkout decisions.",
+          "openspec/changes/add-shopify-checkout-integration/tasks.md records the reviewed basket and request guards in tasks 11.6-11.11."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/spec.md",
+        "anchors": [
+          "Requirement: Shopify payment settles one Grade10 order"
+        ],
+        "classification": "semantic",
+        "reason": "The current settlement requirement uses My Orders terminology and includes guest-order ownership. The member settlement and Shopify return behavior remain; guest links and joining are covered by the later guest-checkout implementation.",
+        "evidence": [
+          "packages/grade10-store/backend/test/services/orders/completion.test.ts covers guest completion without points.",
+          "apps/frontend/grade10/src/pages/orders/OrderLinkPage.test.tsx and LatestOrderPage.test.tsx cover guest order return and access.",
+          "integrations/shopify-pos/grade10/extensions/hosted/myOrdersLink.test.ts covers the static Shopify My Orders link.",
+          "openspec/changes/add-shopify-checkout-integration/tasks.md records order polling, paid-cart refresh and both return surfaces in tasks 11.9-11.11."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/user-journeys.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The current journey file retains the member checkout, repair and return journeys, and adds guest purchase and later guest-order recovery. The latter behavior belongs to the guest-checkout work; this change's pending-Pay disposition remains the existing TC42 case.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/store/guest-checkout.spec.ts defines guest checkout and return journeys; it is not claimed as a run of the waived hosted walk.",
+          "apps/frontend/grade10/src/pages/orders/LatestOrderPage.test.tsx and OrderLinkPage.test.tsx cover guest order return and access.",
+          "docs/prds/products/grade10-site/store/tests/cart-tcs.md and openspec/changes/add-shopify-checkout-integration/rounds.md record the current pending-Pay TC42 disposition."
+        ]
+      }
+    ]
+  }
 }
