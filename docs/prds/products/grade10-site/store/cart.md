@@ -129,7 +129,7 @@ back to that page.
 
 :::detail{title="How the total is priced" for="engineer"}
 - **The Quote** — the store asks the shop to price the basket the same way the checkout's promise is priced, so the drawer and the checkout agree
-  - **By the Shop's Rules** — where every live site discount and the one code are kinds the shop's rules are proven on, the drawer works the basket out by those rules rather than asking: a percentage or fixed amount off the order, products or variants, with a spend floor, and what it combines with. A member's coupon is read as the code it would ride. Anything else — an app's discount, one kept to some customers, a collection read short, two buy-x-get-ys on the same goods — is asked of the shop
+  - **By the Shop's Rules** — where every live site discount and the one code are kinds the shop's rules are proven on, the drawer works the basket out by those rules rather than asking: a percentage or fixed amount off the order, products or variants, with a spend floor, and what it combines with. A member's coupon is read as the code it would ride. Anything else — an app's discount, one kept to some customers or counting its uses, a collection read short, or a basket shape the shop was never seen to price (one product on two lines, a buy-x-get-y over lines of one price, two product discounts too close to call, a stack wider than two of a kind) — is asked of the shop
   - **Checkout Asks** — the checkout's promise is always the shop's own figure
 - **The Held Choice** — the code and the points are stored with the cart and changed together, as one choice
 - **The Wallet Read** — the loyalty programme lists the member's coupons that fit the cart, on the store's own rules rather than the shop's
