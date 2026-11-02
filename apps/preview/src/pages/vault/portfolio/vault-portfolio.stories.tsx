@@ -69,10 +69,9 @@ function VaultPortfolioPage({
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [detailsRequest, setDetailsRequest] =
     useState<VaultPayoutRequest | null>(null);
-  const [pageTab, setPageTab] = useState<"assets" | "incentives">("assets");
-  const [ledgerTab, setLedgerTab] = useState<
-    "all" | "incentives" | "withdrawal"
-  >("all");
+  const [pageTab, setPageTab] = useState<
+    "assets" | "incentives" | "withdrawal"
+  >("assets");
   const tabsRef = useRef<HTMLDivElement>(null);
   const openCashOuts = PAYOUT_REQUESTS.filter(
     (request) =>
@@ -130,8 +129,7 @@ function VaultPortfolioPage({
                 });
               }}
               onViewCashOuts={() => {
-                setPageTab("incentives");
-                setLedgerTab("withdrawal");
+                setPageTab("withdrawal");
                 tabsRef.current?.scrollIntoView({
                   behavior: "smooth",
                   block: "start",
@@ -146,7 +144,7 @@ function VaultPortfolioPage({
           ref={tabsRef as never}
           value={pageTab}
           onValueChange={(value) =>
-            setPageTab(value as "assets" | "incentives")
+            setPageTab(value as "assets" | "incentives" | "withdrawal")
           }
         >
           <StickyTabBar className="border-b border-border pb-0 pt-1">
@@ -159,8 +157,9 @@ function VaultPortfolioPage({
                 Assets
                 <Badge size="sm">{PORTFOLIO_SUMMARY.itemCount}</Badge>
               </TabsTrigger>
-              <TabsTrigger value="incentives">
-                Incentives & Withdrawal
+              <TabsTrigger value="incentives">Incentives</TabsTrigger>
+              <TabsTrigger value="withdrawal">
+                Withdrawal
                 {openCashOuts > 0 ? (
                   <Badge size="sm">{openCashOuts} open</Badge>
                 ) : null}
@@ -198,9 +197,16 @@ function VaultPortfolioPage({
             <RewardsLedger
               dailyIncentives={DAILY_INCENTIVES}
               payoutRequests={PAYOUT_REQUESTS}
-              tab={ledgerTab}
+              tab="incentives"
               onOpenWithdrawal={setDetailsRequest}
-              onTabChange={setLedgerTab}
+            />
+          </TabsContent>
+          <TabsContent className="mt-8 outline-none" value="withdrawal">
+            <RewardsLedger
+              dailyIncentives={DAILY_INCENTIVES}
+              payoutRequests={PAYOUT_REQUESTS}
+              tab="withdrawal"
+              onOpenWithdrawal={setDetailsRequest}
             />
           </TabsContent>
         </Tabs>
