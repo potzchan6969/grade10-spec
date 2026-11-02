@@ -1,6 +1,6 @@
 <title>Handoff Page</title>
 <style>
-  /* Layout: one 760px reading column, with an outline beside it from 1120px wide.
+  /* Layout: one 760px reading column, with a contents rail down the left edge from 1120px wide, as the manual has.
      The page opens on its name and state, lists every change at a glance, then gives
      each change one card: what it was, what it is now, the picture, and the proof. */
   :root {
@@ -214,21 +214,68 @@
       gap: 48px;
     }
   }
+  /* The contents rail: down the left edge from 1120px wide, as the manual's nav; a drawer below that */
+  :root {
+    --rail-w: 288px;
+  }
   .rail {
-    display: none;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 30;
+    width: min(var(--rail-w), 86vw);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-right: 1px solid var(--line);
+    background: var(--sunk);
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition:
+      transform 200ms cubic-bezier(0.32, 0.72, 0, 1),
+      visibility 200ms;
+  }
+  .rail-open .rail {
+    transform: none;
+    visibility: visible;
+    box-shadow: 0 0 40px rgb(0 0 0 / 18%);
+  }
+  .rail-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 29;
+    background: var(--scrim);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms;
+  }
+  .rail-open .rail-scrim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rail,
+    .rail-scrim {
+      transition: none;
+    }
   }
   @media (min-width: 1120px) {
-    .page {
-      display: grid;
-      grid-template-columns: minmax(0, 760px) 212px;
-      justify-content: center;
-      gap: 56px;
-    }
-    .main {
-      margin: 0;
+    body.has-rail {
+      padding-left: var(--rail-w);
     }
     .rail {
-      display: block;
+      width: var(--rail-w);
+      transform: none;
+      visibility: visible;
+      transition: none;
+    }
+    .rail-open .rail {
+      box-shadow: none;
+    }
+    .rail-scrim,
+    .rail-close {
+      display: none;
     }
   }
 
@@ -460,8 +507,7 @@
     padding: 14px 18px 8px;
   }
   .glance-head h2,
-  .g-phase,
-  .outline-head {
+  .g-phase {
     color: var(--muted);
     font-size: 12.5px;
     font-weight: 750;
@@ -470,6 +516,41 @@
   }
   .g-phase {
     padding: 12px 18px 4px;
+  }
+  .glance.scoped .g-group + .g-group {
+    margin-top: 6px;
+    border-top: 1px solid var(--line-strong);
+  }
+  .g-scope-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 8px;
+    padding: 6px 18px 2px 12px;
+  }
+  .g-scope-title {
+    color: var(--fg);
+    font-weight: 720;
+    text-decoration: none;
+  }
+  .g-scope-title:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .view-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+  }
+  .view-hint {
+    padding: 0 18px 6px;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  .audience label[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
   .g-list {
     margin: 0;
@@ -671,6 +752,43 @@
     border-inline: 1px solid var(--line);
     background: #fff;
   }
+  .ico {
+    display: inline-flex;
+    flex: none;
+    width: 16px;
+    height: 16px;
+  }
+  .ico svg {
+    width: 100%;
+    height: 100%;
+  }
+  .outline .ico {
+    color: var(--muted);
+  }
+  .outline a[aria-current] .ico,
+  .outline a:hover .ico {
+    color: inherit;
+  }
+  .h-ico {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: -3px;
+    color: var(--accent);
+  }
+  .t-icon {
+    place-items: center;
+    border-color: transparent;
+    background: var(--tone-soft);
+    color: var(--tone);
+  }
+  .t-icon .ico {
+    width: 30px;
+    height: 30px;
+  }
+  .g-list a:hover .t-icon {
+    border-color: var(--tone);
+  }
   .t-none {
     background: repeating-linear-gradient(135deg, var(--sunk) 0 6px, var(--stage) 6px 12px);
   }
@@ -701,8 +819,12 @@
     }
     .glance-head,
     .g-phase,
+    .view-hint,
     .g-proof {
       padding-inline: 14px;
+    }
+    .g-scope-head {
+      padding-inline: 8px 14px;
     }
     .g-proof {
       grid-template-columns: 76px minmax(0, 1fr) auto;
@@ -853,14 +975,96 @@
     }
   }
   .outline {
-    position: sticky;
-    top: calc(env(safe-area-inset-top, 0px) + 40px);
     display: grid;
-    gap: 10px;
-    max-height: calc(100vh - 80px);
-    overflow-y: auto;
-    padding-top: 6px;
-    scrollbar-width: thin;
+    align-content: start;
+    gap: 14px;
+    padding: 18px 14px 32px;
+  }
+  .rail-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 8px 4px;
+  }
+  .outline .rail-home {
+    display: grid;
+    padding: 0;
+    gap: 2px;
+    min-width: 0;
+    color: var(--fg);
+    text-decoration: none;
+  }
+  .rail-kind {
+    color: var(--accent);
+    font-size: 11.5px;
+    font-weight: 750;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+  .rail-title {
+    overflow: hidden;
+    font-size: 16px;
+    font-weight: 720;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rail-close {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--fg);
+    font: inherit;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .rail-seg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 0 4px;
+    padding: 3px;
+    border-radius: 10px;
+    background: var(--stage);
+  }
+  .rail-seg label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 30px;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background 150ms,
+      color 150ms;
+  }
+  .rail-seg input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .rail-seg label:has(input:checked) {
+    background: var(--surface);
+    color: var(--fg);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+  }
+  .rail-seg label:has(input:disabled) {
+    opacity: 0.55;
+    cursor: default;
+  }
+  .rail-seg label:has(input:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
   }
   .outline ul {
     display: grid;
@@ -870,34 +1074,130 @@
     list-style: none;
   }
   .outline a {
+    position: relative;
     display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 5px 10px;
-    border-left: 2px solid var(--line);
-    color: var(--muted);
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    color: var(--fg);
     font-size: 14px;
     font-weight: 560;
-    line-height: 1.4;
+    line-height: 1.35;
     text-decoration: none;
   }
+  .outline a > span:not(.ico, .n) {
+    flex: 1;
+    min-width: 0;
+  }
   .outline a:hover {
-    color: var(--fg);
-    border-left-color: var(--line-strong);
+    background: var(--stage);
+  }
+  .outline a.within {
+    color: var(--accent);
   }
   .outline a[aria-current] {
-    border-left-color: var(--accent);
-    color: var(--fg);
+    background: var(--accent-soft);
+    color: var(--accent);
     font-weight: 680;
   }
-  .outline .sub a {
-    padding-left: 22px;
-    font-size: 13.5px;
-    font-weight: 500;
+  .outline a[aria-current]::before {
+    position: absolute;
+    inset: 7px auto 7px 0;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+    content: "";
   }
-  .outline .to-top {
-    border-left-color: transparent;
-    font-size: 13px;
+  .outline .n {
+    font-size: 12.5px;
+  }
+  .outline a:focus-visible,
+  .rail-heading:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  .outline .rail-tree {
+    gap: 6px;
+    margin: 6px 0 12px 12px;
+  }
+  .rail-group > ul {
+    gap: 1px;
+  }
+  .rail-heading {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    min-height: 26px;
+    padding: 2px 10px;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 11.5px;
+    font-weight: 720;
+    letter-spacing: 0.07em;
+    text-align: left;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .rail-heading:hover {
+    color: var(--fg);
+  }
+  .chev {
+    display: inline-flex;
+    opacity: 0;
+    transition:
+      transform 150ms,
+      opacity 150ms;
+  }
+  .rail-heading:hover .chev,
+  .rail-heading:focus-visible .chev,
+  .rail-heading[aria-expanded="false"] .chev {
+    opacity: 1;
+  }
+  .rail-heading[aria-expanded="false"] .chev {
+    transform: rotate(-90deg);
+  }
+  .rail-row {
+    display: flex;
+    align-items: center;
+  }
+  .rail-row > a {
+    flex: 1;
+    min-width: 0;
+  }
+  .outline .rail-row a {
+    font-size: 13.5px;
+    font-weight: 520;
+  }
+  .rail-row {
+    position: relative;
+  }
+  .rail-row.followed a > span:not(.ico, .n)::after {
+    margin-left: 6px;
+    color: var(--accent);
+    font-size: 12px;
+    content: "★";
+  }
+
+  .rail-toggle {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--fg);
+    border-radius: 999px;
+    background: var(--fg);
+    color: var(--bg);
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 650;
+    cursor: pointer;
   }
 
   /* Sections */
@@ -948,6 +1248,147 @@
     gap: 4px 10px;
     font-size: 18px;
     font-weight: 720;
+  }
+
+  /* A filtered-out card, product or group: an author display rule never wins over hidden */
+  .card[hidden],
+  .fu[hidden],
+  .g-group[hidden],
+  .g-scope[hidden],
+  .g-list li[hidden],
+  .phase-group[hidden],
+  .scope-band[hidden],
+  .scope-group[hidden],
+  .rail-group[hidden],
+  .filter-note[hidden],
+  .rail-row[hidden],
+  .outline li[hidden] {
+    display: none;
+  }
+
+  /* Scopes: What changed grouped as the manual groups its pages, a band per group and a heading per product */
+  .scope-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    min-width: 0;
+    scroll-margin-top: 72px;
+  }
+  .scope-band + .scope-band {
+    margin-top: 26px;
+  }
+  .scope-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--line-strong);
+    font-size: 20px;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+  }
+  .scope-group {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    min-width: 0;
+    scroll-margin-top: 72px;
+  }
+  .scope-group + .scope-group {
+    margin-top: 10px;
+  }
+  .scope-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 10px;
+  }
+  .scope-head h4 {
+    font-size: 17px;
+    font-weight: 720;
+  }
+  .scope-link {
+    color: var(--accent);
+    font-size: 13.5px;
+    font-weight: 620;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .scope-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .scope-head .scope-link {
+    margin-left: auto;
+  }
+  .g-phase .count {
+    margin-left: 8px;
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .g-scope-head .count {
+    font-size: 13.5px;
+  }
+  .star {
+    display: inline-grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .star:hover {
+    border-color: var(--line);
+    background: var(--sunk);
+    color: var(--fg);
+  }
+  .star[aria-pressed="true"] {
+    color: var(--accent);
+  }
+  .star:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .rail-row .star {
+    position: absolute;
+    top: 50%;
+    right: 3px;
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(-50%);
+  }
+  .rail-row:hover .star,
+  .rail-row .star:focus-visible {
+    opacity: 1;
+  }
+  .rail-row:hover .n,
+  .rail-row:has(.star:focus-visible) .n {
+    visibility: hidden;
+  }
+  .c-phase {
+    padding: 0 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 12.5px;
+    font-weight: 650;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+  .fu-scope {
+    color: var(--accent);
+    font-weight: 650;
   }
 
   .card {
@@ -2577,6 +3018,60 @@
     const PHASES = [...new Set(CH.map((c) => c.phase).filter(Boolean))];
     const AUDIENCES = [...new Set(CH.flatMap((c) => list(c.who)))];
     const FILTER = CH.length >= 4 && AUDIENCES.length >= 2;
+    // Scopes: the manual's groups and products. With them the page groups by where in the product a change lands,
+    // and a reader stars the products they work on, so Following shows only those on every day's page.
+    const SCOPES = DATA.scopes ?? [];
+    const SCOPE = new Map(SCOPES.map((s) => [s.id, s]));
+    const SCOPED = CH.some((c) => SCOPE.has(c.scope));
+    const ACROSS = "Across the day";
+    const scopeId = (id) => `scope-${slug(id)}`;
+    const groupId = (g) => `group-${slug(g)}`;
+    const FOLLOW = "digest-follow";
+    // icons:start - generated by scripts/icons.mjs from @phosphor-icons/react duotone; do not edit by hand
+    const ICONS = {
+      "app-window": ["M224,56V200a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H216A8,8,0,0,1,224,56Z","M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM80,84A12,12,0,1,1,68,72,12,12,0,0,1,80,84Zm40,0a12,12,0,1,1-12-12A12,12,0,0,1,120,84Z"],
+      "arrows-clockwise": ["M216,128a88,88,0,1,1-88-88A88,88,0,0,1,216,128Z","M224,48V96a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h28.69L182.06,73.37a79.56,79.56,0,0,0-56.13-23.43h-.45A79.52,79.52,0,0,0,69.59,72.71,8,8,0,0,1,58.41,61.27a96,96,0,0,1,135,.79L208,76.69V48a8,8,0,0,1,16,0ZM186.41,183.29a80,80,0,0,1-112.47-.66L59.31,168H88a8,8,0,0,0,0-16H40a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V179.31l14.63,14.63A95.43,95.43,0,0,0,130,222.06h.53a95.36,95.36,0,0,0,67.07-27.33,8,8,0,0,0-11.18-11.44Z"],
+      "arrows-left-right": ["M208,80v96H48V80Z","M213.66,181.66l-32,32a8,8,0,0,1-11.32-11.32L188.69,184H48a8,8,0,0,1,0-16H188.69l-18.35-18.34a8,8,0,0,1,11.32-11.32l32,32A8,8,0,0,1,213.66,181.66Zm-139.32-64a8,8,0,0,0,11.32-11.32L67.31,88H208a8,8,0,0,0,0-16H67.31L85.66,53.66A8,8,0,0,0,74.34,42.34l-32,32a8,8,0,0,0,0,11.32Z"],
+      "bank": ["M232,96H24L128,32Z","M24,104H48v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16H208V104h24a8,8,0,0,0,4.19-14.81l-104-64a8,8,0,0,0-8.38,0l-104,64A8,8,0,0,0,24,104Zm40,0H96v64H64Zm80,0v64H112V104Zm48,64H160V104h32ZM128,41.39,203.74,88H52.26ZM248,208a8,8,0,0,1-8,8H16a8,8,0,0,1,0-16H240A8,8,0,0,1,248,208Z"],
+      "book-open": ["M232,56V200H160a32,32,0,0,0-32,32,32,32,0,0,0-32-32H24V56H96a32,32,0,0,1,32,32,32,32,0,0,1,32-32Z","M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z"],
+      "browsers": ["M224,56V168a8,8,0,0,1-8,8H192V88a8,8,0,0,0-8-8H64V56a8,8,0,0,1,8-8H216A8,8,0,0,1,224,56Z","M216,40H72A16,16,0,0,0,56,56V72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V184h16a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,88H184v16H40ZM184,200H40V120H184v80Zm32-32H200V88a16,16,0,0,0-16-16H72V56H216Z"],
+      "calendar-check": ["M216,48V88H40V48a8,8,0,0,1,8-8H208A8,8,0,0,1,216,48Z","M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-38.34-85.66a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L116,164.69l42.34-42.35A8,8,0,0,1,169.66,122.34Z"],
+      "chart-bar": ["M208,40V208H152V40Z","M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"],
+      "chart-line-up": ["M224,64V208H32V48H208A16,16,0,0,1,224,64Z","M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0V156.69l50.34-50.35a8,8,0,0,1,11.32,0L128,132.69,180.69,80H160a8,8,0,0,1,0-16h40a8,8,0,0,1,8,8v40a8,8,0,0,1-16,0V91.31l-58.34,58.35a8,8,0,0,1-11.32,0L96,123.31l-56,56V200H224A8,8,0,0,1,232,208Z"],
+      "check-square": ["M216,48V208a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V48a8,8,0,0,1,8-8H208A8,8,0,0,1,216,48Z","M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM224,48V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM208,208V48H48V208H208Z"],
+      "clock": ["M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z","M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"],
+      "coins": ["M240,132c0,19.88-35.82,36-80,36-19.6,0-37.56-3.17-51.47-8.44h0C146.76,156.85,176,142,176,124V96.72h0C212.52,100.06,240,114.58,240,132ZM176,84c0-19.88-35.82-36-80-36S16,64.12,16,84s35.82,36,80,36S176,103.88,176,84Z","M184,89.57V84c0-25.08-37.83-44-88-44S8,58.92,8,84v40c0,20.89,26.25,37.49,64,42.46V172c0,25.08,37.83,44,88,44s88-18.92,88-44V132C248,111.3,222.58,94.68,184,89.57ZM232,132c0,13.22-30.79,28-72,28-3.73,0-7.43-.13-11.08-.37C170.49,151.77,184,139,184,124V105.74C213.87,110.19,232,122.27,232,132ZM72,150.25V126.46A183.74,183.74,0,0,0,96,128a183.74,183.74,0,0,0,24-1.54v23.79A163,163,0,0,1,96,152,163,163,0,0,1,72,150.25Zm96-40.32V124c0,8.39-12.41,17.4-32,22.87V123.5C148.91,120.37,159.84,115.71,168,109.93ZM96,56c41.21,0,72,14.78,72,28s-30.79,28-72,28S24,97.22,24,84,54.79,56,96,56ZM24,124V109.93c8.16,5.78,19.09,10.44,32,13.57v23.37C36.41,141.4,24,132.39,24,124Zm64,48v-4.17c2.63.1,5.29.17,8,.17,3.88,0,7.67-.13,11.39-.35A121.92,121.92,0,0,0,120,171.41v23.46C100.41,189.4,88,180.39,88,172Zm48,26.25V174.4a179.48,179.48,0,0,0,24,1.6,183.74,183.74,0,0,0,24-1.54v23.79a165.45,165.45,0,0,1-48,0Zm64-3.38V171.5c12.91-3.13,23.84-7.79,32-13.57V172C232,180.39,219.59,189.4,200,194.87Z"],
+      "database": ["M216,80c0,26.51-39.4,48-88,48S40,106.51,40,80s39.4-48,88-48S216,53.49,216,80Z","M128,24C74.17,24,32,48.6,32,80v96c0,31.4,42.17,56,96,56s96-24.6,96-56V80C224,48.6,181.83,24,128,24Zm80,104c0,9.62-7.88,19.43-21.61,26.92C170.93,163.35,150.19,168,128,168s-42.93-4.65-58.39-13.08C55.88,147.43,48,137.62,48,128V111.36c17.06,15,46.23,24.64,80,24.64s62.94-9.68,80-24.64ZM69.61,53.08C85.07,44.65,105.81,40,128,40s42.93,4.65,58.39,13.08C200.12,60.57,208,70.38,208,80s-7.88,19.43-21.61,26.92C170.93,115.35,150.19,120,128,120s-42.93-4.65-58.39-13.08C55.88,99.43,48,89.62,48,80S55.88,60.57,69.61,53.08ZM186.39,202.92C170.93,211.35,150.19,216,128,216s-42.93-4.65-58.39-13.08C55.88,195.43,48,185.62,48,176V159.36c17.06,15,46.23,24.64,80,24.64s62.94-9.68,80-24.64V176C208,185.62,200.12,195.43,186.39,202.92Z"],
+      "gavel": ["M149.66,45.66l-64,64a8,8,0,0,1-11.32,0l-16-16a8,8,0,0,1,0-11.32l64-64a8,8,0,0,1,11.32,0l16,16A8,8,0,0,1,149.66,45.66Zm88,76.68-16-16a8,8,0,0,0-11.32,0l-64,64a8,8,0,0,0,0,11.32l16,16a8,8,0,0,0,11.32,0l64-64A8,8,0,0,0,237.66,122.34Z","M243.32,116.69l-16-16a16,16,0,0,0-20.84-1.53L156.84,49.52a16,16,0,0,0-1.52-20.84l-16-16a16,16,0,0,0-22.63,0l-64,64a16,16,0,0,0,0,22.63l16,16a16,16,0,0,0,20.83,1.52L96.69,124,31.31,189.38A25,25,0,0,0,66.63,224.7L132,159.32l7.17,7.16a16,16,0,0,0,1.52,20.84l16,16a16,16,0,0,0,22.63,0l64-64A16,16,0,0,0,243.32,116.69ZM80,104,64,88l64-64,16,16ZM55.32,213.38a9,9,0,0,1-12.69,0,9,9,0,0,1,0-12.68L108,135.32,120.69,148ZM101,105.66,145.66,61,195,110.34,150.35,155ZM168,192l-16-16,4-4h0l56-56h0l4-4,16,16Z"],
+      "globe": ["M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z","M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm88,104a87.61,87.61,0,0,1-3.33,24H174.16a157.44,157.44,0,0,0,0-48h38.51A87.61,87.61,0,0,1,216,128ZM102,168H154a115.11,115.11,0,0,1-26,45A115.27,115.27,0,0,1,102,168Zm-3.9-16a140.84,140.84,0,0,1,0-48h59.88a140.84,140.84,0,0,1,0,48ZM40,128a87.61,87.61,0,0,1,3.33-24H81.84a157.44,157.44,0,0,0,0,48H43.33A87.61,87.61,0,0,1,40,128ZM154,88H102a115.11,115.11,0,0,1,26-45A115.27,115.27,0,0,1,154,88Zm52.33,0H170.71a135.28,135.28,0,0,0-22.3-45.6A88.29,88.29,0,0,1,206.37,88ZM107.59,42.4A135.28,135.28,0,0,0,85.29,88H49.63A88.29,88.29,0,0,1,107.59,42.4ZM49.63,168H85.29a135.28,135.28,0,0,0,22.3,45.6A88.29,88.29,0,0,1,49.63,168Zm98.78,45.6a135.28,135.28,0,0,0,22.3-45.6h35.66A88.29,88.29,0,0,1,148.41,213.6Z"],
+      "hard-drives": ["M216,152v48a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V152a8,8,0,0,1,8-8H208A8,8,0,0,1,216,152ZM208,48H48a8,8,0,0,0-8,8v48a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V56A8,8,0,0,0,208,48Z","M208,136H48a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V152A16,16,0,0,0,208,136Zm0,64H48V152H208v48Zm0-160H48A16,16,0,0,0,32,56v48a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V56A16,16,0,0,0,208,40Zm0,64H48V56H208v48ZM192,80a12,12,0,1,1-12-12A12,12,0,0,1,192,80Zm0,96a12,12,0,1,1-12-12A12,12,0,0,1,192,176Z"],
+      "identification-card": ["M216,48H40a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H216a8,8,0,0,0,8-8V56A8,8,0,0,0,216,48ZM96,144a24,24,0,1,1,24-24A24,24,0,0,1,96,144Z","M200,112a8,8,0,0,1-8,8H152a8,8,0,0,1,0-16h40A8,8,0,0,1,200,112Zm-8,24H152a8,8,0,0,0,0,16h40a8,8,0,0,0,0-16Zm40-80V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56ZM216,200V56H40V200H216Zm-80.26-34a8,8,0,1,1-15.5,4c-2.63-10.26-13.06-18-24.25-18s-21.61,7.74-24.25,18a8,8,0,1,1-15.5-4,39.84,39.84,0,0,1,17.19-23.34,32,32,0,1,1,45.12,0A39.76,39.76,0,0,1,135.75,166ZM96,136a16,16,0,1,0-16-16A16,16,0,0,0,96,136Z"],
+      "key": ["M232,98.36C230.73,136.92,198.67,168,160.09,168a71.68,71.68,0,0,1-26.92-5.17h0L120,176H96v24H72v24H40a8,8,0,0,1-8-8V187.31a8,8,0,0,1,2.34-5.65l58.83-58.83h0A71.68,71.68,0,0,1,88,95.91c0-38.58,31.08-70.64,69.64-71.87A72,72,0,0,1,232,98.36Z","M216.57,39.43A80,80,0,0,0,83.91,120.78L28.69,176A15.86,15.86,0,0,0,24,187.31V216a16,16,0,0,0,16,16H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A79.73,79.73,0,0,0,160,176h.1A80,80,0,0,0,216.57,39.43ZM224,98.1c-1.09,34.09-29.75,61.86-63.89,61.9H160a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A63.72,63.72,0,0,1,96,95.92c0-34.14,27.81-62.8,61.9-63.89A64,64,0,0,1,224,98.1ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"],
+      "layout": ["M104,104V208H40a8,8,0,0,1-8-8V104Z","M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V96H40V56ZM40,112H96v88H40Zm176,88H112V112H216v88Z"],
+      "lightning": ["M96,240l16-80L48,136,160,16,144,96l64,24Z","M215.79,118.17a8,8,0,0,0-5-5.66L153.18,90.9l14.66-73.33a8,8,0,0,0-13.69-7l-112,120a8,8,0,0,0,3,13l57.63,21.61L88.16,238.43a8,8,0,0,0,13.69,7l112-120A8,8,0,0,0,215.79,118.17ZM109.37,214l10.47-52.38a8,8,0,0,0-5-9.06L62,132.71l84.62-90.66L136.16,94.43a8,8,0,0,0,5,9.06l52.8,19.8Z"],
+      "list-magnifying-glass": ["M216,144a32,32,0,1,1-32-32A32,32,0,0,1,216,144Z","M32,64a8,8,0,0,1,8-8H216a8,8,0,0,1,0,16H40A8,8,0,0,1,32,64Zm8,72h72a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16Zm88,48H40a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16Zm109.66,13.66a8,8,0,0,1-11.32,0L206,177.36A40,40,0,1,1,217.36,166l20.3,20.3A8,8,0,0,1,237.66,197.66ZM184,168a24,24,0,1,0-24-24A24,24,0,0,0,184,168Z"],
+      "lock-key": ["M208,88H48a8,8,0,0,0-8,8V208a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V96A8,8,0,0,0,208,88Zm-80,72a20,20,0,1,1,20-20A20,20,0,0,1,128,160Z","M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Zm-80-96a28,28,0,0,0-8,54.83V184a8,8,0,0,0,16,0V166.83A28,28,0,0,0,128,112Zm0,40a12,12,0,1,1,12-12A12,12,0,0,1,128,152Z"],
+      "medal": ["M176,96a48,48,0,1,1-48-48A48,48,0,0,1,176,96Z","M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96ZM168,227.06l-36.43-18.21a8,8,0,0,0-7.16,0L88,227.06V174.37a87.89,87.89,0,0,0,80,0ZM128,152A56,56,0,1,0,72,96,56.06,56.06,0,0,0,128,152Zm0-96A40,40,0,1,1,88,96,40,40,0,0,1,128,56Z"],
+      "moon": ["M227.89,147.89A96,96,0,1,1,108.11,28.11,96.09,96.09,0,0,0,227.89,147.89Z","M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"],
+      "newspaper": ["M224,64V184a16,16,0,0,1-16,16H32a16,16,0,0,0,16-16V64a8,8,0,0,1,8-8H216A8,8,0,0,1,224,64Z","M88,112a8,8,0,0,1,8-8h80a8,8,0,0,1,0,16H96A8,8,0,0,1,88,112Zm8,40h80a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16ZM232,64V184a24,24,0,0,1-24,24H32A24,24,0,0,1,8,184.11V88a8,8,0,0,1,16,0v96a8,8,0,0,0,16,0V64A16,16,0,0,1,56,48H216A16,16,0,0,1,232,64Zm-16,0H56V184a23.84,23.84,0,0,1-1.37,8H208a8,8,0,0,0,8-8Z"],
+      "package": ["M128,129.09V232a8,8,0,0,1-3.84-1l-88-48.18a8,8,0,0,1-4.16-7V80.18a8,8,0,0,1,.7-3.25Z","M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm176,85.78h0l-80,43.79V133.82l32-17.51V152a8,8,0,0,0,16,0V107.55L216,90v85.77Z"],
+      "palette": ["M224,127.17a96.48,96.48,0,0,1-2.39,22.18A24,24,0,0,1,198.21,168H152a24,24,0,0,0-24,24,24,24,0,0,1-32,22.61C58.73,201.44,32,169.81,32,128a96,96,0,0,1,95-96C179.84,31.47,223.55,74.35,224,127.17Z","M200.77,53.89A103.27,103.27,0,0,0,128,24h-1.07A104,104,0,0,0,24,128c0,43,26.58,79.06,69.36,94.17A32,32,0,0,0,136,192a16,16,0,0,1,16-16h46.21a31.81,31.81,0,0,0,31.2-24.88,104.43,104.43,0,0,0,2.59-24A103.28,103.28,0,0,0,200.77,53.89Zm13,93.71A15.89,15.89,0,0,1,198.21,160H152a32,32,0,0,0-32,32,16,16,0,0,1-21.31,15.07C62.49,194.3,40,164,40,128a88,88,0,0,1,87.09-88h.9a88.35,88.35,0,0,1,88,87.25A88.86,88.86,0,0,1,213.81,147.6ZM140,76a12,12,0,1,1-12-12A12,12,0,0,1,140,76ZM96,100A12,12,0,1,1,84,88,12,12,0,0,1,96,100Zm0,56a12,12,0,1,1-12-12A12,12,0,0,1,96,156Zm88-56a12,12,0,1,1-12-12A12,12,0,0,1,184,100Z"],
+      "path": ["M224,200a24,24,0,1,1-24-24A24,24,0,0,1,224,200Z","M200,168a32.06,32.06,0,0,0-31,24H72a32,32,0,0,1,0-64h96a40,40,0,0,0,0-80H72a8,8,0,0,0,0,16h96a24,24,0,0,1,0,48H72a48,48,0,0,0,0,96h97a32,32,0,1,0,31-40Zm0,48a16,16,0,1,1,16-16A16,16,0,0,1,200,216Z"],
+      "shopping-bag": ["M224,56V200a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H216A8,8,0,0,1,224,56Z","M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"],
+      "signature": ["M67.41,142.56C35.71,129.52,45.41,32.07,78,32,111.82,32.05,92,90.26,67.41,142.56Z","M232,168H63.86c2.66-5.24,5.33-10.63,8-16.11,14.94,1.65,32.58-8.78,52.66-31.14,5,13.46,14.45,30.93,30.58,31.25,9.09.18,18.11-5.2,27.42-16.37C189.31,143.75,203.3,152,232,152a8,8,0,0,0,0-16c-30.43,0-39.43-10.45-40-16.11a7.67,7.67,0,0,0-5.46-7.75,8.14,8.14,0,0,0-9.25,3.49C165.23,134.17,158,136.06,155.38,136c-8.26-.16-16.66-19.52-19.54-33.42a8,8,0,0,0-14.09-3.37C101.54,124.55,88,133.08,79.57,135.29,88.06,116.42,94.4,99.85,98.46,85.9c6.82-23.44,7.32-39.83,1.51-50.1-3-5.38-9.34-11.8-22.06-11.8C61.85,24,49.18,39.18,43.14,65.65c-3.59,15.71-4.18,33.21-1.62,48s7.87,25.55,15.59,31.94c-3.73,7.72-7.53,15.26-11.23,22.41H24a8,8,0,0,0,0,16H37.41c-11.32,21-20.12,35.64-20.26,35.88a8,8,0,1,0,13.71,8.24c.15-.26,11.27-18.79,24.7-44.12H232a8,8,0,0,0,0-16ZM58.74,69.21C62.72,51.74,70.43,40,77.91,40c5.33,0,7.1,1.86,8.13,3.67,3,5.33,6.52,24.19-21.66,86.39C56.12,118.78,53.31,93,58.74,69.21Z"],
+      "sliders": ["M80,136a24,24,0,1,1-24-24A24,24,0,0,1,80,136Zm48-72a24,24,0,1,0,24,24A24,24,0,0,0,128,64Zm72,80a24,24,0,1,0,24,24A24,24,0,0,0,200,144Z","M64,105V40a8,8,0,0,0-16,0v65a32,32,0,0,0,0,62v49a8,8,0,0,0,16,0V167a32,32,0,0,0,0-62Zm-8,47a16,16,0,1,1,16-16A16,16,0,0,1,56,152Zm80-95V40a8,8,0,0,0-16,0V57a32,32,0,0,0,0,62v97a8,8,0,0,0,16,0V119a32,32,0,0,0,0-62Zm-8,47a16,16,0,1,1,16-16A16,16,0,0,1,128,104Zm104,64a32.06,32.06,0,0,0-24-31V40a8,8,0,0,0-16,0v97a32,32,0,0,0,0,62v17a8,8,0,0,0,16,0V199A32.06,32.06,0,0,0,232,168Zm-32,16a16,16,0,1,1,16-16A16,16,0,0,1,200,184Z"],
+      "squares-four": ["M112,56v48a8,8,0,0,1-8,8H56a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8h48A8,8,0,0,1,112,56Zm88-8H152a8,8,0,0,0-8,8v48a8,8,0,0,0,8,8h48a8,8,0,0,0,8-8V56A8,8,0,0,0,200,48Zm-96,96H56a8,8,0,0,0-8,8v48a8,8,0,0,0,8,8h48a8,8,0,0,0,8-8V152A8,8,0,0,0,104,144Zm96,0H152a8,8,0,0,0-8,8v48a8,8,0,0,0,8,8h48a8,8,0,0,0,8-8V152A8,8,0,0,0,200,144Z","M200,136H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48ZM104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Z"],
+      "stack": ["M224,80l-96,56L32,80l96-56Z","M230.91,172A8,8,0,0,1,228,182.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,169.09l92,53.65,92-53.65A8,8,0,0,1,230.91,172ZM220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26Z"],
+      "storefront": ["M224,96v16a32,32,0,0,1-64,0V96H96v16a32,32,0,0,1-64,0V96L46.34,45.8A8,8,0,0,1,54,40H202a8,8,0,0,1,7.69,5.8Z","M231.69,93.81,217.35,43.6A16.07,16.07,0,0,0,202,32H54A16.07,16.07,0,0,0,38.65,43.6L24.31,93.81A7.94,7.94,0,0,0,24,96v16a40,40,0,0,0,16,32v72a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V144a40,40,0,0,0,16-32V96A7.94,7.94,0,0,0,231.69,93.81ZM54,48H202l11.42,40H42.61Zm98,56v8a24,24,0,0,1-48,0v-8ZM51.06,132.2A24,24,0,0,1,40,112v-8H88v8a24,24,0,0,1-35.12,21.26A7.88,7.88,0,0,0,51.06,132.2ZM200,208H56V151.2a40.57,40.57,0,0,0,8,.8,40,40,0,0,0,32-16,40,40,0,0,0,64,0,40,40,0,0,0,32,16,40.57,40.57,0,0,0,8-.8Zm16-96a24,24,0,0,1-11.07,20.2,8.08,8.08,0,0,0-1.8,1.05A24,24,0,0,1,168,112v-8h48Z"],
+      "ticket": ["M200,128a32,32,0,0,0,32,32v32a8,8,0,0,1-8,8H96V56H224a8,8,0,0,1,8,8V96A32,32,0,0,0,200,128Z","M232,104a8,8,0,0,0,8-8V64a16,16,0,0,0-16-16H32A16,16,0,0,0,16,64V96a8,8,0,0,0,8,8,24,24,0,0,1,0,48,8,8,0,0,0-8,8v32a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V160a8,8,0,0,0-8-8,24,24,0,0,1,0-48ZM32,167.2a40,40,0,0,0,0-78.4V64H88V192H32Zm192,0V192H104V64H224V88.8a40,40,0,0,0,0,78.4Z"],
+      "translate": ["M224,184H144l40-80ZM96,127.56h0A95.78,95.78,0,0,0,128,56H64A95.78,95.78,0,0,0,96,127.56Z","M247.15,212.42l-56-112a8,8,0,0,0-14.31,0l-21.71,43.43A88,88,0,0,1,108,126.93,103.65,103.65,0,0,0,135.69,64H160a8,8,0,0,0,0-16H104V32a8,8,0,0,0-16,0V48H32a8,8,0,0,0,0,16h87.63A87.7,87.7,0,0,1,96,116.35a87.74,87.74,0,0,1-19-31,8,8,0,1,0-15.08,5.34A103.63,103.63,0,0,0,84,127a87.55,87.55,0,0,1-52,17,8,8,0,0,0,0,16,103.46,103.46,0,0,0,64-22.08,104.18,104.18,0,0,0,51.44,21.31l-26.6,53.19a8,8,0,0,0,14.31,7.16L148.94,192h70.11l13.79,27.58A8,8,0,0,0,240,224a8,8,0,0,0,7.15-11.58ZM156.94,176,184,121.89,211.05,176Z"],
+      "user-circle": ["M224,128a95.76,95.76,0,0,1-31.8,71.37A72,72,0,0,0,128,160a40,40,0,1,0-40-40,40,40,0,0,0,40,40,72,72,0,0,0-64.2,39.37h0A96,96,0,1,1,224,128Z","M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"],
+      "user-list": ["M120,104A40,40,0,1,1,80,64,40,40,0,0,1,120,104Z","M152,80a8,8,0,0,1,8-8h88a8,8,0,0,1,0,16H160A8,8,0,0,1,152,80Zm96,40H160a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16Zm0,48H184a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm-96.25,22a8,8,0,0,1-5.76,9.74,7.55,7.55,0,0,1-2,.26,8,8,0,0,1-7.75-6c-6.16-23.94-30.34-42-56.25-42s-50.09,18.05-56.25,42a8,8,0,0,1-15.5-4c5.59-21.71,21.84-39.29,42.46-48a48,48,0,1,1,58.58,0C129.91,150.71,146.16,168.29,151.75,190ZM80,136a32,32,0,1,0-32-32A32,32,0,0,0,80,136Z"],
+      "vault": ["M216,48H40a8,8,0,0,0-8,8V192a8,8,0,0,0,8,8H216a8,8,0,0,0,8-8V56A8,8,0,0,0,216,48ZM152,168a40,40,0,1,1,40-40A40,40,0,0,1,152,168Z","M216,40H40A16,16,0,0,0,24,56V192a16,16,0,0,0,16,16H56v16a8,8,0,0,0,16,0V208H184v16a8,8,0,0,0,16,0V208h16a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,152H40V56H216v64H199.32a48,48,0,1,0,0,16H216v56Zm-50.16-72a16,16,0,1,0,0,16H183a32,32,0,1,1,0-16Z"],
+      "wrench": ["M224,96a64,64,0,0,1-94.94,56L73,217A24,24,0,0,1,39,183L104,126.94a64,64,0,0,1,80-90.29L144,80l5.66,26.34L176,112l43.35-40A63.8,63.8,0,0,1,224,96Z","M226.76,69a8,8,0,0,0-12.84-2.88l-40.3,37.19-17.23-3.7-3.7-17.23,37.19-40.3A8,8,0,0,0,187,29.24,72,72,0,0,0,88,96,72.34,72.34,0,0,0,94,124.94L33.79,177c-.15.12-.29.26-.43.39a32,32,0,0,0,45.26,45.26c.13-.13.27-.28.39-.42L131.06,162A72,72,0,0,0,232,96,71.56,71.56,0,0,0,226.76,69ZM160,152a56.14,56.14,0,0,1-27.07-7,8,8,0,0,0-9.92,1.77L67.11,211.51a16,16,0,0,1-22.62-22.62L109.18,133a8,8,0,0,0,1.77-9.93,56,56,0,0,1,58.36-82.31l-31.2,33.81a8,8,0,0,0-1.94,7.1L141.83,108a8,8,0,0,0,6.14,6.14l26.35,5.66a8,8,0,0,0,7.1-1.94l33.81-31.2A56.06,56.06,0,0,1,160,152Z"],
+    };
+    // icons:end
+    const view = { who: "", follow: new Set(), only: false, linked: [] };
 
     function h(tag, props, ...kids) {
       const el = document.createElement(tag);
@@ -3147,8 +3642,12 @@
     function thumb(c) {
       const all = list(c.picture).filter((p) => THUMBS[p?.kind]);
       const p = all.find((one) => one.kind === "shot" || one.kind === "beforeNow") ?? all[0];
+      const screen = p && (p.kind === "shot" || p.kind === "beforeNow");
+      if (SCOPED && !screen) {
+        const tone = KIND[c.kind]?.[1] ?? "none";
+        return h("span", { class: `g-thumb t-icon tone-${tone}`, "aria-hidden": "true" }, icon(SCOPE.get(c.scope)?.icon ?? ACROSS_ICON));
+      }
       if (!p) return h("span", { class: "g-thumb t-none", "aria-hidden": "true" });
-      const screen = p.kind === "shot" || p.kind === "beforeNow";
       return h(
         "span",
         { class: "g-thumb", "aria-hidden": "true" },
@@ -3160,40 +3659,59 @@
     function glance() {
       if (CH.length < 2) return null;
       const kinded = CH.some((c) => KIND[c.kind]);
-      const pictured = CH.some((c) => list(c.picture).some((p) => THUMBS[p?.kind]));
-      const el = h(
-        "section",
-        { class: `glance${kinded ? "" : " plain"}${pictured ? " pictured" : ""}`, id: "glance", "aria-labelledby": "glance-h" },
-        h("div", { class: "glance-head" }, h("h2", { id: "glance-h" }, "At a glance"), FILTER ? audience() : null),
-      );
-      for (const [phase, items] of groups()) {
-        el.append(
+      const pictured = SCOPED || CH.some((c) => list(c.picture).some((p) => THUMBS[p?.kind]));
+      const item = (c) => {
+        const [word, tone] = KIND[c.kind] ?? [];
+        return h(
+          "li",
+          { "data-for": list(c.who).join("|"), "data-scope": c.scope ?? "" },
           h(
-            "div",
-            { class: "g-group", "data-group": phase },
-            phase ? h("p", { class: "g-phase" }, phase) : null,
-            h(
-              "ul",
-              { class: "g-list" },
-              items.map((c) => {
-                const [word, tone] = KIND[c.kind] ?? [];
-                return h(
-                  "li",
-                  { "data-for": list(c.who).join("|") },
-                  h(
-                    "a",
-                    { href: `#${c.id}` },
-                    pictured ? thumb(c) : null,
-                    kinded ? h("span", {}, word ? h("span", { class: `chip tone-${tone}` }, word) : null) : null,
-                    h("span", { class: "g-title", html: mdText(c.title) }),
-                    list(c.who).length ? h("span", { class: "g-for" }, list(c.who).join(", ")) : null,
-                  ),
-                );
-              }),
-            ),
+            "a",
+            { href: `#${c.id}` },
+            pictured ? thumb(c) : null,
+            kinded ? h("span", {}, word ? h("span", { class: `chip tone-${tone}` }, word) : null) : null,
+            h("span", { class: "g-title", html: mdText(c.title) }),
+            list(c.who).length ? h("span", { class: "g-for" }, list(c.who).join(", ")) : null,
           ),
         );
-      }
+      };
+      const el = h(
+        "section",
+        { class: `glance${kinded ? "" : " plain"}${pictured ? " pictured" : ""}${SCOPED ? " scoped" : ""}`, id: "glance", "aria-labelledby": "glance-h" },
+        h("div", { class: "glance-head" }, h("h2", { id: "glance-h" }, SCOPED ? "Where things moved" : "At a glance"), viewBar()),
+        SCOPED ? h("p", { class: "view-hint", id: "view-hint" }, "Star ☆ the products you work on; Following then shows only them, on every day's digest.") : null,
+      );
+      if (SCOPED) {
+        for (const [g, scopes] of scopeTree(CH)) {
+          const n = scopes.reduce((k, [, cards]) => k + cards.length, 0);
+          el.append(
+            h(
+              "div",
+              { class: "g-group", "data-group": g },
+              h("p", { class: "g-phase" }, h("a", { class: "g-scope-title", href: `#${groupId(g)}` }, g), h("span", { class: "count", "data-tally": "" }, plural(n, "change"))),
+              scopes.map(([sc, cards]) =>
+                h(
+                  "div",
+                  { class: "g-scope", "data-box": "" },
+                  sc
+                    ? h(
+                        "div",
+                        { class: "g-scope-head" },
+                        star(sc),
+                        h("a", { class: "g-scope-title", href: `#${scopeId(sc.id)}` }, sc.title),
+                        h("span", { class: "count" }, kinds(cards) || plural(cards.length, "change")),
+                      )
+                    : null,
+                  h("ul", { class: "g-list" }, cards.map(item)),
+                ),
+              ),
+            ),
+          );
+        }
+      } else
+        for (const [phase, items] of groups()) {
+          el.append(h("div", { class: "g-group", "data-group": phase }, phase ? h("p", { class: "g-phase" }, phase) : null, h("ul", { class: "g-list" }, items.map(item))));
+        }
       if (PR.length) {
         el.append(
           h(
@@ -3206,6 +3724,31 @@
         );
       }
       return el;
+    }
+
+    // [group, [[scope, cards]]] in the manual's order; the cards no scope claims close the list as one group.
+    // A manual icon, as the manual's nav draws it: the duotone back at a fifth, the line over it.
+    function icon(name, cls) {
+      const [back, front] = ICONS[name] ?? ICONS["squares-four"];
+      return h("span", { class: `ico${cls ? ` ${cls}` : ""}`, "aria-hidden": "true", html: `<svg viewBox="0 0 256 256" fill="currentColor"><path d="${back}" opacity="0.2"/><path d="${front}"/></svg>` });
+    }
+    const ACROSS_ICON = "newspaper";
+
+    function scopeTree(items) {
+      const tree = [];
+      for (const g of [...new Set(SCOPES.map((sc) => sc.group))]) {
+        const scopes = SCOPES.filter((sc) => sc.group === g)
+          .map((sc) => [sc, items.filter((c) => c.scope === sc.id)])
+          .filter(([, cards]) => cards.length);
+        if (scopes.length) tree.push([g, scopes]);
+      }
+      const rest = items.filter((c) => !SCOPE.has(c.scope));
+      if (rest.length) tree.push([ACROSS, [[null, rest]]]);
+      return tree;
+    }
+
+    function star(sc) {
+      return h("button", { type: "button", class: "star", "data-star": sc.id, "aria-pressed": "false", "aria-label": `Follow ${sc.title}`, title: `Follow ${sc.title}`, onclick: () => toggleFollow(sc.id) }, "☆");
     }
 
     function groups() {
@@ -3234,17 +3777,124 @@
       );
     }
 
+    function viewBar() {
+      if (!FILTER && !SCOPED) return null;
+      return h(
+        "div",
+        { class: "view-bar" },
+        FILTER ? audience() : null,
+        SCOPED
+          ? h(
+              "div",
+              { class: "audience areas", role: "radiogroup", "aria-label": "Show the products" },
+              h("label", {}, h("input", { type: "radio", name: "areas", value: "all", onchange: () => showOnly(false) }), "All products"),
+              h("label", { id: "areas-mine" }, h("input", { type: "radio", name: "areas", value: "mine", onchange: () => showOnly(true) }), "Following", h("span", { class: "n", id: "follow-n" })),
+            )
+          : null,
+      );
+    }
+
     function showFor(who) {
-      const a = AUDIENCES.includes(who) ? who : "";
-      writeLocal("handoff-for", a);
+      view.who = AUDIENCES.includes(who) ? who : "";
+      writeLocal("handoff-for", view.who);
+      applyView();
+    }
+
+    function showOnly(on) {
+      view.only = on && view.follow.size > 0;
+      view.linked = [];
+      writeLocal(`${FOLLOW}-only`, view.only ? "1" : "");
+      applyView();
+    }
+
+    function toggleFollow(id) {
+      if (view.follow.has(id)) view.follow.delete(id);
+      else view.follow.add(id);
+      if (!view.follow.size) view.only = false;
+      writeLocal(FOLLOW, JSON.stringify([...view.follow]));
+      applyView();
+    }
+
+    function showAll() {
+      view.who = "";
+      view.only = false;
+      view.linked = [];
+      writeLocal("handoff-for", "");
+      writeLocal(`${FOLLOW}-only`, "");
+      applyView();
+    }
+
+    // The reader's view: a role from the audience pills, the starred products, and ?scope= on a shared link, which wins for that visit.
+    function loadView() {
+      const params = (() => {
+        try {
+          return new URLSearchParams(location.search);
+        } catch {
+          return new URLSearchParams();
+        }
+      })();
+      const who = params.get("for") ?? readLocal("handoff-for") ?? "";
+      view.who = AUDIENCES.includes(who) ? who : "";
+      try {
+        for (const id of JSON.parse(readLocal(FOLLOW) ?? "[]")) if (typeof id === "string") view.follow.add(id);
+      } catch {}
+      view.only = readLocal(`${FOLLOW}-only`) === "1" && view.follow.size > 0;
+      view.linked = params
+        .getAll("scope")
+        .flatMap((v) => v.split(","))
+        .filter((id) => SCOPE.has(id));
+    }
+
+    function applyView() {
+      const only = view.linked.length ? new Set(view.linked) : view.only ? view.follow : null;
+      const a = view.who;
       for (const r of document.querySelectorAll('input[name="audience"]')) r.checked = r.value === a;
-      for (const el of document.querySelectorAll("[data-for]")) el.hidden = !!a && !!el.dataset.for && !el.dataset.for.split("|").includes(a);
-      for (const g of document.querySelectorAll("[data-group]")) g.hidden = ![...g.querySelectorAll("[data-for]")].some((el) => !el.hidden);
+      for (const r of document.querySelectorAll('input[name="areas"]')) {
+        r.checked = (r.value === "mine") === (view.only && !view.linked.length);
+        if (r.value === "mine") {
+          r.disabled = !view.follow.size;
+          r.parentElement.setAttribute("aria-disabled", String(!view.follow.size));
+        }
+      }
+      for (const r of document.querySelectorAll('input[name="rail-areas"]')) {
+        r.checked = (r.value === "mine") === (view.only && !view.linked.length);
+        if (r.value === "mine") {
+          r.disabled = !view.follow.size;
+          r.parentElement.title = view.follow.size ? "" : "Star ☆ a product to follow it";
+        }
+      }
+      const railN = document.getElementById("rail-follow-n");
+      if (railN) railN.textContent = view.follow.size ? String(view.follow.size) : "";
+      for (const b of document.querySelectorAll("[data-star]")) {
+        const on = view.follow.has(b.dataset.star);
+        b.closest(".rail-row")?.classList.toggle("followed", on);
+        b.setAttribute("aria-pressed", String(on));
+        b.textContent = on ? "★" : "☆";
+      }
+      const count = document.getElementById("follow-n");
+      if (count) count.textContent = view.follow.size ? ` ${view.follow.size}` : "";
+      const hint = document.getElementById("view-hint");
+      if (hint) hint.hidden = view.follow.size > 0;
+      for (const el of document.querySelectorAll("[data-for]")) {
+        const off = (!!a && !!el.dataset.for && !el.dataset.for.split("|").includes(a)) || (!!only && !!el.dataset.scope && !only.has(el.dataset.scope));
+        el.hidden = off;
+      }
+      for (const box of document.querySelectorAll("[data-box], [data-group]")) box.hidden = ![...box.querySelectorAll("[data-for]")].some((el) => !el.hidden);
+      for (const n of document.querySelectorAll(".rail [data-count]")) n.textContent = n.closest("li").querySelectorAll("i[data-for]:not([hidden])").length;
+      for (const n of document.querySelectorAll("[data-tally]")) n.textContent = plural(n.parentElement.parentElement.querySelectorAll("li[data-for]:not([hidden])").length, "change");
+      for (const link of document.querySelectorAll(".rail-secs [data-spy]")) {
+        const target = document.getElementById(link.dataset.spy);
+        if (target?.matches(".scope-band, .scope-group, .phase-group")) link.parentElement.hidden = target.hidden;
+      }
       const note = document.getElementById("filter-note");
       if (note) {
-        const shown = CH.filter((c) => !a || !list(c.who).length || list(c.who).includes(a)).length;
-        note.hidden = !a;
-        note.firstChild.textContent = `Showing ${shown} of ${CH.length} changes, those for ${a}.`;
+        const shown = CH.filter((c) => !document.getElementById(c.id)?.hidden).length;
+        const parts = [
+          a ? `for ${a}` : null,
+          view.linked.length ? `in ${plural(view.linked.length, "product")} from the link` : only ? `in the ${plural(only.size, "product")} you follow` : null,
+        ].filter(Boolean);
+        note.hidden = !parts.length;
+        note.firstChild.textContent = `Showing ${shown} of ${CH.length} changes, ${parts.join(" and ")}.`;
       }
       spy();
     }
@@ -3413,8 +4063,36 @@
     function changedSection() {
       if (!CH.length) return null;
       const sec = section("changed", DECISION ? "What is settled" : "What changed", kinds(CH));
-      if (FILTER) sec.body.append(h("p", { class: "filter-note", id: "filter-note", hidden: true }, h("span", {}), h("button", { type: "button", class: "link-btn", onclick: () => showFor("") }, "Show every change")));
-      if (PHASES.length) {
+      if (FILTER || SCOPED) sec.body.append(h("p", { class: "filter-note", id: "filter-note", hidden: true }, h("span", {}), h("button", { type: "button", class: "link-btn", onclick: showAll }, "Show every change")));
+      if (SCOPED) {
+        for (const [g, scopes] of scopeTree(CH)) {
+          const all = scopes.flatMap(([, cards]) => cards);
+          sec.body.append(
+            h(
+              "div",
+              { class: "scope-band", id: groupId(g), "data-group": g },
+              h("h3", { class: "scope-title" }, g, h("span", { class: "count" }, kinds(all) || plural(all.length, "change"))),
+              scopes.map(([sc, cards]) =>
+                h(
+                  "div",
+                  { class: "scope-group", id: sc ? scopeId(sc.id) : null, "data-box": "" },
+                  sc
+                    ? h(
+                        "div",
+                        { class: "scope-head" },
+                        h("h4", {}, icon(sc.icon, "h-ico"), sc.title),
+                        h("span", { class: "count" }, kinds(cards) || plural(cards.length, "change")),
+                        sc.href ? h("a", { class: "scope-link", href: sc.href, target: "_blank", rel: "noopener" }, "Manual page ↗") : null,
+                        star(sc),
+                      )
+                    : null,
+                  cards.map((c) => changeCard(c, sc ? "h5" : "h4")),
+                ),
+              ),
+            ),
+          );
+        }
+      } else if (PHASES.length) {
         for (const [phase, items] of groups()) {
           sec.body.append(
             h(
@@ -3446,11 +4124,12 @@
       const proofs = PR.map((p, i) => [p, i]).filter(([p]) => p.change === c.id);
       return h(
         "article",
-        { class: "card change", id: c.id, "data-for": who.join("|") },
+        { class: "card change", id: c.id, "data-for": who.join("|"), "data-scope": c.scope ?? "" },
         h(
           "div",
           { class: "c-head" },
           word ? h("span", { class: `chip tone-${tone}` }, word) : null,
+          SCOPED && c.phase ? h("span", { class: "c-phase" }, c.phase) : null,
           who.length ? h("span", { class: "c-for" }, `For ${who.join(", ")}`) : null,
           h("a", { class: "anchor", href: `#${c.id}`, "aria-label": `Link to ${plain(c.title)}` }, "#"),
         ),
@@ -3624,11 +4303,16 @@
           FU.map((f) =>
             h(
               "div",
-              { class: "fu", id: `fu-${f.id}` },
+              { class: "fu", id: `fu-${f.id}`, "data-for": "", "data-scope": f.scope ?? "" },
               h("input", { type: "checkbox", id: `fu-${f.id}-done`, "aria-label": `Done: ${plain(f.title)}`, onchange: (e) => tick(f.id, e.target.checked) }),
               h("span", { class: "fu-title", html: md(f.title) }),
               f.why ? h("span", { class: "fu-why", html: md(f.why) }) : null,
-              h("span", { class: "fu-owner" }, [f.owner, f.due].filter(Boolean).join(" · ")),
+              h(
+                "span",
+                { class: "fu-owner" },
+                SCOPE.has(f.scope) ? [h("span", { class: "fu-scope" }, SCOPE.get(f.scope).title), " · "] : null,
+                [f.owner, f.due].filter(Boolean).join(" · "),
+              ),
             ),
           ),
         ),
@@ -3808,15 +4492,27 @@
     // The section the reader is in lights up in the pills and the outline.
     let current = null;
     function spy() {
-      const marks = [...document.querySelectorAll(".main .sec[id], .main .phase-group[id]")].filter((el) => !el.hidden && document.querySelector(`[data-spy="${el.id}"]`));
+      const marks = [...document.querySelectorAll(".main .sec[id], .main .phase-group[id], .main .scope-band[id], .main .scope-group[id]")].filter(
+        (el) => !el.hidden && document.querySelector(`[data-spy="${el.id}"]`),
+      );
       let here = null;
       for (const el of marks) if (el.getBoundingClientRect().top < 120) here = el.id;
       if (here === current) return;
       current = here;
-      const section = here?.startsWith("area-") ? "changed" : here;
+      const section = /^(area|group|scope)-/.test(here ?? "") ? "changed" : here;
+      const band = here?.startsWith("scope-") ? document.getElementById(here)?.closest(".scope-band")?.id : null;
+      const box = document.querySelector(".rail");
+      const row = box?.querySelector(`.rail-row [data-spy="${here}"]`) ?? box?.querySelector(`.rail-secs [data-spy="${section}"]`);
       for (const a of document.querySelectorAll("[data-spy]")) {
-        if (a.dataset.spy === here || a.dataset.spy === section) a.setAttribute("aria-current", "true");
+        const inRail = !!a.closest(".rail");
+        const on = inRail ? a === row : a.dataset.spy === here || a.dataset.spy === section || a.dataset.spy === band;
+        if (on) a.setAttribute("aria-current", "true");
         else a.removeAttribute("aria-current");
+        a.classList.toggle("within", inRail && a !== row && a.dataset.spy === section);
+      }
+      if (row) {
+        const r = row.getBoundingClientRect();
+        if (r.top < 0 || r.bottom > box.clientHeight) box.scrollTop += r.top - box.clientHeight / 3;
       }
       const pills = document.querySelector(".pills");
       const pill = pills?.querySelector(`[data-spy="${section}"]`);
@@ -3828,11 +4524,126 @@
       return h("a", { href: `#${id}`, "data-spy": id }, h("span", {}, sec.label ?? sec.el.querySelector("h2")?.textContent), counts[id] ? h("span", { class: "n" }, counts[id]) : null);
     }
 
+    // The contents rail, as the manual's nav: the page's sections, with What changed opening onto the manual's groups,
+    // each a heading that folds, and their products under them. What the reader folded is kept for the next day's page.
+    const NAV = "handoff-nav";
+    const shut = (() => {
+      try {
+        const m = JSON.parse(readLocal(NAV) ?? "{}");
+        return new Set(Array.isArray(m.shut) ? m.shut : []);
+      } catch {
+        return new Set();
+      }
+    })();
+    const chevron = () => h("span", { class: "chev", "aria-hidden": "true", html: '<svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' });
+
+    function productRow(sc, cards) {
+      return h(
+        "li",
+        { "data-box": "" },
+        cards.map((c) => h("i", { hidden: true, "data-for": list(c.who).join("|"), "data-scope": c.scope ?? "" })),
+        h(
+          "div",
+          { class: "rail-row" },
+          h("a", { href: `#${scopeId(sc.id)}`, "data-spy": scopeId(sc.id) }, icon(sc.icon), h("span", {}, sc.title), h("span", { class: "n", "data-count": "" }, cards.length)),
+          star(sc),
+        ),
+      );
+    }
+
+    function groupNav(g, scopes) {
+      const cards = scopes.flatMap(([, c]) => c);
+      if (g === ACROSS)
+        return h(
+          "li",
+          { class: "rail-group", "data-group": g },
+          cards.map((c) => h("i", { hidden: true, "data-for": list(c.who).join("|"), "data-scope": "" })),
+          h("div", { class: "rail-row" }, h("a", { href: `#${groupId(g)}`, "data-spy": groupId(g) }, icon(ACROSS_ICON), h("span", {}, g), h("span", { class: "n", "data-count": "" }, cards.length))),
+        );
+      const panel = h("ul", { id: `rail-${groupId(g)}` }, scopes.map(([sc, c]) => productRow(sc, c)));
+      const heading = h("button", { type: "button", class: "rail-heading", "aria-controls": panel.id }, h("span", {}, g), chevron());
+      heading.onclick = () => {
+        const open = heading.getAttribute("aria-expanded") !== "true";
+        heading.setAttribute("aria-expanded", String(open));
+        panel.hidden = !open;
+        if (open) shut.delete(g);
+        else shut.add(g);
+        writeLocal(NAV, JSON.stringify({ shut: [...shut] }));
+      };
+      heading.setAttribute("aria-expanded", String(!shut.has(g)));
+      panel.hidden = shut.has(g);
+      return h("li", { class: "rail-group", "data-group": g }, heading, panel);
+    }
+
+    function railView() {
+      if (!SCOPED) return null;
+      return h(
+        "div",
+        { class: "rail-seg", role: "radiogroup", "aria-label": "Show the products" },
+        h("label", {}, h("input", { type: "radio", name: "rail-areas", value: "all", onchange: () => showOnly(false) }), "All products"),
+        h("label", {}, h("input", { type: "radio", name: "rail-areas", value: "mine", onchange: () => showOnly(true) }), "Following", h("span", { class: "n", id: "rail-follow-n" })),
+      );
+    }
+
+    function rail(sections, counts) {
+      const s = DATA.stamp ?? {};
+      const when = DIGEST ? toDay(s.date) : null;
+      return h(
+        "aside",
+        { class: "rail", id: "rail", "aria-label": "Contents" },
+        h(
+          "nav",
+          {
+            class: "outline",
+            "aria-label": "On this page",
+            onclick: (e) => {
+              if (e.target.closest("a")) openRail(false);
+            },
+          },
+          h(
+            "div",
+            { class: "rail-head" },
+            h(
+              "a",
+              { class: "rail-home", href: "#top" },
+              h("span", { class: "rail-kind" }, [KINDWORD[PAGE] ?? "Handoff", DIGEST ? s.branch : null].filter(Boolean).join(" · ")),
+              h("span", { class: "rail-title" }, when ? dayText(when, true) : (DATA.title ?? "")),
+            ),
+            h("button", { type: "button", class: "rail-close", "aria-label": "Close the contents", onclick: () => openRail(false) }, "×"),
+          ),
+          railView(),
+          h(
+            "ul",
+            { class: "rail-secs" },
+            sections.map((sec) =>
+              h(
+                "li",
+                {},
+                navLink(sec, counts),
+                sec.el.id === "changed" && SCOPED
+                  ? h("ul", { class: "rail-tree" }, scopeTree(CH).map(([g, scopes]) => groupNav(g, scopes)))
+                  : sec.el.id === "changed" && PHASES.length > 1
+                    ? h("ul", { class: "rail-tree" }, PHASES.map((p) => h("li", {}, h("div", { class: "rail-row" }, h("a", { href: `#${phaseId(p)}`, "data-spy": phaseId(p) }, h("span", {}, p))))))
+                    : null,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    function openRail(open) {
+      document.body.classList.toggle("rail-open", open);
+      for (const b of document.querySelectorAll(".rail-toggle")) b.setAttribute("aria-expanded", String(open));
+      if (open) document.querySelector(".rail-close")?.focus();
+      else if (document.activeElement?.closest(".rail")) document.querySelector(".rail-toggle")?.focus();
+    }
+
     function reveal() {
       const id = decodeURIComponent(location.hash.slice(1));
       const target = id && document.getElementById(id);
       if (!target) return;
-      if (target.closest("[hidden]")) showFor("");
+      if (target.closest("[hidden]")) showAll();
       target.scrollIntoView({ block: "start" });
     }
 
@@ -3857,44 +4668,27 @@
           { class: "main" },
           header(),
           glance(),
-          nav ? h("nav", { class: "pills", "aria-label": "Sections" }, sections.map((sec) => navLink(sec, counts))) : null,
+          nav
+            ? h(
+                "nav",
+                { class: "pills", "aria-label": "Sections" },
+                h("button", { type: "button", class: "rail-toggle", "aria-controls": "rail", "aria-expanded": "false", onclick: () => openRail(true) }, h("span", { "aria-hidden": "true" }, "☰"), "Contents"),
+                sections.map((sec) => navLink(sec, counts)),
+              )
+            : null,
           sections.map((sec) => sec.el),
         ),
-        nav
-          ? h(
-              "aside",
-              { class: "rail" },
-              h(
-                "nav",
-                { class: "outline", "aria-label": "On this page" },
-                h("p", { class: "outline-head" }, "On this page"),
-                h(
-                  "ul",
-                  {},
-                  sections.map((sec) =>
-                    h(
-                      "li",
-                      {},
-                      navLink(sec, counts),
-                      sec.el.id === "changed" && PHASES.length > 1
-                        ? h(
-                            "ul",
-                            { class: "sub" },
-                            PHASES.map((p) => h("li", {}, h("a", { href: `#${phaseId(p)}`, "data-spy": phaseId(p) }, p))),
-                          )
-                        : null,
-                    ),
-                  ),
-                  h("li", {}, h("a", { class: "to-top", href: "#top" }, "Back to top")),
-                ),
-              ),
-            )
-          : null,
+        nav ? rail(sections, counts) : null,
+        nav ? h("div", { class: "rail-scrim", onclick: () => openRail(false) }) : null,
       );
+      if (nav) document.body.classList.add("has-rail");
       loadLocal();
       lightbox();
       refresh();
-      if (FILTER) showFor(readLocal("handoff-for") ?? "");
+      if (FILTER || SCOPED) {
+        loadView();
+        applyView();
+      }
       reveal();
       spy();
       let ticking = false;
@@ -3911,6 +4705,9 @@
         { passive: true },
       );
       window.addEventListener("hashchange", reveal);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && document.body.classList.contains("rail-open")) openRail(false);
+      });
     }
 
     init();

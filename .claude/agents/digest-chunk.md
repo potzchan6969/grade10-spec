@@ -37,7 +37,7 @@ One JSON file:
 
 ```json
 {
-  "changes": [{ "id": "member-pass", "kind": "changed", "phase": "Blocks", "who": ["Members"], "title": "...", "before": "...", "now": "...", "commits": ["d12c402"], "picture": { "kind": "shot", "src": "shots/member-pass.jpg", "phone": true, "caption": "..." }, "links": [] }],
+  "changes": [{ "id": "member-pass", "kind": "changed", "phase": "Blocks", "scope": "shared/ui", "who": ["Members"], "title": "...", "before": "...", "now": "...", "commits": ["d12c402"], "picture": { "kind": "shot", "src": "shots/member-pass.jpg", "phone": true, "caption": "..." }, "links": [] }],
   "followups": [{ "id": "member-pass-apps", "title": "...", "why": "...", "owner": "Engineering" }],
   "plan": [{ "name": "member-pass", "story": "<story id>", "phone": true }]
 }
@@ -49,6 +49,10 @@ One JSON file:
   shows as its thumbnail: a shot of the screen first, else `bars`, a
   `table`, a `diff`, a `board` or a `flow`, in that order, as the digest's
   What Changed, by Area says; the build refuses a card without one
+- **Scope** - every card with a `kind` names the manual scope it lands in,
+  as the digest's Scopes says: its commits' `scopes` in `facts.json`
+  suggest it, and `node .claude/skills/checkpoint-digest/scripts/scopes.mjs list`
+  names them all; a follow-up may name one too
 - **Commits** - only your chunk's commits; a card that needs another chunk's
   commit is the lead's, so name it in your reply and leave it out
 - **Shots** - for a screen a card shows, find its story with
