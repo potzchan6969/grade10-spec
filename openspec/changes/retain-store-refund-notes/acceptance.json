@@ -1,0 +1,62 @@
+{
+  "version": 2,
+  "change": "retain-store-refund-notes",
+  "baseline": "770e4b09b6c661054e3a22c5371df1718b36987256cfdfe9e1a58dd2a2d48365",
+  "fingerprint": "432c8e63aee0f15545b25afa443437d4fe695484db75b6e19e72828f2fff37fc",
+  "reviewedBy": "@kinisworking",
+  "acceptedAt": "2026-11-02T08:17:01.498Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/retain-store-refund-notes/decisions.md",
+      "sha256": "89aed754bc727b0c051946d918c6de1215a97eed26b883ed92b6f178396ec12f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/retain-store-refund-notes/proposal.md",
+      "sha256": "5585831b7a3f2b6a3b6160700b7a065b737bbc2dd6efd73bda18154b208d364d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/retain-store-refund-notes/specs/grade10-site/store/order-detail/spec.md",
+      "sha256": "938dbfebaad50fb2ead08fc06f0e6bff31501f4664285efc8dce3df81a9402b9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/retain-store-refund-notes/specs/grade10-site/store/order-detail/user-journeys.md",
+      "sha256": "01a1bd78cefae9900e68445e3a34bdd4ce7fff98bbb38f387076e088c3eeeffd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/retain-store-refund-notes/tech-design.md",
+      "sha256": "826d73c7f15876af485106b2e8248b9c11532103c54bf0371a74c34ded93cdc8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-detail/spec.md",
+      "sha256": "7e8a76eb61e4f499b61e4c65abd0491429efa1115b45cc5269d203c83813a36b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-detail/user-journeys.md",
+      "sha256": "faa3374fa9983b832fa2a2e310d1e1c8037e12c8ba606b62e49105309e5260e3",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/store/order-detail/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Existing authorized detail reads carry retained reasons",
+        "Requirement: Refund metadata retains the supplied source facts",
+        "Requirement: Refund reason text stays within the existing erasure boundary",
+        "Requirement: Retained refund records expose optional reasons and precise attribution"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-detail/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

@@ -231,12 +231,12 @@ observations are 5.6 and 5.7.
 
 These retired addresses are not completed tasks and are never reused.
 
-## 13. The walk (grade10)
+## 13. The walk (grade10) (owner: @kinisworking)
 
-Uses draft feature cases as planning input after Group 11 lands. Planning marks no case approved or actual.
+Uses the current Store PRD suite after Group 11 lands. This group updates automation disposition only; QA owns case Status.
 
 - [ ] 13.1 Keep one end-to-end actor walk for each frozen journey through the drawer, My Orders and the Shopify return link; US-05 walks one Pay at a time and older and lost answers, not invoice reuse or recovery: `grade10-site-store-checkout-US-01`, `grade10-site-store-checkout-US-02`, `grade10-site-store-checkout-US-03`, `grade10-site-store-checkout-US-04`, `grade10-site-store-checkout-US-05`, `grade10-site-store-checkout-US-06`. — blocked: the walk exists (`apps/frontend/grade10/e2e/tests/store/checkout-integration.spec.ts`) but the isolated e2e stack needs Docker, which this sandbox lacks - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
-- [ ] 13.2 In the walks' own commit, use `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>` only for cases the walks decide. Name remaining manual provider cases in the suite and rounds row. — blocked: follows 13.1
+- [x] 13.2 In the walks' own commit, use `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path> --suite-file docs/prds/products/grade10-site/store/tests/cart-tcs.md` only for cases the walks decide. Name remaining manual provider cases in the suite and rounds row. — disposition recorded 2026-11-02: `g10.store-cart.TC39` is decided by `cart-checkout.spec.ts`, `g10.store-cart.TC42` by `cart-review.spec.ts`; live-Shopify cases `TC35`–`TC38`, `TC40`, `TC43`–`TC47` stay manual (see `rounds.md`).
 - [ ] 13.3 Verify Playwright and authorized staging evidence separately; record unrun gates and receipts without treating fixtures as live Shopify proof. Backend guarantees are evidenced by `add-checkout-purchase-safety`. — blocked: needs the walks run and authorized staging - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived
 
 ## 14. Checkout pending product record (grade10-spec)
@@ -257,11 +257,11 @@ the existing shared guard and host mapping are required by this request path.
 - [x] 15.2 Make those tests pass using the common `interactionPending` input and synchronous Pay guard. Hold actual Pay until settlement without canceling on close, retain external cart/member stale-answer rejection and release only currently permitted actions after failure or the last operation; start no automatic new Pay. A still-current successful hosted-invoice answer opens Shopify after plain dismissal or reopen (Checkout Q35 / Cart Drawer Q22); drawer open state does not invalidate the request: `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-66`, `grade10-site-store-checkout-SC-67`, `grade10-site-store-checkout-SC-68`.
 - [x] 15.3 Verify focused drawer/checkout tests, compatibility typechecks and frontend checks required by `docs/conventions/validation.md`; perform no backend, provider or production change.
 
-## 16. The walk - pending Pay (grade10)
+## 16. The walk - pending Pay (grade10) (owner: @kinisworking)
 
 Uses draft `feature-tcs.md` as planning input after Groups 14-15 land; keeps
 Group 13's complete journey scope with the pending-action amendment.
 
 - [ ] 16.1 Keep an end-to-end actor walk for every checkout journey, including blocked drawer controls during Pay, changes from another tab/session, dismissal/reopen, overlapping operations, failed/lost answers and deliberate retry: `grade10-site-store-checkout-US-01`, `grade10-site-store-checkout-US-02`, `grade10-site-store-checkout-US-03`, `grade10-site-store-checkout-US-04`, `grade10-site-store-checkout-US-05`, `grade10-site-store-checkout-US-06`. — blocked: the walk exists (`apps/frontend/grade10/e2e/tests/store/cart-drawer-pending.spec.ts`) but the isolated e2e stack needs Docker - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
-- [ ] 16.2 In the walks' own commit, mark only cases decided by those walks with `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>` and name remaining manual provider cases in the suite and the walk's `rounds.md` row. — blocked: follows 16.1
+- [x] 16.2 In the walks' own commit, mark only cases decided by those walks with `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>` and name remaining manual provider cases in the suite and the walk's `rounds.md` row. — disposition recorded 2026-11-02: `g10.store-cart.TC42` is already automated and decided by `cart-review.spec.ts` in round 13; no additional current Store PRD case is decided by the pending-operation walk. Remaining manual provider cases are listed in `rounds.md`.
 - [ ] 16.3 Verify focused Playwright walks and record unrun Shopify/provider gates separately; preserve backend safety ownership and all earlier acceptance receipts. — blocked: needs the walks run - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived

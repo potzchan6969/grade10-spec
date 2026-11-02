@@ -58,8 +58,9 @@ export const CheckoutRedirecting: Story = {
   parameters: {
     journeys: [
       "grade10-site-store-checkout-US-01",
-      "grade10-site-store-checkout-US-05",
       "g10.store-cart-drawer.US6",
+      "g10.store-cart-drawer.US7",
+      "g10.store-cart-drawer.US9",
     ],
   },
   play: async () => {

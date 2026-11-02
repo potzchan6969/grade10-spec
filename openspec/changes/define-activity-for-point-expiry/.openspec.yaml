@@ -1,3 +1,5 @@
 schema: grade10-planning
 created: 2026-10-27
 depends_on: add-point-expiry-reminders
+hands:
+  dev: "@htonyl"
