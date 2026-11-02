@@ -939,20 +939,37 @@
   }
   .outline {
     display: grid;
-    gap: 18px;
-    padding: 14px 12px 32px;
+    align-content: start;
+    gap: 14px;
+    padding: 18px 14px 32px;
   }
   .rail-head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 8px;
-    padding: 4px 8px 0;
+    padding: 0 8px 4px;
+  }
+  .outline .rail-home {
+    display: grid;
+    padding: 0;
+    gap: 2px;
+    min-width: 0;
+    color: var(--fg);
+    text-decoration: none;
+  }
+  .rail-kind {
+    color: var(--accent);
+    font-size: 11.5px;
+    font-weight: 750;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
   }
   .rail-title {
     overflow: hidden;
-    font-size: 14.5px;
+    font-size: 16px;
     font-weight: 720;
+    letter-spacing: -0.01em;
     line-height: 1.3;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -970,6 +987,48 @@
     line-height: 1;
     cursor: pointer;
   }
+  .rail-seg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 0 4px;
+    padding: 3px;
+    border-radius: 10px;
+    background: var(--stage);
+  }
+  .rail-seg label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 30px;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background 150ms,
+      color 150ms;
+  }
+  .rail-seg input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .rail-seg label:has(input:checked) {
+    background: var(--surface);
+    color: var(--fg);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+  }
+  .rail-seg label:has(input:disabled) {
+    opacity: 0.55;
+    cursor: default;
+  }
+  .rail-seg label:has(input:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
   .outline ul {
     display: grid;
     gap: 1px;
@@ -978,15 +1037,16 @@
     list-style: none;
   }
   .outline a {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
     min-height: 32px;
-    padding: 4px 8px;
+    padding: 4px 10px;
     border-radius: 8px;
     color: var(--fg);
     font-size: 14px;
-    font-weight: 520;
+    font-weight: 560;
     line-height: 1.35;
     text-decoration: none;
   }
@@ -997,36 +1057,52 @@
   .outline a:hover {
     background: var(--stage);
   }
+  .outline a.within {
+    color: var(--accent);
+  }
   .outline a[aria-current] {
     background: var(--accent-soft);
     color: var(--accent);
     font-weight: 680;
   }
+  .outline a[aria-current]::before {
+    position: absolute;
+    inset: 7px auto 7px 0;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+    content: "";
+  }
+  .outline .n {
+    font-size: 12.5px;
+  }
   .outline a:focus-visible,
-  .rail-heading:focus-visible,
-  .rail-caret:focus-visible {
+  .rail-heading:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: -2px;
   }
-  .outline .sub a {
-    padding-left: 22px;
-    color: var(--muted);
-    font-size: 13.5px;
+  .outline .rail-tree {
+    gap: 6px;
+    margin: 6px 0 12px 12px;
+  }
+  .rail-group > ul {
+    gap: 1px;
   }
   .rail-heading {
     display: flex;
     align-items: center;
     gap: 6px;
     width: 100%;
-    padding: 4px 8px;
+    min-height: 26px;
+    padding: 2px 10px;
     border: 0;
-    border-radius: 8px;
+    border-radius: 6px;
     background: none;
     color: var(--muted);
     font: inherit;
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 720;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     text-align: left;
     text-transform: uppercase;
     cursor: pointer;
@@ -1034,22 +1110,20 @@
   .rail-heading:hover {
     color: var(--fg);
   }
-  .rail-heading .n {
-    margin-left: auto;
-    letter-spacing: 0;
+  .chev {
+    display: inline-flex;
+    opacity: 0;
+    transition:
+      transform 150ms,
+      opacity 150ms;
   }
-  .caret {
-    display: inline-block;
-    flex: none;
-    width: 10px;
-    font-size: 9px;
-    transition: transform 150ms;
+  .rail-heading:hover .chev,
+  .rail-heading:focus-visible .chev,
+  .rail-heading[aria-expanded="false"] .chev {
+    opacity: 1;
   }
-  [aria-expanded="false"] > .caret {
+  .rail-heading[aria-expanded="false"] .chev {
     transform: rotate(-90deg);
-  }
-  .rail-group > ul {
-    margin-top: 2px;
   }
   .rail-row {
     display: flex;
@@ -1059,102 +1133,20 @@
     flex: 1;
     min-width: 0;
   }
-  .rail-caret {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 22px;
-    height: 32px;
-    padding: 0;
-    border: 0;
-    border-radius: 6px;
-    background: none;
-    color: var(--muted);
-    cursor: pointer;
+  .outline .rail-row a {
+    font-size: 13.5px;
+    font-weight: 520;
   }
-  .rail-caret:hover {
-    color: var(--fg);
+  .rail-row {
+    position: relative;
   }
-  .outline .rail-cards {
-    margin: 1px 0 6px 22px;
-    padding-left: 8px;
-    border-left: 1px solid var(--line);
+  .rail-row.followed a > span:first-child::after {
+    margin-left: 6px;
+    color: var(--accent);
+    font-size: 12px;
+    content: "★";
   }
-  .outline .rail-cards a {
-    min-height: 28px;
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 480;
-  }
-  .outline .rail-cards a:hover {
-    color: var(--fg);
-  }
-  .outline .rail-cards a > span:first-child {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-  .dot {
-    flex: none;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--tone, var(--line-strong));
-  }
-  .outline .rail-cards a > .dot {
-    order: -1;
-  }
-  .outline .to-top {
-    color: var(--muted);
-    font-size: 13px;
-  }
-  .rail-view {
-    display: grid;
-    gap: 8px;
-    margin: 0 4px;
-    padding: 10px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: var(--surface);
-    font-size: 13px;
-  }
-  .rail-for {
-    display: grid;
-    gap: 4px;
-    color: var(--muted);
-    font-weight: 600;
-  }
-  .rail-for select {
-    min-height: 32px;
-    padding: 4px 8px;
-    border: 1px solid var(--line-strong);
-    border-radius: 8px;
-    background: var(--surface);
-    color: var(--fg);
-    font: inherit;
-    font-weight: 560;
-  }
-  .rail-only {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 28px;
-    color: var(--fg);
-    font-weight: 560;
-    cursor: pointer;
-  }
-  .rail-only input {
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    accent-color: var(--accent);
-  }
-  .rail-only:has(input:disabled) {
-    color: var(--muted);
-    cursor: default;
-  }
+
   .rail-toggle {
     flex: none;
     display: inline-flex;
@@ -1231,7 +1223,8 @@
   .scope-band[hidden],
   .scope-group[hidden],
   .rail-group[hidden],
-  .rail-cards[hidden],
+  .filter-note[hidden],
+  .rail-row[hidden],
   .outline li[hidden] {
     display: none;
   }
@@ -1329,20 +1322,22 @@
     outline-offset: 1px;
   }
   .rail-row .star {
-    width: 28px;
-    height: 28px;
-    font-size: 15px;
+    position: absolute;
+    top: 50%;
+    right: 3px;
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
     opacity: 0;
+    transform: translateY(-50%);
   }
   .rail-row:hover .star,
-  .rail-row .star:focus-visible,
-  .rail-row .star[aria-pressed="true"] {
+  .rail-row .star:focus-visible {
     opacity: 1;
   }
-  @media (hover: none) {
-    .rail-row .star {
-      opacity: 1;
-    }
+  .rail-row:hover .n,
+  .rail-row:has(.star:focus-visible) .n {
+    visibility: hidden;
   }
   .c-phase {
     padding: 0 8px;
@@ -3769,16 +3764,18 @@
           r.parentElement.setAttribute("aria-disabled", String(!view.follow.size));
         }
       }
-      const pick = document.getElementById("rail-for");
-      if (pick) pick.value = a;
-      const mine = document.getElementById("rail-only");
-      if (mine) {
-        mine.checked = view.only && !view.linked.length;
-        mine.disabled = !view.follow.size;
-        mine.parentElement.title = view.follow.size ? "" : "Star ☆ a product first";
+      for (const r of document.querySelectorAll('input[name="rail-areas"]')) {
+        r.checked = (r.value === "mine") === (view.only && !view.linked.length);
+        if (r.value === "mine") {
+          r.disabled = !view.follow.size;
+          r.parentElement.title = view.follow.size ? "" : "Star ☆ a product to follow it";
+        }
       }
+      const railN = document.getElementById("rail-follow-n");
+      if (railN) railN.textContent = view.follow.size ? String(view.follow.size) : "";
       for (const b of document.querySelectorAll("[data-star]")) {
         const on = view.follow.has(b.dataset.star);
+        b.closest(".rail-row")?.classList.toggle("followed", on);
         b.setAttribute("aria-pressed", String(on));
         b.textContent = on ? "★" : "☆";
       }
@@ -3791,6 +3788,7 @@
         el.hidden = off;
       }
       for (const box of document.querySelectorAll("[data-box], [data-group]")) box.hidden = ![...box.querySelectorAll("[data-for]")].some((el) => !el.hidden);
+      for (const n of document.querySelectorAll(".rail [data-count]")) n.textContent = n.closest("li").querySelectorAll("i[data-for]:not([hidden])").length;
       for (const n of document.querySelectorAll("[data-tally]")) n.textContent = plural(n.parentElement.parentElement.querySelectorAll("li[data-for]:not([hidden])").length, "change");
       for (const link of document.querySelectorAll(".rail-secs [data-spy]")) {
         const target = document.getElementById(link.dataset.spy);
@@ -4411,12 +4409,15 @@
       current = here;
       const section = /^(area|group|scope)-/.test(here ?? "") ? "changed" : here;
       const band = here?.startsWith("scope-") ? document.getElementById(here)?.closest(".scope-band")?.id : null;
-      for (const a of document.querySelectorAll("[data-spy]")) {
-        if (a.dataset.spy === here || a.dataset.spy === section || a.dataset.spy === band) a.setAttribute("aria-current", "true");
-        else a.removeAttribute("aria-current");
-      }
       const box = document.querySelector(".rail");
       const row = box?.querySelector(`.rail-row [data-spy="${here}"]`) ?? box?.querySelector(`.rail-secs [data-spy="${section}"]`);
+      for (const a of document.querySelectorAll("[data-spy]")) {
+        const inRail = !!a.closest(".rail");
+        const on = inRail ? a === row : a.dataset.spy === here || a.dataset.spy === section || a.dataset.spy === band;
+        if (on) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+        a.classList.toggle("within", inRail && a !== row && a.dataset.spy === section);
+      }
       if (row) {
         const r = row.getBoundingClientRect();
         if (r.top < 0 || r.bottom > box.clientHeight) box.scrollTop += r.top - box.clientHeight / 3;
@@ -4431,94 +4432,70 @@
       return h("a", { href: `#${id}`, "data-spy": id }, h("span", {}, sec.label ?? sec.el.querySelector("h2")?.textContent), counts[id] ? h("span", { class: "n" }, counts[id]) : null);
     }
 
-    // The contents rail, as the manual's nav: the page's sections, then each manual group as a heading that folds,
-    // its products as rows that open onto their cards. What the reader folded or opened is kept for the next day's page.
+    // The contents rail, as the manual's nav: the page's sections, with What changed opening onto the manual's groups,
+    // each a heading that folds, and their products under them. What the reader folded is kept for the next day's page.
     const NAV = "handoff-nav";
-    function navMemory() {
+    const shut = (() => {
       try {
         const m = JSON.parse(readLocal(NAV) ?? "{}");
-        return { shut: new Set(Array.isArray(m.shut) ? m.shut : []), open: new Set(Array.isArray(m.open) ? m.open : []) };
+        return new Set(Array.isArray(m.shut) ? m.shut : []);
       } catch {
-        return { shut: new Set(), open: new Set() };
+        return new Set();
       }
-    }
-    const memory = navMemory();
-    function remember(set, key, on) {
-      if (on) set.add(key);
-      else set.delete(key);
-      writeLocal(NAV, JSON.stringify({ shut: [...memory.shut], open: [...memory.open] }));
-    }
-
-    function fold(button, panel, open) {
-      button.setAttribute("aria-expanded", String(open));
-      panel.hidden = !open;
-    }
-
-    function cardRow(c) {
-      const [word, tone] = KIND[c.kind] ?? [];
-      return h(
-        "li",
-        { "data-for": list(c.who).join("|"), "data-scope": c.scope ?? "" },
-        h("a", { href: `#${c.id}`, title: word ? `${word}: ${c.title}` : c.title }, h("span", { html: mdText(c.title) }), h("span", { class: `dot${tone ? ` tone-${tone}` : ""}`, "aria-hidden": "true" })),
-      );
-    }
+    })();
+    const chevron = () => h("span", { class: "chev", "aria-hidden": "true", html: '<svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' });
 
     function productRow(sc, cards) {
-      const panel = h("ul", { class: "rail-cards", id: `rail-${scopeId(sc.id)}` }, cards.map(cardRow));
-      const caret = h("button", { type: "button", class: "rail-caret", "aria-controls": panel.id, "aria-label": `Show the changes in ${sc.title}` }, h("span", { class: "caret", "aria-hidden": "true" }, "▼"));
-      caret.onclick = () => {
-        const open = caret.getAttribute("aria-expanded") !== "true";
-        fold(caret, panel, open);
-        remember(memory.open, sc.id, open);
-      };
-      fold(caret, panel, memory.open.has(sc.id));
       return h(
         "li",
         { "data-box": "" },
-        h("div", { class: "rail-row" }, caret, h("a", { href: `#${scopeId(sc.id)}`, "data-spy": scopeId(sc.id) }, h("span", {}, sc.title), h("span", { class: "n" }, cards.length)), star(sc)),
-        panel,
+        cards.map((c) => h("i", { hidden: true, "data-for": list(c.who).join("|"), "data-scope": c.scope ?? "" })),
+        h(
+          "div",
+          { class: "rail-row" },
+          h("a", { href: `#${scopeId(sc.id)}`, "data-spy": scopeId(sc.id) }, h("span", {}, sc.title), h("span", { class: "n", "data-count": "" }, cards.length)),
+          star(sc),
+        ),
       );
     }
 
     function groupNav(g, scopes) {
-      const n = scopes.reduce((k, [, cards]) => k + cards.length, 0);
-      const panel = h("ul", { id: `rail-${groupId(g)}` }, scopes.flatMap(([sc, cards]) => (sc ? productRow(sc, cards) : cards.map(cardRow))));
-      const heading = h("button", { type: "button", class: "rail-heading", "aria-controls": panel.id }, h("span", { class: "caret", "aria-hidden": "true" }, "▼"), h("span", {}, g), h("span", { class: "n" }, n));
+      const cards = scopes.flatMap(([, c]) => c);
+      if (g === ACROSS)
+        return h(
+          "li",
+          { class: "rail-group", "data-group": g },
+          cards.map((c) => h("i", { hidden: true, "data-for": list(c.who).join("|"), "data-scope": "" })),
+          h("div", { class: "rail-row" }, h("a", { href: `#${groupId(g)}`, "data-spy": groupId(g) }, h("span", {}, g), h("span", { class: "n", "data-count": "" }, cards.length))),
+        );
+      const panel = h("ul", { id: `rail-${groupId(g)}` }, scopes.map(([sc, c]) => productRow(sc, c)));
+      const heading = h("button", { type: "button", class: "rail-heading", "aria-controls": panel.id }, h("span", {}, g), chevron());
       heading.onclick = () => {
         const open = heading.getAttribute("aria-expanded") !== "true";
-        fold(heading, panel, open);
-        remember(memory.shut, g, !open);
+        heading.setAttribute("aria-expanded", String(open));
+        panel.hidden = !open;
+        if (open) shut.delete(g);
+        else shut.add(g);
+        writeLocal(NAV, JSON.stringify({ shut: [...shut] }));
       };
-      fold(heading, panel, !memory.shut.has(g));
-      return h("div", { class: "rail-group", "data-group": g }, heading, panel);
+      heading.setAttribute("aria-expanded", String(!shut.has(g)));
+      panel.hidden = shut.has(g);
+      return h("li", { class: "rail-group", "data-group": g }, heading, panel);
     }
 
-    // The same view as the pills at the top, kept in reach in the rail while the reader scrolls.
     function railView() {
-      if (!FILTER && !SCOPED) return null;
+      if (!SCOPED) return null;
       return h(
         "div",
-        { class: "rail-view" },
-        FILTER
-          ? h(
-              "label",
-              { class: "rail-for" },
-              h("span", {}, "Show changes for"),
-              h("select", { id: "rail-for", onchange: (e) => showFor(e.target.value) }, ["", ...AUDIENCES].map((a) => h("option", { value: a }, a || "Everyone"))),
-            )
-          : null,
-        SCOPED
-          ? h(
-              "label",
-              { class: "rail-only" },
-              h("input", { type: "checkbox", id: "rail-only", onchange: (e) => showOnly(e.target.checked) }),
-              h("span", {}, "Only the products I follow"),
-            )
-          : null,
+        { class: "rail-seg", role: "radiogroup", "aria-label": "Show the products" },
+        h("label", {}, h("input", { type: "radio", name: "rail-areas", value: "all", onchange: () => showOnly(false) }), "All products"),
+        h("label", {}, h("input", { type: "radio", name: "rail-areas", value: "mine", onchange: () => showOnly(true) }), "Following", h("span", { class: "n", id: "rail-follow-n" })),
       );
     }
 
     function rail(sections, counts) {
+      const s = DATA.stamp ?? {};
+      const when = DIGEST ? toDay(s.date) : null;
       return h(
         "aside",
         { class: "rail", id: "rail", "aria-label": "Contents" },
@@ -4531,7 +4508,17 @@
               if (e.target.closest("a")) openRail(false);
             },
           },
-          h("div", { class: "rail-head" }, h("p", { class: "rail-title" }, DATA.title ?? "On this page"), h("button", { type: "button", class: "rail-close", "aria-label": "Close the contents", onclick: () => openRail(false) }, "×")),
+          h(
+            "div",
+            { class: "rail-head" },
+            h(
+              "a",
+              { class: "rail-home", href: "#top" },
+              h("span", { class: "rail-kind" }, [KINDWORD[PAGE] ?? "Handoff", DIGEST ? s.branch : null].filter(Boolean).join(" · ")),
+              h("span", { class: "rail-title" }, when ? dayText(when, true) : (DATA.title ?? "")),
+            ),
+            h("button", { type: "button", class: "rail-close", "aria-label": "Close the contents", onclick: () => openRail(false) }, "×"),
+          ),
           railView(),
           h(
             "ul",
@@ -4541,14 +4528,14 @@
                 "li",
                 {},
                 navLink(sec, counts),
-                sec.el.id === "changed" && !SCOPED && PHASES.length > 1
-                  ? h("ul", { class: "sub" }, PHASES.map((p) => h("li", {}, h("a", { href: `#${phaseId(p)}`, "data-spy": phaseId(p) }, h("span", {}, p)))))
-                  : null,
+                sec.el.id === "changed" && SCOPED
+                  ? h("ul", { class: "rail-tree" }, scopeTree(CH).map(([g, scopes]) => groupNav(g, scopes)))
+                  : sec.el.id === "changed" && PHASES.length > 1
+                    ? h("ul", { class: "rail-tree" }, PHASES.map((p) => h("li", {}, h("div", { class: "rail-row" }, h("a", { href: `#${phaseId(p)}`, "data-spy": phaseId(p) }, h("span", {}, p))))))
+                    : null,
               ),
             ),
           ),
-          SCOPED ? scopeTree(CH).map(([g, scopes]) => groupNav(g, scopes)) : null,
-          h("ul", {}, h("li", {}, h("a", { class: "to-top", href: "#top" }, h("span", {}, "Back to top")))),
         ),
       );
     }
