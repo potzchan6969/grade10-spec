@@ -11,7 +11,8 @@ vault's daily incentive and consignment sale proceeds -
 ## Wallet
 
 - 🚧 **Available Amount** — incentive and sale proceeds posted, less cash-outs; all of it cashable
-  - **Denominated in US Dollars** — everything in the wallet reads US$; decided by the owner, 2026-10-30
+  - **Denominated in US Dollars** — everything in the wallet reads US$, from the start; decided by the owner, 2026-10-30
+  - **Proceeds in Hong Kong Dollars** — converted once when credited, at the day's European Central Bank rate, kept with the amount; a refund takes back that same US$ amount
   - **Incentive** — posted daily, after the card's vesting - [Incentive](/p/grade10-site/vault/incentive#reaching-the-wallet)
   - **Sale Proceeds** — posted 3 business days after the buyer pays
   - **Vesting** — shown beside it, with its release date; not part of the wallet
@@ -36,8 +37,9 @@ vault's daily incentive and consignment sale proceeds -
 
 ## Cash-Out
 
-- 🚧 **Request** — at least US$65, one every 7 days
-  - **Currency** — cashed out in Hong Kong dollars or US dollars; an HKD request pays the day's converted amount, and a USD or overseas-bank request is handled manually by our team - decided by the owner, 2026-10-30
+- 🚧 **Request** — at least US$65 and at most US$6,500, one every 7 days; each figure an admin setting
+  - **Review Above** — an admin setting, off by default: a request above it waits for finance, as a held cash-out does
+  - **Currency** — cashed out in Hong Kong dollars or US dollars; an HKD request is quoted at the request's rate, kept with it, and a USD or overseas-bank request is handled manually by our team - decided by the owner, 2026-10-30
   - **Built** — staff-side only: the collector's page to see the wallet, save a payout account and ask for a cash-out is not built yet
 - 🚧 **Paid** — within 3 business days, by FPS or bank transfer
   - **Built** — by bank transfer, to a payout account whose name matches the verified identity
@@ -45,10 +47,6 @@ vault's daily incentive and consignment sale proceeds -
 - **Account** — entered on the first request, saved to the profile and filled in next time; in the verified collector's name
   - 🚧 **Changing It** — the collector may change it, after passing the identity check again
 - **Held** — while the collector has a debt
-
-:::callout{kind="note"}
-- ❓ **Cash-out maximum** — US$6,500 (≈ HKD 50,000) a request, or no maximum with a manual review above a threshold. Finance confirms before Phase 2, 6 December
-:::
 
 ## Payouts
 
@@ -62,7 +60,9 @@ What finance does with the requests.
 
 ## Identity Check
 
-- 🚧 **One Check, for the Account** — identity is verified once per account, never by a service at an intake, a signing or a sale - [KYC](/p/grade10-site/account/kyc)
+- 🚧 **One Check, for the Account** — identity is verified once per account and reused, never by a service at an intake, a signing or a sale - [KYC](/p/grade10-site/account/kyc)
+- 🚧 **Before Money Leaves** — a cash-out, or a loan advance when the loan offer is accepted, before the transfer; also once for a mail-in, where no staff see the ID - [Vault Intake](/p/grade10-site/vault/intake#mail-in)
+  - **The Store's Bid Bar** — reads the same check - [Identity Check](/p/grade10-site/finance/identity-check)
 - 🚧 **When** — at the first cash-out, when the cash-out account changes, and when a new ID has been recorded on the account since the last check
   - **Proceeds Held** — sale proceeds reach the wallet unchecked, and can't be cashed out until the check passes
   - **Not for a Retrieval** — staff check the ID at the counter against the one recorded at intake - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#collection)
@@ -85,7 +85,7 @@ number and finance pays one way. Money only leaves to a verified name; the
 intake itself stays light.
 
 - **Paid 3 business days after the buyer pays** — proceeds don't wait for delivery or a return window; a rare refund is reversed from the wallet instead
-- **At least HKD 500, once every 7 days** — keeps payouts batchable for finance
+- **At least US$65, once every 7 days** — keeps payouts batchable for finance
 - **Identity before money leaves, not at intake** — anti-money-laundering practice asks for it at the exit, and asking at the door would turn intakes away; one check for the account, compared with the ID read at intake, so a mistyped email at the counter can't send one collector's money to another - the counter review, round 2, 2026-11-02
 - **Earnings, not a balance** — it is cashed out only, so it never reads as store credit
 - **Not in scope** — spending the wallet on Grade10; payout to a card
@@ -93,8 +93,9 @@ intake itself stays light.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | KYC | 🚧 | Identity is verified per account, only at cash-out, and compared with the ID recorded at intake; a contradiction holds the cash-out for finance - the counter review, round 2, 2026-11-02, settling the question open since deposit | Owner |
-| Loans and the identity check | ❓ | Whether a loan needs a verified identity before it is paid out, as money leaving Grade10 other than a cash-out | Product |
-| Cash-out | ❓ | At least US$65, every 7 days, paid in HKD or USD, to an account in the owner's verified name, a debt blocking it, a batch approved by a second treasurer | Owner |
+| Loans and the identity check | Decided | A loan advance is money leaving Grade10, so the account's one check is required when the loan offer is accepted, before the transfer - the counter review, round 3, 2026-11-02 | Product |
+| Cash-out | Decided | At least US$65 and at most US$6,500, every 7 days, paid in HKD or USD, to an account in the owner's verified name, a debt blocking it, a batch approved by a second treasurer; the figures are admin settings, with a review threshold off by default - the counter review, round 3, 2026-11-02 | Product |
+| Money-lenders licence | ❓ | Whether the licence asks for more than the account check before a loan is paid out | Legal |
 | The payout flow | 🚧 | Proceeds go to the wallet, and the account is named at cash-out, not at the counter - the counter review, 2026-11-02, settling the brand setting left open on 2026-10-27; a partner is always paid by bank | Owner |
 :::
 

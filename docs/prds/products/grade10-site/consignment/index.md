@@ -53,8 +53,8 @@ is the default it starts on.
 | --- | --- |
 | Consignment period | **1** year from signing |
 | Sale proceeds | in the wallet **3** business days after the buyer pays |
-| Fee for ending early | ❓ unset |
-| Currency | HKD |
+| Fee for ending early | **US$0**, charged only once an auction lot is prepared |
+| Currency | HKD, credited to the wallet in US dollars |
 
 - 🚧 **Proceeds as built** - the brand's payout setting picks where they go,
   by default a bank account kept on the consignor's list after the return

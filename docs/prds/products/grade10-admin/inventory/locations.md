@@ -7,7 +7,7 @@ order: 3
 
 | Rule | Value |
 | --- | --- |
-| Sites | shop · vault · warehouse |
+| Sites | shop · vault · warehouse · card event |
 | Storage units | room · safe · locker · cabinet · display case · shelf · tray, each inside a site or another unit |
 | Outside places | grader · partner · storage provider · other |
 | Label | one short code per item, printed with its QR code and title |
@@ -22,9 +22,17 @@ order: 3
 - **Outside place** - a place the house sends items to and does not run: a
   grader's receiving address, a partner, a storage provider
 - 🚧 **Card Event** - a kind of site, beside a shop, that an admin opens
-  for an event with its name, address and time zone, and retires once every
-  item has moved out; cards taken there start there -
+  for an event with its name, address, time zone, opening and closing days
+  and the place its cards go next; cards taken there start there -
   [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+  - **After It Closes** - every card still there shows To Move -
+    [Transit](/p/grade10-admin/inventory/transit)
+  - **Retired by Hand** - refused while it holds a card
+- 🚧 **Holds Vaulted Cards** - a setting on each storage unit, set from its kind
+  when it is made: a safe, locker, cabinet or room at a shop or a vault holds
+  vaulted cards, and an admin switches others on, KEC's among them
+- 🚧 **Display** - a setting on each storage unit, set for display cases and
+  shelves: it holds cards on sale
 - **One registry** - inventory keeps every place; the diary keeps the hours,
   desks and bookings of the sites that take visits, under the ids its shops
   carry today - [Diary](/p/grade10-admin/appointment/diary)

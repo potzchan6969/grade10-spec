@@ -13,18 +13,15 @@ the share of vaulted cards that get consigned, and the time it takes.
   - **Row** — owner, market price, liquidity, days in the vault, incentive paid so far, last contact
   - **Ranking** — by how likely the card is to sell: liquidity and market price first, then days in the vault
   - **Filters** — price tier, liquidity, days in the vault, owner type, contact status
-  - **Flagged** — a card that has earned for a long time without being consigned
+  - **Flagged** — a card that has earned for 90 days, an admin setting, without being consigned
 
 ## Owner Outreach
 
 - 🚧 **Email** — from the row, with the card's market price and a link to the consign form
 - 🚧 **Contact Log** — a call or message logged by hand with its outcome: interested, not now, declined
 - 🚧 **Last Contact** — shown on every card, so nobody is contacted twice in a short time
+  - **Contact Limit** — 30 days by default, an admin setting; inside it, staff are warned before an email, and a call is still logged
 - 🚧 **Declined** — leaves the list until staff bring it back
-
-:::callout{kind="note"}
-- ❓ **Contact limit** — how soon the same owner may be contacted again. Product confirms
-:::
 
 ## Approval Queues
 
@@ -33,20 +30,13 @@ the share of vaulted cards that get consigned, and the time it takes.
   - **Act in the Row** — approve, reject with a reason, set the list or starting price and the starting channel
   - **Bulk Approve** — rows with nothing flagged
 - 🚧 **Incentive Approval** — cards waiting to be approved to earn, oldest first, with the price match and liquidity beside each; a card approved at intake doesn't appear - [Incentive](/p/grade10-site/vault/incentive#earning)
-
-:::callout{kind="note"}
-- ❓ **Target time to approve** — how long a consignment may wait. Product confirms
-:::
+- 🚧 **Approval Target** — 2 business days by default, an admin setting; a consignment past it turns amber and moves to the top
 
 ## On-Sale Monitor
 
 - 🚧 **Cards on Sale** — by channel and days on sale
-- 🚧 **Slow Cards** — a card with no sale after a set number of days is flagged, so staff can lower its list price, never below the lowest acceptable price, or move a card consigned to both to the other channel
+- 🚧 **Slow Cards** — a card with no sale after 45 days, an admin setting, is flagged, so staff can lower its list price, never below the lowest acceptable price, or move a card consigned to both to the other channel
 - 🚧 **Unsold Lots** — auction lots that ended unsold, to move or relist
-
-:::callout{kind="note"}
-- ❓ **Days before a card is flagged** — Product confirms
-:::
 
 ## Conversion Funnel
 

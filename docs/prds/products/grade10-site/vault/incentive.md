@@ -19,7 +19,7 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
   - **Estimate at Intake** — the intake form shows about how much each card earns a day and over a year, by this formula on the day's figures, from its Earning Starts date
   - **A Day's Price** — the window's median is of every SNKRDUNK sale in it, each dated at +08:00; a day older than SNKRDUNK's week counts its one daily average; the day still in progress counts none
   - **Evidence** — each SNKRDUNK answer is kept as it came, and a price shows every sale behind it: counted, an outlier, or excluded by staff
-  - **In Another Currency** — a dollar price is converted at the European Central Bank's daily reference rate
+  - **In US Dollars** — SNKRDUNK prices are already in US dollars, and an admin enters a fixed price in US dollars, so a day's incentive is never converted
   - **Unlikely Data** — a price or a rate of exchange that jumps too far from the day before is used all the same and flagged for staff; a figure staff find wrong is corrected in Inventory's market prices — re-read from SNKRDUNK, or a wrong sale excluded — and every day priced from it is worked again, the difference credited or taken back
   - **Built** — a deployed environment imports rates of exchange but prices no card until the price worker that supplies the sales is connected, so no card earns there yet
 - 🚧 **Liquidity Factor** — how easily the card sells, from 0.2 to 1: velocity × price stability
@@ -33,7 +33,7 @@ A HKD 10,000 card, worked through:
 | Step | Working | Result |
 | --- | --- | --- |
 | Market price | the median of 30 days' sales on SNKRDUNK | HKD 10,000 |
-| Price tier | 5,000 – 19,999: at least 3 sales, a target of 10 | 12 sales: eligible |
+| Price tier | US$650 – 2,599: at least 3 sales, a target of 10 | 12 sales: eligible |
 | Velocity | 12 ÷ 10, at most 1 | 1.00 |
 | Price variation | sales of 9,000, 9,500, 10,000, 10,500 and 13,000 sit 1,000, 500, 0, 500 and 3,000 from the median; the middle distance, 500, is 5% of it | 5% |
 | Price stability | 1 − 5% | 0.95 |
@@ -46,26 +46,32 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 
 ## Price Tiers
 
-| Market price (HKD) | Minimum sales in 30 days | Sales target |
+| Market price (US$) | Minimum sales in 30 days | Sales target |
 | --- | --- | --- |
-| Under 1,000 | 10 | 40 |
-| 1,000 – 4,999 | 5 | 20 |
-| 5,000 – 19,999 | 3 | 10 |
-| 20,000 and up | 2 | 5 |
+| Under 130 | 10 | 40 |
+| 130 – 649 | 5 | 20 |
+| 650 – 2,599 | 3 | 10 |
+| 2,600 and up | 2 | 5 |
 
 - 🚧 **Why Tiers** — expensive cards sell less often, so they need fewer sales to qualify and to reach full velocity
 - 🚧 **Tier of the Day** — worked out each day from that day's market price
+- 🚧 **Liquidity Settings** — the tiers, the stability floor of 0.5, the factor floor of 0.2 and the 3 grace days are admin settings starting at these figures; a change applies from the next day, and each day keeps the figures it was worked on
 
 ## Earning
 
 - 🚧 **Earning Starts** — each card's own start date, set on the intake form: the day after intake unless staff choose another, and never before the Vault Terms are signed - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
   - **Pinned to the Card** — signed with the Vault Terms; vesting counts from it
-  - **Once Authenticated** — a card checked later earns from its start date once it passes; a card that fails never earns
+  - **Once Authenticated** — a card checked later earns from its start date once it passes, those days paid in full; a card that fails never earns and loses nothing
   - **Built** — a card earns from the day it is placed in the vault, once it passes authentication
 - 🚧 **Incentive Approval** — staff check the card's SNKRDUNK match, its price and its liquidity; a card rejected or held is Not Eligible from the next day, and the collector sees why
 - 🚧 **Eligible on the Day** — checked every day; a card earns on a day it has a market price, its tier's minimum sales, a liquidity factor of 0.2 or more, an eligible product, Earns Incentive ticked, and no pause
   - **Earns Incentive** — staff set it per card at intake, on by default; a later change takes a reason and applies from the next day; each change logged - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
   - **Not Eligible** — earns nothing that day and is not paid later; it earns again the next day it qualifies, and the dashboard says why, never as a pause
+  - **Earning Rules** — an admin list of the products, and the grades by each grader, that don't earn; empty by default, so every card earns
+    - **Checked at Signing** — each card is checked when its Vault Terms are signed, and keeps that answer
+    - **Cards Already Signed** — a rule reaches them only when staff apply it, with approval, from the next day; a day already earned is never taken back
+  - **Value Cap** — the most of a card's market price that earns, an admin setting signed with the card; none by default
+  - **Account Review** — an account earning more than an admin threshold in a month is reviewed by staff, never cut back; off by default
   - **Vesting Still Releases** — what vested before stays on the card and is released on its day; what is in the wallet stays there
   - **Built** — no tiers: at least **5** sales in 30 days for every card, every product eligible and no cap
 - 🚧 **Grace Days** — a card that was earning and loses its market price keeps earning on its last price and liquidity for up to 3 days
@@ -78,44 +84,41 @@ reach the wallet together on day 30, and each day's amount drips in after that.
   - **Heard From Consignment** — the sale, a reversed sale, the delivery, the settlement and a refund after payout reach the vault once each
 
 :::callout{kind="note"}
-- ❓ **Liquidity model, tiers and grace days** — the formula, the tier figures and 3 grace days are drafts. Product confirms before Phase 1, mid November
-- ❓ **Eligible products** — which products, grades or value ranges earn. Product confirms before Phase 1, mid November
-- ❓ **Caps** — the most value counted per card, and the most incentive per account a month. Product confirms before Phase 2, 6 December
-- ❓ **A late pass** — whether a card that passes authentication after it was vaulted earns from its start date; built as earning from the start date. Owner confirms
+- ❓ **Value Cap on the Papers** — the words the Vault Terms print for a card's value counted up to its cap. Legal confirms
 :::
 
 ## Reaching the Wallet
 
 - 🚧 **Daily Drip** — after midnight Hong Kong time, each card's incentive for the day before is posted to the wallet
-  - **Base Currency** — the wallet holds US dollars; the HKD-priced amount converts at the day's rate of exchange - decided by the owner, 2026-10-30
+  - **Base Currency** — the wallet holds US dollars - decided by the owner, 2026-10-30
+  - **HKD Beside It** — a Hong Kong dollar figure shown beside a wallet amount is a guide: the total at one day's European Central Bank rate
+  - **Credited Each Morning** — the Hong Kong day closes at midnight, and its incentive posts as soon as its price is in
   - **Fixed for the Day** — the day's price and liquidity are set at its start
   - **Fractions of a Cent** — carry to the next day, so rounding never gains or loses money
   - **Live Estimate** — the dashboard may show the day so far; only the posted amount counts
   - **Built** — credited the day after it closes in Hong Kong; a day is never paid twice
-- 🚧 **Vesting** — for its first days from Earning Starts a card's incentive vests on the card, not in the wallet
+- 🚧 **Vesting** — for its first 30 days from Earning Starts a card's incentive vests on the card, not in the wallet; the days are an admin setting signed with the card
   - **Release** — on the last vesting day everything vested is posted at once; daily drips follow
   - **Once an Intake** — vesting runs once, not again on every stretch
   - **Shown Beside the Wallet** — "Vesting: US$ X", with its release date; not cashable
-  - **Retrieved Early** — a card that leaves the vault before release forfeits what is vesting
-  - **Sold Early** — a card sold before release, say on day 60 of 90; sale proceeds are paid as usual, and the note below says what happens to the incentive
+  - **Retrieved Early** — a card its owner takes back before release forfeits what is vesting, as its signed terms say; it is the only penalty for leaving early
+    - **Never Forfeits** — a pause, a Not Eligible day, a card that fails authentication, or any return Grade10 starts
+  - **Sold Early** — a sale is not a retrieval: the card's vested days are paid on its own release day, with the sale proceeds paid as usual
   - **Built** — credited every day and locked until day N, or shown as one held figure posted on day N; an admin setting switches the view, every amount and unlock day the same either way, so it may be flipped at any time
   - **Forfeit at Release, as Built** — where the card's rule forfeits, releasing it before day N takes back what is still locked on it; a retrieval request that is called off takes back nothing
 - 🚧 **Never Taken Back** — incentive in the wallet stays the collector's, whatever happens to the card
 
 :::callout{kind="note"}
-- ❓ **Wallet currency** — decided as US dollars, while the amounts are built in HKD; whether the conversion lands with Consign and Sell or as a change of its own. Product confirms before Phase 2, 6 December
-- ❓ **Daily credit time** — the exact time each day's incentive posts to the wallet; suggested 00:00 HKT, after the Hong Kong day closes. Owner confirms
-- ❓ **Vesting period** — 30 or 60 days; longer protects more, but delays the first payout a collector sees. Product confirms before Phase 1, mid November
-- ❓ **Incentive when a card sells during vesting** — only the vested days (recommended: pays what the card earned), or the full period (pays the remaining days too, at a higher cost). A sold card stops earning the day it sells; built as a sale forfeiting nothing, its credited incentive unlocking on its own day. Product confirms before Phase 2, 6 December
-- ❓ **Which view to launch on** — credited daily and locked, the owner's own reading, or vesting held on the card. Owner confirms
-- ❓ **Forfeit** — whether a card taken back inside its vesting days loses what is still locked; the draft says it does, and each card keeps the rule it was signed with. Owner confirms
+- ❓ **HKD Wording** — the words that call a Hong Kong dollar figure a guide on signed papers. Legal confirms
+- ❓ **Forfeit Clause** — the Vault Terms' words for forfeiting what is vesting. Legal confirms
 :::
 
 ## Settings
 
-- 🚧 **Admin Settings** — the rate, the liquidity model, the liquidity factor on a fixed price, eligible products, caps and the price check's limits; every change logged
-- 🚧 **Pinned to the Card** — the rate, the vesting days, the early retrieval fee's period and amount, and the forfeit rule are pinned when the card's custody paper is prepared; a later change reaches only the next card
-  - **Unset Refuses** — the paper is not prepared while the rate, the vesting days or the fee's period is unset
+- 🚧 **Admin Settings** — the rate, the liquidity settings, the liquidity factor on a fixed price, the earning rules, the value cap and the account review threshold; every change logged
+- 🚧 **Pinned to the Card** — the rate, the vesting days, the forfeit rule, the value cap and Earning Starts are pinned when the card's Vault Terms are prepared; a later change reaches only the next card
+  - **Unset Refuses** — the paper is not prepared while the rate or the vesting days is unset
+  - **No Early Retrieval Fee** — forfeiting what is vesting is the only cost of leaving early - the counter review, round 3, 2026-11-02
 - 🚧 **Pause and the Daily Run** — staff pause incentive, the price import and the drip run daily - [Vault Operations](/p/grade10-site/vault/operations#daily-run)
 
 :::detail{title="Product decisions" for="pm"}
@@ -143,7 +146,9 @@ vault, cash out and leave.
 | A late fact waits | Decided | A day whose price or rate has not arrived waits and is paid in full, rather than earning nothing after 3 days - decided by the owner, 2026-10-28 | Owner |
 | A day's SNKRDUNK price | Decided | The median counts every sale in the window, each on its date at +08:00, read from a kept snapshot of SNKRDUNK's answer; a day past SNKRDUNK's week counts its daily average. SNKRDUNK's week holds each sale and its longer history one average per Japan day, so neither is merged into the other - decided by the owner, 2026-11-02, in place of the day taking its last point (2026-10-30) | Owner |
 | A sold card stops on the sale | Decided | It stops earning on the day it is marked sold, not at the delivery or the settlement, so a card earns nothing while its sale is being completed - decided by the owner, 2026-10-29 | Owner |
-| A sale is not an early retrieval | ❓ | A card sold through consignment forfeits nothing; its credited incentive unlocks on its own day - built so, 2026-10-27 | Owner |
+| A sale is not an early retrieval | Decided | A card sold through consignment forfeits nothing; its vested days are paid on its own release day - built so, 2026-10-27; confirmed in the counter review, round 3, 2026-11-02 | Product |
+| The earnings model | Decided | Five terms signed per card - the rate, 30 vesting days, forfeit on the owner's early retrieval, a value cap, Earning Starts; a late pass backdates; earning rules are a deny-list; no account cap, a review instead; vesting always shown beside the wallet, so there is no view to choose; liquidity is the drafted formula with its tiers in US dollars - the counter review, round 3, 2026-11-02 | Product |
+| The wallet in US dollars from the start | Decided | The wallet holds US dollars from Phase 1, so its ledger never needs converting; SNKRDUNK prices are US dollars already and a fixed price is entered in them - the counter review, round 3, 2026-11-02 | Product |
 :::
 
 :::detail{title="Code map" for="engineer"}

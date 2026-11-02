@@ -29,6 +29,7 @@ agreement - [Vault Intake](/p/grade10-site/vault/intake#intake-form).
 - 🚧 **Declined** — the Vault Terms still stand, and the cards are kept in the vault
 - 🚧 **The Counter Ends at Signing** — a signed consignment waits in Pending Approval, where Grade10 sets the price and lists it - [Consignment Console](/p/grade10-site/consignment/operator-console#queue)
 
-:::callout{kind="note"}
-- ❓ **Partners at launch** — whether a partner, whose items are not vaulted, consigns at launch. Product confirms before Phase 2, 6 December
-:::
+## Partners
+
+- 🚧 **Partner Consignment** — a partner's cards are consigned without the vault: taken in on the console with the same item rows, paid by bank, and given back through Inventory's release; after 6 December - [Consignment Console](/p/grade10-site/consignment/operator-console)
+  - **Collectors Always Vault** — a collector's card is consigned only once it is a vaulted card

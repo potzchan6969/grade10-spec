@@ -18,7 +18,7 @@ the settings the schedule runs on.
 | To sign | terms agreed and the agreement not yet signed |
 | To list | signed and not yet on sale |
 | On sale | in the shop or at auction; ending soon badged |
-| Sold | sold and inside the return window |
+| Sold | sold, waiting 3 business days after the buyer pays |
 | Payout due | past the window and not yet paid |
 | Ended unsold | the term ended and the consignor has not chosen |
 | Returning | going back to the consignor |
@@ -88,21 +88,18 @@ pinned to a consignment when its agreement is prepared.
 
 | Setting | Default | Choices |
 | --- | --- | --- |
-| Commission, for each channel and price band | unset; intended **10–12%** | a share of the price |
-| Incentive, on the estimated value | intended **5%**, paid at consignment | a share of the estimated value |
-| Minimum commission | none | an amount per item |
-| Fees: listing, return, early take-back | none | an amount each |
-| Term on sale | **90** days | any number of days |
+| Setting | Default | Choices |
+| --- | --- | --- |
+| Commission, for each channel | unset; entered at launch as **12%** for the store and **10%** at auction | a share of the price |
+| Minimum commission, for each channel | none | an amount per card |
+| Fee for ending early | **US$0**, charged only once an auction lot is prepared | an amount |
+| Term on sale | **1** year | any number of days |
 | Return window | **14** days after a store sale is delivered; **7** after an auction lot is delivered or collected | any number of days, per channel |
-| When a consignor is paid | after the return window | at the sale; one monthly statement |
-| A refund after payout | set against the next payout | asked back from the consignor |
-| Identity before signing | always verified | above a sale price; never |
-| Ending soon | **7** days before the term ends | any number of days |
+| When a consignor is paid | **3** business days after the buyer pays, into the wallet | any number of business days |
 
-- ❓ Product - **The intended figures** - the consignment fee is intended
-  at **10–12%** of the price at sale and the incentive at **5%** of the
-  estimated value; the exact figures are unset
-- 🚧 **Vault-First Defaults** — one commission rate for the store and one for the auction; the term **1** year; paid **3** business days after the buyer pays; a refund after payout reversed from the wallet; no identity setting, the account's check coming at cash-out; the incentive leaves this schedule for the vault's - [Incentive](/p/grade10-site/vault/incentive#settings)
+- 🚧 **Vault-First Schedule** — the figures above; a refund after payout is reversed from the wallet; a partner keeps its own bank settlement. No incentive, identity or payout-destination setting is left - [Incentive](/p/grade10-site/vault/incentive#settings)
+- 🚧 **A Version per Save** — each save that changes a figure an agreement prints is the next version; an agreement keeps the version it was prepared on
+- 🚧 **Operations Settings** — figures for staff work that no agreement prints, so a change never makes a new version: the price check's **20%** below and **50%** above, ending soon at **7** days, the contact limit at **30** days, the approval target at **2** business days, slow cards at **45** days and unconsigned cards flagged at **90** - [Dashboard](/p/grade10-site/consignment/dashboard)
 - **Pinned to the agreement** - a change reaches the next agreement
   prepared; one waiting for a signature keeps the schedule it was prepared on
 - **Unset refuses** - an agreement is not prepared while a figure it prints
@@ -135,8 +132,9 @@ pinned to a consignment when its agreement is prepared.
 | Payouts on the vault's rule | Decided | Recorded after the bank transfer by a treasurer; a correction takes a second holder of the grant - decided under the owner's delegation, 2026-10-08 | Finance |
 | Seller display is an admin act | Decided | The owner names the admin as the one who sets it - decided by the owner, 2026-10-08 | Product |
 | Every figure a setting | Decided | The schedule, the term, the windows, fees, identity and when a consignor is paid are settings admins change in the console, each starting on the recommended default - decided by the owner, 2026-10-08 | Product |
-| One payout per consignment | ❓ Open | Proposed: every sale of a consignment past its window is paid as one payout, and a sale still inside its window waits for its own day | Finance |
-| A schedule version per save | ❓ Open | Proposed: each settings save that moves a figure is the next schedule version, the one an agreement prepared after it pins | Product |
+| One payout per consignment | Decided | Overtaken: each sale is credited to the wallet on its own day, and a cash-out is the only batch; a partner keeps its bank payouts - the counter review, round 3, 2026-11-02 | Finance |
+| A schedule version per save | Decided | Built: a save that changes a figure an agreement prints is the next version; staff-work figures sit apart, in operations settings - the counter review, round 3, 2026-11-02 | Product |
+| The commission figures | Decided | One rate per channel, 12% for the store and 10% at auction, entered at launch for Finance to confirm; the incentive left consignment - the counter review, round 3, 2026-11-02 | Finance |
 | The channel and the details at intake | Decided | the receive act records where the consignment was taken, its channel - the store or the auction - and each item's market value and the consignment rates applying to it - decided under the owner's delegation, 2026-10-16; replaced by the counter review, 2026-11-02: where it was taken is the items' first inventory location, the channel is set per item at Terms, and the market price is the SNKRDUNK median | Product |
 | A light counter | 🚧 | The counter asks for the consignor's ID number and an 18-or-over tick, never an identity check, a list price, price links, an incentive, a payout account, last-sold figures or a declared value; items follow the inventory catalogue, go into a vault case that earns the daily incentive, and keep their photos per item - the counter review, 2026-11-02 | Product |
 | One intake form | 🚧 | The counter is the vault's intake form with cards set to Consign: one card per vault case, received before its terms, the Consignment Agreement signed with the Vault Terms, and Pending Approval from the signing; the consignment keeps only its sale terms, never a copy of the card - the counter review, round 2, 2026-11-02 | Product |

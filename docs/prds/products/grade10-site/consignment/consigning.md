@@ -37,7 +37,7 @@ goes below. Grade10 prices the listing at approval.
   - **Pinned to the Agreement** — the rates in force when the agreement is prepared; a later change reaches only the next agreement
   - **Outside the Schedule** — a rate negotiated for a partner is set by someone who may approve it - [Consignment Console](/p/grade10-site/consignment/operator-console#grants)
 - 🚧 **Consignment Period** — 1 year from signing
-  - **Built** — a term from the brand's settings, intended 90 days; its dates are set when the agreement seals, an item ends on its latest signed renewal, and a lot already placed runs to its close
+  - **Built** — a term from the brand's settings; its dates are set when the agreement seals, an item ends on its latest signed renewal, and a lot already placed runs to its close
 - **Agreement** — one Consignment Agreement a consignment; a change makes a new version, never an edit
   - 🚧 **Renewal Is Signed** — extending or repricing prepares a renewal the consignor signs, linked to the one it renews
 - 🚧 **No Incentive at Consigning** — built as a setting that starts at 0, so the agreement leaves its line out; a vaulted card earns the vault's daily incentive instead - [Incentive](/p/grade10-site/vault/incentive)
@@ -70,9 +70,7 @@ For a card with a market price of HKD 10,000:
 | HKD 14,000 | 40% above | accepted |
 | HKD 16,000 | 60% above | refused; the collector lowers it |
 
-:::callout{kind="note"}
-- ❓ **Limits** — 20% below and 50% above are proposed. Product confirms before Phase 2, 6 December
-:::
+- 🚧 **Limits** — 20% below and 50% above, each an admin setting that can be switched off; a low price the collector confirms keeps the limits it was checked against
 
 ## Listing Approval
 
@@ -101,11 +99,11 @@ For a card with a market price of HKD 10,000:
 - 🚧 **Price Changes** — entered by staff; they may raise the price at their will, never below the lowest acceptable price
 - 🚧 **Handover** — the buyer takes the card at the counter; a card held elsewhere moves to the shop first
   - **Online Orders** — once online is on, an order ships from the shop, Kerry Logistics collecting it there
+  - **First Hold Wins** — a card held for an online checkout is the shop's to keep for that checkout; the till never cancels it
   - **Released to Its Buyer** — on delivery, under the consignment agreement; no release paper, no early retrieval fee, and the card's credited incentive is kept - [Case Lifecycle](/p/grade10-site/finance/case-lifecycle)
 
 :::callout{kind="note"}
-- ❓ **Who wins the counter** — the first hold, the shop reserving the card for an online checkout, or the till, cancelling an unpaid online checkout; built on the first. Owner confirms
-- ❓ **The release clause** — its exact words in the consignment agreement; a draft prints until they are confirmed. Owner confirms
+- ❓ **The release clause** — its exact words in the consignment agreement; a draft prints until they are confirmed. Legal confirms
 :::
 
 ### At Auction
@@ -126,10 +124,7 @@ For a card with a market price of HKD 10,000:
 
 - **Paid on the Listed Price** — a discount the buyer gets at checkout is Grade10's, and so is a refund where the buyer keeps the card
 - **The Collector's Until Sold** — ownership passes to the buyer only when the card is delivered or collected
-
-:::callout{kind="note"}
-- ❓ **Points and discounts** — whether points, coupons and the shop's discounts reach a consigned card. Product confirms
-:::
+- **Points and Discounts** — points, coupons and the shop's discounts reach a consigned card, and the collector is still paid on the listed price; staff leave consigned cards out of a discount by its collection in the store
 
 ## Seller Name
 
@@ -170,11 +165,12 @@ lets Grade10 price the listing while the collector keeps a hard limit.
 - **The price check warns low and refuses high** — a low price may be the collector's reason and is confirmed twice; a price far above market would only stall the sale
 - **Both channels, one at a time** — a card is never on the shelf and in an auction together, so it can't sell twice; moving it needs no second signature
 - **A year's period** — long enough for an auction cycle and a slow card, and an unsold card simply goes back to earning
-- **Not in scope** — a paper consignment; consigning a card that isn't vaulted; the collector setting the list price
+- **Not in scope** — a paper consignment; a collector consigning a card that isn't vaulted, which only a partner does, after 6 December; the collector setting the list price
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | The shop and online | 🚧 | One store product per consigned item; staff list it in the shop, online or both - decided by the owner, 2026-10-27, reversing no shop-only listing of 2026-10-11; Phase 1 opens the shop's tills only, the other channels switched on later - owner, 2026-10-30 | Product |
 | Instant incentive | 🚧 | The consignor is paid an incentive on the item's estimated value instantly when the consignment is taken - decided under the owner's delegation, 2026-10-16; it defaults to 0 now that a vault card earns daily, and stays a setting - 2026-10-27 | Owner |
+| Open items settled | Decided | The price check's limits are admin settings; the first hold wins at the counter, as built; discounts reach consigned cards at Grade10's cost; partners consign without the vault after 6 December - the counter review, round 3, 2026-11-02 | Product |
 | Selling from the vault | Decided | A storage card is consigned where it sits and released to its buyer on delivery under the consignment agreement; the exact clause is confirmed later - owner, 2026-10-27 | Owner |
 :::

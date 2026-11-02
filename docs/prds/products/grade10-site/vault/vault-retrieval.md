@@ -39,27 +39,11 @@ The ID checked against the one recorded at intake, the condition against the int
   - **After Release** — only the day's incentive not yet posted
   - **In the Wallet** — never; it stays cashable
 
-:::callout{kind="note"}
-- ❓ **Admin fee** — whether a retrieval is charged; built as the early retrieval fee below. Product confirms
-:::
+## No Retrieval Fee
 
-## Early Retrieval Fee
-
-As built: a card taken back inside its first days owes the vault's fee, fixed
-on the day of the request. Consignment's fee for ending early is its own -
-[Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment).
-
-- 🚧 **Default** — HKD 0, and the period it applies for is unset
-- 🚧 **Paid by Card on an Invoice** — one Shopify invoice per request, paid from its link or loaded at the shop's till; the retrieval paper prints the link, and the card is not handed back until it is paid
-- 🚧 **Never From the Wallet** — recorded on the vault's money register as paid by card
-- 🚧 **Called Off, Voided** — a request that is called off voids its invoice
-- 🚧 **Waived by Two** — staff may waive a fee with a second person's approval; a fee a refund reopens before the card leaves can then only be waived
-- 🚧 **Seen Before It Is Owed** — the collector sees the fee, and what the retrieval costs in incentive, before they confirm
-- 🚧 **A Refund** — staff are alerted as soon as the shop hears of it. Before the card leaves, the release reads the fee again and holds the card; after, it is recorded on the card when staff check its payment, and nothing is taken back from the collector on its own
-
-:::callout{kind="note"}
-- ❓ **The fee's period** — how many days from the start the fee applies; unset until the owner names it. Owner confirms
-:::
+- 🚧 **Forfeit Is the Only Cost** — a card taken back early loses what is vesting, as its signed terms say, and pays no fee - [Incentive](/p/grade10-site/vault/incentive#reaching-the-wallet)
+  - **Built** — a fee for a card taken back inside its first days, HKD 0 by default with its period unset, paid by card on a Shopify invoice before the card is handed back; it is removed - the counter review, round 3, 2026-11-02
+- 🚧 **Ending a Consignment First** — consignment's own fee, only once an auction lot is prepared - [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval)
 
 ## Collection
 
