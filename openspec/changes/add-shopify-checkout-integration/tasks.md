@@ -257,7 +257,7 @@ the existing shared guard and host mapping are required by this request path.
 - [x] 15.2 Make those tests pass using the common `interactionPending` input and synchronous Pay guard. Hold actual Pay until settlement without canceling on close, retain external cart/member stale-answer rejection and release only currently permitted actions after failure or the last operation; start no automatic new Pay. A still-current successful hosted-invoice answer opens Shopify after plain dismissal or reopen (Checkout Q35 / Cart Drawer Q22); drawer open state does not invalidate the request: `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-66`, `grade10-site-store-checkout-SC-67`, `grade10-site-store-checkout-SC-68`.
 - [x] 15.3 Verify focused drawer/checkout tests, compatibility typechecks and frontend checks required by `docs/conventions/validation.md`; perform no backend, provider or production change.
 
-## 16. The walk - pending Pay (grade10)
+## 16. The walk - pending Pay (grade10) (owner: @kinisworking)
 
 Uses draft `feature-tcs.md` as planning input after Groups 14-15 land; keeps
 Group 13's complete journey scope with the pending-action amendment.
