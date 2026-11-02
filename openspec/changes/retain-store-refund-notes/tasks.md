@@ -19,7 +19,7 @@ Depends on group 2's landed metadata input contract.
 - [x] 3.3 Implement the order-locked metadata processor and extend existing erasure scope/status counting to clear refund text and prevent sync restoration, including orders found through the existing provider customer reference. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC22`.
 - [x] 3.4 Verify: inspect generated SQL, run `pnpm check:migrations`, the affected Store repository/erasure tests, Grade10 and ZZZ Store migration lanes on isolated databases, and `pnpm --filter @grade10/store-service typecheck`. Exercise transaction rollback and lock races with a real local PostgreSQL lane.
 
-## 4. Ingest metadata before monetary filtering and dedupe (grade10)
+## 4. Ingest metadata before monetary filtering and dedupe (grade10) (owner: @kinisworking)
 
 Depends on groups 2 and 3.
 
