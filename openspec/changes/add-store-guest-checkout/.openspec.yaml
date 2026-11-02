@@ -1,6 +1,7 @@
 schema: grade10-planning
 created: 2026-10-13
 design_waived: "Built before this record across existing seams - the guest checkout procedure, the order link page and the drawer footer props; the tasks name each"
+tasks_waived: "@kinisworking, 2026-11-02: task 3.3 waived at the owner’s direction; the guest checkout, order link page and drawer footer were built before this record, so no new Figma frames are required"
 reviewed:
   proposal: 49a9f785
   decisions: 33a68ef4

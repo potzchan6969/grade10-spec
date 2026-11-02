@@ -16,7 +16,7 @@
 
 - [x] 3.1 Requirement deltas for the cart drawer and the shared store cart, folded into the durable specs; the checkout guest requirement was already durable
 - [x] 3.2 The order-detail and order-history requirements — blocked: those capabilities are introduced by `add-grade10-customer-order-pages`, not yet a durable spec; the journeys stay on this change
-- [ ] 3.3 Figma frames for the guest footer and the order link — blocked: needs the designer in Figma
+- [ ] 3.3 Figma frames for the guest footer and the order link — blocked: needs the designer in Figma; waived 2026-11-02 by @kinisworking: the guest checkout, order link page and drawer footer were built before this record, so new Figma frames are not required; left unchecked and waived at archive by tasks_waived
 
 ## 4. The walk (grade10)
 
