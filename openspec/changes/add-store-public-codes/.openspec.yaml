@@ -1,6 +1,7 @@
 schema: grade10-planning
 created: 2026-10-13
 design_waived: "Built before this record on the shop's site-discount read and the quote's held list; the tasks name each"
+tasks_waived: "@kinisworking, 2026-11-02: task 3.2 waived at the owner's direction; the public-code read, quote and merged-picker behavior were built before this record, so no new Figma frames are required"
 reviewed:
   proposal: 3de8067f
   decisions: a6c96420

@@ -12,7 +12,7 @@
 ## 3. Record (grade10-spec)
 
 - [x] 3.1 Requirement deltas for discounts, the cart drawer and the shared store cart, folded into the durable specs
-- [ ] 3.2 Figma frames for the merged picker — blocked: needs the designer in Figma
+- [ ] 3.2 Figma frames for the merged picker — blocked: needs the designer in Figma; waived 2026-11-02 by @kinisworking: the public-code read, quote and merged-picker behavior were built before this record, so new Figma frames are not required; left unchecked and waived at archive by tasks_waived
 
 ## 4. The walk (grade10)
 
