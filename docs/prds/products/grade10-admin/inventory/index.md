@@ -37,7 +37,9 @@ has.
 - 🚧 **Products at the Counter** — consignment's counter finds a catalogue
   product by name, set, number or Cert ID, or creates one through the
   classification and its schema; the item links to it and counts no house
-  stock - [Consignment Console](/p/grade10-site/consignment/counter)
+  stock - [Consignment Counter](/p/grade10-site/consignment/counter)
+- 🚧 **Starting Location** — each counter item is received at the counter's
+  Taken At, its first move in inventory, and is labelled there
 - 🚧 **SNKRDUNK Card** — an item's SNKRDUNK card is inventory's, remembered on
   its product so the next copy fills it in; consignment and the vault read it
   rather than keep their own

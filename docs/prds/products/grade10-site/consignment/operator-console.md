@@ -47,7 +47,7 @@ the settings the schedule runs on.
 - **Acts** - receive, set terms, prepare the agreement, list, change the
   price, take off sale, return, extend, move to the other channel or the
   vault - [Services and Hand-offs](/p/grade10-admin/inventory/services#hand-offs)
-- 🚧 **Approve or Reject** — sets the list or starting price, never below the lowest acceptable price, and the starting channel of a card consigned to both; receiving and setting terms at the counter leave the console
+- 🚧 **Approve or Reject** — sets the list or starting price, never below the lowest acceptable price, and the starting channel of a card consigned to both; receiving and the terms are taken at the counter - [Consignment Counter](/p/grade10-site/consignment/counter)
 - **Before the act** - a dialog states the rule first: the floor, the
   schedule, the term
 - **Withheld in words** - an act not offered yet says why
@@ -137,6 +137,6 @@ pinned to a consignment when its agreement is prepared.
 | Every figure a setting | Decided | The schedule, the term, the windows, fees, identity and when a consignor is paid are settings admins change in the console, each starting on the recommended default - decided by the owner, 2026-10-08 | Product |
 | One payout per consignment | ❓ Open | Proposed: every sale of a consignment past its window is paid as one payout, and a sale still inside its window waits for its own day | Finance |
 | A schedule version per save | ❓ Open | Proposed: each settings save that moves a figure is the next schedule version, the one an agreement prepared after it pins | Product |
-| The channel and the details at intake | Decided | the receive act records where the consignment was taken, its channel - the store or the auction - and each item's market value and the consignment rates applying to it - decided under the owner's delegation, 2026-10-16; replaced by the counter review, 2026-11-02: where it was taken is optional, the channel is set per item at Terms, and the market price is the SNKRDUNK median | Product |
-| A light counter | 🚧 | The counter asks for the consignor's ID number and an 18-or-over tick, never an identity check, a list price, price links, an incentive, a payout account, last-sold figures or a declared value; items follow the inventory catalogue, and photos are kept per item - the counter review, 2026-11-02 | Product |
+| The channel and the details at intake | Decided | the receive act records where the consignment was taken, its channel - the store or the auction - and each item's market value and the consignment rates applying to it - decided under the owner's delegation, 2026-10-16; replaced by the counter review, 2026-11-02: where it was taken is the items' first inventory location, the channel is set per item at Terms, and the market price is the SNKRDUNK median | Product |
+| A light counter | 🚧 | The counter asks for the consignor's ID number and an 18-or-over tick, never an identity check, a list price, price links, an incentive, a payout account, last-sold figures or a declared value; items follow the inventory catalogue, go into a vault case that earns the daily incentive, and keep their photos per item - the counter review, 2026-11-02 | Product |
 :::

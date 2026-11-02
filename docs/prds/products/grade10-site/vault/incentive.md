@@ -12,7 +12,7 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
   - **Built** — the same formula, the factor's model still the owner's draft; each day's price, rate of exchange, factor, rate and settings are kept with its amount, so a changed setting never changes an amount already credited
 - 🚧 **Market Price** — the median of the card's sales on SNKRDUNK over 30 days, outliers removed
   - **SNKRDUNK Card Required** — every card taken at the counter names its SNKRDUNK card, kept in Inventory and remembered on its catalogue product for the next copy
-  - **Fixed Price** — an admin may enter a fixed price in place of the SNKRDUNK card
+  - **Fixed Price** — entered by an admin only for a card with no SNKRDUNK listing to link; it stands as the card's market price until a SNKRDUNK card is linked
   - **Estimate at Intake** — the counter shows each card's estimated incentive, worked out by this formula on the day's figures, for the collector to see
   - **A Day's Price** — the window's median is of every SNKRDUNK sale in it, each dated at +08:00; a day older than SNKRDUNK's week counts its one daily average; the day still in progress counts none
   - **Evidence** — each SNKRDUNK answer is kept as it came, and a price shows every sale behind it: counted, an outlier, or excluded by staff
@@ -78,7 +78,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 - ❓ **Liquidity model, tiers and grace days** — the formula, the tier figures and 3 grace days are drafts. Product confirms before Phase 1, mid November
 - ❓ **Eligible products** — which products, grades or value ranges earn. Product confirms before Phase 1, mid November
 - ❓ **Caps** — the most value counted per card, and the most incentive per account a month. Product confirms before Phase 2, 6 December
-- ❓ **Fixed price** — who may enter one, and whether it prices the card every day until a SNKRDUNK card is linked; recommended: an admin with `consignment:approve`, standing until linked and flagged for staff. Owner confirms, since a price staff type in was out of scope until the counter review, 2026-11-02
+- ❓ **Liquidity on a fixed price** — a fixed price has no sales behind it, so the minimum sales and the liquidity factor can't be worked out; recommended: a fixed liquidity factor set by an admin, 0.5 to start. Owner confirms
 - ❓ **A late pass** — whether a card that passes authentication after it was vaulted earns from its start date; built as earning from the start date. Owner confirms
 :::
 
