@@ -46,6 +46,8 @@ export const PATTERNS = {
   weekday: "EEE d MMM",
   /** A slot near enough that its weekday is what the reader goes by. */
   weekdayMoment: "EEE d MMM, HH:mm",
+  /** A near time something runs out at: the hour first, since it is what runs out. */
+  weekdayCutoff: "HH:mm, EEE d MMM",
   /** A day within the reader's current year, which goes unsaid. */
   shortDay: "d MMM",
   /** A month a report or a chart's tick is cut to. */
@@ -76,6 +78,7 @@ const ZH_PATTERNS: Partial<Record<keyof typeof PATTERNS, string>> = {
   weekdayOfMonth: "EEE d日",
   weekday: "M月d日 EEE",
   weekdayMoment: "M月d日 EEE, HH:mm",
+  weekdayCutoff: "M月d日 EEE HH:mm",
   shortDay: "M月d日",
   month: "yyyy年M月",
   monthName: "yyyy年M月",

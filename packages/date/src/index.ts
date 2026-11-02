@@ -19,6 +19,11 @@ export {
   isCalendarDay,
   startOfDay,
 } from "./calendar-day.ts";
+export {
+  formatWeekdayList,
+  formatWeekdaySpan,
+  formatWeekdaySpanInYear,
+} from "./day-span.ts";
 export type { Instant } from "./instant.ts";
 export {
   formatCollectorDeadline,
@@ -55,6 +60,7 @@ export {
   formatMonthNameAlone,
   formatShortDay,
   formatTimeOfDay,
+  formatWeekdayCutoff,
   formatWeekdayDay,
   formatWeekdayMoment,
   formatZone,
