@@ -15,7 +15,7 @@ import { WithdrawalDetails } from "./withdrawal-details";
  * row's chevron opens its details in a right-side drawer.
  */
 const meta = {
-  title: "Vault/Wallet/Parts/RewardsLedger",
+  title: "Vault/Portfolio/Parts/RewardsLedger",
   component: RewardsLedger,
   parameters: { layout: "padded" },
 } satisfies Meta<typeof RewardsLedger>;
