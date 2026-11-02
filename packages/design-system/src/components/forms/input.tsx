@@ -50,9 +50,18 @@ const inputBoxVariants = cva(
   // `Size/size-10`, `Radius/radius-full`, `Gap/gap-4` padding and `Gap/gap-2`
   // between the magnifier/value. Bind `radius-full` on the token, as Button
   // already does — `rounded-full` is a different number.
-  "flex h-10 w-full items-center gap-2 rounded-(--radius-full) border bg-input px-4 transition-[color,box-shadow,border-color,background-color,opacity] focus-within:ring-1 focus-within:ring-inset has-disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "flex w-full items-center gap-2 rounded-(--radius-full) border bg-input px-4 transition-[color,box-shadow,border-color,background-color,opacity] focus-within:ring-1 focus-within:ring-inset has-disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
+      // `size` has no Figma axis on Text/Number/Search Input — added in code,
+      // mirroring Stepper Input's `lg` rung (48px). The taller field keeps
+      // `text-base` at every viewport: the `md:text-sm` downgrade on the
+      // control and its slots is sized for the 40px rung, so the selectors
+      // below pin it back.
+      size: {
+        md: "h-10",
+        lg: "h-12 md:[&_[data-slot=input]]:text-base md:[&_[data-slot=input-prefix]]:text-base md:[&_[data-slot=input-unit]]:text-base",
+      },
       status: {
         default:
           "border-border focus-within:border-ring focus-within:ring-ring",
@@ -64,6 +73,7 @@ const inputBoxVariants = cva(
     },
     defaultVariants: {
       status: "default",
+      size: "md",
     },
   },
 );
@@ -120,6 +130,7 @@ type InputShellProps = React.ComponentProps<"div"> &
 function InputShell({
   className,
   status = "default",
+  size = "md",
   label,
   message,
   disabled,
@@ -156,7 +167,10 @@ function InputShell({
       <div
         data-slot="input-box"
         className={cn(
-          inputBoxVariants({ status: disabled ? "default" : status }),
+          inputBoxVariants({
+            status: disabled ? "default" : status,
+            size,
+          }),
           disabled && "bg-background-subtle",
           boxClassName,
         )}

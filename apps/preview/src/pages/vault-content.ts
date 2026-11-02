@@ -449,6 +449,22 @@ const PAYOUT_METHOD = {
   maskedAccount: "••• 8304",
 };
 
+/** Saved withdrawal destinations — bank first, then FPS. */
+const PAYOUT_METHODS = [
+  {
+    id: "hsbc-8304",
+    kind: "bank" as const,
+    title: "HSBC ••• 8304",
+    detail: "Chan Tai Man · HK$",
+  },
+  {
+    id: "fps-mobile",
+    kind: "fps" as const,
+    title: "FPS · +852 9123 ••45",
+    detail: "Chan Tai Man · HK$",
+  },
+];
+
 const WITHDRAWAL_PROCESSING_DAYS = "3 business days";
 
 type VaultPayoutStatus = "Pending" | "Processing" | "Completed" | "Declined";
@@ -1134,6 +1150,7 @@ export {
   MANAGE_CARD_COPY,
   NEXT_AVAILABLE_VISIT_DATE,
   PAYOUT_METHOD,
+  PAYOUT_METHODS,
   PAYOUT_REQUESTS,
   PAYOUT_STATUS_VARIANT,
   PORTFOLIO_ASSETS,
