@@ -47,7 +47,7 @@ const page = (canvasElement: HTMLElement) =>
 async function openDrawer(canvasElement: HTMLElement) {
   const drawer = await waitFor(() => {
     const found = page(canvasElement).getByRole("dialog", {
-      name: "Withdrawal details",
+      name: "Withdrawal Details",
     });
     expect(found).toBeVisible();
     return found;
@@ -65,7 +65,8 @@ export const Completed: Story = {
   args: { request: COMPLETED },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
-    expect(drawer.getByText(`Withdrawal · ${COMPLETED.id}`)).toBeVisible();
+    expect(drawer.getByText("Reference")).toBeVisible();
+    expect(drawer.getByText(COMPLETED.id)).toBeVisible();
     expect(drawer.getByText("US$40")).toBeVisible();
     expect(drawer.getByText("Completed")).toBeVisible();
     expect(drawer.getByText("HK$312.40 received")).toBeVisible();
@@ -81,7 +82,7 @@ export const Pending: Story = {
   args: { request: PENDING },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
-    expect(drawer.getByText("Pending review")).toBeVisible();
+    expect(drawer.getByText("Pending")).toBeVisible();
     expect(drawer.getByText("Est. ~HK$650")).toBeVisible();
     expect(drawer.getByText("Waiting for review")).toBeVisible();
     expect(drawer.queryByText("Exchange rate applied")).not.toBeInTheDocument();
@@ -94,7 +95,7 @@ export const Processing: Story = {
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
     expect(drawer.getByText("Processing")).toBeVisible();
-    expect(drawer.getByText("To HSBC ••• 8304")).toBeVisible();
+    expect(drawer.getByText("Est. ~HK$497.92")).toBeVisible();
     expect(drawer.getByText("4 Oct 2026")).toBeVisible();
   },
 };
@@ -104,8 +105,12 @@ export const Declined: Story = {
   args: { request: DECLINED },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
-    expect(drawer.getByText("Declined")).toBeVisible();
-    expect(drawer.getByText("Returned to rewards")).toBeVisible();
+    /* The badge and the failed timeline step both read "Declined". */
+    expect(drawer.getAllByText("Declined").length).toBeGreaterThan(1);
+    expect(drawer.getByText("8 Sep 2026")).toBeVisible();
+    expect(drawer.getByText("Est. ~HK$738")).toBeVisible();
+    expect(drawer.getByText("Withdrawal declined")).toBeVisible();
+    expect(drawer.getByText(/account holder name didn’t match/)).toBeVisible();
     expect(drawer.queryByText("Completed")).not.toBeInTheDocument();
   },
 };

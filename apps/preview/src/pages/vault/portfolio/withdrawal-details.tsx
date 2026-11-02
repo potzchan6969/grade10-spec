@@ -1,4 +1,6 @@
+import { Alert } from "@grade10/design-system/components/display/alert";
 import { Badge } from "@grade10/design-system/components/display/badge";
+import { Card } from "@grade10/design-system/components/display/card";
 import { DetailRow } from "@grade10/design-system/components/display/detail-row";
 import { Step } from "@grade10/design-system/components/display/step";
 import type { StepIndicatorState } from "@grade10/design-system/components/display/step-indicator";
@@ -19,8 +21,6 @@ import {
   PAYOUT_METHOD,
   PAYOUT_STATUS_VARIANT,
   type VaultPayoutRequest,
-  type VaultPayoutStatus,
-  WITHDRAWAL_PROCESSING_DAYS,
 } from "../../vault-content";
 
 const SM_UP_MQ = "(min-width: 640px)";
@@ -40,13 +40,6 @@ function useSmUp() {
   return smUp;
 }
 
-const STATUS_LABEL: Record<VaultPayoutStatus, string> = {
-  Pending: "Pending review",
-  Processing: "Processing",
-  Completed: "Completed",
-  Declined: "Declined",
-};
-
 type TimelineStep = {
   label: string;
   description?: string;
@@ -60,13 +53,6 @@ function timelineSteps(request: VaultPayoutRequest): TimelineStep[] {
     description: request.requestedAt,
     state: "completed",
   };
-  const rateNote =
-    request.currency === "HKD" && request.convertedHkd != null
-      ? `Converted at US$1 = HK$${(request.convertedHkd / request.amountUsd).toFixed(2)}`
-      : null;
-  const approvedDescription = [request.approvedAt, rateNote]
-    .filter(Boolean)
-    .join(" · ");
 
   switch (request.status) {
     case "Pending":
@@ -77,43 +63,39 @@ function timelineSteps(request: VaultPayoutRequest): TimelineStep[] {
           description: "Waiting for review",
           state: "progress",
         },
-        {
-          label: "Completed",
-          description: `${WITHDRAWAL_PROCESSING_DAYS} after approval`,
-          state: "upcoming",
-        },
+        { label: "Transfer sent", state: "upcoming" },
       ];
     case "Processing":
       return [
         requested,
         {
           label: "Grade10 review",
-          description: approvedDescription || undefined,
+          description: request.approvedAt,
           state: "completed",
         },
-        {
-          label: "Completed",
-          description: `Arrives in ${WITHDRAWAL_PROCESSING_DAYS}`,
-          state: "progress",
-        },
+        { label: "Transfer in progress", state: "progress" },
       ];
     case "Completed":
       return [
         requested,
         {
           label: "Grade10 review",
-          description: approvedDescription || undefined,
+          description: request.approvedAt,
           state: "completed",
         },
-        { label: "Completed", description: request.sentAt, state: "completed" },
+        {
+          label: "Transfer sent",
+          description: request.sentAt,
+          state: "completed",
+        },
       ];
     case "Declined":
       return [
         requested,
         {
-          label: "Grade10 review",
-          description: "Declined, returned to rewards",
-          state: "completed",
+          label: "Declined",
+          description: request.declinedAt,
+          state: "error",
         },
       ];
   }
@@ -122,13 +104,10 @@ function timelineSteps(request: VaultPayoutRequest): TimelineStep[] {
 /** The line under the amount — an estimate until approval sets the rate. */
 function amountSubtext(request: VaultPayoutRequest): string {
   if (request.currency === "HKD" && request.convertedHkd != null) {
-    if (request.status === "Pending") {
-      return `Est. ~${formatHkd(request.convertedHkd)}`;
-    }
     if (request.status === "Completed") {
       return `${formatHkd(request.convertedHkd)} received`;
     }
-    return `${formatHkd(request.convertedHkd)} on the way`;
+    return `Est. ~${formatHkd(request.convertedHkd)}`;
   }
   if (request.status === "Declined") return "Returned to rewards";
   return `To ${PAYOUT_METHOD.bankName} ${PAYOUT_METHOD.maskedAccount}`;
@@ -156,6 +135,8 @@ function WithdrawalDetails({
     <Drawer
       open={open}
       onOpenChange={onOpenChange}
+      /* The sheet shows its drag affordance; the side drawer has the close button. */
+      showSwipeHandle={!smUp}
       swipeDirection={smUp ? "right" : "down"}
     >
       <DrawerContent
@@ -167,37 +148,40 @@ function WithdrawalDetails({
         }
       >
         <DrawerHeader>
-          <DrawerTitle>Withdrawal details</DrawerTitle>
-          <DrawerDescription className="font-medium uppercase tracking-wide">
-            {request ? `Withdrawal · ${request.id}` : "Withdrawal"}
+          <DrawerTitle>Withdrawal Details</DrawerTitle>
+          <DrawerDescription className="sr-only">
+            Status, timeline and payout details for this withdrawal.
           </DrawerDescription>
         </DrawerHeader>
         {request ? (
-          <DrawerBody className="gap-6">
-            <div className="flex flex-col gap-1">
-              <div className="flex items-start justify-between gap-4">
-                <p className="font-heading text-3xl font-medium tracking-tight tabular-nums">
-                  {formatUsd(request.amountUsd)}
-                </p>
-                <Badge
-                  className="mt-1.5"
-                  variant={PAYOUT_STATUS_VARIANT[request.status]}
-                >
-                  {request.status === "Pending" ? (
-                    <span
-                      aria-hidden
-                      className="size-1.5 rounded-full bg-warning"
-                    />
-                  ) : null}
-                  {STATUS_LABEL[request.status]}
-                </Badge>
+          <DrawerBody className="gap-8 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <Card className="shrink-0">
+              <div className="flex flex-col gap-1 px-(--card-spacing)">
+                <div className="flex items-start justify-between gap-4">
+                  <p className="font-heading text-3xl font-medium tracking-tight tabular-nums">
+                    {formatUsd(request.amountUsd)}
+                  </p>
+                  <Badge
+                    className="mt-1.5"
+                    variant={PAYOUT_STATUS_VARIANT[request.status]}
+                  >
+                    {request.status}
+                  </Badge>
+                </div>
+                <Text tone="secondary">{amountSubtext(request)}</Text>
               </div>
-              <Text tone="secondary">{amountSubtext(request)}</Text>
-            </div>
+            </Card>
 
-            <Stepper aria-label="Withdrawal progress" orientation="vertical">
+            <Stepper
+              aria-label="Withdrawal progress"
+              className="shrink-0"
+              orientation="vertical"
+            >
               {steps.map((step, index) => (
                 <Step
+                  /* The last step has no connector to fill — release the row's
+                     min height so the seam to Details matches the one above. */
+                  className={index === steps.length - 1 ? "min-h-0" : undefined}
                   description={step.description}
                   key={step.label}
                   label={step.label}
@@ -209,7 +193,20 @@ function WithdrawalDetails({
               ))}
             </Stepper>
 
-            <section aria-label="Details" className="flex flex-col gap-2">
+            {request.status === "Declined" && request.declineReason ? (
+              <Alert
+                className="shrink-0"
+                description={request.declineReason}
+                dismissible={false}
+                status="error"
+                title="Withdrawal declined"
+              />
+            ) : null}
+
+            <section
+              aria-label="Details"
+              className="flex shrink-0 flex-col gap-2"
+            >
               <Text
                 className="uppercase tracking-wide"
                 size="xs"
@@ -221,7 +218,7 @@ function WithdrawalDetails({
               <div>
                 {request.currency === "HKD" &&
                 request.convertedHkd != null &&
-                request.status !== "Pending" ? (
+                request.status === "Completed" ? (
                   <DetailRow label="Exchange rate applied">
                     <span className="tabular-nums">
                       US$1 = HK$

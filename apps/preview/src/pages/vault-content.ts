@@ -471,6 +471,10 @@ type VaultPayoutRequest = {
   approvedAt?: string;
   /** Set once the transfer has been sent. */
   sentAt?: string;
+  /** Set once Grade10 declines the request. */
+  declinedAt?: string;
+  /** The operator's reason for declining, shown to the collector. */
+  declineReason?: string;
   /** Incentive wallet is denominated in USD. */
   amountUsd: number;
   /** Bank currency the collector asked for. */
@@ -494,7 +498,8 @@ const PAYOUT_REQUESTS: VaultPayoutRequest[] = [
     requestedAt: "1 Oct 2026",
     approvedAt: "4 Oct 2026",
     amountUsd: 64,
-    currency: "USD",
+    currency: "HKD",
+    convertedHkd: 497.92,
     status: "Processing",
   },
   {
@@ -522,6 +527,9 @@ const PAYOUT_REQUESTS: VaultPayoutRequest[] = [
     amountUsd: 95,
     currency: "HKD",
     convertedHkd: 738,
+    declinedAt: "8 Sep 2026",
+    declineReason:
+      "The account holder name didn’t match your verified name. US$95 was returned to your available balance.",
     status: "Declined",
   },
 ];

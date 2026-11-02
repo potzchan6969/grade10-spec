@@ -51,7 +51,7 @@ function WithdrawalRow({
       <div
         className={cn(
           "flex shrink-0 flex-col items-end gap-1 whitespace-nowrap tabular-nums",
-          declined && "line-through",
+          declined && "line-through decoration-muted-foreground",
         )}
       >
         <Text tone={declined ? "muted" : "primary"} weight="medium">
@@ -63,7 +63,7 @@ function WithdrawalRow({
           </Text>
         ) : null}
       </div>
-      <span aria-hidden className="shrink-0 text-secondary-foreground">
+      <span aria-hidden className="shrink-0 text-muted-foreground">
         <CaretRight size={16} />
       </span>
     </>
@@ -73,7 +73,7 @@ function WithdrawalRow({
       {onOpen ? (
         <button
           aria-label={`View withdrawal details, ${request.status}`}
-          className="flex w-full cursor-pointer items-center gap-4 p-4 text-left transition-colors hover:bg-background-subtle"
+          className="flex w-full cursor-pointer items-center gap-4 p-4 text-left transition-colors hover:bg-background-subtle active:bg-background-subtle"
           type="button"
           onClick={() => onOpen(request)}
         >
