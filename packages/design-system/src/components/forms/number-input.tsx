@@ -8,12 +8,15 @@ import { XIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useId } from "react";
 
-type NumberInputProps = React.ComponentProps<"input"> & {
+type NumberInputProps = Omit<React.ComponentProps<"input">, "size"> & {
   /** Rendered above the field. Figma's `showLabel`, as the absence of a value. */
   label?: ReactNode;
   /** Helper or validation text below the field. */
   message?: ReactNode;
   status?: InputStatus;
+  /** Field height — `lg` is the 48px rung Stepper Input publishes; the
+   * control keeps `text-base` at every viewport there. Code-side axis. */
+  size?: "md" | "lg";
   loading?: boolean;
   /** Uneditable text before the value — currency symbol, etc. */
   prefix?: ReactNode;
@@ -31,6 +34,9 @@ type NumberInputProps = React.ComponentProps<"input"> & {
  * Same four Figma axes as `TextInput`, plus `unit` and `clear`. The clear
  * button is dropped while disabled — a field that cannot be edited cannot be
  * cleared, which is what the design draws.
+ *
+ * `size` is a code-side axis Figma does not draw on this set — `lg` matches
+ * Stepper Input's 48px rung.
  */
 function NumberInput({
   className,
@@ -38,6 +44,7 @@ function NumberInput({
   label,
   message,
   status = "default",
+  size = "md",
   loading = false,
   disabled,
   prefix,
@@ -71,6 +78,7 @@ function NumberInput({
     <InputShell
       className={className}
       status={status}
+      size={size}
       label={label}
       message={message}
       disabled={disabled}

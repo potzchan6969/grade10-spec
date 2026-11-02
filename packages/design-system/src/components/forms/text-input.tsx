@@ -7,7 +7,7 @@ import {
 import type { ReactNode } from "react";
 import { useId } from "react";
 
-type TextInputProps = React.ComponentProps<"input"> & {
+type TextInputProps = Omit<React.ComponentProps<"input">, "size"> & {
   /** Rendered above the field. Omit it and no label renders — Figma's
    * `showLabel`, expressed as the absence of a value. */
   label?: ReactNode;
@@ -15,6 +15,9 @@ type TextInputProps = React.ComponentProps<"input"> & {
   message?: ReactNode;
   /** The field's tone. Told to the component, never derived by it. */
   status?: InputStatus;
+  /** Field height — `lg` is the 48px rung Stepper Input publishes; the
+   * control keeps `text-base` at every viewport there. Code-side axis. */
+  size?: "md" | "lg";
   /** Puts a spinner in the trailing slot, replacing the status icon. */
   loading?: boolean;
   /** Uneditable text before the value — currency symbol, etc. */
@@ -30,6 +33,9 @@ type TextInputProps = React.ComponentProps<"input"> & {
  * only axis with a code counterpart. The message stays
  * `Base/secondary-foreground` on every status — error and success tone the
  * border and trailing icon only.
+ *
+ * `size` is a code-side axis Figma does not draw on this set — `lg` matches
+ * Stepper Input's 48px rung.
  */
 function TextInput({
   className,
@@ -37,6 +43,7 @@ function TextInput({
   label,
   message,
   status = "default",
+  size = "md",
   loading = false,
   disabled,
   prefix,
@@ -52,6 +59,7 @@ function TextInput({
     <InputShell
       className={className}
       status={status}
+      size={size}
       label={label}
       message={message}
       disabled={disabled}
