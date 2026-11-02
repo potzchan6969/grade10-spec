@@ -1,3 +1,4 @@
+import { formatDay, formatShortDay } from "@grade10/date";
 import { Column, Row, Section, Text } from "react-email";
 
 import {
@@ -70,15 +71,11 @@ export function dayStamp(
   lang: LoyaltyLang,
   { year = false }: { year?: boolean } = {},
 ): string {
-  const formatted = new Intl.DateTimeFormat(
-    lang === "en" ? "en-GB" : "zh-Hant-HK",
-    {
-      timeZone: "Asia/Hong_Kong",
-      day: "numeric",
-      month: "short",
-      ...(year ? { year: "numeric" } : {}),
-    },
-  ).format(new Date(iso));
+  const format = year ? formatDay : formatShortDay;
+  const formatted = format(new Date(iso), {
+    locale: lang === "en" ? "en" : "zh-Hant",
+    timeZone: "Asia/Hong_Kong",
+  });
   // Chinese dates breathe: `12 月 14 日`, `2027 年 1 月 14 日`.
   return lang === "en"
     ? formatted
