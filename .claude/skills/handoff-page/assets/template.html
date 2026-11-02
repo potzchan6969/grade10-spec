@@ -1,6 +1,6 @@
 <title>Handoff Page</title>
 <style>
-  /* Layout: one 760px reading column, with an outline beside it from 1120px wide.
+  /* Layout: one 760px reading column, with a contents rail down the left edge from 1120px wide, as the manual has.
      The page opens on its name and state, lists every change at a glance, then gives
      each change one card: what it was, what it is now, the picture, and the proof. */
   :root {
@@ -214,21 +214,68 @@
       gap: 48px;
     }
   }
+  /* The contents rail: down the left edge from 1120px wide, as the manual's nav; a drawer below that */
+  :root {
+    --rail-w: 288px;
+  }
   .rail {
-    display: none;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 30;
+    width: min(var(--rail-w), 86vw);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-right: 1px solid var(--line);
+    background: var(--sunk);
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition:
+      transform 200ms cubic-bezier(0.32, 0.72, 0, 1),
+      visibility 200ms;
+  }
+  .rail-open .rail {
+    transform: none;
+    visibility: visible;
+    box-shadow: 0 0 40px rgb(0 0 0 / 18%);
+  }
+  .rail-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 29;
+    background: var(--scrim);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms;
+  }
+  .rail-open .rail-scrim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rail,
+    .rail-scrim {
+      transition: none;
+    }
   }
   @media (min-width: 1120px) {
-    .page {
-      display: grid;
-      grid-template-columns: minmax(0, 760px) 212px;
-      justify-content: center;
-      gap: 56px;
-    }
-    .main {
-      margin: 0;
+    body.has-rail {
+      padding-left: var(--rail-w);
     }
     .rail {
-      display: block;
+      width: var(--rail-w);
+      transform: none;
+      visibility: visible;
+      transition: none;
+    }
+    .rail-open .rail {
+      box-shadow: none;
+    }
+    .rail-scrim,
+    .rail-close {
+      display: none;
     }
   }
 
@@ -460,8 +507,7 @@
     padding: 14px 18px 8px;
   }
   .glance-head h2,
-  .g-phase,
-  .outline-head {
+  .g-phase {
     color: var(--muted);
     font-size: 12.5px;
     font-weight: 750;
@@ -892,14 +938,37 @@
     }
   }
   .outline {
-    position: sticky;
-    top: calc(env(safe-area-inset-top, 0px) + 40px);
     display: grid;
-    gap: 10px;
-    max-height: calc(100vh - 80px);
-    overflow-y: auto;
-    padding-top: 6px;
-    scrollbar-width: thin;
+    gap: 18px;
+    padding: 14px 12px 32px;
+  }
+  .rail-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 8px 0;
+  }
+  .rail-title {
+    overflow: hidden;
+    font-size: 14.5px;
+    font-weight: 720;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rail-close {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--fg);
+    font: inherit;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
   }
   .outline ul {
     display: grid;
@@ -910,38 +979,196 @@
   }
   .outline a {
     display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 5px 10px;
-    border-left: 2px solid var(--line);
-    color: var(--muted);
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    color: var(--fg);
     font-size: 14px;
-    font-weight: 560;
-    line-height: 1.4;
+    font-weight: 520;
+    line-height: 1.35;
     text-decoration: none;
   }
+  .outline a > span:first-child {
+    flex: 1;
+    min-width: 0;
+  }
   .outline a:hover {
-    color: var(--fg);
-    border-left-color: var(--line-strong);
+    background: var(--stage);
   }
   .outline a[aria-current] {
-    border-left-color: var(--accent);
-    color: var(--fg);
+    background: var(--accent-soft);
+    color: var(--accent);
     font-weight: 680;
+  }
+  .outline a:focus-visible,
+  .rail-heading:focus-visible,
+  .rail-caret:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
   }
   .outline .sub a {
     padding-left: 22px;
+    color: var(--muted);
     font-size: 13.5px;
-    font-weight: 500;
   }
-  .outline .sub2 a {
-    padding-left: 34px;
+  .rail-heading {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: 4px 8px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 720;
+    letter-spacing: 0.06em;
+    text-align: left;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .rail-heading:hover {
+    color: var(--fg);
+  }
+  .rail-heading .n {
+    margin-left: auto;
+    letter-spacing: 0;
+  }
+  .caret {
+    display: inline-block;
+    flex: none;
+    width: 10px;
+    font-size: 9px;
+    transition: transform 150ms;
+  }
+  [aria-expanded="false"] > .caret {
+    transform: rotate(-90deg);
+  }
+  .rail-group > ul {
+    margin-top: 2px;
+  }
+  .rail-row {
+    display: flex;
+    align-items: center;
+  }
+  .rail-row > a {
+    flex: 1;
+    min-width: 0;
+  }
+  .rail-caret {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .rail-caret:hover {
+    color: var(--fg);
+  }
+  .outline .rail-cards {
+    margin: 1px 0 6px 22px;
+    padding-left: 8px;
+    border-left: 1px solid var(--line);
+  }
+  .outline .rail-cards a {
+    min-height: 28px;
+    color: var(--muted);
     font-size: 13px;
     font-weight: 480;
   }
+  .outline .rail-cards a:hover {
+    color: var(--fg);
+  }
+  .outline .rail-cards a > span:first-child {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--tone, var(--line-strong));
+  }
+  .outline .rail-cards a > .dot {
+    order: -1;
+  }
   .outline .to-top {
-    border-left-color: transparent;
+    color: var(--muted);
     font-size: 13px;
+  }
+  .rail-view {
+    display: grid;
+    gap: 8px;
+    margin: 0 4px;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    font-size: 13px;
+  }
+  .rail-for {
+    display: grid;
+    gap: 4px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .rail-for select {
+    min-height: 32px;
+    padding: 4px 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--fg);
+    font: inherit;
+    font-weight: 560;
+  }
+  .rail-only {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
+    color: var(--fg);
+    font-weight: 560;
+    cursor: pointer;
+  }
+  .rail-only input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--accent);
+  }
+  .rail-only:has(input:disabled) {
+    color: var(--muted);
+    cursor: default;
+  }
+  .rail-toggle {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--fg);
+    border-radius: 999px;
+    background: var(--fg);
+    color: var(--bg);
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 650;
+    cursor: pointer;
   }
 
   /* Sections */
@@ -1003,6 +1230,8 @@
   .phase-group[hidden],
   .scope-band[hidden],
   .scope-group[hidden],
+  .rail-group[hidden],
+  .rail-cards[hidden],
   .outline li[hidden] {
     display: none;
   }
@@ -1098,6 +1327,22 @@
   .star:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 1px;
+  }
+  .rail-row .star {
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
+    opacity: 0;
+  }
+  .rail-row:hover .star,
+  .rail-row .star:focus-visible,
+  .rail-row .star[aria-pressed="true"] {
+    opacity: 1;
+  }
+  @media (hover: none) {
+    .rail-row .star {
+      opacity: 1;
+    }
   }
   .c-phase {
     padding: 0 8px;
@@ -3524,6 +3769,14 @@
           r.parentElement.setAttribute("aria-disabled", String(!view.follow.size));
         }
       }
+      const pick = document.getElementById("rail-for");
+      if (pick) pick.value = a;
+      const mine = document.getElementById("rail-only");
+      if (mine) {
+        mine.checked = view.only && !view.linked.length;
+        mine.disabled = !view.follow.size;
+        mine.parentElement.title = view.follow.size ? "" : "Star ☆ a product first";
+      }
       for (const b of document.querySelectorAll("[data-star]")) {
         const on = view.follow.has(b.dataset.star);
         b.setAttribute("aria-pressed", String(on));
@@ -3539,7 +3792,7 @@
       }
       for (const box of document.querySelectorAll("[data-box], [data-group]")) box.hidden = ![...box.querySelectorAll("[data-for]")].some((el) => !el.hidden);
       for (const n of document.querySelectorAll("[data-tally]")) n.textContent = plural(n.parentElement.parentElement.querySelectorAll("li[data-for]:not([hidden])").length, "change");
-      for (const link of document.querySelectorAll(".outline [data-spy]")) {
+      for (const link of document.querySelectorAll(".rail-secs [data-spy]")) {
         const target = document.getElementById(link.dataset.spy);
         if (target?.matches(".scope-band, .scope-group, .phase-group")) link.parentElement.hidden = target.hidden;
       }
@@ -4162,6 +4415,12 @@
         if (a.dataset.spy === here || a.dataset.spy === section || a.dataset.spy === band) a.setAttribute("aria-current", "true");
         else a.removeAttribute("aria-current");
       }
+      const box = document.querySelector(".rail");
+      const row = box?.querySelector(`.rail-row [data-spy="${here}"]`) ?? box?.querySelector(`.rail-secs [data-spy="${section}"]`);
+      if (row) {
+        const r = row.getBoundingClientRect();
+        if (r.top < 0 || r.bottom > box.clientHeight) box.scrollTop += r.top - box.clientHeight / 3;
+      }
       const pills = document.querySelector(".pills");
       const pill = pills?.querySelector(`[data-spy="${section}"]`);
       if (pill && pills.scrollWidth > pills.clientWidth) pills.scrollLeft = pill.offsetLeft - (pills.clientWidth - pill.offsetWidth) / 2;
@@ -4170,6 +4429,135 @@
     function navLink(sec, counts) {
       const id = sec.el.id;
       return h("a", { href: `#${id}`, "data-spy": id }, h("span", {}, sec.label ?? sec.el.querySelector("h2")?.textContent), counts[id] ? h("span", { class: "n" }, counts[id]) : null);
+    }
+
+    // The contents rail, as the manual's nav: the page's sections, then each manual group as a heading that folds,
+    // its products as rows that open onto their cards. What the reader folded or opened is kept for the next day's page.
+    const NAV = "handoff-nav";
+    function navMemory() {
+      try {
+        const m = JSON.parse(readLocal(NAV) ?? "{}");
+        return { shut: new Set(Array.isArray(m.shut) ? m.shut : []), open: new Set(Array.isArray(m.open) ? m.open : []) };
+      } catch {
+        return { shut: new Set(), open: new Set() };
+      }
+    }
+    const memory = navMemory();
+    function remember(set, key, on) {
+      if (on) set.add(key);
+      else set.delete(key);
+      writeLocal(NAV, JSON.stringify({ shut: [...memory.shut], open: [...memory.open] }));
+    }
+
+    function fold(button, panel, open) {
+      button.setAttribute("aria-expanded", String(open));
+      panel.hidden = !open;
+    }
+
+    function cardRow(c) {
+      const [word, tone] = KIND[c.kind] ?? [];
+      return h(
+        "li",
+        { "data-for": list(c.who).join("|"), "data-scope": c.scope ?? "" },
+        h("a", { href: `#${c.id}`, title: word ? `${word}: ${c.title}` : c.title }, h("span", { html: mdText(c.title) }), h("span", { class: `dot${tone ? ` tone-${tone}` : ""}`, "aria-hidden": "true" })),
+      );
+    }
+
+    function productRow(sc, cards) {
+      const panel = h("ul", { class: "rail-cards", id: `rail-${scopeId(sc.id)}` }, cards.map(cardRow));
+      const caret = h("button", { type: "button", class: "rail-caret", "aria-controls": panel.id, "aria-label": `Show the changes in ${sc.title}` }, h("span", { class: "caret", "aria-hidden": "true" }, "▼"));
+      caret.onclick = () => {
+        const open = caret.getAttribute("aria-expanded") !== "true";
+        fold(caret, panel, open);
+        remember(memory.open, sc.id, open);
+      };
+      fold(caret, panel, memory.open.has(sc.id));
+      return h(
+        "li",
+        { "data-box": "" },
+        h("div", { class: "rail-row" }, caret, h("a", { href: `#${scopeId(sc.id)}`, "data-spy": scopeId(sc.id) }, h("span", {}, sc.title), h("span", { class: "n" }, cards.length)), star(sc)),
+        panel,
+      );
+    }
+
+    function groupNav(g, scopes) {
+      const n = scopes.reduce((k, [, cards]) => k + cards.length, 0);
+      const panel = h("ul", { id: `rail-${groupId(g)}` }, scopes.flatMap(([sc, cards]) => (sc ? productRow(sc, cards) : cards.map(cardRow))));
+      const heading = h("button", { type: "button", class: "rail-heading", "aria-controls": panel.id }, h("span", { class: "caret", "aria-hidden": "true" }, "▼"), h("span", {}, g), h("span", { class: "n" }, n));
+      heading.onclick = () => {
+        const open = heading.getAttribute("aria-expanded") !== "true";
+        fold(heading, panel, open);
+        remember(memory.shut, g, !open);
+      };
+      fold(heading, panel, !memory.shut.has(g));
+      return h("div", { class: "rail-group", "data-group": g }, heading, panel);
+    }
+
+    // The same view as the pills at the top, kept in reach in the rail while the reader scrolls.
+    function railView() {
+      if (!FILTER && !SCOPED) return null;
+      return h(
+        "div",
+        { class: "rail-view" },
+        FILTER
+          ? h(
+              "label",
+              { class: "rail-for" },
+              h("span", {}, "Show changes for"),
+              h("select", { id: "rail-for", onchange: (e) => showFor(e.target.value) }, ["", ...AUDIENCES].map((a) => h("option", { value: a }, a || "Everyone"))),
+            )
+          : null,
+        SCOPED
+          ? h(
+              "label",
+              { class: "rail-only" },
+              h("input", { type: "checkbox", id: "rail-only", onchange: (e) => showOnly(e.target.checked) }),
+              h("span", {}, "Only the products I follow"),
+            )
+          : null,
+      );
+    }
+
+    function rail(sections, counts) {
+      return h(
+        "aside",
+        { class: "rail", id: "rail", "aria-label": "Contents" },
+        h(
+          "nav",
+          {
+            class: "outline",
+            "aria-label": "On this page",
+            onclick: (e) => {
+              if (e.target.closest("a")) openRail(false);
+            },
+          },
+          h("div", { class: "rail-head" }, h("p", { class: "rail-title" }, DATA.title ?? "On this page"), h("button", { type: "button", class: "rail-close", "aria-label": "Close the contents", onclick: () => openRail(false) }, "×")),
+          railView(),
+          h(
+            "ul",
+            { class: "rail-secs" },
+            sections.map((sec) =>
+              h(
+                "li",
+                {},
+                navLink(sec, counts),
+                sec.el.id === "changed" && !SCOPED && PHASES.length > 1
+                  ? h("ul", { class: "sub" }, PHASES.map((p) => h("li", {}, h("a", { href: `#${phaseId(p)}`, "data-spy": phaseId(p) }, h("span", {}, p)))))
+                  : null,
+              ),
+            ),
+          ),
+          SCOPED ? scopeTree(CH).map(([g, scopes]) => groupNav(g, scopes)) : null,
+          h("ul", {}, h("li", {}, h("a", { class: "to-top", href: "#top" }, h("span", {}, "Back to top")))),
+        ),
+      );
+    }
+
+    function openRail(open) {
+      document.body.classList.toggle("rail-open", open);
+      for (const b of document.querySelectorAll(".rail-toggle")) b.setAttribute("aria-expanded", String(open));
+      if (open) document.querySelector(".rail-close")?.focus();
+      else if (document.activeElement?.closest(".rail")) document.querySelector(".rail-toggle")?.focus();
     }
 
     function reveal() {
@@ -4201,61 +4589,20 @@
           { class: "main" },
           header(),
           glance(),
-          nav ? h("nav", { class: "pills", "aria-label": "Sections" }, sections.map((sec) => navLink(sec, counts))) : null,
+          nav
+            ? h(
+                "nav",
+                { class: "pills", "aria-label": "Sections" },
+                h("button", { type: "button", class: "rail-toggle", "aria-controls": "rail", "aria-expanded": "false", onclick: () => openRail(true) }, h("span", { "aria-hidden": "true" }, "☰"), "Contents"),
+                sections.map((sec) => navLink(sec, counts)),
+              )
+            : null,
           sections.map((sec) => sec.el),
         ),
-        nav
-          ? h(
-              "aside",
-              { class: "rail" },
-              h(
-                "nav",
-                { class: "outline", "aria-label": "On this page" },
-                h("p", { class: "outline-head" }, "On this page"),
-                h(
-                  "ul",
-                  {},
-                  sections.map((sec) =>
-                    h(
-                      "li",
-                      {},
-                      navLink(sec, counts),
-                      sec.el.id === "changed" && SCOPED
-                        ? h(
-                            "ul",
-                            { class: "sub" },
-                            scopeTree(CH).map(([g, scopes]) =>
-                              h(
-                                "li",
-                                {},
-                                h("a", { href: `#${groupId(g)}`, "data-spy": groupId(g) }, g),
-                                scopes.some(([sc]) => sc)
-                                  ? h(
-                                      "ul",
-                                      { class: "sub2" },
-                                      scopes
-                                        .filter(([sc]) => sc)
-                                        .map(([sc]) => h("li", {}, h("a", { href: `#${scopeId(sc.id)}`, "data-spy": scopeId(sc.id) }, sc.title))),
-                                    )
-                                  : null,
-                              ),
-                            ),
-                          )
-                        : sec.el.id === "changed" && PHASES.length > 1
-                        ? h(
-                            "ul",
-                            { class: "sub" },
-                            PHASES.map((p) => h("li", {}, h("a", { href: `#${phaseId(p)}`, "data-spy": phaseId(p) }, p))),
-                          )
-                        : null,
-                    ),
-                  ),
-                  h("li", {}, h("a", { class: "to-top", href: "#top" }, "Back to top")),
-                ),
-              ),
-            )
-          : null,
+        nav ? rail(sections, counts) : null,
+        nav ? h("div", { class: "rail-scrim", onclick: () => openRail(false) }) : null,
       );
+      if (nav) document.body.classList.add("has-rail");
       loadLocal();
       lightbox();
       refresh();
@@ -4279,6 +4626,9 @@
         { passive: true },
       );
       window.addEventListener("hashchange", reveal);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && document.body.classList.contains("rail-open")) openRail(false);
+      });
     }
 
     init();
