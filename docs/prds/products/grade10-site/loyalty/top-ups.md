@@ -31,15 +31,15 @@ A member buys points in packs an operator sets.
 - **Receipt** — Stripe's own receipt email, to the address the member is
   signed in with, confirms the top-up; the pack's entry in the member's
   points history opens it
-- 🚧 **Picked over Membership** — the Top-up Points button opens the pack
+**Picked over Membership** — the Top-up Points button opens the pack
   picker over the Membership page, and the member comes back to that page
-- 🚧 **A wait that cannot be dismissed** — while the payment is confirmed, a
+**A wait that cannot be dismissed** — while the payment is confirmed, a
   dialog on a wide viewport, a drawer on a narrow one
-- 🚧 **The outcome is a toast on Membership** — points added names the
+**The outcome is a toast on Membership** — points added names the
   points and the new balance; payment not completed says nothing was
   charged, with Try again; a payment still unconfirmed after half a minute
   closes the wait and says the points will show in Points History
-- 🚧 **Points History is the only record** — a credited pack's whole entry
+**Points History is the only record** — a credited pack's whole entry
   opens its receipt, a chargeback reads as a negative line, and a checkout left
   unpaid writes no entry; there is no top-up history page
 - **Account deleted** — an open checkout closes with nothing charged; a
