@@ -1,0 +1,10 @@
+{
+  "docs/prds/products/grade10-site/store/order-detail.md": "39b4e937cbd3619fb04edef6e933459ccab812e8fbb4aebb13e393cadffe9406",
+  "openspec/changes/retain-store-refund-notes/proposal.md": "5585831b7a3f2b6a3b6160700b7a065b737bbc2dd6efd73bda18154b208d364d",
+  "openspec/changes/retain-store-refund-notes/decisions.md": "a0e6d06d1f639b48dea44afedae8539c54dfdba3198d1b13960db8359597c908",
+  "openspec/changes/retain-store-refund-notes/specs/grade10-site/store/order-detail/user-journeys.md": "01a1bd78cefae9900e68445e3a34bdd4ce7fff98bbb38f387076e088c3eeeffd",
+  "openspec/changes/retain-store-refund-notes/specs/grade10-site/store/order-detail/spec.md": "f768fc6a62115cd89a54f6659e8b45555ed91ac7d2a7230cffbfabd3e723930b",
+  ".claude/skills/spec-to-tcs/SKILL.md": "7daeb6244cf4bc931992865ff0626956f753b5aef24f11a4d2766608d81196c7",
+  "docs/governance/specs-to-test-cases.md": "5edb226b71e4c3a9f4fe160d8cf4157d28e9cf0bafd7d0e047b7b294180612ae",
+  "docs/governance/tcs-conventions.md": "c2015d6903d86fbbcfff6d669e38960aad18c6f39ed048a8402931862b93a028"
+}

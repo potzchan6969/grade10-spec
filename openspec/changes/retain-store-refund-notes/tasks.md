@@ -1,0 +1,46 @@
+## 1. Align the Order Details product record (grade10-spec)
+
+- [ ] 1.1 Check the marked PRD line and recorded decisions against the accepted refund-reason delta before editing; this documentation-only group introduces no executable behavior or application scenario claim.
+- [ ] 1.2 Update `docs/prds/products/grade10-site/store/order-detail.md` only if implementation clarification is needed; retain the backend-scope and direct-text decisions, and leave 🚧 removal to archive.
+- [ ] 1.3 Verify: run the store's focused `pnpm check:manual` and strict change validation; keep frontend follow-on scope distinct.
+
+## 2. Add the optional refund metadata contracts (grade10)
+
+- [ ] 2.1 First commit failing contract/decoder tests for omitted collection, optional reason, exact literal strings, explicit null versus omitted source fields, and source-line identity; tick this test task last. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC21`.
+- [ ] 2.2 Add the optional customer detail refund collection and backend metadata input contract defined in `tech-design.md`; retain old decoder compatibility and keep monetary refund inputs and idempotency semantics unchanged. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC21`.
+- [ ] 2.3 Verify: `pnpm --filter @grade10/store-contracts test`, `pnpm --filter @grade10/store-contracts typecheck`, and focused backend typechecking after the additive types land.
+
+## 3. Persist metadata and protect erasure (grade10)
+
+Depends on group 2's landed metadata input contract.
+
+- [ ] 3.1 First commit failing repository/PostgreSQL tests for unique per-refund rows, exact source-line associations, field-presence handling, source precedence, canonical empty, concurrent upserts and erasure/replay races; tick this test task last. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC22`.
+- [ ] 3.2 Add the single refund metadata table, source provenance and order erasure guard in the shared Store schema; generate Grade10 and ZZZ migrations with `pnpm db:drizzle:generate`, keeping generated output separate from unrelated changes. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC22`.
+- [ ] 3.3 Implement the order-locked metadata processor and extend existing erasure scope/status counting to clear refund text and prevent sync restoration, including orders found through the existing provider customer reference. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC22`.
+- [ ] 3.4 Verify: inspect generated SQL, run `pnpm check:migrations`, the affected Store repository/erasure tests, Grade10 and ZZZ Store migration lanes on isolated databases, and `pnpm --filter @grade10/store-service typecheck`. Exercise transaction rollback and lock races with a real local PostgreSQL lane.
+
+## 4. Ingest metadata before monetary filtering and dedupe (grade10)
+
+Depends on groups 2 and 3.
+
+- [ ] 4.1 First commit failing Shopify parser/adapter and Store ingestion tests covering webhook/provider parity, settled/pending/restock-only inputs, earlier financially remembered deliveries, old unkeyed history, partial later settlement and canonical correction/clearing; assert unchanged money/points/stock and no raw reason in logs or analytics; tick this test task last. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC11`, `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC22`.
+- [ ] 4.2 Preserve source property presence in the metadata decoder and map all Shopify refund metadata independently of settlement filters. Route verified webhook metadata before financial-event dedupe, including events with no refund transaction, without adding monetary transitions. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC11`, `g10.store-order-detail.SC12`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC17`.
+- [ ] 4.3 Wire canonical metadata through reconciliation, external ingestion and settlement pulls even when money was deduplicated; preserve original provider identity separately from existing `<ref>@<amount>` settlement keys. Add the explicit-order, dry-run-default metadata replay command with existing read-claim protection and erasure guard; do not run it against production. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC21`, `g10.store-order-detail.SC22`.
+- [ ] 4.4 Verify: focused `@grade10/shopify-backend` parser tests, `@grade10/store-service` adapter/refund/webhook/reconcile/ingest/refresh tests and both package typechecks; rerun unchanged refund creation/idempotency and settlement regression suites. Run replay dry-run and metadata-only execution against isolated fixtures and confirm zero financial writes.
+
+## 5. Enrich authorized detail responses (grade10)
+
+Depends on groups 2 and 3; use fixtures for all metadata so this group can run independently of group 4.
+
+- [ ] 5.1 First commit failing buyer-read/router tests for explicit line identity, same-variant distinct lines, refund-only/unresolved associations, literal text, deterministic ordering, owner/private-link parity, denied reads, legacy responses, pending notes with zero refunded money and provider failure; tick this test task last. `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC18`, `g10.store-order-detail.SC19`, `g10.store-order-detail.SC20`, `g10.store-order-detail.SC21`.
+- [ ] 5.2 Add detail-only metadata enrichment after existing authorization/repair for owner, private-link and legacy guest reads. Resolve source line refs exactly, omit unavailable variants/reasons, retain no-line distinctions, and apply defined sorting without copying reasons through the variant quantity map or adding list/admin data. `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC18`, `g10.store-order-detail.SC19`, `g10.store-order-detail.SC20`, `g10.store-order-detail.SC21`.
+- [ ] 5.3 Verify: focused buyer-read/router/contract tests and `pnpm --filter @grade10/store-service typecheck`; run the affected Worker route lane, then the repository validation commands selected by `docs/conventions/validation.md`. Confirm no frontend/shared UI production files changed and old clients can decode responses.
+
+## 6. The walk - backend refund reason delivery (grade10)
+
+Uses the draft Store domain suite's backend out-of-suite inventory as planning input, after groups 2–5 land. This backend-only change adds no GUI case; it walks the changed data portion of `grade10-site-store-order-detail-US-01` through the authenticated owner and existing private-link APIs. Existing GUI journeys and their unchanged behavior are covered by their existing suite, not new UI work.
+
+- [ ] 6.1 Add or extend a protected `/test` fixture door on the isolated Store stack to seed one owned order, a private-link secret, distinct source lines including a shared variant, old financial events, and provider refund snapshots with literal/empty, settled/pending/restock-only and shipping-only notes. Expose deterministic provider snapshot replacement and explicit refresh/replay triggers through existing test harness conventions; fail outside test-enabled environments. Use fixed timestamps, verified webhook payloads/signatures and injected provider results; never wait for cron, time or Shopify. Keep the API walk as the backend end-to-end suite.
+- [ ] 6.2 Walk verified webhook → persistence → authorized owner/private-link read, then canonical correction/clearing, same-money retry, old-order metadata replay, denied reads and erasure followed by replay. Assert literal text, stable refund order, exact associations and unchanged totals/financial event count/points/stock. The direct API door exercises the existing collector journey's changed backend contract; record the actual local walk path and result.
+- [ ] 6.3 Record the backend scenarios as API/non-GUI evidence in the Store suite routing, and keep any existing GUI case unchanged unless the walk actually decides its assertion. If a later reconciliation introduces a case decided by this walk, classify only that case with `pnpm run tcs:automated <case…> --decided-by grade10:<walk path>` in the walk commit; do not invent GUI cases for data-only work.
+- [ ] 6.4 Verify: run the new local API walk with its deterministic fixture door, the affected Store Worker suite and applicable full repository gates from `docs/conventions/validation.md`; capture commands, source SHA and results. No step waits on deployed evidence, human QA, a live provider or production replay.

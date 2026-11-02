@@ -61,6 +61,8 @@ order: 7
   - **Refunded Whole** — the refunded row alone
   - **Refund Naming No Line** — such as delivery alone, splits no line
 
+- 🚧 **Refund Reason Data** — the Store keeps each Shopify refund note and makes its non-empty text available as the refund reason on the owner read and the valid order-link read; no approval or reason mapping. The frontend display is follow-on work.
+
 ## Order Summary
 
 - **Full Refund** — the paid total stays, and the whole amount shows as its
@@ -145,6 +147,7 @@ order: 7
 :::
 
 :::detail{title="Product decisions" for="pm"}
+- **Refund notes** — directly expose the source text, including system-written notes, rather than add approval, classification or rewriting; an empty or whitespace-only note offers no reason. This change delivers the backend data only.
 - **Order pictures** — the first current product picture, as the cart does, rather than a purchase-time image; a later image edit can appear on an earlier order, and a removed product may have none
 - **Order link for every order** — member orders included; a forwarded email lets a holder see a member's order, accepted because the page shows no account facts
 - **The account prompt on our order page** — not on a Shopify Thank-you extension

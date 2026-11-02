@@ -7,6 +7,7 @@ title: Store Order Detail Test Cases
 **Status:** pending-review · 4/23
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/order-detail
+**Out of suite (api):** Refund-note persistence and additive owner/private-link response data, including source fidelity, empty notes, refund/line association, metadata replay and backfill, access boundaries and erasure — `order-detail#items/refund-reason-data`; frontend display is follow-on work.
 
 ## Background
 
