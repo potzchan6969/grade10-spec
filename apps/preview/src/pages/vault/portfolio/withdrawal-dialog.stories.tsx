@@ -138,6 +138,31 @@ export const FirstPayout: Story = {
   },
 };
 
+/** Manual request — US$/overseas banks get their own form, no step rail. */
+export const ManualRequest: Story = {
+  args: { payoutMethods: PAYOUT_METHODS },
+  play: async ({ canvasElement }) => {
+    const dialog = await openDialog(canvasElement);
+    await enterMaxAndContinue(dialog);
+    await waitFor(() => expect(dialog.getByText("Withdraw To")).toBeVisible());
+    await userEvent.click(dialog.getByText("US$ or overseas bank"));
+    await waitFor(() =>
+      expect(dialog.getByText("Manual Withdrawal Request")).toBeVisible(),
+    );
+    expect(dialog.getByLabelText("Amount (US$)")).toHaveValue("160");
+    expect(dialog.getByLabelText("Bank country / region")).toBeVisible();
+    expect(dialog.getByLabelText("Bank name")).toBeVisible();
+    expect(dialog.getByLabelText("SWIFT / BIC")).toBeVisible();
+    expect(
+      dialog.getByLabelText("Account Holder Name"),
+    ).toHaveValue("Chan Tai Man");
+    expect(
+      dialog.getByRole("button", { name: "Submit Request" }),
+    ).toBeDisabled();
+    expect(dialog.queryByText(/Step \d of 3/)).toBeNull();
+  },
+};
+
 /** Step 3 — the review names the converted amount and the destination. */
 export const Review: Story = {
   args: { payoutMethods: PAYOUT_METHODS },

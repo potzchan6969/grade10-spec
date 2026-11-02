@@ -76,6 +76,7 @@ type WithdrawalStep =
   | "amount"
   | "destination"
   | "add-method"
+  | "manual-request"
   | "review"
   | "submitted";
 
@@ -92,6 +93,25 @@ const HK_BANKS = [
 ] as const;
 
 const FPS_ID_TYPES = ["Mobile number", "Email address", "FPS ID"] as const;
+
+const MANUAL_CURRENCIES = [
+  "US dollar",
+  "Euro",
+  "British pound",
+  "Singapore dollar",
+  "Other",
+] as const;
+
+const MANUAL_BANK_COUNTRIES = [
+  "United States",
+  "United Kingdom",
+  "Singapore",
+  "Australia",
+  "Canada",
+  "Japan",
+  "Mainland China",
+  "Other",
+] as const;
 
 const FPS_PLACEHOLDER: Record<(typeof FPS_ID_TYPES)[number], string> = {
   "Mobile number": "e.g. +852 9123 4567",
@@ -303,6 +323,16 @@ function WithdrawalDialog({
   const [saveForFuture, setSaveForFuture] = useState(true);
   const bankSelectId = useId();
   const fpsSelectId = useId();
+  const currencySelectId = useId();
+  const countrySelectId = useId();
+  const [manualReturnStep, setManualReturnStep] =
+    useState<WithdrawalStep>("amount");
+  const [receiveCurrency, setReceiveCurrency] =
+    useState<(typeof MANUAL_CURRENCIES)[number]>("US dollar");
+  const [manualCountry, setManualCountry] = useState("United States");
+  const [manualBank, setManualBank] = useState("");
+  const [manualAccount, setManualAccount] = useState("");
+  const [manualSwift, setManualSwift] = useState("");
 
   const [wasOpen, setWasOpen] = useState(open);
   if (open !== wasOpen) {
@@ -316,6 +346,11 @@ function WithdrawalDialog({
       setAccountNumber("");
       setAccountHolder(collectorName);
       setSaveForFuture(true);
+      setReceiveCurrency("US dollar");
+      setManualCountry("United States");
+      setManualBank("");
+      setManualAccount("");
+      setManualSwift("");
     }
   }
 
@@ -325,6 +360,13 @@ function WithdrawalDialog({
   const balanceAfter = availableUsd - amount;
   const methodDetailsValid =
     accountHolder.trim() !== "" && accountNumber.trim() !== "";
+  const manualDetailsValid =
+    amountValid &&
+    manualCountry.trim() !== "" &&
+    manualBank.trim() !== "" &&
+    manualAccount.trim() !== "" &&
+    manualSwift.trim() !== "" &&
+    accountHolder.trim() !== "";
   const hasMethods = methods.length > 0;
 
   const destination =
@@ -335,6 +377,7 @@ function WithdrawalDialog({
     amount: "Withdraw Rewards",
     destination: "Withdraw To",
     "add-method": "Add Withdrawal Method",
+    "manual-request": "Manual Withdrawal Request",
     review: "Review Withdrawal",
     submitted: `Withdrawal of ${formatUsd(amount)} Requested`,
   };
@@ -343,13 +386,16 @@ function WithdrawalDialog({
     amount: `Available to withdraw: ${formatUsd(availableUsd)}`,
     destination: `Withdrawing ${formatUsd(amount)} · ≈ ${formatHkd(convertedHkd)}`,
     "add-method": "Hong Kong accounts only, in HK$.",
+    "manual-request":
+      "For US$ withdrawals or overseas bank accounts. Our team handles these one by one.",
     review: "Grade10 reviews every request before sending it.",
     submitted: "We’ll email you once Grade10 approves the payout.",
   };
 
-  function requestManually() {
+  function requestManually(from: WithdrawalStep) {
+    setManualReturnStep(from);
     setManualRequest(true);
-    setStep("review");
+    setStep("manual-request");
   }
 
   function saveMethod() {
@@ -374,12 +420,15 @@ function WithdrawalDialog({
       setStep(hasMethods ? "destination" : "add-method");
     } else if (step === "destination") {
       if (selection === MANUAL_VALUE) {
-        requestManually();
+        requestManually("destination");
       } else {
         setStep("review");
       }
     } else if (step === "add-method") {
       saveMethod();
+    } else if (step === "manual-request") {
+      onSubmit?.(amount, "USD");
+      setStep("submitted");
     } else if (step === "review") {
       onSubmit?.(amount, manualRequest ? "USD" : "HKD");
       setStep("submitted");
@@ -390,6 +439,7 @@ function WithdrawalDialog({
     if (step === "destination") setStep("amount");
     else if (step === "add-method")
       setStep(hasMethods ? "destination" : "amount");
+    else if (step === "manual-request") setStep(manualReturnStep);
     else if (step === "review")
       setStep(manualRequest || !hasMethods ? "amount" : "destination");
   };
@@ -397,12 +447,13 @@ function WithdrawalDialog({
   const primaryDisabled =
     (step === "amount" && !amountValid) ||
     (step === "destination" && !selection) ||
-    (step === "add-method" && !methodDetailsValid);
+    (step === "add-method" && !methodDetailsValid) ||
+    (step === "manual-request" && !manualDetailsValid);
 
   const primaryLabel =
     step === "add-method"
       ? "Save & Use"
-      : step === "review"
+      : step === "review" || step === "manual-request"
         ? "Submit Request"
         : "Continue";
 
@@ -481,7 +532,12 @@ function WithdrawalDialog({
                   </span>
                 </span>
                 <Link
-                  render={<button type="button" onClick={requestManually} />}
+                  render={
+                    <button
+                      type="button"
+                      onClick={() => requestManually("amount")}
+                    />
+                  }
                   size="sm"
                 >
                   Request manually
@@ -527,7 +583,7 @@ function WithdrawalDialog({
                 <CaretRight size={16} weight="regular" />
               </span>
             }
-            onClick={requestManually}
+            onClick={() => requestManually("destination")}
           />
         </VStack>
       ) : null}
@@ -645,12 +701,131 @@ function WithdrawalDialog({
           <Text size="sm" tone="secondary">
             Overseas account?{" "}
             <Link
-              render={<button type="button" onClick={requestManually} />}
+              render={
+                <button
+                  type="button"
+                  onClick={() => requestManually("add-method")}
+                />
+              }
               size="sm"
             >
               Request manually
             </Link>
           </Text>
+        </VStack>
+      ) : null}
+
+      {step === "manual-request" ? (
+        <VStack gap="md" hAlign="stretch">
+          <div className="grid w-full grid-cols-2 gap-3">
+            <TextInput
+              label="Amount (US$)"
+              inputMode="decimal"
+              value={amountInput}
+              onChange={(event) =>
+                setAmountInput(event.target.value.replace(/[^0-9.]/g, ""))
+              }
+            />
+            <div className="flex w-full flex-col gap-2">
+              <label
+                className="text-sm font-medium text-secondary-foreground"
+                htmlFor={currencySelectId}
+              >
+                Receive in
+              </label>
+              <Select
+                onValueChange={(value) => {
+                  if (
+                    typeof value === "string" &&
+                    (MANUAL_CURRENCIES as readonly string[]).includes(value)
+                  ) {
+                    setReceiveCurrency(
+                      value as (typeof MANUAL_CURRENCIES)[number],
+                    );
+                  }
+                }}
+                value={receiveCurrency}
+              >
+                <SelectTrigger className="w-full" id={currencySelectId}>
+                  <SelectValue placeholder="Select a currency" />
+                </SelectTrigger>
+                <SelectContent alignItemWithTrigger={false}>
+                  {MANUAL_CURRENCIES.map((currency) => (
+                    <SelectItem
+                      key={currency}
+                      label={currency}
+                      value={currency}
+                    >
+                      {currency}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flex w-full flex-col gap-2">
+            <label
+              className="text-sm font-medium text-secondary-foreground"
+              htmlFor={countrySelectId}
+            >
+              Bank country / region
+            </label>
+            <Select
+              onValueChange={(value) => {
+                if (typeof value === "string") setManualCountry(value);
+              }}
+              value={manualCountry}
+            >
+              <SelectTrigger className="w-full" id={countrySelectId}>
+                <SelectValue placeholder="Select a country or region" />
+              </SelectTrigger>
+              <SelectContent alignItemWithTrigger={false}>
+                {MANUAL_BANK_COUNTRIES.map((country) => (
+                  <SelectItem key={country} label={country} value={country}>
+                    {country}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <TextInput
+            label="Bank name"
+            placeholder="e.g. Chase"
+            value={manualBank}
+            onChange={(event) => setManualBank(event.target.value)}
+          />
+          <div className="grid w-full grid-cols-2 gap-3">
+            <TextInput
+              label="Account number / IBAN"
+              placeholder="Account number"
+              value={manualAccount}
+              onChange={(event) => setManualAccount(event.target.value)}
+            />
+            <TextInput
+              label="SWIFT / BIC"
+              placeholder="e.g. CHASUS33"
+              value={manualSwift}
+              onChange={(event) =>
+                setManualSwift(event.target.value.toUpperCase())
+              }
+            />
+          </div>
+          <div className="flex w-full flex-col gap-2">
+            <TextInput
+              label="Account Holder Name"
+              value={accountHolder}
+              onChange={(event) => setAccountHolder(event.target.value)}
+            />
+            <Text size="sm" tone="secondary">
+              Taken from your verified Grade10 profile.
+            </Text>
+          </div>
+          <Alert
+            description="We email you to confirm details before sending. The amount is held from your balance meanwhile, and you can cancel before it’s approved."
+            icon={<Info aria-hidden weight="regular" />}
+            status="default"
+            title="Manual review"
+          />
         </VStack>
       ) : null}
 
@@ -882,7 +1057,9 @@ function WithdrawalDialog({
           style={{ "--drawer-content-max-height": "92dvh" } as CSSProperties}
         >
           <DrawerHeader>
-            {step !== "submitted" ? <StepRail step={step} /> : null}
+            {step !== "submitted" && step !== "manual-request" ? (
+              <StepRail step={step} />
+            ) : null}
             <DrawerTitle
               className={step === "submitted" ? "sr-only" : undefined}
             >
@@ -912,7 +1089,9 @@ function WithdrawalDialog({
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogContent className="max-w-lg">
-        {step !== "submitted" ? <StepRail step={step} /> : null}
+        {step !== "submitted" && step !== "manual-request" ? (
+          <StepRail step={step} />
+        ) : null}
         <DialogHeader>
           <DialogTitle className={step === "submitted" ? "sr-only" : undefined}>
             {TITLE[step]}
