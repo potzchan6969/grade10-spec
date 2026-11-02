@@ -11,9 +11,10 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 - 🚧 **Daily Incentive** — market price × liquidity factor × yearly rate ÷ 365
   - **Built** — the same formula, the factor's model still the owner's draft; each day's price, rate of exchange, factor, rate and settings are kept with its amount, so a changed setting never changes an amount already credited
 - 🚧 **Market Price** — the median of the card's sales on SNKRDUNK over 30 days, outliers removed; staff never enter a price by hand
-  - **A Day's Price** — each SNKRDUNK point counts on its date at +08:00, and the day takes its last point, the end of the day; the day still in progress takes none
+  - **A Day's Price** — the window's median is of every SNKRDUNK sale in it, each dated at +08:00; a day older than SNKRDUNK's week counts its one daily average; the day still in progress counts none
+  - **Evidence** — each SNKRDUNK answer is kept as it came, and a price shows every sale behind it: counted, an outlier, or excluded by staff
   - **In Another Currency** — a dollar price is converted at the European Central Bank's daily reference rate
-  - **Unlikely Data** — a price or a rate of exchange that jumps too far from the day before is used all the same and flagged for staff; a figure staff find wrong is corrected in Inventory's market prices, and every day priced from it is worked again, the difference credited or taken back
+  - **Unlikely Data** — a price or a rate of exchange that jumps too far from the day before is used all the same and flagged for staff; a figure staff find wrong is corrected in Inventory's market prices — re-read from SNKRDUNK, or a wrong sale excluded — and every day priced from it is worked again, the difference credited or taken back
   - **Built** — a deployed environment imports rates of exchange but prices no card until the price worker that supplies the sales is connected, so no card earns there yet
 - 🚧 **Liquidity Factor** — how easily the card sells, from 0.2 to 1: velocity × price stability
   - **Velocity** — sales in 30 days ÷ the sales target for its price tier, at most 1
@@ -131,7 +132,7 @@ vault, cash out and leave.
 | Where prices come from | Decided | A separate price worker, reached by a service binding; its answer's shape is assumed until it exists - decided by the owner, 2026-10-27 | Owner |
 | Nothing is held | Decided | An unlikely price or rate is used and flagged, never held, because a credit stays locked until vesting ends and nothing is cashed out without a second treasurer; a wrong one is corrected in Inventory and the days it priced are worked again with no second approver - decided by the owner, 2026-10-28 | Owner |
 | A late fact waits | Decided | A day whose price or rate has not arrived waits and is paid in full, rather than earning nothing after 3 days - decided by the owner, 2026-10-28 | Owner |
-| A day's SNKRDUNK price | Decided | A point counts on its date at +08:00 and the day takes its last point, since SNKRDUNK's history merges the week's sales, at any hour, into its daily points - decided by the owner, 2026-10-30 | Owner |
+| A day's SNKRDUNK price | Decided | The median counts every sale in the window, each on its date at +08:00, read from a kept snapshot of SNKRDUNK's answer; a day past SNKRDUNK's week counts its daily average. SNKRDUNK's week holds each sale and its longer history one average per Japan day, so neither is merged into the other - decided by the owner, 2026-11-02, in place of the day taking its last point (2026-10-30) | Owner |
 | A sold card stops on the sale | Decided | It stops earning on the day it is marked sold, not at the delivery or the settlement, so a card earns nothing while its sale is being completed - decided by the owner, 2026-10-29 | Owner |
 | A sale is not an early retrieval | ❓ | A card sold through consignment forfeits nothing; its credited incentive unlocks on its own day - built so, 2026-10-27 | Owner |
 :::
