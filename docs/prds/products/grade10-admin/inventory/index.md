@@ -32,17 +32,15 @@ has.
 | [Services and Hand-offs](/p/grade10-admin/inventory/services) | Which service acts on an item, and passing it to the next |
 | [Inventory Console](/p/grade10-admin/inventory/console) | The item page, scanning, receiving, the transit board and counts |
 
-## Consignment Counter
+## The Intake Form
 
-- 🚧 **Products at the Counter** — consignment's counter finds a catalogue
-  product by name, set, number or Cert ID, or creates one through the
-  classification and its schema; the item links to it and counts no house
-  stock - [Consignment Counter](/p/grade10-site/consignment/counter)
-- 🚧 **Starting Location** — each counter item is received at the counter's
-  Taken At, its first move in inventory, and is labelled there
-- 🚧 **SNKRDUNK Card** — an item's SNKRDUNK card is inventory's, remembered on
-  its product so the next copy fills it in; consignment and the vault read it
-  rather than keep their own
+The vault's intake form finds and creates its products, receives its cards and
+prints their labels through inventory - [Vault Intake](/p/grade10-site/vault/intake#intake-form).
+
+- 🚧 **SNKRDUNK Card** — an item's SNKRDUNK card is inventory's; its product
+  remembers the SNKRDUNK card so the next copy fills it in, the condition
+  coming from the copy; the vault and consignment read it rather than keep
+  their own
 
 ## Product Assets
 
@@ -61,9 +59,9 @@ has.
   asset for a listing and saves, that listing keeps its own copy of the
   selected media. Changing, reordering, or removing the product gallery later
   does not change the listing.
-- 🚧 **Media by Unit** — the product media page groups the gallery by unit:
-  a file dropped on a unit is tagged to it, and each item's photos from the
-  counter show beside its unit
+- ❓ **Media by Unit** — whether the product media page groups the gallery
+  by unit, a file dropped on a unit tagged to it and each item's intake photos
+  beside it; it waits on its design. Product confirms
 
 :::detail{title="Product decisions" for="pm"}
 Three records count physical things and never meet: the catalogue counts

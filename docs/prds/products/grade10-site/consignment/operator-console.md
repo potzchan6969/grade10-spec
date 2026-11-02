@@ -28,7 +28,7 @@ the settings the schedule runs on.
   price, days on sale and a badge naming why it waits
 - **Counts** - each view carries its count, and every view adds up to all
 
-- 🚧 **Pending Approval** — a consignment the collector submitted from the vault waits here for approval, replacing To price and To sign - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
+- 🚧 **Pending Approval** — a consignment signed at the counter, or submitted by the collector from the vault, waits here from its signing; it replaces New, To price and To sign - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
 - 🚧 **Sold** — waits 3 business days after the buyer pays, not the return window
 - 🚧 **Ended Unsold** — the card goes back to the vault and keeps earning; nothing waits on the collector's choice
 
@@ -47,7 +47,7 @@ the settings the schedule runs on.
 - **Acts** - receive, set terms, prepare the agreement, list, change the
   price, take off sale, return, extend, move to the other channel or the
   vault - [Services and Hand-offs](/p/grade10-admin/inventory/services#hand-offs)
-- 🚧 **Approve or Reject** — sets the list or starting price, never below the lowest acceptable price, and the starting channel of a card consigned to both; receiving and the terms are taken at the counter - [Consignment Counter](/p/grade10-site/consignment/counter)
+- 🚧 **Approve or Reject** — sets the list or starting price, never below the lowest acceptable price, and the starting channel of a card consigned to both; receiving, the terms and the signing are taken at the counter, which ends at signing - [Consignment Counter](/p/grade10-site/consignment/counter)
 - **Before the act** - a dialog states the rule first: the floor, the
   schedule, the term
 - **Withheld in words** - an act not offered yet says why
@@ -102,7 +102,7 @@ pinned to a consignment when its agreement is prepared.
 - ❓ Product - **The intended figures** - the consignment fee is intended
   at **10–12%** of the price at sale and the incentive at **5%** of the
   estimated value; the exact figures are unset
-- 🚧 **Vault-First Defaults** — one commission rate for the store and one for the auction; the term **1** year; paid **3** business days after the buyer pays; a refund after payout reversed from the wallet; the identity check at the first cash-out; the incentive leaves this schedule for the vault's - [Incentive](/p/grade10-site/vault/incentive#settings)
+- 🚧 **Vault-First Defaults** — one commission rate for the store and one for the auction; the term **1** year; paid **3** business days after the buyer pays; a refund after payout reversed from the wallet; no identity setting, the account's check coming at cash-out; the incentive leaves this schedule for the vault's - [Incentive](/p/grade10-site/vault/incentive#settings)
 - **Pinned to the agreement** - a change reaches the next agreement
   prepared; one waiting for a signature keeps the schedule it was prepared on
 - **Unset refuses** - an agreement is not prepared while a figure it prints
@@ -139,4 +139,5 @@ pinned to a consignment when its agreement is prepared.
 | A schedule version per save | ❓ Open | Proposed: each settings save that moves a figure is the next schedule version, the one an agreement prepared after it pins | Product |
 | The channel and the details at intake | Decided | the receive act records where the consignment was taken, its channel - the store or the auction - and each item's market value and the consignment rates applying to it - decided under the owner's delegation, 2026-10-16; replaced by the counter review, 2026-11-02: where it was taken is the items' first inventory location, the channel is set per item at Terms, and the market price is the SNKRDUNK median | Product |
 | A light counter | 🚧 | The counter asks for the consignor's ID number and an 18-or-over tick, never an identity check, a list price, price links, an incentive, a payout account, last-sold figures or a declared value; items follow the inventory catalogue, go into a vault case that earns the daily incentive, and keep their photos per item - the counter review, 2026-11-02 | Product |
+| One intake form | 🚧 | The counter is the vault's intake form with cards set to Consign: one card per vault case, received before its terms, the Consignment Agreement signed with the Vault Terms, and Pending Approval from the signing; the consignment keeps only its sale terms, never a copy of the card - the counter review, round 2, 2026-11-02 | Product |
 :::

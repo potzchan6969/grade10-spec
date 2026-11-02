@@ -4,49 +4,31 @@ audience: operator
 order: 5
 ---
 
-The admin console's New consignment: staff take a consignor's items in one
-visit, in five steps - the consignor, the items, the terms, signing, and on
-sale.
+Consigning at the counter is the vault's intake form with cards set to
+Consign: staff take the consignor, the cards and the photos there, receive
+them into the vault, then set what is consignment's own - the terms and the
+agreement - [Vault Intake](/p/grade10-site/vault/intake#intake-form).
 
-- 🚧 **Consignor** — an account found by name, email or phone, or a walk-in
-  given a light account before the next step
-  - **ID** — the ID type and number, in any Hong Kong or Taiwan format, kept
-    masked - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
-  - **18 or Over** — a tick staff must give
-  - **No Identity Check** — the online check waits for the first cash-out -
-    [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
-  - **Taken At** — required: the inventory location where the intake
-    happens, the shop or a card event, and where every item starts in
-    inventory - [Locations](/p/grade10-admin/inventory/locations#places)
-  - **Heading To** — optional: the location the items move to next
-- 🚧 **Items** — a list staff add to and remove from; staff move on once it
-  holds an item, with no receive press per item
-  - **Vault Case** — the items go into one vault case for the consignor, and
-    each earns the vault's daily incentive as a vaulted card -
-    [Vault Intake](/p/grade10-site/vault/intake#intake-form)
-  - **Received Into Inventory** — each item is registered at Taken At, under
-    the consignor, with its label printed
-  - **Product** — found in the catalogue by name, set, number or Cert ID -
-    [Products and Stock](/p/grade10-admin/inventory/catalog#product-schemas)
-    - **A Product Nobody Has** — counter staff create it by the inventory
-      classification and its schema; it is created only once the schema's
-      required values are given, and never twice
-  - **SNKRDUNK Card** — required; its 30-day median is the item's market
-    price - [Incentive](/p/grade10-site/vault/incentive#daily-amount)
-  - **Fixed Price** — entered by an admin only when the card has no SNKRDUNK
-    listing to link; used wherever the SNKRDUNK median would be
-  - **Earns Incentive** — a tick per item, on by default
-  - **Photos** — front and back required for every item before the items
-    are received, and more as staff choose; kept on the item
-  - **Items Table** — each item's market price, photos and estimated
-    incentive, to show the consignor
-    - **Estimated Incentive** — about how much a day, and over a year, at
-      today's market price and liquidity
-- 🚧 **Terms** — per item, the channel, the lowest acceptable price, the
-  commission and the minimum commission; Grade10 sets the list price later -
-  [Consigning](/p/grade10-site/consignment/consigning#terms)
-  - **No Incentive** — the vault's daily incentive replaces it
-  - **No Payout Account** — the consignor names one at cash-out -
-    [Earnings Wallet](/p/grade10-site/account/earnings-wallet#cash-out)
-- 🚧 **Signing** — the Vault Terms for the case and the Consignment
-  Agreement, together, on the counter tablet or by an emailed link
+- 🚧 **New Consignment** — opens the intake form with every card set to Consign
+- 🚧 **Keep or Consign** — per card, after the cards are received, with Keep All and Consign All
+
+## Terms
+
+- 🚧 **Per Consigned Card** — the channel, the lowest acceptable price, the commission and the minimum commission - [Consigning](/p/grade10-site/consignment/consigning#terms)
+  - **Channel** — the store, the auction or both; required on every card
+  - **Lowest Acceptable Price** — price-checked against the card's market price
+  - **Commission** — Grade10's rate for the channel; another rate takes `consignment:approve`
+  - **Minimum Commission** — optional, takes `consignment:approve`, and refused at or above the lowest acceptable price
+  - **List Price Later** — Grade10 sets it at approval - [Consignment Console](/p/grade10-site/consignment/operator-console#one-consignment)
+- 🚧 **No Incentive** — the vault's daily incentive replaces it - [Incentive](/p/grade10-site/vault/incentive)
+- 🚧 **No Payout Account** — the consignor names one at cash-out - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#cash-out)
+
+## Signing
+
+- 🚧 **With the Vault Terms** — the Consignment Agreement is signed in the same handover, after the Vault Terms - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+- 🚧 **Declined** — the Vault Terms still stand, and the cards are kept in the vault
+- 🚧 **The Counter Ends at Signing** — a signed consignment waits in Pending Approval, where Grade10 sets the price and lists it - [Consignment Console](/p/grade10-site/consignment/operator-console#queue)
+
+:::callout{kind="note"}
+- ❓ **Partners at launch** — whether a partner, whose items are not vaulted, consigns at launch. Product confirms before Phase 2, 6 December
+:::

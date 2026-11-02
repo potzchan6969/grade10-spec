@@ -5,7 +5,7 @@ order: 1
 
 ## Two Ways In
 
-- 🚧 **At Intake** — the main way: staff tick Consign Now for a card on the intake form; it is registered into the vault first and consigned in the same visit, and the collector signs the Consignment Agreement with the Vault Terms - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+- 🚧 **At Intake** — the main way: staff set a card to Consign on the intake form; it is registered into the vault first and consigned in the same visit, and the collector signs the Consignment Agreement with the Vault Terms - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
 - 🚧 **From the Dashboard** — a card already in the vault, on the consign form below
 - 🚧 **Approved Alike** — either way, staff approve the listing before it goes on sale - [Listing Approval](/p/grade10-site/consignment/consigning#listing-approval)
 
@@ -44,7 +44,7 @@ goes below. Grade10 prices the listing at approval.
 
 ## Price Check
 
-On the intake form's Consign Now, on the consign form, and whenever the lowest price is changed.
+On the intake form's Keep or Consign step, on the consign form, and whenever the lowest price is changed.
 
 - 🚧 **Market Price** — the card's 30-day SNKRDUNK median, or the fixed price an admin entered in its place; a card with no market price has no check
 - 🚧 **The Check** — how far the lowest acceptable price sits from the market price:

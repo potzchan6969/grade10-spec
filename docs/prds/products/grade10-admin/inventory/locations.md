@@ -21,9 +21,10 @@ order: 3
   `Locker A-12`; a unit may sit inside another, a locker inside a room
 - **Outside place** - a place the house sends items to and does not run: a
   grader's receiving address, a partner, a storage provider
-- 🚧 **Card Event** - a site an admin opens for an event's days, with its
-  name and dates, and retires once every item has moved out; items taken
-  there start there - [Consignment Counter](/p/grade10-site/consignment/counter)
+- 🚧 **Card Event** - a kind of site, beside a shop, that an admin opens
+  for an event with its name, address and time zone, and retires once every
+  item has moved out; cards taken there start there -
+  [Vault Intake](/p/grade10-site/vault/intake#intake-form)
 - **One registry** - inventory keeps every place; the diary keeps the hours,
   desks and bookings of the sites that take visits, under the ids its shops
   carry today - [Diary](/p/grade10-admin/appointment/diary)

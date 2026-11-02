@@ -3,7 +3,7 @@ title: Incentive
 order: 2
 ---
 
-A daily amount paid on approved, eligible vaulted cards, consigned or not.
+A daily amount paid on eligible vaulted cards, consigned or not, from each card's Earning Starts date.
 It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 
 ## Daily Amount
@@ -13,8 +13,10 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 - 🚧 **Market Price** — the median of the card's sales on SNKRDUNK over 30 days, outliers removed
   - **SNKRDUNK Card Required** — every card taken at the counter names its SNKRDUNK card, kept in Inventory and remembered on its catalogue product for the next copy
   - **Fixed Price** — entered by an admin only for a card with no SNKRDUNK listing to link; it stands as the card's market price until a SNKRDUNK card is linked
+    - **SNKRDUNK Wins** — a linked SNKRDUNK card always replaces the fixed price, and an admin can't set one while the card's product already has a SNKRDUNK card
+    - **A Changed Price** — applies from the next day; a mistake corrected is worked again like any other price
     - **Liquidity on a Fixed Price** — a fixed factor, an admin setting starting at 0.5, with no minimum sales, since no sales stand behind the price
-  - **Estimate at Intake** — the counter shows each card's estimated incentive, worked out by this formula on the day's figures, for the collector to see
+  - **Estimate at Intake** — the intake form shows about how much each card earns a day and over a year, by this formula on the day's figures, from its Earning Starts date
   - **A Day's Price** — the window's median is of every SNKRDUNK sale in it, each dated at +08:00; a day older than SNKRDUNK's week counts its one daily average; the day still in progress counts none
   - **Evidence** — each SNKRDUNK answer is kept as it came, and a price shows every sale behind it: counted, an outlier, or excluded by staff
   - **In Another Currency** — a dollar price is converted at the European Central Bank's daily reference rate
@@ -56,14 +58,14 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 
 ## Earning
 
-- 🚧 **Incentive Approval** — staff check the card's SNKRDUNK match, its price and its liquidity, then approve it
-  - **Approved** — earns from the next day; days waiting for approval are not paid later
-  - **Rejected or Held** — stays in the vault without earning; the collector sees why
-  - **Built** — no approval step: a card earns from the day it is vaulted, its own effective start date, once it passes authentication; a card that fails never earns
-  - **Skipped at Intake** — staff who already authenticated the card and verified its value tick Skip Incentive Approval on the intake form; the card is approved when the intake is submitted, and the skip is recorded with the staff member - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+- 🚧 **Earning Starts** — each card's own start date, set on the intake form: the day after intake unless staff choose another, and never before the Vault Terms are signed - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+  - **Pinned to the Card** — signed with the Vault Terms; vesting counts from it
+  - **Once Authenticated** — a card checked later earns from its start date once it passes; a card that fails never earns
+  - **Built** — a card earns from the day it is placed in the vault, once it passes authentication
+- 🚧 **Incentive Approval** — staff check the card's SNKRDUNK match, its price and its liquidity; a card rejected or held is Not Eligible from the next day, and the collector sees why
 - 🚧 **Eligible on the Day** — checked every day; a card earns on a day it has a market price, its tier's minimum sales, a liquidity factor of 0.2 or more, an eligible product, Earns Incentive ticked, and no pause
-  - **Earns Incentive** — staff set it per card at intake, on by default, and may change it later; each change logged - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
-  - **Not Eligible** — earns nothing that day and is not paid later; it earns again the next day it qualifies, and the dashboard says why
+  - **Earns Incentive** — staff set it per card at intake, on by default; a later change takes a reason and applies from the next day; each change logged - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+  - **Not Eligible** — earns nothing that day and is not paid later; it earns again the next day it qualifies, and the dashboard says why, never as a pause
   - **Vesting Still Releases** — what vested before stays on the card and is released on its day; what is in the wallet stays there
   - **Built** — no tiers: at least **5** sales in 30 days for every card, every product eligible and no cap
 - 🚧 **Grace Days** — a card that was earning and loses its market price keeps earning on its last price and liquidity for up to 3 days
@@ -90,7 +92,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
   - **Fractions of a Cent** — carry to the next day, so rounding never gains or loses money
   - **Live Estimate** — the dashboard may show the day so far; only the posted amount counts
   - **Built** — credited the day after it closes in Hong Kong; a day is never paid twice
-- 🚧 **Vesting** — for its first days in the vault a card's incentive vests on the card, not in the wallet
+- 🚧 **Vesting** — for its first days from Earning Starts a card's incentive vests on the card, not in the wallet
   - **Release** — on the last vesting day everything vested is posted at once; daily drips follow
   - **Once an Intake** — vesting runs once, not again on every stretch
   - **Shown Beside the Wallet** — "Vesting: US$ X", with its release date; not cashable
@@ -101,6 +103,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 - 🚧 **Never Taken Back** — incentive in the wallet stays the collector's, whatever happens to the card
 
 :::callout{kind="note"}
+- ❓ **Wallet currency** — decided as US dollars, while the amounts are built in HKD; whether the conversion lands with Consign and Sell or as a change of its own. Product confirms before Phase 2, 6 December
 - ❓ **Daily credit time** — the exact time each day's incentive posts to the wallet; suggested 00:00 HKT, after the Hong Kong day closes. Owner confirms
 - ❓ **Vesting period** — 30 or 60 days; longer protects more, but delays the first payout a collector sees. Product confirms before Phase 1, mid November
 - ❓ **Incentive when a card sells during vesting** — only the vested days (recommended: pays what the card earned), or the full period (pays the remaining days too, at a higher cost). A sold card stops earning the day it sells; built as a sale forfeiting nothing, its credited incentive unlocking on its own day. Product confirms before Phase 2, 6 December
@@ -123,7 +126,7 @@ vault, cash out and leave.
 
 - **Market price from SNKRDUNK's 30-day median** — so one odd sale can't move it, and no staff member types a price
 - **Liquidity in the amount** — a card that sells easily and holds its price earns more, so the cost follows the cards Grade10 can sell
-- **Approved before earning** — an internal check of the price match before a card costs anything; staff who already checked it at the counter may skip it, and the skip is recorded
+- **A start date set at intake** — the collector sees on the form, and signs, the day each card starts earning, so earning never waits on where the card is placed; an approval that finds a problem stops the card from the next day - the counter review, round 2, 2026-11-02
 - **Vest on the card, not in the wallet** — the wallet only ever holds cashable money, and nothing in it is clawed back
 - **One rate for every card** — vault-only and consigned cards earn the same, so consigning never costs the collector the incentive
 - **Not in scope** — a rate that steps down over time
@@ -132,6 +135,7 @@ vault, cash out and leave.
 | --- | --- | --- | --- |
 | The vault earns, finance lends | Decided | One vaulting base: a case is everything handed in on one visit, made of one-card contracts, each with its own incentive rate, and a financed card is its own financed contract | Owner |
 | The clock is the card's | Decided | Per card from its contract's effective start date, not per case, so cards in one case unlock on their own days | Owner |
+| Earning Starts | 🚧 | Set per card on the intake form, the day after intake by default, never before signing; it is the card's effective start date, and Not Eligible is its own reason rather than a pause - the counter review, round 2, 2026-11-02 | Product |
 | Credited while locked | Decided | The incentive accrues from day one; the vesting days only stop it being cashed out. The held-then-posted reading is a way of showing it, never a second way of crediting it | Owner |
 | Prices in yen | Decided | Converted at the ECB's daily reference rate; a rate outside its bounds, or moving too far in a day, is flagged for staff - decided by the owner, 2026-10-27, flagged rather than held on 2026-10-28 | Owner |
 | Where prices come from | Decided | A separate price worker, reached by a service binding; its answer's shape is assumed until it exists - decided by the owner, 2026-10-27 | Owner |

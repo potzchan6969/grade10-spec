@@ -15,28 +15,32 @@ the financed lane is unchanged - [Case Lifecycle](/p/grade10-site/finance/case-l
 
 ## Intake Form
 
-Staff register the cards on the intake form, at a card event or the shop's counter.
+The one form for every in-person intake, at a card event or the shop's counter.
+Keeping a card in the vault and consigning it differ only in what the collector
+signs - [Consignment Counter](/p/grade10-site/consignment/counter).
 
-1. 🚧 **Location** — the card event, or the shop in Causeway Bay from Phase 2
-   - **Starting Location** — where the intake happens is where each card starts in inventory; where it goes next is optional - [Consignment Counter](/p/grade10-site/consignment/counter)
-2. 🚧 **Collector** — found by email, or a new account created and an invite sent
-   - **Phone Number** — taken if the account has none; not confirmed by a code
-   - **ID** — staff read the collector's ID document in hand: the legal name as shown, the ID type, the ID number, and a tick that the collector is 18 or over
-     - **Any Hong Kong or Taiwan ID** — an HKID, a Taiwan national ID or resident certificate, or a passport, each checked against its own format
-     - **Number Kept Masked** — typed once, and kept only as a mask (A1****6(7)) and a one-way digest; the full number and the date of birth are never stored
+1. 🚧 **Consignor**
+   - **Account** — found by email, or a light account opened and an invite sent; the phone number is taken if the account has none, never confirmed by a code
+   - **ID Record** — staff read the ID document in hand: the legal name as shown, the kind of document, its number, and a tick that the collector is 18 or over
+     - **Kinds** — an HKID, a Taiwan national ID, a Taiwan resident certificate in its old or new form, or a passport, each checked against its own format
+     - **Number Kept Masked** — typed once, kept only as a mask that never shows the check digit (A12*****) and a one-way digest; the full number and the date of birth are never stored
+     - **Use That Account** — when the same ID is already on another account, staff are told and offered that account
    - **Ownership Declaration** — the collector declares they own every card
-3. 🚧 **Cards** — card, condition or certificate, front and back photos; a label printed for each
-   - **Market Price** — the card's 30-day price, shown to the collector
-   - **Sales and Liquidity** — the card's sales count and liquidity, in the staff's detail view
-   - **Estimated Daily Incentive** — or Not Eligible, for a card that earns nothing
-   - **Earns Incentive** — a tick on each card, on by default; staff untick a card that should earn nothing - [Incentive](/p/grade10-site/vault/incentive#earning)
-   - **Photos** — front and back required, and more as staff choose; kept on that card, not on its catalogue product
-   - **Skip Incentive Approval** — a checkbox on each card, unticked by default; staff tick it when they have already authenticated the card and verified its value on the spot, so it needn't wait for approval - [Incentive](/p/grade10-site/vault/incentive#earning)
-4. 🚧 **Consign Now** — optional, per card at an event; at the consignment counter every card is consigned, into a vault case - [Consignment Counter](/p/grade10-site/consignment/counter); the card is registered into the vault first, then consigned in the same visit: the store, the auction or both, the lowest acceptable price (required for the store or both, optional for the auction), price-checked as on the consign form, and the commission; Grade10 sets the list or starting price at approval - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
-5. 🚧 **Sign** — on the shop's tablet, or by a link emailed to the collector
-   - **Vault Terms** — signed
-   - **Consignment Agreement** — signed only where a card is consigned now
-   - **Custody Receipt** — confirmed
+   - **Collection Notice** — shown before the ID is read
+   - **Taken At** — required: the shop or a card event; where each card starts in inventory - [Locations](/p/grade10-admin/inventory/locations#places)
+   - **Heading To** — optional: where the cards go next
+2. 🚧 **Items** — one row per card: the product, its condition or certificate, its SNKRDUNK card or a fixed price, and front and back photos - [Products and Stock](/p/grade10-admin/inventory/catalog#product-schemas)
+   - **Market Price** — the card's 30-day price, shown to the collector, with its sales and liquidity in the staff's detail view
+   - **Estimated Incentive** — about how much a day and over a year, at today's price, or Not Eligible - [Incentive](/p/grade10-site/vault/incentive#daily-amount)
+   - **Earns Incentive** — a tick on each card, on by default
+   - **Earning Starts** — the day each card starts earning; the day after intake unless staff choose another - [Incentive](/p/grade10-site/vault/incentive#earning)
+   - **Authenticated Here or Check Later** — per card - [Authentication](/p/grade10-site/vault/intake#authentication)
+   - **Receive** — one press takes every card into the vault and inventory at Taken At and prints its label; a card refused is named, and the rest wait for it
+3. 🚧 **Keep or Consign** — per card, with Keep All and Consign All; a consigned card takes its terms there - [Consignment Counter](/p/grade10-site/consignment/counter#terms)
+4. 🚧 **Sign** — in one handover, on the shop's tablet or by one email
+   - **Vault Terms and Custody Receipt** — always, first
+   - **Consignment Agreement** — only when a card is consigned
+   - **Agreement Declined** — the Vault Terms still stand, and its cards are kept in the vault
 
 ## Authentication
 
@@ -60,9 +64,10 @@ built later.
 
 1. 🚧 **Request** — from the collector's account: the cards, each with its condition or certificate and the collector's own photos
    - **Phone Number and Declaration** — as at the counter
-   - **Identity Check** — passed online before staff approve; no staff see the collector, so it stands in for the ID read at the counter - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
+   - **ID Record** — taken from the identity check passed online, since no staff see the collector - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
+   - ❓ **Before Approval** — whether a mail-in still needs that check before staff approve, against an identity check only at cash-out. Product confirms before Phase 3
    - **Vault Terms** — signed online
-   - **Estimated Daily Incentive and Consign Now** — as on the intake form
+   - **Estimated Incentive and Keep or Consign** — as on the intake form
 2. 🚧 **Posting** — a request reference to put in the parcel, the KEC warehouse's address, and packing guidance
 3. 🚧 **Received at KEC** — staff match the parcel to the request and record and photograph the cards
    - **Not as Described** — a card missing, damaged or not as described is raised for review, and the collector is told
@@ -80,15 +85,15 @@ built later.
 - 🚧 **Account** — a Grade10 account with a confirmed email
 - 🚧 **Phone Number** — on the account, for contact and abuse checks; it proves no identity
 - 🚧 **Signed Declaration** — that the collector owns the cards
-- 🚧 **ID Recorded** — the legal name, ID type, masked number and digest, and 18 or over, read by staff at intake, or the identity check for a mail-in; the identity a retrieval is checked against - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#collection)
-- 🚧 **Identity Check** — not at an intake in person; it comes before money leaves Grade10, and before a mail-in is approved - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
+- 🚧 **ID Record** — read by staff at intake, kept on the collector's account for every service; the identity a retrieval is checked against - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#collection)
+- 🚧 **No Identity Check** — identity is verified once per account, only when the collector cashes out - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
 
 ## Card States
 
 1. 🚧 **Received** — recorded and photographed at intake, or on arrival at KEC
 2. 🚧 **Authenticating** — at the counter, or later for a card kept unchecked - [Authentication](/p/grade10-site/vault/intake#authentication)
-3. 🚧 **In the Vault** — passed and stored; not earning yet
-4. 🚧 **Approved to Earn** — passed incentive approval, or approved at intake where staff skipped it; earning from the next day - [Incentive](/p/grade10-site/vault/incentive#earning)
+3. 🚧 **In the Vault** — passed and in custody under signed Vault Terms
+4. 🚧 **Earning** — from its Earning Starts date, once authenticated - [Incentive](/p/grade10-site/vault/incentive#earning)
 
 - 🚧 **Failed** — returned to the collector; it never earns
 - 🚧 **Afterwards** — an earning card is consigned, sold or retrieved; a consignment ended or unsold comes back earning - [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval)
@@ -117,6 +122,7 @@ can: an account, a phone number, a declaration and the ID staff read in hand.
 - **Events first, then the shop, then the post** — Phase 1 takes cards in person at card events, where staff reach collectors; the shop's counter joins in Phase 2 on the same form; mail-in waits for Phase 3, once the business settles how parcels are handled
 - **Storage at nothing for now, as a setting** — a fee would turn away the intakes the incentive is paying for, and a setting leaves room to charge one later without a rebuild; pinned to the Vault Terms, so a fee is never added to terms a collector already signed
 - **Checked at the counter, or later** — the counter check is the usual way, but an intake shouldn't wait for a professional to be free; a card kept unchecked earns and sells nothing until it passes, so taking it early costs nothing
-- **The ID read at intake, kept masked** — a retrieval is matched against it at the counter, so no identity check is needed to take a card home, and no usable ID number is stored, under the Privacy Commissioner's Code of Practice on the ID Card Number; confirmed with the 18-or-over tick and IDs in any Hong Kong or Taiwan format in the counter review, 2026-11-02
+- **One form, two papers** — keeping and consigning share every step and differ only in what is signed; the Vault Terms never wait on the consignment, so a declined agreement leaves the cards in the vault - the counter review, round 2, 2026-11-02
+- **The ID read at intake, kept masked** — a retrieval is matched against it at the counter, so no identity check is needed to take a card home, and no usable ID number is stored, under the Privacy Commissioner's Code of Practice on the ID Card Number; confirmed with the 18-or-over tick and IDs in any Hong Kong or Taiwan format in the counter review, 2026-11-02; kept once per account for every service, with the mask hiding the check digit, in the counter review, round 2, 2026-11-02
 - **A phone number captured, not confirmed** — it serves contact and abuse checks and proves no identity
 :::

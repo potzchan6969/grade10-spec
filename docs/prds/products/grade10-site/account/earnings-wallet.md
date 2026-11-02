@@ -62,11 +62,15 @@ What finance does with the requests.
 
 ## Identity Check
 
-- 🚧 **When** — where money leaves Grade10: when the first cash-out is requested, and when the cash-out account changes; never at a consignment intake - [KYC](/p/grade10-site/account/kyc)
-  - **Mail-In** — before staff approve a mailed-in card, since no staff see the collector - [Mail-In](/p/grade10-site/vault/intake#mail-in)
+- 🚧 **One Check, for the Account** — identity is verified once per account, never by a service at an intake, a signing or a sale - [KYC](/p/grade10-site/account/kyc)
+- 🚧 **When** — at the first cash-out, when the cash-out account changes, and when a new ID has been recorded on the account since the last check
   - **Proceeds Held** — sale proceeds reach the wallet unchecked, and can't be cashed out until the check passes
   - **Not for a Retrieval** — staff check the ID at the counter against the one recorded at intake - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#collection)
   - **Built** — at every cash-out and before sale proceeds reach the wallet; each point is an admin setting - [Identity Check](/p/grade10-site/finance/identity-check#gate)
+- 🚧 **Against the Intake ID** — the verified ID is compared with the ID staff recorded at intake - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+  - **Same Document** — the numbers must match; a different number holds the cash-out
+  - **Another Document** — the collector is asked to verify with the document shown at intake; if they verify with another, the legal names are compared, and a different name holds the cash-out
+  - **Held for Finance** — a held cash-out is not paid until finance clears it, or refuses it with a reason and the amount returns to the wallet
 - 🚧 **Verified Name** — every cash-out goes only to the verified collector
 - 🚧 **Review** — finance approves or rejects, with a reason shown to the collector
 
@@ -82,13 +86,14 @@ intake itself stays light.
 
 - **Paid 3 business days after the buyer pays** — proceeds don't wait for delivery or a return window; a rare refund is reversed from the wallet instead
 - **At least HKD 500, once every 7 days** — keeps payouts batchable for finance
-- **Identity before money leaves, not at intake** — anti-money-laundering practice asks for it at the exit, and asking at the door would turn intakes away
+- **Identity before money leaves, not at intake** — anti-money-laundering practice asks for it at the exit, and asking at the door would turn intakes away; one check for the account, compared with the ID read at intake, so a mistyped email at the counter can't send one collector's money to another - the counter review, round 2, 2026-11-02
 - **Earnings, not a balance** — it is cashed out only, so it never reads as store credit
 - **Not in scope** — spending the wallet on Grade10; payout to a card
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| KYC | ❓ | When identity is asked for is still being discussed; today's rule stands at deposit, and cash-out and sale proceeds ask always until it is. The counter review of 2026-11-02 took it off consignment intake and sale proceeds, leaving the cash-out | Owner |
+| KYC | 🚧 | Identity is verified per account, only at cash-out, and compared with the ID recorded at intake; a contradiction holds the cash-out for finance - the counter review, round 2, 2026-11-02, settling the question open since deposit | Owner |
+| Loans and the identity check | ❓ | Whether a loan needs a verified identity before it is paid out, as money leaving Grade10 other than a cash-out | Product |
 | Cash-out | ❓ | At least US$65, every 7 days, paid in HKD or USD, to an account in the owner's verified name, a debt blocking it, a batch approved by a second treasurer | Owner |
 | The payout flow | 🚧 | Proceeds go to the wallet, and the account is named at cash-out, not at the counter - the counter review, 2026-11-02, settling the brand setting left open on 2026-10-27; a partner is always paid by bank | Owner |
 :::
