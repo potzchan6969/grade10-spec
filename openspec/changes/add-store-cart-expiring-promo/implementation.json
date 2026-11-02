@@ -48,5 +48,43 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@kinisworking",
+    "reviewedAt": "2026-11-02T08:39:09.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "Later shared-cart test additions expand callback-gating coverage. The existing US22 near-expiry ticket case is unchanged and remains explicitly manual, preserving both the scoped expiry-detail contract and its separate Storybook QA gate.",
+        "evidence": [
+          "The US22 and US22-TC1 blocks are byte-for-byte identical at baseline b92071076078d2a235c9c5abe2ea4f0f86a3b709 and current main, including the near-expiry, plain, and inapplicable rows.",
+          "The change rounds.md records the requester-attested local cart-picker walk and explicitly leaves shared.ui-store-cart.US22-TC1 unclaimed pending its controlled Storybook manual pass."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The later Feature set addition covers independent tender-action gating. The existing Near-expiry detail feature and consumer-owned detail-emphasis requirement remain in force.",
+        "evidence": [
+          "The scoped Feature set diff adds Tender action gating; it does not remove or alter Near-expiry detail.",
+          "The Promo tickets render consumer-owned detail emphasis requirement remains present in current main, alongside the near-expiry, plain, and refused-ticket scenarios in the unchanged US22-TC1 suite."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The later US9 journey adds independent read-only tender behavior. The existing US22 public-code picker journey is unchanged and still covers the expiring-promo surface.",
+        "evidence": [
+          "The baseline and current US22 journey text is unchanged; current main adds only the separate US9 read-only tender-options journey in this file.",
+          "The archived change records the Grade10 local walk for SC59-SC64 and SC70-SC72 while retaining the separate shared US22-TC1 manual QA case."
+        ]
+      }
+    ]
+  }
 }
