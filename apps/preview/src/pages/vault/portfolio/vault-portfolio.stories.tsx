@@ -15,7 +15,7 @@ import { activeIntakeSubmissionCount } from "../../intake-content";
 import {
   DAILY_INCENTIVES,
   INTAKE_TRACKER_STORY_ID,
-  PAYOUT_METHOD,
+  PAYOUT_METHODS,
   PAYOUT_REQUESTS,
   PORTFOLIO_ASSETS,
   PORTFOLIO_SUMMARY,
@@ -222,9 +222,10 @@ function VaultPortfolioPage({
         availableUsd={PORTFOLIO_SUMMARY.rewardsAvailableUsd}
         hkdPerUsd={PORTFOLIO_SUMMARY.hkdPerUsd}
         minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
-        payoutMethod={PAYOUT_METHOD}
+        payoutMethods={PAYOUT_METHODS}
         open={withdrawOpen}
         onOpenChange={setWithdrawOpen}
+        onViewWithdrawal={() => setPageTab("withdrawal")}
       />
     </VaultPageShell>
   );
