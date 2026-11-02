@@ -10,7 +10,7 @@
 - [ ] 2.2 Add the optional customer detail refund collection and backend metadata input contract defined in `tech-design.md`; retain old decoder compatibility and keep monetary refund inputs and idempotency semantics unchanged. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC21`.
 - [ ] 2.3 Verify: `pnpm --filter @grade10/store-contracts test`, `pnpm --filter @grade10/store-contracts typecheck`, and focused backend typechecking after the additive types land.
 
-## 3. Persist metadata and protect erasure (grade10)
+## 3. Persist metadata and protect erasure (grade10) (owner: @kinisworking)
 
 Depends on group 2's landed metadata input contract.
 
