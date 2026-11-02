@@ -93,6 +93,7 @@ A reader opens the digest for what they work on: the vault, the store, the share
 - **Across the day** - an overview card, such as the OpenSpec board or Where the work landed, names no scope and closes the page under Across the day; a card with a `kind` always names one, and the build refuses it otherwise
 - **Groups** - the manual's groups in its order (Grade10, ZZZ, Shared, Admin, Platform with its platform pages and the design system, Shopify), then How we work, then Across the day
 - **Where things moved** - the page's top lists every card under its group and product, with a star beside each product; a reader stars what they work on, and Following then shows only those, on every day's page, kept in that browser
+- **Icons** - each scope wears the icon its manual page names in `icon:`, or the one `scopes.mjs` gives a platform page or a way of working; a card's thumbnail is that icon on a tile coloured by its kind (new, changed, removed, settled), unless the card leads with a screen, and the rail and each product's heading wear it too; Across the day wears a newspaper
 - **Readers** - the `who` pills still narrow it by role, alongside Following
 - **A product's link** - `?scope=grade10-site/vault` (repeat it, or join ids with commas) opens the page showing only those products, for a team's bookmark or a thread
 - **Follow-ups** - may name a `scope` too, shown beside their owner, and Following narrows them with the cards
@@ -101,15 +102,15 @@ A reader opens the digest for what they work on: the vault, the store, the share
 
 Each change is one card under its `scope`, with a `phase` naming the kind of work; the page groups and counts them by group and product. Draw what a reader would act on, not every commit.
 
-Every card leads with a picture, and At a glance shows that picture as the card's thumbnail, so the day reads at a glance before a word of it. The build refuses a card without one. Pick by what the reader would recognise first:
+Every card leads with a picture; the build refuses a card without one. Where things moved shows a screen as the card's thumbnail, and any other picture as its product's icon, since a chart or a table is unreadable that small. Pick by what the reader would recognise first:
 
-1. **A screen** - a `shot` captured with `shoot.mjs`, or a `beforeNow` pair where the same state looks different; the thumbnail is the screen itself
+1. **A screen** - a `shot` captured with `shoot.mjs`, or a `beforeNow` pair where the same state looks different; the thumbnail is the screen itself, the only picture that is
 2. **A chart** - `bars` for anything counted: lines, commits, keys, cases, tests
 3. **A table** - `table` for things listed side by side: keys and their words, ids and their rules, files and what moved
-4. **A diff** - `diff` for values or words before and now; a colour shows its swatch in the thumbnail too
+4. **A diff** - `diff` for values or words before and now
 5. **A diagram** - `board`, `flow` or `states` for moves between stages and paths
 
-- **Several pictures** - a card may carry a list: the screen first, then the chart or table that explains it; the thumbnail shows the screen and counts the rest
+- **Several pictures** - a card may carry a list: the screen first, then the chart or table that explains it
 - **Engineering cards** - tooling, CI and skills still get a picture: a `flow` of the new steps, a `table` of commands and what each does, or `bars` of what moved
 
 | What moved | Draw it as |

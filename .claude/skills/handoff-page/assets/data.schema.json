@@ -406,6 +406,10 @@
         "href": {
           "anyOf": [{ "$ref": "#/$defs/href" }, { "type": "null" }],
           "description": "Its manual page."
+        },
+        "icon": {
+          "$ref": "#/$defs/text",
+          "description": "The icon the manual's nav wears beside it, such as vault; one of the names scripts/icons.mjs draws."
         }
       }
     },

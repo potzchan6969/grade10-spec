@@ -54,3 +54,35 @@ test("fill writes the named scopes in manual order and names the unknown", () =>
     "work/guides",
   ]);
 });
+
+test("every scope of the manual wears an icon the page draws", async () => {
+  const { manualScopes } = await import("./scopes.mjs");
+  const { readFileSync } = await import("node:fs");
+  const template = readFileSync(
+    new URL("../../handoff-page/assets/template.html", import.meta.url),
+    "utf8",
+  );
+  const drawn = new Set(
+    [...template.matchAll(/^ {6}"([a-z-]+)": \["/gm)].map((m) => m[1]),
+  );
+  const root = new URL("../../../../", import.meta.url).pathname;
+  const scopes = manualScopes(root);
+  assert.ok(scopes.length > 20);
+  for (const s of scopes)
+    assert.ok(
+      drawn.has(s.icon),
+      `${s.id} wears "${s.icon}", which the page does not draw`,
+    );
+});
+
+test("the page's icons are what scripts/icons.mjs draws", async () => {
+  const { execFileSync } = await import("node:child_process");
+  const script = new URL(
+    "../../handoff-page/scripts/icons.mjs",
+    import.meta.url,
+  ).pathname;
+  assert.match(
+    execFileSync(process.execPath, [script, "--check"], { encoding: "utf8" }),
+    /in step/,
+  );
+});

@@ -1,6 +1,6 @@
 // The manual's scopes - its groups and the products and platform pages under them - and which scope a changed path belongs to,
 // so a digest groups its cards the way docs/prds/manual.yaml groups the manual and a reader goes straight to what they work on.
-// node scopes.mjs list               - prints every scope in manual order: id, group, title, href
+// node scopes.mjs list               - prints every scope in manual order: id, group, title, href, icon
 // node scopes.mjs fill <data.json>   - writes data.scopes from the scopes its cards and follow-ups name, in manual order;
 //                                      refuses a scope the manual does not hold
 // A scope id is a manual product (`grade10-site/vault`), a platform page (`platform/backup`, `platform/shared/money-amounts`),
@@ -16,14 +16,42 @@ const PLATFORM = "Platform";
 const WORK = "How we work";
 const UNLISTED = "Not in manual.yaml";
 
-const title = (root, file, fallback) => {
+// A frontmatter field of a manual page: its title, or the icon the manual's nav wears beside it.
+const field = (root, file, key, fallback) => {
   const path = join(root, file);
   if (!existsSync(path)) return fallback;
-  const m = readFileSync(path, "utf8").match(
-    /^---\n[\s\S]*?^title:\s*["']?(.+?)["']?\s*$/m,
-  );
+  const front =
+    readFileSync(path, "utf8").match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
+  const m = front.match(new RegExp(`^${key}:\\s*["']?(.+?)["']?\\s*$`, "m"));
   return m?.[1] ?? fallback;
 };
+const title = (root, file, fallback) => field(root, file, "title", fallback);
+// The icon for a scope whose page wears none: the platform pages, the design system and the ways of working.
+const ICON = {
+  "platform/shared/money-amounts": "coins",
+  "platform/shared/dates-and-times": "clock",
+  "platform/shared/localization": "translate",
+  "platform/multi-product": "stack",
+  "platform/serving": "globe",
+  "platform/cross-service": "arrows-left-right",
+  "platform/account-data": "user-list",
+  "platform/edge-cache": "lightning",
+  "platform/shared/frontend-composition": "layout",
+  "platform/shared/backend-service-repository": "hard-drives",
+  "platform/favicon": "app-window",
+  "platform/auction-service": "gavel",
+  "platform/vault-custody": "vault",
+  "platform/loyalty-service": "medal",
+  "platform/admin-access": "lock-key",
+  "platform/backup": "database",
+  "platform/tracking": "chart-line-up",
+  "platform/testing": "check-square",
+  "platform/e2e": "path",
+  "design-system": "palette",
+  "work/guides": "book-open",
+  "work/tooling": "wrench",
+};
+const FALLBACK_ICON = "squares-four";
 const humanize = (s) =>
   s.replace(/[-_]/g, " ").replace(/^./, (c) => c.toUpperCase());
 
@@ -43,6 +71,7 @@ export function manualScopes(root = process.cwd()) {
       group,
       title: title(root, `${PRDS}/products/${id}/index.md`, humanize(id)),
       href: `${MANUAL_URL}/p/${id}`,
+      icon: field(root, `${PRDS}/products/${id}/index.md`, "icon", null),
     });
   const groups = Object.entries(config.groups ?? {});
   for (const [group, ids] of groups) for (const id of ids) product(id, group);
@@ -77,6 +106,7 @@ export function manualScopes(root = process.cwd()) {
     title: "Skills, tooling and CI",
     href: null,
   });
+  for (const s of scopes) s.icon = s.icon ?? ICON[s.id] ?? FALLBACK_ICON;
   // The groups in manual order, the platform pages inside Platform, and How we work last.
   const order = [...new Set([...groups.map(([g]) => g), PLATFORM, UNLISTED])];
   const rank = (g) =>

@@ -791,6 +791,14 @@ items(data.followups, "data.followups").forEach((f, i) => {
 });
 
 // Scopes: the manual's groups and products the cards sit under; every scope a card or follow-up names is defined once.
+const ICON_NAMES = new Set(
+  [
+    ...readFileSync(
+      join(here, "..", "assets", "template.html"),
+      "utf8",
+    ).matchAll(/^ {6}"([a-z-]+)": \["/gm),
+  ].map((m) => m[1]),
+);
 const scopeIds = new Set();
 items(data.scopes, "data.scopes").forEach((s, i) => {
   const at = `data.scopes[${i}]`;
@@ -799,6 +807,11 @@ items(data.scopes, "data.scopes").forEach((s, i) => {
   need(s, "group", at, "the manual group, such as Grade10");
   need(s, "title", at, "the manual's words for it, such as Vault");
   if (s.href != null) link(s.href, `${at}.href`);
+  if (s.icon != null && !ICON_NAMES.has(s.icon))
+    fail(
+      `${at}.icon`,
+      `"${s.icon}" is no icon the page draws: scripts/icons.mjs names them`,
+    );
   if (scopeIds.has(s.id)) fail(`${at}.id`, `"${s.id}" appears twice`);
   scopeIds.add(s.id);
 });

@@ -46,7 +46,7 @@ No summary screen: the masthead, one list of the changes, then the sections.
 - **Numbers** - up to four counts the reader would quote, drawn large under the headline: `227 commits`, `3 states`
 - **Stamp** - the branch, commit, version (`v2`) and date the page was read at, in one quiet line; a page tied to no revision cannot be trusted after the next push
 - **Since** - from `v2` on, one line names what moved since the last version, so a returning reader skips the rest
-- **At a glance** - with two or more changes, every change in one list grouped by phase, or by group and product when the changes carry a `scope`: a thumbnail of its card's first picture, its kind, its title linking to its card, and who notices it; under it, a bar of the proof rows by status
+- **At a glance** - with two or more changes, every change in one list grouped by phase, or by group and product when the changes carry a `scope`: a thumbnail of its card's first picture (on a scoped page, a screen, or else its product's icon on a tile coloured by its kind), its kind, its title linking to its card, and who notices it; under it, a bar of the proof rows by status
 - **Thumbnail** - a card's first `shot` or `beforeNow` when it has one, cropped from the top; else its first chart, table, diff, board, flow, states, lanes or mock drawn in miniature from the same data, with `+n` for each further picture; once any change has a picture, a card with none shows an empty frame, so give each one
 - **Filter** - with four or more changes and two or more readers in `who`, one chip per reader narrows the page to the changes that reader notices; the reader's browser remembers the pick
 - **Contents rail** - one link per section with its count (`Decide 2`, `Proof 3/4`), down the left edge from 1120px wide as the manual's nav, and a Contents drawer from the jump row below that; on a scoped page What changed opens onto the manual's groups, each a heading that folds, and their products with counts and a star, under an All products / Following switch; it remembers what the reader folded (`handoff-nav`); it marks where the reader is, and the page derives every count
@@ -122,7 +122,7 @@ The same names in the same order on every handoff, so a reader who has seen one 
 | `proof` | `claim`, `how`, `revision`, `href`, `status` (`verified`, `partial`, `not-run`, `failed`), `why`, `change` |
 | `ship` | `needs` (a list), `risk`, `undo` |
 | `followups` | `id`, `title`, `why`, `owner`, `due`, `scope` |
-| `scopes` | `id`, `group`, `title`, `href`: the groups and products the cards' `scope` names, in the order the page shows them |
+| `scopes` | `id`, `group`, `title`, `href`, `icon`: the groups and products the cards' `scope` names, in the order the page shows them |
 | `engineers` | `commits` (`sha`, `subject`, `href`), `files`, `notes`, `links` (`text`, `href`) |
 | `extra` | `title` and `file`: an HTML fragment drawn as its own section after Try it |
 
@@ -132,7 +132,7 @@ The same names in the same order on every handoff, so a reader who has seen one 
 - **How** - the method and where it lives: `Unit test, CartDrawer.test.tsx: strikes only the line a product discount cuts`, `E2E on the lot page`, `Walk on staging`, or `Read in points.ts` for a fact the code states
 - **Status** - `verified`, checked on that revision by a run or by reading; `partial`, part of it checked, or checked on another revision; `not-run`, a test or walk that exists or is planned and nobody ran for this page; `failed`, it ran and failed
 - **Phases** - give each change a `phase` when the work has many; the page groups the changes and counts new, changed and removed per phase
-- **Scopes** - give each change a `scope` naming an entry in `scopes` (`id`, `group`, `title`, `href`); the page then groups by group and product, the phase becomes a tag on the card, and a reader stars the products they follow. `/checkpoint-digest` writes `scopes` from the manual
+- **Scopes** - give each change a `scope` naming an entry in `scopes` (`id`, `group`, `title`, `href`, and an `icon` from `scripts/icons.mjs`); the page then groups by group and product, the phase becomes a tag on the card, and a reader stars the products they follow. `/checkpoint-digest` writes `scopes` from the manual
 - **Ids are keys** - question and blocker numbers and follow-up ids outlive a version; never renumber or reuse one
 - **A change's id is its address** - every link to its card ends in it, so the build refuses an id the page uses for its own parts, such as `decide` or `proof`
 - **Answered** - once an answer is recorded, keep the question with `answered: {option, text, href}` naming the record, or a blocker with `done: {text, href}`; the card shows the outcome, and the reply stops asking it
