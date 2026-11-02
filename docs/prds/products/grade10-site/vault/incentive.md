@@ -13,6 +13,7 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 - 🚧 **Market Price** — the median of the card's sales on SNKRDUNK over 30 days, outliers removed
   - **SNKRDUNK Card Required** — every card taken at the counter names its SNKRDUNK card, kept in Inventory and remembered on its catalogue product for the next copy
   - **Fixed Price** — entered by an admin only for a card with no SNKRDUNK listing to link; it stands as the card's market price until a SNKRDUNK card is linked
+    - **Liquidity on a Fixed Price** — a fixed factor, an admin setting starting at 0.5, with no minimum sales, since no sales stand behind the price
   - **Estimate at Intake** — the counter shows each card's estimated incentive, worked out by this formula on the day's figures, for the collector to see
   - **A Day's Price** — the window's median is of every SNKRDUNK sale in it, each dated at +08:00; a day older than SNKRDUNK's week counts its one daily average; the day still in progress counts none
   - **Evidence** — each SNKRDUNK answer is kept as it came, and a price shows every sale behind it: counted, an outlier, or excluded by staff
@@ -78,7 +79,6 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 - ❓ **Liquidity model, tiers and grace days** — the formula, the tier figures and 3 grace days are drafts. Product confirms before Phase 1, mid November
 - ❓ **Eligible products** — which products, grades or value ranges earn. Product confirms before Phase 1, mid November
 - ❓ **Caps** — the most value counted per card, and the most incentive per account a month. Product confirms before Phase 2, 6 December
-- ❓ **Liquidity on a fixed price** — a fixed price has no sales behind it, so the minimum sales and the liquidity factor can't be worked out; recommended: a fixed liquidity factor set by an admin, 0.5 to start. Owner confirms
 - ❓ **A late pass** — whether a card that passes authentication after it was vaulted earns from its start date; built as earning from the start date. Owner confirms
 :::
 
@@ -110,7 +110,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 
 ## Settings
 
-- 🚧 **Admin Settings** — the rate, the liquidity model, eligible products, caps and the price check's limits; every change logged
+- 🚧 **Admin Settings** — the rate, the liquidity model, the liquidity factor on a fixed price, eligible products, caps and the price check's limits; every change logged
 - 🚧 **Pinned to the Card** — the rate, the vesting days, the early retrieval fee's period and amount, and the forfeit rule are pinned when the card's custody paper is prepared; a later change reaches only the next card
   - **Unset Refuses** — the paper is not prepared while the rate, the vesting days or the fee's period is unset
 - 🚧 **Pause and the Daily Run** — staff pause incentive, the price import and the drip run daily - [Vault Operations](/p/grade10-site/vault/operations#daily-run)
