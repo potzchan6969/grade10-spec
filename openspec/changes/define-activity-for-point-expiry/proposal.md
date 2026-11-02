@@ -5,7 +5,7 @@
 The twelve-month inactivity lapse never said what "no activity" means, so the
 ledger and the member could disagree on what keeps a balance alive. The
 programme now fixes it: buying and topping up are activity, and nothing else
-is — with one open call on whether redeeming still counts.
+is — redeeming included.
 
 **Metric:** share of lapses a member could have prevented with one purchase
 or top-up (expected to rise as the rule becomes legible); secondary: support
@@ -27,9 +27,9 @@ contacts about balances lapsing after a redemption (watch).
   near-instant
 - **Operator actions unchanged** — a grant, a correction, a reversal and a
   console restart behave exactly as the running spec has them
-- **Redemption open** — the proposal is that redeeming stops resetting the
-  window, so only money in keeps a balance alive. Not confirmed by the PM;
-  ❓ on the [Points page](../../../docs/prds/products/grade10-site/loyalty/points.md#expiry)
+- **Redemption settled** — the PM confirmed 2026-11-02 that redeeming does
+  not reset the window: only money in keeps a balance alive, and a reward
+  redemption is no purchase
 
 ## Non-Goals
 
@@ -41,15 +41,16 @@ See [Non-Goals](decisions.md#non-goals).
 
 - `grade10-site/loyalty/programme` — the requirement `The redeemable
   balance expires after a period of inactivity` redefines what resets the
-  window: purchases and top-up credits in, redemption out pending PM
-  confirmation, operator movements unchanged
+  window: purchases and top-up credits in, redemption out, operator
+  movements unchanged
+- `grade10-site/loyalty/expiry-reminders` — the scenario naming what moves
+  the day drops redemption from its list, since a redemption moves nothing
 
 ## Impact
 
 - **Loyalty backend** — the activity test moves from "earn or redemption"
   to "purchase or top-up credit"; a purchase later refunded in full keeps
-  its reset, and a redemption no longer moves the date if the open call
-  lands that way
+  its reset, and a redemption no longer moves the date
 - **Member surfaces** — the expiry table on the membership pages and the
   [Points page](../../../docs/prds/products/grade10-site/loyalty/points.md#expiry)
   examples re-read under the new rule

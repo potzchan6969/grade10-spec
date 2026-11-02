@@ -274,7 +274,7 @@ The program implements the owner's 2026-08 draft ([the programme reference](/ref
 
 | Question | What is built | Why |
 | --- | --- | --- |
-| Do bonus points reset the expiry clock? | No — only a spend or a redemption does | The draft says the balance lapses after twelve months with no earn or redeem activity, then says any purchase or redemption resets it. Points nobody paid for should not buy the balance another year |
+| Do bonus points reset the expiry clock? | No — only a spend does | The draft said the balance lapses after twelve months with no earn or redeem activity and that any purchase or redemption resets it; the PM settled it 2026-11-02: redemption moves no date, so only money in keeps a balance alive. Points nobody paid for should not buy the balance another year |
 | Can a settled lapse be revived? | No — activity settles what is already dead before it moves the clock | A balance that came back would depend on when the sweep last ran |
 | Is a reversal activity? | No | It undoes a redemption; the member did nothing new |
 | What holds a tier for another term? | The tier's attainment points — 500 for Gold | The softer 400 is an open business question; the config carries a separate retention threshold for the day it closes |
