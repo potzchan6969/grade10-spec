@@ -664,7 +664,7 @@ const VAULT_FOOTER = {
     {
       heading: "VAULT",
       links: [
-        { label: "My Portfolio", href: VAULT_PORTFOLIO_HREF },
+        { label: "Vault", href: VAULT_PORTFOLIO_HREF },
         { label: "Book a visit", href: VAULT_BOOK_VISIT_HREF },
         { label: "Appointments", href: VAULT_MY_VISITS_HREF },
       ],
