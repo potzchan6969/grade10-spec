@@ -1,5 +1,4 @@
 import { DetailRow } from "@grade10/design-system/components/display/detail-row";
-import { toast } from "@grade10/design-system/components/overlays/toast";
 import { Text } from "@grade10/design-system/components/display/text";
 import {
   Autocomplete,
@@ -37,14 +36,15 @@ import {
   DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Bank, Globe, Lightning, Plus } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useId, useState } from "react";
+import { WinnerOrderContactDialog } from "../../auction/post-bidding/winner-order-contact-dialog";
 import {
   WINNER_ORDER_SUPPORT_EMAIL,
   type WinnerOrderContactMail,
 } from "../../auction/post-bidding/winner-order-contact-mail";
-import { WinnerOrderContactDialog } from "../../auction/post-bidding/winner-order-contact-dialog";
 import {
   formatHkd,
   formatUsd,
