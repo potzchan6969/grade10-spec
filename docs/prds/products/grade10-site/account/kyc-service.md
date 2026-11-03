@@ -85,7 +85,8 @@ From the verification page, signed in. A vault case invites nobody - [Identity
 Check](/p/grade10-site/finance/identity-check).
 ## The provider runs the check
 Photograph the document, photograph your face, screened - resumable, so a
-collector who stops halfway comes back to where they were.
+collector who stops halfway comes back to where they were. Its pages open in
+the language of the site page the check started from.
 ## The verdict comes back on its own
 Minutes later, usually, or after a reviewer decides a screening match.
 ## Grade10 judges it again

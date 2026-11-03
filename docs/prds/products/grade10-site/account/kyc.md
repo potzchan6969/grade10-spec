@@ -47,6 +47,8 @@ The page where a collector sees where they stand and verifies.
   started
 - **On the provider's page** - on this device; the verdict lands on its own -
   [Hosted Verification](/p/grade10-site/account/kyc-service#hosted-verification)
+- **In the site's language** - the provider's pages open in the language the
+  verification page was read in, not the browser's
 - **Being reviewed** - a check a reviewer holds reads as being reviewed, and
   nothing is asked of the collector
 - **Declined** - the page says the check could not be completed online, names
@@ -156,6 +158,7 @@ service.
 | An unverified winner's invoice | ❓ Open | Whether a won lot's invoice waits for a verified winner, at the bar with the premium or on a request, before production. | Compliance |
 | Consent | Decided | Explicit, on the page that starts the check, stamped on the check; the text names the document and face check, watchlist and political-exposure screening, what is kept, reuse across Grade10, and erasure. A DPIA is completed before production; the provider's DPA governs the transfer. | Compliance |
 | Reuse without re-consent | Decided | One consent covers every Grade10 service and says so. | Compliance |
+| The provider's language | Decided | The provider's pages follow the site's language: English, Traditional Chinese, Simplified Chinese and Korean. Persona has no Hong Kong Chinese, so Traditional Chinese opens as Taiwan's; decided 2026-11-03. | Owner |
 | Vendor | Decided | Persona - hosted government-ID and selfie check, screening, a reviewer's case, verdict by webhook, a redaction command, and org-level retention policies. The spec names no vendor. | Product |
 | What a decline says | Decided | That the check could not be completed online and the counter is another way - no reason. The findings are an operator's, behind `kyc:read`. | Compliance |
 
