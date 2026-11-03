@@ -155,7 +155,9 @@ export type Mark = {
   row: string;
   surface: Surface;
   value: MarkValue;
-  /** Which of the case's expectations broke, by its position from 0. */
+  /** Which of the case's expectations broke, by its position from 0;
+   * positions past the case's own lines name the row's expected data
+   * cells, by column from 0 after them. */
   expectation?: number;
   triage?: Triage;
   /** The issue's link, once pasted. */
@@ -214,6 +216,10 @@ export type RunView = {
    * apply on top. */
   seq: number;
 };
+
+/** `GET /api/desk/runs/:id/rows/:row/marks` — every mark the row was given,
+ * oldest first, with who and when: the view carries only the current ones. */
+export type RowHistory = { marks: Mark[] };
 
 /** One message on a run's live connection. */
 export type LiveMessage =
