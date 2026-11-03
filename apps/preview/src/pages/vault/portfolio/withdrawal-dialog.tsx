@@ -1,4 +1,3 @@
-import { Alert } from "@grade10/design-system/components/display/alert";
 import { DetailRow } from "@grade10/design-system/components/display/detail-row";
 import { Step } from "@grade10/design-system/components/display/step";
 import { Stepper } from "@grade10/design-system/components/display/stepper";
@@ -55,7 +54,6 @@ import {
   CaretRight,
   CheckCircle,
   Globe,
-  Info,
   Lightning,
   Plus,
 } from "@phosphor-icons/react";
@@ -277,7 +275,11 @@ function stepIndex(step: WithdrawalStep): number {
 }
 
 function methodIcon(kind: WithdrawalMethod["kind"]) {
-  return kind === "fps" ? <Lightning aria-hidden /> : <Bank aria-hidden />;
+  return kind === "fps" ? (
+    <Lightning aria-hidden size={20} weight="regular" />
+  ) : (
+    <Bank aria-hidden size={20} weight="regular" />
+  );
 }
 
 /** A non-radio action row in the destination list (add method, manual). */
@@ -424,7 +426,6 @@ function WithdrawalDialog({
   const amountTooHigh = amount > availableUsd;
   const amountTooLow = amountInput.trim() !== "" && amount < minWithdrawalUsd;
   const convertedHkd = Math.round(amount * hkdPerUsd * 100) / 100;
-  const balanceAfter = availableUsd - amount;
   /** FPS proxy name preview — shown once the identifier passes its rule. */
   const fpsIdentifierValid =
     fpsIdType === "Mobile number"
@@ -967,23 +968,18 @@ function WithdrawalDialog({
       {step === "review" ? (
         <VStack gap="md" hAlign="start">
           <div className="flex w-full flex-col items-start gap-1">
+            <Text size="sm" tone="secondary" weight="medium">
+              You’ll receive
+            </Text>
             <span className="font-heading text-3xl font-medium tracking-tight tabular-nums">
               {manualRequest ? formatUsd(amount) : formatHkd(convertedHkd)}
             </span>
-            <div className="flex w-full items-baseline justify-between">
-              <Text size="sm" tone="secondary">
-                You’ll receive
-              </Text>
-              <Text size="sm" tone="secondary">
-                from {formatUsd(amount)} of rewards
-              </Text>
-            </div>
           </div>
           {manualRequest ? (
-            <div className="flex w-full items-center gap-4 rounded-(--radius-2xl) border border-border bg-background-subtle p-4">
+            <div className="flex w-full items-center gap-3 rounded-xl border border-border bg-card p-3">
               <span
                 aria-hidden
-                className="flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) bg-muted text-foreground"
+                className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-foreground [&_svg]:size-5"
               >
                 <Globe size={20} weight="regular" />
               </span>
@@ -1003,10 +999,10 @@ function WithdrawalDialog({
               </VStack>
             </div>
           ) : (
-            <div className="flex w-full items-center gap-4 rounded-(--radius-2xl) border border-border bg-card p-4">
+            <div className="flex w-full items-center gap-3 rounded-xl border border-border bg-card p-3">
               <span
                 aria-hidden
-                className="flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) bg-muted text-foreground"
+                className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-foreground [&_svg]:size-5"
               >
                 {destination ? (
                   methodIcon(destination.kind)
@@ -1037,38 +1033,21 @@ function WithdrawalDialog({
           )}
           <div className="flex w-full flex-col">
             <DetailRow label="Withdraw from rewards">
-              <span className="font-medium">{formatUsd(amount)}</span>
+              {formatUsd(amount)}
             </DetailRow>
-            {manualRequest ? (
-              <DetailRow label="Handled by">
-                <span className="font-medium">Our team manually</span>
-              </DetailRow>
-            ) : (
-              <DetailRow label="Rate">
-                <span className="font-medium">US$1 = HK${hkdPerUsd}</span>
-              </DetailRow>
+            {manualRequest ? null : (
+              <DetailRow label="Fixed rate">US$1 = HK${hkdPerUsd}</DetailRow>
             )}
-            <DetailRow label="Balance after">
-              <span className="font-medium">
-                {formatUsd(Math.max(0, balanceAfter))}
-              </span>
-            </DetailRow>
-            <DetailRow className="border-b-0" label="Arrives">
-              <span className="font-medium">
-                {WITHDRAWAL_PROCESSING_DAYS} after approval
-              </span>
+            <DetailRow label="Withdrawal fee">Free</DetailRow>
+            <DetailRow className="border-b-0" label="Est. processing time">
+              Most transfers are sent within {WITHDRAWAL_PROCESSING_DAYS}
             </DetailRow>
           </div>
-          <Alert
-            description={
-              manualRequest
-                ? "Our team will contact you to arrange the transfer. You can cancel before it’s approved."
-                : "The HK$ amount is fixed at US$1 = HK$7.8. Your history shows both US$ and HK$. You can cancel before it’s approved."
-            }
-            icon={<Info aria-hidden weight="regular" />}
-            status="default"
-            title={manualRequest ? "Manual request" : "Fixed rate"}
-          />
+          {manualRequest ? (
+            <Text size="sm" tone="secondary">
+              Our team will contact you to arrange the transfer.
+            </Text>
+          ) : null}
         </VStack>
       ) : null}
 
