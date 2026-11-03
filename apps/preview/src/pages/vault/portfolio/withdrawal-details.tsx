@@ -1,5 +1,4 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Card } from "@grade10/design-system/components/display/card";
 import { DetailRow } from "@grade10/design-system/components/display/detail-row";
 import { Step } from "@grade10/design-system/components/display/step";
@@ -19,7 +18,6 @@ import {
   formatHkd,
   formatUsd,
   PAYOUT_METHOD,
-  PAYOUT_STATUS_VARIANT,
   type VaultPayoutRequest,
 } from "../../vault-content";
 
@@ -161,12 +159,6 @@ function WithdrawalDetails({
                   <p className="font-heading text-3xl font-medium tracking-tight tabular-nums">
                     {formatUsd(request.amountUsd)}
                   </p>
-                  <Badge
-                    className="mt-1.5"
-                    variant={PAYOUT_STATUS_VARIANT[request.status]}
-                  >
-                    {request.status}
-                  </Badge>
                 </div>
                 <Text tone="secondary">{amountSubtext(request)}</Text>
               </div>
