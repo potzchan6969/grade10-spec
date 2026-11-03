@@ -152,7 +152,10 @@ function WithdrawalDetails({
           </DrawerDescription>
         </DrawerHeader>
         {request ? (
-          <DrawerBody className="gap-8 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <DrawerBody
+            className="gap-8 pb-[max(1rem,env(safe-area-inset-bottom))]"
+            tabIndex={0}
+          >
             <Card className="shrink-0">
               <div className="flex flex-col gap-1 px-(--card-spacing)">
                 <div className="flex items-start justify-between gap-4">
