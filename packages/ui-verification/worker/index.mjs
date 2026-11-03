@@ -1,8 +1,14 @@
-import { ArchiveError, createR2Archive } from "../src/archive.mjs";
+import {
+  ArchiveError,
+  createR2Archive,
+  createR2Store,
+} from "../src/archive.mjs";
 import {
   createArchiveHandler,
   DEFAULT_LOCAL_ORIGINS,
 } from "../src/archive-api.mjs";
+import { createCopyReview } from "../src/copy-review.mjs";
+import { createGitHubCopyShipper } from "./copy-github.mjs";
 import { coordinatorProxy } from "./reference-captures.mjs";
 
 const ACCESS_KEY_CACHE_MS = 10 * 60 * 1000;
@@ -297,6 +303,13 @@ export function createWorker({ fetcher = globalThis.fetch } = {}) {
         coordinator: env.REFERENCE_CAPTURES
           ? coordinatorProxy(env.REFERENCE_CAPTURES)
           : null,
+        copyReview: createCopyReview({
+          store: createR2Store(env.ARCHIVE),
+          // Without the token the hosted page still reviews and approves.
+          shipper: env.COPY_GITHUB_TOKEN
+            ? createGitHubCopyShipper({ token: env.COPY_GITHUB_TOKEN, fetcher })
+            : null,
+        }),
         storage: { kind: "r2", location: "Storybook archive" },
       });
       return handler(request);

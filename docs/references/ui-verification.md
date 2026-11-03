@@ -116,6 +116,16 @@ pnpm storybook:workbench
 - **Story dialog** - Row Approve only opens the dialog, so a person sees the images first. Approve all sizes makes the focused capture the Approve tab makes, and is off by the same Nothing new rule. Request changes needs one size and a comment. On the Site drift tab there is no approval: nobody approves a site capture.
 - **Fix prompts** - On the Site drift tab, Copy prompt copies one story's drift report with a sample prompt to fix the site. The button above the table copies every drift past the tolerance in the current filters as one batch prompt. The page shows what it copied.
 
+## Copy Review
+
+- **Where** - A page of its own beside the dashboard, at `?path=/copy-review/`. Open it from the dashboard's header or its sidebar entry. It reads `@grade10/i18n` as this build of the workbench bundles it, one row per key in each layer: `shared`, then each brand.
+- **Review** - Each value in each locale is either Looks right or gets a proposed edit. The page runs the copy checks on the current value and on an edit while it is typed: placeholders and tags against the English, ICU braces, copy left in English, Simplified characters in zh-Hant and the reverse, and English house style.
+- **Approve** - A proposed edit is approved, or sent back with a comment it needs. An edit with an error cannot be approved; a warning is the approver's call. A sent-back edit returns to Review, where its proposer edits it again.
+- **Records** - Reviews, proposals, decisions and change sets are create-only JSON records under `copy-review/v1/` in the same archive, R2 hosted and files locally. Each is bound to the layer, locale, namespace and key, and to the SHA-256 of the value it judged, so a value that changes is reviewed again. The newest decision on an edit holds. The person is the Access identity hosted and `local-development` locally.
+- **Ship** - Approved edits ship together. Hosted, the Worker opens one pull request on grade10-spec from `main`; locally, they are written into this checkout's catalog files to commit. An edit whose catalog value moved since it was proposed is left out.
+- **Reaching the site** - A merged edit shows as Merged, not on the site yet, until grade10's `external/grade10-spec` pin on `main` includes the merge. Moving the pin stays a grade10 commit.
+- **Not here** - The auction email copy grade10 still writes in its own code, and which deployed environment serves which copy.
+
 ## Where Captures And Approvals Live
 
 - **Coordinator** - One capture coordinator owns the schedule, the live runs, every approval, an index of every reference by case, and the drift scores. Between full captures its alarm fills the index from the archive once, then scores queued pairs a few per wake. `/api/references` answers from the index once it is filled, so a story's references are one lookup, not a scan of the archive. Hosted, it is one Cloudflare Durable Object, `ReferenceCaptures`, and its alarm drives a full capture. Locally, the workbench runs it in-process, with JSON files beside the archive and a timer for the alarm.
@@ -157,6 +167,7 @@ pnpm storybook:workbench
 - **Human access** - Set `ACCESS_ISSUER` and `ACCESS_AUD` for the Cloudflare Access application protecting the Storybook origin. The Worker verifies signed assertions before it reads evidence.
 - **Publishing** - Set the Worker secret `PUBLISHER_TOKEN`. A capture runner publishes with `pnpm ui:verify publish --run <runId> --archive <dir> --endpoint <storybook origin> --token-env UI_VERIFICATION_TOKEN`. When Access protects the host, the runner also needs its service credentials.
 - **Publisher token** - `PUBLISHER_TOKEN` is a value you choose, not one Cloudflare issues. Generate it with `openssl rand -hex 32`. Store it on the Worker with `pnpm dlx wrangler@4.120.0 secret put PUBLISHER_TOKEN -c wrangler.storybook.jsonc` in `apps/preview`. Give the same value to the runner as `UI_VERIFICATION_TOKEN`. Keep it in the team's secret manager, never in git or in the Storybook bundle.
+- **Copy shipping** - ❓ Set the Worker secret `COPY_GITHUB_TOKEN`, a GitHub token that may push branches and open pull requests on `9gag/grade10-spec` and read `9gag/grade10`. Without it the hosted Copy review still reviews and approves, and Ship answers that it cannot ship.
 - **Who may ask** - Only a signed-in person may request a full capture, approve, or make a focused capture. A deploy asks through the Worker's own hourly check.
 - **Reuse** - A run that reuses captures needs its source run published first.
 - **Origins** - The Worker allows its own origin. Set `ALLOWED_ORIGINS` only for a separate development workbench.

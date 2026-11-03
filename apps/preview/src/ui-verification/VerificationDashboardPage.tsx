@@ -1509,6 +1509,12 @@ export function VerificationDashboardPage() {
             Reference captures
           </button>
           <button
+            onClick={() => managerApi.navigate("/copy-review/")}
+            type="button"
+          >
+            Copy review
+          </button>
+          <button
             className="verification-primary"
             onClick={() => setRefresh((value) => value + 1)}
             type="button"

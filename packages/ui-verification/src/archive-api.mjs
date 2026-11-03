@@ -7,6 +7,12 @@ const DEFAULT_LOCAL_ORIGINS = [
 const MAX_JSON_BYTES = 1 * 1024 * 1024;
 const MAX_OBJECT_BYTES = 20 * 1024 * 1024;
 const METHODS = "GET, POST, PUT, OPTIONS";
+const COPY_ACTIONS = new Map([
+  ["/api/copy/reviews", "review"],
+  ["/api/copy/proposals", "propose"],
+  ["/api/copy/decisions", "decide"],
+  ["/api/copy/changesets", "ship"],
+]);
 const HEADERS =
   "Authorization, Content-Type, Cf-Access-Jwt-Assertion, Cf-Access-Client-Id, Cf-Access-Client-Secret";
 
@@ -153,6 +159,7 @@ function routeScope(method, pathname) {
   )
     return "approve";
   if (method === "POST" && pathname === "/api/reference-runs") return "approve";
+  if (method === "POST" && COPY_ACTIONS.has(pathname)) return "approve";
   // Queuing scores changes no evidence, but only a signed-in person asks.
   if (method === "POST" && pathname === "/api/scores") return "approve";
   if (method === "POST" && ["/api/runs", "/api/assessments"].includes(pathname))
@@ -180,6 +187,16 @@ function pathRunId(pathname) {
   }
 }
 
+function requireCopyReview(copyReview) {
+  if (!copyReview)
+    throw new ArchiveError(
+      501,
+      "COPY_REVIEW_UNAVAILABLE",
+      "this archive keeps no copy review",
+    );
+  return copyReview;
+}
+
 function requireCoordinator(coordinator) {
   if (!coordinator)
     throw new ArchiveError(
@@ -195,6 +212,7 @@ export function createArchiveHandler(
   {
     authorize = async () => null,
     coordinator = null,
+    copyReview = null,
     allowedOrigins = DEFAULT_LOCAL_ORIGINS,
     sameOrigin = false,
     storage = archive?.root
@@ -431,6 +449,27 @@ export function createArchiveHandler(
           await readJson(request),
         );
         return jsonResponse(assessment, 201, headers);
+      }
+
+      if (request.method === "GET" && url.pathname === "/api/copy/records") {
+        return jsonResponse(
+          await requireCopyReview(copyReview).list(),
+          200,
+          headers,
+        );
+      }
+
+      const copyAction =
+        request.method === "POST" ? COPY_ACTIONS.get(url.pathname) : undefined;
+      if (copyAction) {
+        return jsonResponse(
+          await requireCopyReview(copyReview)[copyAction](
+            await readJson(request),
+            identity.reviewer,
+          ),
+          201,
+          headers,
+        );
       }
 
       return jsonResponse(

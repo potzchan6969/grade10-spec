@@ -1,0 +1,307 @@
+/* The copy review page borrows the panel's manager-theme variables. */
+.copy-review {
+  /* Storybook's page area does not scroll, so the page scrolls itself. */
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  padding: 24px max(24px, calc((100% - 1392px) / 2));
+  font-size: 14px;
+}
+
+.copy-review code {
+  font-family: var(--vp-mono, ui-monospace, monospace);
+  font-size: 12px;
+}
+
+.copy-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 1px solid var(--vp-border, #d7d9df);
+}
+
+.copy-review .copy-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  border: 0;
+  border-radius: 0;
+  padding: 0 14px;
+  background: none;
+  font-weight: 700;
+}
+
+.copy-review .copy-tabs button[aria-selected="true"] {
+  color: var(--vp-accent, #0b6fbf);
+  box-shadow: inset 0 -3px 0 var(--vp-accent, #0b6fbf);
+}
+
+.copy-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  padding: 0 6px;
+  background: var(--vp-surface, #f0f2f5);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.copy-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.copy-search {
+  flex: 1 1 240px;
+}
+
+.copy-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.copy-review .copy-filters button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 16px;
+}
+
+.copy-review .copy-filters button[aria-pressed="true"] {
+  border-color: var(--vp-accent, #0b6fbf);
+  color: var(--vp-on-accent, #fff);
+  background: var(--vp-accent, #0b6fbf);
+}
+
+.copy-layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.copy-table-wrap {
+  flex: 999 1 560px;
+  min-width: 0;
+  overflow-x: auto;
+  border: 1px solid var(--vp-border, #d7d9df);
+  border-radius: 6px;
+}
+
+.copy-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+}
+
+.copy-table th,
+.copy-table td {
+  border-bottom: 1px solid var(--vp-border, #e3e6ea);
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.copy-table thead th {
+  color: var(--vp-muted, #626875);
+  background: var(--vp-surface, #f6f9fc);
+  font-size: 12px;
+}
+
+.copy-table tr[aria-selected="true"] {
+  background: color-mix(in srgb, var(--vp-accent, #0b6fbf) 8%, transparent);
+}
+
+.copy-review .copy-key {
+  min-height: 0;
+  border: 0;
+  padding: 0;
+  color: var(--vp-accent, #0b6fbf);
+  background: none;
+  font-family: var(--vp-mono, ui-monospace, monospace);
+  font-size: 12px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.copy-cell-value {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.copy-more,
+.copy-empty {
+  margin: 8px;
+}
+
+.copy-detail {
+  display: flex;
+  flex: 1 1 360px;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+  min-width: 0;
+}
+
+.copy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.copy-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--vp-border, #d7d9df);
+  border-radius: 6px;
+  padding: 12px;
+  background: var(--vp-bg, #fff);
+}
+
+.copy-card-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.copy-value,
+.copy-proposal p,
+.copy-compare p {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.copy-proposal {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 4px;
+  padding: 8px;
+  background: color-mix(in srgb, var(--vp-accent, #0b6fbf) 8%, transparent);
+}
+
+.copy-comment {
+  border-radius: 4px;
+  padding: 8px;
+  color: var(--vp-error-fg, #7d1818);
+  background: var(--vp-error-bg, #fff0f0);
+}
+
+.copy-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.copy-compare {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 12px;
+}
+
+.copy-compare > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 4px;
+  padding: 8px 10px;
+  background: var(--vp-surface, #f6f9fc);
+}
+
+.copy-issues {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+}
+
+.copy-issues [data-severity="error"] {
+  color: var(--vp-error-fg, #7d1818);
+}
+
+.copy-issues [data-severity="warn"] {
+  color: var(--vp-warn-fg, #523f12);
+}
+
+.copy-issues [data-severity="info"] {
+  color: var(--vp-muted, #626875);
+}
+
+.copy-state {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--vp-border, #c5c8cf);
+  border-radius: 3px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.copy-state[data-state="todo"] {
+  border-color: var(--vp-warn-border, #d8c691);
+  color: var(--vp-warn-fg, #523f12);
+  background: var(--vp-warn-bg, #fff9e8);
+}
+
+.copy-state[data-state="check-failed"],
+.copy-state[data-state="changes-requested"],
+.copy-state[data-state="closed"] {
+  border-color: var(--vp-error-border, #d65a5a);
+  color: var(--vp-error-fg, #7d1818);
+  background: var(--vp-error-bg, #fff0f0);
+}
+
+.copy-state[data-state="approved"],
+.copy-state[data-state="reviewed"] {
+  border-color: var(--vp-ok-border, #a9d8b8);
+  color: var(--vp-ok-fg, #14602e);
+  background: var(--vp-ok-bg, #e5f5ea);
+}
+
+.copy-state[data-state="proposed"],
+.copy-state[data-state="shipping"],
+.copy-state[data-state="waiting-for-pin"] {
+  border-color: var(--vp-accent, #0b6fbf);
+  color: var(--vp-fg, #2e3438);
+  background: color-mix(in srgb, var(--vp-accent, #0b6fbf) 10%, transparent);
+}
+
+.copy-ship-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.copy-ship-list label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-weight: 400;
+}
+
+.copy-ship-change {
+  display: block;
+  color: var(--vp-muted, #626875);
+  overflow-wrap: anywhere;
+}
+
+.copy-review fieldset.copy-filters {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
