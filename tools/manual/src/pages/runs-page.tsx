@@ -10,6 +10,8 @@ import type { RunSummary } from "../api/desk";
 import { relativeTime } from "../api/time";
 import { useManualIndex } from "../api/use-manual-index";
 import { handleOf } from "../desk/checks";
+import { DeskError } from "../desk/client";
+import { plural } from "../desk/model";
 import { readRunSpec } from "../desk/run-spec-file";
 import { useDesk } from "../desk/use-desk";
 import { PageHeading } from "./page-heading";
@@ -21,6 +23,24 @@ const STATE_TONE = {
   closed: "default",
 } as const;
 
+/** What a refused open says, and the run it names where the selection is
+ * already open on one: the desk's own words, else the run whose fingerprint
+ * matches. */
+export function refusalOf(
+  cause: unknown,
+  fingerprint: string,
+  runs: RunSummary[] | null,
+): { text: string; run?: string } {
+  const text = cause instanceof Error ? cause.message : String(cause);
+  if (!(cause instanceof DeskError) || cause.status !== 409) return { text };
+  const named = /\brun\s+([A-Za-z0-9_-]+)/i.exec(text)?.[1];
+  const matching = (runs ?? []).find(
+    (one) => one.state !== "closed" && one.fingerprint === fingerprint,
+  )?.id;
+  const run = named ?? matching;
+  return run ? { text, run } : { text };
+}
+
 /** Every run on the desk, newest first, and a door to open one from the
  * file the run sheet writes. */
 export function RunsPage() {
@@ -31,6 +51,7 @@ export function RunsPage() {
   const [runs, setRuns] = useState<RunSummary[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [problems, setProblems] = useState<string[]>([]);
+  const [conflict, setConflict] = useState<string | null>(null);
   const [me, setMe] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const inputId = useId();
@@ -59,15 +80,19 @@ export function RunsPage() {
         `${file.name} is not a run the desk can open:`,
         ...reading.problems,
       ]);
+      setConflict(null);
       return;
     }
     setProblems([]);
+    setConflict(null);
     try {
       const run = await desk.openRun(reading.spec);
       navigate(`/runs/${encodeURIComponent(run.id)}`);
     } catch (cause) {
       console.error("the desk refused the run", cause);
-      setProblems([cause instanceof Error ? cause.message : String(cause)]);
+      const refused = refusalOf(cause, reading.spec.fingerprint, runs);
+      setProblems([refused.text]);
+      setConflict(refused.run ?? null);
     }
   };
 
@@ -127,11 +152,21 @@ export function RunsPage() {
         <Alert
           className="mb-6"
           description={
-            <ul className="list-disc pl-5">
-              {problems.slice(1).map((one) => (
-                <li key={one}>{one}</li>
-              ))}
-            </ul>
+            conflict ? (
+              <Link
+                className="font-medium underline underline-offset-2"
+                data-conflict={conflict}
+                to={`/runs/${encodeURIComponent(conflict)}`}
+              >
+                Go to run {conflict}
+              </Link>
+            ) : (
+              <ul className="list-disc pl-5">
+                {problems.slice(1).map((one) => (
+                  <li key={one}>{one}</li>
+                ))}
+              </ul>
+            )
           }
           role="alert"
           status="error"
@@ -181,7 +216,7 @@ export function RunsPage() {
                   {[
                     run.env,
                     run.phase ? phaseName(run.phase) : null,
-                    `${run.cases} cases, ${run.rows} rows`,
+                    `${plural(run.cases, "case")}, ${plural(run.rows, "row")}`,
                     run.rerunOf ? `re-run of run ${run.rerunOf}` : null,
                     `opened by ${who(run.openedBy)} ${relativeTime(run.openedAt)}`,
                   ]

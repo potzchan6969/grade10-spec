@@ -106,6 +106,17 @@ export class MemoryDesk implements DeskApi {
 
   async openRun(spec: RunSpec, id?: string): Promise<RunSummary> {
     this.reach();
+    const open = [...this.runsById.values()].find(
+      (held) =>
+        held.run.state !== "closed" &&
+        held.run.fingerprint === spec.fingerprint &&
+        !spec.rerunOf,
+    );
+    if (open)
+      throw new DeskError(
+        `run ${open.run.id} (${open.run.name}) already holds this selection: mark it there, or close it before opening it again`,
+        409,
+      );
     const runId = id ?? String(this.nextRun);
     this.nextRun = Math.max(
       this.nextRun,
