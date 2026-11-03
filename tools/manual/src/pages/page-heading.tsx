@@ -23,6 +23,8 @@ type PageHeadingProps = {
   eyebrow?: ReactNode;
   title: ReactNode;
   summary?: string;
+  /** What the page wears beside its title: its phase and readiness. */
+  chips?: ReactNode;
   children?: ReactNode;
 };
 
@@ -30,6 +32,7 @@ export function PageHeading({
   eyebrow,
   title,
   summary,
+  chips,
   children,
 }: PageHeadingProps) {
   const ref = useRef<HTMLElement>(null);
@@ -42,9 +45,18 @@ export function PageHeading({
           {eyebrow}
         </div>
       ) : null}
-      <h1 className="font-heading font-bold text-foreground text-manual-h1 leading-tight">
-        {title}
-      </h1>
+      {chips ? (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <h1 className="font-heading font-bold text-foreground text-manual-h1 leading-tight">
+            {title}
+          </h1>
+          <div className="flex flex-wrap items-center gap-1.5">{chips}</div>
+        </div>
+      ) : (
+        <h1 className="font-heading font-bold text-foreground text-manual-h1 leading-tight">
+          {title}
+        </h1>
+      )}
       {summary ? (
         <Text as="p" className="mt-3 max-w-[62ch]" size="lg" tone="secondary">
           {summary}

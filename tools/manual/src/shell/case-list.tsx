@@ -2,10 +2,12 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { CaretRight } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { dirOf, humanize } from "../api/paths";
+import type { CaseResult } from "../api/readiness";
 import { caseParts, type TestCase } from "../api/suites";
 import { AnchorLink, useHashTarget } from "../blocks/anchor";
 import { useBlockScope } from "../blocks/block-scope";
 import { MarkdownView } from "../blocks/markdown";
+import { VerdictPip } from "../blocks/phase-chip";
 import type { SectionRule } from "../blocks/side-blocks";
 
 export type CaseRow = { testCase: TestCase; rules: string[] };
@@ -22,9 +24,12 @@ const SEVERITY_DOT: Record<string, string> = {
 export function CaseList({
   rows,
   rules,
+  results,
 }: {
   rows: CaseRow[];
   rules: SectionRule[];
+  /** Each case's latest verdict, where the run desk holds one. */
+  results?: Map<string, CaseResult>;
 }) {
   const nameOf = (anchor: string) =>
     rules.find((rule) => rule.anchor === anchor)?.name ?? humanize(anchor);
@@ -57,6 +62,7 @@ export function CaseList({
               <CaseLine
                 also={traced.slice(1).map(nameOf)}
                 key={testCase.id}
+                result={results?.get(testCase.id)}
                 testCase={testCase}
               />
             ))}
@@ -68,7 +74,15 @@ export function CaseList({
 }
 
 /** A case's claim on one line; open, how to walk it. */
-function CaseLine({ testCase, also }: { testCase: TestCase; also: string[] }) {
+function CaseLine({
+  testCase,
+  also,
+  result,
+}: {
+  testCase: TestCase;
+  also: string[];
+  result?: CaseResult;
+}) {
   const id = `case-${testCase.id.replace(/\W+/g, "-").toLowerCase()}`;
   const targeted = useHashTarget(id);
   const [open, setOpen] = useState(false);
@@ -100,6 +114,18 @@ function CaseLine({ testCase, also }: { testCase: TestCase; also: string[] }) {
               </Text>
             ) : null}
           </Text>
+          {result ? (
+            <span className="mt-0.5 inline-flex">
+              <VerdictPip
+                title={
+                  result.verdict === "stale"
+                    ? "Revised since the run that marked it"
+                    : `Latest verdict${result.triages.length > 0 ? `, ${result.triages.join(", ")}` : ""}`
+                }
+                verdict={result.verdict}
+              />
+            </span>
+          ) : null}
           <span
             className={`mt-1 inline-flex shrink-0 text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`}
           >

@@ -45,6 +45,40 @@
   --shadow-color: var(--gray-950);
 }
 
+/* The readiness ladder's colours: one per step, so a chip, a bar and a
+ * verdict pip read alike on the QA tab, the page chip and the phase board.
+ * The design system has no ladder, so the manual owns these the way it owns
+ * its dark mapping. */
+:root {
+  --step-planned: #9d9a97;
+  --step-prepared: #c4903d;
+  --step-reviewed: #62748e;
+  --step-in-qa: #298dcc;
+  --step-passed: #66904b;
+  --step-failing: #cf5844;
+  --step-blocked: #b19a3a;
+}
+
+.dark {
+  --step-planned: #75726f;
+  --step-prepared: #d3ac6e;
+  --step-reviewed: #90a1b9;
+  --step-in-qa: #4ca4db;
+  --step-passed: #7cab5e;
+  --step-failing: #da7e6f;
+  --step-blocked: #cdb965;
+}
+
+@theme inline {
+  --color-step-planned: var(--step-planned);
+  --color-step-prepared: var(--step-prepared);
+  --color-step-reviewed: var(--step-reviewed);
+  --color-step-in-qa: var(--step-in-qa);
+  --color-step-passed: var(--step-passed);
+  --color-step-failing: var(--step-failing);
+  --color-step-blocked: var(--step-blocked);
+}
+
 /* The reading type scale over a 15px body: h1 2.357em, h2 26px, and the
  * h1-to-h2 ratio (1.36) carried down to h3, with h4 at the body. A
  * `text-manual-*` utility carries each step to headings outside the prose. */

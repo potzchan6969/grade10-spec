@@ -39,7 +39,11 @@ function scan(): PageSection[] {
   for (const heading of document.querySelectorAll<HTMLElement>(
     "main h2[id], main h3[id]",
   )) {
-    const title = (heading.textContent ?? "").trim();
+    // A heading's own chrome — its phase chip — is not its title.
+    const words = heading.cloneNode(true) as HTMLElement;
+    for (const aside of words.querySelectorAll("[data-heading-aside]"))
+      aside.remove();
+    const title = (words.textContent ?? "").trim();
     if (title === "") continue;
     found.push({
       id: heading.id,
