@@ -30,7 +30,6 @@ function WalletSummary({
   openCashOutCount,
   minWithdrawalUsd,
   onCashOut,
-  onViewActivity,
   onViewCashOuts,
   className,
 }: {
@@ -42,7 +41,6 @@ function WalletSummary({
   openCashOutCount: number;
   minWithdrawalUsd: number;
   onCashOut?: () => void;
-  onViewActivity?: () => void;
   onViewCashOuts?: () => void;
   className?: string;
 }) {
@@ -116,14 +114,6 @@ function WalletSummary({
             onClick={onCashOut}
           >
             Withdraw
-          </Button>
-          <Button
-            size="md"
-            type="button"
-            variant="outline"
-            onClick={onViewActivity}
-          >
-            View Activity
           </Button>
         </div>
       </div>
