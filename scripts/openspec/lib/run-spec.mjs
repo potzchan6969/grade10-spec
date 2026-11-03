@@ -7,7 +7,6 @@
  * dry run confirms one thing whichever way the run is walked.
  */
 
-import { basename } from "node:path";
 import { caseParts, readSuite } from "../../../tools/manual/src/api/suites.ts";
 import {
   columnKey,
@@ -237,7 +236,7 @@ export function walksOf(text, suite, ids) {
     }));
     if (!steps.some((one) => one.cases.length > 0)) continue;
     walks.push({
-      id: `${basename(suite)}#${label
+      id: `${suite}#${label
         .trim()
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")

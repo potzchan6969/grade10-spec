@@ -31,7 +31,7 @@ import {
 } from "./lib/printed-run-message.mjs";
 import { deskSourceAt, rerunSpecOf } from "./lib/run-desk.mjs";
 import { selectionSnapshot } from "./lib/run-sheet-records.mjs";
-import { runSpecOf } from "./lib/run-spec.mjs";
+import { runSpecOf, walksOf } from "./lib/run-spec.mjs";
 import {
   inReadingOrder,
   selectCases,
@@ -412,7 +412,7 @@ test("a store case reaches the desk with its section, its rows, its walk and the
   });
   assert.deepEqual(spec.walks, [
     {
-      id: "cart-tcs.md#walk-1",
+      id: "docs/prds/products/grade10-site/store/tests/cart-tcs.md#walk-1",
       title: "Open the cart and read it",
       suite: "docs/prds/products/grade10-site/store/tests/cart-tcs.md",
       start: ["customer on `<listing url>` with `<product A>` in the cart"],
@@ -704,6 +704,19 @@ test("without the Access service token the run sheet says so and names the way r
     /Re-run of r5 \(Store\): 1 fail and blocked rows in 1 cases/,
   );
   assert.match(offline.stdout, new RegExp(`RunSpec: ${out}`));
+});
+
+test("two suites' walks of the same name are two walks", () => {
+  const known = new Set(["g10.store-cart.TC1", "g10.store-cart.TC2"]);
+  const a = walksOf(STORE, "openspec/specs/a/b/c/feature-tcs.md", known);
+  const b = walksOf(STORE, "openspec/specs/a/b/d/feature-tcs.md", known);
+  assert.deepEqual(
+    [...a, ...b].map((walk) => walk.id),
+    [
+      "openspec/specs/a/b/c/feature-tcs.md#walk-1",
+      "openspec/specs/a/b/d/feature-tcs.md#walk-1",
+    ],
+  );
 });
 
 /** An in-memory desk behind HTTP on a local port, for the run sheet's CLI. */
