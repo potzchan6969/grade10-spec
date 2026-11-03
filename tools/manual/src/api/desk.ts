@@ -250,6 +250,11 @@ export type DeskVerdicts = {
 
 export type DeskMe = { email: string };
 
+/** `GET /api/desk/runs/:id/record` — what a run's print commit is written
+ * from and checked against: the run, its state, and the spec it froze. A
+ * `RunView` answers the same reading. */
+export type RunRecord = { run: RunSummary; spec: RunSpec };
+
 /** A mark as the client sends it. */
 export type MarkInput = Omit<Mark, "by" | "at" | "seq">;
 export type ObservationInput = Omit<Observation, "by" | "at" | "seq">;

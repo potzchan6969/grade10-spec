@@ -21,7 +21,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
       spreadsheetId: process.env.TCS_SHEET_ID,
     });
     console.log(
-      `Verified ${count} finalized print commits against the live registry`,
+      `Verified ${count} finalized print commits against the live registry and the run desk`,
     );
   } catch (error) {
     console.error(error.message);

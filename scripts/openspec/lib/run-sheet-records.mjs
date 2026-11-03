@@ -64,6 +64,10 @@ export function selectionSnapshot(
     suites = null,
     priority = null,
     level = null,
+    phase = null,
+    releasePriority = null,
+    ready = false,
+    section = null,
   } = {},
 ) {
   const ordered = inReadingOrder(picked);
@@ -97,6 +101,12 @@ export function selectionSnapshot(
       suites,
       priority,
       level,
+      // Only a selection that names them carries them, so a fingerprint
+      // printed before phases existed reads the same.
+      ...(phase ? { phase } : {}),
+      ...(releasePriority ? { releasePriority } : {}),
+      ...(ready ? { ready } : {}),
+      ...(section ? { section } : {}),
     },
     selected,
     excluded: normalizeExclusions(excluded, ordered),
@@ -301,11 +311,19 @@ export const isSourcePath = (rel) =>
   rel.startsWith("openspec/specs/") || isStoreSuite(rel);
 
 export function candidatesAt(root, ref) {
+  return atSource(root, ref, SOURCE_PATHS, (scratch) =>
+    readCandidates(scratch).filter((one) => isSourcePath(one.read.rel)),
+  );
+}
+
+/** `read` over these paths of a Git snapshot, extracted to a scratch
+ *  directory that is gone when it returns. */
+export function atSource(root, ref, sourcePaths, read) {
   const scratch = mkdtempSync(join(tmpdir(), "run-sheet-source-"));
   try {
     // A source pinned before the store's cases moved holds no store folder,
     // and `git archive` refuses a path the tree does not hold.
-    const paths = SOURCE_PATHS.filter((path) =>
+    const paths = sourcePaths.filter((path) =>
       execFileSync("git", ["ls-tree", "-d", "--name-only", ref, path], {
         cwd: root,
         encoding: "utf8",
@@ -316,10 +334,18 @@ export function candidatesAt(root, ref) {
       maxBuffer: 64 * 1024 * 1024,
     });
     execFileSync("tar", ["-x", "-C", scratch], { input: archive });
-    return readCandidates(scratch).filter((one) => isSourcePath(one.read.rel));
+    return read(scratch);
   } finally {
     rmSync(scratch, { recursive: true, force: true });
   }
+}
+
+/** The merged print commit of a desk run, or null. */
+export function mergedDeskRecord(root, runId, ref = "origin/main") {
+  return (
+    printCommits(root, ref).find((one) => printKey(one.run) === `desk:${runId}`)
+      ?.run ?? null
+  );
 }
 
 export function recordBranch(record) {
