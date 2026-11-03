@@ -1,4 +1,4 @@
-## 1. Maintain Capability PRDs (grade10-spec)
+## 1. Maintain Capability PRDs (grade10-spec) (owner: @htonyl)
 
 - [x] 1.1 Run the changed-capability manual checks before the PRD update and record any rule or code-map discrepancy.
 - [x] 1.2 Update the Listings section of Auction Management and the Auction Details and Lot Status sections of Auction Display to match the verified delivery and its code map. Keep delivery marks until archive verifies implementation.
