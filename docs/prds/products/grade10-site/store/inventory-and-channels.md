@@ -26,6 +26,7 @@ Where the store's stock sits, and the channels that sell it.
 
 - **Same Stock** — every channel sells the shop's stock; the first sale wins and the product comes off the others - [Consigning](/p/grade10-site/consignment/consigning#at-the-store)
 - 🚧 **Consigned Cards** — sold on Point of Sale only, at the shop and events
+- 🚧 **An Item's Product** — every item on sale is one product with one unit, created and priced from the admin panel - [Store Listings](/p/grade10-site/store/store-listings)
 - **Marketplace** — online, later, with no date; one more channel on the same stock
 
 :::detail{title="Product decisions" for="pm"}

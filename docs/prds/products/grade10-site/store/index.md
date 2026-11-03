@@ -22,6 +22,7 @@ The Grade10 store is the trading-card and collectibles shop at
   1. Account system
   2. Membership and loyalty program
   3. Rewards
+  4. 🚧 Item listings — each item the store sells, consigned or house stock, is a product Grade10 creates and runs from the admin panel - [Store Listings](/p/grade10-site/store/store-listings)
 
 ## Users
 

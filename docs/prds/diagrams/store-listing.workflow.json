@@ -1,0 +1,143 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "An item's store listing",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "admin",
+      "label": "Grade10's admin panel"
+    },
+    {
+      "id": "store",
+      "label": "Grade10's store"
+    },
+    {
+      "id": "shop",
+      "label": "Shopify"
+    }
+  ],
+  "mainPath": [
+    "listed",
+    "listing",
+    "product",
+    "sold"
+  ],
+  "nodes": [
+    {
+      "id": "listed",
+      "lane": "admin",
+      "col": 0,
+      "type": "frontend",
+      "label": "Item listed",
+      "sublabel": "consignment approval, or house stock",
+      "width": 170
+    },
+    {
+      "id": "price",
+      "lane": "admin",
+      "col": 1,
+      "type": "frontend",
+      "label": "Price set",
+      "sublabel": "by staff, or later by a rule",
+      "width": 160
+    },
+    {
+      "id": "rule",
+      "lane": "admin",
+      "col": 2,
+      "type": "backend",
+      "label": "Rule, daily",
+      "sublabel": "latest sale × markup, never below the floor",
+      "width": 190
+    },
+    {
+      "id": "listing",
+      "lane": "store",
+      "col": 1,
+      "type": "database",
+      "label": "The listing",
+      "sublabel": "every change sent to the shop",
+      "width": 170
+    },
+    {
+      "id": "product",
+      "lane": "shop",
+      "col": 2,
+      "type": "external",
+      "label": "One product",
+      "sublabel": "one unit, created by Grade10",
+      "width": 170
+    },
+    {
+      "id": "edit",
+      "lane": "shop",
+      "col": 1,
+      "type": "security",
+      "label": "Shop edit",
+      "sublabel": "to a field Grade10 holds",
+      "width": 150
+    },
+    {
+      "id": "sold",
+      "lane": "shop",
+      "col": 3,
+      "type": "external",
+      "label": "Sold",
+      "sublabel": "comes off every channel",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "from": "listed",
+      "to": "listing",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "from": "listing",
+      "to": "product",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "product",
+      "to": "sold",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "price",
+      "to": "listing",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "rule",
+      "to": "price",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "later"
+    },
+    {
+      "from": "edit",
+      "to": "listing",
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "label": "written back"
+    }
+  ]
+}

@@ -45,6 +45,9 @@ other mark stands alone.
   [Items](/p/grade10-admin/inventory/items#marks)
 - **Paper behind every mark** - an item the house holds for someone else is
   always under a signed agreement of a service holding it
+- 🚧 **Sell as house stock** - the store creates the item's product at the
+  price staff set, never below its cost, under the store's mark -
+  [Store Listings](/p/grade10-site/store/store-listings)
 
 ## Hand-offs
 

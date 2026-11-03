@@ -51,6 +51,7 @@ that receive, move and count.
 | Documents | every agreement and receipt covering the item, across services |
 | Owners | every change of owner: a transfer, a sale, a forfeit |
 | Activity | every act on the item from the audit chain |
+| 🚧 Store | the item's store listing: its price beside the floor and the market price, manual or by rule, its channels and location, whether the shop has it, missing filters, a link to the product, and every price change - [Store Listings](/p/grade10-site/store/store-listings) |
 
 - **Apply to a service** - one menu naming the vault, grading, consignment,
   the auction and the store, each offered or withheld with the reason in
@@ -115,6 +116,7 @@ An admin changes every setting here; each starts on its default.
 | Missing until lost | **30** days | any number of days |
 | Sell from the vault | on, storage lane only | off |
 | A live loan and a sale | no sale until the vault case is released | the proceeds repay the loan first |
+| 🚧 House stock's lowest price | its cost | off |
 
 - **On the audit chain** - every change, with the old and new value
 

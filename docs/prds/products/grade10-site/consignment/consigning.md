@@ -98,6 +98,7 @@ For a card with a market price of HKD 10,000:
   - **Marketplace** — online, later, with no date; it joins as one more store channel, the first sale wins, and its commission is decided then
 - **Sales Report Themselves** — the store and the auction report each sale, delivery and refund; staff record one by hand only where a channel didn't
 - 🚧 **Price Changes** — entered by staff; they may raise the price at their will, never below the lowest acceptable price
+  - **Later, by Rule** — from the latest sale, never below the lowest acceptable price; the product's details and filters come from the vaulted item - [Store Listings](/p/grade10-site/store/store-listings)
 - 🚧 **Handover** — the buyer takes the card at the counter; a card held elsewhere moves to the shop first
   - **Online Orders** — once online is on, an order ships from the shop, Kerry Logistics collecting it there
   - **First Hold Wins** — a card held for an online checkout is the shop's to keep for that checkout; the till never cancels it
