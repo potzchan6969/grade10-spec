@@ -4,6 +4,8 @@ spec: grade10-admin/console/user-directory
 order: 3
 ---
 
+::phase{id="auction" priority="P1"}
+
 The Grade10 Users page is the **access desk** — who holds what, standing,
 sessions, and the grants an account actually carries — with the loyalty record
 kept next door rather than merged.

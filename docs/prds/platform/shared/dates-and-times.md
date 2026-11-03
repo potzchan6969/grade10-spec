@@ -48,6 +48,8 @@ zone of its own. What a person reads depends on the surface.
 
 ## Other Surfaces
 
+::phase{id="auction" priority="P2" rules="auction-order-operators"}
+
 Operator tables, admin surfaces and the records a machine reads - an export,
 the audit trail - state Coordinated Universal Time, except an admin surface
 whose own spec keeps a shop's clock.

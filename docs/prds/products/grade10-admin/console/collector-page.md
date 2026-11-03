@@ -4,6 +4,8 @@ spec: grade10-admin/console/collector-page
 order: 4
 ---
 
+::phase{id="internal-consignment" priority="P1"}
+
 One console page per collector: who they are, and what the shop holds or
 handles for them, one section per product.
 

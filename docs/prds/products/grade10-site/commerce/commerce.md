@@ -4,6 +4,8 @@ spec: grade10-site/commerce/commerce
 order: 1
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 How the storefronts sell: Shopify is each brand's product catalog, a payment provider collects the money, and every order of record lives in that store's own Postgres. Where account data lives: [Account Data](/platform/account-data).
 
 ## Parts

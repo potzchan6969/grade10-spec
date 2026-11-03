@@ -4,6 +4,8 @@ spec: shared/ui/site-chrome
 order: 2
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 Two components make the chrome: a site header and a site footer. Each is usable
 on its own, and between them they are what every storefront page sits inside.
 
@@ -22,6 +24,8 @@ same header wear another brand's words without a fork.
   currency.
 
 ## Account Entry
+
+::phase{id="pre-store-launch" priority="P1" rules="membership"}
 
 - **`SiteHeader`** — a compound header wraps the design-system `Nav` with
   session-aware account entry: Sign In as a primary button when signed out; the

@@ -4,6 +4,8 @@ audience: operator
 order: 5
 ---
 
+::phase{id="internal-consignment" priority="P0"}
+
 Consigning at the counter is the vault's intake form with cards set to
 Consign: staff take the consignor, the cards and the photos there, receive
 them into the vault, then set what is consignment's own - the terms and the

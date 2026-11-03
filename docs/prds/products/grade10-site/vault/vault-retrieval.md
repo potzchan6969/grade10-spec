@@ -3,8 +3,8 @@ title: Vault Retrieval
 order: 4
 ---
 
-The collector takes a card out of the vault and home. Phase 3; until then
-staff run retrievals by hand. It replaces the storage
+The collector takes a card out of the vault and home. Not planned yet; until
+it is, staff run retrievals by hand. It replaces the storage
 lane's release; a financed case releases as before -
 [Case Lifecycle](/p/grade10-site/finance/case-lifecycle).
 

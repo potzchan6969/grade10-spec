@@ -9,6 +9,8 @@ platform's own entry, read in the collector's dashboard.
 
 ## Papers
 
+::phase{id="internal-consignment" priority="P1" rules="vault-terms,custody-receipt,incentive-ledger,consignment-agreement,settlement-statement"}
+
 - 🚧 **Vault Terms** — signed by the collector at the first intake: the storage fee in force, the incentive rules (the rate, eligibility, the daily drip, the day forfeited on retrieval) and the retrieval terms - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
 - 🚧 **Custody Receipt** — each intake: the cards, where they are held, their condition against the photos; confirmed by the collector and recorded by staff
 - 🚧 **Incentive Ledger** — daily, per card: the price used, the liquidity factor, the rate, the amount earned and the amount cashed out - [Incentive](/p/grade10-site/vault/incentive)
@@ -19,6 +21,8 @@ platform's own entry, read in the collector's dashboard.
 - 🚧 **Retrieval Note** — when a card is handed back: the cards, the ID checked, the condition and the day's incentive forfeited; confirmed by whoever collects and recorded by staff - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#collection)
 
 ## Rules
+
+::phase{id="internal-consignment" priority="P1"}
 
 - **Never Edited** — a paper is made from stored data; a correction is a new version
 - 🚧 **Records** — timestamped, never edited, and exported to PDF from the dashboard

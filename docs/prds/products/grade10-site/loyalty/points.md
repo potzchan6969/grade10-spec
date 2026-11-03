@@ -4,6 +4,8 @@ spec: grade10-site/loyalty/programme
 order: 1
 ---
 
+::phase{id="pre-store-launch" priority="P0"}
+
 ## Rules
 
 | Rule | Value |
@@ -16,6 +18,8 @@ order: 1
 | Timing | **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter; a ticket order earns when it is confirmed - [Buying Tickets](/p/grade10-site/ticketing/buying) |
 
 ## Qualification Criteria
+
+::phase{id="store-launch-2" priority="P0"}
 
 Points are earned from the **net paid amount after any discount or coupon,
 excluding shipping and tax**, so a redemption never earns back part of what it
@@ -37,6 +41,8 @@ it: the whole discount sits on the goods, as Shopify allocates it.
 A fully discounted order earns nothing and writes no ledger entry.
 
 ## Backend Flow
+
+::phase{id="store-launch-2" priority="P0"}
 
 An order's earn is written once, the first time the order completes.
 
@@ -190,6 +196,8 @@ order then, in order:
 :::
 
 ## Refunds
+
+::phase{id="store-launch-2" priority="P1"}
 
 A refund takes back the points the refunded goods earned, and never more than
 the member still holds from them.

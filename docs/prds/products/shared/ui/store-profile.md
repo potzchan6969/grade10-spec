@@ -4,6 +4,8 @@ spec: shared/ui/store-profile
 order: 10
 ---
 
+::phase{id="store-launch-1" priority="P2"}
+
 Three blocks make the account profile, rendered the same way by both brands'
 stores: a card that frames the surface, the read view of a collector's basic
 information, and the form that edits it. The details and the form render

@@ -4,6 +4,8 @@ spec: grade10-site/loyalty/programme
 order: 4
 ---
 
+::phase{id="store-launch-2" priority="P0"}
+
 ## Rules
 
 | Rule | Value |

@@ -4,6 +4,8 @@ spec: shared/console/audit
 icon: list-magnifying-glass
 ---
 
+::phase{id="auction" priority="P2"}
+
 Every operator action across every product is written to a tamper-evident log,
 and the Audit section of the admin console reads all of them as one list. An
 auditor — somebody holding that role and nothing else — filters and pages back

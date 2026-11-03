@@ -4,6 +4,8 @@ spec: shared/ui/auction-order
 order: 10
 ---
 
+::phase{id="auction" priority="P2"}
+
 Blocks make a winner's auction order, composed by every application that
 shows it: the Winner Order page body and the delivery address form. What an
 order means is [Winner

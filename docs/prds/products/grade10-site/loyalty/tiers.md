@@ -4,6 +4,8 @@ spec: grade10-site/loyalty/programme
 order: 2
 ---
 
+::phase{id="pre-store-launch" priority="P0"}
+
 ## Ladder
 
 | Tier | Earns | Reached by | Kept by |

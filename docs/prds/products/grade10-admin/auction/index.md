@@ -4,6 +4,8 @@ summary: Drafting, publishing and closing out the lots collectors bid on.
 icon: gavel
 ---
 
+::phase{id="auction" priority="P2"}
+
 The operator half of the auction, on one page: a listing is drafted, filled
 with catalogue copy and a gallery, priced and scheduled, and published or
 called off, and a won lot is worked forward until the card is in the buyer's

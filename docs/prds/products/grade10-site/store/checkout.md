@@ -4,6 +4,8 @@ spec: grade10-site/store/checkout
 order: 5
 ---
 
+::phase{id="store-launch-1" priority="P0"}
+
 Checkout is Shopify's page, under `checkout.grade10.com`. The store hands it
 the cart, Shopify takes the address and the money, and the order comes back
 to Grade10.
@@ -75,6 +77,8 @@ In My Orders.
 - **Order Labels** — the shared order-status labels, with no unpaid badge of its own
 
 ## Guest Checkout
+
+::phase{id="store-launch-2" priority="P1" rules="no-points"}
 
 - **Gateway** — the signed-out drawer's primary button, Check out as guest, checks out the cart this browser holds; under it a quiet Sign in link for points and rewards, and no extra step — [Cart Drawer](/p/grade10-site/store/cart#checkout)
   - **A Public Code** — the guest may type one or pick one in the drawer; a member's own codes and rewards are never shown to a guest — [Discounts](/p/grade10-site/store/discounts#public-codes)

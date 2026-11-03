@@ -4,6 +4,8 @@ spec: grade10-site/loyalty/expiry-reminders
 order: 10
 ---
 
+::phase{id="pre-store-launch" priority="P2"}
+
 ## Values
 
 | Rule | Value |

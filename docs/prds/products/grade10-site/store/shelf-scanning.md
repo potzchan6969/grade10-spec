@@ -4,6 +4,8 @@ spec: grade10-site/store/shelf-scanning
 order: 8
 ---
 
+::phase{id="internal-consignment" priority="P2"}
+
 Shelf scanning lets a shopkeeper point the card scanner at a product on the
 shop's shelf and see what the store sells it as. The scanner opens at the
 site's `/scan`; the store keeps what it knows in step with the catalogue.

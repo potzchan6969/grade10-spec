@@ -4,6 +4,8 @@ spec: grade10-site/store/wallet-member-card
 order: 8
 ---
 
+::phase{id="pre-store-launch" priority="P1"}
+
 ## Wallets
 
 | Wallet | Code | Identifies | Spends and collects | Offered |

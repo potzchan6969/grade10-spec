@@ -5,6 +5,8 @@ audience: operator
 order: 4
 ---
 
+::phase{id="auction" priority="P1"}
+
 ## Roles
 
 There are seven roles, from one closed set: `user`, `staff`, `support`, `finance`, `treasurer`, `auditor` and `admin`. A name outside the set is dropped.

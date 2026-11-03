@@ -5,6 +5,8 @@ audience: operator
 order: 7
 ---
 
+::phase{id="auction" priority="P2"}
+
 ## What Lands on the Trail
 
 - **Identity writes** — ban, unban, set-role, revoke, a trusted product creating a new user id or flipping one to verified, account deletion, and second-factor enable, disable and recovery regenerate

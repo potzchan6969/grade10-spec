@@ -3,6 +3,8 @@ title: Store Listings
 order: 10
 ---
 
+::phase{id="internal-consignment" priority="P0"}
+
 How an item goes on sale in the store: one Shopify product a Grade10 admin
 creates, describes, prices and takes down, whether a collector consigned the
 item or the house owns it.
@@ -24,12 +26,14 @@ item or the house owns it.
 - 🚧 **Managed Here** — the listing is run from the admin panel: a consigned
   item's from its consignment, house stock's from its store listing; never
   from the Shopify admin - [Admin Homes](#admin-homes)
-- 🚧 **Phase 1: the Tills** — listed items sell at the shop's tills and events
+- 🚧 **The Tills First** — listed items sell at the shop's tills and events
   until online opens; each is also published to grade10.com, which sells
   nothing while the store is closed, so the shelf scanner names it -
   [Shelf Scanning](/p/grade10-site/store/shelf-scanning#slabs)
 
 ## What the Product Shows
+
+::phase{id="store-launch-1" priority="P1" rules="filters,before-online-opens"}
 
 Every field below comes from the item and is sent again whenever it changes.
 
@@ -98,6 +102,8 @@ Every field below comes from the item and is sent again whenever it changes.
 
 ## Pricing by Rule
 
+::phase{id="internal-consignment" priority="P2"}
+
 Later: a listing can follow a rule instead of a staff price.
 
 - **Manual or Rule** — each listing is one or the other; a new listing starts
@@ -151,7 +157,7 @@ its product, and the shop is where it sells.
   codes in the shop - owner, 2026-11-03
 - **Any item, one unit** — every item is one unit, consigned or house stock, in
   any category - owner, 2026-11-03
-- **Phase 1 publishes to grade10.com** — a listed item is published to the
+- **Published to grade10.com from the first listing** — a listed item is published to the
   website's channel too, so the shelf scanner names it; nothing sells online
   while the store is closed, rather than the scanner going blind to listings
   until online opens - owner, 2026-11-03

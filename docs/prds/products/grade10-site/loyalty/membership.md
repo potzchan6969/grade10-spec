@@ -4,6 +4,8 @@ spec: grade10-site/loyalty/programme
 order: 6
 ---
 
+::phase{id="pre-store-launch" priority="P0"}
+
 An account is a member. The membership is run from `/membership`; the
 collector's name, bio and email are shown on
 [the account profile](/p/grade10-site/account/profile).
@@ -43,6 +45,8 @@ removed from the product. The code still carries them and is to be removed.
 :::
 
 ## Purchases Before the Account
+
+::phase{id="store-launch-2" priority="P1"}
 
 A sale rung up at the till as a guest is not lost: it earns once it has an
 owner. An order placed through the site's guest checkout gets its owner from the

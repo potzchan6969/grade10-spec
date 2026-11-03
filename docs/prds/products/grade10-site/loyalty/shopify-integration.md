@@ -4,6 +4,8 @@ spec: grade10-site/store/membership
 order: 7
 ---
 
+::phase{id="store-launch-2" priority="P0"}
+
 Shopify is the online checkout and the till: it prices the basket, takes the
 payment and shows a discount, and never holds a balance, a tier or a coupon.
 

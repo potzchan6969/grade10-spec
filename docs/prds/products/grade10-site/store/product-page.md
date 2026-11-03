@@ -4,6 +4,8 @@ spec: grade10-site/store/product-page
 order: 3
 ---
 
+::phase{id="store-launch-1" priority="P0"}
+
 The product details page shows one product, its price, and the one item for
 sale a collector can add.
 
@@ -36,20 +38,28 @@ sale a collector can add.
 
 ## Free Pick-up
 
+::phase{id="store-launch-1" priority="P1"}
+
 - **Shipping and Pick-up Lines** — the same on every card: shipping calculated at checkout, free pick-up at Hong Kong Grade10 Store
   - **Store Name** — opens Store Locator in the same tab, in the page's language
   - **Shipping Fee** — plain text, not a link: no page stands behind it
 
 ## Shared Link
 
+::phase{id="store-launch-1" priority="P2"}
+
 - **Link Preview** — the card's first picture, fitted whole into the wide box a preview fetcher lays out and padded white; it asks for the wide card
   - **No Picture** — a card the catalogue has no picture for unfurls without one, and asks for the small card
 
 ## You May Also Like
 
+::phase{id="store-launch-1" priority="P2"}
+
 - **Related Cards** — under the card — [You May Also Like](/p/grade10-site/store/cross-sell)
 
 ## Unknown Product Address
+
+::phase{id="store-launch-1" priority="P1"}
 
 - **Not-Found State** — `grade10.com/store/products/<handle>` with no card for the handle shows the Store's own not-found state, in the page's language, still answering 404; its one action returns to the product listing in the same tab
   - **Other Addresses** — one outside an owned surface keeps the site's generic not-found page and its Home action

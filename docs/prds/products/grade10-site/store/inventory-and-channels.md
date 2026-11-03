@@ -3,6 +3,8 @@ title: Inventory and Sales Channels
 order: 9
 ---
 
+::phase{id="internal-consignment" priority="P1"}
+
 Where the store's stock sits, and the channels that sell it.
 
 ## Inventory Location
@@ -25,7 +27,7 @@ Where the store's stock sits, and the channels that sell it.
 | SuperPacks | in a partner's storefront |
 
 - **Same Stock** — every channel sells the shop's stock; the first sale wins and the product comes off the others - [Consigning](/p/grade10-site/consignment/consigning#at-the-store)
-- 🚧 **Items in Phase 1** — consigned cards and house stock sell at the tills only until online opens; each is also published to grade10.com, which sells nothing while the store is closed, so the shelf scanner names it - [Store Listings](/p/grade10-site/store/store-listings#the-listing)
+- 🚧 **Items at the Tills First** — consigned cards and house stock sell at the tills only until online opens; each is also published to grade10.com, which sells nothing while the store is closed, so the shelf scanner names it - [Store Listings](/p/grade10-site/store/store-listings#the-listing)
 - 🚧 **An Item's Product** — every item on sale is one product with one unit, created and priced from the admin panel - [Store Listings](/p/grade10-site/store/store-listings)
 - **Marketplace** — online, later, with no date; one more channel on the same stock
 

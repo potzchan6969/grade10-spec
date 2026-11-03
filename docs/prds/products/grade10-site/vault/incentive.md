@@ -3,6 +3,8 @@ title: Incentive
 order: 2
 ---
 
+::phase{id="internal-consignment" priority="P0"}
+
 A daily amount paid on eligible vaulted cards, consigned or not, from each card's Earning Starts date.
 It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 
@@ -151,7 +153,7 @@ vault, cash out and leave.
 | A sold card stops on the sale | Decided | It stops earning on the day it is marked sold, not at the delivery or the settlement, so a card earns nothing while its sale is being completed - decided by the owner, 2026-10-29 | Owner |
 | A sale is not an early retrieval | Decided | A card sold through consignment forfeits nothing; its vested days are paid on its own release day - built so, 2026-10-27; confirmed in the counter review, round 3, 2026-11-02 | Product |
 | The earnings model | Decided | Terms signed per card - the rate, 30 vesting days, forfeit on the owner's early retrieval, a value cap, Earning Starts, and the early retrieval fee's period and amount; a late pass backdates; earning rules are a deny-list; no account cap, a review instead; vesting always shown beside the wallet, so there is no view to choose; liquidity is the drafted formula with its tiers in US dollars - the counter review, round 3, 2026-11-02 | Product |
-| The wallet in US dollars from the start | Decided | The wallet holds US dollars from Phase 1, so its ledger never needs converting; a fixed price is entered in them - the counter review, round 3, 2026-11-02 | Product |
+| The wallet in US dollars from the start | Decided | The wallet holds US dollars from the first day it holds anything, so its ledger never needs converting; a fixed price is entered in them - the counter review, round 3, 2026-11-02 | Product |
 | SNKRDUNK in yen | 🚧 | Inventory prices SNKRDUNK in yen, so the vault converts a yen price to US dollars through HKD at the ECB's rates and records both rate days, in place of reading SNKRDUNK prices as US dollars already (2026-11-02) - decided by the owner, 2026-11-03 | Owner |
 :::
 

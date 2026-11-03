@@ -9,11 +9,15 @@ the financed lane is unchanged - [Case Lifecycle](/p/grade10-site/finance/case-l
 
 ## Ways In
 
-- 🚧 **Card Event** — staff meet collectors in person and register their cards on the intake form; Phase 1
-- 🚧 **The Shop's Counter** — a collector brings cards to the shop in Causeway Bay; the same form and flow as an event; Phase 2
-- 🚧 **Mail-In** — the collector asks online and posts the cards to the KEC warehouse; Phase 3 - [Mail-In](/p/grade10-site/vault/intake#mail-in)
+::phase{id="internal-consignment" priority="P0" rules="card-event,the-shops-counter"}
+
+- 🚧 **Card Event** — staff meet collectors in person and register their cards on the intake form
+- 🚧 **The Shop's Counter** — a collector brings cards to the shop in Causeway Bay; the same form and flow as an event
+- 🚧 **Mail-In** — the collector asks online and posts the cards to the KEC warehouse; not planned yet - [Mail-In](/p/grade10-site/vault/intake#mail-in)
 
 ## Intake Form
+
+::phase{id="internal-consignment" priority="P0"}
 
 The one form for every in-person intake, at a card event or the shop's counter.
 Keeping a card in the vault and consigning it differ only in what the collector
@@ -56,6 +60,8 @@ signs - [Consignment Counter](/p/grade10-site/consignment/counter).
 
 ## Authentication
 
+::phase{id="internal-consignment" priority="P0"}
+
 Professional staff check that each card is genuine. The check fits around the
 intake, so an intake never waits for it.
 
@@ -68,7 +74,7 @@ intake, so an intake never waits for it.
 
 ## Mail-In
 
-Phase 3. The business hasn't confirmed how mail-in runs, so it is written now and
+Not planned yet. The business hasn't confirmed how mail-in runs, so it is written now and
 built later.
 
 1. 🚧 **Request** — from the collector's account: the cards, each with its condition or certificate and the collector's own photos
@@ -90,6 +96,8 @@ built later.
 
 ## What an Intake Needs
 
+::phase{id="internal-consignment" priority="P0"}
+
 - 🚧 **Account** — a Grade10 account with a confirmed email
 - 🚧 **Phone Number** — on the account, for contact and abuse checks; it proves no identity
 - 🚧 **Signed Declaration** — that the collector owns the cards
@@ -97,6 +105,8 @@ built later.
 - 🚧 **No Identity Check** — identity is verified once per account, only before money leaves Grade10 - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
 
 ## Card States
+
+::phase{id="internal-consignment" priority="P0"}
 
 1. 🚧 **Received** — recorded and photographed at intake, or on arrival at KEC
 2. 🚧 **Authenticating** — at the counter, or later for a card kept unchecked - [Authentication](/p/grade10-site/vault/intake#authentication)
@@ -110,6 +120,8 @@ built later.
 ::image{src="assets/diagrams/vault-card-life.svg" alt="A card in the vault: Received and labelled at Taken At, Authenticating here or later, In the Vault once the Vault Terms seal, Earning from Earning Starts, and Consigned while still earning; some days an earning card is Not Eligible; a card that fails authentication is Failed and returned; an earning card is Retrieved, collected at the shop; a consigned card is Sold and stops earning, or comes back earning when its consignment ends, goes unsold or is rejected"}
 
 ## Custody
+
+::phase{id="internal-consignment" priority="P1"}
 
 - 🚧 **Locations** — the shop in Causeway Bay, the KEC warehouse, and a card event until the card moves
   - **Holds Vaulted Cards** — a setting on each storage unit: the shop's safe and lockers hold vaulted cards, and KEC's units don't until an admin switches them on - [Locations](/p/grade10-admin/inventory/locations#places)
@@ -129,7 +141,7 @@ built later.
 The intake is the top of the funnel, so it asks for as little as it safely
 can: an account, a phone number, a declaration and the ID staff read in hand.
 
-- **Events first, then the shop, then the post** — Phase 1 takes cards in person at card events, where staff reach collectors; the shop's counter joins in Phase 2 on the same form; mail-in waits for Phase 3, once the business settles how parcels are handled
+- **Events first, then the shop, then the post** — card events take cards in person first, where staff reach collectors; the shop's counter joins on the same form; mail-in waits until the business settles how parcels are handled
 - **Storage at nothing for now, as a setting** — a fee would turn away the intakes the incentive is paying for, and a setting leaves room to charge one later without a rebuild; pinned to the Vault Terms, so a fee is never added to terms a collector already signed
 - **Checked at the counter, or later** — the counter check is the usual way, but an intake shouldn't wait for a professional to be free; a card kept unchecked earns and sells nothing until it passes, so taking it early costs nothing
 - **One form, two papers** — keeping and consigning share every step and differ only in what is signed; the Vault Terms never wait on the consignment, so a declined agreement leaves the cards in the vault - the counter review, round 2, 2026-11-02

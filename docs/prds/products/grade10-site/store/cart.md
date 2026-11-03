@@ -4,6 +4,8 @@ spec: grade10-site/store/cart-drawer
 order: 4
 ---
 
+::phase{id="store-launch-1" priority="P0"}
+
 The Cart Drawer opens over the page the collector is on: they check what is in
 the cart, put a promo code and points against it, and go on to checkout or
 back to that page.
@@ -35,6 +37,8 @@ back to that page.
 ::story{id="store-cart-blocks-cartdrawer--unavailable-items-removed" title="Lines whose product left the shop, leaving"}
 
 ## Promo Code
+
+::phase{id="store-launch-2" priority="P1" rules="held-codes,wallet-not-answered,gift"}
 
 - **One Code** — one per cart, typed or picked; a second replaces the first
 - **Typed** — a code the store knows takes its cut off the total at once; one
@@ -71,6 +75,8 @@ back to that page.
 ::story{id="store-cart-blocks-cartdrawerfooter-guest--member-with-public-codes" title="A member's codes beside the public ones"}
 
 ## Points
+
+::phase{id="store-launch-2" priority="P0"}
 
 - **Offered** — to a member the programme knows, with the balance, the rate
   and the most this cart can take after the code
@@ -116,6 +122,8 @@ back to that page.
 ::story{id="store-cart-screens-cart-drawer-guest--guest" title="The drawer's guest checkout"}
 
 ## Pending Operations
+
+::phase{id="store-launch-1" priority="P1"}
 
 - **Wait Before Another Action** — while the drawer reads, saves or starts
   checkout, it takes no cart edit, code or points action, product link or

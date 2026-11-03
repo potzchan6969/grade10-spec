@@ -3,6 +3,8 @@ title: Consignment Dashboard
 order: 3
 ---
 
+::phase{id="internal-consignment" priority="P2"}
+
 One internal view for consignment staff to turn vaulted cards into
 consignments, and consignments into sales, faster. The measure is conversion:
 the share of vaulted cards that get consigned, and the time it takes.

@@ -4,6 +4,8 @@ spec: grade10-site/store/order-history
 order: 6
 ---
 
+::phase{id="store-launch-1" priority="P0"}
+
 My Orders is the signed-in collector's way back to Store purchases after
 checkout: active and past purchases in one place, each order a click away. It
 has its own address under the store rather than sitting inside the profile
@@ -42,11 +44,15 @@ the shop's gate, not the profile's.
 
 ## Product Pictures
 
+::phase{id="store-launch-1" priority="P2"}
+
 - 🚧 **Recognise a Purchase** — each item shows its product's current
   picture, as the cart does, earlier purchases too; with no picture, the
   placeholder, and the order still reads
 
 ## Guest Orders
+
+::phase{id="store-launch-2" priority="P1" rules="no-points"}
 
 - **Joined Guest Orders** — a paid guest order is listed from the moment it
   joins the account its email proves —

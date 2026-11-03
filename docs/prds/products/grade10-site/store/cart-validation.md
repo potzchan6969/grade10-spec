@@ -4,6 +4,8 @@ spec: grade10-site/store/cart-validation
 order: 4
 ---
 
+::phase{id="store-launch-1" priority="P0"}
+
 Cart Validation is the promise behind every cart decision: a held line is only
 an intention until the shop answers what it can sell now.
 
@@ -47,6 +49,8 @@ an intention until the shop answers what it can sell now.
 
 ## Failed Checks
 
+::phase{id="store-launch-1" priority="P1"}
+
 - **Check That Cannot Finish** — every affected line reads unchecked, Retry is
   offered, and checkout stays unavailable until the store has a current answer
   - **Unchecked State** — replaces each line's last availability and price,
@@ -56,6 +60,8 @@ an intention until the shop answers what it can sell now.
   [Store Cart](/p/shared/ui/store-cart) shows a cart not yet read
 
 ## Measurement
+
+::phase{id="store-launch-1" priority="P2"}
 
 - **Preventable checkout refusal share** — for Grade10 production checkouts,
   count checkout-time `contradicted` outcomes in `store.checkout.outcome`

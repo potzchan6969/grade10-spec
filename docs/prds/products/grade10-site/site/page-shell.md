@@ -4,6 +4,8 @@ spec: grade10-site/site/page-shell
 order: 1
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 One wrapper renders every surface of the site, not-found included, so no
 surface can ship without the site around it. It gives the page exactly one
 banner, one main and one contentinfo landmark, and adds no heading, copy or
@@ -67,6 +69,8 @@ controls do not appear or disappear.
   language and search controls to its left; the Cart control stays where it is
 
 ## Account Menu
+
+::phase{id="pre-store-launch" priority="P1" rules="membership"}
 
 - **Account menu** — signed in, an avatar sits above the email, above
   the items: My Auctions and Sign Out on auction launch; My Orders and My

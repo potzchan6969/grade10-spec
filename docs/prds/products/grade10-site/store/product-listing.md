@@ -4,6 +4,8 @@ spec: grade10-site/store/product-listing
 order: 2
 ---
 
+::phase{id="store-launch-1" priority="P0"}
+
 ## Products Display
 
 - **Product Count** — number of products given the filters
@@ -24,6 +26,8 @@ order: 2
 
 ## Filters
 
+::phase{id="store-launch-1" priority="P1"}
+
 - **Filter Groups** — lists of options to tick
   - **Worlds** — such as Pokémon and One Piece; the top five, then a link to the rest
   - **Types** — such as Graded Card and Booster Box; always listed in full
@@ -42,6 +46,8 @@ order: 2
 
 ## Sort
 
+::phase{id="store-launch-1" priority="P1"}
+
 - **Sort Options** — Latest (default), lowest price, highest price
   - **Scope** — the whole store
   - **Sold Out** — last, whichever the sort
@@ -53,6 +59,8 @@ order: 2
 :::
 
 ## Search
+
+::phase{id="store-launch-1" priority="P1"}
 
 - **Search Box** — wide screens only, at the top of the filter sidebar
   - **Suggestions** — up to five products and five worlds or types, from the whole store
@@ -72,6 +80,8 @@ order: 2
 
 ## Links and Back Button
 
+::phase{id="store-launch-1" priority="P2"}
+
 - **Address** — holds the collection, filters, search and sort, so a link opens the same view and Back undoes the last change
   - **Scroll Position** — a link, or Back from a product, starts at the top
 
@@ -81,6 +91,8 @@ order: 2
 4. `grade10.com/store/products/<handle>` — a product page
 
 ## Catalogue Source
+
+::phase{id="store-launch-1" priority="P1"}
 
 - **Source** — the store's own copy of the catalogue, so browsing works while Shopify is down
   - **Product changes** — a change Shopify reports by webhook is on every

@@ -4,6 +4,8 @@ spec: grade10-site/auction/listing-page
 order: 2
 ---
 
+::phase{id="auction" priority="P0"}
+
 Where a collector meets a lot: the catalogue card, the lot's own page with its
 gallery and status, and the admin panel an operator makes the lot in.
 

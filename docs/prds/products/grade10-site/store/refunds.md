@@ -4,6 +4,8 @@ spec: grade10-site/store/order-settlement
 order: 21
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 A refund is money going back, and everything that rode on it going back with it.
 Staff take it in Shopify; the collector's order, their points and their coupons
 follow from there.
@@ -22,6 +24,8 @@ follow from there.
 
 ## What Comes Back to the Programme
 
+::phase{id="store-launch-2" priority="P1"}
+
 - **Earning** — clawed back for the goods that came back; never for the
   delivery, and never for goods that earned nothing
 - **Points Tender** — all the goods back, or none of it
@@ -33,6 +37,8 @@ follow from there.
     earned back, a gift card kept) gets the points back from an operator by hand
 
 ## Pricing a Return
+
+::phase{id="store-launch-2" priority="P1"}
 
 - **What the Refund Names** — what came back, read against what the order
   earned on

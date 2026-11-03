@@ -4,6 +4,8 @@ spec: grade10-site/site/crawlable-pages
 order: 2
 ---
 
+::phase{id="store-launch-1" priority="P2"}
+
 A public surface is one a collector reaches with no session, on a build that
 carries it — [Carried Surfaces](/p/grade10-site/site/carried-surfaces). Every
 one of them puts its title, description, headline and static copy in the first

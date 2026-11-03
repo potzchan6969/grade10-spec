@@ -4,6 +4,8 @@ spec: grade10-site/commerce/order-status
 order: 4
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 Order Status is the one badge every Store surface uses for where an order
 stands. [My Orders](/p/grade10-site/store/order-history) and
 [Order Details](/p/grade10-site/store/order-detail) both take it from one

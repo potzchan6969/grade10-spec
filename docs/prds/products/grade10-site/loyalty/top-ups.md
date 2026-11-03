@@ -3,6 +3,8 @@ title: Top-ups
 order: 11
 ---
 
+::phase{id="pre-store-launch" priority="P0"}
+
 ## Packs
 
 A member buys points in packs an operator sets.

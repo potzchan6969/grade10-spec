@@ -4,6 +4,8 @@ spec: shared/ui/auth-sign-in
 order: 8
 ---
 
+::phase{id="auction" priority="P2"}
+
 Sign-in is a modal dialog over the page that asked for it, not a page of its
 own. The page beneath stays mounted while the dialog is open, so a collector
 asked to sign in mid-flow — adding a card to the cart, placing a bid — comes

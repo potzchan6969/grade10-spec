@@ -3,6 +3,8 @@ title: KYC Service
 order: 4
 ---
 
+::phase{id="auction" priority="P1"}
+
 | Rule | Value |
 | --- | --- |
 | A started check left unfinished | Expires after **24 hours** |

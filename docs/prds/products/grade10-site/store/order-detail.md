@@ -4,6 +4,8 @@ spec: grade10-site/store/order-detail
 order: 7
 ---
 
+::phase{id="store-launch-1" priority="P0"}
+
 ## Order
 
 - **Owner-Only Address** — `grade10.com/store/my-orders/<order-id>`, for the
@@ -64,6 +66,8 @@ order: 7
 - 🚧 **Refund Reason Data** — the Store keeps each Shopify refund note and makes its non-empty text available as the refund reason on the owner read and the valid order-link read; no approval or reason mapping. The frontend display is follow-on work.
 
 ## Order Summary
+
+::phase{id="store-launch-2" priority="P1" rules="points,points-to-earn"}
 
 - **Full Refund** — the paid total stays, and the whole amount shows as its
   Refund row below it: charged, then returned
@@ -126,6 +130,8 @@ order: 7
 ::story{id="store-order-detail-screens-order-link--member-order-signed-out" title="A member's order link, signed out"}
 
 ## Back From Checkout
+
+::phase{id="store-launch-1" priority="P1"}
 
 - **Latest Order** — `grade10.com/orders/latest`, where the Continue button on
   Shopify's Thank you page lands: the order this browser last sent to Shopify

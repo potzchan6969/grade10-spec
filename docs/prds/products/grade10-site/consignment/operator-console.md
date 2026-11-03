@@ -5,6 +5,8 @@ audience: operator
 order: 4
 ---
 
+::phase{id="internal-consignment" priority="P0"}
+
 The Consignment section of the admin console: a queue of consignments cut by
 what each one waits for, one consignment's page, the treasurer's payouts and
 the settings the schedule runs on.

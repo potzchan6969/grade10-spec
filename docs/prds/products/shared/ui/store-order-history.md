@@ -4,6 +4,8 @@ spec: shared/ui/store-order-history
 order: 7
 ---
 
+::phase{id="store-launch-1" priority="P2"}
+
 An Order History page is four blocks from one component source: a status badge
 carrying the six Status-set variants, a line item showing image, product×qty
 and line total, an order card with its header metadata and a horizontally

@@ -3,6 +3,8 @@ title: Auction Service
 order: 1
 ---
 
+::phase{id="auction" priority="P2"}
+
 One auction backend (`apps/backend/grade10/auction`) runs every auction for all storefronts: a product unit is auctioned once, the grade10 site and the zzz storefront display the same live auction, and their users bid against each other. Admins manage the catalog and post-auction fulfillment. A bid holds no money on the bidder's card; 🚧 the winner pays an invoice by card checkout or bank transfer. Builds on [Account Data](/platform/account-data) (data ownership) and [Multi-Product Assembly](/platform/multi-product) (the isolation this service is the recorded exception to).
 
 ## Sharing and trust

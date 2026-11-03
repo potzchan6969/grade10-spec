@@ -5,6 +5,8 @@ order: 22
 
 ## Today
 
+::phase{id="store-launch-1" priority="P1"}
+
 - **Address** — Shopify takes it at checkout
 - **Order Badge** — the one [Order Status](/p/grade10-site/commerce/order-status)
   gives the order; no badge says a parcel arrived

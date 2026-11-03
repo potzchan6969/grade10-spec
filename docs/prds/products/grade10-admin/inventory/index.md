@@ -3,6 +3,8 @@ title: Inventory
 icon: package
 ---
 
+::phase{id="internal-consignment" priority="P1"}
+
 Inventory is the house ledger for physical stock more than one application
 consumes. One snapshot per catalogue product answers how much Grade10 holds
 and where every unit stands — available, reserved, vaulted, sold, withdrawn —

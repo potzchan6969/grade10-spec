@@ -4,6 +4,8 @@ spec: shared/auth/sign-in
 order: 1
 ---
 
+::phase{id="auction" priority="P0"}
+
 People sign in with an emailed link, or with Google where the brand offers it. The session each sign-in makes, sign-out, and the staging test endpoint QA signs in through are on this page too; their specs are `shared/auth/session`, `shared/auth/sign-out` and `shared/auth/test-sign-in`. There is no password and no code. A session covers the site or console it was made on, and no other brand. A return address the brand does not trust is ignored.
 
 ## Google Sign-In

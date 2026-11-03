@@ -3,6 +3,8 @@ title: Store
 icon: storefront
 ---
 
+::phase{id="store-launch-1" priority="P2"}
+
 The Grade10 store is the trading-card and collectibles shop at
 `grade10.com/store`.
 
@@ -25,6 +27,8 @@ The Grade10 store is the trading-card and collectibles shop at
   4. 🚧 Item listings — each item the store sells, consigned or house stock, is a product Grade10 creates and runs from the admin panel - [Store Listings](/p/grade10-site/store/store-listings)
 
 ## Users
+
+::phase{id="internal-consignment" priority="P2" rules="staff"}
 
 - **Collectors** — browse and buy
 - **Shopkeepers** — sell at the till in the physical shop, through the

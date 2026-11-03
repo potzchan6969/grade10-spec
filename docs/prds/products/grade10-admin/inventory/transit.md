@@ -3,6 +3,8 @@ title: Transit
 order: 4
 ---
 
+::phase{id="internal-consignment" priority="P1"}
+
 ## Values
 
 | Rule | Value |

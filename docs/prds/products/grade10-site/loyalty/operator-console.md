@@ -5,6 +5,8 @@ audience: operator
 order: 9
 ---
 
+::phase{id="pre-store-launch" priority="P1"}
+
 ## Moving Points
 
 An operator moves points by hand from the admin console two ways, and the two
