@@ -18,15 +18,11 @@
   "saveFailed": "Could not save your profile. Try again.",
   "consignments": {
     "view": {
-      "new": "Request received",
-      "toprice": "Received",
-      "tosign": "Ready to sign",
-      "tolist": "Signed",
+      "signing": "Ready to sign",
+      "pending": "Waiting for approval",
       "onsale": "On sale",
       "sold": "Sold",
-      "payout": "Payout on its way",
-      "ended": "Ended: choose what happens next",
-      "returning": "On its way back to you",
+      "ended": "Ended",
       "closed": "Closed"
     },
     "sellerLine": "Sold by {name}",
