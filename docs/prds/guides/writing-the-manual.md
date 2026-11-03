@@ -102,6 +102,8 @@ items in a note, and its stories.
 - **🚧** — confirmed and being built. One line per outcome; remove the mark
   once it ships and is checked
 - **One mark a line** — never 🚧 and ❓ on the same line
+- **Phase** — a mark says what is built; the `::phase` block above a line
+  says when it launches - [Release Phases](/p/shared/planning/release-phases)
 
 ## Naming a Control
 

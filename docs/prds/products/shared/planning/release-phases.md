@@ -8,7 +8,6 @@ Which of the five release phases each section of the manual launches in, how far
 ## Phases
 
 - 🚧 **Phase** — a named release in the order work launches, listed once for every product, with an optional target day or month
-  - **Named Without the Word** — a phase's name never carries the word phase, so a number names one release only
 - 🚧 **The Five** — the releases, in order
   1. **Auction** — the auction
   2. **Internal Consignment** — inventory, vault and consignment, in the admin panel only
@@ -19,7 +18,6 @@ Which of the five release phases each section of the manual launches in, how far
   - **P0** — the phase does not launch without it
   - **P1** — launches in the phase if it is ready; otherwise it moves to the next phase
   - **P2** — stretch; moves like a P1, and is walked after it
-  - **Not a Case's Priority** — a case's priority is its run order, so the two keep separate names and separate values
 - ❓ **Targets** — no phase has a target day or month yet. Product confirms
 - 🚧 **One Plan** — the vault's own three phases and the tills-only "Phase 1" on Consigning and Store Listings give way to the five
   - **Staff-Only Flows** — the vault's and consignment's admin flows launch in Internal Consignment
@@ -42,7 +40,8 @@ The phase sits on the section it belongs to, and part of a section can launch in
   - **Open** — an unconfirmed line, a question rather than unplanned work
 - 🚧 **Adopted per Page** — on a page that names a phase, a line still being built in no phase is flagged
 - 🚧 **Renames Carry It** — renaming a rule moves the blocks that name it, as it moves the cases that trace it
-- 🚧 **First Assignment** — drafted as one table of page, split, phase, release priority and a reason, which the product manager marks up before any block is written
+- 🚧 **First Assignment** — an agent places every page and writes its blocks, with one table of page, split, phase, release priority and a reason, which the product manager marks up - [the assignment](/references/release-phase-assignment)
+  - **Judged Priority** — where nobody gave one: P0 for the main flow a phase needs, P2 for what the product does not fail without, and lower where backend tests already guarantee the behaviour
 
 ## Reading a Phase
 
@@ -79,6 +78,7 @@ QA's unit is a section in a phase on a store page, whose cases trace its rules, 
 
 - 🚧 **A Run per Phase** — the run sheet selects by phase, release priority and readiness, resolves to explicit cases, and opens a run on the run desk once a person confirms its dry run
   - **Ready** — a unit reviewed or further
+  - **Opened From a File** — until the run sheet holds the desk's service token, QA opens the run sheet's file on the desk's Runs page
   - **A Run Names Its Phase** — a run selected by phase records it in its print commit; only such a run leaves cases out of a unit, and results attach to cases whatever the run
 - 🚧 **Which Cases** — what each unit brings to a run
   - **Store Pages** — the cases tracing a rule in the unit
@@ -144,7 +144,7 @@ QA's words in a run's own shape: the run as a list beside the case being walked,
 - 🚧 **A Slip** — a unit moved before the release is a one-line edit of its block, so git keeps the slip
 
 :::detail{title="How it is written" for="engineer"}
-- **Registry** — `phases.yaml` beside the team map: one entry per phase with its id, name, an optional target and its QA environment; `released` is written by the release command alone
+- **Registry** — `phases.yaml` beside the team map: one entry per phase with its id, name, an optional target and its QA environment; `released` is written by the release command alone, and a name carrying the word phase is refused, so a number names one release only
 - **Block** — `::phase{id="store-launch-2" priority="P1"}` under the heading; `rules="held-codes"` names rule anchors, the ones case traces already use
 - **Checks** — the manual's check fails an unknown phase, a priority outside P0 to P2, a rule the section does not have, a rule named twice and two whole-section blocks under one heading; it warns on a line being built in no phase on a page that names one, and on a block naming a released phase. It reads nothing live, so At Risk stays on the board
 - **One Reader** — the manual, the run sheet and the release command read units and readiness from the same pure reader, so a board, a run and a release cannot disagree. Store suites come from the pages; elsewhere the reader takes the OpenSpec suites through the store's reader at build, and a repository without OpenSpec shows no readiness outside the store
@@ -163,7 +163,7 @@ QA deciding what to walk next, the product manager deciding what a phase holds, 
 - **Every line, not only open ones** — pages such as Main Page, Product Details, Tiers and Top-ups carry no mark, yet have not launched; marks say what is built, and a phase says when it launches
 - **A block, not words** — the check can hold a block, the editor can offer it and the run sheet can select on it; a phase written into a line's words was ruled out
 - **No sixth phase for later** — once every page is placed, a line's mark already tells launched from unplanned
-- **Release priority, not priority** — a case's priority is already its run order
+- **Release priority, not priority** — a case's priority is already its run order, so the two keep separate names and separate values
 - **A question never holds a step** — 73 of the 531 sections on the pages hold an unconfirmed line, 42 of them a single one among five or more rules; a ladder that stopped there would hide every result QA marks. A question holds the release instead
 - **Reviewed is a step** — 1,550 cases are draft against 237 reviewed, and the run sheet prints reviewed cases only, so a unit with draft cases is not ready for a run
 - **Capabilities outside the store** — only the store's cases trace a page's rules; elsewhere a section's readiness would be its whole suite's, so the unit is the capability
