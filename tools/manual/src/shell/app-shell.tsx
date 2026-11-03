@@ -1,6 +1,6 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import { type CSSProperties, useState } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useMatch } from "react-router";
 import { useSnapshot } from "../api/snapshot-provider";
 import { useHashFlash } from "../blocks/anchor";
 import { SnapshotFooter } from "./footer";
@@ -38,6 +38,8 @@ function Shell() {
   const [navOpen, setNavOpen] = useState(false);
   const closeNav = () => setNavOpen(false);
   const ready = snapshot.status === "ready";
+  // A run is a list beside a case: it takes the whole width.
+  const desk = useMatch("/runs/:id") !== null;
   // A new page starts at the top and back returns where you left it; a hash
   // belongs to the seek, which keeps looking until the row it names exists.
   useScrollMemory();
@@ -107,7 +109,9 @@ function Shell() {
               <div
                 className={cn(
                   "mx-auto w-full min-w-0",
-                  layout.split && layout.sideShown ? "max-w-none" : "max-w-4xl",
+                  (layout.split && layout.sideShown) || desk
+                    ? "max-w-none"
+                    : "max-w-4xl",
                 )}
               >
                 {snapshot.status === "loading" ? <SnapshotLoading /> : null}

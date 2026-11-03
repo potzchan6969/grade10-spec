@@ -1,7 +1,7 @@
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { Text } from "@grade10/design-system/components/display/text";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
-import { List, SidebarSimple, X } from "@phosphor-icons/react";
+import { ClipboardText, List, SidebarSimple, X } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { useLayout } from "./layout";
 import { RecentBell } from "./recent-bell";
@@ -57,6 +57,16 @@ export function Header({ navOpen, onToggleNav, onNavigate }: HeaderProps) {
 
         <div className="ml-auto flex items-center gap-2 max-sm:gap-1">
           <ManualSearch />
+          <IconButton
+            aria-label="Runs"
+            nativeButton={false}
+            render={<Link onClick={onNavigate} to="/runs" />}
+            size="md"
+            title="Runs"
+            variant="ghost"
+          >
+            <ClipboardText aria-hidden />
+          </IconButton>
           <RecentBell />
           <ThemeToggle />
         </div>

@@ -22,6 +22,21 @@ export const router = createBrowserRouter([
       { path: "recent", element: <RecentPage /> },
       { path: "phases", element: <PhasesPage /> },
       { path: "phases/:phase", element: <PhasesPage /> },
+      // The run desk is QA's alone: a reader never downloads it.
+      {
+        path: "runs",
+        lazy: () =>
+          import("./pages/runs-page").then((page) => ({
+            Component: page.RunsPage,
+          })),
+      },
+      {
+        path: "runs/:id",
+        lazy: () =>
+          import("./pages/run-page").then((page) => ({
+            Component: page.RunPage,
+          })),
+      },
       { path: "references", element: <ReferencesPage /> },
       { path: "references/:slug", element: <ReferencePage /> },
       { path: "*", element: <ManualPage /> },
