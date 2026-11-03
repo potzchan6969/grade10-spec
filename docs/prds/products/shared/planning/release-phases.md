@@ -78,7 +78,7 @@ QA's unit is a section in a phase on a store page, whose cases trace its rules, 
 
 - 🚧 **A Run per Phase** — the run sheet selects by phase, release priority and readiness, resolves to explicit cases, and opens a run on the run desk once a person confirms its dry run
   - **Ready** — a unit reviewed or further
-  - **Opened From a File** — until the run sheet holds the desk's service token, QA opens the run sheet's file on the desk's Runs page
+  - **Opened From a File** — until the run sheet holds the desk's service token, QA opens the run sheet's file on the desk's Runs page; a selection already open as a run is walked there, never opened twice
   - **A Run Names Its Phase** — a run selected by phase records it in its print commit; only such a run leaves cases out of a unit, and results attach to cases whatever the run
 - 🚧 **Which Cases** — what each unit brings to a run
   - **Store Pages** — the cases tracing a rule in the unit
@@ -151,8 +151,9 @@ QA's words in a run's own shape: the run as a list beside the case being walked,
 - **Run Desk** — one Durable Object holds every run in SQLite storage, in a Worker of its own that the manual's Worker reaches through a binding; a manual deploy, made on every push to main, never restarts it or drops a tester's connection
 - **One Address** — the desk's Worker has no address of its own, so every request passes the Access in front of the manual
 - **Reads** — pages and the board fetch results once when opened; only a run's own page holds a live connection
-- **Identity** — Cloudflare Access names the tester by e-mail; a mark keeps the e-mail, and the team map turns it into a handle where it can, never refusing one it cannot
-- **Idempotent Marks** — each mark carries an id, so a retried mark is a no-op and marks made offline send on reconnect
+- **Identity** — Cloudflare Access names the tester by e-mail, read only from an Access token the manual's Worker verifies against the team and application it is set to; with neither set, the desk names nobody and refuses every request; a mark keeps the e-mail, and the team map turns it into a handle where it can, never refusing one it cannot
+- **Idempotent Marks** — each mark carries an id, so a retried mark is a no-op and marks made offline send on reconnect; a mark waits while the desk is unreachable, down or the tester signed out, and is dropped only when the desk refuses it, saying why
+  - **Newer Wins** — a mark made offline carries the mark it was made over, and is refused when someone else has marked the row since, so a late reconnect never overwrites a newer mark
 - **Service Token** — the run sheet, the release command and the finalized-run check reach the desk through an Access service token
 :::
 

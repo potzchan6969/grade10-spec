@@ -262,7 +262,12 @@ export type DeskMe = { email: string };
 export type RunRecord = { run: RunSummary; spec: RunSpec };
 
 /** A mark as the client sends it. */
-export type MarkInput = Omit<Mark, "by" | "at" | "seq">;
+export type MarkInput = Omit<Mark, "by" | "at" | "seq"> & {
+  /** The seq of the row's current mark on this surface when the tester made
+   * this one, 0 for none: a mark someone else has made since refuses it, so
+   * a write queued offline never silently overwrites a newer one. */
+  basis?: number;
+};
 export type ObservationInput = Omit<Observation, "by" | "at" | "seq">;
 
 /** The address the manual's Worker answers the desk on. */

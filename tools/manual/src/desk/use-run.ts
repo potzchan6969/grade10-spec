@@ -196,7 +196,13 @@ export function useRun(
     notices,
     dismiss: (at) => setNotices((held) => held.filter((_, one) => one !== at)),
     mark: (marks) => {
-      outbox.add({ kind: "marks", marks });
+      outbox.add({
+        kind: "marks",
+        marks: marks.map((one) => ({
+          ...one,
+          basis: one.basis ?? basisOf(base, one),
+        })),
+      });
       flush();
     },
     observe: (observations) => {
@@ -219,4 +225,18 @@ export function useRun(
       }
     },
   };
+}
+
+/** The seq of the row's current mark on the surface as the desk last told
+ * this page, 0 for none: the desk refuses the mark if someone else has marked
+ * the row since. */
+export function basisOf(
+  view: RunView | null,
+  input: Pick<MarkInput, "row" | "surface">,
+): number {
+  let seq = 0;
+  for (const mark of view?.marks ?? [])
+    if (mark.row === input.row && mark.surface === input.surface)
+      seq = Math.max(seq, mark.seq);
+  return seq;
 }

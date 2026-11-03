@@ -218,3 +218,18 @@ describe("keeping on sending", () => {
     expect(markIds(outbox)).toEqual(["a"]);
   });
 });
+
+describe("a mark's basis", () => {
+  it("is the seq of the row's newest mark on its surface, 0 for none", async () => {
+    const { basisOf } = await import("../src/desk/use-run.ts");
+    const marks = [
+      { row: "TC1", surface: "web", seq: 3 },
+      { row: "TC1", surface: "web", seq: 9 },
+      { row: "TC1", surface: "mobile", seq: 12 },
+    ];
+    const view = { marks } as unknown as Parameters<typeof basisOf>[0];
+    expect(basisOf(view, { row: "TC1", surface: "web" })).toBe(9);
+    expect(basisOf(view, { row: "TC2", surface: "web" })).toBe(0);
+    expect(basisOf(null, { row: "TC1", surface: "web" })).toBe(0);
+  });
+});
