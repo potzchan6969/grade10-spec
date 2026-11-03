@@ -48,7 +48,7 @@ An order's earn is written once, the first time the order completes.
 - **Till sale** - earns at the counter; one attributed to the member later
   nets the refunds recorded before it lands, as a web order does at completion,
   so it earns on what it still holds and nothing is clawed back
-- 🚧 **Guest order** - never earns, joined to an account or not -
+- **Guest order** - never earns, joined to an account or not -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 - 🚧 **Ticket order** - earns when it is confirmed, under the buyer's email
   alone: buying asks no sign-in, the earn goes to the account behind the
