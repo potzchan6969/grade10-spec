@@ -70,10 +70,10 @@ optional alt live in `grade10-site/auction/listing-media`. An operator also writ
 - Unsold close
   - Stock released: a listing that closes with no winner releases its inventory hold at the close, with no operator step
   - Released note: an Unsold listing says its stock was released, and when
-  - Relist: an Unsold listing's row in the Listings table opens a new draft with the same product, quantity and catalogue copy, once its stock is released, outside a campaign and once per listing
+  - Relist: an Unsold listing's row in the Listings table, or its listing page, opens a new draft with the same product, quantity and catalogue copy, once its stock is released, outside a campaign and once per listing
   - Earlier holds freed: holds left by earlier Unsold closes are released once
   - Relist public address: Relist Save frees the Unsold source's slug and assigns it to the new draft in one transaction; the new draft keeps its own listing code; both listings' activity records the transfer; no redirect table
-  - Relisted badge: once Relist Save linked a successor, the Unsold source shows Relisted beside Unsold on its listing detail header and in the Listings table Status column
+  - Relisted badge: once Relist Save linked a successor, the Unsold source shows Relisted beside Unsold on its listing detail header and in the Listings table Status column; a canceled listing relisted before the Unsold-only rule shows Relisted beside Canceled
 - Unit-aware source selection
   - For a selected Cert record, the main selector offers the product's untagged source media and media tagged to that record. Every Cert record has a Cert ID.
   - Other media tagged to a printed-Cert record stays outside the main selector; the separately labelled drawer contains only that media, grouped and named by the printed Cert ID, which an explicit Add to listing action names.
@@ -2017,8 +2017,9 @@ completed.
 
 ### Requirement: Relist opens a new draft from an Unsold listing
 
-The Listings table row of an Unsold listing SHALL offer **Relist** when every
-condition holds, and SHALL NOT show it otherwise; no other row SHALL offer it:
+The Listings table row of an Unsold listing, and that listing's page, SHALL
+offer **Relist** when every condition holds, and SHALL NOT show it otherwise;
+no other row or listing page SHALL offer it:
 
 | Condition | Rule |
 | --- | --- |
@@ -2047,7 +2048,9 @@ condition holds, and SHALL NOT show it otherwise; no other row SHALL offer it:
    present, else the listing id. Grade10 SHALL NOT create a redirect or alias
    for the move. Once that Save linked a successor, the Unsold source's listing
    detail header and its Listings table Status column SHALL show a **Relisted**
-   badge beside **Unsold**.
+   badge beside **Unsold**. A canceled listing that already has a successor,
+   from before Relist was limited to Unsold listings, SHALL show **Relisted**
+   beside **Canceled** in the same places.
 
 The gallery SHALL be copied into the new listing, so later edits to either
 gallery do not change the other.

@@ -89,7 +89,9 @@ the card is in the winner's hands. The collector's half is
   transaction, so a shared link opens the live successor once it is
   published. The new draft still receives its own listing code. No redirect
   table. Both listings' activity logs record the transfer. The Unsold source
-  shows Relisted beside Unsold once Relist Save linked a successor
+  shows Relisted beside Unsold once Relist Save linked a successor; a
+  canceled listing relisted while the code briefly allowed it shows Relisted
+  beside Canceled
 - **A relist's first photo saves it** — Relist stores nothing until Save,
   except that the first media upload makes that Save first, so the photo has
   a listing to belong to; a later Save keeps the same draft
@@ -134,14 +136,11 @@ the card is in the winner's hands. The collector's half is
   reserve, extension, taxonomy and sandbox start as on any new draft. Relist
   shows on an Unsold listing, never on one a collector won, to an operator
   who can operate auctions; nothing is stored until Save. It shows on the
-  listing's row in the Listings table, once its stock was released, and not
+  listing's row in the Listings table and on its listing page, under the same
+  rule, once its stock was released, and not
   on a listing in a campaign or one already relisted. A consigned lot is
   relisted from its consignment, and reads Relist from consignment with its
   reference
-- ❓ **A canceled lot relisted before the Unsold-only rule** - a canceled
-  listing relisted while the code briefly allowed it keeps its successor link;
-  whether it shows Relisted beside Canceled or no badge is open. Product
-  confirms
 - **Media** — an operator can choose reusable assets from the selected
   inventory product or upload media directly to the listing, then order every
   item together. A chosen product asset becomes part of the listing on Save:
@@ -644,6 +643,8 @@ settings.
 | Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
 | A relist's first upload | Decided | The first media upload in a Relist editor makes the Relist Save, holding stock and moving the slug, and later Saves keep that draft. Holding uploads until Save was ruled out: the editor would have to stage media with no listing behind it. | Product |
 | Relist public address | Decided | Relist Save moves the Unsold source's slug onto the new draft and frees it on the source, in one transaction; the new draft keeps its own listing code. Chosen over a redirect from the old address, so one canonical URL stays with the lot that is live. Activity on both listings records the transfer. | Product (@jeff) |
+| Where Relist shows | Decided | On the Unsold listing's row in the Listings table and on its listing page, under one rule. Chosen over the row only, which would take Relist off the page an operator opens a lot from ([#1737](https://github.com/9gag/grade10/issues/1737)). | Product (@htonyl) |
+| A canceled lot already relisted | Decided | Relisted shows beside Canceled on a canceled listing that has a successor from the short time the code allowed it; no canceled listing can be relisted now. Chosen over no badge, since the link is real history ([#1737](https://github.com/9gag/grade10/issues/1737)). | Product (@htonyl) |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |
 | Cert-aware inventory media | Decided | A Cert listing's main selector offers untagged product media and media tagged to that Cert; other Cert media sits in a labelled drawer and joins only through an explicit Add that names the source Cert ID. A No Cert ID listing starts with untagged media only. Existing listing-edit authority covers the drawer; selected sources are copied into the gallery snapshot. | Product |
