@@ -186,6 +186,9 @@ const ROW_RULE = /^\|\s*(?:(?:🚧|❓)\s*)?(?:\*\*)?([^|*]+?)(?:\*\*)?\s*\|/u;
 const DIVIDER = /^\s*\|[\s:|-]+\|\s*$/;
 const STARTS = [HEADING, FENCE, LIST_ITEM, TABLE_ROW, /^\s*:{2,}/];
 
+const indentOf = (text: string) =>
+  (/^\s*/.exec(text) as RegExpExecArray)[0].replace(/\t/g, "    ").length;
+
 function markOf(line: string): LineMark {
   if (BUILDING.test(line)) return "building";
   if (OPEN.test(line)) return "open";
@@ -275,15 +278,22 @@ export function outlineOf(ast: PageAst): PageOutline {
       }
       table = null;
       const item = LIST_ITEM.exec(line);
+      if (!item && last && !STARTS.some((start) => start.test(line))) {
+        last.text = `${last.text} ${line.trim()}`;
+        if (last.mark === null) last.mark = markOf(last.text);
+        continue;
+      }
+      const indent = indentOf(item ? item[1] : line);
+      // A line belongs to the list items indented less than it; one at the
+      // list's own indent or lower ends them.
+      while (
+        rules.length > 0 &&
+        (rules.at(-1) as { indent: number }).indent >= indent
+      )
+        rules.pop();
+      const within = rules.map((one) => one.anchor).reverse();
       if (item) {
-        const indent = item[1].replace(/\t/g, "    ").length;
-        while (
-          rules.length > 0 &&
-          (rules.at(-1) as { indent: number }).indent >= indent
-        )
-          rules.pop();
         const named = RULE_NAME.exec(item[2]);
-        const within = rules.map((one) => one.anchor).reverse();
         last = push({
           text: item[2].trim(),
           mark: markOf(line),
@@ -295,13 +305,7 @@ export function outlineOf(ast: PageAst): PageOutline {
         if (named) rules.push({ indent, anchor: traceAnchor(named[1]) });
         continue;
       }
-      if (last && !STARTS.some((start) => start.test(line))) {
-        last.text = `${last.text} ${line.trim()}`;
-        if (last.mark === null) last.mark = markOf(last.text);
-        continue;
-      }
-      rules.length = 0;
-      last = push({ text: line.trim(), mark: markOf(line), within: [] });
+      last = push({ text: line.trim(), mark: markOf(line), within });
     }
   };
 

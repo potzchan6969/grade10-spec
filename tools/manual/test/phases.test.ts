@@ -188,6 +188,38 @@ describe("nearest block wins", () => {
     });
   });
 
+  it("keeps a rule's children in its phase past a paragraph inside it", () => {
+    const nested = outlineOf(
+      parsePage(`---
+title: T
+---
+
+## Section
+
+::phase{id="auction" priority="P0"}
+
+::phase{id="store-launch-1" priority="P0" rules="parent"}
+
+- **Parent** — the rule
+  - **Child One** — first
+
+  A paragraph still inside the parent.
+  - **Child Two** — second
+
+A paragraph after the list.
+`),
+    );
+    const at = phasesOf(nested);
+    const read = (text: string) => {
+      const line = nested.lines.find((one) => one.text.includes(text));
+      return line ? at.line(line)?.phase : undefined;
+    };
+    expect(read("Child One")).toBe("store-launch-1");
+    expect(read("still inside")).toBe("store-launch-1");
+    expect(read("Child Two")).toBe("store-launch-1");
+    expect(read("after the list")).toBe("auction");
+  });
+
   it("never reads a detail's lines", () => {
     expect(lineOf("never-counted")).toBeUndefined();
   });
