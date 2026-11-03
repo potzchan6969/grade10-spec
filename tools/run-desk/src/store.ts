@@ -9,6 +9,7 @@ import {
   type MarkValue,
   type Observation,
   type ObservationInput,
+  type RowHistory,
   type RowObjects,
   type RunRecord,
   type RunCase,
@@ -534,6 +535,22 @@ export class DeskStore {
       at,
     );
     return seq;
+  }
+
+  /** Every mark a row was given, oldest first: who changed it and when. */
+  history(id: string, row: string): RowHistory {
+    this.summary(id);
+    if (!this.#held(id).rows.some((one) => one.key === row))
+      throw new DeskError(404, `run ${id} has no row ${row}`);
+    return {
+      marks: this.#sql
+        .exec(
+          "select * from marks where run = ? and row = ? order by seq",
+          id,
+          row,
+        )
+        .map(toMark),
+    };
   }
 
   #currentMarks(run?: string): (Mark & { run: string })[] {

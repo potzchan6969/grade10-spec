@@ -158,6 +158,10 @@ async function route(
         throw new DeskError(426, "the live connection is a WebSocket");
     }
   }
+  if (parts.length === 5 && leaf === "rows" && row && rowLeaf === "marks") {
+    only("GET");
+    return done(200, store.history(id, row));
+  }
   if (parts.length === 5 && leaf === "rows" && row && rowLeaf === "objects") {
     only("PUT");
     const { value, live } = store.setObjects(

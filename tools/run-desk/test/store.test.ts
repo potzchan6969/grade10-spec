@@ -624,3 +624,27 @@ test("a finalized run's print record names its cases in run order", () => {
   assert.deepEqual(record.spec, aSpec());
   assert.throws(() => store.record("7"), refused(404));
 });
+
+test("a row's history keeps every mark with who and when, oldest first", () => {
+  const { store } = deskInMemory();
+  const { id } = store.open(aSpec(), TESTER);
+  const row = store.view(id).rows[0].key;
+  store.mark(
+    id,
+    { marks: [{ id: "m1", row, surface: "web", value: "fail" }] },
+    TESTER,
+  );
+  store.mark(
+    id,
+    { marks: [{ id: "m2", row, surface: "web", value: "pass" }] },
+    TESTER,
+  );
+  assert.deepEqual(
+    store.history(id, row).marks.map((one) => [one.id, one.value, one.by]),
+    [
+      ["m1", "fail", TESTER],
+      ["m2", "pass", TESTER],
+    ],
+  );
+  assert.throws(() => store.history(id, "nope"), refused(404));
+});
