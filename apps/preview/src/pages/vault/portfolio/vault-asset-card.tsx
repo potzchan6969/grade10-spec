@@ -1,7 +1,18 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
+import { Warning } from "@phosphor-icons/react";
 import { registerBones } from "boneyard-js";
 import { Skeleton } from "boneyard-js/react";
-import { PORTFOLIO_ASSETS, type VaultAsset } from "../../vault-content";
+import {
+  assetEstDailyUsd,
+  PORTFOLIO_ASSETS,
+  type VaultAsset,
+} from "../../vault-content";
 import vaultAssetCardBones from "./vault-asset-card.bones.json";
 import { VaultAssetStatus } from "./vault-asset-status";
 
@@ -40,6 +51,31 @@ function VaultAssetCardBody({ asset }: { asset: VaultAsset }) {
           </p>
           <p className="line-clamp-3 w-full text-base leading-6 font-medium text-foreground underline-offset-2 group-hover/vault-card:underline">
             {asset.name}
+          </p>
+          <p className="flex w-full items-center gap-1 text-sm text-secondary-foreground tabular-nums">
+            {asset.priceStale ? (
+              <>
+                Est. paused
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger
+                      aria-label="Why the daily estimate is paused"
+                      className="inline-flex size-4 items-center justify-center text-warning outline-none"
+                      render={<span />}
+                    >
+                      <Warning aria-hidden size={14} weight="fill" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      Daily earning paused while the market price is
+                      unavailable. Missed days credit immediately once pricing
+                      resumes.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </>
+            ) : (
+              `Est. ~US$${assetEstDailyUsd(asset).toFixed(2)} / day`
+            )}
           </p>
         </div>
       </div>

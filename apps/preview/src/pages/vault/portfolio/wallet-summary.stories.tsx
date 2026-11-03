@@ -4,7 +4,7 @@ import { PORTFOLIO_SUMMARY } from "../../vault-content";
 import { WalletSummary } from "./wallet-summary";
 
 /**
- * Incentive wallet above the holdings. Incentives accrue daily
+ * Earnings wallet above the holdings. Incentives accrue daily
  * while items stay in custody; the Withdraw CTA unlocks at the minimum.
  */
 const meta = {
@@ -28,15 +28,14 @@ export const Filled: Story = {
     cashedOutUsd: PORTFOLIO_SUMMARY.cashedOutUsd,
     openCashOutCount: 2,
     minWithdrawalUsd: PORTFOLIO_SUMMARY.minWithdrawalUsd,
-    hasPayoutMethod: PORTFOLIO_SUMMARY.hasPayoutMethod,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Incentives available")).toBeVisible();
+    expect(canvas.getByText("Available earnings")).toBeVisible();
     expect(canvas.getByText("Earned all time")).toBeVisible();
     expect(canvas.getByText("In withdrawal")).toBeVisible();
     expect(canvas.getByText("Withdrawn")).toBeVisible();
-    expect(canvas.getByText(/daily while your items/)).toBeVisible();
+    expect(canvas.getByText(/Est. daily earning/)).toBeVisible();
     expect(canvas.getByRole("button", { name: "Withdraw" })).toBeEnabled();
   },
 };
@@ -53,19 +52,6 @@ export const BelowMinimum: Story = {
     expect(
       canvas.getByRole("button", { name: "Minimum US$65 to withdraw" }),
     ).toBeVisible();
-  },
-};
-
-/** No bank account on file — set-up CTA replaces Withdraw. */
-export const NoPayoutMethod: Story = {
-  parameters: {
-    verification: { caseId: "vc_510d9abd-97a8-402a-a99b-4a1d793030b5" },
-  },
-  args: { ...Filled.args, hasPayoutMethod: false },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Set Up Payout" })).toBeVisible();
-    expect(canvas.queryByRole("button", { name: "Withdraw" })).toBeNull();
   },
 };
 

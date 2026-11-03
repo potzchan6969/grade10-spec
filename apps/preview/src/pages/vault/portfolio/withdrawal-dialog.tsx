@@ -460,7 +460,7 @@ function WithdrawalDialog({
     methods.find((method) => method.id === DRAFT_VALUE);
 
   const TITLE: Record<WithdrawalStep, string> = {
-    amount: "Withdraw Incentives",
+    amount: "Withdraw Earnings",
     destination: "Withdraw To",
     "add-method": "Add Withdrawal Method",
     "manual-request": "Manual Withdrawal Request",

@@ -116,7 +116,6 @@ function VaultPortfolioPage({
               cashedOutUsd={PORTFOLIO_SUMMARY.cashedOutUsd}
               dailyIncentiveUsd={PORTFOLIO_SUMMARY.dailyIncentiveUsd}
               earnedAllTimeUsd={PORTFOLIO_SUMMARY.earnedAllTimeUsd}
-              hasPayoutMethod={PORTFOLIO_SUMMARY.hasPayoutMethod}
               inCashOutUsd={PORTFOLIO_SUMMARY.inCashOutUsd}
               minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
               openCashOutCount={openCashOuts}
@@ -157,7 +156,7 @@ function VaultPortfolioPage({
                 Assets
                 <Badge size="sm">{PORTFOLIO_SUMMARY.itemCount}</Badge>
               </TabsTrigger>
-              <TabsTrigger value="incentives">Incentives</TabsTrigger>
+              <TabsTrigger value="incentives">Earnings</TabsTrigger>
               <TabsTrigger value="withdrawal">
                 Withdrawal
                 {openCashOuts > 0 ? (
@@ -255,11 +254,11 @@ export const Filled: Story = {
       expect(
         canvas.getByRole("button", { name: "Submit to Vault" }),
       ).toBeVisible();
-      expect(canvas.getByText("Incentives available")).toBeVisible();
+      expect(canvas.getByText("Available earnings")).toBeVisible();
       expect(canvas.getByText("Earned all time")).toBeVisible();
       expect(canvas.getByText("In withdrawal")).toBeVisible();
       expect(canvas.getByText("Withdrawn")).toBeVisible();
-      expect(canvas.getByRole("tab", { name: "Incentives" })).toBeVisible();
+      expect(canvas.getByRole("tab", { name: "Earnings" })).toBeVisible();
       expect(canvas.getByRole("tab", { name: /^Withdrawal/ })).toBeVisible();
       expect(
         canvas.getByText("2 submissions currently in intake"),
@@ -308,7 +307,7 @@ export const Empty: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("No items in your vault")).toBeVisible();
     expect(canvas.queryByText(/currently in intake/)).toBeNull();
-    expect(canvas.queryByText("Incentives available")).toBeNull();
+    expect(canvas.queryByText("Available earnings")).toBeNull();
   },
 };
 
@@ -326,6 +325,6 @@ export const EmptyWithIntake: Story = {
         canvas.getByText("2 submissions currently in intake"),
       ).toBeVisible(),
     );
-    expect(canvas.queryByText("Incentives available")).toBeNull();
+    expect(canvas.queryByText("Available earnings")).toBeNull();
   },
 };

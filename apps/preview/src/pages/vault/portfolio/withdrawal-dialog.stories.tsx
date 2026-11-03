@@ -81,7 +81,7 @@ export const Amount: Story = {
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
     expect(
-      dialog.getByRole("heading", { name: "Withdraw Incentives" }),
+      dialog.getByRole("heading", { name: "Withdraw Earnings" }),
     ).toBeVisible();
     expect(dialog.getAllByText(/Available: US\$160/).length).toBeGreaterThan(0);
     expect(dialog.getByText("Hong Kong Dollar")).toBeVisible();
@@ -280,7 +280,7 @@ export const Narrow: Story = {
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
     expect(
-      dialog.getByRole("heading", { name: "Withdraw Incentives" }),
+      dialog.getByRole("heading", { name: "Withdraw Earnings" }),
     ).toBeVisible();
   },
 };

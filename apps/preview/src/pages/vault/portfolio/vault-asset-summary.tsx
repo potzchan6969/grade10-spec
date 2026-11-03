@@ -10,8 +10,22 @@ import {
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { Gavel, ShieldCheck, Storefront, TrendUp } from "@phosphor-icons/react";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@grade10/design-system/components/overlays/tooltip";
+import {
+  Gavel,
+  Info,
+  ShieldCheck,
+  Storefront,
+  TrendUp,
+  Warning,
+} from "@phosphor-icons/react";
+import {
+  assetEstDailyUsd,
   formatHkd,
   statusBadgeVariant,
   type VaultAsset,
@@ -72,9 +86,17 @@ function VaultAssetSummary({
     asset.status === "Live Auction" || asset.status === "Listed";
   const locked = liveListing || asset.status === "Retrieval Pending";
   const price = headlinePrice(asset);
+  const estDailyUsd = assetEstDailyUsd(asset);
+  const daysVaulted = asset.vaultedAt
+    ? Math.max(
+        1,
+        Math.floor((Date.now() - Date.parse(asset.vaultedAt)) / 86_400_000),
+      )
+    : 0;
+  const earnedUsd = Math.round(estDailyUsd * daysVaulted * 100) / 100;
   const showListings = !locked && Boolean(onListForAuction || onListForSale);
   const valuePotentialDescription = valuePotential
-    ? `Est. Graded PSA Value: ${formatHkd(valuePotential.gradedEstimateHkd)} (+${valuePotential.upsidePercent}%)`
+    ? `Est. Graded PSA Value: ${formatHkd(valuePotential.gradedEstimateHkd)}`
     : undefined;
 
   return (
@@ -102,26 +124,73 @@ function VaultAssetSummary({
       <Card className="bg-background-subtle">
         <CardHeader className="gap-2">
           <CardDescription className="text-xs font-medium uppercase text-secondary-foreground">
-            {liveListing ? price.label : "Estimated value since intake"}
+            {liveListing ? price.label : "Total earned to date"}
           </CardDescription>
           <div className="flex flex-wrap items-baseline gap-1">
-            <Text className="font-heading" size="lg" weight="medium">
-              HK$
-            </Text>
-            <CardTitle className="font-heading text-3xl font-medium tabular-nums">
-              {price.amountHkd.toLocaleString("en-HK")}
-            </CardTitle>
-            {showEstimateChange && asset.estimateChangePercent != null ? (
-              <Text
-                className="font-heading font-semibold"
-                size="sm"
-                tone="success"
-                weight="bold"
-              >
-                ▲ {asset.estimateChangePercent}%
-              </Text>
-            ) : null}
+            {liveListing ? (
+              <>
+                <Text className="font-heading" size="lg" weight="medium">
+                  HK$
+                </Text>
+                <CardTitle className="font-heading text-3xl font-medium tabular-nums">
+                  {price.amountHkd.toLocaleString("en-HK")}
+                </CardTitle>
+                {showEstimateChange && asset.estimateChangePercent != null ? (
+                  <Text
+                    className="font-heading font-semibold"
+                    size="sm"
+                    tone="success"
+                    weight="bold"
+                  >
+                    ▲ {asset.estimateChangePercent}%
+                  </Text>
+                ) : null}
+              </>
+            ) : (
+              <CardTitle className="font-heading text-3xl font-medium tabular-nums">
+                US${" "}
+                {earnedUsd.toLocaleString("en-HK", {
+                  minimumFractionDigits: 2,
+                })}
+              </CardTitle>
+            )}
           </div>
+          {liveListing ? null : (
+            <Text
+              as="span"
+              className="flex items-center gap-1"
+              size="sm"
+              tone="secondary"
+            >
+              {asset.priceStale
+                ? "Est. paused"
+                : `Est. US$${estDailyUsd.toFixed(2)} / day`}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger
+                    aria-label={
+                      asset.priceStale
+                        ? "Why the daily estimate is paused"
+                        : "How the daily rate is estimated"
+                    }
+                    className={`inline-flex size-4 items-center justify-center ${asset.priceStale ? "text-warning" : "text-secondary-foreground"} outline-none focus-visible:ring-3 focus-visible:ring-ring/50`}
+                    render={<button type="button" />}
+                  >
+                    {asset.priceStale ? (
+                      <Warning aria-hidden size={14} weight="fill" />
+                    ) : (
+                      <Info aria-hidden size={14} weight="bold" />
+                    )}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {asset.priceStale
+                      ? "Daily earning paused while the market price is unavailable. Missed days credit immediately once pricing resumes."
+                      : "Updated daily based on market liquidity factors."}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </Text>
+          )}
         </CardHeader>
         {valuePotential ? (
           <CardContent>

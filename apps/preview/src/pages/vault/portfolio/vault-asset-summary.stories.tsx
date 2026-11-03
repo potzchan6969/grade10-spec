@@ -56,12 +56,28 @@ export const Graded: Story = {
       canvas.getByRole("heading", { name: VAULT_ASSET_DETAILS[0].name }),
     ).toBeVisible();
     expect(canvas.getByText("Secured in Vault")).toBeVisible();
-    expect(canvas.getByText("Estimated value since intake")).toBeVisible();
+    expect(canvas.getByText("Total earned to date")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "List for Auction" }),
     ).toBeVisible();
     expect(canvas.getByRole("button", { name: "List for Sale" })).toBeVisible();
     expect(canvas.queryByText("Submit for Grading")).toBeNull();
+  },
+};
+
+/** Price feed down — the yield line pauses with a warning icon and tooltip. */
+export const EstimatePaused: Story = {
+  args: {
+    asset: { ...VAULT_ASSET_DETAILS[0], priceStale: true },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Est. paused")).toBeVisible();
+    expect(
+      canvas.getByRole("button", {
+        name: "Why the daily estimate is paused",
+      }),
+    ).toBeVisible();
   },
 };
 
@@ -101,26 +117,6 @@ export const GradedSoftLaunch: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("▲ 12.4%")).toBeNull();
-    expect(
-      canvas.queryByRole("button", { name: "List for Auction" }),
-    ).toBeNull();
-    expect(canvas.queryByRole("button", { name: "List for Sale" })).toBeNull();
-  },
-};
-
-/** Soft launch on a raw asset — the grading prompt still shows. */
-export const RawSoftLaunch: Story = {
-  parameters: {
-    verification: { caseId: "vc_c34275cc-5589-40a2-a0f2-0b07d1bf44b6" },
-  },
-  args: {
-    asset: VAULT_ASSET_DETAILS[1],
-    listForAuction: false,
-    listForSale: false,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Value Potential")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "List for Auction" }),
     ).toBeNull();

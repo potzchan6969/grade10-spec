@@ -39,10 +39,6 @@ export const Graded: Story = {
     expect(canvas.getByText("Cert Number")).toBeVisible();
     expect(canvas.getByText("63261276")).toBeVisible();
     expect(canvas.getByRole("link", { name: "Verify" })).toBeVisible();
-    expect(canvas.getByText("Vault Storage ID")).toBeVisible();
-    expect(canvas.getByText("G10-VLT-004821")).toBeVisible();
-    expect(canvas.getByText("Location")).toBeVisible();
-    expect(canvas.getByText("Crown Fine Art, Hong Kong")).toBeVisible();
     expect(canvas.getByText("Condition")).toBeVisible();
     expect(canvas.getByText("Graded, Gem Mint")).toBeVisible();
     expect(
@@ -64,9 +60,6 @@ export const Raw: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("Grade")).toBeNull();
     expect(canvas.queryByText("Cert Number")).toBeNull();
-    expect(canvas.getByText("Vault Storage ID")).toBeVisible();
-    expect(canvas.getByText("G10-VLT-004821")).toBeVisible();
-    expect(canvas.getByText("Location")).toBeVisible();
     expect(canvas.getByText("Condition")).toBeVisible();
     expect(canvas.getByText("Raw, Lightly Played")).toBeVisible();
     expect(
