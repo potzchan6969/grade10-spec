@@ -3,6 +3,7 @@ import { BlockCard } from "./block-card";
 import { type DraftBlock, newDraftBlock, type Problems } from "./draft";
 import { insertAt, moveBy, removeAt, replaceAt } from "./list";
 import { AddBlock } from "./palette";
+import { rulesAround } from "./suggestions";
 
 /** The page's blocks in order, with a place to add one between any two. */
 
@@ -43,6 +44,11 @@ export function BlockList({
             onMove={(delta) => onChange(moveBy(blocks, index, delta))}
             onRemove={() => onChange(removeAt(blocks, index))}
             problems={problems}
+            rules={
+              block.type === "phase" && !nested
+                ? rulesAround(blocks, index)
+                : undefined
+            }
           />
           <InsertPoint leavesOnly={leavesOnly} onAdd={add(index + 1)} />
         </div>
