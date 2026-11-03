@@ -36,6 +36,11 @@ export const RULES = [
     level: "fail",
     title: "Story ids in the workbench Storybook index",
   },
+  {
+    key: "phase",
+    level: "fail",
+    title: "Phase blocks naming a phase, a rule or a heading wrongly",
+  },
   { key: "dense", level: "warn", title: "Pages denser than the style allows" },
   {
     key: "copy",
@@ -61,6 +66,11 @@ export const RULES = [
     key: "ledger",
     level: "warn",
     title: "Ledgers written as a table, outside an example",
+  },
+  {
+    key: "phase-warn",
+    level: "warn",
+    title: "Lines in no phase on a page that names one, or in a released phase",
   },
   { key: "figma", level: "warn", title: "Figma links" },
   { key: "icon", level: "warn", title: "Domains with no icon in the rail" },

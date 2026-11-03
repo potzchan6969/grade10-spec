@@ -1,0 +1,30 @@
+# The release phases, in the order they launch - one list for every product.
+#
+# A page puts its lines in a phase with `::phase{id="<id>" priority="P0"}`
+# under a heading, or before its first heading for the whole page -
+# docs/prds/products/shared/planning/release-phases.md.
+#
+# Read through tools/manual/src/api/phases.ts, the only reader: the manual,
+# `pnpm check:manual`, the run sheet and `pnpm phase:release` all read it there.
+#
+# - `id` is what a block names; it never changes once a block uses it
+# - `name` is what a reader sees, never carrying the word phase
+# - `env` is the QA environment the phase's runs count on
+# - `target` is an optional `YYYY-MM` or `YYYY-MM-DD`
+# - `released` is written by `pnpm phase:release` alone
+phases:
+  - id: auction
+    name: Auction
+    env: staging-1
+  - id: internal-consignment
+    name: Internal Consignment
+    env: staging-1
+  - id: pre-store-launch
+    name: Pre-Store Launch
+    env: staging-1
+  - id: store-launch-1
+    name: Store Launch 1
+    env: staging-1
+  - id: store-launch-2
+    name: Store Launch 2
+    env: staging-1
