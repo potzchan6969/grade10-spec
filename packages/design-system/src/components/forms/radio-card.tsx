@@ -1,6 +1,7 @@
 import type { Radio as RadioPrimitive } from "@base-ui/react/radio";
 import { RadioButton } from "@grade10/design-system/components/forms/radio-button";
 import { cn } from "@grade10/design-system/lib/utils";
+import { IconContext } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
 // `title` is taken over from the DOM attribute of that name: the card's
@@ -12,6 +13,12 @@ type RadioCardProps = Omit<RadioPrimitive.Root.Props, "title"> & {
   description?: ReactNode;
   /** Freeform body beside the radio when `title` / `description` are not enough. */
   children?: ReactNode;
+  /**
+   * Leading media in a 40px muted circle (`withIcon=true` in Figma). The radio
+   * moves to the trailing edge; the slot sizes the glyph and pins Phosphor to
+   * `regular` weight, overriding the app's default.
+   */
+  icon?: ReactNode;
   /**
    * Trailing control outside the selectable label (e.g. remove). Clicks here do
    * not toggle the radio.
@@ -27,9 +34,12 @@ type RadioCardProps = Omit<RadioPrimitive.Root.Props, "title"> & {
  * Use inside a `RadioList` (or `RadioGroup`). The card chrome and selected
  * border are owned here; the radio value still reports through the group.
  *
- * **No Figma component set yet** — Storybook-first extraction from the Winner
- * Order Confirm delivery address picker. Publish a Radio Card set before adding
- * axes or a Code Connect template.
+ * Figma `7528:3385` draws two axes on the content: `withIcon` swaps the leading
+ * radio for a 40px `Radius/radius-full` `Base/muted` media circle holding a
+ * `Size/size-5` glyph and moves the radio to the trailing edge, and the card
+ * pads to `Gap/gap-3` (12px) on every side; `withIcon=false` keeps the radio
+ * leading with a 16px bottom pad. Selected uses `Base/primary` on the border
+ * and a light primary tint fill (`primary` at 5%).
  *
  * Disabled dims the whole card (`Opacity/opacity-50`), matching `RadioListItem`.
  * Selected uses `Base/primary` on the border and a light primary tint fill
@@ -41,6 +51,7 @@ function RadioCard({
   title,
   description,
   children,
+  icon,
   action,
   disabled,
   ...props
@@ -65,13 +76,27 @@ function RadioCard({
       <RadioButton
         {...props}
         className={cn(
-          "min-h-full min-w-0 flex-1 gap-2 px-3 pt-3 pb-4 text-left text-sm",
+          "min-h-full min-w-0 flex-1 text-left text-sm",
+          icon != null
+            ? "flex-row-reverse items-start gap-3 p-3"
+            : "gap-2 px-3 pt-3 pb-4",
           disabled
             ? "cursor-not-allowed disabled:opacity-100"
             : "cursor-pointer",
         )}
         disabled={disabled}
       >
+        {icon != null ? (
+          <span
+            aria-hidden
+            data-slot="radio-card-icon"
+            className="order-last flex size-10 shrink-0 self-center items-center justify-center rounded-full bg-muted text-foreground [&_svg]:size-5"
+          >
+            <IconContext.Provider value={{ weight: "regular" }}>
+              {icon}
+            </IconContext.Provider>
+          </span>
+        ) : null}
         <span
           data-slot="radio-card-content"
           className="flex min-w-0 flex-1 flex-col items-start gap-0.5"

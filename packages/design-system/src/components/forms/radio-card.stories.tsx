@@ -1,6 +1,6 @@
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
-import { Trash } from "@phosphor-icons/react";
+import { Bank, DeviceMobile, Trash } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { RadioCard } from "./radio-card";
@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Selectable card chrome around a radio. Use inside `RadioList`. No Figma set yet — Storybook-first; do not add variant axes until design publishes Radio Card.",
+          "Selectable card chrome around a radio. Use inside `RadioList`. `icon` draws the Figma `withIcon` variant — a leading muted media circle with the radio trailing.",
       },
     },
   },
@@ -128,6 +128,42 @@ export const WithAction: Story = {
     const selected = canvas
       .getByText("Wan Chai home")
       .closest('[data-slot="radio-card"]');
+    expect(
+      selected?.querySelector('[data-slot="radio-button"][data-checked]'),
+    ).toBeTruthy();
+  },
+};
+
+export const WithIcon: Story = {
+  name: "With icon",
+  render: () => (
+    <RadioList
+      aria-label="Withdrawal destination"
+      className="max-w-md"
+      defaultValue="hsbc"
+    >
+      <RadioCard
+        description="Chan Tai Man · HK$"
+        icon={<Bank aria-hidden />}
+        title="HSBC ••• 8304"
+        value="hsbc"
+      />
+      <RadioCard
+        description="Chan Tai Man · HK$"
+        icon={<DeviceMobile aria-hidden />}
+        title="FPS · +852 9123 ••45"
+        value="fps"
+      />
+    </RadioList>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const selected = canvas
+      .getByText("HSBC ••• 8304")
+      .closest('[data-slot="radio-card"]');
+    expect(
+      selected?.querySelector('[data-slot="radio-card-icon"]'),
+    ).toBeTruthy();
     expect(
       selected?.querySelector('[data-slot="radio-button"][data-checked]'),
     ).toBeTruthy();
