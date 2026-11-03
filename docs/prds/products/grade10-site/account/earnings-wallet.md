@@ -71,6 +71,7 @@ What finance does with the requests.
   - **Same Document** — the numbers must match; a different number holds the cash-out
   - **Another Document** — the collector is asked to verify with the document shown at intake; if they verify with another, the legal names are compared, and a different name holds the cash-out
   - **Held for Finance** — a held cash-out is not paid until finance clears it, or refuses it with a reason and the amount returns to the wallet
+    - **Who Clears** — any approver (`vault:approve`) opens the held list in the console and clears or refuses each, with the reason recorded
 - 🚧 **Verified Name** — every cash-out goes only to the verified collector
 - 🚧 **Review** — finance approves or rejects, with a reason shown to the collector
 
