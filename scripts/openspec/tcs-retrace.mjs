@@ -2,15 +2,24 @@
 /**
  * Move every store case's trace when a PRD page, section or rule is renamed:
  * the `**Trace:**` targets inside `<old>` and the suite headings that file
- * cases under it. A section's rules move with it.
+ * cases under it. A section's rules move with it. A rule renamed on its page
+ * also moves the `::phase` blocks that name it, under its section or before
+ * the page's first heading; a block under a heading follows a renamed
+ * section on its own.
  *
  *   pnpm tcs:retrace product-listing#links product-listing#links-and-back-button
  *   pnpm tcs:retrace cart#points/earning cart#points/points-earned
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { relative } from "node:path";
+import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { pageSections, storeSuites, within } from "./lib/store-suites.mjs";
+import {
+  headingAnchor,
+  pageSections,
+  STORE_PRD,
+  storeSuites,
+  within,
+} from "./lib/store-suites.mjs";
 
 const TARGET = /^[a-z0-9-]+(?:#[\p{L}\p{N}-]+(?:\/[\p{L}\p{N}-]+)?)?$/u;
 const TRACE_LINE = /^(\s*[*-]\s+\*\*Trace:\*\*\s*)(.*)$/;
@@ -36,6 +45,41 @@ export function retrace(text, from, to) {
         : line;
     if (next !== line) lines += 1;
     return next;
+  });
+  return { text: out.join("\n"), lines };
+}
+
+const PHASE_LINE = /^(::phase\{.*\brules=")([^"]*)(".*)$/;
+
+/** A page's text with the rule `from` renamed `to` in the `::phase` blocks
+ * under the section `section`, or before the page's first heading, and how
+ * many block lines moved. Fences and containers hold no placed block. */
+export function retraceBlocks(text, section, from, to) {
+  let lines = 0;
+  let current = "";
+  let fence = null;
+  let depth = 0;
+  const out = text.split("\n").map((line) => {
+    if (fence !== null) {
+      if (line.startsWith(fence)) fence = null;
+      return line;
+    }
+    const opened = /^(`{3,}|~{3,})/.exec(line);
+    if (opened) {
+      fence = opened[1];
+      return line;
+    }
+    if (/^:::\s*$/.test(line)) depth = 0;
+    else if (/^:::[a-z]/.test(line)) depth = 1;
+    if (depth > 0) return line;
+    const heading = /^##\s+(.+?)\s*#*\s*$/.exec(line);
+    if (heading) current = headingAnchor(heading[1]);
+    const block = PHASE_LINE.exec(line);
+    if (!block || (current !== "" && current !== section)) return line;
+    const rules = block[2].split(",");
+    if (!rules.includes(from)) return line;
+    lines += 1;
+    return `${block[1]}${rules.map((rule) => (rule === from ? to : rule)).join(",")}${block[3]}`;
   });
   return { text: out.join("\n"), lines };
 }
@@ -80,6 +124,32 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log(
       `${relative(root, file)}: ${lines} line${lines === 1 ? "" : "s"}`,
     );
+  }
+  const [fromPage, fromRest = ""] = from.split("#");
+  const [toPage, toRest = ""] = to.split("#");
+  const fromRule = fromRest.split("/")[1];
+  const [toSection, toRule] = toRest.split("/");
+  if (toRule !== undefined && fromRule !== toRule) {
+    if (fromPage === toPage) {
+      const file = join(root, STORE_PRD, `${toPage}.md`);
+      const { text, lines } = retraceBlocks(
+        readFileSync(file, "utf8"),
+        toSection,
+        fromRule,
+        toRule,
+      );
+      if (lines > 0) {
+        writeFileSync(file, text);
+        total += lines;
+        console.log(
+          `${relative(root, file)}: ${lines} phase block${lines === 1 ? "" : "s"}`,
+        );
+      }
+    } else {
+      console.log(
+        `a phase block on ${fromPage}.md naming \`${fromRule}\` stays: the rule left the page, so place its phase on ${toPage}.md by hand`,
+      );
+    }
   }
   console.log(
     total === 0
