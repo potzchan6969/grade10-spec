@@ -105,3 +105,20 @@ export function driftNotice(comparison: PixelComparison | undefined): string {
   }
   return "";
 }
+
+// Approving a reference that draws exactly what was approved adds nothing:
+// the same bytes, or no pixel apart (`ratio` of the approved-to-current pair).
+// A change request on those bytes can still be reversed by approving.
+export function unchangedSinceApproval(
+  status: ReferenceStatus,
+  ratio: number | undefined,
+): boolean {
+  const { current, approved, flag } = status;
+  if (!current || !approved || flag === "changes-requested") return false;
+  return (
+    current.image.sha256 === approved.reference.image.sha256 || ratio === 0
+  );
+}
+
+export const UNCHANGED_LINE =
+  "Every size draws exactly what was last approved, so there is nothing new to approve. Capture the current reference again after the story changes.";

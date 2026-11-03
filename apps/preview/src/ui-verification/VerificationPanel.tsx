@@ -38,6 +38,7 @@ import {
   FLAG_LABELS,
   type ReferenceStatus,
   referenceStatus,
+  unchangedSinceApproval,
 } from "./capture-stamp";
 
 import {
@@ -1080,6 +1081,19 @@ export function VerificationPanel({
       >,
     [mode, statuses],
   );
+  const unchanged = PROFILE_TABS.every(({ id }) => {
+    const status = statuses[id];
+    const comparison = comparisons[id];
+    return (
+      status !== null &&
+      unchangedSinceApproval(
+        status,
+        typeof comparison === "object" && comparison.kind === "compared"
+          ? comparison.ratio
+          : undefined,
+      )
+    );
+  });
   const recordKey = PROFILE_TABS.map(
     (item) =>
       `${recordImages[item.id].approved?.artifact.key ?? ""}|${recordImages[item.id].current?.artifact.key ?? ""}`,
@@ -2130,6 +2144,7 @@ export function VerificationPanel({
                                     requestChanges(item.id, comment)
                                   }
                                   status={statuses[item.id] as ReferenceStatus}
+                                  unchanged={unchanged}
                                 />
                               ) : null}
                             </>
