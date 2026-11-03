@@ -10,6 +10,7 @@ import {
   type Observation,
   type ObservationInput,
   type RowObjects,
+  type RunRecord,
   type RunCase,
   type RunRow,
   type RunSpec,
@@ -45,19 +46,6 @@ export class DeskError extends Error {
 
 export type Live = { run: string; message: LiveMessage };
 export type Written<T> = { value: T; live: Live[] };
-
-export type PrintRecord = {
-  id: string;
-  name: string;
-  env: string;
-  phase?: string;
-  selection: string;
-  source: string;
-  fingerprint: string;
-  rerunOf?: string;
-  cases: { id: string; marker?: string; rev?: number }[];
-  exclusions: { id: string; reason: string }[];
-};
 
 const SCHEMA = [
   "create table if not exists counters (name text primary key, value integer not null)",
@@ -502,30 +490,16 @@ export class DeskStore {
     return lines.map((line) => `${line.map(cell).join(",")}\r\n`).join("");
   }
 
-  record(id: string): PrintRecord {
+  /** A finalized run as its print commit records it: the run and the
+   * selection it froze. */
+  record(id: string): RunRecord {
     const run = this.summary(id);
     if (run.state === "open")
       throw new DeskError(
         409,
         `run ${id} is open: only a finalized run is recorded`,
       );
-    const { spec } = this.#held(id);
-    return {
-      id,
-      name: spec.name,
-      env: spec.env,
-      ...(spec.phase ? { phase: spec.phase } : {}),
-      selection: spec.selection,
-      source: spec.source,
-      fingerprint: spec.fingerprint,
-      ...(spec.rerunOf ? { rerunOf: spec.rerunOf } : {}),
-      cases: spec.cases.map((one) => ({
-        id: one.id,
-        ...(one.marker ? { marker: one.marker } : {}),
-        ...(one.rev !== undefined ? { rev: one.rev } : {}),
-      })),
-      exclusions: spec.exclusions,
-    };
+    return { run, spec: this.#held(id).spec };
   }
 
   #writable(id: string): RunSummary {

@@ -93,7 +93,7 @@ test("the desk answers the routes the manual and the run sheet call", async () =
   });
   assert.equal(finalized.body.state, "finalized");
   assert.equal(
-    (await call("GET", `/runs/${run.id}/record`)).body.cases.length,
+    (await call("GET", `/runs/${run.id}/record`)).body.spec.cases.length,
     3,
   );
 
