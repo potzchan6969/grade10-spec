@@ -9,8 +9,9 @@
   // The one thing the Worker runs is /api/desk/*: it names the Access
   // identity and passes the request to the run desk, a Worker of its own
   // (tools/run-desk) with no address, so a deploy here never restarts it.
-  // ACCESS_TEAM_DOMAIN and ACCESS_AUD, set as vars on the deployed Worker
-  // (kept across deploys), make it verify the Access token's signature too.
+  // It names nobody, and so refuses every desk request, until
+  // ACCESS_TEAM_DOMAIN and ACCESS_AUD are set as vars on the deployed Worker
+  // (kept across deploys): only an Access token those verify names a tester.
   "name": "grade10-manual",
   "main": "worker/index.ts",
   "compatibility_date": "2026-08-01",
@@ -24,5 +25,6 @@
   },
   "services": [{ "binding": "DESK", "service": "grade10-run-desk" }],
   "keep_vars": true,
-  "workers_dev": false
+  "workers_dev": false,
+  "preview_urls": false
 }

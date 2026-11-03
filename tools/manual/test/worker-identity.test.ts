@@ -63,40 +63,48 @@ const noKeys = async () => new Map<string, CryptoKey>();
 const at = () => NOW;
 
 describe("the desk's identity, as Cloudflare Access names it", () => {
-  test("without a team configured, the Access e-mail header is trusted", async () => {
-    const headers = new Headers({
-      "cf-access-authenticated-user-email": "qa@grade10.com",
-    });
-    expect(await identify(headers, {}, noKeys)).toEqual({
-      email: "qa@grade10.com",
-    });
+  test("without a team configured, nobody is named, whatever the request says", async () => {
+    const unsigned = `${encode({ alg: "none" })}.${encode({ email: "forged@x" })}.AAAA`;
+    for (const headers of [
+      new Headers({ "cf-access-authenticated-user-email": "boss@x" }),
+      new Headers({ "cf-access-jwt-assertion": unsigned }),
+      new Headers(),
+    ]) {
+      expect(await identify(headers, {}, noKeys)).toMatchObject({
+        status: 503,
+        error: expect.stringMatching(/ACCESS_TEAM_DOMAIN and ACCESS_AUD/),
+      });
+    }
   });
 
-  test("a service token is named by its common name", async () => {
-    const token = `${encode({ alg: "RS256" })}.${encode({ common_name: "run-sheet.access" })}.sig`;
-    const headers = new Headers({ "cf-access-jwt-assertion": token });
-    expect(await identify(headers, {}, noKeys)).toEqual({
-      email: "service:run-sheet.access",
-    });
-  });
-
-  test("nobody named is refused with the reason", async () => {
-    expect(await identify(new Headers(), {}, noKeys)).toEqual({
-      status: 403,
-      error: "Cloudflare Access named nobody: sign in to the manual first",
-    });
-  });
-
-  test("local dev stands in an e-mail of its own", async () => {
-    expect(
-      await identify(
-        new Headers(),
-        { DESK_DEV_EMAIL: "dev@grade10.local" },
-        noKeys,
-      ),
-    ).toEqual({
+  test("local dev stands in an e-mail of its own on localhost alone", async () => {
+    const dev = { DESK_DEV_EMAIL: "dev@grade10.local" };
+    expect(await identify(new Headers(), dev, noKeys, at, true)).toEqual({
       email: "dev@grade10.local",
     });
+    expect(await identify(new Headers(), dev, noKeys, at, false)).toMatchObject(
+      { status: 503 },
+    );
+  });
+
+  test("with a team configured, a request with no token is refused with the reason", async () => {
+    expect(await identify(new Headers(), verifying, noKeys, at)).toEqual({
+      status: 403,
+      error: "no Cloudflare Access token on the request",
+    });
+  });
+
+  test("with a team configured, an unsigned token names nobody", async () => {
+    const { certs } = await teamKeys();
+    const unsigned = `${encode({ alg: "none" })}.${encode(claims())}.AAAA`;
+    expect(
+      await identify(
+        new Headers({ "cf-access-jwt-assertion": unsigned }),
+        verifying,
+        certs,
+        at,
+      ),
+    ).toMatchObject({ status: 403, error: expect.stringMatching(/RS256/) });
   });
 
   test("with a team configured, a token signed by the team's key names its holder", async () => {

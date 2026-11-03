@@ -1,9 +1,9 @@
 /**
  * Who is asking, as Cloudflare Access names them: a person's e-mail, or
- * `service:<common name>` for a service token. With `ACCESS_TEAM_DOMAIN` and
- * `ACCESS_AUD` set, the Access token's signature is checked against the
- * team's keys; without them the header is trusted, since Access fronts the
- * only route in.
+ * `service:<common name>` for a service token, read only from an Access token
+ * whose signature, audience, issuer and expiry check out against the team in
+ * `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD`. Without them the desk refuses
+ * everyone, so a missing var never trusts a header a client can write.
  */
 
 export type AccessEnv = {
@@ -11,11 +11,12 @@ export type AccessEnv = {
   ACCESS_TEAM_DOMAIN?: string;
   /** The Access application's audience tag. */
   ACCESS_AUD?: string;
-  /** Local dev only: the identity when no Access stands in front. */
+  /** Local dev only, honoured on a localhost request alone: the identity
+   * when no Access stands in front. */
   DESK_DEV_EMAIL?: string;
 };
 
-export type Identity = { email: string } | { status: 403; error: string };
+export type Identity = { email: string } | { status: 403 | 503; error: string };
 
 type Claims = {
   email?: string;
@@ -109,18 +110,17 @@ export async function identify(
   env: AccessEnv,
   keys: KeySource & { refresh?: (team: string) => void },
   now: () => number = Date.now,
+  local = false,
 ): Promise<Identity> {
-  if (env.DESK_DEV_EMAIL) return { email: env.DESK_DEV_EMAIL };
+  if (local && env.DESK_DEV_EMAIL) return { email: env.DESK_DEV_EMAIL };
+  if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD)
+    return {
+      status: 503,
+      error:
+        "the desk cannot check who is asking: ACCESS_TEAM_DOMAIN and ACCESS_AUD are not set on the manual's Worker",
+    };
   const token = headers.get("cf-access-jwt-assertion");
   const read = token ? readToken(token) : undefined;
-  if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) {
-    const email = headers.get("cf-access-authenticated-user-email");
-    if (email) return { email };
-    return (
-      (read && named(read.claims)) ??
-      refused("Cloudflare Access named nobody: sign in to the manual first")
-    );
-  }
   if (!read) return refused("no Cloudflare Access token on the request");
   const team = env.ACCESS_TEAM_DOMAIN;
   const { header, claims } = read;

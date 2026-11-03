@@ -17,8 +17,30 @@ const certs = accessCerts();
 const isDesk = (path: string) =>
   path === DESK_BASE || path.startsWith(`${DESK_BASE}/`);
 
-async function toDesk(request: Request, env: Env): Promise<Response> {
-  const who = await identify(request.headers, env, certs);
+const LOCAL = new Set(["localhost", "127.0.0.1", "[::1]"]);
+
+/** A browser's request from another site, which only a forged form or a
+ * foreign page's script sends; scripts with a service token send no Origin. */
+export function crossSite(request: Request, url: URL): boolean {
+  const origin = request.headers.get("origin");
+  if (origin !== null && origin !== url.origin) return true;
+  const site = request.headers.get("sec-fetch-site");
+  return site !== null && site !== "same-origin" && site !== "none";
+}
+
+async function toDesk(request: Request, env: Env, url: URL): Promise<Response> {
+  if (crossSite(request, url))
+    return Response.json(
+      { error: "the desk answers the manual's own pages only" },
+      { status: 403 },
+    );
+  const who = await identify(
+    request.headers,
+    env,
+    certs,
+    Date.now,
+    LOCAL.has(url.hostname),
+  );
   if ("error" in who)
     return Response.json({ error: who.error }, { status: who.status });
   const headers = new Headers(request.headers);
@@ -29,8 +51,9 @@ async function toDesk(request: Request, env: Env): Promise<Response> {
 
 export default {
   fetch(request, env) {
-    return isDesk(new URL(request.url).pathname)
-      ? toDesk(request, env)
+    const url = new URL(request.url);
+    return isDesk(url.pathname)
+      ? toDesk(request, env, url)
       : env.ASSETS.fetch(request);
   },
 } satisfies ExportedHandler<Env>;
