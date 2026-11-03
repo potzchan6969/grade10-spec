@@ -10,26 +10,138 @@
   "lanes": [
     { "id": "site", "label": "Taken At, a site" },
     { "id": "kept", "label": "Kept At, its place" },
-    { "id": "move", "label": "To Move, read and never stored", "variant": "exception" }
+    {
+      "id": "move",
+      "label": "To Move, read and never stored",
+      "variant": "exception"
+    }
   ],
   "mainPath": ["taken", "received", "kept-at", "unit", "display"],
   "nodes": [
-    { "id": "taken", "lane": "site", "col": 0, "type": "frontend", "label": "Taken At", "sublabel": "the shop or a card event", "width": 150 },
-    { "id": "received", "lane": "site", "col": 1, "type": "database", "label": "Received there", "sublabel": "labelled, in inventory", "width": 150 },
-    { "id": "kept-at", "lane": "kept", "col": 2, "type": "backend", "label": "Kept At", "sublabel": "the site's Default Destination", "width": 170 },
-    { "id": "unit", "lane": "kept", "col": 3, "type": "database", "label": "A vault unit", "sublabel": "Holds Vaulted Cards", "width": 150 },
-    { "id": "display", "lane": "kept", "col": 4, "type": "frontend", "label": "A display unit", "sublabel": "only while on sale", "width": 150 },
-    { "id": "to-move", "lane": "move", "col": 2, "type": "security", "label": "To Move", "sublabel": "the place doesn't fit", "width": 170 },
-    { "id": "moved", "lane": "move", "col": 3, "type": "backend", "label": "Moved", "sublabel": "left and arrived, by hand", "width": 150 }
+    {
+      "id": "taken",
+      "lane": "site",
+      "col": 0,
+      "type": "frontend",
+      "label": "Taken At",
+      "sublabel": "the shop or a card event",
+      "width": 150
+    },
+    {
+      "id": "received",
+      "lane": "site",
+      "col": 1,
+      "type": "database",
+      "label": "Received there",
+      "sublabel": "labelled, in inventory",
+      "width": 150
+    },
+    {
+      "id": "kept-at",
+      "lane": "kept",
+      "col": 2,
+      "type": "backend",
+      "label": "Kept At",
+      "sublabel": "the site's Default Destination",
+      "width": 170
+    },
+    {
+      "id": "unit",
+      "lane": "kept",
+      "col": 3,
+      "type": "database",
+      "label": "A vault unit",
+      "sublabel": "Holds Vaulted Cards",
+      "width": 150
+    },
+    {
+      "id": "display",
+      "lane": "kept",
+      "col": 4,
+      "type": "frontend",
+      "label": "A display unit",
+      "sublabel": "only while on sale",
+      "width": 150
+    },
+    {
+      "id": "to-move",
+      "lane": "move",
+      "col": 2,
+      "type": "security",
+      "label": "To Move",
+      "sublabel": "the place doesn't fit",
+      "width": 170
+    },
+    {
+      "id": "moved",
+      "lane": "move",
+      "col": 3,
+      "type": "backend",
+      "label": "Moved",
+      "sublabel": "left and arrived, by hand",
+      "width": 150
+    }
   ],
   "edges": [
-    { "from": "taken", "to": "received", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
-    { "from": "received", "to": "kept-at", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
-    { "from": "kept-at", "to": "unit", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
-    { "from": "unit", "to": "display", "variant": "emphasis", "fromSide": "right", "toSide": "left", "label": "on sale" },
-    { "from": "received", "to": "to-move", "variant": "security", "fromSide": "bottom", "toSide": "left", "label": "away from Kept At" },
-    { "from": "display", "to": "to-move", "variant": "security", "fromSide": "bottom", "toSide": "bottom", "label": "no longer on sale" },
-    { "from": "to-move", "to": "moved", "variant": "dashed", "fromSide": "right", "toSide": "left" },
-    { "from": "moved", "to": "unit", "variant": "dashed", "fromSide": "top", "toSide": "bottom", "label": "arrives" }
+    {
+      "from": "taken",
+      "to": "received",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "received",
+      "to": "kept-at",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "kept-at",
+      "to": "unit",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "unit",
+      "to": "display",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "on sale"
+    },
+    {
+      "from": "received",
+      "to": "to-move",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "label": "away from Kept At"
+    },
+    {
+      "from": "display",
+      "to": "to-move",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "label": "no longer on sale"
+    },
+    {
+      "from": "to-move",
+      "to": "moved",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "moved",
+      "to": "unit",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "label": "arrives"
+    }
   ]
 }

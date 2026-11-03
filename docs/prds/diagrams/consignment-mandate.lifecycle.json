@@ -8,10 +8,7 @@
     "legend": {
       "mode": "hidden"
     },
-    "viewBox": [
-      1040,
-      680
-    ]
+    "viewBox": [1040, 680]
   },
   "lanes": [
     {
@@ -163,10 +160,7 @@
       "fromSide": "bottom",
       "toSide": "right",
       "label": "after delivery, or auction",
-      "labelAt": [
-        560,
-        430
-      ]
+      "labelAt": [560, 430]
     }
   ]
 }

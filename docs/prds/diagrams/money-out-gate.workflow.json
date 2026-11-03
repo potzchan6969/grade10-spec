@@ -24,13 +24,7 @@
       "variant": "exception"
     }
   ],
-  "mainPath": [
-    "request",
-    "verified",
-    "compare",
-    "passes",
-    "paid"
-  ],
+  "mainPath": ["request", "verified", "compare", "passes", "paid"],
   "nodes": [
     {
       "id": "request",

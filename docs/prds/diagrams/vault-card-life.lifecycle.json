@@ -8,10 +8,7 @@
     "legend": {
       "mode": "hidden"
     },
-    "viewBox": [
-      980,
-      760
-    ]
+    "viewBox": [980, 760]
   },
   "lanes": [
     {
@@ -158,10 +155,7 @@
       "to": "sold",
       "variant": "emphasis",
       "label": "sold",
-      "labelAt": [
-        710,
-        240
-      ]
+      "labelAt": [710, 240]
     },
     {
       "id": "ended",
