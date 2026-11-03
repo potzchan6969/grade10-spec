@@ -34,7 +34,7 @@
     "member-pays",
     "shopify-order-paid",
     "store-order-marked-paid",
-    "loyalty-points-debited-earn-granted"
+    "loyalty-points-debited"
   ],
   "nodes": [
     {
@@ -92,12 +92,12 @@
       "width": 132
     },
     {
-      "id": "loyalty-points-debited-earn-granted",
+      "id": "loyalty-points-debited",
       "lane": "loyalty",
       "col": 3,
       "type": "backend",
       "label": "Points debited",
-      "sublabel": "coupon used, earn granted",
+      "sublabel": "coupon used, no earn yet",
       "width": 132
     }
   ],
@@ -139,10 +139,13 @@
     },
     {
       "from": "store-order-marked-paid",
-      "to": "loyalty-points-debited-earn-granted",
-      "label": "order event · once",
+      "to": "loyalty-points-debited",
+      "label": "order event \u00b7 once",
       "variant": "dashed",
-      "labelAt": [474, 429],
+      "labelAt": [
+        474,
+        429
+      ],
       "fromSide": "bottom",
       "toSide": "top"
     }

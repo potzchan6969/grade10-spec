@@ -151,7 +151,7 @@ The webhook, signed over its own bytes. Each discount names itself, and each lin
 The store finds its points by either points title — [Paying with Points](/p/grade10-site/loyalty/paying-with-points#rules) — in any letter case, with or without spaces around it. An order whose discounts carry neither title is read like one that names none: the applied total less every other instrument, never more than promised — [Discounts](/p/grade10-site/store/discounts#the-sale-step-by-step)
 
 ## *Store* — **Order marked paid**
-The bytes are verified, the delivery is deduped on Shopify's webhook id, and the draft is read back for the order it became, because a paid invoice carries no cart token. The qualifying goods are priced once and the order event is written with the status in one transaction, so a redelivery writes nothing.
+The bytes are verified, the delivery is deduped on Shopify's webhook id, and the draft is read back for the order it became, because a paid invoice carries no cart token. The qualifying goods are priced once and the order event, carrying no earn, is written with the status in one transaction, so a redelivery writes nothing.
 
 ```json
 {
@@ -159,14 +159,14 @@ The bytes are verified, the delivery is deduped on Shopify's webhook id, and the
   "kind": "paid",
   "sourceRef": "9c1e4a70-6f83-4d02-b6a1-0e3f5c9d21ab",
   "userId": "usr_01J8ZQ4X7K",
-  "earningMinor": 2300,
+  "earningMinor": 0,
   "currency": "HKD",
   "occurredAt": "2026-09-10T04:21:07.113Z"
 }
 ```
 
-## *Loyalty* — **Points debited, earn granted**
-The promised points are debited, scaled to what the shop applied and never above the promise; the coupon is marked used; the earn lands on the same goods — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) and [Points](/p/grade10-site/loyalty/points)
+## *Loyalty* — **Points debited**
+The promised points are debited, scaled to what the shop applied and never above the promise; the coupon is marked used. The paid event earns nothing: the earn on the same goods waits for the order to complete — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) and [Points](/p/grade10-site/loyalty/points#backend-flow)
 :::
 
 :::flow{title="Online checkout" case="Abandoned or replaced" diagram="assets/diagrams/shopify-online-abandoned.svg"}
@@ -324,10 +324,10 @@ The same webhook as online, carrying the shop's own counter channel.
 ```
 
 ## *Store* — **Sale marked paid**
-The order id on the cart is a claim, not proof: it binds only where the shop's own counter channel rang the sale, the customer on it is the paired one, and the currency matches. Then the sale is marked paid and the order event is written once, the same shape the online order writes.
+The order id on the cart is a claim, not proof: it binds only where the shop's own counter channel rang the sale, the customer on it is the paired one, and the currency matches. Then the sale is marked paid and the order event is written once, the same shape the online order writes, carrying the earn the online one waits to complete for.
 
 ## *Loyalty* — **Points debited, earn granted**
-The same debit and the same earn as online, recorded against the counter rather than the online store.
+The same debit as online, recorded against the counter rather than the online store. The earn lands here too: a till sale is fulfilled at the counter, so it earns when it is paid — [Points](/p/grade10-site/loyalty/points#rules)
 :::
 
 :::flow{title="At the till" case="Guest sale, claimed later" diagram="assets/diagrams/shopify-till-guest.svg"}

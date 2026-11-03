@@ -26,6 +26,7 @@
   "mainPath": [
     "shop-order-paid",
     "store-order-recorded",
+    "store-order-completes",
     "loyalty-points-granted"
   ],
   "nodes": [
@@ -48,9 +49,18 @@
       "width": 132
     },
     {
+      "id": "store-order-completes",
+      "lane": "store",
+      "col": 2,
+      "type": "database",
+      "label": "Order completes",
+      "sublabel": "every item fulfilled, once",
+      "width": 132
+    },
+    {
       "id": "loyalty-points-granted",
       "lane": "loyalty",
-      "col": 0,
+      "col": 2,
       "type": "backend",
       "label": "Points granted",
       "sublabel": "on the lines that earn",
@@ -67,12 +77,23 @@
     },
     {
       "from": "store-order-recorded",
+      "to": "store-order-completes",
+      "label": "fulfilled",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "store-order-completes",
       "to": "loyalty-points-granted",
-      "label": "order event · async",
+      "label": "completed event · async",
       "variant": "dashed",
-      "labelAt": [195, 305],
       "fromSide": "bottom",
-      "toSide": "top"
+      "toSide": "top",
+      "labelAt": [
+        441,
+        305
+      ]
     }
   ]
 }

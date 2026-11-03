@@ -60,10 +60,7 @@ An order's earn is written once, the first time the order completes.
 - **Delivery** - retried until the programme takes it, and taken once, so
   a purchase during an outage still earns, and never twice
 
-❓ The diagrams below still draw the earn starting from Order paid — the old
-trigger — and need redrawing to start from the order's completion.
-
-:::flow{title="From a paid order to points" case="Normal" diagram="assets/diagrams/loyalty-pricing-an-order.svg"}
+:::flow{title="From an order to points" case="Normal" diagram="assets/diagrams/loyalty-pricing-an-order.svg"}
 ## *Shop* — **Order paid**
 The shop sends the paid order: its lines, their discounts, and the goods total it stated
 
@@ -94,13 +91,16 @@ The webhook already flags a gift card, but a grading fee, a credit top-up, and r
 The read for the Charizard VMAX line — a real product, so the order prices as usual
 
 ## *Store* — **Order recorded**
-The lines judged by that read, a gift card, a fee, a grading service left out, and the earning amount written on the order once, never re-priced — [Code map](#detail-code-map)
+The lines judged by that read, a gift card, a fee, a grading service left out, and the earning amount written on the order once, never re-priced — [Code map](#detail-code-map). Payment earns nothing yet
+
+## *Store* — **Order completes**
+The first time every item is fulfilled, with goods left after its refunds — the earn is queued once, on the earning amount less what was refunded by then
 
 ## *Loyalty* — **Points granted**
-Reached by an order event, not by the sale waiting: **$10** a base point, rounded down, then the tier rate, rounded down again — **$139** at **1.2×** = **15** — as a dated entry, never edited
+Reached by the completed order event, not by the sale waiting: **$10** a base point, rounded down, then the tier rate, rounded down again — **$139** at **1.2×** = **15** — as a dated entry, never edited
 :::
 
-:::flow{title="From a paid order to points" case="A line the shop cannot classify" diagram="assets/diagrams/loyalty-pricing-unclassified.svg"}
+:::flow{title="From an order to points" case="A line the shop cannot classify" diagram="assets/diagrams/loyalty-pricing-unclassified.svg"}
 ## *Shop* — **Order paid**
 A line names a product, but nothing here says its type or tags yet — only the read can tell real goods from a fee or a credit top-up
 
@@ -128,11 +128,14 @@ The product behind the Mystery Booster Box line was deleted from Shopify since t
 ## *Store* — **Order recorded**
 A read that answers prices the order as usual; a read that fails writes no earning amount, and the sale still stands
 
+## *Store* — **Never completes**
+An order with no earning amount is not marked paid, so it cannot complete — fulfilling it changes nothing until a retry prices it
+
 ## *Loyalty* — **Points granted**
-No amount, so no order event and no points — counted, and granted when a retry classifies the sale
+No completion, so no completed event and no points — counted, and granted when a retry classifies the sale and the order completes
 :::
 
-:::flow{title="From a paid order to points" case="A total with no lines" diagram="assets/diagrams/loyalty-pricing-unitemised.svg"}
+:::flow{title="From an order to points" case="A total with no lines" diagram="assets/diagrams/loyalty-pricing-unitemised.svg"}
 ## *Shop* — **Order paid**
 One goods total and no lines at all
 
@@ -146,11 +149,14 @@ One goods total and no lines at all
 ## *Store* — **Order recorded**
 The store's own item prices, the whole-order discount shared across them by value; the shop's stated goods total only where the store has no prices of its own
 
+## *Store* — **Order completes**
+As usual, once every item is fulfilled
+
 ## *Loyalty* — **Points granted**
 As usual, on the amount the order carries
 :::
 
-:::flow{title="From a paid order to points" case="A custom sale" diagram="assets/diagrams/loyalty-pricing-custom-sale.svg"}
+:::flow{title="From an order to points" case="A custom sale" diagram="assets/diagrams/loyalty-pricing-custom-sale.svg"}
 ## *Shop* — **Order paid**
 A line rung at the till names no catalog product — a consignment, a repair, a price override
 
@@ -165,6 +171,9 @@ A line rung at the till names no catalog product — a consignment, a repair, a 
 
 ## *Store* — **Order recorded**
 Nothing can ever classify that line, so it is left out and the rest of the order is priced; waiting would hold the sale for a fact that is never coming
+
+## *Store* — **Order completes**
+As usual, once every item is fulfilled
 
 ## *Loyalty* — **Points granted**
 As usual, on the lines that earn; the custom line earns nothing

@@ -63,7 +63,7 @@ svg[data-diagram="shopify-online-paid"] .c-lane{fill: var(--lane-fill); stroke: 
         <path data-step="member-pays" data-edge-from="shopify-invoice-link-issued" data-edge-to="member-pays" data-edge-key="2" data-composition-points="300,243;354,243;354,145" d="M 300 243 L 354 243 L 354 145" class="a-emphasis" stroke-width="1.8" marker-end="url(#shopify-online-paid-arrowhead-emphasis)"/>
         <path data-step="store-order-marked-paid" data-edge-from="shopify-order-paid" data-edge-to="store-order-marked-paid" data-edge-key="3" data-composition-points="474,269;474,341" d="M 474 269 L 474 341" class="a-emphasis" stroke-width="1.8" marker-end="url(#shopify-online-paid-arrowhead-emphasis)"/>
         <path data-step="shopify-invoice-link-issued" data-edge-from="store-draft-order-created" data-edge-to="shopify-invoice-link-issued" data-edge-key="4" data-composition-points="234,341;234,269" d="M 234 341 L 234 269" class="a-emphasis" stroke-width="1.8" marker-end="url(#shopify-online-paid-arrowhead-emphasis)"/>
-        <path data-step="loyalty-points-debited-earn-granted" data-edge-from="store-order-marked-paid" data-edge-to="loyalty-points-debited-earn-granted" data-edge-label="order event · once" data-edge-key="5" data-composition-points="474,393;474,465" d="M 474 393 L 474 465" class="a-dashed" stroke-width="1.4" marker-end="url(#shopify-online-paid-arrowhead-dashed)"/>
+        <path data-step="loyalty-points-debited" data-edge-from="store-order-marked-paid" data-edge-to="loyalty-points-debited" data-edge-label="order event · once" data-edge-key="5" data-composition-points="474,393;474,465" d="M 474 393 L 474 465" class="a-dashed" stroke-width="1.4" marker-end="url(#shopify-online-paid-arrowhead-dashed)"/>
         
         <g data-step="member-chooses-points-and-a-coupon" id="shopify-online-paid-node-member-chooses-points-and-a-coupon" data-node-id="member-chooses-points-and-a-coupon" data-node-label="Chooses points" aria-label="Focus Chooses points, and a coupon, on /checkout, Member" data-node-kind="external" data-node-sublabel="and a coupon, on /checkout" data-node-context="Member">
           <title>Chooses points · and a coupon, on /checkout · Member</title>
@@ -130,18 +130,18 @@ svg[data-diagram="shopify-online-paid"] .c-lane{fill: var(--lane-fill); stroke: 
           <text data-node-label="" data-detail-anchor="" x="474" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Order marked paid</text>
           <text data-detail="context" x="474" y="379" class="t-muted" font-size="6.8" text-anchor="middle">draft read back, goods stamped</text>
         </g>
-        <g data-step="loyalty-points-debited-earn-granted" id="shopify-online-paid-node-loyalty-points-debited-earn-granted" data-node-id="loyalty-points-debited-earn-granted" data-node-label="Points debited" aria-label="Focus Points debited, coupon used, earn granted, Loyalty" data-node-kind="backend" data-node-sublabel="coupon used, earn granted" data-node-context="Loyalty">
-          <title>Points debited · coupon used, earn granted · Loyalty</title>
+        <g data-step="loyalty-points-debited" id="shopify-online-paid-node-loyalty-points-debited" data-node-id="loyalty-points-debited" data-node-label="Points debited" aria-label="Focus Points debited, coupon used, no earn yet, Loyalty" data-node-kind="backend" data-node-sublabel="coupon used, no earn yet" data-node-context="Loyalty">
+          <title>Points debited · coupon used, no earn yet · Loyalty</title>
           <rect x="408" y="465" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="408" y="465" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(414 471) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="474" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Points debited</text>
-          <text data-detail="context" x="474" y="503" class="t-muted" font-size="8" text-anchor="middle">coupon used, earn granted</text>
+          <text data-detail="context" x="474" y="503" class="t-muted" font-size="8" text-anchor="middle">coupon used, no earn yet</text>
         </g>
         
-        <g data-step="loyalty-points-debited-earn-granted" data-detail="context" data-edge-from="store-order-marked-paid" data-edge-to="loyalty-points-debited-earn-granted" data-edge-label="order event · once" data-edge-key="5">
+        <g data-step="loyalty-points-debited" data-detail="context" data-edge-from="store-order-marked-paid" data-edge-to="loyalty-points-debited" data-edge-label="order event · once" data-edge-key="5">
           <rect x="425.8" y="419" width="96.39999999999999" height="14" rx="3" class="c-mask"/>
           <text x="474" y="429" class="t-database" font-size="8" text-anchor="middle">order event · once</text>
         </g>

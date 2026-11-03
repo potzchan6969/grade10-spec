@@ -108,7 +108,7 @@
       "from": "loyalty",
       "to": "store",
       "y": 550,
-      "label": "points debited, earn granted",
+      "label": "points debited; a till sale earns",
       "variant": "return"
     }
   ],

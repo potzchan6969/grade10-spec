@@ -26,6 +26,7 @@
   "mainPath": [
     "shop-order-paid",
     "store-order-recorded",
+    "store-never-completes",
     "loyalty-points-granted"
   ],
   "nodes": [
@@ -41,7 +42,7 @@
     {
       "id": "store-asks-shopify_unread",
       "lane": "shop",
-      "col": 2,
+      "col": 1,
       "type": "external",
       "label": "Read fails",
       "sublabel": "the facts stay unread",
@@ -53,13 +54,22 @@
       "col": 0,
       "type": "security",
       "label": "Order recorded",
-      "sublabel": "no earning amount written",
+      "sublabel": "no earning amount, not paid",
+      "width": 132
+    },
+    {
+      "id": "store-never-completes",
+      "lane": "store",
+      "col": 2,
+      "type": "security",
+      "label": "Never completes",
+      "sublabel": "not paid until it is priced",
       "width": 132
     },
     {
       "id": "loyalty-points-granted",
       "lane": "loyalty",
-      "col": 0,
+      "col": 2,
       "type": "messagebus",
       "label": "Points wait",
       "sublabel": "counted, until a retry",
@@ -84,12 +94,23 @@
     },
     {
       "from": "store-order-recorded",
-      "to": "loyalty-points-granted",
-      "label": "no order event",
+      "to": "store-never-completes",
+      "label": "stays open",
       "variant": "dashed",
-      "labelAt": [195, 305],
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "store-never-completes",
+      "to": "loyalty-points-granted",
+      "label": "no completed event",
+      "variant": "dashed",
       "fromSide": "bottom",
-      "toSide": "top"
+      "toSide": "top",
+      "labelAt": [
+        446,
+        305
+      ]
     }
   ]
 }
