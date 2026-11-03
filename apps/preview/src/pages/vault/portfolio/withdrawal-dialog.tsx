@@ -77,6 +77,8 @@ type WithdrawalMethod = {
   title: string;
   /** Secondary line — the masked identifier: `123 •••• 8304`, `+852 •••• 4567`. */
   detail: string;
+  /** The unmasked identifier, shown on the review step only. */
+  fullDetail?: string;
 };
 
 type WithdrawalStep =
@@ -497,6 +499,12 @@ function WithdrawalDialog({
       kind: methodKind,
       title: methodKind === "bank" ? (bank.split(" – ")[1] ?? bank) : "FPS",
       detail: identifier,
+      fullDetail:
+        methodKind === "bank"
+          ? accountNumber
+          : fpsIdType === "Mobile number"
+            ? `${mobileCode} ${accountNumber}`
+            : accountNumber,
     };
     setMethods((held) => [...held.filter((m) => m.id !== DRAFT_VALUE), method]);
     setSelection(method.id);
@@ -1015,7 +1023,7 @@ function WithdrawalDialog({
                   {destination?.title}
                 </Text>
                 <Text as="span" className="text-secondary-foreground" size="sm">
-                  {destination?.detail}
+                  {destination?.fullDetail ?? destination?.detail}
                 </Text>
               </VStack>
               <Link

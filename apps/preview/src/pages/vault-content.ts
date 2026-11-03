@@ -450,12 +450,14 @@ const PAYOUT_METHODS = [
     kind: "bank" as const,
     title: "HSBC",
     detail: "123 •••• 8304",
+    fullDetail: "123-456-8304",
   },
   {
     id: "fps-mobile",
     kind: "fps" as const,
     title: "FPS",
     detail: "+852 •••• 4567",
+    fullDetail: "+852 9123 4567",
   },
 ];
 

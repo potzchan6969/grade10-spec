@@ -230,7 +230,7 @@ export const Review: Story = {
     );
     expect(dialog.getByText(/HK\$1,248/)).toBeVisible();
     expect(dialog.getByText("HSBC")).toBeVisible();
-    expect(dialog.getByText("123 •••• 8304")).toBeVisible();
+    expect(dialog.getByText("123-456-8304")).toBeVisible();
     expect(
       dialog.getByRole("button", { name: "Submit Request" }),
     ).toBeVisible();
