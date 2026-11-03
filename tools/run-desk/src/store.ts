@@ -130,6 +130,14 @@ export class DeskStore {
   open(input: unknown, by: string): RunSummary {
     const spec = checkSpec(input);
     if (spec.rerunOf !== undefined) this.summary(spec.rerunOf);
+    const twin = this.runs().find(
+      (run) => run.state === "open" && run.fingerprint === spec.fingerprint,
+    );
+    if (twin)
+      throw new DeskError(
+        409,
+        `run ${twin.id} (${twin.name}) is open on this selection already: walk it there`,
+      );
     const id = this.#sql.transaction(() => {
       const n = this.#next("run");
       const id = String(n);
@@ -252,7 +260,22 @@ export class DeskStore {
           one.id,
         );
         if (held) return toMark(held);
-        const mark: Mark = { ...one, by, at, seq: this.#next("seq") };
+        const { basis, ...input } = one;
+        if (basis !== undefined) {
+          const newer = this.#currentMarks(run.id).find(
+            (current) =>
+              current.row === input.row &&
+              current.surface === input.surface &&
+              current.seq > basis &&
+              current.by !== by,
+          );
+          if (newer)
+            throw new DeskError(
+              409,
+              `${input.row} on ${input.surface} was marked ${MARK_LABEL[newer.value]} by ${newer.by} at ${newer.at}, after you marked it: look again before marking`,
+            );
+        }
+        const mark: Mark = { ...input, by, at, seq: this.#next("seq") };
         this.#sql.exec(
           `insert into marks (seq, id, run, row, surface, value, expectation, triage, issue, note, by, at, walked)
             values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -738,7 +761,16 @@ function checkMark(
   run: string,
 ): MarkInput {
   if (!isRecord(input)) throw new DeskError(400, "a mark is an object");
-  const { id, row, surface, value, expectation, triage, issue, note } = input;
+  const { id, row, surface, value, expectation, triage, issue, note, basis } =
+    input;
+  if (
+    basis !== undefined &&
+    (typeof basis !== "number" || !Number.isInteger(basis) || basis < 0)
+  )
+    throw new DeskError(
+      400,
+      "a mark's basis is the seq it was made on, from 0",
+    );
   if (!isText(id))
     throw new DeskError(400, "a mark carries the id its client made");
   const held = rows.find((one) => one.key === row);
@@ -788,6 +820,7 @@ function checkMark(
     ...(triage !== undefined ? { triage: triage as Mark["triage"] } : {}),
     ...(issue ? { issue: issue as string } : {}),
     ...(note ? { note: note as string } : {}),
+    ...(basis !== undefined ? { basis: basis as number } : {}),
   };
 }
 

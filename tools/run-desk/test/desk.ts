@@ -46,14 +46,18 @@ export function aCase(id: string, extra: Partial<RunCase> = {}): RunCase {
   };
 }
 
+let opened = 0;
+
+/** Each spec a selection of its own unless the test names its fingerprint. */
 export function aSpec(extra: Partial<RunSpec> = {}): RunSpec {
+  opened++;
   return {
     name: "store launch 1",
     env: "qa",
     phase: "store-launch-1",
     selection: "--phase store-launch-1",
     source: "b4aa3cf",
-    fingerprint: "sha256:abc",
+    fingerprint: `sha256:abc${opened}`,
     cases: [
       aCase("TC1", {
         marker: "g10.store-cart.TC-q5a",

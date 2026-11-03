@@ -646,13 +646,14 @@ test("the CSV export is one line per row and surface, quoted as RFC 4180", () =>
 
 test("a finalized run's print record names its cases in run order", () => {
   const { store } = deskInMemory();
-  const { id } = store.open(aSpec(), TESTER);
+  const spec = aSpec();
+  const { id } = store.open(spec, TESTER);
   assert.throws(() => store.record(id), refused(409, /open/));
   store.setState(id, { state: "finalized" }, TESTER);
   const record = store.record(id);
   assert.equal(record.run.state, "finalized");
   assert.equal(record.run.id, id);
-  assert.deepEqual(record.spec, aSpec());
+  assert.deepEqual(record.spec, spec);
   assert.throws(() => store.record("7"), refused(404));
 });
 
@@ -788,4 +789,56 @@ test("a newer run that has not walked a case leaves its result with the run that
   assert.equal(qa.TC3.run, walked.id);
   assert.equal(caseVerdict(qa.TC3.rows).verdict, "pass");
   assert.equal(qa.TC2.run, fresh.id, "never walked: the newest run holding it");
+});
+
+test("a mark made on an older reading of its row is refused when someone else marked it since", () => {
+  const { store } = deskInMemory();
+  const { id } = store.open(aSpec(), TESTER);
+  const [seen] = store.mark(id, { marks: [mark("TC2", "pass")] }, TESTER).value;
+  store.mark(
+    id,
+    { marks: [mark("TC2", "na", { basis: seen.seq })] },
+    "other@grade10.com",
+  );
+  assert.throws(
+    () =>
+      store.mark(
+        id,
+        { marks: [mark("TC2", "skipped", { basis: seen.seq })] },
+        TESTER,
+      ),
+    refused(409, /marked n\/a by other@grade10.com/),
+  );
+  const own = store.mark(
+    id,
+    { marks: [mark("TC3", "pass", { basis: 0 })] },
+    TESTER,
+  ).value[0];
+  store.mark(
+    id,
+    { marks: [mark("TC3", "fail", { basis: 0, triage: "bug" })] },
+    TESTER,
+  );
+  assert.ok(!("basis" in own), "the basis is not part of the mark");
+  assert.equal(
+    store.view(id).marks.find((m) => m.row === "TC3")?.value,
+    "fail",
+    "your own newer mark is yours to change",
+  );
+});
+
+test("a selection already open is not opened twice", () => {
+  const { store } = deskInMemory();
+  const spec = aSpec();
+  const first = store.open(spec, TESTER);
+  assert.throws(
+    () => store.open(spec, TESTER),
+    refused(409, new RegExp(`run ${first.id} `)),
+  );
+  store.setState(first.id, { state: "finalized" }, TESTER);
+  assert.equal(
+    store.open(spec, TESTER).id,
+    "2",
+    "once finalized, the selection opens again",
+  );
 });
