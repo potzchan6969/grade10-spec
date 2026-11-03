@@ -370,16 +370,16 @@ describe("units and readiness", () => {
     ...(triage ? { triage } : {}),
   });
   const desk = (
-    rows: Record<string, { rev?: number; marks: Mark[] }>,
+    rows: Record<string, { rev?: number; run?: string; marks: Mark[] }>,
     excluded: DeskVerdicts["excluded"] = {},
   ): DeskVerdicts => ({
     runs: [],
     cases: {
       "staging-1": Object.fromEntries(
-        Object.entries(rows).map(([id, { rev, marks }]) => [
+        Object.entries(rows).map(([id, { rev, run, marks }]) => [
           id,
           {
-            run: "r1",
+            run: run ?? "r1",
             ...(rev === undefined ? {} : { rev }),
             rows: [{ key: id, marks }],
           },
@@ -429,6 +429,26 @@ describe("units and readiness", () => {
     expect(stale.stale).toBe(1);
     expect(stale.triages).toEqual({ bug: 1 });
     expect(stale.waitingOn[0]).toEqual({ role: "assignee", why: "1 case bug" });
+  });
+
+  it("names the newest run among its cases' results", () => {
+    const tiers = unit("tiers@auction");
+    const both = (row: string, seq: number) => [
+      mark(row, "web", "pass", seq),
+      mark(row, "mobile", "pass", seq + 1),
+    ];
+    const read = (first: string, second: string) =>
+      readinessOf(
+        tiers,
+        reading.casesOf(tiers),
+        phase("auction"),
+        desk({
+          "a.US1-TC1": { run: first, marks: both("a", 1) },
+          "a.US1-TC2": { run: second, marks: both("b", 3) },
+        }),
+      ).run;
+    expect(read("9", "12")).toBe("12");
+    expect(read("12", "9")).toBe("12");
   });
 
   it("leaves a case a finalized run of the phase excluded out of a capability", () => {

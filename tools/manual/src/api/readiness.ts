@@ -135,6 +135,10 @@ const TRIAGE_TURN: Record<string, Turn["role"]> = {
   untriaged: "qa",
 };
 
+/** Run ids count up, so the newest is the one that sorts last as a number. */
+const newerRun = (a: string, b: string) =>
+  a.localeCompare(b, "en", { numeric: true }) > 0;
+
 export function readinessOf(
   unit: Unit,
   allCases: UnitCase[],
@@ -175,7 +179,11 @@ export function readinessOf(
     }
     results.push(found);
     ran += 1;
-    run ??= found.run;
+    if (
+      found.run !== undefined &&
+      (run === undefined || newerRun(found.run, run))
+    )
+      run = found.run;
     if (found.verdict === "stale") {
       stale += 1;
       counts.notrun += 1;
