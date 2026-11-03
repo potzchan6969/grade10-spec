@@ -42,5 +42,6 @@ rather than dropping to Silver.
 | What is raised | 🚧 Being built | That a reminder is owed, naming the member, the period end, the points earned and the points still needed. | Product |
 | Which channel carries it | 🚧 Being built | Email, the same channel the points reminder ships on. | Product |
 | Lead time | 🚧 Being built | One lead of 30 days, matching the points reminder; a ladder or a different lead is a value, not a rule ([9gag/grade10#1693](https://github.com/9gag/grade10/issues/1693#issuecomment-6571705441)). | Product |
+| A Gold member under a Black invitation | 🚧 Being built | Owed no reminder while the invitation stands: the member sees Black and loses nothing they can see this period ([9gag/grade10#1693](https://github.com/9gag/grade10/issues/1693#issuecomment-6597982648)). | Product |
 | Silver periods and Black invitations | ❓ Open | Neither owes a warning yet: Silver rolls over and an invitation's end is operator-set. | Product |
 :::
