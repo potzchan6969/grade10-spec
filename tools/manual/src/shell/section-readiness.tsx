@@ -86,7 +86,8 @@ const rank = (step: Step): number => {
 const plural = (count: number, word: string) =>
   `${count} ${word}${count === 1 ? "" : "s"}`;
 
-type Rung = { state: "done" | "held"; text: ReactNode };
+/** done, waiting on someone, or failing: only a fail or a block is red. */
+type Rung = { state: "done" | "held" | "failing"; text: ReactNode };
 
 /** The ladder up to where the unit stands: each step passed, then the one
  * holding it. */
@@ -128,7 +129,9 @@ export function rungsOf(readiness: Readiness, runName?: string): Rung[] {
     rungs.push({ state: "held", text: "In QA: in no run yet" });
     return rungs;
   }
-  const run = runName ?? readiness.run;
+  const run = readiness.run
+    ? `Run ${readiness.run}${runName ? ` · ${runName}` : ""}`
+    : undefined;
   rungs.push({
     state: "done",
     text: run ? (
@@ -157,7 +160,10 @@ export function rungsOf(readiness: Readiness, runName?: string): Rung[] {
   rungs.push(
     at >= 4
       ? { state: "done", text: `Passed: every case passes` }
-      : { state: "held", text: `Passed: ${tally}` },
+      : {
+          state: counts.fail || counts.blocked ? "failing" : "held",
+          text: `Passed: ${tally}`,
+        },
   );
   if (readiness.step === "released")
     rungs.push({ state: "done", text: "Released" });
@@ -171,6 +177,11 @@ const RUNG_ICON = {
     </span>
   ),
   held: (
+    <span className="text-step-prepared">
+      <CircleHalf aria-hidden size={12} weight="bold" />
+    </span>
+  ),
+  failing: (
     <span className="text-step-failing">
       <X aria-hidden size={12} weight="bold" />
     </span>

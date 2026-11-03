@@ -629,7 +629,7 @@ function UnitLine({
               className="text-foreground underline underline-offset-2"
               to={`/runs/${readiness.run}`}
             >
-              {runName ?? readiness.run}
+              {`Run ${readiness.run}${runName ? ` · ${runName}` : ""}`}
             </Link>
             <Text as="span" size="xs" tone="secondary">
               {[
