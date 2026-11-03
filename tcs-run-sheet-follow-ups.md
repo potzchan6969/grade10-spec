@@ -24,13 +24,15 @@ Answered on the [Release Phases](docs/prds/products/shared/planning/release-phas
 
 ## Phases, Readiness and the Run Desk
 
-Planned on the [Release Phases](docs/prds/products/shared/planning/release-phases.md) page. The run desk keeps the run tab's shape and replaces the Sheet as the place results are marked.
+Planned on the [Release Phases](docs/prds/products/shared/planning/release-phases.md) page. The run desk replaces the Sheet as the place results are marked, keeping QA's words but not the spreadsheet's shape.
 
 - [ ] Select by phase, release priority and readiness (`--phase`, `--release-priority`, `--ready`, `--section`), resolving to explicit ids through the manual's own unit reader; `--ready` means reviewed or further
 - [ ] Record `Phase: <id>` in the print commit of a run selected by phase, so its reasoned exclusions leave a capability's cases out of that phase's unit
 - [ ] Re-run the failed and blocked rows of a run as a new run (`--rerun <run> --only fail,blocked`)
 - [ ] Open a confirmed selection as a run on the run desk instead of printing a tab; keep the dry run, the fingerprint and the print commit, which names the run in place of the sheet and tab
-- [ ] Carry the tab's layout onto the desk: the reading, marking and filter columns, page and section banners, held columns, draft bands and the Summary's per-surface counts; a per-row case shows its shared text once
-- [ ] Triage and Issue on every marked cell, the row named on each expanded per-row case, and a prefilled bug report from a failed row
+- [ ] Mark on the desk as a run list beside the case: walks first, the rules a case checks, steps beside expectations, the suite's own row table, the Summary's per-surface counts; marking from the list; no grid view
+- [ ] Keep the real test data objects each row used, offering earlier values without assuming them
+- [ ] Triage and Issue on every marked cell, the expectation that broke, the row named on each expanded per-row case, and a prefilled bug report from a failed row carrying the objects it used
+- [ ] Walk a fixed row again in place until the run closes, at the same case revision
 - [ ] An Access service token for the run sheet, the release command and the finalized-run check to reach the desk
 - [ ] Retire the Sheets writer, its layout and its Google identity once a phase has passed on the run desk
