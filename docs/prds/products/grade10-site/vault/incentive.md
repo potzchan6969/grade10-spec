@@ -109,6 +109,8 @@ reach the wallet together on day 30, and each day's amount drips in after that.
   - **Forfeit at Release, as Built** — where the card's rule forfeits, releasing it before day N takes back what is still locked on it; a retrieval request that is called off takes back nothing
 - 🚧 **Never Taken Back** — incentive in the wallet stays the collector's, whatever happens to the card
 
+::image{src="assets/diagrams/vault-earning-clock.svg" alt="A card's earning clock: the Vault Terms seal pins the rate, the lock and the fee; Earning Starts, never before the seal; each day earns only if the card is eligible; the first 30 days vest on the card and are released at once, then the daily drip goes into the wallet; an owner who retrieves the card before release forfeits what is vesting and pays the early retrieval fee inside its period, while a sold card forfeits nothing and its vested days are released on its own day"}
+
 :::callout{kind="note"}
 - ❓ **HKD Wording** — the words that call a Hong Kong dollar figure a guide on signed papers. Legal confirms
 - ❓ **Forfeit Clause** — the Vault Terms' words for forfeiting what is vesting. Legal confirms
@@ -119,6 +121,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
 - 🚧 **Admin Settings** — the rate, the liquidity settings, the liquidity factor on a fixed price, the earning rules, the value cap, the early retrieval fee's period and amount, and the account review threshold; every change logged
 - 🚧 **Pinned to the Card** — the rate, the vesting days, the forfeit rule, the value cap, Earning Starts, and the early retrieval fee's period and amount are pinned when the card's Vault Terms are prepared; a later change reaches only the next card
   - **Unset Refuses** — the paper is not prepared while the rate, the vesting days or the fee's period is unset
+- 🚧 **Forfeit and Fee Apart** — forfeiting what is vesting and the early retrieval fee are separate settings, and either can be 0, so an early retrieval may cost both, one or neither - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#early-retrieval-fee)
 - 🚧 **Pause and the Daily Run** — staff pause incentive, the price import and the drip run daily - [Vault Operations](/p/grade10-site/vault/operations#daily-run)
 
 :::detail{title="Product decisions" for="pm"}

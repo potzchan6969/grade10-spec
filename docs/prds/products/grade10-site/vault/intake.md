@@ -43,11 +43,16 @@ signs - [Consignment Counter](/p/grade10-site/consignment/counter).
      - 🚧 **Editable Until Signed** — the price source, Earns Incentive, Earning Starts and authentication can still change on a received card; a change prepares the Vault Terms again and ends the link already handed over
      - 🚧 **Photos** — can still be added after Receive
 3. 🚧 **Keep or Consign** — per card, with Keep All and Consign All; a consigned card takes its terms there - [Consignment Counter](/p/grade10-site/consignment/counter#terms)
-4. 🚧 **Sign** — in one handover, on the shop's tablet or by one email
+4. 🚧 **Sign** — in one handover, on one link: a QR on the shop's tablet or one email
    - **One Live Link** — emailing the link ends the one on the tablet, and a link opened on the tablet ends the one emailed; the email can be sent again
    - **Vault Terms and Custody Receipt** — always, first
-   - **Consignment Agreement** — only when a card is consigned
+   - **Consignment Agreement** — only when a card is consigned; carried on the Vault Terms' own link - [Consignment Counter](/p/grade10-site/consignment/counter#signing)
+     - **Done Opens It** — once the Vault Terms seal, Done opens the agreement on the same link; several consignments from one visit follow one after another
+     - **Prepared on Its Own** — the agreement's own prepare and hand-over stay, for when the link can't carry it
    - **Agreement Declined** — the Vault Terms still stand, and its cards are kept in the vault
+   - **Start the Next Intake** — offered once every consigned card has its agreement out
+
+::image{src="assets/diagrams/vault-counter-intake.svg" alt="One counter intake across the services: the intake page reads the ID into an e-KYC ID record, finds or makes each product in inventory, receives one vault case a card registered and labelled at Taken At, makes unsigned sale mandates in consignment for consigned cards, then hands the Vault Terms and the carried Consignment Agreement to the collector on one link; the Vault Terms seal pins each card's terms and Earning Starts, a signed agreement waits for approval, and the next intake starts once every agreement is out"}
 
 ## Authentication
 
@@ -95,13 +100,14 @@ built later.
 
 1. 🚧 **Received** — recorded and photographed at intake, or on arrival at KEC
 2. 🚧 **Authenticating** — at the counter, or later for a card kept unchecked - [Authentication](/p/grade10-site/vault/intake#authentication)
-3. 🚧 **In the Vault** — passed and in custody under signed Vault Terms
+3. 🚧 **In the Vault** — passed and in custody under sealed Vault Terms
 4. 🚧 **Earning** — from its Earning Starts date, once authenticated - [Incentive](/p/grade10-site/vault/incentive#earning)
 
+- 🚧 **Not Eligible** — a day an earning card doesn't qualify; it earns again the next day it does - [Incentive](/p/grade10-site/vault/incentive#earning)
 - 🚧 **Failed** — returned to the collector; it never earns
 - 🚧 **Afterwards** — an earning card is consigned, sold or retrieved; a consignment ended or unsold comes back earning - [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval)
 
-::image{src="assets/diagrams/vault-card-life.svg" alt="A card in the vault: Received, Authenticating, In the Vault, Approved to Earn and Consigned; a card that fails authentication is Failed and returned; an earning card is Retrieved, collected at the shop; a consigned card is Sold, or comes back earning when the consignment ends or it goes unsold"}
+::image{src="assets/diagrams/vault-card-life.svg" alt="A card in the vault: Received and labelled at Taken At, Authenticating here or later, In the Vault once the Vault Terms seal, Earning from Earning Starts, and Consigned while still earning; some days an earning card is Not Eligible; a card that fails authentication is Failed and returned; an earning card is Retrieved, collected at the shop; a consigned card is Sold and stops earning, or comes back earning when its consignment ends, goes unsold or is rejected"}
 
 ## Custody
 
