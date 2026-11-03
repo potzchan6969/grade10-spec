@@ -400,6 +400,7 @@ export class DeskStore {
         ...spec,
         name: name ?? `${spec.name} re-run`,
         selection: `the failed and blocked rows of run ${id}`,
+        fingerprint: `rerun-of:${id}@${this.#seq()}`,
         cases,
         walks,
         exclusions: [],

@@ -456,6 +456,37 @@ test("a re-run walks the failed and blocked rows again, keeping their row number
   );
 });
 
+test("a desk re-run names its own fingerprint and keeps its rows' numbers, however often", () => {
+  const { store } = deskInMemory();
+  const { id } = store.open(aSpec(), TESTER);
+  store.mark(id, { marks: [mark("TC1#1", "fail")] }, TESTER);
+  store.mark(id, { marks: [mark("TC1#3", "fail")] }, TESTER);
+  store.mark(id, { marks: [mark("TC2", "blocked")] }, TESTER);
+  const again = store.rerun(id, {}, TESTER);
+  assert.notEqual(again.fingerprint, store.summary(id).fingerprint);
+  assert.match(again.fingerprint, new RegExp(`^rerun-of:${id}@\\d+$`));
+  assert.deepEqual(
+    store.view(again.id).rows.map((row) => row.key),
+    ["TC1#1", "TC1#3", "TC2"],
+  );
+  store.mark(again.id, { marks: [mark("TC1#1", "pass")] }, TESTER);
+  store.mark(
+    again.id,
+    { marks: [mark("TC1#1", "pass", { surface: "mobile" })] },
+    TESTER,
+  );
+  store.mark(again.id, { marks: [mark("TC1#3", "fail")] }, TESTER);
+  store.mark(again.id, { marks: [mark("TC2", "blocked")] }, TESTER);
+  const third = store.rerun(again.id, {}, TESTER);
+  assert.equal(third.rerunOf, again.id);
+  assert.notEqual(third.fingerprint, again.fingerprint);
+  assert.deepEqual(
+    store.view(third.id).rows.map((row) => row.key),
+    ["TC1#3", "TC2"],
+  );
+  assert.equal(store.view(third.id).spec.cases[0].data?.rows.length, 3);
+});
+
 test("verdicts take each case from the newest run on its environment that walked it", () => {
   const { store } = deskInMemory();
   const older = store.open(aSpec(), TESTER);
