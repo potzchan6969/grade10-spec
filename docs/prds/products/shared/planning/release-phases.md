@@ -84,34 +84,34 @@ QA's unit is a section in a phase on a store page, whose cases trace its rules, 
   - **Store Pages** — the cases tracing a rule in the unit
   - **Other Pages** — the suite of the capability; where it spans two phases, QA leaves out the other phase's cases in the dry run with a reason
 - 🚧 **Re-Run** — the failed and blocked rows of a run, opened as a new run
+  - **Again in Place** — until a run closes, a fixed row is walked again where it failed, at the same case revision
 
 ## Run Desk
 
-The run tab QA marks today, live in the manual: the same columns, banners and words, with its results reaching the pages.
+QA's words in a run's own shape: the run as a list beside the case being walked, built from what the suites already say.
 
-- 🚧 **Same Tab** — what each run tab holds today
-  - **The Case** — id, title, pre-conditions, test data, steps and expected results, as the suite says them, never edited on the desk
-  - **The Marks** — Web, Mobile, Auto web and Auto mobile in the six result words, and Notes
-  - **Banners** — a page's banner over its sections' banners, each folding the rows under it
-  - **Held Columns** — the case's id and title stay in view however far the run scrolls
-- 🚧 **One Case, Its Rows** — a case run once per row of its test data shows its shared text once and one line per row, each marked on its own
+- 🚧 **Run List** — one line a case, its rows as pips on the tester's surface, grouped by walk, then by page and section, with their progress
+  - **Marked From the List** — the keyboard moves through the list and marks the row in focus, without opening the case
+- 🚧 **The Case** — the case as a tester walks it, never edited on the desk
+  - **What It Checks** — the rules it traces, quoted from the page, or its journey's words outside the store
+  - **Steps Beside Expectations** — each step with what it should show
+  - **Its Rows** — a case run once per row of its test data shows the suite's own table, with a verdict on each row
+- 🚧 **Walk Mode** — a walk's cases in route order, its starting state shown once; a route step ticks an observation, and each case's verdict still comes from its own rows
+- 🚧 **Test Data in Use** — each row keeps the real objects it used
+  - **Offered, Never Assumed** — an earlier value is offered, never taken as given, and never stands in for a starting state
+  - **Never Asked** — the environment's address, and a value that follows from another
 - 🚧 **Filters** — product, domain, capability, level, severity, priority, phase, surface and result; a filter changes what shows, never what is in the run
 - 🚧 **Run Header** — each surface's counts and pass rate, as the Summary tab gives them, with n/a left out of the rate
-- 🚧 **Your Surface** — a tester marks one surface, chosen once on each device; a phone starts on Mobile, and the automated columns are never in a person's path
-- 🚧 **Marking** — keyboard first on a computer, in the tab's grid
-  - **On a Phone** — one case a screen, with large buttons for the surface being tested, so a tester walking the mobile site marks it on the same phone
+- 🚧 **Marking** — keyboard first on a computer, on the tester's own surface, chosen once on each device; the automated columns are never in a person's path
+  - **On a Phone** — Mobile first; the case fills the screen and the list slides in from the side, so a tester walking the mobile site marks it on the same phone
   - **No Bulk Verdict** — many rows at once only as blocked, skipped, n/a or to do; a pass or a fail is marked one row at a time
-- 🚧 **Several at Once** — a mark reaches every open copy of the run, and the run shows who is on which row, as the Sheet does today
-- 🚧 **Signed** — every mark keeps the signed-in e-mail, shown as the team map's handle where the map knows it
-- 🚧 **Frozen Content** — a row keeps its case as selected, so a later edit to a suite never changes a run
-- 🚧 **History** — every change is kept, with who and when
-- 🚧 **Export** — a run downloads as a spreadsheet file
+- 🚧 **Live and Signed** — a mark reaches every open copy of the run, so one tester's phone and laptop agree, and keeps the signed-in e-mail, shown as the team map's handle where the map knows it
+- 🚧 **Kept** — a row keeps its case as selected, so a later edit to a suite never changes a run; every change is kept with who and when; a run downloads as a spreadsheet file
 - 🚧 **Run States** — in order
   1. **Open** — the selection can change, and the marks on rows that stay are kept
   2. **Finalized** — the selection is frozen and recorded in git, as printed runs are today; marking goes on
   3. **Closed** — marking ends
 - 🚧 **Where It Runs** — on the manual's own deployment, behind the Cloudflare Access that already guards it; the store's "not an application" rule names it as its one exception
-- 🚧 **Left With the Sheet** — cell comments, columns of QA's own and pasted screenshots; Notes, the linked issue and the export carry what they held
 
 ## Results
 
@@ -127,7 +127,8 @@ The run tab QA marks today, live in the manual: the same columns, banners and wo
   - **Data** — the test data was missing; walked again once QA prepares it
   - **Flaky** — on an automated fail only: the test failed where the product works; its author fixes the test
   - **Deferred** — on a skip only: left on purpose; a P0 unit waits for it
-- 🚧 **Filing a Bug** — a fail opens the app's bug report filled from the case and the run, and reads "bug, no issue yet" until the issue's link is pasted in
+- 🚧 **Which Expectation** — a fail asks which of the case's expectations broke, chosen from its lines, or skipped with one key
+- 🚧 **Filing a Bug** — a fail opens the app's bug report filled from the case, the expectation that broke, the objects the row used and the run, and reads "bug, no issue yet" until the issue's link is pasted in
 - 🚧 **Automated Results** — entered by hand, as they are today
 - 🚧 **Row Identity** — a case run once per row of its test data is one row each, so a failure names its row
 - 🚧 **Results on the Page** — the QA tab, the page chip and the phase board read the run desk's latest verdicts when opened; results never reach git
@@ -167,9 +168,9 @@ QA deciding what to walk next, the product manager deciding what a phase holds, 
 - **Reviewed is a step** — 1,550 cases are draft against 237 reviewed, and the run sheet prints reviewed cases only, so a unit with draft cases is not ready for a run
 - **Capabilities outside the store** — only the store's cases trace a page's rules; elsewhere a section's readiness would be its whole suite's, so the unit is the capability
 - **No deployment state** — of the 204 sections with lines being built, 110 are linked from no change and only 58 from an active one, so a built or deployed state read through changes would be wrong more often than right; a section not yet deployed shows as Blocked when QA runs it
-- **The tab QA already marks** — QA's run 5, store-stage1, held 170 cases as 326 rows under 45 section banners; the desk keeps that tab's shape. What it adds over the Sheet is results reaching the pages and the release, triage on each mark, rows named apart and reprints that keep marks; marking together and a cell's history the Sheet already gave
+- **Past the Sheet** — QA's tab is shaped by what a cell can hold: run 5, store-stage1, put 170 cases on 326 rows, the suites' walks and shared test data had nowhere to go, and 83 placeholders were resolved by hand at 791 uses. The desk keeps QA's words and walks a case the way the suites write it; no grid view is built, a spreadsheet stays one export away, and cell comments and screenshots go to Notes and the bug's issue
 - **Derived, never set** — readiness is read from the pages, the suites and the run desk; a status somebody sets goes stale when nobody updates it
 - **The case rules are untouched** — where results live is reworded by the rules' owner when the Sheet retires
-- **Not in scope** — a phase calendar or burndown, moving work between phases from the manual, and a personal queue
+- **Not in scope** — a phase calendar or burndown, moving work between phases from the manual, a personal queue, and showing who else is on a run while QA is one person
 - ❓ **Measured by** — days from Reviewed to a unit's first run, and P0 units passed by their phase's target; nothing records them yet. Product confirms
 :::
