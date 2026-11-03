@@ -52,7 +52,7 @@
 - Unsold close
   - Stock released: a listing that closes with no winner releases its inventory hold at the close, with no operator step
   - Released note: an Unsold listing says its stock was released, and when
-  - Relist: an Unsold listing's row in the Listings table opens a new draft with the same product, quantity and catalogue copy, once its stock is released, outside a campaign and once per listing
+  - Relist: an Unsold listing's row in the Listings table, or its listing page, opens a new draft with the same product, quantity and catalogue copy, once its stock is released, outside a campaign and once per listing
   - Earlier holds freed: holds left by earlier Unsold closes are released once
 - Unit-aware source selection
   - For a selected Cert record, the main selector offers the product's untagged source media and media tagged to that record. Every Cert record has a Cert ID.
