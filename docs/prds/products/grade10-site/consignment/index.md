@@ -24,7 +24,7 @@ The card is authenticated, at the counter or later, and stored; it goes on sale 
 # Selling
 
 ## Staff — Approve the listing
-Grade10 sets the list or starting price, and for both channels where the card starts.
+Once the Vault Terms seal and the card passes, Grade10 sets the list or starting price, and for both channels where the card starts; or rejects it, and the card stays in the vault, earning.
 
 ## Buyer — Buy it
 At the shop's counter, online or at auction; the card stops earning.

@@ -12,8 +12,11 @@ vault and keeps earning.
 - 🚧 **In the Store** — while the card is on sale; not once it is sold or in an open order
 - 🚧 **At Auction** — until the lot is published in the catalogue, then locked so bidders never see a lot disappear
 - 🚧 **Early Fee** — one fee, charged only once an auction lot is prepared, US$0 by default; an admin setting pinned to the agreement and printed only when it is above 0
-  - **From the Wallet** — a short wallet is paid at the counter or becomes a debt
   - **Quoted First** — the collector sees the total before confirming
+
+:::callout{kind="note"}
+- ❓ **How the Early Fee Is Paid** — from the wallet, a short wallet paid at the counter or becoming a debt, as this page said; or by card on the vault's Shopify invoice, like the early retrieval fee, as it is built - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval#early-retrieval-fee). The owner confirms
+:::
 
 ## What Happens
 

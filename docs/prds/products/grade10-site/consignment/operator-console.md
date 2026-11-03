@@ -29,6 +29,9 @@ the settings the schedule runs on.
 - **Counts** - each view carries its count, and every view adds up to all
 
 - 🚧 **Pending Approval** — a consignment signed at the counter, or submitted by the collector from the vault, waits here from its signing; it replaces New, To price and To sign - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
+  - **Ready or Waiting** — each card says whether it waits for the Vault Terms to seal or for authentication
+  - **Approval Clock** — approve today, within so many days, or late by so many, against the approval target
+- 🚧 **Views** — Needs You, Signing, Pending Approval, On Sale, Sold, Ended, Held, Closed and All, each named beside the collector's words for it - [Consignment States](/p/grade10-site/consignment/consigning#consignment-states)
 - 🚧 **Sold** — waits 3 business days after the buyer pays, not the return window
 - 🚧 **Ended Unsold** — the card goes back to the vault and keeps earning; nothing waits on the collector's choice
 
@@ -47,7 +50,7 @@ the settings the schedule runs on.
 - **Acts** - receive, set terms, prepare the agreement, list, change the
   price, take off sale, return, extend, move to the other channel or the
   vault - [Services and Hand-offs](/p/grade10-admin/inventory/services#hand-offs)
-- 🚧 **Approve or Reject** — sets the list or starting price, never below the lowest acceptable price, and the starting channel of a card consigned to both; receiving, the terms and the signing are taken at the counter, which ends at signing - [Consignment Counter](/p/grade10-site/consignment/counter)
+- 🚧 **Approve or Reject** — approve sets the list or starting price, never below the lowest acceptable price and price-checked again, and the starting channel of a card consigned to both; reject ends the mandate with a reason, and the card stays in the vault, earning; receiving, the terms and the signing are taken at the counter, which ends at signing - [Consignment Counter](/p/grade10-site/consignment/counter)
 - **Before the act** - a dialog states the rule first: the floor, the
   schedule, the term
 - **Withheld in words** - an act not offered yet says why
@@ -88,8 +91,6 @@ pinned to a consignment when its agreement is prepared.
 
 | Setting | Default | Choices |
 | --- | --- | --- |
-| Setting | Default | Choices |
-| --- | --- | --- |
 | Commission, for each channel | unset; entered at launch as **12%** for the store and **10%** at auction | a share of the price |
 | Minimum commission, for each channel | none | an amount per card |
 | Fee for ending early | **US$0**, charged only once an auction lot is prepared | an amount |
@@ -100,6 +101,8 @@ pinned to a consignment when its agreement is prepared.
 - 🚧 **Vault-First Schedule** — the figures above; a refund after payout is reversed from the wallet; a partner keeps its own bank settlement. No incentive, identity or payout-destination setting is left - [Incentive](/p/grade10-site/vault/incentive#settings)
 - 🚧 **A Version per Save** — each save that changes a figure an agreement prints is the next version; an agreement keeps the version it was prepared on
 - 🚧 **Operations Settings** — figures for staff work that no agreement prints, so a change never makes a new version: the price check's **20%** below and **50%** above, ending soon at **7** days, the contact limit at **30** days, the approval target at **2** business days, slow cards at **45** days and unconsigned cards flagged at **90** - [Dashboard](/p/grade10-site/consignment/dashboard)
+  - **Saved Apart** — with their own save, a reason, and their own change log
+  - **Not Read Yet** — the contact limit, slow cards and unconsigned flags are marked as read by nothing until the dashboard uses them
 - **Pinned to the agreement** - a change reaches the next agreement
   prepared; one waiting for a signature keeps the schedule it was prepared on
 - **Unset refuses** - an agreement is not prepared while a figure it prints

@@ -31,7 +31,7 @@ goes below. Grade10 prices the listing at approval.
 | 🚧 Price Grade10 sets | the list price, never below the lowest acceptable price | the starting price |
 | Commission | 🚧 a share of the sale price, one rate for the store, replacing the price bands | a share of the hammer price only, one rate; the buyer's premium is Grade10's |
 
-- 🚧 **Both** — one agreement and one lowest acceptable price, required, cover both; the commission is the rate of the channel the card sells in - [Consign to Store & Auction](/p/grade10-site/consignment/consigning#consign-to-store-auction)
+- 🚧 **Both** — one agreement and one lowest acceptable price, required, cover both; the commission is the schedule's rate of the channel the card sells in, and the lowest price clears the minimum commission in both - [Consign to Store & Auction](/p/grade10-site/consignment/consigning#consign-to-store-auction)
 - **Commission**
   - **Minimum Charge** — optional, per card
   - **Pinned to the Agreement** — the rates in force when the agreement is prepared; a later change reaches only the next agreement
@@ -41,6 +41,10 @@ goes below. Grade10 prices the listing at approval.
 - **Agreement** — one Consignment Agreement a consignment; a change makes a new version, never an edit
   - 🚧 **Renewal Is Signed** — extending or repricing prepares a renewal the consignor signs, linked to the one it renews
 - 🚧 **No Incentive at Consigning** — built as a setting that starts at 0, so the agreement leaves its line out; a vaulted card earns the vault's daily incentive instead - [Incentive](/p/grade10-site/vault/incentive)
+
+:::callout{kind="note"}
+- ❓ **The Auction's Lowest Price** — optional, as the table says, or required, as the build has it and the plan reads; the two disagree. The owner confirms
+:::
 
 ## Price Check
 
@@ -76,10 +80,11 @@ For a card with a market price of HKD 10,000:
 
 - 🚧 **Staff Approval** — every consignment, before it goes on sale
   - **Authenticated First** — a card checked later waits until it passes - [Authentication](/p/grade10-site/vault/intake#authentication)
+  - **The Vault's Word on Each Card** — approval waits until the Vault Terms seal and the card is authenticated; the vault also confirms each card is the collector's and still held, and the market price is read by Grade10, never sent by the page
   - **List or Starting Price** — set by Grade10, as the terms say
   - **Starting Channel** — for a card consigned to both, staff decide which channel it starts in; the collector doesn't choose the order
   - **Approved** — listed: a store product, or the card added to an auction lot
-  - **Rejected** — the collector is told why and can edit and resubmit
+  - **Rejected** — the mandate ends as rejected, the collector is emailed why, and the card stays in the vault, earning
 - 🚧 **Changing the Lowest Price** — from the dashboard; approved like a new listing
   - **In the Store** — a new lowest price above the list price raises the list price to match
   - **At Auction** — until the catalogue is published, then locked
@@ -116,7 +121,8 @@ For a card with a market price of HKD 10,000:
 ### Both
 
 - 🚧 **One at a Time** — a card consigned to both is never on the store shelf and in an auction together
-- 🚧 **Moving** — if it doesn't sell, staff move it to the other channel without the collector signing again, taking it off the first channel at once
+- 🚧 **Moving** — if it doesn't sell, staff move it to the other channel without the collector signing again, taking it off the first channel at once; it keeps its one lowest price
+  - **An Unsold Lot** — moves on to the store
   - **From an Auction** — only before the catalogue is published, or after the auction ends unsold
 - 🚧 **Dashboard** — shows which channel the card is in now
 
@@ -125,6 +131,26 @@ For a card with a market price of HKD 10,000:
 - **Paid on the Listed Price** — a discount the buyer gets at checkout is Grade10's, and so is a refund where the buyer keeps the card
 - **The Collector's Until Sold** — ownership passes to the buyer only when the card is delivered or collected
 - **Points and Discounts** — points, coupons and the shop's discounts reach a consigned card, and the collector is still paid on the listed price; staff leave consigned cards out of a discount by its collection in the store
+
+## Refunds
+
+- 🚧 **After Delivery** — the mandate ends and the proceeds are reversed from the wallet - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#sale-proceeds)
+  - **A Card Sent Back** — comes in through a new intake, since the vault released it to its buyer - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+- 🚧 **Before Delivery** — while the vault still holds the card
+  - **In the Store** — the refund may relist the card for the rest of its term
+  - **At Auction** — the refund ends the mandate, and the card is vault-only again
+
+## Consignment States
+
+1. 🚧 **Ready to Sign** — `profile.consignments.view.signing` ("Ready to sign"): consigned at intake, the agreement not yet signed
+2. 🚧 **Waiting for Approval** — `profile.consignments.view.pending` ("Waiting for approval"): signed, until staff approve the listing
+3. 🚧 **On Sale** — `profile.consignments.view.onsale` ("On sale"): in the store or at auction, still earning
+4. 🚧 **Sold** — `profile.consignments.view.sold` ("Sold"): the card stops earning; proceeds reach the wallet 3 business days after the buyer pays
+5. 🚧 **Closed** — `profile.consignments.view.closed` ("Closed"): the sale settled
+
+- 🚧 **Ended** — `profile.consignments.view.ended` ("Ended"): declined, lapsed, rejected, unsold, taken off sale or refunded; a card still in the vault is vault-only again and keeps earning
+
+::image{src="assets/diagrams/consignment-mandate.svg" alt="A sale mandate: Ready to sign, made at Keep or Consign; Waiting for approval, which waits for the vault's word; On sale in the store, at auction or both; Sold, when the card stops earning; Closed with the proceeds in the wallet. A declined or lapsed agreement, a rejection, or a card unsold or taken off sale ends the mandate, and the card keeps earning; a sale refunded has its proceeds reversed, and a store refund before delivery relists the card, while a refund after delivery or at auction ends the mandate"}
 
 ## Seller Name
 
