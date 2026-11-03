@@ -51,6 +51,7 @@ vault's daily incentive and consignment sale proceeds -
   - **Built** — by bank transfer, to a payout account whose name matches the verified identity
 - 🚧 **Held While It Is Paid** — the amount leaves what can be cashed out the moment it is asked for, and comes back if its batch is rejected
 - 🚧 **Account** — entered on the first request, saved to the profile and filled in next time; in the verified collector's name; a Hong Kong bank account or an FPS handle
+  - 🚧 **Checking It Is Theirs** — not yet decided how the account entered is matched to the collector; possibly an operator checks it by hand on each request
   - 🚧 **Changing It** — the collector may change it, after passing the identity check again
 - **Held** — while the collector has a debt
 
