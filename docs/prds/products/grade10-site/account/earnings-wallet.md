@@ -42,13 +42,15 @@ vault's daily incentive and consignment sale proceeds -
 ## Cash-Out
 
 - 🚧 **Request** — at least US$65 and at most US$6,500, one every 7 days; each figure an admin setting
+  - 🚧 **Asked from the Wallet** — the collector asks from their wallet page: the amount and what it arrives in, where it goes, a review, then a submitted confirmation
   - **Review Above** — an admin setting, off by default: a request above it waits for finance, as a held cash-out does
   - **Currency** — cashed out in Hong Kong dollars or US dollars; an HKD request is quoted at the request's rate, kept with it, and a USD or overseas-bank request is handled manually by our team - decided by the owner, 2026-10-30
+  - 🚧 **US Dollars and Overseas Banks Go Manual** — the collector submits it the same way, and it lands with the team as a manual request, never paid online
   - **Built** — staff-side only: the collector's page to see the wallet, save a payout account and ask for a cash-out is not built yet
 - 🚧 **Paid** — within 3 business days, by FPS or bank transfer
   - **Built** — by bank transfer, to a payout account whose name matches the verified identity
 - 🚧 **Held While It Is Paid** — the amount leaves what can be cashed out the moment it is asked for, and comes back if its batch is rejected
-- **Account** — entered on the first request, saved to the profile and filled in next time; in the verified collector's name
+- 🚧 **Account** — entered on the first request, saved to the profile and filled in next time; in the verified collector's name; a Hong Kong bank account or an FPS handle
   - 🚧 **Changing It** — the collector may change it, after passing the identity check again
 - **Held** — while the collector has a debt
 
