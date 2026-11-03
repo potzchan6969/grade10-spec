@@ -211,8 +211,7 @@ function WithdrawalDetails({
                 Details
               </Text>
               <div>
-                {request.currency !== "USD" &&
-                request.convertedHkd != null ? (
+                {request.currency !== "USD" && request.convertedHkd != null ? (
                   <DetailRow label="Exchange rate">
                     <span className="tabular-nums">
                       US$1 = HK$
