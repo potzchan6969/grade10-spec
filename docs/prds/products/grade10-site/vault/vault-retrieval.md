@@ -64,6 +64,7 @@ own - [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval)
 - 🚧 **Handover** — at the shop, by appointment
   - **Identity** — staff check the collector's face against their ID, and the ID against the one recorded at intake, or the identity check for a mail-in: the legal name must match, and the ID number typed again must match the stored digest
   - **A Mismatch** — the card is handed over only with a recorded reason, naming the staff member who gave it
+  - **Checked This Hour** — a match counts for the handover for one hour
   - **Someone Else Collecting** — a person the collector named in the dashboard shows their own ID
   - **Condition** — checked against the intake photos
   - **Retrieval Note** — confirmed by whoever collects

@@ -72,6 +72,7 @@ reach the wallet together on day 30, and each day's amount drips in after that.
     - **Cards Already Signed** — a rule reaches them only when staff apply it, with approval, from the next day; a day already earned is never taken back
   - **Value Cap** — the most of a card's market price that earns, an admin setting signed with the card; none by default
   - **Account Review** — an account earning more than an admin threshold in a month is reviewed by staff, never cut back; off by default
+    - **Accounts to Review** — listed on the earnings desk until staff mark each one seen with a note
   - **Vesting Still Releases** — what vested before stays on the card and is released on its day; what is in the wallet stays there
   - **Built** — no tiers: at least **5** sales in 30 days for every card, every product eligible and no cap
 - 🚧 **Grace Days** — a card that was earning and loses its market price keeps earning on its last price and liquidity for up to 3 days

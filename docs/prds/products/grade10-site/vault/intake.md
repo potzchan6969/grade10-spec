@@ -25,11 +25,14 @@ signs - [Consignment Counter](/p/grade10-site/consignment/counter).
      - **Kinds** — an HKID, a Taiwan national ID, a Taiwan resident certificate in its old or new form, or a passport, each checked against its own format
      - **Number Kept Masked** — typed once, kept only as a mask that never shows the check digit (A12*****) and a one-way digest; the full number and the date of birth are never stored
      - **Use That Account** — when the same ID is already on another account, staff are told and offered that account
+       - **Which Account** — named only to staff who may read identity records; others are told to ask a supervisor
+       - **Kept Here Anyway** — staff may keep the cards on the account in hand only with a recorded reason
    - **Ownership Declaration** — the collector declares they own every card
    - **Collection Notice** — shown before the ID is read
    - **Taken At** — required: the shop or a card event; where each card starts in inventory - [Locations](/p/grade10-admin/inventory/locations#places)
    - **Kept At** — where the cards will be held, a place that holds vaulted cards; it starts as Taken At's destination, and a card elsewhere shows To Move until it arrives - [Transit](/p/grade10-admin/inventory/transit)
 2. 🚧 **Items** — one row per card: the product, its condition or certificate, its SNKRDUNK card or a fixed price, and front and back photos - [Products and Stock](/p/grade10-admin/inventory/catalog#product-schemas)
+   - **A Price Source for Every Card** — a card with neither a SNKRDUNK card nor a fixed price is not received; only staff who may set fixed prices can give one, so others ask an admin
    - **Market Price** — the card's 30-day price, shown to the collector, with its sales and liquidity in the staff's detail view
    - **Estimated Incentive** — about how much a day and over a year, at today's price, or Not Eligible - [Incentive](/p/grade10-site/vault/incentive#daily-amount)
    - **Earns Incentive** — a tick on each card, on by default
@@ -38,6 +41,7 @@ signs - [Consignment Counter](/p/grade10-site/consignment/counter).
    - **Receive** — one press takes every card into the vault and inventory at Taken At and prints its label; a card refused is named, and the rest wait for it
 3. 🚧 **Keep or Consign** — per card, with Keep All and Consign All; a consigned card takes its terms there - [Consignment Counter](/p/grade10-site/consignment/counter#terms)
 4. 🚧 **Sign** — in one handover, on the shop's tablet or by one email
+   - **One Live Link** — emailing the link ends the one on the tablet, and a link opened on the tablet ends the one emailed; the email can be sent again
    - **Vault Terms and Custody Receipt** — always, first
    - **Consignment Agreement** — only when a card is consigned
    - **Agreement Declined** — the Vault Terms still stand, and its cards are kept in the vault
