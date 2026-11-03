@@ -97,6 +97,9 @@ export type RunCase = {
   other?: { label: string; text: string }[];
   /** A case run once per row of its test data: the table as written. */
   data?: { header: string[]; rows: string[][] };
+  /** The data rows this run walks, from 1, where it walks only some: a
+   * re-run of the rows that failed keeps their numbers. Absent, every row. */
+  rows?: number[];
   /** The surfaces in play before anyone marks, from its testability and a
    * `[web only]` or `[mobile only]` title: a surface not in play starts n/a. */
   surfaces: Surface[];
@@ -234,7 +237,9 @@ export type DeskVerdicts = {
         run: string;
         marker?: string;
         rev?: number;
-        rows: { key: string; marks: Mark[] }[];
+        /** `inPlay` is the case's surfaces, always sent, so `caseVerdict`
+         * reads a surface nobody can walk as n/a rather than to do. */
+        rows: { key: string; inPlay?: Surface[]; marks: Mark[] }[];
       }
     >
   >;
@@ -251,3 +256,7 @@ export type ObservationInput = Omit<Observation, "by" | "at" | "seq">;
 
 /** The address the manual's Worker answers the desk on. */
 export const DESK_BASE = "/api/desk";
+
+/** The header the manual's Worker names the Access identity in, the only one
+ * the desk trusts; a client's own is stripped before it reaches the desk. */
+export const DESK_EMAIL_HEADER = "x-desk-email";

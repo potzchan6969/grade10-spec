@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // The run desk: one Durable Object holding every QA run in SQLite storage.
+  // A Worker of its own, so the manual's deploy on every push to main never
+  // restarts it. It has no address: no route and no workers.dev, so the only
+  // way in is the manual's Worker, through its DESK service binding, behind
+  // the Cloudflare Access that guards spec.grade10-stg.com.
+  "name": "grade10-run-desk",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-01",
+  "account_id": "de021143aac704ccbda9c3cd00be261d",
+  "workers_dev": false,
+  "preview_urls": false,
+  "durable_objects": {
+    "bindings": [{ "name": "RUN_DESK", "class_name": "RunDesk" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["RunDesk"] }]
+}

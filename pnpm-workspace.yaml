@@ -1,9 +1,11 @@
 packages:
   - "apps/*"
   - "packages/*"
-  # Exactly `tools/manual`, not `tools/*`: `tools/openspec-viewer` is a
+  # Each tool by name, not `tools/*`: `tools/openspec-viewer` is a
   # submodule with its own pnpm workspace and must not join this one.
   - "tools/manual"
+  # The run desk's Worker, which the manual's Worker reaches by binding.
+  - "tools/run-desk"
   # The OpenSpec store's readers, which `scripts/openspec` runs on.
   - "tools/openspec-store"
 allowBuilds:

@@ -439,6 +439,7 @@ test("Test's jobs skip only what they do not read", () => {
   for (const path of [
     "tools/manual/src/a.ts",
     "tools/manual/walk/board.walk.ts",
+    "tools/run-desk/src/store.ts",
     "tools/openspec-viewer",
     "tools/openspec-viewer/lib/a.mjs",
     "scripts/openspec/validate-changes.mjs",
