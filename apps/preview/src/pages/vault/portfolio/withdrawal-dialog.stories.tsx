@@ -1,6 +1,7 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ComponentProps, useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
@@ -10,9 +11,11 @@ import { WithdrawalDialog, type WithdrawalMethod } from "./withdrawal-dialog";
 function WithdrawalDialogDemo({
   initialStep,
   payoutMethods,
+  flow,
 }: {
   initialStep?: ComponentProps<typeof WithdrawalDialog>["initialStep"];
   payoutMethods?: WithdrawalMethod[];
+  flow?: ComponentProps<typeof WithdrawalDialog>["flow"];
 }) {
   const [open, setOpen] = useState(true);
 
@@ -38,9 +41,11 @@ function WithdrawalDialogDemo({
         minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
         payoutMethods={payoutMethods}
         initialStep={initialStep}
+        flow={flow}
         open={open}
         onOpenChange={setOpen}
       />
+      <Toast position="bottom-right" />
     </div>
   );
 }
@@ -86,7 +91,7 @@ export const Amount: Story = {
     expect(dialog.getAllByText(/Available: US\$160/).length).toBeGreaterThan(0);
     expect(dialog.getByText("Hong Kong Dollar")).toBeVisible();
     expect(dialog.getByText("US Dollar")).toBeVisible();
-    expect(dialog.getByText(/By request only/)).toBeVisible();
+    expect(dialog.getByText("Not available now")).toBeVisible();
     expect(dialog.getByLabelText("Withdraw Amount")).toHaveValue(160);
     expect(dialog.getByRole("button", { name: "Continue" })).toBeEnabled();
     const field = dialog.getByLabelText("Withdraw Amount");
@@ -108,14 +113,14 @@ export const Destination: Story = {
     await enterMaxAndContinue(dialog);
     await waitFor(() =>
       expect(
-        dialog.getByRole("heading", { name: "Withdraw To" }),
+        dialog.getByRole("heading", { name: "Withdrawal Destination" }),
       ).toBeVisible(),
     );
     expect(dialog.getByText("HSBC")).toBeVisible();
     expect(dialog.getByText("123 •••• 8304")).toBeVisible();
     expect(dialog.getByText("+852 •••• 4567")).toBeVisible();
     expect(dialog.getByText("Add Hong Kong bank or FPS")).toBeVisible();
-    expect(dialog.getByText("US$ or overseas bank")).toBeVisible();
+    expect(dialog.getByText("Overseas bank")).toBeVisible();
   },
 };
 
@@ -158,53 +163,49 @@ export const FirstPayout: Story = {
   },
 };
 
-/** Manual request — US$/overseas banks get their own form, no step rail. */
+/** Manual request — US$/overseas payouts go through an email to Grade10. */
 export const ManualRequest: Story = {
   parameters: {
     verification: { caseId: "vc_57fb92b8-3636-4606-af08-e39e67ed663d" },
   },
-  args: { initialStep: "manual-request", payoutMethods: PAYOUT_METHODS },
+  args: { payoutMethods: PAYOUT_METHODS },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
     await waitFor(() =>
       expect(
-        dialog.getByRole("heading", { name: "Manual Withdrawal Request" }),
+        dialog.getByRole("heading", { name: "Withdraw Earnings" }),
       ).toBeVisible(),
     );
-    expect(dialog.getByLabelText("Amount (US$)")).toHaveValue("160");
-    expect(dialog.getByLabelText("Amount (US$)")).toHaveAttribute("readonly");
-    expect(dialog.getByLabelText("Bank country / region")).toBeVisible();
-    expect(dialog.getByLabelText("Bank name")).toBeVisible();
-    expect(dialog.getByLabelText("SWIFT / BIC")).toBeVisible();
-    expect(dialog.getByLabelText("Account Holder Name")).toHaveValue("");
-    expect(dialog.getByRole("button", { name: "Continue" })).toBeDisabled();
-    expect(dialog.queryByText(/Step \d of 3/)).toBeNull();
-    await userEvent.type(dialog.getByLabelText("Bank name"), "Chase");
-    await userEvent.type(
-      dialog.getByLabelText("Account number / IBAN"),
-      "987654321",
-    );
-    await userEvent.type(dialog.getByLabelText("SWIFT / BIC"), "CHASUS33");
-    await userEvent.type(
-      dialog.getByLabelText("Account Holder Name"),
-      "Chan Tai Man",
-    );
-    await userEvent.click(dialog.getByRole("button", { name: "Continue" }));
+    await userEvent.click(dialog.getByRole("button", { name: "Request" }));
+    const page = body(canvasElement);
+    const contact = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "Email Grade10" });
+      expect(found).toBeVisible();
+      return within(found);
+    });
+    expect(contact.getByText("support@grade10.com")).toBeVisible();
+    expect(
+      contact.getByRole("button", { name: "Open Mail App" }),
+    ).toBeVisible();
+    expect(contact.getByRole("button", { name: "Copy Message" })).toBeVisible();
+  },
+};
+
+/** On-file bank — paperwork captured in store: HKD only, no add or overseas. */
+export const OnFileBank: Story = {
+  parameters: {
+    verification: { caseId: "vc_2d2a84d8-c12f-4c05-9f41-3051c7c5d04e" },
+  },
+  args: { flow: "prelinked", payoutMethods: [PAYOUT_METHODS[0]] },
+  play: async ({ canvasElement }) => {
+    const dialog = await openDialog(canvasElement);
     await waitFor(() =>
       expect(
-        dialog.getByRole("heading", { name: "Review Withdrawal" }),
+        dialog.getByRole("heading", { name: "Withdraw Earnings" }),
       ).toBeVisible(),
     );
-    expect(dialog.getByText(/Chase/)).toBeVisible();
-    expect(dialog.getAllByText(/Manual request/).length).toBeGreaterThan(0);
-    await userEvent.click(
-      dialog.getByRole("button", { name: "Submit Request" }),
-    );
-    await waitFor(() =>
-      expect(
-        dialog.getByRole("heading", { name: "Manual Request Submitted" }),
-      ).toBeVisible(),
-    );
+    expect(dialog.queryByText("Receive in")).toBeNull();
+    expect(dialog.queryByText("US Dollar")).toBeNull();
   },
 };
 
@@ -219,7 +220,7 @@ export const Review: Story = {
     await enterMaxAndContinue(dialog);
     await waitFor(() =>
       expect(
-        dialog.getByRole("heading", { name: "Withdraw To" }),
+        dialog.getByRole("heading", { name: "Withdrawal Destination" }),
       ).toBeVisible(),
     );
     await userEvent.click(dialog.getByRole("button", { name: "Continue" }));
@@ -230,7 +231,7 @@ export const Review: Story = {
     );
     expect(dialog.getByText(/HK\$1,248/)).toBeVisible();
     expect(dialog.getByText("HSBC")).toBeVisible();
-    expect(dialog.getByText("123 •••• 8304")).toBeVisible();
+    expect(dialog.getByText("123-456-8304")).toBeVisible();
     expect(
       dialog.getByRole("button", { name: "Submit Request" }),
     ).toBeVisible();
@@ -257,16 +258,15 @@ export const Submitted: Story = {
     await userEvent.click(
       dialog.getByRole("button", { name: "Submit Request" }),
     );
+    const page = body(canvasElement);
+    await waitFor(() => expect(page.queryByRole("dialog")).toBeNull());
     await waitFor(() =>
-      expect(dialog.getByText(/Withdrawal of US\$160 requested/)).toBeVisible(),
+      expect(page.getByText("Withdrawal requested")).toBeVisible(),
     );
-    expect(dialog.getByText("Request submitted")).toBeVisible();
-    expect(dialog.getByText("Grade10 review")).toBeVisible();
-    expect(dialog.getByText(/Withdrawn to HSBC/)).toBeVisible();
     expect(
-      dialog.getByRole("button", { name: "View Withdrawal" }),
+      page.getByText(/to HSBC\. We’ll email you once it’s transferred\./),
     ).toBeVisible();
-    expect(dialog.getByRole("button", { name: "Done" })).toBeVisible();
+    expect(page.getByRole("button", { name: "View withdrawal" })).toBeVisible();
   },
 };
 

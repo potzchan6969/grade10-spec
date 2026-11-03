@@ -450,12 +450,14 @@ const PAYOUT_METHODS = [
     kind: "bank" as const,
     title: "HSBC",
     detail: "123 •••• 8304",
+    fullDetail: "123-456-8304",
   },
   {
     id: "fps-mobile",
     kind: "fps" as const,
     title: "FPS",
     detail: "+852 •••• 4567",
+    fullDetail: "+852 9123 4567",
   },
 ];
 
@@ -662,7 +664,7 @@ const VAULT_FOOTER = {
     {
       heading: "VAULT",
       links: [
-        { label: "My Portfolio", href: VAULT_PORTFOLIO_HREF },
+        { label: "Vault", href: VAULT_PORTFOLIO_HREF },
         { label: "Book a visit", href: VAULT_BOOK_VISIT_HREF },
         { label: "Appointments", href: VAULT_MY_VISITS_HREF },
       ],

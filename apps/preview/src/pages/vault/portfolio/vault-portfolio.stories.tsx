@@ -120,13 +120,6 @@ function VaultPortfolioPage({
               minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
               openCashOutCount={openCashOuts}
               onCashOut={() => setWithdrawOpen(true)}
-              onViewActivity={() => {
-                setPageTab("incentives");
-                tabsRef.current?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-              }}
               onViewCashOuts={() => {
                 setPageTab("withdrawal");
                 tabsRef.current?.scrollIntoView({
