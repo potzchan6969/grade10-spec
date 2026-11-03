@@ -31,6 +31,9 @@ type Story = StoryObj<typeof meta>;
 // placeholder or selected value does not contribute one. The WithLabel story
 // is named by its Label instead.
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_289b4a78-3936-4bce-b732-485d61d4fa99" },
+  },
   render: () => (
     <Select>
       <SelectTrigger aria-label="Market" className="w-48">
@@ -48,6 +51,9 @@ export const Default: Story = {
 };
 
 export const WithDefaultValue: Story = {
+  parameters: {
+    verification: { caseId: "vc_801a6ed9-72e8-4964-ae51-970b46c85cfa" },
+  },
   render: () => (
     <Select defaultValue="eth">
       <SelectTrigger aria-label="Market" className="w-48">
@@ -65,6 +71,9 @@ export const WithDefaultValue: Story = {
 };
 
 export const Small: Story = {
+  parameters: {
+    verification: { caseId: "vc_735f1afb-7e2c-4133-bcd3-591d02f39658" },
+  },
   render: () => (
     <Select defaultValue="btc">
       <SelectTrigger aria-label="Market" size="sm" className="w-40">
@@ -81,6 +90,9 @@ export const Small: Story = {
 };
 
 export const WithGroups: Story = {
+  parameters: {
+    verification: { caseId: "vc_2c65582a-f611-450f-a2be-bc7295a9b4de" },
+  },
   render: () => (
     <Select>
       <SelectTrigger aria-label="Market" className="w-48">
@@ -107,6 +119,9 @@ export const WithGroups: Story = {
 };
 
 export const Disabled: Story = {
+  parameters: {
+    verification: { caseId: "vc_37b387f7-2c6f-4b0d-a508-ccc26f5e15d9" },
+  },
   render: () => (
     <Select defaultValue="btc" disabled>
       <SelectTrigger aria-label="Market" className="w-48">
@@ -120,6 +135,9 @@ export const Disabled: Story = {
 };
 
 export const WithLabel: Story = {
+  parameters: {
+    verification: { caseId: "vc_9518d216-e201-4874-b9b2-a23213b83bea" },
+  },
   render: () => (
     <div className="flex w-48 flex-col gap-2">
       <Label htmlFor="market">Market</Label>
@@ -141,6 +159,9 @@ export const WithLabel: Story = {
  * match into view (`winner-order-SC-175`, `winner-order-SC-178`).
  */
 export const LongListTypeahead: Story = {
+  parameters: {
+    verification: { caseId: "vc_5f673f25-e3ef-471e-9cb8-bbad6510ad48" },
+  },
   render: () => (
     <Select defaultValue={LONG_LIST_OPTIONS[0]}>
       <SelectTrigger aria-label="Country or region" className="w-64">

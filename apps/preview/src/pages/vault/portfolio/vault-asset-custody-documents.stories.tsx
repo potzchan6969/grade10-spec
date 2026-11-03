@@ -25,6 +25,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Default starts on the Custody Log tab. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_a0cc638f-dbb7-473a-a3b6-0a2cc077e8d9" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
   },
@@ -41,6 +44,9 @@ export const Default: Story = {
 
 /** The Documents tab: the grading institute's report opens its own site in a new tab. */
 export const Documents: Story = {
+  parameters: {
+    verification: { caseId: "vc_567bae10-bc25-4f2a-bac8-d87fa44fd8a7" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
   },

@@ -22,6 +22,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Points UI omitted — balance loading or member without points tender */
 export const WithoutPoints: Story = {
+  parameters: {
+    verification: { caseId: "vc_3e528b9f-c284-4c40-998b-7cadfa7fc349" },
+  },
   args: {
     pointsState: null,
   },
@@ -38,6 +41,9 @@ export const WithoutPoints: Story = {
 
 /** Points expanded with balance helper */
 export const PointsExpanded: Story = {
+  parameters: {
+    verification: { caseId: "vc_b2dcacfe-94ff-4a88-bf5a-16ad339cd53f" },
+  },
   args: {
     pointsState: { status: "expanded" },
     pointsBalanceLabel: "You’ve 1,200 pts.",
@@ -53,6 +59,9 @@ export const PointsExpanded: Story = {
 
 /** Points apply error */
 export const PointsError: Story = {
+  parameters: {
+    verification: { caseId: "vc_0ba250c5-5112-4352-9619-47dcb7f24908" },
+  },
   args: {
     pointsState: {
       status: "expanded",
@@ -68,6 +77,9 @@ export const PointsError: Story = {
 
 /** Points credit applied on summary */
 export const PointsApplied: Story = {
+  parameters: {
+    verification: { caseId: "vc_8a3b55a9-f9cc-45a2-ba1e-93e33ec64ba8" },
+  },
   args: {
     pointsState: {
       status: "applied",
@@ -85,6 +97,9 @@ export const PointsApplied: Story = {
 
 /** Stacked: typed promo + points */
 export const PromoAndPointsStacked: Story = {
+  parameters: {
+    verification: { caseId: "vc_469e3e1c-ae95-4d80-a01a-0a69b716571e" },
+  },
   args: {
     promoState: {
       status: "applied",
@@ -105,6 +120,9 @@ export const PromoAndPointsStacked: Story = {
 };
 
 export const TenderPendingPoints: Story = {
+  parameters: {
+    verification: { caseId: "vc_f1b01859-ac43-4890-ba0c-7b0f4ac2fa90" },
+  },
   args: { pointsState: { status: "expanded" } },
   render: (args) => {
     const [tenderPending, setTenderPending] = useState(false);
@@ -156,6 +174,9 @@ export const TenderPendingPoints: Story = {
 };
 
 export const TenderPendingPreservesDrafts: Story = {
+  parameters: {
+    verification: { caseId: "vc_f30e2adb-ac55-41f4-8947-5490c9fb586b" },
+  },
   args: { pointsState: { status: "expanded" } },
   render: (args) => {
     const [pending, setPending] = useState(false);
@@ -218,6 +239,9 @@ export const TenderPendingPreservesDrafts: Story = {
 };
 
 export const TenderPendingAppliedPoints: Story = {
+  parameters: {
+    verification: { caseId: "vc_d99b8e48-106e-4d8b-98e5-5f213c79d062" },
+  },
   args: {
     tenderPending: true,
     promoState: {

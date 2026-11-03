@@ -23,6 +23,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_080a9d38-5f53-431b-82ac-c7c71af15d60" },
+  },
   args: {
     badges: PRODUCT_DETAIL_STORY.badges,
     copy: METADATA_COPY,
@@ -38,6 +41,9 @@ export const Default: Story = {
 };
 
 export const WithoutSku: Story = {
+  parameters: {
+    verification: { caseId: "vc_599ad3ee-bb97-4c8c-8960-8bd6f0235d5d" },
+  },
   args: {
     badges: SOLD_OUT_PRODUCT_STORY.badges,
     copy: METADATA_COPY,
@@ -53,6 +59,9 @@ export const WithoutSku: Story = {
 /** A label with no page is the line's own text: neither the store name nor
  * the shipping fee is a link, and neither is underlined (Q22). */
 export const NoPages: Story = {
+  parameters: {
+    verification: { caseId: "vc_7081923d-c4b6-4e0b-84b1-04594cf7ebae" },
+  },
   args: {
     badges: PRODUCT_DETAIL_STORY.badges,
     copy: METADATA_COPY,

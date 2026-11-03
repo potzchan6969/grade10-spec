@@ -82,4 +82,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** A guest's order opened signed out: the receipt's email and the ask to add it. */
-export const Scenario: Story = {};
+export const Scenario: Story = {
+  parameters: {
+    verification: { caseId: "vc_5dade0ae-0ed1-40b7-a9c9-c2a21671c0d2" },
+  },
+};

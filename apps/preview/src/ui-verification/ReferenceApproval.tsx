@@ -4,6 +4,7 @@ import {
   DECISION_LABELS,
   FLAG_LABELS,
   type ReferenceStatus,
+  UNCHANGED_LINE,
 } from "./capture-stamp";
 
 // The Storybook manager builder compiles this TSX with React.createElement.
@@ -60,8 +61,11 @@ export function ReferenceApproval({
   onCapture,
   onApprove,
   onRequestChanges,
+  unchanged = false,
 }: {
   status: ReferenceStatus;
+  /** Every size draws exactly what was last approved; Approve adds nothing. */
+  unchanged?: boolean;
   /** The records are not in, so the status is unknown and nothing is offered. */
   pending?: keyof typeof PENDING_LINES;
   onCapture: () => Promise<void>;
@@ -122,8 +126,9 @@ export function ReferenceApproval({
       <div className="verification-inline-actions">
         <button
           className="verification-primary"
-          disabled={busy}
+          disabled={busy || unchanged}
           onClick={() => void run("approve", () => onApprove(trimmed))}
+          title={unchanged ? UNCHANGED_LINE : undefined}
           type="button"
         >
           {pending === "approve"
@@ -147,6 +152,9 @@ export function ReferenceApproval({
             : "Capture current reference"}
         </button>
       </div>
+      {unchanged && !busy ? (
+        <p className="verification-hint">{UNCHANGED_LINE}</p>
+      ) : null}
       {error ? (
         <p role="alert" className="verification-error">
           Approval: {error}

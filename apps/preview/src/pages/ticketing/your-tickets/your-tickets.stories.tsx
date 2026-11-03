@@ -36,6 +36,9 @@ const main = (canvasElement: HTMLElement) =>
 
 /** Every order, newest first, the held one asking to pay. */
 export const List: Story = {
+  parameters: {
+    verification: { caseId: "vc_f8a8f7b2-2df9-44a6-b438-63f04f7242be" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = main(canvasElement);
     await expect(
@@ -50,6 +53,9 @@ export const List: Story = {
 
 /** Signed out: Sign In with Email, and where a guest's tickets are. */
 export const SignedOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_7e53bac3-43f3-4b61-8b9d-ab177c55932e" },
+  },
   name: "Signed out",
   args: { state: "signedOut" },
   play: async ({ canvasElement }) => {
@@ -63,6 +69,9 @@ export const SignedOut: Story = {
 
 /** Sign In with Email, an email, then Check Your Email. */
 export const CheckYourEmail: Story = {
+  parameters: {
+    verification: { caseId: "vc_8abebb06-a688-4344-a11c-7d855e2db0b5" },
+  },
   name: "Check your email",
   args: { state: "signedOut" },
   play: async ({ canvasElement }) => {
@@ -91,6 +100,9 @@ export const CheckYourEmail: Story = {
 /** Back from the link: the guest's orders listed, and the toast says the
  * points are on the account. */
 export const BackFromTheLink: Story = {
+  parameters: {
+    verification: { caseId: "vc_d86085ef-f487-4535-a4d7-95f0b398eed1" },
+  },
   name: "Back from the link",
   args: { state: "backFromTheLink" },
   play: async ({ canvasElement }) => {
@@ -106,6 +118,9 @@ export const BackFromTheLink: Story = {
 
 /** No orders yet: the way to the shows. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_3d7f023f-a3cc-4b49-8b95-76c277fc5325" },
+  },
   args: { state: "empty" },
   play: async ({ canvasElement }) => {
     await expect(
@@ -117,6 +132,9 @@ export const Empty: Story = {
 };
 
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_cad15be6-0195-482c-9b81-3ccbeb509bd9" },
+  },
   args: { state: "loading" },
   play: async ({ canvasElement }) => {
     await expect(
@@ -127,6 +145,9 @@ export const Loading: Story = {
 
 /** The list could not load: Try Again. */
 export const Failed: Story = {
+  parameters: {
+    verification: { caseId: "vc_93192df6-7a33-480c-82b2-460f295c68d0" },
+  },
   name: "Load failed",
   args: { state: "failed" },
   play: async ({ canvasElement }) => {

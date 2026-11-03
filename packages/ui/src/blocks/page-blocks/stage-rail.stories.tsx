@@ -37,6 +37,9 @@ function read(canvasElement: HTMLElement) {
  * root carries none and its stepper keeps `stepper`
  * (shared-ui-page-blocks-SC-18). */
 export const FinancedMid: Story = {
+  parameters: {
+    verification: { caseId: "vc_614ba300-212e-438c-aa7f-36fdf9962641" },
+  },
   play: async ({ canvasElement }) => {
     const { steps, labels, states, current } = read(canvasElement);
     expect(labels).toEqual(FINANCED_STAGES.map((stage) => stage.label));
@@ -60,6 +63,9 @@ export const FinancedMid: Story = {
 
 /** The rail carries the slot it is given (shared-ui-page-blocks-SC-18). */
 export const WithSlot: Story = {
+  parameters: {
+    verification: { caseId: "vc_32070444-7ecd-4a97-9f5f-a5b928ab4203" },
+  },
   args: { slot: "vault-case-stages" },
   play: async ({ canvasElement }) => {
     const rail = within(canvasElement).getByRole("list").parentElement;
@@ -69,6 +75,9 @@ export const WithSlot: Story = {
 
 /** The storage lane's six stages, at Vault (shared-ui-page-blocks-SC-12). */
 export const StorageLane: Story = {
+  parameters: {
+    verification: { caseId: "vc_ab52d142-c204-4a28-91ab-33a41f6ae12a" },
+  },
   args: { copy: { stages: STORAGE_STAGES }, current: "vault" },
   play: async ({ canvasElement }) => {
     const { steps, labels, states, current } = read(canvasElement);
@@ -94,6 +103,9 @@ export const StorageLane: Story = {
 
 /** The wizard's first step (shared-ui-page-blocks-SC-13). */
 export const WizardFirst: Story = {
+  parameters: {
+    verification: { caseId: "vc_23bbe2d1-fc5c-4799-924a-227c684c48b3" },
+  },
   args: { copy: { stages: WIZARD_STEPS }, current: "describe" },
   play: async ({ canvasElement }) => {
     const { labels, states } = read(canvasElement);
@@ -105,6 +117,9 @@ export const WizardFirst: Story = {
 /** An ended case stays at its stage with the ending's word under it, and no
  * later stage reads as reached (shared-ui-page-blocks-SC-14). */
 export const Ended: Story = {
+  parameters: {
+    verification: { caseId: "vc_586ad249-8219-476f-92c0-dbf0c3022b37" },
+  },
   args: {
     copy: { stages: FINANCED_STAGES, ended: ENDED_WORD },
     current: "offer",
@@ -124,6 +139,9 @@ export const Ended: Story = {
  * page does not, and takes focus so a keyboard can scroll it
  * (shared-ui-page-blocks-SC-16). */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_a18d1d14-1bf8-4054-9645-c918b920c878" },
+  },
   decorators: [
     (Story) => (
       <div style={{ width: 320 }}>

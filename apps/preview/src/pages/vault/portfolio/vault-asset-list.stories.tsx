@@ -44,6 +44,9 @@ const listArgs = {
 } satisfies Story["args"];
 
 export const AllAssets: Story = {
+  parameters: {
+    verification: { caseId: "vc_c719b855-303a-4a57-80a5-0d263f602f52" },
+  },
   args: listArgs,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -67,6 +70,9 @@ export const AllAssets: Story = {
 
 /** In Vault also lists Retrieval Pending items awaiting admin approval. */
 export const InVault: Story = {
+  parameters: {
+    verification: { caseId: "vc_2f31f7a4-a18d-45fc-aec8-47052268ebcd" },
+  },
   args: listArgs,
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
@@ -88,6 +94,9 @@ export const InVault: Story = {
 
 /** Live Auction filters to cards under the hammer. */
 export const LiveAuction: Story = {
+  parameters: {
+    verification: { caseId: "vc_f8e74113-a988-46f3-8271-dde7eb07d8eb" },
+  },
   args: listArgs,
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
@@ -106,6 +115,9 @@ export const LiveAuction: Story = {
 
 /** Listed filters to store-listed cards. */
 export const Listed: Story = {
+  parameters: {
+    verification: { caseId: "vc_a28b4c98-d171-42bb-8436-7b585fa9529e" },
+  },
   args: listArgs,
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
@@ -122,6 +134,9 @@ export const Listed: Story = {
 
 /** Only statuses present get tabs — here nothing is listed or on auction. */
 export const VaultedOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_7fc32b29-b5af-4a18-8f0e-3c80bbda47af" },
+  },
   args: {
     ...listArgs,
     assets: PORTFOLIO_ASSETS.filter(

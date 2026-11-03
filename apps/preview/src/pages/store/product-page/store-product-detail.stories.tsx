@@ -24,6 +24,9 @@ const content: Decorator = (Story) => (
 );
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_aeb959fa-555b-41c1-bae2-24d977d314d7" },
+  },
   args: { product: PRODUCT_DETAIL_PRODUCT },
   decorators: [content],
   play: async ({ canvasElement }) => {
@@ -59,6 +62,9 @@ export const Default: Story = {
 };
 
 export const NoMedia: Story = {
+  parameters: {
+    verification: { caseId: "vc_a30b3b97-30a7-4d01-b388-ce4920f9c07a" },
+  },
   args: { product: { ...PRODUCT_DETAIL_PRODUCT, images: [] } },
   decorators: [content],
   play: async ({ canvasElement }) => {
@@ -71,6 +77,9 @@ export const NoMedia: Story = {
 };
 
 export const SoldOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_285221c9-38cd-4a30-9405-4f49179eb7db" },
+  },
   args: { product: SOLD_OUT_PRODUCT },
   decorators: [content],
   play: async ({ canvasElement }) => {
@@ -83,6 +92,9 @@ export const SoldOut: Story = {
 };
 
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_4d6779cf-99de-4eeb-855c-d2c4064ee7c0" },
+  },
   args: { product: PRODUCT_DETAIL_PRODUCT },
   decorators: [content],
   globals: { viewport: { value: "mobile1" } },

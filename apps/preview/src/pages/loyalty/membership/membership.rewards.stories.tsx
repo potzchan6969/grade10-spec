@@ -15,6 +15,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const RedeemCoupon: Story = {
+  parameters: {
+    verification: { caseId: "vc_4d10b22f-ab3a-4a76-bbd6-90a3c02399c7" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const overlay = within(document.body);
@@ -40,6 +43,9 @@ export const RedeemCoupon: Story = {
 
 /** The rewards section holds its place while the catalog is read. */
 export const RewardsLoading: Story = {
+  parameters: {
+    verification: { caseId: "vc_017b1d38-8e15-462e-a6ed-df3370c1674f" },
+  },
   args: { view: MEMBERSHIP_STATE_VIEWS.rewardsLoading },
   play: async ({ canvasElement }) => {
     expect(

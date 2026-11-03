@@ -21,6 +21,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The wait has no close control, and Escape leaves it up. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_85362096-37e7-4e44-a8bd-becce8bc0155" },
+  },
   play: async () => {
     const overlay = within(document.body);
     const dialog = await overlay.findByRole("dialog", {
@@ -37,6 +40,9 @@ export const Default: Story = {
 
 /** A phone: the same wait as a drawer. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_7238d7ed-6b74-4e7c-97a0-c8f671165a64" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async () => {
     const overlay = within(document.body);

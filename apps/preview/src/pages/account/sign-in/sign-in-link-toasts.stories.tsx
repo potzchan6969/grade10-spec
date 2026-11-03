@@ -69,6 +69,9 @@ async function expectToast(text: string) {
 
 /** The link ran out after five minutes: the toast says it has expired. */
 export const Expired: Story = {
+  parameters: {
+    verification: { caseId: "vc_40b29713-a3f9-49bd-9f59-30eba0555102" },
+  },
   args: { toast: "expired" },
   play: async () => {
     await expectToast(signIn.linkExpired);
@@ -77,6 +80,9 @@ export const Expired: Story = {
 
 /** A used, replaced or otherwise invalid link: one shared toast. */
 export const NoLongerWorks: Story = {
+  parameters: {
+    verification: { caseId: "vc_56e3c345-2c01-4856-8122-19de91c542dd" },
+  },
   name: "No longer works",
   args: { toast: "invalid" },
   play: async () => {
@@ -86,6 +92,9 @@ export const NoLongerWorks: Story = {
 
 /** Signed in as another account: the toast offers Switch or Stay. */
 export const DifferentAccount: Story = {
+  parameters: {
+    verification: { caseId: "vc_accc6c37-9f05-44d9-832c-e1b8ef9a44b0" },
+  },
   name: "Different account",
   args: { toast: "different" },
   play: async () => {

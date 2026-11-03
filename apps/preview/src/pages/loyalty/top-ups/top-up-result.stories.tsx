@@ -17,6 +17,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Back from Stripe, still confirming the payment. */
 export const ConfirmingPayment: Story = {
+  parameters: {
+    verification: { caseId: "vc_6d0001d2-b5b3-4c24-9acc-1318f24f3883" },
+  },
   name: "Confirming Payment",
   args: { state: "confirming" },
   play: async () => {
@@ -32,6 +35,9 @@ export const ConfirmingPayment: Story = {
 
 /** The pack credited: the new balance, as a toast. */
 export const PointsAdded: Story = {
+  parameters: {
+    verification: { caseId: "vc_30a8f3df-6fce-4b21-bb06-7b80f7d57a75" },
+  },
   name: "Points Added",
   args: { state: "added" },
   play: async () => {
@@ -47,6 +53,9 @@ export const PointsAdded: Story = {
 /** Still unconfirmed after half a minute: the wait closes and the points
  * are promised in Points History. */
 export const StillConfirming: Story = {
+  parameters: {
+    verification: { caseId: "vc_548927bc-def7-486e-a60f-5f9656afcabb" },
+  },
   name: "Still Confirming",
   args: { state: "still-confirming" },
   play: async () => {
@@ -65,6 +74,9 @@ export const StillConfirming: Story = {
 
 /** The member came back without paying: retry starts the pick again. */
 export const PaymentNotCompleted: Story = {
+  parameters: {
+    verification: { caseId: "vc_f5853734-28d6-45ec-87ea-c9166a766f28" },
+  },
   name: "Payment Not Completed",
   args: { state: "not-completed" },
   play: async () => {
@@ -80,6 +92,9 @@ export const PaymentNotCompleted: Story = {
 /** The toast reads the same at a phone width — only the confirming wait
  * is a drawer. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_cb56f374-8683-49ea-b3f0-25262f0a7ee1" },
+  },
   args: { state: "added" },
   globals: { viewport: { value: "mobile1" } },
   play: async () => {

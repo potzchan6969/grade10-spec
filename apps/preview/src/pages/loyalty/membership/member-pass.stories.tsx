@@ -115,6 +115,9 @@ type Story = StoryObj<typeof meta>;
  * screen cannot dim mid-scan, and Refresh minting a new code that swaps in
  * and out of view. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_8a11ae99-20f1-477b-9f52-a82e192a738c" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("mei.lin@example.com")).toBeInTheDocument();

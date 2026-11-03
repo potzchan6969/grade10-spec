@@ -28,6 +28,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Changing the passcode in the console signed every phone out. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_8a1f833d-70af-4b65-a807-d1bd0e2de973" },
+  },
   name: "Passcode changed",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);

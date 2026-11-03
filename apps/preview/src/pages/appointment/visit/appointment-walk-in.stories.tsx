@@ -113,6 +113,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Open: the wait for each service now, and Book for a booked-only one. */
 export const Open: Story = {
+  parameters: {
+    verification: { caseId: "vc_4a90e417-91b5-44bb-85de-4fbf0a65381a" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("heading", { name: SHOP })).toBeVisible();
@@ -126,10 +129,18 @@ export const Open: Story = {
 };
 
 /** Walk-ins paused: every service offers booking instead. */
-export const Paused: Story = { args: { state: "paused" } };
+export const Paused: Story = {
+  parameters: {
+    verification: { caseId: "vc_4adfd95f-6019-47ad-8f0c-20418429f53b" },
+  },
+  args: { state: "paused" },
+};
 
 /** Closed today: the other shops open today replace the wait. */
 export const ClosedToday: Story = {
+  parameters: {
+    verification: { caseId: "vc_2cfae37e-bd3f-403e-b3d3-c2ab5e5a2055" },
+  },
   args: { state: "closedToday" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -137,7 +148,17 @@ export const ClosedToday: Story = {
   },
 };
 
-export const Loading: Story = { args: { state: "loading" } };
+export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_4bb12d5e-09dc-4589-9806-9a5f8127f666" },
+  },
+  args: { state: "loading" },
+};
 
 /** A poster address that names no shop. */
-export const NotFound: Story = { args: { state: "notFound" } };
+export const NotFound: Story = {
+  parameters: {
+    verification: { caseId: "vc_9f1800ec-ed94-491f-b88b-71d1c54be0f1" },
+  },
+  args: { state: "notFound" },
+};

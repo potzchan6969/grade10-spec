@@ -45,6 +45,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Pictures: Story = {
+  parameters: {
+    verification: { caseId: "vc_68d8d07b-edb2-4dc4-b336-d7593f0b992e" },
+  },
   args: {
     items: [{ ...PICTURE_CART_ITEM, imageAlt: "  " }, SAMPLE_CART_ITEMS[1]],
   },
@@ -52,6 +55,9 @@ export const Pictures: Story = {
 
 /** Default list: cart items only */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_380740b2-9984-4d86-8b25-d145ec5e4502" },
+  },
   render: (args) => {
     const [items, setItems] =
       useState<readonly CartItemSummary[]>(SAMPLE_CART_ITEMS);
@@ -85,6 +91,9 @@ export const Default: Story = {
 
 /** Overflow list: 6 items rendered */
 export const OverflowItems: Story = {
+  parameters: {
+    verification: { caseId: "vc_03214864-da9a-4c07-bfc9-27c80f8f4fea" },
+  },
   args: {
     items: OVERFLOW_CART_ITEMS,
   },
@@ -99,6 +108,9 @@ export const OverflowItems: Story = {
 
 /** Empty body: design-system empty state with no action button */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_65d4f210-90cf-485a-8bc9-09c476abe7ee" },
+  },
   args: {
     items: [],
   },
@@ -124,6 +136,9 @@ export const Empty: Story = {
 
 /** Shared interaction guard: rows remain visible and the list remains scrollable. */
 export const InteractionPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_ac45b34e-a06a-4022-b161-274d871b969e" },
+  },
   args: {
     interactionPending: true,
   },
@@ -143,6 +158,9 @@ export const InteractionPending: Story = {
 
 /** Mixed states: active items, sold out item, and quantity adjusted item */
 export const MixedItemStates: Story = {
+  parameters: {
+    verification: { caseId: "vc_e9784876-10c3-435c-8816-cbe4db812c84" },
+  },
   render: (args) => {
     const [items, setItems] = useState<readonly CartItemSummary[]>([
       SAMPLE_CART_ITEMS[0],
@@ -203,6 +221,9 @@ function rowOf(canvasElement: HTMLElement, name: string) {
 
 /** A line that owns its removal stays, busy, until the consumer drops it, then leaves */
 export const LineRemovalPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_c66beb51-83bd-42df-9326-703b08f42ca5" },
+  },
   render: (args) => {
     const [items, setItems] = useState(OWNED_ITEMS);
     return (
@@ -243,6 +264,9 @@ export const LineRemovalPending: Story = {
 
 /** A refused removal keeps the row, says why on it, and the row is usable again */
 export const LineRemovalRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_4098855e-afd1-4a08-b00a-abe6efd77ed7" },
+  },
   args: {
     items: [
       { ...OWNED_ITEMS[0], failed: "Couldn’t remove this item. Try again." },

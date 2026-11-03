@@ -24,6 +24,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Signed in: the held visit, and the way to it. */
 export const Held: Story = {
+  parameters: {
+    verification: { caseId: "vc_1894f699-95fb-4c88-9532-346754636e22" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("link", { name: "Open it" })).toHaveAttribute(
@@ -35,6 +38,9 @@ export const Held: Story = {
 
 /** Signed out: only that the link went to the inbox, and Sign in. */
 export const HeldSignedOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_136398b1-3d46-4537-834c-e389495b3dcd" },
+  },
   args: {
     refusal: "heldOut",
     copy: {
@@ -54,6 +60,9 @@ export const HeldSignedOut: Story = {
 
 /** Too many tries today, with the shop's phone: still a warning, not an error. */
 export const Tries: Story = {
+  parameters: {
+    verification: { caseId: "vc_21963d17-0b70-4e6e-af92-dc44d278b885" },
+  },
   args: {
     refusal: "tries",
     copy: {
@@ -73,4 +82,9 @@ export const Tries: Story = {
 };
 
 /** Pressed again: the same notice shakes. */
-export const PressedAgain: Story = { args: { attempt: 1 } };
+export const PressedAgain: Story = {
+  parameters: {
+    verification: { caseId: "vc_2f869e63-a1ff-4f55-8715-a38343db5073" },
+  },
+  args: { attempt: 1 },
+};

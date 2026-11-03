@@ -28,6 +28,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Signed-in cart with two lines, one pictured, and the tender rows collapsed. */
 export const Items: Story = {
+  parameters: {
+    verification: { caseId: "vc_138378e3-022a-46ae-a067-2f753b58b4e3" },
+  },
   play: () => {
     const canvas = drawer();
     expect(canvas.getByRole("heading", { name: "Cart" })).toBeInTheDocument();
@@ -41,6 +44,9 @@ export const Items: Story = {
 
 /** No lines: the design-system empty state, with no count badge and no footer. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_565416fe-60cb-4c1d-a39e-9eda8887417c" },
+  },
   args: { items: [], subtotal: "HK$0.00", estimatedTotal: "HK$0.00" },
   play: () => {
     const canvas = drawer();
@@ -53,6 +59,9 @@ export const Empty: Story = {
 
 /** Narrow viewport: the drawer takes the phone width and the lines stay readable. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_7bb346f1-6c64-446a-8c87-5f26f30f5ee0" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: () => {
     const canvas = drawer();

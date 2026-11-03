@@ -12,6 +12,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_65b1962f-2424-48ea-8321-04a9ed7afa92" },
+  },
   render: () => (
     <NavigationList>
       <NavigationLink active href="#store">

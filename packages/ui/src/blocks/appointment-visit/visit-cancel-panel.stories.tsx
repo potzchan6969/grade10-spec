@@ -46,6 +46,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The reason is optional; Something else asks for the collector's words. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_9b28d8bf-cd61-43b2-bb3f-26055e2a252d" },
+  },
   play: async ({ args }) => {
     const canvas = screen;
     expect(
@@ -62,6 +65,9 @@ export const Default: Story = {
 };
 
 export const Cancelling: Story = {
+  parameters: {
+    verification: { caseId: "vc_b265af52-49de-4d37-a964-09eea0585305" },
+  },
   args: { reason: "wrong", pending: true },
   play: async () => {
     const button = await screen.findByRole("button", { name: "Cancelling…" });
@@ -71,6 +77,9 @@ export const Cancelling: Story = {
 };
 
 export const Failed: Story = {
+  parameters: {
+    verification: { caseId: "vc_243502e2-579b-49d9-82ac-29083c2bde29" },
+  },
   args: { error: "We couldn’t cancel the visit. Try again." },
   play: async () => {
     expect(await screen.findByRole("alert")).toHaveTextContent(
@@ -81,6 +90,9 @@ export const Failed: Story = {
 
 /** Paid, a day or more ahead: the deposit goes back to the card. */
 export const Refunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_7ba04530-4677-4633-9089-3082ad9d254a" },
+  },
   args: { refund: REFUND_DUE },
   play: async () => {
     expect(await screen.findByText("Refunded")).toBeVisible();
@@ -89,6 +101,9 @@ export const Refunded: Story = {
 
 /** Paid, under a day ahead: the deposit is kept. */
 export const NotRefunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_d7e60a8e-5ae1-4576-80cc-25534230ca07" },
+  },
   args: { refund: REFUND_KEPT },
   play: async () => {
     expect(await screen.findByText("Not refunded")).toBeVisible();

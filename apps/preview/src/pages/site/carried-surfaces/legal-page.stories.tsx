@@ -19,6 +19,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const TermsOfService: Story = {
+  parameters: {
+    verification: { caseId: "vc_a32fd275-524b-45f5-9451-e7cf3493e76d" },
+  },
   args: { surface: "terms" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -49,6 +52,9 @@ export const TermsOfService: Story = {
 };
 
 export const PrivacyPolicy: Story = {
+  parameters: {
+    verification: { caseId: "vc_7e5f89a8-a918-4a2b-b27c-c0f307a3aaa5" },
+  },
   args: { surface: "privacy" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

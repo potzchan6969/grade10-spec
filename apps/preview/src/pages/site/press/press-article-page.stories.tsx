@@ -21,6 +21,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_e1bed971-3852-4269-98d0-e206948e89fe" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
@@ -101,6 +104,9 @@ export const Default: Story = {
 };
 
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_e80dfb36-7a6c-4e1d-b4db-056df769ffd7" },
+  },
   globals: { viewport: { value: "mobile2" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

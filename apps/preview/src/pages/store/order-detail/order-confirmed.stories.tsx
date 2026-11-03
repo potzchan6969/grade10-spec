@@ -81,6 +81,9 @@ async function theToast() {
  * link sent, added, another email, send failed — ride the toast's
  * standard variants, so they draw no stories of their own. */
 export const JustPaid: Story = {
+  parameters: {
+    verification: { caseId: "vc_190ca1f6-c078-4495-b266-3f4f7612cffe" },
+  },
   name: "Back from checkout",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

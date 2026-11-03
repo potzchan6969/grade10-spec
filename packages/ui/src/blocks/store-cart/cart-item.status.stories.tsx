@@ -32,6 +32,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Sold out item: dimmed appearance, "Sold Out" badge, and trash can removal icon */
 export const SoldOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_e47e886d-e45d-4d0c-b4d8-a3e2eb291edd" },
+  },
   args: {
     item: {
       id: "item-sold",
@@ -63,6 +66,7 @@ export const QuantityAdjusted: Story = {
     },
   },
   parameters: {
+    verification: { caseId: "vc_b1309f11-f5f6-4947-a86e-f4b45990435f" },
     docs: {
       story: {
         // Keep the docs canvas on the opening state (qty 2 + low-stock warning).
@@ -142,6 +146,9 @@ export const QuantityAdjusted: Story = {
  * what was already changed, the other says what is left.
  */
 export const RemainingCount: Story = {
+  parameters: {
+    verification: { caseId: "vc_175578e6-c271-40c1-88fc-734b59b049cb" },
+  },
   args: {
     item: {
       ...SAMPLE_CART_ITEMS[0],
@@ -165,6 +172,9 @@ export const RemainingCount: Story = {
  * line says nothing about what is left.
  */
 export const NoRemainingCount: Story = {
+  parameters: {
+    verification: { caseId: "vc_b2e1b274-2eb2-4355-b466-dded486474c1" },
+  },
   args: {
     item: { ...SAMPLE_CART_ITEMS[0], quantity: 1, maxQuantity: 5 },
   },

@@ -56,6 +56,9 @@ function OctoberCalendar({
 }
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_3da1eea1-3c5d-4624-b6ed-d2fac6f0ecb3" },
+  },
   name: "Dropdown month and year",
   args: {
     onMonthChange: fn(),
@@ -139,6 +142,9 @@ export const Default: Story = {
 };
 
 export const DropdownMonth: Story = {
+  parameters: {
+    verification: { caseId: "vc_83b12a82-a203-48bc-9d4d-ec47606bbce9" },
+  },
   name: "Dropdown month, fixed year",
   render: () => <OctoberCalendar captionLayout="dropdown-months" />,
   play: async ({ canvasElement }) => {
@@ -150,6 +156,9 @@ export const DropdownMonth: Story = {
 };
 
 export const BoundedCaption: Story = {
+  parameters: {
+    verification: { caseId: "vc_c0c9f7f4-4937-4084-ad93-1bda47dd7f3c" },
+  },
   name: "Bounded month and year",
   render: () => {
     const [month, setMonth] = useState(MONTH);
@@ -192,6 +201,9 @@ export const BoundedCaption: Story = {
 };
 
 export const Label: Story = {
+  parameters: {
+    verification: { caseId: "vc_5f56a795-973b-4aea-ace3-9992f34d6d12" },
+  },
   name: "Label",
   render: () => <OctoberCalendar captionLayout="label" />,
   play: async ({ canvasElement }) => {
@@ -202,6 +214,9 @@ export const Label: Story = {
 };
 
 export const DisabledDays: Story = {
+  parameters: {
+    verification: { caseId: "vc_7bb06d50-b9bc-4509-8bd7-242149f7e0b7" },
+  },
   name: "Disabled days",
   render: () => (
     <Calendar

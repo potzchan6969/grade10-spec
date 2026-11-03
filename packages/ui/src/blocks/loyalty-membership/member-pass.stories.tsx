@@ -103,6 +103,9 @@ function TickingPass(args: MemberPassProps) {
  * minting stays with the consumer. Drawn live: the countdown ticks, and a
  * refresh mints a fresh square that swaps in and out of view. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_f1daecb0-5204-4add-8c71-cf5a9c487b82" },
+  },
   render: (args) => <TickingPass {...args} />,
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -121,6 +124,9 @@ export const Default: Story = {
 /** Each tier wears its own skin: the badge is the signal once the header's
  * warm gradient is shared between gold and black. */
 export const Silver: Story = {
+  parameters: {
+    verification: { caseId: "vc_081cea7e-1841-4e01-b7f4-b0c1f60a9992" },
+  },
   args: { tier: "Silver", variant: "silver" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -132,6 +138,9 @@ export const Silver: Story = {
 /** The black pass shares gold's warm header; the crowned white badge is
  * what says it — the same badge the tier card wears. */
 export const Black: Story = {
+  parameters: {
+    verification: { caseId: "vc_9e262c98-a586-4d88-ba06-3dae078f117c" },
+  },
   args: { tier: "Black", variant: "black" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -146,6 +155,9 @@ export const Black: Story = {
  * rendering is the token's own code, and refresh only asks — nothing moves
  * until a new token arrives. */
 export const PassNeverMintsItsCode: Story = {
+  parameters: {
+    verification: { caseId: "vc_a732b5bf-75d1-4e32-9d01-2710338451d9" },
+  },
   render: (args) => (
     <>
       <MemberPass {...args} />
@@ -182,6 +194,9 @@ const ROTATED_TOKEN = `${MEMBER_TOKEN}.rotated`;
 /** A fresh token dips the square out of view and settles the new one in
  * rather than snapping — the swap happens while the square is out of sight. */
 export const CodeRotates: Story = {
+  parameters: {
+    verification: { caseId: "vc_8ce3d196-d82f-4c0b-b15b-4a630b0dc08a" },
+  },
   render: (args) => {
     const [token, setToken] = useState(args.token);
     return (
@@ -216,6 +231,9 @@ export const CodeRotates: Story = {
 
 /** A new code is on its way: refresh draws busy and the pass stays shown. */
 export const Refreshing: Story = {
+  parameters: {
+    verification: { caseId: "vc_f5c4facd-6727-4279-8f7e-b08b22df6684" },
+  },
   args: { refreshing: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -230,6 +248,9 @@ export const Refreshing: Story = {
 /** A refused refresh toasts its reason once — the control is pressable
  * again and nothing sits inline under it. */
 export const RefreshFailed: Story = {
+  parameters: {
+    verification: { caseId: "vc_c154ee1d-34db-45b6-a9c7-0e778241a786" },
+  },
   args: {
     refreshFailed: "We could not get a new code.",
   },

@@ -64,6 +64,9 @@ type Story = StoryObj<typeof meta>;
  * Remove stands where the field was, and the total, the points and Pay
  * follow. */
 export const CodeApplied: Story = {
+  parameters: {
+    verification: { caseId: "vc_c8ba23ac-83bd-4832-bbec-29043aec962c" },
+  },
   args: {
     order: (
       <TicketCheckoutOrder
@@ -110,6 +113,9 @@ const onRemoveCode = fn();
 /** Pay pressed, and the last use was just taken: pay the full total, or
  * take the code off. The code's line stays, struck through. */
 export const UsedUpAtPay: Story = {
+  parameters: {
+    verification: { caseId: "vc_412a2144-daea-4498-bdd1-d97b6eff0d03" },
+  },
   args: {
     notice: (
       <TicketCodeUsedUpNotice
@@ -165,6 +171,9 @@ export const UsedUpAtPay: Story = {
 
 /** CREW4 makes the order free: HK$0.00, no points, Get Tickets. */
 export const CodeMakesOrderFree: Story = {
+  parameters: {
+    verification: { caseId: "vc_afff9574-d224-4a67-aa2b-6fb317176591" },
+  },
   args: {
     order: (
       <TicketCheckoutOrder
@@ -209,6 +218,9 @@ export const CodeMakesOrderFree: Story = {
 /** CREW4 with 2 left: the dearest two tickets go free, each line says so,
  * and the rest is paid. */
 export const CodeWithTwoLeft: Story = {
+  parameters: {
+    verification: { caseId: "vc_c36ce43f-e37f-4616-8fae-2c70b1599315" },
+  },
   args: {
     order: (
       <TicketCheckoutOrder

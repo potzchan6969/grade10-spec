@@ -19,6 +19,9 @@ type Story = StoryObj<typeof meta>;
 
 /** A prototype: the card primitive's look until the banner is designed. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_dbaf3625-ddcc-492a-8a4b-5dfbf77b9b79" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Catch Me If You Can")).toBeInTheDocument();
@@ -33,6 +36,9 @@ export const Default: Story = {
 
 /** With its picture above the name. */
 export const WithPicture: Story = {
+  parameters: {
+    verification: { caseId: "vc_aa3f112c-9d79-4253-a4f2-f6b9da3f4f30" },
+  },
   args: {
     imageUrl:
       "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'><rect width='3' height='1' fill='%23ddd'/></svg>",
@@ -46,6 +52,9 @@ export const WithPicture: Story = {
 
 /** No tagline: the name and the link alone. */
 export const NoTagline: Story = {
+  parameters: {
+    verification: { caseId: "vc_9cde51ab-9731-42f4-85f6-8efa2cf5409e" },
+  },
   args: { tagline: null },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

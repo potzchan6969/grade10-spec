@@ -18,6 +18,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The packs on sale, the balance, and the way in; nothing picked yet. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_d9421bf2-9e3a-40a2-8cf6-f31f251ce3cd" },
+  },
   args: { state: "default" },
   play: async () => {
     const overlay = within(document.body);
@@ -45,6 +48,9 @@ export const Default: Story = {
 
 /** The 10,000-point pack: the way in unlocks and the balance reads the pick. */
 export const PackSelected: Story = {
+  parameters: {
+    verification: { caseId: "vc_d9b589ba-41e8-481b-ab71-467ddcf2d91f" },
+  },
   name: "Pack Selected",
   args: { state: "default" },
   play: async () => {
@@ -61,6 +67,9 @@ export const PackSelected: Story = {
 
 /** While Stripe's checkout opens the button shows the wait. */
 export const OpeningCheckout: Story = {
+  parameters: {
+    verification: { caseId: "vc_fae9a475-1851-43e8-8b25-64cebf1260a5" },
+  },
   name: "Opening Checkout",
   args: { state: "opening" },
   play: async () => {
@@ -75,6 +84,9 @@ export const OpeningCheckout: Story = {
 
 /** Near the daily cap the too-large packs are refused and say why in a tooltip. */
 export const LimitAlmostReached: Story = {
+  parameters: {
+    verification: { caseId: "vc_30e4fbb9-c439-445c-b9cc-0448dcc3426b" },
+  },
   name: "Limit Almost Reached",
   args: { state: "limit-almost-reached" },
   play: async () => {
@@ -95,6 +107,9 @@ export const LimitAlmostReached: Story = {
 
 /** Stripe refused to open checkout: a toast says so, the pick stays. */
 export const CheckoutNotOpened: Story = {
+  parameters: {
+    verification: { caseId: "vc_b52b0f29-6529-4376-8f5a-c3d270724a8a" },
+  },
   name: "Checkout Not Opened",
   args: { state: "checkout-not-opened" },
   play: async () => {
@@ -118,6 +133,9 @@ export const CheckoutNotOpened: Story = {
 
 /** The day is spent: the trigger answers with a toast, the picker never opens. */
 export const LimitReached: Story = {
+  parameters: {
+    verification: { caseId: "vc_43e70c42-c924-4d4b-89c2-a013744a98ae" },
+  },
   name: "Limit Reached",
   args: { state: "limit-reached" },
   play: async ({ canvasElement }) => {
@@ -142,6 +160,9 @@ export const LimitReached: Story = {
 
 /** Top-ups paused on the account: the trigger answers with a toast. */
 export const Paused: Story = {
+  parameters: {
+    verification: { caseId: "vc_2363ea19-66d4-4924-8505-4f194e821ae5" },
+  },
   args: { state: "paused" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -162,6 +183,9 @@ export const Paused: Story = {
 
 /** Top-ups switched off entirely: the trigger answers with a toast. */
 export const Unavailable: Story = {
+  parameters: {
+    verification: { caseId: "vc_a1c4fe31-bf57-480c-a226-e7677b264994" },
+  },
   args: { state: "unavailable" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -183,6 +207,9 @@ export const Unavailable: Story = {
 /** Under 640px the picker is a bottom drawer, not a dialog: pack rows,
  * a full-width pay button, and no balance line. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_60587881-8a9a-4958-9dfa-aa93c69557f1" },
+  },
   args: { state: "default" },
   globals: { viewport: { value: "mobile1" } },
   play: async () => {

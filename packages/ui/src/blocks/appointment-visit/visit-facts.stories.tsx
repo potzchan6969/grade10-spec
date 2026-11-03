@@ -15,6 +15,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_893a6c82-1d1e-4fea-9af1-876d24dc0d36" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("region", { name: "Your visit" })).toBeVisible();
@@ -23,4 +26,9 @@ export const Default: Story = {
 };
 
 /** A visit that is off: its time struck. */
-export const Off: Story = { args: { facts: STRUCK_FACTS } };
+export const Off: Story = {
+  parameters: {
+    verification: { caseId: "vc_0613dec7-a30a-4aa1-a0c5-21e171c41f3b" },
+  },
+  args: { facts: STRUCK_FACTS },
+};

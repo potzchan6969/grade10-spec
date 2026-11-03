@@ -131,7 +131,11 @@ export function sameIdentity(
   return identityKey(left) === identityKey(right);
 }
 
-function apiUrl(base: string, pathname: string, query?: URLSearchParams): URL {
+export function apiUrl(
+  base: string,
+  pathname: string,
+  query?: URLSearchParams,
+): URL {
   const url = new URL(`${base}${pathname}`);
   if (query) url.search = query.toString();
   return url;
@@ -147,7 +151,10 @@ function errorMessage(payload: unknown): string | undefined {
   return undefined;
 }
 
-async function requestJson(url: URL, init: RequestInit = {}): Promise<unknown> {
+export async function requestJson(
+  url: URL,
+  init: RequestInit = {},
+): Promise<unknown> {
   let response: Response;
   try {
     const headers = new Headers(init.headers);

@@ -17,6 +17,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The link opens the booking: its time and place, with Move and Cancel. */
 export const Live: Story = {
+  parameters: {
+    verification: { caseId: "vc_ee088052-0513-4bee-a94e-a980fbd8a2fd" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -34,6 +37,9 @@ export const Live: Story = {
 
 /** Move the visit: the booking flow's slot picker opens under the card. */
 export const Moving: Story = {
+  parameters: {
+    verification: { caseId: "vc_80b28c50-f83c-41a9-bf2a-9ec1a46893c3" },
+  },
   args: { state: "moving" },
   play: async ({ canvasElement }) => {
     expect(
@@ -51,6 +57,9 @@ export const Moving: Story = {
 
 /** Cancel asks first in a dialog; the visit is cancelled only when confirmed. */
 export const CancelConfirmation: Story = {
+  parameters: {
+    verification: { caseId: "vc_8dd7b8f9-6246-4e47-b1ff-23b17adb5ddf" },
+  },
   args: { state: "live" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -71,6 +80,9 @@ export const CancelConfirmation: Story = {
 
 /** Once cancelled the card says so and offers nothing more. */
 export const Cancelled: Story = {
+  parameters: {
+    verification: { caseId: "vc_441d3e6c-14dd-4690-8716-0cc48b682528" },
+  },
   args: { state: "cancelled" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -86,6 +98,9 @@ export const Cancelled: Story = {
 
 /** A visit that has ended is closed: its state shows and the link offers nothing. */
 export const Closed: Story = {
+  parameters: {
+    verification: { caseId: "vc_053df9d1-13f8-44f3-acbc-9619d81dd0bc" },
+  },
   args: { state: "closed" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -101,6 +116,9 @@ export const Closed: Story = {
 
 /** A link that names no booking says so, and offers to book one. */
 export const NotFound: Story = {
+  parameters: {
+    verification: { caseId: "vc_00eefd2f-12ed-4a64-8703-da028947ec8b" },
+  },
   args: { state: "notFound" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -115,6 +133,9 @@ export const NotFound: Story = {
 
 /** Signed out, the link still opens the booking and invites a sign-in. */
 export const SignedOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_d0ebb442-9061-4ac8-9c1f-9c6317f05521" },
+  },
   args: { state: "signedOut" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

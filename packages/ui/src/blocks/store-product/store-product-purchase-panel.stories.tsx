@@ -66,6 +66,9 @@ function InteractivePurchasePanel({
 }
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_b5849ef5-bd85-4e03-8e27-f774a2706048" },
+  },
   render: () => <InteractivePurchasePanel product={PRODUCT_DETAIL_STORY} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -99,6 +102,9 @@ export const Default: Story = {
  * shopper-facing variant choice and adds the one supplied sale item.
  */
 export const AddsOneItemWithoutVariantChoice: Story = {
+  parameters: {
+    verification: { caseId: "vc_eb125a06-843c-4da8-a9b4-731def7005df" },
+  },
   args: {
     onAddToCart: fn(),
     saleItem: PRODUCT_DETAIL_STORY.saleItem,
@@ -118,6 +124,9 @@ export const AddsOneItemWithoutVariantChoice: Story = {
  * of the purchase item, so the request reaches cart review unbounded.
  */
 export const QuantityBeyondBrowseCount: Story = {
+  parameters: {
+    verification: { caseId: "vc_3d2700ac-2a84-41f6-983d-d43551fe2a14" },
+  },
   render: () => <InteractivePurchasePanel product={PRODUCT_DETAIL_STORY} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -138,6 +147,9 @@ export const QuantityBeyondBrowseCount: Story = {
 };
 
 export const SoldOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_fc9b5111-d727-4c56-895a-e6450c57bbd0" },
+  },
   render: () => <InteractivePurchasePanel product={SOLD_OUT_PRODUCT_STORY} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -149,6 +161,9 @@ export const SoldOut: Story = {
 };
 
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_a210bb42-fa22-4c63-899f-cc382fcd0a4f" },
+  },
   args: {
     loading: true,
     quantity: 2,
@@ -166,6 +181,9 @@ export const Loading: Story = {
 /** A refused add says why under the button, which is pressable again for a
  * retry; the chosen quantity stays. */
 export const AddRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_fdccc214-813a-4cd5-a71f-8af22802924f" },
+  },
   render: () => (
     <InteractivePurchasePanel product={PRODUCT_DETAIL_STORY} refuses />
   ),

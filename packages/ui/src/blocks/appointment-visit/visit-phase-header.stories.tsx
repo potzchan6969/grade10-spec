@@ -22,6 +22,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Booked: Story = {
+  parameters: {
+    verification: { caseId: "vc_3e401dcb-74ec-45c2-9db7-13bd6602bee2" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -32,6 +35,9 @@ export const Booked: Story = {
 };
 
 export const Called: Story = {
+  parameters: {
+    verification: { caseId: "vc_754a1e57-aed3-4be6-9a6c-6a7c513a2677" },
+  },
   args: {
     tone: "ink",
     copy: {
@@ -45,6 +51,9 @@ export const Called: Story = {
 
 /** Checked in: the live tone while the collector waits. */
 export const CheckedIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_fe078c79-45c4-4412-bb19-126d417cba71" },
+  },
   args: {
     tone: "info",
     copy: { phase: "Checked in", note: "10:09", title: "We’ll call you" },
@@ -52,6 +61,9 @@ export const CheckedIn: Story = {
 };
 
 export const Missed: Story = {
+  parameters: {
+    verification: { caseId: "vc_40fffb75-312d-4c51-8b3d-f04a83934be7" },
+  },
   args: {
     tone: "warn",
     copy: { phase: "Missed", title: "We missed you" },
@@ -59,6 +71,9 @@ export const Missed: Story = {
 };
 
 export const Cancelled: Story = {
+  parameters: {
+    verification: { caseId: "vc_576a78d1-b962-4918-a041-c04a30023902" },
+  },
   args: {
     tone: "bad",
     copy: {

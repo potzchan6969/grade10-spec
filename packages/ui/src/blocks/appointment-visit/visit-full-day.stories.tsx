@@ -38,6 +38,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Full on the picked day: each shop's earliest time, a press that picks it. */
 export const Full: Story = {
+  parameters: {
+    verification: { caseId: "vc_9a3118c9-b03f-43aa-9ac4-833a00bd0839" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
@@ -52,6 +55,9 @@ export const Full: Story = {
 
 /** A later day, full. */
 export const FullOnADay: Story = {
+  parameters: {
+    verification: { caseId: "vc_7b092ca7-78dd-4033-81ea-a10599e71326" },
+  },
   args: {
     copy: {
       title: "Sat 17 Oct is full at Central.",
@@ -63,6 +69,9 @@ export const FullOnADay: Story = {
 
 /** Closed on the picked day. */
 export const Closed: Story = {
+  parameters: {
+    verification: { caseId: "vc_b8b05f8d-3eda-4626-9502-abd538d2e65c" },
+  },
   args: {
     copy: {
       title: "Central is closed on Mon 2 Nov.",

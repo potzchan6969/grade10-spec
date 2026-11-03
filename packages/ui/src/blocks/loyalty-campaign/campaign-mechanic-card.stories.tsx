@@ -31,6 +31,9 @@ type Story = StoryObj<typeof meta>;
 
 /** A prototype: the card primitive's look until the card is designed. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_f4f7c294-ceec-4ba5-8982-98564f3850ea" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("A Pokémon card pack")).toBeInTheDocument();
@@ -44,6 +47,9 @@ export const Default: Story = {
 
 /** A gift held for the member: no count left to show. */
 export const Held: Story = {
+  parameters: {
+    verification: { caseId: "vc_2ea4882d-c5b0-4a02-bcf0-521bdaae84ed" },
+  },
   args: {
     remaining: null,
     step: "held",

@@ -46,11 +46,12 @@ pnpm storybook:workbench
 
 ## Give A Story A Case
 
-- **Rule** - Every Auction story, bar those under State Tests, carries `parameters.verification.caseId` in the form `vc_<uuid>`. A case names one story, so no two stories share one.
+- **Rule** - Every story carries `parameters.verification.caseId` in the form `vc_<uuid>`: screens, flows, blocks and Design System primitives alike. A case names one story, so no two stories share one.
 - **Permanent** - Mint it once and never change it. Archived runs find the story by it, so a new id orphans the history.
-- **New story** - `pnpm storybook:check` fails an Auction story with no id. `pnpm storybook:case-ids --write` adds one to each story that lacks it; then run Biome on the files.
-- **Other domains** - Add the domain to `VERIFIED_DOMAINS` in `scripts/storybook/case-ids.mjs`, then run the same command.
-- **State Tests** - These stories drive an API response and have no site screen to compare, so they carry no id.
+- **New story** - `pnpm storybook:check` fails a story with no id. `pnpm storybook:case-ids --write` adds one to each story that lacks it; then run Biome on the files.
+- **A story that copies another** - A story spread from a sibling (`...Filled`) has no literal for the command to fill. Add `parameters: { ...Filled.parameters, verification: { caseId } }` by hand, or it would carry the sibling's id.
+- **Prototypes** - Drafts outside the agreed look carry no id: nobody approves them.
+- **Captured only when declared** - ❓ A full capture covers the cases an application's site run declares, so a block or primitive with an id but no site recipe has no reference yet. Tony L confirms how the workbench captures those.
 
 ## Capture One Domain
 
@@ -75,6 +76,7 @@ pnpm storybook:workbench
 - **What an approval judges** - One captured reference image, tied to its SHA-256. A later capture of the same PNG carries the approval. A capture that changes one pixel is not approved.
 - **Newest wins** - Approvals are never edited or deleted. A new one on the same image replaces the shown one; the history lists every decision at that size and locale.
 - **First baseline** - With no approval yet there is nothing to diff. Approve to start one.
+- **Nothing new** - When every size's current reference is the approved image, or no pixel apart from it, Approve all sizes is off and says why. A size not yet compared, or a change request on the approved image, keeps it on.
 - **Loading** - Until a story's references and approvals load, the Approve and Site Compare tabs say so: the size tabs, the flag and the image slots wait, nothing is compared, and Approve, Request changes and Capture are off. An empty list is never shown as "no reference" before it has loaded.
 - **Commit** - Each capture records the commit it drew. Hosted, that is the deploy's build receipt. Locally, it is this checkout's commit, flagged when the checkout had uncommitted changes.
 - **Who** - Hosted, the approver is the Cloudflare Access identity, never a name typed in the panel. The publisher token cannot approve. Locally, every approval is `local-development`.
@@ -111,8 +113,18 @@ pnpm storybook:workbench
 - **Approvals tab** - Reference drift only, in three sections: unapproved references past the tolerance, worst first; stories with no baseline; the other unapproved references. Pressing the Approved box lists the approved stories.
 - **Site drift tab** - One list, the highest site drift between the sizes first. A screen size filter ranks by that size alone. Compare the site with Last approved, where a size with no approved reference has nothing to compare and shows `-`, or Current reference, the reference the run recorded, where a compact label says when that reference is approved.
 - **Domain filter** - Choosing a domain groups either tab by Storybook path, each path keeping its tab's order and ranking from 1.
-- **Story dialog** - Row Approve only opens the dialog, so a person sees the images first. Approve all sizes makes the focused capture the Approve tab makes. Request changes needs one size and a comment. On the Site drift tab there is no approval: nobody approves a site capture.
+- **Story dialog** - Row Approve only opens the dialog, so a person sees the images first. Approve all sizes makes the focused capture the Approve tab makes, and is off by the same Nothing new rule. Request changes needs one size and a comment. On the Site drift tab there is no approval: nobody approves a site capture.
 - **Fix prompts** - On the Site drift tab, Copy prompt copies one story's drift report with a sample prompt to fix the site. The button above the table copies every drift past the tolerance in the current filters as one batch prompt. The page shows what it copied.
+
+## Copy Review
+
+- **Where** - A page of its own beside the dashboard, at `?path=/copy-review/`. Open it from the dashboard's header or its sidebar entry. It reads `@grade10/i18n` as this build of the workbench bundles it, one row per key in each layer: `shared`, then each brand.
+- **Review** - Each value in each locale is either Looks right or gets a proposed edit. The page runs the copy checks on the current value and on an edit while it is typed: placeholders and tags against the English, ICU braces, copy left in English, Simplified characters in zh-Hant and the reverse, and English house style.
+- **Approve** - A proposed edit is approved, or sent back with a comment it needs. An edit with an error cannot be approved; a warning is the approver's call. A sent-back edit returns to Review, where its proposer edits it again.
+- **Records** - Reviews, proposals, decisions and change sets are create-only JSON records under `copy-review/v1/` in the same archive, R2 hosted and files locally. Each is bound to the layer, locale, namespace and key, and to the SHA-256 of the value it judged, so a value that changes is reviewed again. The newest decision on an edit holds. The person is the Access identity hosted and `local-development` locally.
+- **Ship** - Approved edits ship together. Hosted, the Worker opens one pull request on grade10-spec from `main`; locally, they are written into this checkout's catalog files to commit. An edit whose catalog value moved since it was proposed is left out.
+- **Reaching the site** - A merged edit shows as Merged, not on the site yet, until grade10's `external/grade10-spec` pin on `main` includes the merge. Moving the pin stays a grade10 commit.
+- **Not here** - The auction email copy grade10 still writes in its own code, and which deployed environment serves which copy.
 
 ## Where Captures And Approvals Live
 
@@ -155,6 +167,7 @@ pnpm storybook:workbench
 - **Human access** - Set `ACCESS_ISSUER` and `ACCESS_AUD` for the Cloudflare Access application protecting the Storybook origin. The Worker verifies signed assertions before it reads evidence.
 - **Publishing** - Set the Worker secret `PUBLISHER_TOKEN`. A capture runner publishes with `pnpm ui:verify publish --run <runId> --archive <dir> --endpoint <storybook origin> --token-env UI_VERIFICATION_TOKEN`. When Access protects the host, the runner also needs its service credentials.
 - **Publisher token** - `PUBLISHER_TOKEN` is a value you choose, not one Cloudflare issues. Generate it with `openssl rand -hex 32`. Store it on the Worker with `pnpm dlx wrangler@4.120.0 secret put PUBLISHER_TOKEN -c wrangler.storybook.jsonc` in `apps/preview`. Give the same value to the runner as `UI_VERIFICATION_TOKEN`. Keep it in the team's secret manager, never in git or in the Storybook bundle.
+- **Copy shipping** - ❓ Set the Worker secret `COPY_GITHUB_TOKEN`, a GitHub token that may push branches and open pull requests on `9gag/grade10-spec` and read `9gag/grade10`. Without it the hosted Copy review still reviews and approves, and Ship answers that it cannot ship.
 - **Who may ask** - Only a signed-in person may request a full capture, approve, or make a focused capture. A deploy asks through the Worker's own hourly check.
 - **Reuse** - A run that reuses captures needs its source run published first.
 - **Origins** - The Worker allows its own origin. Set `ALLOWED_ORIGINS` only for a separate development workbench.

@@ -68,6 +68,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The whole ledger: totals, tabs, what is on the way, then the months. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_de77cbbf-8288-4eba-81a4-a4faaa38070a" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -93,6 +96,9 @@ export const Default: Story = {
 /** Boneyard: the ledger is still on the wire — the summary and rows draw
  * as skeletons. */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_6ae357d6-4f90-4841-9f1b-7d3726eb24c1" },
+  },
   args: {
     view: {
       ledger: { status: "loading" },
@@ -108,6 +114,9 @@ export const Loading: Story = {
 
 /** Nothing earned yet: the totals read zero and the list says so. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_351a3b1a-bbaa-41d9-aaec-1e5763f0300c" },
+  },
   args: {
     view: {
       ledger: {

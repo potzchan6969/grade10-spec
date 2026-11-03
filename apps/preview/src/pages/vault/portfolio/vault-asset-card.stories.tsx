@@ -58,6 +58,9 @@ function LinkedCard({ asset }: { asset: VaultAsset }) {
 
 /** Vaulted holding — no status badge and no price line. */
 export const InVault: Story = {
+  parameters: {
+    verification: { caseId: "vc_10140eb8-df97-4dde-9d1b-721a1612e642" },
+  },
   args: { asset: assetWithStatus("In Vault") },
   render: ({ asset }) => <LinkedCard asset={asset} />,
   play: async ({ canvasElement }) => {
@@ -70,6 +73,9 @@ export const InVault: Story = {
 
 /** Fixed-price store listing — brand badge. */
 export const Listed: Story = {
+  parameters: {
+    verification: { caseId: "vc_7d16d880-fea4-4801-869b-3339760784dc" },
+  },
   args: { asset: assetWithStatus("Listed") },
   render: ({ asset }) => <LinkedCard asset={asset} />,
   play: async ({ canvasElement }) => {
@@ -81,6 +87,9 @@ export const Listed: Story = {
 
 /** Bidding in progress — brand badge. */
 export const LiveAuction: Story = {
+  parameters: {
+    verification: { caseId: "vc_6c3bbd5a-4f53-4ba8-a075-6a3082ba90ad" },
+  },
   args: { asset: assetWithStatus("Live Auction") },
   render: ({ asset }) => <LinkedCard asset={asset} />,
   play: async ({ canvasElement }) => {
@@ -90,8 +99,24 @@ export const LiveAuction: Story = {
   },
 };
 
+<<<<<<< HEAD
 /** Boneyard skeleton while the holdings fetch settles — also the capture target at the card's 288px grid width. */
+=======
+/** Boneyard skeleton while the holdings fetch settles. */
+export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_368de28d-6edb-43c2-8939-2dc46e8a2385" },
+  },
+  args: { asset: assetWithStatus("In Vault"), loading: true },
+  render: ({ asset }) => <VaultAssetCard asset={asset} loading />,
+};
+
+/** Boneyard capture target — `loading` at the card's 288px grid width. */
+>>>>>>> origin/main
 export const BoneyardCapture: Story = {
+  parameters: {
+    verification: { caseId: "vc_6f9060c3-474a-4bf3-acb0-0334665eb46c" },
+  },
   args: { asset: assetWithStatus("In Vault"), loading: true },
 };
 
@@ -110,6 +135,9 @@ export const EstimatePaused: Story = {
 
 /** Withdrawal requested, admin approval pending — badge, no price line. */
 export const RetrievalPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_c5543946-2f51-4412-8184-a696a0300f8d" },
+  },
   args: { asset: assetWithStatus("Retrieval Pending") },
   render: ({ asset }) => <LinkedCard asset={asset} />,
   play: async ({ canvasElement }) => {

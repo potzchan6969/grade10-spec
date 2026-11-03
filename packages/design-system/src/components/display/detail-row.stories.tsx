@@ -14,9 +14,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_eb38107e-95a9-45ff-8c73-ade08dc391bc" },
+  },
+};
 
 export const ComposedValue: Story = {
+  parameters: {
+    verification: { caseId: "vc_294c9335-d8cb-4f34-8b1f-8ae4d0c6c79c" },
+  },
   args: {
     label: "Certificate",
     children: (

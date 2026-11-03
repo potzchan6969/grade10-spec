@@ -21,6 +21,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_33eafc5a-d27d-4fc9-9a3a-ce6a69e6373e" },
+  },
   args: {
     title: PRODUCT_DETAIL_STORY.title,
     saleItem: PRODUCT_DETAIL_STORY.saleItem,
@@ -44,6 +47,9 @@ export const Default: Story = {
  * keeps its item's price while the purchase block disables adding it.
  */
 export const SoldOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_affbab50-03ea-42f5-8f70-133672dd3283" },
+  },
   args: {
     title: SOLD_OUT_PRODUCT_STORY.title,
     saleItem: SOLD_OUT_PRODUCT_STORY.saleItem,

@@ -25,6 +25,9 @@ type Story = StoryObj<typeof meta>;
 /** Choosing an option reports it and dismisses the list; the trigger stays
  * on the previous label until the consumer supplies a new one. */
 export const SortIsReported: Story = {
+  parameters: {
+    verification: { caseId: "vc_b6ddd1d1-b816-43d5-8f25-71c67c52fa11" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
 
@@ -48,6 +51,9 @@ export const SortIsReported: Story = {
 
 /** Choosing the already-active option reports nothing. */
 export const ActiveSortReportsNothing: Story = {
+  parameters: {
+    verification: { caseId: "vc_1b5dd589-1127-4218-83bb-d061f3348611" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
 
@@ -64,6 +70,9 @@ export const ActiveSortReportsNothing: Story = {
 
 /** Dismissing a chip reports the group and option as unselected. */
 export const AppliedFilterIsRemoved: Story = {
+  parameters: {
+    verification: { caseId: "vc_5650304e-28bc-4708-9c16-c5715ca70376" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Pokémon" }));
@@ -80,6 +89,9 @@ export const AppliedFilterIsRemoved: Story = {
 
 /** Clear-all reports once; chips stay until the consumer supplies a new list. */
 export const AppliedFiltersAreCleared: Story = {
+  parameters: {
+    verification: { caseId: "vc_bb2acd65-2f9b-4ec8-9711-7e5df09eec48" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(

@@ -137,6 +137,9 @@ const PRODUCT_NAME = "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)";
 const POKEMON_TILE = /🐭\s*Pokémon/;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_fb6dcfed-5ec8-4c50-afd0-01e1bc0ba4be" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -154,6 +157,9 @@ export const Default: Story = {
 
 /** The collections read is in flight: the heading stays, no empty grid shows. */
 export const CollectionsLoading: Story = {
+  parameters: {
+    verification: { caseId: "vc_ba903464-8ed3-4ab4-b425-9aae5a32eb3c" },
+  },
   args: { collections: "loading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -169,6 +175,9 @@ export const CollectionsLoading: Story = {
 
 /** The merchandised read is in flight: the row says it is loading, no cards. */
 export const ProductsLoading: Story = {
+  parameters: {
+    verification: { caseId: "vc_b1ffc5f7-b367-4086-9d45-b49f033f94b1" },
+  },
   args: { products: "loading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -181,6 +190,9 @@ export const ProductsLoading: Story = {
 
 /** The read failed: the row says so and offers Retry, which reads again. */
 export const ProductsFailed: Story = {
+  parameters: {
+    verification: { caseId: "vc_36595fc1-6b9a-43f0-a976-527f305742fb" },
+  },
   args: { products: "failed" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -201,6 +213,9 @@ export const ProductsFailed: Story = {
 
 /** The catalogue lists no products: the section is absent, heading and all. */
 export const ProductsEmpty: Story = {
+  parameters: {
+    verification: { caseId: "vc_4f2daf53-8b4a-4042-afb3-34d598c33159" },
+  },
   args: { products: "empty" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -215,5 +230,8 @@ export const ProductsEmpty: Story = {
 };
 
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_9740b807-4908-406e-a59f-db75b9ef3740" },
+  },
   globals: { viewport: { value: "mobile1" } },
 };

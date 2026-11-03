@@ -1200,7 +1200,7 @@ function storeFactory(createStore) {
   };
 }
 
-function createFileStore(rootValue) {
+export function createFileStore(rootValue) {
   if (typeof rootValue !== "string" || rootValue.trim() === "") {
     throw new TypeError("archive root must be a non-empty path");
   }
@@ -1377,7 +1377,7 @@ function createFileStore(rootValue) {
   };
 }
 
-function createR2Store(bucket) {
+export function createR2Store(bucket) {
   if (
     !bucket ||
     typeof bucket.put !== "function" ||

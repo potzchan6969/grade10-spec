@@ -17,6 +17,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const TimeJustTaken: Story = {
+  parameters: {
+    verification: { caseId: "vc_db793cd5-87a6-403a-ac13-13c5e7a41d97" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("alert")).toHaveTextContent(
@@ -26,4 +29,9 @@ export const TimeJustTaken: Story = {
 };
 
 /** A repeat press: the notice shakes. */
-export const Repeated: Story = { args: { attempt: 1 } };
+export const Repeated: Story = {
+  parameters: {
+    verification: { caseId: "vc_0d40c17c-a072-4c1b-bfa1-2f466cf57603" },
+  },
+  args: { attempt: 1 },
+};

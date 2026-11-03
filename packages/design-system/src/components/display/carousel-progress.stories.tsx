@@ -24,6 +24,9 @@ const SLIDES = ["Featured lot 1", "Featured lot 2", "Featured lot 3"] as const;
 
 /** Static active pill — no auto-advance timer. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_31baf5ad-b5e7-4b70-af87-85d4d5979206" },
+  },
   render: () => (
     <CarouselProgress aria-label="Featured lots">
       {SLIDES.map((label, index) => (
@@ -43,6 +46,9 @@ export const Default: Story = {
 
 /** Active fill runs for 5s; pause freezes the animation. */
 export const Timed: Story = {
+  parameters: {
+    verification: { caseId: "vc_979ece80-3b8a-429f-833f-e043789204f8" },
+  },
   render: function TimedCarouselProgress() {
     const [index, setIndex] = useState(0);
     const [playKey, setPlayKey] = useState(0);
@@ -86,6 +92,9 @@ export const Timed: Story = {
 
 /** Reduced motion keeps the active fill full-width with no animation. */
 export const ReducedMotion: Story = {
+  parameters: {
+    verification: { caseId: "vc_39afa43c-4726-4a14-9d99-a3aaaebaf3d9" },
+  },
   render: () => (
     <CarouselProgress aria-label="Featured lots">
       {SLIDES.map((label, index) => (
@@ -111,6 +120,9 @@ export const ReducedMotion: Story = {
 
 /** Selecting a dot restarts the timer via `playKey`. */
 export const SelectSlide: Story = {
+  parameters: {
+    verification: { caseId: "vc_c9c71524-a36d-4695-be39-d9c735fee03a" },
+  },
   render: function SelectSlideCarouselProgress() {
     const [index, setIndex] = useState(0);
     const [playKey, setPlayKey] = useState(0);
@@ -145,6 +157,9 @@ export const SelectSlide: Story = {
 
 /** `onComplete` fires when the fill finishes. */
 export const Completes: Story = {
+  parameters: {
+    verification: { caseId: "vc_c1100672-4973-4b98-b2c1-0d6080d13b21" },
+  },
   render: function CompletesCarouselProgress() {
     const [done, setDone] = useState(false);
     return (

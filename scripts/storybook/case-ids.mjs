@@ -1,5 +1,5 @@
 /**
- * `pnpm storybook:case-ids` - holds every story in a verified domain to a
+ * `pnpm storybook:case-ids` - holds every story bar a prototype to a
  * permanent `parameters.verification.caseId`, and with `--write` gives the
  * ones without one a fresh id. The panel finds a story's archived runs by
  * that id, so it is minted once, never changes, and names one story.
@@ -9,23 +9,16 @@ import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { rootDirectory, storyIndex } from "./story-index.mjs";
 
-/** Domains whose stories carry a verification case id. */
-export const VERIFIED_DOMAINS = ["Auction"];
-
-/** Stories that drive an API response, with no screen on the site to compare. */
-const EXEMPT_KIND = "State Tests";
+/** Drafts outside the agreed look; their references are never approved. */
+const EXEMPT_KIND = "Prototypes";
 
 export const CASE_ID =
   /^vc_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 export const newCaseId = () => `vc_${randomUUID()}`;
 
-/** Every flow carries a case id: its steps are what a recipe walks on the site. */
-export const needsCaseId = (title) => {
-  const parts = title.split("/");
-  if (parts[1] === "Flows") return true;
-  return VERIFIED_DOMAINS.includes(parts[0]) && !parts.includes(EXEMPT_KIND);
-};
+/** Every story bar a prototype: screens, flows, blocks and primitives alike. */
+export const needsCaseId = (title) => !title.split("/").includes(EXEMPT_KIND);
 
 /** What is wrong with the case ids of the parsed story files; empty when nothing is. */
 export function caseIdErrors(parsed) {

@@ -65,6 +65,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Confirmed and signed in: a QR card per ticket. */
 export const Confirmed: Story = {
+  parameters: {
+    verification: { caseId: "vc_b6d71049-ada7-47ad-8233-c380eb37df68" },
+  },
   name: "Confirmed, signed in",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -88,6 +91,9 @@ const unpaid = { ...SUMMARY, copy: { ...SUMMARY.copy, paidBy: undefined } };
 
 /** Held, counting down: no codes until it is paid. */
 export const Held: Story = {
+  parameters: {
+    verification: { caseId: "vc_be11698a-9ad1-4c03-8866-43e7ef8d0994" },
+  },
   name: "Held, counting down",
   args: {
     copy: { ...ORDER_COPY, status: "Waiting for Payment", facts: HELD_FACTS },
@@ -124,6 +130,9 @@ export const Held: Story = {
 };
 
 export const Checking: Story = {
+  parameters: {
+    verification: { caseId: "vc_06b3bee3-54c5-45c6-9945-741a2b3394e6" },
+  },
   name: "Hold reached zero",
   args: {
     copy: { ...ORDER_COPY, status: "Checking", facts: HELD_FACTS },
@@ -150,6 +159,9 @@ export const Checking: Story = {
 };
 
 export const AfterDayOne: Story = {
+  parameters: {
+    verification: { caseId: "vc_32da5d09-8477-49ae-85b7-88ad5482f6ae" },
+  },
   name: "After day 1",
   args: {
     tickets: TICKETS_AFTER_DAY_ONE,
@@ -164,6 +176,9 @@ export const AfterDayOne: Story = {
 };
 
 export const PartRefunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_efd0cbbe-c677-45aa-b706-3ee52c1b382b" },
+  },
   name: "One ticket refunded",
   args: {
     copy: { ...ORDER_COPY, status: "Partly Refunded" },
@@ -217,6 +232,9 @@ const refundedSummary = {
 };
 
 export const Refunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_1ffad070-6f92-4bb0-a654-0848e370dbfa" },
+  },
   name: "Fully refunded",
   args: {
     copy: { ...ORDER_COPY, status: "Refunded" },
@@ -252,6 +270,9 @@ export const Refunded: Story = {
 };
 
 export const EventCancelled: Story = {
+  parameters: {
+    verification: { caseId: "vc_ecf31073-f695-4687-a9a3-8f82fa616645" },
+  },
   name: "Event cancelled",
   args: {
     copy: { ...ORDER_COPY, status: "Refunded" },
@@ -278,6 +299,9 @@ export const EventCancelled: Story = {
 };
 
 export const FreeOrder: Story = {
+  parameters: {
+    verification: { caseId: "vc_d283bd8a-45ab-463b-9550-5cb41f0e07de" },
+  },
   name: "Free order",
   args: {
     copy: {
@@ -318,6 +342,9 @@ export const FreeOrder: Story = {
 /** A guest in the browser that paid, for a day: no breadcrumb, and the way
  * to see the order anywhere. */
 export const GuestInBuyingBrowser: Story = {
+  parameters: {
+    verification: { caseId: "vc_9e3de2bd-39da-4b45-9d44-1896819e433f" },
+  },
   name: "Guest in the buying browser",
   args: {
     copy: { ...ORDER_COPY, breadcrumb: undefined },
@@ -345,6 +372,9 @@ export const GuestInBuyingBrowser: Story = {
 /** Back from Stripe, paid: the outcome leads the tickets in the browser that
  * paid. */
 export const PaidReturn: Story = {
+  parameters: {
+    verification: { caseId: "vc_5f9e53a6-c033-4b35-b9a4-745f66921f3e" },
+  },
   name: "Paid, back from Stripe",
   args: {
     lead: (

@@ -32,6 +32,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const WithTrackOrder: Story = {
+  parameters: {
+    verification: { caseId: "vc_5f5d7231-1bf1-49aa-a62b-e32f735f5aab" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Track Order" }));
@@ -42,6 +45,9 @@ export const WithTrackOrder: Story = {
 };
 
 export const WithoutTrackOrder: Story = {
+  parameters: {
+    verification: { caseId: "vc_9fec79f7-9dc0-4cc4-bc68-d0d6dcc08c30" },
+  },
   args: { trackOrder: false, onTrackOrder: undefined },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -57,6 +57,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Before the day: the compact pass, Change time and Cancel, what to bring. */
 export const Booked: Story = {
+  parameters: {
+    verification: { caseId: "vc_70bb6bb7-e51a-479d-b476-7e14e1e44395" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -76,6 +79,9 @@ export const Booked: Story = {
 
 /** On the day: the large pass, Running late first, the weather after the acts. */
 export const Today: Story = {
+  parameters: {
+    verification: { caseId: "vc_4907c64e-ee5c-4c48-8a19-3aa7e56b2d43" },
+  },
   args: {
     copy: TODAY_BODY_COPY,
     tone: "ink",
@@ -95,6 +101,9 @@ export const Today: Story = {
 
 /** Paid: the deposit and when it comes back, among the facts. */
 export const Paid: Story = {
+  parameters: {
+    verification: { caseId: "vc_8e6402cb-e602-42af-a4d8-c6464d737baf" },
+  },
   args: { facts: PAID_FACTS },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -104,6 +113,9 @@ export const Paid: Story = {
 
 /** Just moved: said as a toast, gone by itself. */
 export const Said: Story = {
+  parameters: {
+    verification: { caseId: "vc_6f0fda01-523e-4ecf-adc7-9e3e02952482" },
+  },
   args: {
     copy: {
       ...BOOKED_BODY_COPY,
@@ -121,6 +133,9 @@ export const Said: Story = {
 
 /** A sheet open over the page: the acts stay behind the scrim. */
 export const Cancelling: Story = {
+  parameters: {
+    verification: { caseId: "vc_4470a7af-4694-4cca-b162-b5933916d764" },
+  },
   args: {
     panel: (
       <VisitCancelPanel
@@ -143,6 +158,9 @@ export const Cancelling: Story = {
 };
 
 export const Called: Story = {
+  parameters: {
+    verification: { caseId: "vc_17daeffc-18c2-4d5f-883a-ac393dcdf819" },
+  },
   args: {
     copy: CALLED_BODY_COPY,
     tone: "ink",
@@ -154,11 +172,17 @@ export const Called: Story = {
 
 /** Time passed: the held time is gone, so book another. */
 export const TimePassed: Story = {
+  parameters: {
+    verification: { caseId: "vc_97e2358b-3ded-4959-a6e6-ebaa198578f5" },
+  },
   args: { copy: PASSED_BODY_COPY, tone: "warn", before: undefined },
 };
 
 /** Called off: the time struck, the reason in a plain notice, and no pass. */
 export const Cancelled: Story = {
+  parameters: {
+    verification: { caseId: "vc_73976989-37a8-4b18-a904-061e64e6df62" },
+  },
   args: {
     copy: CANCELLED_BODY_COPY,
     tone: "bad",
@@ -179,6 +203,9 @@ export const Cancelled: Story = {
 
 /** Lost signal: what it last knew, with Try now. */
 export const Reconnecting: Story = {
+  parameters: {
+    verification: { caseId: "vc_04715d5a-beeb-44cc-8293-6b2a09d2adaa" },
+  },
   args: {
     reconnecting: { copy: RECONNECTING_COPY, busy: false, onRetry: fn() },
   },

@@ -5,7 +5,11 @@ import {
   type ReferenceRecord,
   referenceRecord,
 } from "./archive-client";
-import { driftNotice, referenceStatus } from "./capture-stamp";
+import {
+  driftNotice,
+  referenceStatus,
+  unchangedSinceApproval,
+} from "./capture-stamp";
 import type { PixelComparison } from "./pixel-compare";
 
 const IDENTITY = {
@@ -190,5 +194,52 @@ describe("reference drift", () => {
         site: { width: 2, height: 1 },
       }),
     ).toBe("Reference size changed since approval");
+  });
+});
+
+describe("nothing new to approve", () => {
+  const approvedFirst = approval("a1", FIRST, "2026-10-29T09:01:00Z");
+
+  it("holds a current reference with no pixel apart from the approved one", () => {
+    const result = status([FIRST, SECOND], [approvedFirst]);
+    expect(unchangedSinceApproval(result, 0)).toBe(true);
+  });
+
+  it("holds the very bytes that were approved before any comparison", () => {
+    const again = reference(
+      "reference-3",
+      FIRST.image.sha256,
+      "2026-10-29T11:00:00Z",
+    );
+    expect(
+      unchangedSinceApproval(
+        status([FIRST, again], [approvedFirst]),
+        undefined,
+      ),
+    ).toBe(true);
+  });
+
+  it("offers approval once a pixel moved, or before it is compared", () => {
+    const result = status([FIRST, SECOND], [approvedFirst]);
+    expect(unchangedSinceApproval(result, 0.0001)).toBe(false);
+    expect(unchangedSinceApproval(result, undefined)).toBe(false);
+  });
+
+  it("offers approval with no baseline", () => {
+    expect(unchangedSinceApproval(status([SECOND], []), 0)).toBe(false);
+  });
+
+  it("lets a change request on the same bytes be reversed", () => {
+    const result = status(
+      [FIRST],
+      [
+        approvedFirst,
+        approval("a2", FIRST, "2026-10-29T09:05:00Z", {
+          decision: "changes-requested",
+          comment: "Wrong",
+        }),
+      ],
+    );
+    expect(unchangedSinceApproval(result, 0)).toBe(false);
   });
 });

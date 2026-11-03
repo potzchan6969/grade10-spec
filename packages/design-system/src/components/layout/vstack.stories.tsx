@@ -29,10 +29,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_076729f1-f54d-45d8-8a9c-e1a1e47969b1" },
+  },
+};
 
 /** The gap rungs are `Stack`'s; nothing is added or renamed here. */
 export const Gaps: Story = {
+  parameters: {
+    verification: { caseId: "vc_a813c728-4b48-46be-a61b-a29c23b8e165" },
+  },
   render: (args) => (
     <div className="flex flex-row gap-6">
       <VStack {...args} gap="none" />
@@ -45,6 +52,9 @@ export const Gaps: Story = {
 
 /** `hAlign` moves the items sideways — the cross axis of a vertical stack. */
 export const HorizontalAlignment: Story = {
+  parameters: {
+    verification: { caseId: "vc_63cae9b7-faaf-48a3-8a35-4a9192d4c76b" },
+  },
   args: { hAlign: "center" },
   decorators: [
     (Story) => (
@@ -57,6 +67,9 @@ export const HorizontalAlignment: Story = {
 
 /** `vAlign` distributes along the stacking axis, so it needs a taller box. */
 export const VerticalAlignment: Story = {
+  parameters: {
+    verification: { caseId: "vc_c529191c-38f2-4ac1-b77f-b4c3dc1b95de" },
+  },
   args: { vAlign: "space-between" },
   decorators: [
     (Story) => (
@@ -69,6 +82,9 @@ export const VerticalAlignment: Story = {
 
 /** `align` and `justify` still work; `hAlign` and `vAlign` win over them. */
 export const CssNamedAliases: Story = {
+  parameters: {
+    verification: { caseId: "vc_1d9c2ce6-2da1-4aeb-bc31-5095184bd9f5" },
+  },
   args: { align: "flex-end", justify: "space-around" },
   decorators: [
     (Story) => (

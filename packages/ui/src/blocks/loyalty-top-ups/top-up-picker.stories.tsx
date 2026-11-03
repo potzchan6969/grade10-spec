@@ -61,6 +61,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Nothing picked: the balance as it stands, and Pay Now waits for a pack. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_8fa7ab39-29f9-4eb7-add6-5fe7f1cbc6c7" },
+  },
   play: async ({ args }) => {
     const overlay = within(document.body);
     const dialog = await overlay.findByRole("dialog", {
@@ -86,6 +89,9 @@ export const Default: Story = {
 
 /** Checkout is opening: the button waits and refuses a second press. */
 export const Opening: Story = {
+  parameters: {
+    verification: { caseId: "vc_304ebfd4-c390-4e03-8bc0-524e8dd7c254" },
+  },
   args: { busy: true, defaultPackId: "pack-5k" },
   play: async ({ args }) => {
     const overlay = within(document.body);
@@ -100,6 +106,9 @@ export const Opening: Story = {
 
 /** A phone: the same packs in a drawer. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_9767813b-8daf-4111-82fc-d1f232463936" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async () => {
     const overlay = within(document.body);

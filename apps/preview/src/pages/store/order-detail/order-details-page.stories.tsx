@@ -178,6 +178,9 @@ function orderDetailsRevealed(canvasElement: HTMLElement): boolean {
 }
 
 export const Filled: Story = {
+  parameters: {
+    verification: { caseId: "vc_112d71df-4e76-4e63-969c-c96404fd6b4c" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
@@ -197,6 +200,9 @@ export const Filled: Story = {
 
 /** An order the collector cannot see: the same not-found treatment, with no hint it exists. */
 export const NotFound: Story = {
+  parameters: {
+    verification: { caseId: "vc_483d1462-6123-4ccc-83c1-ac8f3b0fa39d" },
+  },
   args: { read: "notFound" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -218,6 +224,9 @@ export const NotFound: Story = {
 
 /** A line refunded: the paid total stays and the refund shows as its own row. */
 export const PartialRefund: Story = {
+  parameters: {
+    verification: { caseId: "vc_09301aa4-5604-4563-aa73-3092ff8544fa" },
+  },
   args: { order: "partialRefund" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -240,6 +249,9 @@ export const PartialRefund: Story = {
  * end at Refunded, the whole amount sits below the paid total as its Refund
  * row, and no points section shows. */
 export const FullRefund: Story = {
+  parameters: {
+    verification: { caseId: "vc_74082686-1489-4357-a882-9fa9d5b6a202" },
+  },
   args: { order: "fullRefund" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -273,6 +285,9 @@ export const FullRefund: Story = {
 
 /** A point-of-sale order draws the paid total and invents no web fields. */
 export const PointOfSaleOrder: Story = {
+  parameters: {
+    verification: { caseId: "vc_bfdfa9ac-c7fb-4831-a7c7-c927d393e95c" },
+  },
   args: { order: "pointOfSale" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -286,6 +301,9 @@ export const PointOfSaleOrder: Story = {
 
 /** The first read has not settled: the page says it is loading, with no not-found claim. */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_bb3a7567-d365-46b4-bca6-418590374fad" },
+  },
   args: { read: "loading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -300,6 +318,9 @@ export const Loading: Story = {
 
 /** The order read failed: the page offers Retry, which reads the same order again. */
 export const RecoverableFailure: Story = {
+  parameters: {
+    verification: { caseId: "vc_93b18fc5-f497-4d0d-a75e-5e56bc91fbaf" },
+  },
   args: { read: "failed" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -315,6 +336,9 @@ export const RecoverableFailure: Story = {
 
 /** Points paid part of the order: a Points row after the discount names the points used. */
 export const PointsCreditApplied: Story = {
+  parameters: {
+    verification: { caseId: "vc_2a2b88f2-a1f1-4295-8093-2dd96ea8a76d" },
+  },
   args: { order: "pointsCredit" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

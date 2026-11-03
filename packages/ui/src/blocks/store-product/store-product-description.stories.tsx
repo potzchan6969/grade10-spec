@@ -22,6 +22,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_69762f85-9689-4752-9bf6-260a8aac86fd" },
+  },
   args: { description: PRODUCT_DETAIL_STORY.description },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -36,6 +39,9 @@ export const Default: Story = {
 };
 
 export const Short: Story = {
+  parameters: {
+    verification: { caseId: "vc_607915b3-cf23-46f2-a7ed-c6113ef43d4d" },
+  },
   args: {
     copy: DESCRIPTION_COPY,
     description: "A sealed collector item.",

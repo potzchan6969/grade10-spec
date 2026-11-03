@@ -62,6 +62,9 @@ const DECLINED = PAYOUT_REQUESTS[4];
 
 /** A paid-out HKD request — rate applied, every step done. */
 export const Completed: Story = {
+  parameters: {
+    verification: { caseId: "vc_a932acc9-0e40-4523-9463-c76e2cd0cf7b" },
+  },
   args: { request: COMPLETED },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
@@ -79,6 +82,9 @@ export const Completed: Story = {
 
 /** Awaiting Grade10's review — the HKD figure is still an estimate. */
 export const Pending: Story = {
+  parameters: {
+    verification: { caseId: "vc_99d100eb-bfa2-4e4b-b5b1-e364cf7883ec" },
+  },
   args: { request: PENDING },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
@@ -91,6 +97,9 @@ export const Pending: Story = {
 
 /** Approved and on the way — the transfer step is in progress. */
 export const Processing: Story = {
+  parameters: {
+    verification: { caseId: "vc_e69c9623-d17d-40dc-ab03-89714f40e44b" },
+  },
   args: { request: PROCESSING },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
@@ -102,6 +111,9 @@ export const Processing: Story = {
 
 /** Turned down at review — the timeline ends there. */
 export const Declined: Story = {
+  parameters: {
+    verification: { caseId: "vc_33380d58-4208-4fec-8dcf-abb09bfbf56e" },
+  },
   args: { request: DECLINED },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
@@ -117,5 +129,9 @@ export const Declined: Story = {
 /** 390px phone — the drawer becomes a bottom sheet capped at 85dvh. */
 export const Narrow: Story = {
   ...Completed,
+  parameters: {
+    ...Completed.parameters,
+    verification: { caseId: "vc_32e4175e-d929-4e70-b2d7-8f586cb5ae9d" },
+  },
   globals: { viewport: { value: "mobile1" } },
 };

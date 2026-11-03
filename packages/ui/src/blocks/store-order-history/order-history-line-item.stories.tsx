@@ -19,6 +19,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_154050ed-5034-4a4d-9918-5a9e660a9c4f" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -48,5 +51,8 @@ export const Default: Story = {
 };
 
 export const WithoutImage: Story = {
+  parameters: {
+    verification: { caseId: "vc_2f632cbc-3c95-482f-8eaf-eada246c1c66" },
+  },
   args: { imageSrc: undefined, imageAlt: undefined },
 };
