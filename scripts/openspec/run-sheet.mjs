@@ -81,6 +81,7 @@ import {
   displayCaseId,
   inReadingOrder,
   selectCases,
+  unitSelection,
 } from "./lib/select-cases.mjs";
 import { prop, ROOT } from "./lib/suites.mjs";
 
@@ -103,6 +104,10 @@ Selection - one of these, and the first two resolve to the third:
   --changed-since <sha>  Cases owned by suites affected since this commit
   --cases <ids>       A comma-separated list of case ids
   --cases-file <path> The same list, one id per line (\`#\` comments allowed)
+  --phase <id>        Cases of the units in this phase (phases.yaml)
+  --release-priority <list>  Units at these release priorities: P0, P1, P2
+  --ready             Units reviewed or further
+  --section <page#section>  One store section's cases
 
 Flags:
   --name <run>        Run name; the tab becomes <id>-<slug of name>   (required)
@@ -122,6 +127,12 @@ Flags:
   --source-ref <ref>  Sandbox-only source revision for preview and printing
   --sheet <id>        Spreadsheet id; defaults to TCS_SHEET_ID (or sandbox)
   --dry-run           Print what would be written and touch no network
+  --desk              Walk on the run desk: with --dry-run, write the RunSpec
+  --open              With --desk, open the confirmed run on the desk
+  --out <path>        Where --desk writes the RunSpec (default: OS temp dir)
+  --rerun <run id>    With --desk: a desk run's failed and blocked rows
+  --rerun-record <path>  The same, from a downloaded run view JSON
+  --only <list>       With --rerun: failed, blocked (default both)
   --help              Print this help and exit
 `);
 }
@@ -151,6 +162,16 @@ function parseArgs(argv) {
     confirmed: null,
     exclusionsFile: null,
     recordOutput: null,
+    phase: null,
+    releasePriority: null,
+    ready: false,
+    section: null,
+    desk: false,
+    open: false,
+    out: null,
+    rerun: null,
+    rerunRecord: null,
+    only: null,
   };
   const takes = {
     "--name": "name",
@@ -171,6 +192,13 @@ function parseArgs(argv) {
     "--confirmed": "confirmed",
     "--exclusions-file": "exclusionsFile",
     "--record-output": "recordOutput",
+    "--phase": "phase",
+    "--release-priority": "releasePriority",
+    "--section": "section",
+    "--out": "out",
+    "--rerun": "rerun",
+    "--rerun-record": "rerunRecord",
+    "--only": "only",
   };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
@@ -182,6 +210,9 @@ function parseArgs(argv) {
     else if (a === "--include-automated") args.includeAutomated = true;
     else if (a === "--exclude-automated") args.includeAutomated = false;
     else if (a === "--sandbox") args.sandbox = true;
+    else if (a === "--ready") args.ready = true;
+    else if (a === "--desk") args.desk = true;
+    else if (a === "--open") args.open = true;
     else if (a === "--cases") args.cases = (argv[++i] ?? "").split(",");
     else if (a === "--cases-file") args.cases = readIdFile(argv[++i]);
     else if (a in takes) args[takes[a]] = argv[++i] ?? null;
@@ -830,9 +861,84 @@ function summaryDressing(sheetId, startRow, rows, runId) {
   ];
 }
 
+/** What a selection by unit was asked for, in words, when nobody gave them. */
+function unitWords({ phase, releasePriority, ready, section }) {
+  return [
+    phase ? `phase ${phase}` : null,
+    releasePriority ? String(releasePriority).toUpperCase() : null,
+    ready ? "ready" : null,
+    section,
+  ]
+    .filter(Boolean)
+    .join(", ");
+}
+
+function printUnits({ units, spans }) {
+  console.log(`Units: ${units.length}`);
+  for (const unit of units)
+    console.log(
+      `  ${unit.priority} ${unit.key} — ${unit.step}, ${unit.cases.length} cases${unit.drafts ? `, ${unit.drafts} draft` : ""}`,
+    );
+  for (const { unit, others } of spans)
+    console.log(
+      `Spans ${others.join(", ")}: ${unit.spec} — leave the other phase's cases out with --exclusions-file and a reason`,
+    );
+}
+
+/** `--rerun`: a desk run's failed and blocked rows, opened as a new run. */
+async function rerunOnDesk() {
+  if (args.rerun && args.rerunRecord)
+    die("Use --rerun <run id> or --rerun-record <file>, not both");
+  if (args.rerunRecord && args.open)
+    die("A re-run opens from the live run: --rerun <run id> --open");
+  const desk = await import("./lib/run-desk.mjs");
+  let view;
+  let only;
+  try {
+    only = desk.onlyOf(args.only);
+    if (args.rerunRecord)
+      view = JSON.parse(readFileSync(args.rerunRecord, "utf8"));
+    else if (!desk.deskAccess().headers)
+      die(
+        `${desk.MISSING_SERVICE_TOKEN} (a known Blocker).`,
+        `Download the run from ${desk.deskBase()}/api/desk/runs/${args.rerun} and pass --rerun-record <file>.`,
+      );
+    else view = await desk.readRun(args.rerun);
+  } catch (error) {
+    die(error.message);
+  }
+  const { spec, rows } = desk.rerunSpecOf(view, { only, name: args.name });
+  if (rows.length === 0)
+    die(`Run ${view.run.id} has no ${only.join(" or ")} rows to walk again`);
+  console.log(
+    `Re-run of ${view.run.id} (${view.run.name}): ${rows.length} ${only.join(" and ")} rows in ${spec.cases.length} cases`,
+  );
+  for (const key of rows) console.log(`  ${key}`);
+  console.log(`Fingerprint: ${spec.fingerprint}`);
+  const file = desk.writeSpec(spec, desk.specFile(args.out, spec.fingerprint));
+  console.log(`RunSpec: ${file}`);
+  if (args.dryRun) return;
+  if (args.confirmed !== spec.fingerprint)
+    die(
+      "Re-run fingerprint is not confirmed",
+      "Dry-run it, show the rows, then pass --confirmed <fingerprint> after the person's yes.",
+    );
+  try {
+    const opened =
+      only.length === desk.RERUN_DEFAULT.length
+        ? await desk.rerunRun(view.run.id, spec.name)
+        : await desk.openRun(spec);
+    console.log(`Opened run ${opened.id} · ${opened.state} · ${opened.name}`);
+    console.log(`${desk.deskBase()}/runs/${opened.id}`);
+  } catch (error) {
+    die(error.message);
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 const args = parseArgs(cliArgs());
+const envGiven = args.env !== null;
 args.env = envOf(args.env);
 if (!args.env) die("--env is staging-1, staging-2, uat, preview or prod");
 const actionCount = [
@@ -849,7 +955,14 @@ if (args.dryRun && (args.finalize || args.reopen))
   );
 if (args.sandbox && (args.finalize || args.reopen || args.copyRun))
   die("Run finalization and copy receipts are production-sheet operations");
-if (!args.name && !args.finalize && !args.reopen) die("--name is required");
+if (
+  !args.name &&
+  !args.finalize &&
+  !args.reopen &&
+  !args.rerun &&
+  !args.rerunRecord
+)
+  die("--name is required");
 if (args.sourceRef && !args.sandbox)
   die("--source-ref is only for sandbox runs");
 if (args.sourceRef && args.sha) die("Use --source-ref or --sha, not both");
@@ -870,7 +983,42 @@ if (
     "--copy-run supplies the selection; do not combine it with selection filters",
   );
 
+const byUnit = Boolean(
+  args.phase || args.releasePriority || args.ready || args.section,
+);
+if (byUnit && (args.cases || args.copyRun))
+  die(
+    "--phase, --release-priority, --ready and --section select units; do not combine them with explicit cases",
+  );
+if (args.open && !args.desk) die("--open opens a run on the desk; add --desk");
+if ((args.rerun || args.rerunRecord || args.only) && !args.desk)
+  die("--rerun walks a desk run again; add --desk");
+if (
+  args.desk &&
+  (args.sandbox ||
+    args.overwrite ||
+    args.finalize ||
+    args.reopen ||
+    args.copyRun ||
+    args.sheet ||
+    args.sourceRef)
+)
+  die(
+    "--desk opens a run on the desk; Sheet options do not apply. Finalize and reopen on the desk",
+  );
+if (args.desk && args.dryRun === args.open)
+  die("--desk takes --dry-run or --open");
+if (args.desk && args.open && args.sha)
+  die("--sha is only for dry-run; a run opens from latest main");
+if (args.desk && (args.rerun || args.rerunRecord)) {
+  await rerunOnDesk();
+  process.exit(0);
+}
+
 let sha = headSha(args.sourceRef ?? args.sha ?? "HEAD");
+let desk = null;
+let release = null;
+let texts = null;
 let candidates;
 let token;
 let sheets = [];
@@ -972,7 +1120,12 @@ function exportRecord(record) {
 }
 
 try {
-  if (!args.dryRun) {
+  if (args.desk || byUnit) {
+    desk = await import("./lib/run-desk.mjs");
+    if (args.open) sha = refreshMain(ROOT);
+    ({ candidates, release, texts } = desk.deskSourceAt(ROOT, sha));
+  }
+  if (!args.dryRun && !args.desk) {
     args.sheet = resolveSpreadsheet(args);
     if (
       args.sourceRef &&
@@ -990,7 +1143,8 @@ try {
         "Dispatch run-sheet.yml; CI holds the credentials.",
       );
     sha = args.sourceRef ? headSha(args.sourceRef) : refreshMain(ROOT);
-    candidates = candidatesAt(ROOT, sha);
+    if (byUnit) ({ candidates, release } = desk.deskSourceAt(ROOT, sha));
+    else candidates = candidatesAt(ROOT, sha);
     const meta = await call(token, `/${args.sheet}?fields=sheets.properties`);
     sheets = meta.sheets ?? [];
     titles = sheets.map((one) => one.properties.title);
@@ -1047,7 +1201,7 @@ try {
       );
       process.exit(0);
     }
-  } else {
+  } else if (!candidates) {
     candidates = candidatesAt(ROOT, sha);
   }
   if (args.copyRun) {
@@ -1078,11 +1232,12 @@ try {
       args.priority ||
       args.level ||
       args.scope ||
-      args.changedSince
+      args.changedSince ||
+      byUnit
     )
   )
     die(
-      "No selection. Use explicit cases, property filters or --changed-since.",
+      "No selection. Use explicit cases, property filters, a phase or --changed-since.",
     );
   const changedPaths =
     args.changedSince && !args.finalize
@@ -1090,9 +1245,26 @@ try {
       : null;
   if (changedPaths?.length === 0)
     die(`No files changed since ${args.changedSince}`);
-  const scoped = args.scope
-    ? candidates.filter((one) => one.read.rel.includes(args.scope))
-    : candidates;
+  let units = null;
+  if (byUnit) {
+    try {
+      units = unitSelection(release, args);
+    } catch (error) {
+      die(error.message);
+    }
+    if (units.units.length === 0 && !args.section)
+      die(
+        `No unit is ${unitWords(args)}`,
+        "A unit is a store section or a capability under a ::phase block; check the phase board.",
+      );
+    if (args.phase && !envGiven)
+      args.env = release.phases.find((one) => one.id === args.phase).env;
+  }
+  const scoped = candidates.filter(
+    (one) =>
+      (!args.scope || one.read.rel.includes(args.scope)) &&
+      (!units || units.keeps(one)),
+  );
   const {
     picked: unordered,
     refused,
@@ -1157,7 +1329,11 @@ try {
     selection:
       args.selection ??
       current?.snapshot.selection ??
-      (args.changedSince ? `changed since ${args.changedSince}` : ""),
+      (args.changedSince
+        ? `changed since ${args.changedSince}`
+        : byUnit
+          ? unitWords(args)
+          : ""),
     excluded,
   });
   const { rows, lines } = buildGrid(picked);
@@ -1178,8 +1354,37 @@ try {
   }
   for (const one of snapshot.excluded)
     console.log(`Excluded: ${one.id} — ${one.reason}`);
+  if (units) printUnits(units);
   console.log(`Fingerprint: ${snapshot.fingerprint}`);
   console.log(`Source commit: ${sha}`);
+  if (args.desk) {
+    const spec = desk.runSpecOf(picked, {
+      snapshot,
+      texts,
+      release,
+      source: sha,
+      phase: args.phase,
+    });
+    const file = desk.writeSpec(
+      spec,
+      desk.specFile(args.out, snapshot.fingerprint),
+    );
+    console.log(
+      `Run desk: ${spec.cases.length} cases, ${spec.cases.reduce((sum, one) => sum + desk.rowsOf(one), 0)} rows, ${spec.walks.length} walks; environment ${spec.env}${spec.phase ? `, phase ${spec.phase}` : ""}`,
+    );
+    console.log(`RunSpec: ${file}`);
+    if (args.dryRun) process.exit(0);
+    if (args.confirmed !== snapshot.fingerprint)
+      die(
+        "Selection fingerprint is not confirmed",
+        "Dry-run latest main, show the list, then pass --confirmed <fingerprint> after the person's yes.",
+      );
+    if (!desk.deskAccess().headers) die(desk.withoutToken(file));
+    const opened = await desk.openRun(spec);
+    console.log(`Opened run ${opened.id} · ${opened.state} · ${opened.name}`);
+    console.log(`${desk.deskBase()}/runs/${opened.id}`);
+    process.exit(0);
+  }
   if (args.dryRun) {
     console.log(`Dry run: ${rows.length} rows; nothing written.`);
     process.exit(0);

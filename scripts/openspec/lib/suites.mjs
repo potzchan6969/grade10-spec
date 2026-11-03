@@ -961,7 +961,13 @@ export function parseSuite(text, { store = false } = {}) {
 
     if (journey && !tc) {
       const story = line.match(/^\*\*(As an?|I want|so that)\*\*/i);
-      if (story) journey.story.push(story[1].toLowerCase());
+      if (story) {
+        journey.story.push(story[1].toLowerCase());
+        journey.storyLines = [
+          ...(journey.storyLines ?? []),
+          line.replace(/\*\*/g, "").trim(),
+        ];
+      }
       if (/^\*\*Covers:\*\*/.test(line))
         suite.legacy.add("`**Covers:**` scenario lists");
     }
