@@ -13,7 +13,7 @@ This group authors the migration. Apply it only after group 3's compatible publi
 - [x] 2.2 Append the idempotent canceled-slug cleanup migration and its journal/snapshot records. Preserve migration history, code reservations and bidder records (`g10adm.auction-listing.SC156`).
 - [x] 2.3 Verify: apply the committed migration chain to a populated database, execute the cleanup twice, confirm no canceled slug remains and other states and identifiers are unchanged; run migration safety and schema-drift checks.
 
-## 3. Release and Resolve Listing Addresses (grade10)
+## 3. Release and Resolve Listing Addresses (grade10) (owner: @htonyl)
 
 This group can be built independently of group 2's migration. Its rollout precedes the migration's application.
 
