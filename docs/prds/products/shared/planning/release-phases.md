@@ -21,7 +21,10 @@ Which of the five release phases each section of the manual launches in, how far
   - **P2** — stretch; never holds the phase
   - **Not a Case's Priority** — a case's priority is its run order, so the two keep separate names and separate values
 - ❓ **Targets** — no phase has a target day or month yet. Product confirms
-- ❓ **The Vault's Own Phases** — the vault plans Vault and Incentive, Consign and Sell, and Mail-In and Retrieval, and Consigning and Store Listings write "Phase 1: the Tills"; none maps one to one onto the five. Product confirms
+- 🚧 **One Plan** — the vault's own three phases and the tills-only "Phase 1" on Consigning and Store Listings give way to the five
+  - **Staff-Only Flows** — the vault's and consignment's admin flows launch in Internal Consignment
+  - **Collector-Facing Pages** — vault and wallet pages are placed one by one when phases are first assigned
+  - **Mail-In and Retrieval** — no phase until one is planned
 
 ## Marking a Section
 
@@ -86,7 +89,7 @@ A section in a phase is one unit of QA's work, so a section split across phases 
   1. **Open** — the selection can change, and the marks on rows that stay are kept
   2. **Finalized** — the selection is frozen and recorded in git, as printed runs are today; marking goes on
   3. **Closed** — marking ends
-- ❓ **Where It Runs** — on the manual's own deployment, in a separate service, or in the app. Product confirms
+- 🚧 **Where It Runs** — on the manual's own deployment, behind the Cloudflare Access that already guards it; the store's "not an application" rule names it as its one exception
 
 ## Results
 
