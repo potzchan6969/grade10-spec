@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "One counter intake, end to end",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "column_fit": "spread",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1180,
+      900
+    ]
+  },
+  "participants": [
+    {
+      "id": "page",
+      "type": "frontend",
+      "label": "Intake page",
+      "sublabel": "staff, on the tablet"
+    },
+    {
+      "id": "kyc",
+      "type": "security",
+      "label": "e-KYC",
+      "sublabel": "the ID record"
+    },
+    {
+      "id": "inventory",
+      "type": "database",
+      "label": "Inventory",
+      "sublabel": "items and places"
+    },
+    {
+      "id": "vault",
+      "type": "backend",
+      "label": "The vault",
+      "sublabel": "cases and terms"
+    },
+    {
+      "id": "consignment",
+      "type": "backend",
+      "label": "Consignment",
+      "sublabel": "sale mandates"
+    },
+    {
+      "id": "documents",
+      "type": "external",
+      "label": "Documents",
+      "sublabel": "the papers"
+    },
+    {
+      "id": "collector",
+      "type": "frontend",
+      "label": "Collector",
+      "sublabel": "signs"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 244,
+      "label": "1 \u00b7 Consignor"
+    },
+    {
+      "from": 258,
+      "to": 396,
+      "label": "2 \u00b7 Items and Receive"
+    },
+    {
+      "from": 410,
+      "to": 516,
+      "label": "3 \u00b7 Keep or Consign"
+    },
+    {
+      "from": 530,
+      "to": 700,
+      "label": "4 \u00b7 Sign, on one link"
+    },
+    {
+      "from": 714,
+      "to": 820,
+      "label": "5 \u00b7 Seal"
+    }
+  ],
+  "messages": [
+    {
+      "id": "read-id",
+      "from": "page",
+      "to": "kyc",
+      "y": 196,
+      "label": "the ID read: kind, number, legal name, 18+",
+      "variant": "emphasis"
+    },
+    {
+      "id": "id-answer",
+      "from": "kyc",
+      "to": "page",
+      "y": 228,
+      "label": "the mask A12***** \u00b7 or another account holds it",
+      "variant": "return"
+    },
+    {
+      "id": "find-product",
+      "from": "page",
+      "to": "inventory",
+      "y": 284,
+      "label": "find or make the product; SNKRDUNK card or fixed price",
+      "variant": "default"
+    },
+    {
+      "id": "receive",
+      "from": "page",
+      "to": "vault",
+      "y": 316,
+      "label": "Receive: one case a card",
+      "variant": "emphasis"
+    },
+    {
+      "id": "register",
+      "from": "vault",
+      "to": "inventory",
+      "y": 348,
+      "label": "each item at Taken At, labelled, the vault mark",
+      "variant": "default"
+    },
+    {
+      "id": "received",
+      "from": "vault",
+      "to": "page",
+      "y": 380,
+      "label": "received \u00b7 or the card refused, named",
+      "variant": "return"
+    },
+    {
+      "id": "consign",
+      "from": "page",
+      "to": "consignment",
+      "y": 436,
+      "label": "the consigned cards: channel, lowest price, commission",
+      "variant": "default"
+    },
+    {
+      "id": "standing",
+      "from": "consignment",
+      "to": "vault",
+      "y": 468,
+      "label": "each card the collector's and still held?",
+      "variant": "default"
+    },
+    {
+      "id": "mandates",
+      "from": "consignment",
+      "to": "page",
+      "y": 500,
+      "label": "sale mandates, unsigned \u00b7 the Agreement to carry",
+      "variant": "return"
+    },
+    {
+      "id": "handover",
+      "from": "page",
+      "to": "documents",
+      "y": 556,
+      "label": "the Vault Terms, the Agreement carried on its link",
+      "variant": "emphasis"
+    },
+    {
+      "id": "link",
+      "from": "documents",
+      "to": "collector",
+      "y": 588,
+      "label": "one link: a QR on the tablet, or one email",
+      "variant": "default"
+    },
+    {
+      "id": "signs-terms",
+      "from": "collector",
+      "to": "documents",
+      "y": 620,
+      "label": "signs the Vault Terms",
+      "variant": "emphasis"
+    },
+    {
+      "id": "done",
+      "from": "documents",
+      "to": "collector",
+      "y": 652,
+      "label": "Done opens each Agreement on the same link",
+      "variant": "default"
+    },
+    {
+      "id": "signs-agreement",
+      "from": "collector",
+      "to": "documents",
+      "y": 684,
+      "label": "signs the Agreement, or declines it",
+      "variant": "default"
+    },
+    {
+      "id": "seal",
+      "from": "documents",
+      "to": "vault",
+      "y": 740,
+      "label": "Vault Terms sealed: card terms and Earning Starts pinned",
+      "variant": "emphasis"
+    },
+    {
+      "id": "agreed",
+      "from": "documents",
+      "to": "consignment",
+      "y": 772,
+      "label": "Agreement sealed: Waiting for approval",
+      "variant": "default"
+    },
+    {
+      "id": "next",
+      "from": "vault",
+      "to": "page",
+      "y": 804,
+      "label": "Start the next intake, once every Agreement is out",
+      "variant": "return"
+    }
+  ]
+}
