@@ -924,10 +924,7 @@ async function rerunOnDesk() {
       "Dry-run it, show the rows, then pass --confirmed <fingerprint> after the person's yes.",
     );
   try {
-    const opened =
-      only.length === desk.RERUN_DEFAULT.length
-        ? await desk.rerunRun(view.run.id, spec.name)
-        : await desk.openRun(spec);
+    const opened = await desk.openRun(spec);
     console.log(`Opened run ${opened.id} · ${opened.state} · ${opened.name}`);
     console.log(`${desk.deskBase()}/runs/${opened.id}`);
   } catch (error) {

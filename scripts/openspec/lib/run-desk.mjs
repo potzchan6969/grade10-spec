@@ -68,14 +68,6 @@ export function withoutToken(file, env = process.env) {
 export const openRun = (spec, { access = deskAccess(), fetcher } = {}) =>
   deskRequest(access, "/runs", { method: "POST", body: spec, fetcher });
 
-/** The desk's own re-run: a new open run of the failed and blocked rows. */
-export const rerunRun = (id, name, { access = deskAccess(), fetcher } = {}) =>
-  deskRequest(access, `/runs/${encodeURIComponent(id)}/rerun`, {
-    method: "POST",
-    body: { name },
-    fetcher,
-  });
-
 export const readRun = (id, { access = deskAccess(), fetcher } = {}) =>
   deskRequest(access, `/runs/${encodeURIComponent(id)}`, { fetcher });
 
@@ -102,7 +94,9 @@ export function onlyOf(value) {
 /**
  * A run's rows whose verdict (One Verdict per Row) is one of `only`, as a new
  * run's spec: the cases frozen as the run holds them, a per-row case keeping
- * only the data rows to walk again. Its fingerprint covers what it walks.
+ * its whole data and naming in `rows` the rows to walk again, so each row keeps
+ * its number however often it is re-run. Its fingerprint covers what it walks,
+ * and the run sheet opens exactly this spec.
  */
 export function rerunSpecOf(view, { only = RERUN_DEFAULT, name = null } = {}) {
   const byRow = new Map();
@@ -121,24 +115,15 @@ export function rerunSpecOf(view, { only = RERUN_DEFAULT, name = null } = {}) {
   });
   const picked = new Map();
   for (const row of rows) {
-    if (!picked.has(row.case)) picked.set(row.case, new Set());
-    if (row.index > 0) picked.get(row.case).add(row.index);
+    if (!picked.has(row.case)) picked.set(row.case, []);
+    if (row.index > 0) picked.get(row.case).push(row.index);
   }
   const cases = view.spec.cases
     .filter((one) => picked.has(one.id))
-    .map((one) =>
-      one.data && picked.get(one.id).size > 0
-        ? {
-            ...one,
-            data: {
-              header: one.data.header,
-              rows: one.data.rows.filter((_, at) =>
-                picked.get(one.id).has(at + 1),
-              ),
-            },
-          }
-        : one,
-    );
+    .map((one) => {
+      const again = picked.get(one.id).sort((a, b) => a - b);
+      return again.length > 0 ? { ...one, rows: again } : one;
+    });
   const kept = new Set(cases.map((one) => one.id));
   const walks = (view.spec.walks ?? [])
     .map((walk) => ({

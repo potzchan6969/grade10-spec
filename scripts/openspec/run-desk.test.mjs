@@ -6,13 +6,21 @@
  * print commit of a desk run with its check against the desk.
  */
 import assert from "node:assert/strict";
-import { execFileSync, spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-
+import { handle } from "../../tools/run-desk/src/http.ts";
+import { aCase, aSpec, deskInMemory } from "../../tools/run-desk/test/desk.ts";
 import {
   checkPrintedRuns,
   deskAccess,
@@ -634,10 +642,10 @@ test("a re-run takes the failed and blocked rows, a per-row case only its rows",
   const { spec, rows } = rerunSpecOf(view);
   assert.deepEqual(rows, ["c1#2", "c2"]);
   assert.deepEqual(
-    spec.cases.map((one) => [one.id, one.data?.rows]),
+    spec.cases.map((one) => [one.id, one.rows, one.data?.rows.length]),
     [
-      ["c1", [["two"]]],
-      ["c2", undefined],
+      ["c1", [2], 3],
+      ["c2", undefined, undefined],
     ],
   );
   assert.equal(spec.rerunOf, "r5");
@@ -696,4 +704,125 @@ test("without the Access service token the run sheet says so and names the way r
     /Re-run of r5 \(Store\): 1 fail and blocked rows in 1 cases/,
   );
   assert.match(offline.stdout, new RegExp(`RunSpec: ${out}`));
+});
+
+/** An in-memory desk behind HTTP on a local port, for the run sheet's CLI. */
+async function deskServer(t) {
+  const { store } = deskInMemory();
+  const posted = [];
+  const server = createServer(async (incoming, outgoing) => {
+    const chunks = [];
+    for await (const chunk of incoming) chunks.push(chunk);
+    const body = Buffer.concat(chunks);
+    if (incoming.method === "POST")
+      posted.push([incoming.url, JSON.parse(body.toString("utf8"))]);
+    const request = new Request(`http://desk${incoming.url}`, {
+      method: incoming.method,
+      headers: incoming.headers,
+      ...(body.length > 0 ? { body } : {}),
+    });
+    const { response } = await handle(store, request, "qa@grade10.com");
+    outgoing.writeHead(response.status, Object.fromEntries(response.headers));
+    outgoing.end(Buffer.from(await response.arrayBuffer()));
+  });
+  await new Promise((done) => server.listen(0, "127.0.0.1", done));
+  t.after(() => server.close());
+  return { store, posted, url: `http://127.0.0.1:${server.address().port}` };
+}
+
+function runSheet(args, env) {
+  return new Promise((done) => {
+    const child = spawn(process.execPath, [SCRIPT, ...args], { env });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk;
+    });
+    child.stderr.on("data", (chunk) => {
+      stderr += chunk;
+    });
+    child.on("close", (status) => done({ status, stdout, stderr }));
+  });
+}
+
+test("the re-run that opens is the one confirmed, with its rows' numbers, and re-runs again", async (t) => {
+  const desk = await deskServer(t);
+  const dir = mkdtempSync(join(tmpdir(), "run-desk-rerun-"));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const env = {
+    ...process.env,
+    NO_COLOR: "1",
+    DESK_URL: desk.url,
+    CF_ACCESS_CLIENT_ID: "id",
+    CF_ACCESS_CLIENT_SECRET: "secret",
+  };
+  const first = desk.store.open(
+    aSpec({
+      cases: [
+        aCase("TC1", {
+          data: { header: ["tier"], rows: [["Gold"], ["Silver"], ["Bronze"]] },
+        }),
+        aCase("TC2"),
+      ],
+      walks: [],
+    }),
+    "qa@grade10.com",
+  );
+  const mark = (row, value, surface = "web") => ({
+    id: `${row}/${surface}/${value}`,
+    row,
+    surface,
+    value,
+  });
+  const marked = (run, ...marks) => {
+    for (const one of marks)
+      desk.store.mark(run, { marks: [one] }, "qa@grade10.com");
+  };
+  marked(
+    first.id,
+    mark("TC1#1", "fail"),
+    mark("TC1#2", "pass"),
+    mark("TC1#2", "pass", "mobile"),
+    mark("TC1#3", "fail"),
+    mark("TC2", "pass"),
+    mark("TC2", "pass", "mobile"),
+  );
+
+  async function rerun(id, name, only = []) {
+    const out = join(dir, `${name}.json`);
+    const base = ["--desk", "--rerun", id, ...only, "--out", out];
+    const dry = await runSheet([...base, "--dry-run", "--name", name], env);
+    assert.equal(dry.status, 0, dry.stderr);
+    const listed = [...dry.stdout.matchAll(/^ {2}(\S+)$/gm)].map((m) => m[1]);
+    const fingerprint = /Fingerprint: (\w+)/.exec(dry.stdout)[1];
+    const confirmed = JSON.parse(readFileSync(out, "utf8"));
+    const opened = await runSheet(
+      [...base, "--open", "--name", name, "--confirmed", fingerprint],
+      env,
+    );
+    assert.equal(opened.status, 0, opened.stderr);
+    const [path, sent] = desk.posted.at(-1);
+    assert.equal(path, "/api/desk/runs");
+    assert.deepEqual(sent, confirmed);
+    const run = desk.store.runs()[0];
+    assert.equal(run.rerunOf, id);
+    assert.equal(run.fingerprint, fingerprint);
+    const view = desk.store.view(run.id);
+    assert.deepEqual(
+      view.rows.map((row) => row.key),
+      listed,
+    );
+    return { run, listed };
+  }
+
+  const again = await rerun(first.id, "again");
+  assert.deepEqual(again.listed, ["TC1#1", "TC1#3"]);
+  marked(
+    again.run.id,
+    mark("TC1#1", "pass"),
+    mark("TC1#1", "pass", "mobile"),
+    mark("TC1#3", "fail"),
+  );
+  const third = await rerun(again.run.id, "third", ["--only", "failed"]);
+  assert.deepEqual(third.listed, ["TC1#3"]);
 });

@@ -139,8 +139,9 @@ const ITEM = /^(?:[-*+]|\d+\.)\s+(.*)$/;
 const TICKED = /`([^`]+)`/g;
 const CASE_ID = /^[\w.-]+[.-]TC-?\w+$/i;
 
-/** The rows a case opens on the desk: one, or one per row of its data. */
-export const rowsOf = (one) => Math.max(1, one.data?.rows.length ?? 0);
+/** The rows a case opens on the desk: one, or one per data row it names. */
+export const rowsOf = (one) =>
+  Math.max(1, one.rows?.length ?? one.data?.rows.length ?? 0);
 
 /** `**Shared test data:**` tables anywhere in a suite: placeholder to the
  *  words the suite gives it. */
