@@ -67,6 +67,9 @@ export const Graded: Story = {
 
 /** Price feed down — the yield line pauses with a warning icon and tooltip. */
 export const EstimatePaused: Story = {
+  parameters: {
+    verification: { caseId: "vc_dea919c4-b3a1-4374-995a-6d6c22a5c0f5" },
+  },
   args: {
     asset: { ...VAULT_ASSET_DETAILS[0], priceStale: true },
   },

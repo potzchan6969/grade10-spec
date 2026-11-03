@@ -109,6 +109,9 @@ export const BoneyardCapture: Story = {
 
 /** Price feed down — the estimate pauses with a warning icon and tooltip. */
 export const EstimatePaused: Story = {
+  parameters: {
+    verification: { caseId: "vc_73dc2482-fae3-4864-80a3-c9dfc68ba409" },
+  },
   args: { asset: { ...assetWithStatus("In Vault"), priceStale: true } },
   render: ({ asset }) => <LinkedCard asset={asset} />,
   play: async ({ canvasElement }) => {

@@ -35,7 +35,7 @@ const preview: Preview = {
           "Vault": ["Intake", "Incentive", "Portfolio", "Vault Retrieval", "Documents", "Operations"],
           "Submissions": ["Intake Tracker"],
           "Grading": ["Planning", "Drop Off", "Submission", "Documents", "Messages"],
-          "Consignment": ["Consigning", "Consignment Retrieval", "Dashboard", "Operator Console"],
+          "Consignment": ["Consigning", "Consignment Retrieval", "Dashboard", "Operator Console", "Counter"],
           "Appointment": ["Booking", "Visit"],
           "Ticketing": ["Buying", "Waiting Line", "Your Tickets"],
           "Doc Sign": ["Service"],
