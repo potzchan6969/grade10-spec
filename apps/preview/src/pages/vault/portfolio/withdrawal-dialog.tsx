@@ -7,7 +7,6 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { NumberInput } from "@grade10/design-system/components/forms/number-input";
-import { RadioButton } from "@grade10/design-system/components/forms/radio-button";
 import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { SegmentedControl } from "@grade10/design-system/components/forms/segmented-control";
@@ -142,59 +141,7 @@ function stepIndex(step: WithdrawalStep): number {
 }
 
 function methodIcon(kind: WithdrawalMethod["kind"]) {
-  return kind === "fps" ? (
-    <DeviceMobile aria-hidden size={20} weight="regular" />
-  ) : (
-    <Bank aria-hidden size={20} weight="regular" />
-  );
-}
-
-/**
- * One destination row — icon, title and detail beside a trailing radio.
- * `RadioButton` wraps the label so the whole row selects; `flex-row-reverse`
- * puts the control on the right.
- */
-function DestinationOption({
-  value,
-  icon,
-  title,
-  detail,
-  disabled,
-}: {
-  value: string;
-  icon: ReactNode;
-  title: ReactNode;
-  detail: ReactNode;
-  disabled?: boolean;
-}) {
-  return (
-    <RadioButton
-      className={cn(
-        "w-full flex-row-reverse items-center gap-3 rounded-(--radius-2xl) border border-border bg-card p-4 text-left transition-colors",
-        "data-checked:border-primary data-checked:bg-primary/5",
-        disabled
-          ? "cursor-not-allowed opacity-50 disabled:opacity-50"
-          : "cursor-pointer hover:border-border-strong hover:bg-background-subtle data-checked:hover:border-primary data-checked:hover:bg-primary/10",
-      )}
-      disabled={disabled}
-      value={value}
-    >
-      <span className="flex min-w-0 flex-1 items-center gap-3">
-        <span
-          aria-hidden
-          className="flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) bg-muted text-foreground"
-        >
-          {icon}
-        </span>
-        <span className="flex min-w-0 flex-1 flex-col items-start">
-          <span className="text-sm leading-6 font-medium text-foreground">
-            {title}
-          </span>
-          <span className="text-sm text-secondary-foreground">{detail}</span>
-        </span>
-      </span>
-    </RadioButton>
-  );
+  return kind === "fps" ? <DeviceMobile aria-hidden /> : <Bank aria-hidden />;
 }
 
 /** A non-radio action row in the destination list (add method, manual). */
@@ -527,8 +474,8 @@ function WithdrawalDialog({
           >
             <div className="flex w-full flex-col gap-2">
               {methods.map((method) => (
-                <DestinationOption
-                  detail={method.detail}
+                <RadioCard
+                  description={method.detail}
                   icon={methodIcon(method.kind)}
                   key={method.id}
                   title={method.title}
