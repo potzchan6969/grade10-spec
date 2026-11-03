@@ -31,15 +31,15 @@ function WithdrawalRow({
     <>
       <span
         aria-hidden
-        className="grid size-10 shrink-0 place-items-center rounded-full bg-muted text-foreground"
+        className="grid size-9 shrink-0 place-items-center rounded-full bg-muted text-foreground sm:size-10"
       >
         <Bank size={16} />
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <Text className="truncate" weight="medium">
+        <Text weight="medium">
           To {PAYOUT_METHOD.bankName} {PAYOUT_METHOD.maskedAccount}
         </Text>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-x-2">
           <Badge size="sm" variant={PAYOUT_STATUS_VARIANT[request.status]}>
             {request.status}
           </Badge>
@@ -73,14 +73,16 @@ function WithdrawalRow({
       {onOpen ? (
         <button
           aria-label={`View withdrawal details, ${request.status}`}
-          className="flex w-full cursor-pointer items-center gap-4 p-4 text-left transition-colors hover:bg-background-subtle active:bg-background-subtle"
+          className="flex w-full cursor-pointer items-center gap-3 p-3 text-left transition-colors hover:bg-background-subtle active:bg-background-subtle sm:gap-4 sm:p-4"
           type="button"
           onClick={() => onOpen(request)}
         >
           {content}
         </button>
       ) : (
-        <div className="flex items-center gap-4 p-4">{content}</div>
+        <div className="flex items-center gap-3 p-3 sm:gap-4 sm:p-4">
+          {content}
+        </div>
       )}
     </li>
   );

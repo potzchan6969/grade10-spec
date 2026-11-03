@@ -1,5 +1,4 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Card } from "@grade10/design-system/components/display/card";
 import { DetailRow } from "@grade10/design-system/components/display/detail-row";
 import { Step } from "@grade10/design-system/components/display/step";
@@ -19,7 +18,6 @@ import {
   formatHkd,
   formatUsd,
   PAYOUT_METHOD,
-  PAYOUT_STATUS_VARIANT,
   type VaultPayoutRequest,
 } from "../../vault-content";
 
@@ -101,13 +99,13 @@ function timelineSteps(request: VaultPayoutRequest): TimelineStep[] {
   }
 }
 
-/** The line under the amount — an estimate until approval sets the rate. */
+/** The line under the amount — the fixed HK$ figure once converted. */
 function amountSubtext(request: VaultPayoutRequest): string {
   if (request.currency === "HKD" && request.convertedHkd != null) {
     if (request.status === "Completed") {
       return `${formatHkd(request.convertedHkd)} received`;
     }
-    return `Est. ~${formatHkd(request.convertedHkd)}`;
+    return formatHkd(request.convertedHkd);
   }
   if (request.status === "Declined") return "Returned to rewards";
   return `To ${PAYOUT_METHOD.bankName} ${PAYOUT_METHOD.maskedAccount}`;
@@ -154,19 +152,16 @@ function WithdrawalDetails({
           </DrawerDescription>
         </DrawerHeader>
         {request ? (
-          <DrawerBody className="gap-8 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <DrawerBody
+            className="gap-8 pb-[max(1rem,env(safe-area-inset-bottom))]"
+            tabIndex={0}
+          >
             <Card className="shrink-0">
               <div className="flex flex-col gap-1 px-(--card-spacing)">
                 <div className="flex items-start justify-between gap-4">
                   <p className="font-heading text-3xl font-medium tracking-tight tabular-nums">
                     {formatUsd(request.amountUsd)}
                   </p>
-                  <Badge
-                    className="mt-1.5"
-                    variant={PAYOUT_STATUS_VARIANT[request.status]}
-                  >
-                    {request.status}
-                  </Badge>
                 </div>
                 <Text tone="secondary">{amountSubtext(request)}</Text>
               </div>
@@ -216,10 +211,9 @@ function WithdrawalDetails({
                 Details
               </Text>
               <div>
-                {request.currency === "HKD" &&
-                request.convertedHkd != null &&
-                request.status === "Completed" ? (
-                  <DetailRow label="Exchange rate applied">
+                {request.currency !== "USD" &&
+                request.convertedHkd != null ? (
+                  <DetailRow label="Exchange rate">
                     <span className="tabular-nums">
                       US$1 = HK$
                       {(request.convertedHkd / request.amountUsd).toFixed(2)}

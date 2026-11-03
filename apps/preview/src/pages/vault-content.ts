@@ -560,7 +560,7 @@ const PORTFOLIO_SUMMARY = {
   cashedOutUsd: 40,
   minWithdrawalUsd: 65,
   /** Reference conversion for HKD withdrawals. */
-  hkdPerUsd: 7.76,
+  hkdPerUsd: 7.8,
   hasPayoutMethod: true,
 };
 

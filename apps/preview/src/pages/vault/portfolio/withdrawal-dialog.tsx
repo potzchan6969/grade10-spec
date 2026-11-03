@@ -503,7 +503,7 @@ function WithdrawalDialog({
           >
             <div className="flex w-full flex-col gap-2">
               <RadioCard
-                description={`≈ ${formatHkd(convertedHkd)} (US$1 = HK$${hkdPerUsd})`}
+                description={`${formatHkd(convertedHkd)} (US$1 = HK$${hkdPerUsd})`}
                 title="Hong Kong Dollar"
                 value="HKD"
               />
@@ -784,9 +784,7 @@ function WithdrawalDialog({
         <VStack gap="md" hAlign="start">
           <div className="flex w-full flex-col items-start gap-1">
             <span className="font-heading text-3xl font-medium tracking-tight tabular-nums">
-              {manualRequest
-                ? formatUsd(amount)
-                : `≈ ${formatHkd(convertedHkd)}`}
+              {manualRequest ? formatUsd(amount) : formatHkd(convertedHkd)}
             </span>
             <div className="flex w-full items-baseline justify-between">
               <Text size="sm" tone="secondary">
@@ -862,7 +860,7 @@ function WithdrawalDialog({
                 <span className="font-medium">Our team manually</span>
               </DetailRow>
             ) : (
-              <DetailRow label="Indicative rate">
+              <DetailRow label="Rate">
                 <span className="font-medium">US$1 = HK${hkdPerUsd}</span>
               </DetailRow>
             )}
@@ -881,11 +879,11 @@ function WithdrawalDialog({
             description={
               manualRequest
                 ? "Our team will contact you to arrange the transfer. You can cancel before it’s approved."
-                : "The rate is set when Grade10 approves, so the final HK$ amount may differ slightly. Your history shows both US$ and HK$. You can cancel before it’s approved."
+                : "The HK$ amount is fixed at US$1 = HK$7.8. Your history shows both US$ and HK$. You can cancel before it’s approved."
             }
             icon={<Info aria-hidden weight="regular" />}
             status="default"
-            title={manualRequest ? "Manual request" : "Indicative rate"}
+            title={manualRequest ? "Manual request" : "Fixed rate"}
           />
         </VStack>
       ) : null}
@@ -905,7 +903,7 @@ function WithdrawalDialog({
             <Text className="text-center text-secondary-foreground" size="sm">
               {manualRequest
                 ? "Our team will contact you to arrange the payout."
-                : `≈ ${formatHkd(convertedHkd)} to ${destination?.title ?? "your account"}. We’ll email you once Grade10 approves it.`}
+                : `${formatHkd(convertedHkd)} to ${destination?.title ?? "your account"}. We’ll email you once Grade10 approves it.`}
             </Text>
           </VStack>
           <div className="w-full rounded-(--radius-2xl) bg-muted p-4">
