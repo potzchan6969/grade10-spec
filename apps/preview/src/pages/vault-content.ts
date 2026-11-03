@@ -317,16 +317,12 @@ const VAULT_ASSET_DETAILS: VaultAsset[] = [
     estimateHkd: 98000,
     valuationSource: "Intake estimate",
     estimateChangePercent: 12.4,
+    vaultedAt: "2026-08-15",
     custodyLog: [
       {
         label: "Stored in vault",
-        description: "Crown Fine Art, 12 Oct 2026",
+        description: "12 Oct 2026",
         state: "completed",
-      },
-      {
-        label: "Valuation recorded - HK$98,000",
-        description: "Intake estimate by Grade10 specialist, 12 Oct 2026",
-        state: "upcoming",
       },
       {
         label: "Authentication & inspection passed",
@@ -373,13 +369,8 @@ const VAULT_ASSET_DETAILS: VaultAsset[] = [
     custodyLog: [
       {
         label: "Stored in vault",
-        description: "Crown Fine Art, 12 Oct 2026",
+        description: "12 Oct 2026",
         state: "completed",
-      },
-      {
-        label: "Valuation recorded - HK$98,000",
-        description: "Intake estimate by Grade10 specialist, 12 Oct 2026",
-        state: "upcoming",
       },
       {
         label: "Authentication & inspection passed",

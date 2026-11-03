@@ -57,8 +57,6 @@ function VaultAssetDetails({
           </DetailRow>
         </>
       ) : null}
-      <DetailRow label="Vault Storage ID">{asset.vaultId}</DetailRow>
-      <DetailRow label="Location">{asset.location}</DetailRow>
       <DetailRow label="Condition">{conditionDisplay}</DetailRow>
 
       {retrievable && onRequestRetrieval ? (

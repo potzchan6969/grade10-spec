@@ -33,6 +33,7 @@ export const Default: Story = {
     expect(canvas.getByRole("tab", { name: "Custody Log" })).toBeVisible();
     expect(canvas.getByRole("tab", { name: "Documents" })).toBeVisible();
     expect(canvas.getByText("Stored in vault")).toBeVisible();
+    expect(canvas.queryByText(/Crown Fine Art/)).toBeNull();
     expect(canvas.getByText("Received at Grade10 intake")).toBeVisible();
     expect(canvas.queryByText("Vault intake certificate")).toBeNull();
   },
