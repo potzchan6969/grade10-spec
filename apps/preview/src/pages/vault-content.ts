@@ -166,6 +166,9 @@ type VaultAsset = {
   valuePotential?: VaultAssetValuePotential;
   /** ISO date vaulted — drives "Recently added" sorting. */
   vaultedAt?: string;
+  /** Market price feed is down — the daily estimate is paused and missed days
+   * credit immediately once pricing resumes. */
+  priceStale?: boolean;
   /** Listing fields for `Listed` assets. */
   listedAt?: string;
   listedHkd?: number;
@@ -1125,6 +1128,7 @@ export {
   ACTIVE_INTAKE_ALERT_STORY_ID,
   APPOINTMENTS_COPY,
   AUCTION_LOT_LIVE_STORY_ID,
+  assetEstDailyUsd,
   assetSubtitle,
   BOOK_VISIT_NAV_COPY,
   BOOK_VISIT_SERVICES,

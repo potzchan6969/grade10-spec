@@ -4,7 +4,7 @@ import { PORTFOLIO_SUMMARY } from "../../vault-content";
 import { WalletSummary } from "./wallet-summary";
 
 /**
- * Incentive wallet above the holdings. Incentives accrue daily
+ * Earnings wallet above the holdings. Incentives accrue daily
  * while items stay in custody; the Withdraw CTA unlocks at the minimum.
  */
 const meta = {
@@ -25,15 +25,14 @@ export const Filled: Story = {
     cashedOutUsd: PORTFOLIO_SUMMARY.cashedOutUsd,
     openCashOutCount: 2,
     minWithdrawalUsd: PORTFOLIO_SUMMARY.minWithdrawalUsd,
-    hasPayoutMethod: PORTFOLIO_SUMMARY.hasPayoutMethod,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Incentives available")).toBeVisible();
+    expect(canvas.getByText("Available earnings")).toBeVisible();
     expect(canvas.getByText("Earned all time")).toBeVisible();
     expect(canvas.getByText("In withdrawal")).toBeVisible();
     expect(canvas.getByText("Withdrawn")).toBeVisible();
-    expect(canvas.getByText(/daily while your items/)).toBeVisible();
+    expect(canvas.getByText(/Est. daily earning/)).toBeVisible();
     expect(canvas.getByRole("button", { name: "Withdraw" })).toBeEnabled();
   },
 };

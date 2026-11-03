@@ -65,7 +65,7 @@ function WalletSummary({
 
   return (
     <Card
-      aria-label="Incentive wallet"
+      aria-label="Earnings wallet"
       className={cn(
         "grid grid-cols-1 gap-0 overflow-clip p-0 sm:grid-cols-2",
         className,
@@ -76,7 +76,7 @@ function WalletSummary({
     >
       <div className="flex flex-col gap-4 border-b border-border bg-background-subtle p-4 sm:p-8 sm:border-r sm:border-b-0">
         <Text className="uppercase" size="sm" tone="secondary" weight="medium">
-          Incentives available
+          Available earnings
         </Text>
         <div className="flex flex-1 flex-col items-start justify-center gap-2">
           <p className="flex items-baseline gap-1 whitespace-nowrap text-foreground tabular-nums">
@@ -87,31 +87,41 @@ function WalletSummary({
               {availableUsd.toLocaleString("en-HK")}
             </span>
           </p>
-          <Text size="sm" tone="secondary">
-            Receive ~US${dailyIncentiveUsd.toLocaleString("en-HK")} daily while
-            your items are in vault.
+          <Text
+            as="span"
+            className="flex items-center gap-1"
+            size="sm"
+            tone="secondary"
+          >
+            Est. daily earning: ~US${dailyIncentiveUsd.toLocaleString("en-HK")}{" "}
+            / day
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  aria-label="How the daily rate is estimated"
+                  className="inline-flex size-4 items-center justify-center text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                  render={<button type="button" />}
+                >
+                  <Info aria-hidden size={14} weight="bold" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  Daily earnings are estimated based on a 30-day median market
+                  prices and asset liquidity factors. Actual daily payouts will
+                  fluctuate based on market movements.
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </Text>
         </div>
         <div className="flex items-center gap-2">
-          {hasPayoutMethod ? (
-            <Button
-              disabled={!meetsMinimum}
-              size="md"
-              type="button"
-              onClick={onCashOut}
-            >
-              Withdraw
-            </Button>
-          ) : (
-            <Button
-              size="md"
-              type="button"
-              variant="secondary"
-              onClick={onSetUpPayout}
-            >
-              Set Up Payout
-            </Button>
-          )}
+          <Button
+            disabled={!meetsMinimum}
+            size="md"
+            type="button"
+            onClick={onCashOut}
+          >
+            Withdraw
+          </Button>
           <Button
             size="md"
             type="button"

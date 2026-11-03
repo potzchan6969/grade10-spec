@@ -90,15 +90,22 @@ export const LiveAuction: Story = {
   },
 };
 
-/** Boneyard skeleton while the holdings fetch settles. */
-export const Loading: Story = {
-  args: { asset: assetWithStatus("In Vault"), loading: true },
-  render: ({ asset }) => <VaultAssetCard asset={asset} loading />,
-};
-
-/** Boneyard capture target — `loading` at the card's 288px grid width. */
+/** Boneyard skeleton while the holdings fetch settles — also the capture target at the card's 288px grid width. */
 export const BoneyardCapture: Story = {
   args: { asset: assetWithStatus("In Vault"), loading: true },
+};
+
+/** Price feed down — the estimate pauses with a warning icon and tooltip. */
+export const EstimatePaused: Story = {
+  args: { asset: { ...assetWithStatus("In Vault"), priceStale: true } },
+  render: ({ asset }) => <LinkedCard asset={asset} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Est. paused")).toBeVisible();
+    expect(
+      canvas.getByLabelText("Why the daily estimate is paused"),
+    ).toBeVisible();
+  },
 };
 
 /** Withdrawal requested, admin approval pending — badge, no price line. */

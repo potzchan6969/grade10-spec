@@ -181,7 +181,7 @@ export const Graded: Story = {
           name: VAULT_ASSET_DETAILS[0].name,
         }),
       ).toBeVisible();
-      expect(canvas.getByText("Estimated value since intake")).toBeVisible();
+      expect(canvas.getByText("Total earned to date")).toBeVisible();
       expect(
         canvas.getByRole("button", { name: "List for Auction" }),
       ).toBeVisible();
