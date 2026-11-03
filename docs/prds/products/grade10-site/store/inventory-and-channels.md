@@ -14,6 +14,7 @@ Where the store's stock sits, and the channels that sell it.
   - **Filling Online Orders** — a Kerry location set to fill online orders is flagged to be turned off
 - **Kerry Logistics** — also the shipping partner: it comes to the shop, takes the stock that ships and ships it
 - **The Vault's Custody** — where a vaulted card is held, the shop or the KEC warehouse, is the vault's own record, never a Shopify location - [Vault Intake](/p/grade10-site/vault/intake#custody)
+  - 🚧 **Inventory's Places** — the vault names inventory's sites and units, Taken At and Kept At, so the item page and the vault name one place - [Locations](/p/grade10-admin/inventory/locations#places)
 
 ## Sales Channels
 

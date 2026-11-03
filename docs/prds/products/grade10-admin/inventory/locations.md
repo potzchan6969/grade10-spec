@@ -33,11 +33,19 @@ order: 3
   vaulted cards, and an admin switches others on, KEC's among them
 - 🚧 **Display** - a setting on each storage unit, set for display cases and
   shelves: it holds cards on sale
+- 🚧 **Kept At** - where a vaulted card belongs, kept on the vault's mark: it
+  starts as the Default Destination of the site it was taken at, a card
+  event's required, and staff may choose another place that holds vaulted
+  cards - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+  - **To Move** - read whenever a card sits somewhere that doesn't fit it -
+    [Transit](/p/grade10-admin/inventory/transit)
 - **One registry** - inventory keeps every place; the diary keeps the hours,
   desks and bookings of the sites that take visits, under the ids its shops
   carry today - [Diary](/p/grade10-admin/appointment/diary)
 - **Retired, never deleted** - retiring a place is refused while an item is
   in it
+
+::image{src="assets/diagrams/inventory-places.svg" alt="Where a vaulted card is kept: taken at a site, the shop or a card event, and received there, labelled in inventory; Kept At, the site's Default Destination, is a unit that holds vaulted cards, and a display unit only while the card is on sale; a card away from its Kept At, or on a display unit no longer on sale, reads To Move, read and never stored, until staff move it and it arrives"}
 
 ## Where an Item Is
 
