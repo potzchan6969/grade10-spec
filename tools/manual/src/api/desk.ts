@@ -271,6 +271,12 @@ export type MarkInput = Omit<Mark, "by" | "at" | "seq"> & {
 };
 export type ObservationInput = Omit<Observation, "by" | "at" | "seq">;
 
+/** The site each QA environment serves, where it is known: what `<g10url>`
+ * stands for on a run there. An environment missing here shows its name. */
+export const ENV_SITE: Record<string, string> = {
+  "staging-1": "https://grade10-stg.com",
+};
+
 /** The address the manual's Worker answers the desk on. */
 export const DESK_BASE = "/api/desk";
 

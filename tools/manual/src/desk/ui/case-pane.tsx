@@ -9,7 +9,14 @@ import {
   Bug,
   ClockCounterClockwise,
 } from "@phosphor-icons/react";
-import { type ReactNode, useEffect, useId, useState } from "react";
+import {
+  type ReactNode,
+  type Ref,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import { Link } from "react-router";
 import type { ManualIndex } from "../../api/derive";
 import {
@@ -35,9 +42,9 @@ import {
   issueLabel,
   NO_ISSUE,
   offeredValues,
-  type PlaceholderAnswer,
   placeholderAnswer,
   type RunReading,
+  settledValue,
   stepsBeside,
   valueOn,
 } from "../model";
@@ -96,7 +103,9 @@ export function CasePane(props: CasePaneProps) {
   const rows = reading.rowsByCase.get(testCase.id) ?? [];
   const row = rows.find((one) => one.key === focusRow) ?? rows[0];
   const objects = (row && reading.view.objects[row.key]) ?? {};
-  const bind: Binding = (name) => objects[name] ?? answerOf(props, name).value;
+  const bind: Binding = (name) =>
+    objects[name] ??
+    settledValue(reading.view.spec, name, (other) => objects[other]);
   const { steps, after } = stepsBeside(testCase);
   const current = row ? reading.current.get(row.key)?.[surface] : undefined;
 
@@ -206,39 +215,6 @@ export function CasePane(props: CasePaneProps) {
 
       <RowsTable {...props} row={row} rows={rows} />
 
-      {row ? (
-        <MarkBar
-          closed={props.closed}
-          current={current}
-          onMark={props.onMark}
-          row={row}
-          surface={surface}
-        />
-      ) : null}
-
-      {props.ask && row && props.ask.row === row.key ? (
-        <ExpectationPicker
-          choices={props.choices}
-          onCancel={props.onCancelAsk}
-          onPick={props.onExpectation}
-        />
-      ) : null}
-
-      {row &&
-      current &&
-      ["fail", "blocked", "skipped"].includes(current.value) &&
-      !props.ask ? (
-        <Triage
-          bugUrl={props.bugUrl(row, current)}
-          closed={props.closed}
-          expectation={expectationText(testCase, row, current.expectation)}
-          mark={current}
-          objects={objects}
-          onAmend={props.onAmend}
-          pending={props.pendingMarks.has(current.id)}
-        />
-      ) : null}
-
       {row ? <TestData {...props} objects={objects} row={row} /> : null}
 
       {row ? (
@@ -251,25 +227,138 @@ export function CasePane(props: CasePaneProps) {
       ) : null}
 
       <KeyHints surface={surface} />
+
+      {row ? (
+        <MarkStrip
+          {...props}
+          current={current}
+          objects={objects}
+          row={row}
+          testCase={testCase}
+        />
+      ) : null}
     </article>
   );
 }
 
-function answerOf(
-  props: Pick<CasePaneProps, "reading">,
-  name: string,
-): { value?: string; answer: PlaceholderAnswer } {
-  const spec = props.reading.view.spec;
-  const answer = placeholderAnswer(name, spec.placeholders[name], spec.env);
-  return {
-    answer,
-    value:
-      answer.kind === "environment"
-        ? answer.value
-        : answer.kind === "follows"
-          ? answer.value
-          : undefined,
-  };
+/** What waits on a key while the picker is open. */
+export const pickerPrompt = (count: number): string =>
+  `Pick the expectation: ${count === 1 ? "1" : `1–${count}`}, ↵ none, esc cancel`;
+
+/** The mark bar, the expectation picker and the mark's own details, held at
+ * the bottom of the screen so a key's answer is always in sight. */
+function MarkStrip({
+  row,
+  current,
+  objects,
+  ...props
+}: CasePaneProps & {
+  row: RunRow;
+  current: Mark | undefined;
+  objects: RowObjects;
+}) {
+  const asking = props.ask !== null && props.ask.row === row.key;
+  const strip = useRef<HTMLElement>(null);
+  // The strip holds to the screen's foot: opening the picker shows it from
+  // its prompt, and moves the page only where the strip is out of sight.
+  useEffect(() => {
+    if (!asking || !strip.current) return;
+    strip.current.scrollTop = 0;
+    strip.current.scrollIntoView?.({ block: "nearest" });
+  }, [asking]);
+  const triaged =
+    current && ["fail", "blocked", "skipped"].includes(current.value);
+  return (
+    <section
+      aria-label="Mark the row in focus"
+      className="sticky bottom-0 z-10 -mx-4 -mb-4 flex max-h-[60dvh] flex-col gap-2 overflow-y-auto rounded-b-(--radius-2xl) border-border-strong border-t bg-background px-4 py-3 shadow-[0_-8px_16px_-12px_var(--foreground)] lg:-mx-5 lg:-mb-5 lg:px-5"
+      data-slot="mark-strip"
+      ref={strip}
+    >
+      <MarkBar
+        closed={props.closed}
+        current={current}
+        onMark={props.onMark}
+        row={row}
+        surface={props.surface}
+      />
+      {asking ? (
+        <>
+          <Text
+            as="p"
+            data-slot="picker-prompt"
+            role="status"
+            size="xs"
+            weight="bold"
+          >
+            {pickerPrompt(props.choices.length)}
+          </Text>
+          <ExpectationPicker
+            choices={props.choices}
+            onCancel={props.onCancelAsk}
+            onPick={props.onExpectation}
+          />
+        </>
+      ) : current && triaged ? (
+        <Triage
+          bugUrl={props.bugUrl(row, current)}
+          closed={props.closed}
+          expectation={expectationText(
+            props.testCase,
+            row,
+            current.expectation,
+          )}
+          mark={current}
+          objects={objects}
+          onAmend={props.onAmend}
+          pending={props.pendingMarks.has(current.id)}
+        />
+      ) : current ? (
+        <NoteField
+          closed={props.closed}
+          mark={current}
+          onAmend={props.onAmend}
+        />
+      ) : null}
+    </section>
+  );
+}
+
+/** A mark's note: every mark may carry one, as the Sheet's Notes column
+ * did. */
+function NoteField({
+  mark,
+  closed,
+  onAmend,
+  rows = 1,
+}: {
+  mark: Mark;
+  closed: boolean;
+  onAmend: CasePaneProps["onAmend"];
+  rows?: number;
+}) {
+  const [note, setNote] = useState(mark.note ?? "");
+  useEffect(() => setNote(mark.note ?? ""), [mark.note]);
+  const noteId = useId();
+  return (
+    <label className="flex flex-col gap-1" htmlFor={noteId}>
+      <Text as="span" size="xs" tone="secondary">
+        Note on this {MARK_LABEL[mark.value]}
+      </Text>
+      <Textarea
+        data-slot="mark-note"
+        disabled={closed}
+        id={noteId}
+        onBlur={() => {
+          if (note.trim() !== (mark.note ?? ""))
+            onAmend(mark, { note: note.trim() });
+        }}
+        onChange={(event) => setNote(event.target.value)}
+        rows={rows}
+        value={note}
+      />
+    </label>
+  );
 }
 
 function Checks({
@@ -475,16 +564,19 @@ export function ExpectationPicker({
   choices,
   onPick,
   onCancel,
+  ref,
 }: {
   choices: ExpectationChoice[];
   onPick: (index: number | undefined) => void;
   onCancel: () => void;
+  ref?: Ref<HTMLFieldSetElement>;
 }) {
   return (
     <fieldset
       aria-label="Which expectation broke"
       className="flex min-w-0 flex-col gap-1.5 rounded-(--radius-xl) border border-destructive/45 bg-destructive/5 p-3"
       data-slot="expectation-picker"
+      ref={ref}
     >
       <Text as="p" size="sm" weight="bold">
         Which expectation broke?
@@ -493,18 +585,20 @@ export function ExpectationPicker({
         {choices.map((choice, at) => (
           <li key={choice.index}>
             <button
-              className="grid w-full grid-cols-[1.5rem_4.5rem_minmax(0,1fr)] gap-2 rounded-(--radius-md) px-1.5 py-1 text-left text-sm outline-none hover:bg-background focus-visible:ring-2 focus-visible:ring-ring"
+              className="grid w-full grid-cols-[1.5rem_minmax(0,1fr)] gap-x-2 rounded-(--radius-md) px-1.5 py-1 text-left text-sm outline-none hover:bg-background focus-visible:ring-2 focus-visible:ring-ring sm:grid-cols-[1.5rem_4.5rem_minmax(0,1fr)]"
               data-expectation={choice.index}
               onClick={() => onPick(choice.index)}
               type="button"
             >
-              <kbd className="font-mono text-muted-foreground text-xs">
+              <kbd className="font-mono text-muted-foreground text-xs max-sm:row-span-2">
                 {at + 1}
               </kbd>
               <span className="font-semibold text-secondary-foreground text-xs">
                 {choice.from}
               </span>
-              <span>{choice.text}</span>
+              <span>
+                <BoundText bind={() => undefined} text={choice.text} />
+              </span>
             </button>
           </li>
         ))}
@@ -539,13 +633,10 @@ function Triage({
   onAmend: CasePaneProps["onAmend"];
 }) {
   const [issue, setIssue] = useState(mark.issue ?? "");
-  const [note, setNote] = useState(mark.note ?? "");
   useEffect(() => setIssue(mark.issue ?? ""), [mark.issue]);
-  useEffect(() => setNote(mark.note ?? ""), [mark.note]);
   const bind: Binding = (name) => objects[name];
   const used = Object.values(objects).filter(Boolean);
   const issueId = useId();
-  const noteId = useId();
   return (
     <div
       className="flex flex-col gap-2 rounded-(--radius-xl) border border-destructive/45 bg-destructive/5 p-3 text-sm"
@@ -649,22 +740,7 @@ function Triage({
           </Button>
         ) : null}
       </form>
-      <label className="flex flex-col gap-1" htmlFor={noteId}>
-        <Text as="span" size="xs" tone="secondary">
-          Note
-        </Text>
-        <Textarea
-          disabled={closed}
-          id={noteId}
-          onBlur={() => {
-            if (note.trim() !== (mark.note ?? ""))
-              onAmend(mark, { note: note.trim() });
-          }}
-          onChange={(event) => setNote(event.target.value)}
-          rows={2}
-          value={note}
-        />
-      </label>
+      <NoteField closed={closed} mark={mark} onAmend={onAmend} rows={2} />
     </div>
   );
 }
@@ -729,7 +805,9 @@ function TestData({
                       <span>
                         {answer.value}{" "}
                         <span className="text-muted-foreground text-xs">
-                          · the run's environment, never asked
+                          {answer.known
+                            ? "· the run's environment, never asked"
+                            : "· the environment's name: its site is not known here, never asked"}
                         </span>
                       </span>
                     ) : answer.kind === "follows" ? (
@@ -902,7 +980,7 @@ function KeyHints({ surface }: { surface: Surface }) {
         <kbd className={kbd}>↵</kbd> next row · <kbd className={kbd}>j</kbd>{" "}
         <kbd className={kbd}>k</kbd> next or previous case ·{" "}
         <kbd className={kbd}>x</kbd> select rows for blocked, skipped, n/a or to
-        do
+        do · <kbd className={kbd}>/</kbd> find a case
       </span>
     </Text>
   );

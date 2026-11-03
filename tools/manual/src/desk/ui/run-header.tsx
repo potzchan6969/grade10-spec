@@ -20,13 +20,26 @@ import {
 } from "../../api/desk";
 import { ConfirmDialog } from "../../editor/confirm-dialog";
 import type { LiveStatus } from "../client";
-import type { Counts } from "../model";
+import { type Counts, plural } from "../model";
 import { MARK_FILL } from "./marks";
 
 const ORDER: MarkValue[] = ["pass", "fail", "blocked", "todo", "skipped", "na"];
 
-export const rateText = (rate: number | null): string =>
-  rate === null ? "—" : `${Math.round(rate * 100)}%`;
+/** A whole percent, with one decimal under ten so a first pass never reads
+ * as 1% or 0%. */
+export const rateText = (rate: number | null): string => {
+  if (rate === null) return "—";
+  const percent = rate * 100;
+  return percent > 0 && percent < 10
+    ? `${percent.toFixed(1)}%`
+    : `${Math.round(percent)}%`;
+};
+
+/** A surface's counts in one line. */
+export const countsLine = (counts: Counts): string =>
+  ORDER.filter((value) => counts[value] > 0)
+    .map((value) => `${counts[value]} ${MARK_LABEL[value]}`)
+    .join(" · ") || "no rows";
 
 /** A surface's line of the Summary tab: its counts, n/a left out of the
  * rate. */
@@ -72,17 +85,19 @@ export function SurfaceSummary({
         )}
       </div>
       <Text as="p" className="leading-snug" size="xs" tone="secondary">
-        {ORDER.filter((value) => counts[value] > 0)
-          .map((value) => `${counts[value]} ${MARK_LABEL[value]}`)
-          .join(" · ") || "no rows"}
+        {countsLine(counts)}
       </Text>
     </div>
   );
 }
 
+/** The command that writes a finalized run's record in git. The desk never
+ * knows whether it ran, so the header never says it did. */
+export const RECORD_COMMAND = "pnpm tcs:run-record --desk-record <file>";
+
 const STATE_LABEL: Record<RunSummary["state"], string> = {
   open: "open",
-  finalized: "finalized, recorded in git",
+  finalized: "finalized",
   closed: "closed",
 };
 
@@ -118,18 +133,25 @@ export function RunHeader({
   onDownload: (what: "csv" | "record") => void;
 }) {
   const [confirm, setConfirm] = useState<Pending>(null);
+  const [countsOpen, setCountsOpen] = useState(false);
   return (
-    <header className="flex flex-col gap-3 pt-5 pb-3">
-      <div className="flex flex-wrap items-start justify-between gap-3">
+    <header className="flex flex-col gap-3 pt-5 pb-3 max-lg:gap-2 max-lg:pt-3 max-lg:pb-1">
+      <div className="flex flex-wrap items-start justify-between gap-3 max-lg:gap-2">
         <div className="min-w-0">
           <h1 className="font-bold text-manual-h3 leading-tight">
             Run {run.id} · {run.name}
           </h1>
           <Text as="p" className="mt-1" size="sm" tone="secondary">
-            {run.env} · {STATE_LABEL[run.state]} · {run.cases} cases, {run.rows}{" "}
-            rows under {sections} sections
+            {run.env} · {STATE_LABEL[run.state]} · {plural(run.cases, "case")},{" "}
+            {plural(run.rows, "row")} under {plural(sections, "section")}
             {run.rerunOf ? ` · re-run of run ${run.rerunOf}` : ""}
           </Text>
+          {run.state === "finalized" ? (
+            <Text as="p" className="mt-0.5" size="xs" tone="secondary">
+              Not in git until the record is written: download it, then{" "}
+              <code className="font-mono">{RECORD_COMMAND}</code>
+            </Text>
+          ) : null}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Badge
@@ -169,7 +191,8 @@ export function RunHeader({
             </Button>
           ) : null}
           <Button onClick={() => onDownload("csv")} size="sm" variant="ghost">
-            <FileCsv aria-hidden /> Export CSV
+            <FileCsv aria-hidden />{" "}
+            <span className="max-lg:sr-only">Export CSV</span>
           </Button>
           {run.state !== "open" ? (
             <Button
@@ -177,14 +200,35 @@ export function RunHeader({
               size="sm"
               variant="ghost"
             >
-              <DownloadSimple aria-hidden /> Download record
+              <DownloadSimple aria-hidden />{" "}
+              <span className="max-lg:sr-only">Download record</span>
             </Button>
           ) : null}
         </div>
       </div>
+      <button
+        aria-expanded={countsOpen}
+        className="flex min-w-0 items-baseline gap-2 rounded-(--radius-md) text-left text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
+        data-slot="counts-line"
+        onClick={() => setCountsOpen((open) => !open)}
+        type="button"
+      >
+        <b>
+          {SURFACE_LABEL[surface]} {rateText(counts[surface].rate)}
+        </b>
+        <span className="min-w-0 flex-1 truncate text-secondary-foreground">
+          {countsLine(counts[surface])}
+        </span>
+        <span className="shrink-0 text-accent-foreground">
+          {countsOpen ? "Hide" : "All surfaces"}
+        </span>
+      </button>
       <fieldset
         aria-label="The Summary's counts, per surface"
-        className="grid min-w-0 grid-cols-2 gap-2 lg:grid-cols-4"
+        className={cn(
+          "grid min-w-0 grid-cols-2 gap-2 lg:grid-cols-4",
+          !countsOpen && "max-lg:hidden",
+        )}
       >
         {SURFACES.map((one) => (
           <SurfaceSummary
@@ -198,7 +242,7 @@ export function RunHeader({
       <ConfirmDialog
         body={
           confirm === "finalized"
-            ? "The selection is frozen from here and the run sheet records it in git. Marking goes on."
+            ? `The selection is frozen from here; marking goes on. It is in git once its record is written: download the record and run ${RECORD_COMMAND}.`
             : "Marking ends for everyone. The run's verdicts stay the latest for its cases."
         }
         confirmLabel={confirm === "finalized" ? "Finalize" : "Close the run"}

@@ -4,10 +4,11 @@ import { CheckboxButton } from "@grade10/design-system/components/forms/checkbox
 import { X } from "@phosphor-icons/react";
 import type { RunWalk, Surface } from "../../api/desk";
 import {
+  caseLabels,
   caseResult,
   currentObservations,
   type RunReading,
-  shortId,
+  settledValue,
   valueOn,
 } from "../model";
 import { BoundText } from "./bound-text";
@@ -37,6 +38,8 @@ export function WalkPane({
   onLeave: () => void;
 }) {
   const ticks = currentObservations(reading.view.observations);
+  const bind = (name: string) => settledValue(reading.view.spec, name);
+  const labels = caseLabels(reading.view.spec.cases);
   const seen = walk.route.filter(
     (_, step) => ticks.get(`${walk.id}#${step}`)?.seen,
   ).length;
@@ -49,7 +52,7 @@ export function WalkPane({
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <Text as="p" className="font-mono" size="xs" tone="secondary">
-            {walk.id} · {seen} of {walk.route.length} observed
+            Walk · {seen} of {walk.route.length} observed
           </Text>
           <h2 className="mt-1 font-bold text-manual-h3 leading-snug">
             {walk.title}
@@ -69,7 +72,7 @@ export function WalkPane({
         <ul className="flex list-disc flex-col gap-1 pl-5 text-sm">
           {walk.start.map((line) => (
             <li key={line}>
-              <BoundText bind={() => undefined} text={line} />
+              <BoundText bind={bind} text={line} />
             </li>
           ))}
         </ul>
@@ -93,12 +96,11 @@ export function WalkPane({
                 />
                 <div className="flex min-w-0 flex-col gap-1 text-sm">
                   <span>
-                    <b>{at + 1}.</b>{" "}
-                    <BoundText bind={() => undefined} text={step.step} />
+                    <b>{at + 1}.</b> <BoundText bind={bind} text={step.step} />
                   </span>
                   {step.expect ? (
                     <span className="border-success/60 border-l-2 pl-2 text-secondary-foreground">
-                      <BoundText bind={() => undefined} text={step.expect} />
+                      <BoundText bind={bind} text={step.expect} />
                     </span>
                   ) : null}
                   <span className="flex flex-wrap gap-1.5">
@@ -111,7 +113,9 @@ export function WalkPane({
                           onClick={() => onCase(id)}
                           type="button"
                         >
-                          <span className="font-mono">{shortId(id)}</span>
+                          <span className="font-mono">
+                            {labels.get(id) ?? id}
+                          </span>
                           <span className="flex gap-[3px]">
                             {(reading.rowsByCase.get(id) ?? []).map((row) => (
                               <Pip

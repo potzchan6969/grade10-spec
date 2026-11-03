@@ -1,5 +1,6 @@
 import {
   BULK_MARKS,
+  ENV_SITE,
   MARK_LABEL,
   type Mark,
   type MarkInput,
@@ -10,8 +11,10 @@ import {
   type RunRow,
   type RunSpec,
   type RunView,
+  SURFACE_LABEL,
   type Surface,
 } from "../api/desk.ts";
+import { rowVerdict } from "../api/verdicts.ts";
 
 /** The run as the page reads it: rows by case, and each row's current mark
  * per surface, newest winning. */
@@ -120,6 +123,19 @@ export const caseDone = (
     (row) => valueOn(reading, row, surface) !== "todo",
   );
 
+/** Until a run closes, a row is walked again in place, so a re-run is
+ * offered only on a closed run that holds a failed or blocked row. */
+export function canRerun(reading: RunReading): boolean {
+  if (reading.view.run.state !== "closed") return false;
+  return reading.view.rows.some((row) => {
+    const { verdict } = rowVerdict(
+      reading.current.get(row.key) ?? {},
+      reading.caseById.get(row.case)?.surfaces,
+    );
+    return verdict === "fail" || verdict === "blocked";
+  });
+}
+
 /** A bug marked with no issue linked yet reads so until one is pasted. */
 export const NO_ISSUE = "bug · no issue yet";
 
@@ -146,7 +162,8 @@ export const FILTERS = [
   "result",
 ] as const;
 export type FilterKey = (typeof FILTERS)[number];
-export type Filters = Partial<Record<FilterKey, string>>;
+/** Each filter keeps any of its chosen values: fail or blocked. */
+export type Filters = Partial<Record<FilterKey, string[]>>;
 
 export const FILTER_LABEL: Record<FilterKey, string> = {
   product: "Product",
@@ -164,28 +181,61 @@ const facet = (
   key: Exclude<FilterKey, "result">,
 ): string | undefined => testCase[key];
 
-/** The values a filter can take in this run, in the order cases first use
- * them; a facet no case carries offers nothing. */
-export function filterOptions(
-  reading: RunReading,
-  key: FilterKey,
-  surface: Surface,
-): string[] {
+export const SEVERITY_ORDER = ["blocker", "critical", "major", "minor"];
+export const PRIORITY_ORDER = ["P0", "P1", "P2", "P3"];
+
+/** Known values in their own order, unknown ones after, as first met. */
+const ranked = (order: string[]) => (a: string, b: string) => {
+  const at = (value: string) => {
+    const found = order.findIndex(
+      (one) => one.toLowerCase() === value.toLowerCase(),
+    );
+    return found >= 0 ? found : order.length;
+  };
+  return at(a) - at(b);
+};
+
+/** The values a filter can take in this run: a result any of QA's words, a
+ * severity or a priority in its own order, anything else as cases first use
+ * it; a facet no case carries offers nothing. */
+export function filterOptions(reading: RunReading, key: FilterKey): string[] {
+  if (key === "result") return [...WORST];
   const seen = new Set<string>();
   for (const testCase of reading.view.spec.cases) {
-    const value =
-      key === "result"
-        ? caseResult(reading, testCase.id, surface)
-        : facet(testCase, key);
+    const value = facet(testCase, key);
     if (value) seen.add(value);
   }
-  return key === "result"
-    ? WORST.filter((value) => seen.has(value))
-    : [...seen];
+  const values = [...seen];
+  if (key === "severity") return values.sort(ranked(SEVERITY_ORDER));
+  if (key === "priority") return values.sort(ranked(PRIORITY_ORDER));
+  return values;
 }
 
 export const filterValueLabel = (key: FilterKey, value: string): string =>
   key === "result" ? MARK_LABEL[value as MarkValue] : value;
+
+/** A case fits a result when any of its rows reads it on the surface, so a
+ * skipped row is found beside a row still to do. */
+const hasResult = (
+  reading: RunReading,
+  caseId: string,
+  surface: Surface,
+  wanted: string[],
+): boolean =>
+  (reading.rowsByCase.get(caseId) ?? []).some((row) =>
+    wanted.includes(valueOn(reading, row, surface)),
+  );
+
+/** Whether a case answers the words typed in the list's search: its id,
+ * its marker or its title. */
+export function matchesQuery(testCase: RunCase, query: string): boolean {
+  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return true;
+  const said = [testCase.id, testCase.marker ?? "", testCase.title]
+    .join(" ")
+    .toLowerCase();
+  return words.every((word) => said.includes(word));
+}
 
 /** The cases a filter shows. The run itself is never touched: a filter only
  * changes what shows. */
@@ -193,19 +243,72 @@ export function shownCases(
   reading: RunReading,
   filters: Filters,
   surface: Surface,
+  query = "",
 ): Set<string> {
   const shown = new Set<string>();
   for (const testCase of reading.view.spec.cases) {
     const fits = FILTERS.every((key) => {
       const wanted = filters[key];
-      if (!wanted) return true;
-      return key === "result"
-        ? caseResult(reading, testCase.id, surface) === wanted
-        : facet(testCase, key) === wanted;
+      if (!wanted || wanted.length === 0) return true;
+      if (key === "result")
+        return hasResult(reading, testCase.id, surface, wanted);
+      const value = facet(testCase, key);
+      return value !== undefined && wanted.includes(value);
     });
-    if (fits) shown.add(testCase.id);
+    if (fits && matchesQuery(testCase, query)) shown.add(testCase.id);
   }
   return shown;
+}
+
+export type CaseSort = "run" | "priority" | "severity";
+export const SORT_LABEL: Record<CaseSort, string> = {
+  run: "Run order",
+  priority: "Priority",
+  severity: "Severity",
+};
+
+/** A section's cases in the order chosen; ties keep the run's order. */
+export function sortCases(cases: RunCase[], by: CaseSort): RunCase[] {
+  if (by === "run") return cases;
+  const order = by === "priority" ? PRIORITY_ORDER : SEVERITY_ORDER;
+  const compare = ranked(order);
+  return [...cases].sort((a, b) => compare(a[by] ?? "", b[by] ?? ""));
+}
+
+/** Each case's id as the list shows it: the short id, and as much of the
+ * full one as tells two alike apart. */
+export function caseLabels(cases: Pick<RunCase, "id">[]): Map<string, string> {
+  const parts = new Map(cases.map((one) => [one.id, one.id.split(".")]));
+  const labels = new Map<string, string>();
+  for (const [id, segments] of parts) {
+    let take = 1;
+    const label = () => segments.slice(-take).join(".");
+    while (
+      take < segments.length &&
+      [...parts].some(
+        ([other, theirs]) =>
+          other !== id && theirs.slice(-take).join(".") === label(),
+      )
+    )
+      take += 1;
+    labels.set(id, label());
+  }
+  return labels;
+}
+
+/** `1 case`, `2 cases`. */
+export const plural = (count: number, one: string, many = `${one}s`): string =>
+  `${count} ${count === 1 ? one : many}`;
+
+/** Of these cases, how many still have rows to do on each surface a person
+ * walks. */
+export function outstanding(
+  reading: RunReading,
+  caseIds: string[],
+): Record<"web" | "mobile", number> {
+  const count = (surface: Surface) =>
+    caseIds.filter((id) => !caseDone(reading, id, surface)).length;
+  return { web: count("web"), mobile: count("mobile") };
 }
 
 // Grouping
@@ -391,47 +494,38 @@ export function amend(
 
 // The case's own parts
 
-/** A data table's column that says what a row should show. */
-const EXPECTED_COLUMN = /expect|result|should|shows|footer|list|outcome/i;
-
 export type ExpectationChoice = { index: number; text: string; from: string };
 
-/** What a fail can name: the case's expectation lines, then the row's own
- * expected cells. Positions past the case's lines name the row's cells, left
- * to right, so the mark keeps one number either way. */
+/** What a fail can name: the case's own expectation lines, never its test
+ * data. */
 export function expectationChoices(
   testCase: RunCase,
-  row: RunRow | undefined,
+  _row?: RunRow,
 ): ExpectationChoice[] {
-  const lines = testCase.expect.map((one, index) => ({
+  return testCase.expect.map((one, index) => ({
     index,
     text: one.text,
     from: one.step ? `Step ${one.step}` : "Expected",
   }));
-  const data = testCase.data;
-  if (!data || !row || row.index < 1) return lines;
-  const cells = data.rows[row.index - 1] ?? [];
-  const extra: ExpectationChoice[] = [];
-  data.header.forEach((name, column) => {
-    if (EXPECTED_COLUMN.test(name) && cells[column])
-      extra.push({
-        index: testCase.expect.length + column,
-        text: cells[column],
-        from: name,
-      });
-  });
-  return [...lines, ...extra];
 }
 
+/** The words a mark's expectation names. A position past the case's lines
+ * names one of the row's data cells, by column, as earlier marks did. */
 export function expectationText(
   testCase: RunCase,
   row: RunRow | undefined,
   index: number | undefined,
 ): string | undefined {
   if (index === undefined) return undefined;
-  return expectationChoices(testCase, row).find((one) => one.index === index)
-    ?.text;
+  const line = testCase.expect[index];
+  if (line) return line.text;
+  if (!row || row.index < 1) return undefined;
+  return testCase.data?.rows[row.index - 1]?.[index - testCase.expect.length];
 }
+
+/** A line's words with its code marks taken off, where it reads as plain
+ * text. */
+export const plainText = (text: string): string => text.replace(/`/g, "");
 
 /** Each step with the expectations keyed to it, and the rest after; a case
  * of one step takes them all beside it. */
@@ -482,9 +576,16 @@ export function casePlaceholders(testCase: RunCase): string[] {
 }
 
 export type PlaceholderAnswer =
-  | { kind: "environment"; value: string }
+  | { kind: "environment"; value: string; known: boolean }
   | { kind: "follows"; from: string; value?: string }
   | { kind: "asked" };
+
+/** The site a run's environment serves; where none is known, the
+ * environment's own name, said to be one. */
+export function envSite(env: string): { value: string; known: boolean } {
+  const site = ENV_SITE[env];
+  return site ? { value: site, known: true } : { value: env, known: false };
+}
 
 /** The environment's address and a value that follows from another are
  * never asked; everything else is asked on each row. */
@@ -494,13 +595,14 @@ export function placeholderAnswer(
   env: string,
   known: (name: string) => string | undefined = () => undefined,
 ): PlaceholderAnswer {
-  if (name === "<g10url>") return { kind: "environment", value: env };
+  if (name === "<g10url>") return { kind: "environment", ...envSite(env) };
   const said = (words ?? "").replace(/`/g, "").trim();
   const owner = /^(<[^<>]+>)'s\s/.exec(said);
   if (owner) return { kind: "follows", from: owner[1] };
   if (/^\S*<[^<>]+>\S*$/.test(said)) {
     const [from] = placeholdersIn(said);
-    const base = from === "<g10url>" ? env : (known(from) ?? undefined);
+    const base =
+      from === "<g10url>" ? envSite(env).value : (known(from) ?? undefined);
     return {
       kind: "follows",
       from,
@@ -508,6 +610,34 @@ export function placeholderAnswer(
     };
   }
   return { kind: "asked" };
+}
+
+/** What a placeholder stands for before any row says: the environment's
+ * site, or a value that follows from it; nothing that must be asked. */
+export function settledValue(
+  spec: Pick<RunSpec, "env" | "placeholders">,
+  name: string,
+  known: (name: string) => string | undefined = () => undefined,
+): string | undefined {
+  const answer = placeholderAnswer(
+    name,
+    spec.placeholders[name],
+    spec.env,
+    known,
+  );
+  return answer.kind === "asked" ? undefined : answer.value;
+}
+
+/** What the page says aloud once a mark is made. */
+export function markSaid(
+  marks: Pick<MarkInput, "row" | "value" | "surface">[],
+  label: (row: string) => string,
+): string {
+  if (marks.length === 0) return "";
+  const { value, surface } = marks[0];
+  const where =
+    marks.length === 1 ? label(marks[0].row) : plural(marks.length, "row");
+  return `${where} marked ${MARK_LABEL[value]} on ${SURFACE_LABEL[surface]}`;
 }
 
 /** Values other rows of this run used for a placeholder, offered and never
@@ -598,3 +728,22 @@ export function nextRow(
 
 export const firstRow = (reading: RunReading, caseId: string): string | null =>
   reading.rowsByCase.get(caseId)?.[0]?.key ?? null;
+
+/** The case and row the address asks for. A case the run does not hold is
+ * named back and nothing takes focus, so no key marks a case nobody chose;
+ * no case asked is the first shown, unless a walk is open. */
+export function focusOf(
+  reading: RunReading,
+  order: string[],
+  asked: { case: string | null; row: string | null; walk: boolean },
+): { case: string | null; row: string | null; unknown?: string } {
+  if (asked.case && !reading.caseById.has(asked.case))
+    return { case: null, row: null, unknown: asked.case };
+  const caseId = asked.case ?? (asked.walk ? null : (order[0] ?? null));
+  if (!caseId) return { case: null, row: null };
+  const row =
+    asked.row && reading.rowByKey.get(asked.row)?.case === caseId
+      ? asked.row
+      : firstRow(reading, caseId);
+  return { case: caseId, row };
+}

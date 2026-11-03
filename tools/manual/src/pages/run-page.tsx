@@ -12,7 +12,7 @@ import {
   ListBullets,
   Warning,
 } from "@phosphor-icons/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 import {
   type Mark,
@@ -28,16 +28,23 @@ import { handleOf } from "../desk/checks";
 import { newId } from "../desk/client";
 import {
   amend,
+  type CaseSort,
   type Counts,
+  canRerun,
+  caseLabels,
   expectationChoices,
   type Filters,
   firstRow,
+  focusOf,
   keyCommand,
   markCommand,
+  markSaid,
   nextRow,
   pageGroups,
+  plural,
   readRun,
   shownCases,
+  sortCases,
   stepCase,
   surfaceCounts,
   walkCases,
@@ -46,13 +53,21 @@ import {
 import { useSurface } from "../desk/surface";
 import { CasePane, type FailAsk } from "../desk/ui/case-pane";
 import { RunHeader } from "../desk/ui/run-header";
-import { type RowPick, RunList } from "../desk/ui/run-list";
+import { DESK_SEARCH_ID, type RowPick, RunList } from "../desk/ui/run-list";
 import { Toolbar } from "../desk/ui/toolbar";
 import { WalkPane } from "../desk/ui/walk-pane";
 import { useDesk } from "../desk/use-desk";
 import { useRun } from "../desk/use-run";
 import { useLayout } from "../shell/layout";
 import { useDocumentTitle } from "./use-document-title";
+
+/** Desk keys act only where the desk is, or where nothing has focus: a key
+ * pressed on the manual's own links and fields stays theirs. */
+const inDesk = (target: EventTarget | null): boolean =>
+  target === null ||
+  target === document.body ||
+  target === document.documentElement ||
+  (target instanceof Element && target.closest("[data-desk-keys]") !== null);
 
 const typing = (target: EventTarget | null): boolean =>
   target instanceof HTMLElement &&
@@ -126,6 +141,9 @@ function Desk({
   const [params, setParams] = useSearchParams();
   const [surface, setSurface] = useSurface();
   const [filters, setFilters] = useState<Filters>({});
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<CaseSort>("run");
+  const [said, setSaid] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [ask, setAsk] = useState<FailAsk | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -134,10 +152,19 @@ function Desk({
     null,
   );
 
+  // A run is walked beside its list, not the manual's: the rail folds while
+  // the desk is open and comes back on leaving, unless it was folded before.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: once, on entering the desk
+  useEffect(() => {
+    if (!layout.wide || layout.navCollapsed) return;
+    layout.setNavCollapsed(true);
+    return () => layout.setNavCollapsed(false);
+  }, []);
+
   const reading = useMemo(() => readRun(view), [view]);
   const shown = useMemo(
-    () => shownCases(reading, filters, surface),
-    [reading, filters, surface],
+    () => shownCases(reading, filters, surface, query),
+    [reading, filters, surface, query],
   );
   const pageTitle = useCallback(
     (path: string) =>
@@ -146,9 +173,17 @@ function Desk({
     [index],
   );
   const pages = useMemo(
-    () => pageGroups(view.spec, pageTitle),
-    [view.spec, pageTitle],
+    () =>
+      pageGroups(view.spec, pageTitle).map((page) => ({
+        ...page,
+        sections: page.sections.map((section) => ({
+          ...section,
+          cases: sortCases(section.cases, sort),
+        })),
+      })),
+    [view.spec, pageTitle, sort],
   );
+  const labels = useMemo(() => caseLabels(view.spec.cases), [view.spec.cases]);
   const walks = useMemo(() => walkGroups(reading, surface), [reading, surface]);
   const counts = useMemo(
     () =>
@@ -174,22 +209,20 @@ function Desk({
     [pages, shown],
   );
   const order = walk ? walkCases(view.spec, walk.id) : listOrder;
-  const caseId =
-    params.get("case") && reading.caseById.has(params.get("case") as string)
-      ? (params.get("case") as string)
-      : walk
-        ? null
-        : (order[0] ?? null);
-  const rowKey =
-    params.get("row") &&
-    reading.rowByKey.get(params.get("row") as string)?.case === caseId
-      ? (params.get("row") as string)
-      : caseId
-        ? firstRow(reading, caseId)
-        : null;
+  const focused = focusOf(reading, order, {
+    case: params.get("case"),
+    row: params.get("row"),
+    walk: walk !== null,
+  });
+  const caseId = focused.case;
+  const rowKey = focused.row;
   const testCase = caseId ? reading.caseById.get(caseId) : undefined;
   const row = rowKey ? reading.rowByKey.get(rowKey) : undefined;
   const closed = view.run.state === "closed";
+  // Keys pressed faster than the page renders act on where the last key
+  // moved focus, never on the case shown a moment before.
+  const held = useRef({ case: caseId, row: rowKey });
+  held.current = { case: caseId, row: rowKey };
 
   const focus = useCallback(
     (next: {
@@ -197,6 +230,11 @@ function Desk({
       row?: string | null;
       walk?: string | null;
     }) => {
+      if ("case" in next || "row" in next)
+        held.current = {
+          case: next.case ?? null,
+          row: next.row ?? null,
+        };
       setParams(
         (held) => {
           const out = new URLSearchParams(held);
@@ -213,54 +251,81 @@ function Desk({
     [setParams],
   );
 
+  const rowLabel = useCallback(
+    (key: string) => {
+      const one = reading.rowByKey.get(key);
+      if (!one) return key;
+      return `${labels.get(one.case) ?? one.case} row ${one.index || 1}`;
+    },
+    [reading, labels],
+  );
+
   const sendMark = useCallback(
     (value: MarkValue) => {
       if (closed) {
         setNotice("The run is closed; marking has ended.");
         return;
       }
+      const now = held.current;
+      const target = now.case ? reading.caseById.get(now.case) : undefined;
       const command = markCommand({
         value,
         surface,
-        focus: rowKey,
+        focus: now.row,
         selected: [...selected],
-        hasExpectations: testCase
-          ? expectationChoices(testCase, row).length > 0
-          : false,
+        hasExpectations: target ? expectationChoices(target).length > 0 : false,
         makeId: newId,
       });
       if (command.kind === "refused") setNotice(command.reason);
       else if (command.kind === "ask-expectation") setAsk({ row: command.row });
       else {
         handle.mark(command.marks);
+        setSaid(markSaid(command.marks, rowLabel));
         setSelected(new Set());
         setNotice(null);
       }
     },
-    [closed, surface, rowKey, selected, testCase, row, handle],
+    [closed, surface, selected, reading, handle, rowLabel],
   );
 
   const choices = testCase ? expectationChoices(testCase, row) : [];
   const pickExpectation = useCallback(
     (expectation: number | undefined) => {
       if (!ask) return;
-      handle.mark([
+      const marks = [
         {
           id: newId(),
           row: ask.row,
           surface,
-          value: "fail",
+          value: "fail" as const,
           ...(expectation !== undefined ? { expectation } : {}),
         },
-      ]);
+      ];
+      handle.mark(marks);
+      setSaid(markSaid(marks, rowLabel));
       setAsk(null);
     },
-    [ask, handle, surface],
+    [ask, handle, surface, rowLabel],
   );
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || typing(event.target)) return;
+      if (
+        event.defaultPrevented ||
+        typing(event.target) ||
+        !inDesk(event.target)
+      )
+        return;
+      if (event.key === "/" && !event.metaKey && !event.ctrlKey) {
+        event.preventDefault();
+        const search = document.getElementById(DESK_SEARCH_ID);
+        if (search && search.offsetParent !== null) search.focus();
+        else {
+          setListOpen(true);
+          setTimeout(() => document.getElementById(DESK_SEARCH_ID)?.focus());
+        }
+        return;
+      }
       if (ask) {
         if (/^[1-9]$/.test(event.key)) {
           const choice = choices[Number(event.key) - 1];
@@ -287,19 +352,21 @@ function Desk({
       )
         return;
       event.preventDefault();
+      const at = held.current;
       if (command.kind === "case") {
-        const next = stepCase(order, caseId, command.step);
+        const next = stepCase(order, at.case, command.step);
         if (next) focus({ case: next, row: firstRow(reading, next) });
       } else if (command.kind === "row") {
-        const next = nextRow(reading, order, { case: caseId, row: rowKey });
+        const next = nextRow(reading, order, at);
         focus({ case: next.case, row: next.row });
       } else if (command.kind === "mark") sendMark(command.value);
       else if (command.kind === "select") {
-        if (!rowKey) return;
-        setSelected((held) => {
-          const out = new Set(held);
-          if (out.has(rowKey)) out.delete(rowKey);
-          else out.add(rowKey);
+        const key = at.row;
+        if (!key) return;
+        setSelected((chosen) => {
+          const out = new Set(chosen);
+          if (out.has(key)) out.delete(key);
+          else out.add(key);
           return out;
         });
       } else if (command.kind === "clear") {
@@ -309,17 +376,7 @@ function Desk({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [
-    ask,
-    choices,
-    pickExpectation,
-    order,
-    caseId,
-    rowKey,
-    reading,
-    focus,
-    sendMark,
-  ]);
+  }, [ask, choices, pickExpectation, order, reading, focus, sendMark]);
 
   const pickRow = ({ row: key, extend }: RowPick) => {
     const owner = reading.rowByKey.get(key)?.case ?? null;
@@ -375,13 +432,7 @@ function Desk({
       (one) => `${one.page ?? one.suite}#${one.section ?? ""}`,
     ),
   ).size;
-  const canRerun = view.rows.some((one) =>
-    SURFACES.some((each) =>
-      ["fail", "blocked"].includes(
-        reading.current.get(one.key)?.[each]?.value ?? "",
-      ),
-    ),
-  );
+  const rerunnable = canRerun(reading);
 
   const list = (
     <RunList
@@ -401,7 +452,9 @@ function Desk({
         setListOpen(false);
       }}
       pages={pages}
+      onQuery={setQuery}
       pendingMarks={handle.pendingMarks}
+      query={query}
       reading={reading}
       selected={selected}
       shown={shown}
@@ -413,6 +466,14 @@ function Desk({
   const notices = [
     ...handle.notices.map((text, at) => ({ text, at })),
     ...(notice ? [{ text: notice, at: -1 }] : []),
+    ...(focused.unknown
+      ? [
+          {
+            text: `Run ${id} holds no case ${focused.unknown}. Choose one from the list; no key marks anything until you do.`,
+            at: -2,
+          },
+        ]
+      : []),
   ];
   const step = (by: 1 | -1) => {
     const next = stepCase(order, caseId, by);
@@ -420,9 +481,16 @@ function Desk({
   };
 
   return (
-    <div className="flex min-w-0 flex-col gap-3 pb-16" data-slot="run-desk">
+    <div
+      className="flex min-w-0 flex-col gap-3 pb-16 max-lg:gap-2"
+      data-desk-keys
+      data-slot="run-desk"
+    >
+      <p aria-live="polite" className="sr-only" data-slot="desk-said">
+        {said}
+      </p>
       <RunHeader
-        canRerun={canRerun}
+        canRerun={rerunnable}
         counts={counts}
         onDownload={download}
         onRerun={async () => {
@@ -442,18 +510,23 @@ function Desk({
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Toolbar
           filters={filters}
-          onFilter={(key, value) =>
-            setFilters((held) => ({ ...held, [key]: value }))
+          onFilter={(key, values) =>
+            setFilters((held) => ({ ...held, [key]: values }))
           }
+          onSort={setSort}
           onSurface={setSurface}
           phaseName={phaseName}
           reading={reading}
           shown={shown.size}
+          sort={sort}
           surface={surface}
         />
         <Text as="span" size="xs" tone="secondary">
-          {me ? `Signed in as ${who(me)}` : null}
-          {selected.size > 0 ? ` · ${selected.size} rows selected` : ""}
+          <span className="max-lg:hidden">
+            {me ? `Signed in as ${who(me)}` : null}
+            {me && selected.size > 0 ? " · " : ""}
+          </span>
+          {selected.size > 0 ? `${plural(selected.size, "row")} selected` : ""}
         </Text>
       </div>
       {notices.map(({ text, at }) => (
@@ -461,7 +534,13 @@ function Desk({
           dismissible
           key={`${at}-${text}`}
           layout="inline"
-          onDismiss={() => (at === -1 ? setNotice(null) : handle.dismiss(at))}
+          onDismiss={() =>
+            at === -2
+              ? focus({ case: null, row: null })
+              : at === -1
+                ? setNotice(null)
+                : handle.dismiss(at)
+          }
           role="alert"
           status="warning"
           title={text}
@@ -470,7 +549,10 @@ function Desk({
 
       <div className="grid min-w-0 grid-cols-1 items-start gap-4 lg:grid-cols-[18.75rem_minmax(0,1fr)]">
         {layout.wide ? (
-          <div className="sticky top-20 max-h-[calc(100dvh-6rem)] min-w-0 overflow-y-auto">
+          <div
+            className="sticky top-20 max-h-[calc(100dvh-6rem)] min-w-0 overflow-y-auto"
+            data-desk-scroll
+          >
             {list}
           </div>
         ) : (
@@ -507,8 +589,16 @@ function Desk({
               open={listOpen}
               swipeDirection="left"
             >
-              <DrawerContent className="[--drawer-content-width:min(22rem,calc(100vw-2rem))]">
-                <div className="min-h-0 flex-1 overflow-y-auto p-2">{list}</div>
+              <DrawerContent
+                className="[--drawer-content-width:min(22rem,calc(100vw-2rem))]"
+                data-desk-keys
+              >
+                <div
+                  className="min-h-0 flex-1 overflow-y-auto p-2"
+                  data-desk-scroll
+                >
+                  {list}
+                </div>
               </DrawerContent>
             </Drawer>
           </>
@@ -576,9 +666,14 @@ function Desk({
               testCase={testCase}
             />
           </div>
+        ) : focused.unknown ? (
+          <EmptyState
+            description="Choose a case from the list to mark it."
+            title={`No case ${focused.unknown} in this run`}
+          />
         ) : (
           <EmptyState
-            description="Clear a filter to see the run's cases again."
+            description="Clear a filter or the search to see the run's cases again."
             title="No case shows"
           />
         )}

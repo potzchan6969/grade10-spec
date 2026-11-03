@@ -8,6 +8,7 @@ import {
   casePlaceholders,
   caseResult,
   expectationChoices,
+  expectationText,
   firstRow,
   keyCommand,
   markCommand,
@@ -21,7 +22,12 @@ import {
   stepCase,
   surfaceCounts,
 } from "../src/desk/model";
-import { CasePane, type CasePaneProps } from "../src/desk/ui/case-pane";
+import {
+  CasePane,
+  type CasePaneProps,
+  ExpectationPicker,
+  pickerPrompt,
+} from "../src/desk/ui/case-pane";
 import { rateText, SurfaceSummary } from "../src/desk/ui/run-header";
 import { cartRun } from "./desk-fixture";
 import { snapshotOf } from "./manual-fixture";
@@ -206,20 +212,86 @@ describe("no bulk verdict", () => {
 });
 
 describe("a fail", () => {
-  it("offers the case's expectations and the row's own expected cells", async () => {
+  it("offers only the case's own expectations, never its test data", async () => {
     const { read } = await cart();
     const reading = await read();
     const testCase = reading.caseById.get(TC19);
     if (!testCase) throw new Error("TC19 is in the cart suite");
-    const choices = expectationChoices(
-      testCase,
-      reading.rowByKey.get(`${TC19}#2`),
-    );
+    const row = reading.rowByKey.get(`${TC19}#2`);
+    const choices = expectationChoices(testCase, row);
     expect(choices.map((one) => one.text)).toEqual([
       "The row's discount row and total.",
-      "`Discount (<public code>)` −HKD20; total HKD1,280 = 1,300 − 20",
     ]);
-    expect(choices[1].index).toBe(testCase.expect.length + 2);
+    // A mark made before still reads the data cell it named.
+    expect(expectationText(testCase, row, testCase.expect.length + 2)).toBe(
+      "`Discount (<public code>)` −HKD20; total HKD1,280 = 1,300 − 20",
+    );
+  });
+
+  it("names the expectation in its own words, code marks rendered, never as backticks", async () => {
+    const html = renderToStaticMarkup(
+      <ExpectationPicker
+        choices={[
+          {
+            index: 0,
+            text: "opens `<displayed product>`'s page",
+            from: "Step 2",
+          },
+        ]}
+        onCancel={() => {}}
+        onPick={() => {}}
+      />,
+    );
+    expect(html).not.toContain("`");
+    expect(html).toContain('data-bind="&lt;displayed product&gt;"');
+    expect(pickerPrompt(2)).toBe(
+      "Pick the expectation: 1–2, ↵ none, esc cancel",
+    );
+  });
+
+  it("holds the mark bar, the picker and its prompt in the strip at the bottom of the case", async () => {
+    const { read } = await cart();
+    const reading = await read();
+    const html = renderPane(reading, `${TC19}#2`, "web", {
+      ask: { row: `${TC19}#2` },
+    });
+    const strip = html.slice(
+      html.lastIndexOf("<section", html.indexOf('data-slot="mark-strip"')),
+    );
+    expect(strip).toContain("sticky bottom-0");
+    expect(strip).toContain("Mark row 2 on Web");
+    expect(strip).toContain('data-slot="expectation-picker"');
+    expect(strip).toContain(pickerPrompt(1));
+    expect(html.indexOf('data-slot="mark-strip"')).toBeGreaterThan(
+      html.indexOf("marks, newest first"),
+    );
+  });
+
+  it("lets a pass or an n/a carry a note too", async () => {
+    const { desk, run, read } = await cart();
+    await desk.mark(run.id, [
+      {
+        id: "p1",
+        row: `${TC19}#1`,
+        surface: "web",
+        value: "pass",
+        note: "on a slow 3G",
+      },
+    ]);
+    await desk.mark(run.id, [
+      { id: "n1", row: `${TC19}#2`, surface: "web", value: "na" },
+    ]);
+    const reading = await read();
+    const pass = renderPane(reading, `${TC19}#1`, "web");
+    expect(pass).toContain("Note on this pass");
+    expect(pass).toContain("on a slow 3G");
+    expect(pass).not.toContain('data-slot="triage"');
+    expect(renderPane(reading, `${TC19}#2`, "web")).toContain(
+      "Note on this n/a",
+    );
+    expect(renderPane(reading, `${TC19}#1`, "mobile")).not.toContain(
+      'data-slot="mark-note"',
+    );
   });
 
   it("offers only the triages its surface and mark may carry", () => {
@@ -284,7 +356,13 @@ describe("test data in use", () => {
     const spec = reading.view.spec;
     expect(placeholderAnswer("<g10url>", undefined, spec.env)).toEqual({
       kind: "environment",
-      value: "staging-1",
+      value: "https://grade10-stg.com",
+      known: true,
+    });
+    expect(placeholderAnswer("<g10url>", undefined, "uat")).toEqual({
+      kind: "environment",
+      value: "uat",
+      known: false,
     });
     expect(
       placeholderAnswer(
@@ -295,7 +373,7 @@ describe("test data in use", () => {
     ).toEqual({
       kind: "follows",
       from: "<g10url>",
-      value: "staging-1/store/collections",
+      value: "https://grade10-stg.com/store/collections",
     });
     expect(placeholderAnswer("<order id>", "<order>'s id", spec.env)).toEqual({
       kind: "follows",
@@ -324,9 +402,9 @@ describe("filters", () => {
     ]);
     const reading = await read();
     const before = JSON.stringify(reading.view);
-    const failing = shownCases(reading, { result: "fail" }, "web");
+    const failing = shownCases(reading, { result: ["fail"] }, "web");
     expect([...failing]).toEqual([TC19]);
-    const critical = shownCases(reading, { severity: "critical" }, "web");
+    const critical = shownCases(reading, { severity: ["critical"] }, "web");
     expect(critical.size).toBeGreaterThan(0);
     expect(critical.size).toBeLessThan(reading.view.spec.cases.length);
     expect(caseResult(reading, TC19, "web")).toBe("fail");
@@ -342,6 +420,7 @@ function renderPane(
   reading: ReturnType<typeof readRun>,
   row: string,
   surface: CasePaneProps["surface"],
+  extra: Partial<CasePaneProps> = {},
 ) {
   const testCase = reading.caseById.get(reading.rowByKey.get(row)?.case ?? "");
   if (!testCase) throw new Error(`no case for ${row}`);
@@ -367,6 +446,7 @@ function renderPane(
     onAmend: () => {},
     onObjects: () => {},
     onHistory: () => {},
+    ...extra,
   };
   return renderToStaticMarkup(
     <MemoryRouter>

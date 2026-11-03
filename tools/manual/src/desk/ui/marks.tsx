@@ -21,6 +21,17 @@ const MARK_CHIP: Record<MarkValue, string> = {
   na: "bg-muted text-muted-foreground",
 };
 
+/** Each word's letter, so a pip never says it by colour alone; to do is
+ * the empty box. */
+export const MARK_LETTER: Record<MarkValue, string> = {
+  pass: "P",
+  fail: "F",
+  blocked: "B",
+  skipped: "S",
+  na: "–",
+  todo: "",
+};
+
 export function Pip({
   value,
   pending = false,
@@ -34,12 +45,15 @@ export function Pip({
     <i
       aria-hidden
       className={cn(
-        "block size-2 shrink-0 rounded-[2px]",
-        MARK_FILL[value],
+        "flex size-3.5 shrink-0 items-center justify-center rounded-[3px] font-bold font-mono text-[0.5625rem] not-italic leading-none",
+        MARK_CHIP[value],
         pending && "animate-pulse",
       )}
+      data-pip={value}
       title={title}
-    />
+    >
+      {MARK_LETTER[value]}
+    </i>
   );
 }
 
