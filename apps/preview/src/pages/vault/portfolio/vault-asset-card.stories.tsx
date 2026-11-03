@@ -99,20 +99,7 @@ export const LiveAuction: Story = {
   },
 };
 
-<<<<<<< HEAD
 /** Boneyard skeleton while the holdings fetch settles — also the capture target at the card's 288px grid width. */
-=======
-/** Boneyard skeleton while the holdings fetch settles. */
-export const Loading: Story = {
-  parameters: {
-    verification: { caseId: "vc_368de28d-6edb-43c2-8939-2dc46e8a2385" },
-  },
-  args: { asset: assetWithStatus("In Vault"), loading: true },
-  render: ({ asset }) => <VaultAssetCard asset={asset} loading />,
-};
-
-/** Boneyard capture target — `loading` at the card's 288px grid width. */
->>>>>>> origin/main
 export const BoneyardCapture: Story = {
   parameters: {
     verification: { caseId: "vc_6f9060c3-474a-4bf3-acb0-0334665eb46c" },
