@@ -79,6 +79,7 @@ Most of a design is not a component set — it is plain auto-layout frames — a
 | Auto-layout frame, vertical | `<VStack gap={rung}>` |
 | Auto-layout frame, horizontal | `<HStack gap={rung}>` |
 | A frame that exists only to centre its child | `<Center>`, with `axis="horizontal"` or `"vertical"` when only one axis centres |
+| The page column under the nav, centred with the shared side and top padding | `<PageFrame>`, with `size="narrow"` for a single content column; bottom padding goes in `className` |
 | Wrap | `wrap` on the stack |
 | The alignment control | `hAlign` / `vAlign` — named after the axis you can see, exactly as Figma's control is, so `hAlign="center"` moves what dragging the dot horizontally moves |
 | "Space between" distribution | `vAlign="space-between"` on a `VStack`, `hAlign="space-between"` on an `HStack` |
