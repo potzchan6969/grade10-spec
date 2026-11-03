@@ -33,6 +33,9 @@ type Story = StoryObj<typeof meta>;
 const pause = (ms = 900) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_9dd4881e-845e-46e5-9112-293d70efd534" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -57,6 +60,9 @@ export const Default: Story = {
 };
 
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_59fc1319-7ab9-4a57-8d8e-b3895a214887" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);
@@ -139,6 +145,9 @@ async function ringOf(control: HTMLElement) {
  * keeps room above and below it for its whole focus ring.
  */
 export const NarrowPillsKeepTheirFocusRing: Story = {
+  parameters: {
+    verification: { caseId: "vc_66552b55-16c4-4811-9947-7ca8e3e3bca4" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const row = canvasElement.querySelector(
@@ -159,6 +168,9 @@ export const NarrowPillsKeepTheirFocusRing: Story = {
 };
 
 export const NarrowSortAppliesOnChoose: Story = {
+  parameters: {
+    verification: { caseId: "vc_963970a7-c00c-4373-afcc-48a0e21dacbb" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);
@@ -190,6 +202,9 @@ export const NarrowSortAppliesOnChoose: Story = {
 };
 
 export const NarrowFacetClearDraft: Story = {
+  parameters: {
+    verification: { caseId: "vc_768f7fac-e1d6-48df-bdec-0da607045ee9" },
+  },
   globals: { viewport: { value: "mobile1" } },
   args: {
     selection: { types: ["booster-box"] },

@@ -36,6 +36,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Point at a code; today's count for this phone and Find by reference. */
 export const Ready: Story = {
+  parameters: {
+    verification: { caseId: "vc_f0b38d5f-ce69-4215-affd-c86639760353" },
+  },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getByText("Point at a code")).toBeVisible();
@@ -51,6 +54,9 @@ export const Ready: Story = {
 
 /** The browser asks for the camera; a line under it says why. */
 export const CameraAsks: Story = {
+  parameters: {
+    verification: { caseId: "vc_a9cf89d5-d8d3-4fba-ba7d-539f6adb7429" },
+  },
   name: "The camera asks",
   args: { status: "asking", admittedToday: "0" },
   play: async ({ canvasElement }) => {
@@ -62,6 +68,9 @@ export const CameraAsks: Story = {
 
 /** A code was read: shown at once, given up after 4 seconds. */
 export const Checking: Story = {
+  parameters: {
+    verification: { caseId: "vc_fda2f9c4-fef4-43ba-939b-6f16a7d81447" },
+  },
   args: { status: "checking" },
   play: async ({ canvasElement }) => {
     await expect(within(canvasElement).getByRole("status")).toHaveTextContent(
@@ -72,6 +81,9 @@ export const Checking: Story = {
 
 /** The browser was told no: how to allow it, and Find by reference. */
 export const CameraBlocked: Story = {
+  parameters: {
+    verification: { caseId: "vc_267c603e-95c2-4295-a353-c664f502cd52" },
+  },
   name: "Camera blocked",
   args: { status: "blocked" },
   play: async ({ canvasElement, args }) => {
@@ -89,6 +101,9 @@ export const CameraBlocked: Story = {
 
 /** No camera, told apart from a blocked one; a handheld scanner can type. */
 export const NoCamera: Story = {
+  parameters: {
+    verification: { caseId: "vc_aba185cf-c9d6-49ba-b534-05e2d797dce1" },
+  },
   name: "No camera",
   args: { status: "noCamera" },
   play: async ({ canvasElement }) => {
@@ -100,6 +115,9 @@ export const NoCamera: Story = {
 
 /** The consumer's own video element, placed behind the aiming square. */
 export const WithCamera: Story = {
+  parameters: {
+    verification: { caseId: "vc_d394ba35-f149-4cc6-83e8-acae15138bb8" },
+  },
   name: "With the camera's picture",
   args: {
     camera: (

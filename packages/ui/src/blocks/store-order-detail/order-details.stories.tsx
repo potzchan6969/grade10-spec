@@ -97,6 +97,9 @@ function orderDetailsRevealed(canvasElement: HTMLElement): boolean {
 }
 
 export const ItemCoupon: Story = {
+  parameters: {
+    verification: { caseId: "vc_8f5ea365-7cad-4106-85f2-8aa975ff80f5" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
@@ -115,6 +118,9 @@ export const ItemCoupon: Story = {
 
 /** Order-wide promo in the summary; lines stay at list price. */
 export const OrderDiscount: Story = {
+  parameters: {
+    verification: { caseId: "vc_be8ccddc-f3af-4ad4-85a3-e9fb8789077c" },
+  },
   args: {
     lines: FILLED_LINES_ORDER_DISCOUNT,
     summary: FILLED_SUMMARY_ORDER_DISCOUNT,
@@ -131,6 +137,9 @@ export const OrderDiscount: Story = {
 
 /** Order promo plus points bill-credit in the summary. */
 export const WithPointsCredit: Story = {
+  parameters: {
+    verification: { caseId: "vc_b4f1fd27-08aa-4924-bce6-a9d1aafdfcd0" },
+  },
   args: {
     lines: FILLED_LINES_ORDER_DISCOUNT,
     summary: FILLED_SUMMARY_WITH_POINTS,
@@ -146,6 +155,9 @@ export const WithPointsCredit: Story = {
 };
 
 export const Pickup: Story = {
+  parameters: {
+    verification: { caseId: "vc_b00ef76e-3e25-4245-aa96-a185d4e9e054" },
+  },
   args: {
     status: "pickup",
     delivery: PICKUP_DELIVERY,
@@ -160,6 +172,9 @@ export const Pickup: Story = {
 };
 
 export const InStore: Story = {
+  parameters: {
+    verification: { caseId: "vc_5cdb9e58-ab1e-4268-8e6f-d93e027f4186" },
+  },
   args: {
     status: "completed",
     delivery: undefined,
@@ -182,6 +197,9 @@ export const InStore: Story = {
 };
 
 export const NoOptionalGroups: Story = {
+  parameters: {
+    verification: { caseId: "vc_2a1ca883-c3f7-4301-82b5-7fbaac28242a" },
+  },
   args: {
     delivery: undefined,
     loyaltyPoints: undefined,
@@ -212,6 +230,9 @@ export const NoOptionalGroups: Story = {
 };
 
 export const PaidTotalWithoutSubtotal: Story = {
+  parameters: {
+    verification: { caseId: "vc_b979c01a-ce8f-4f4e-8f4f-bdd9642d7bf1" },
+  },
   args: {
     delivery: undefined,
     loyaltyPoints: undefined,
@@ -245,6 +266,9 @@ const stepState = (canvasElement: HTMLElement, label: string) =>
 
 /** Handed to the carrier, not yet delivered: Shipped, with Shipping current. */
 export const ParcelInTransit: Story = {
+  parameters: {
+    verification: { caseId: "vc_c4b779d6-2199-4e99-a3b2-2a11ba4adf44" },
+  },
   args: { status: "shipped", delivery: PARCEL_IN_TRANSIT },
   play: async ({ canvasElement }) => {
     await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
@@ -255,6 +279,9 @@ export const ParcelInTransit: Story = {
 
 /** Every parcel delivered: Completed, with every step reached. */
 export const ParcelDelivered: Story = {
+  parameters: {
+    verification: { caseId: "vc_6c2d37af-cf77-4f8d-b6d2-7fe1f5838263" },
+  },
   args: { status: "completed", delivery: PARCEL_DELIVERED },
   play: async ({ canvasElement }) => {
     await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));

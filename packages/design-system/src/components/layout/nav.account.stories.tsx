@@ -20,6 +20,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Signed-out: primary Sign In button instead of the account icon. */
 export const SignIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_6dc5c216-9dbe-4dd6-ad2b-5e889ccf37d8" },
+  },
   name: "Sign In button",
   args: {
     accountPresentation: "sign-in",
@@ -33,6 +36,9 @@ export const SignIn: Story = {
 
 /** Account icon only — no search or cart. */
 export const IconOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_46c7da22-da7c-481c-ac0e-0d55dcdc31f5" },
+  },
   name: "Account icon only",
   args: {
     promo: null,
@@ -56,6 +62,9 @@ export const IconOnly: Story = {
 
 /** Cart omitted when no handler — absent, not inert. */
 export const WithoutCart: Story = {
+  parameters: {
+    verification: { caseId: "vc_7708c0eb-2e85-48bd-834a-e3843f1dd764" },
+  },
   name: "Without cart",
   args: {
     onAccountClick: fn(),

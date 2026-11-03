@@ -40,6 +40,9 @@ function LedgerWithDetails(args: Story["args"]) {
 }
 
 export const Incentives: Story = {
+  parameters: {
+    verification: { caseId: "vc_b367c00d-7dea-422b-a355-fcfde075f6b5" },
+  },
   args: {
     dailyIncentives: DAILY_INCENTIVES,
     payoutRequests: PAYOUT_REQUESTS,
@@ -58,6 +61,10 @@ export const Incentives: Story = {
 
 export const Withdrawal: Story = {
   ...Incentives,
+  parameters: {
+    ...Incentives.parameters,
+    verification: { caseId: "vc_5c04dd3a-b776-40f8-b14c-46e7d9b8d16a" },
+  },
   args: { ...Incentives.args, tab: "withdrawal" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -81,5 +88,9 @@ export const Withdrawal: Story = {
 
 export const Narrow: Story = {
   ...Incentives,
+  parameters: {
+    ...Incentives.parameters,
+    verification: { caseId: "vc_27450839-a858-4e96-a0e5-da9cba7d940b" },
+  },
   globals: { viewport: { value: "mobile1" } },
 };

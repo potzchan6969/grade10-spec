@@ -20,6 +20,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The title, the days, hours and venue, and the line about the show. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_4d90a52b-638b-4d40-8f19-4b6b74533358" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
@@ -31,6 +34,9 @@ export const Default: Story = {
 
 /** At 390 px: a smaller title and facts. */
 export const Phone: Story = {
+  parameters: {
+    verification: { caseId: "vc_520759a1-a73d-455e-8e92-d65dc6b4b3f7" },
+  },
   decorators: [
     (Story) => (
       <div className="w-[358px]">
@@ -46,6 +52,9 @@ export const Phone: Story = {
 
 /** Day 2 of the event: On Today. */
 export const OnToday: Story = {
+  parameters: {
+    verification: { caseId: "vc_40fd982c-8dd6-4acb-923c-b88f75bb3f26" },
+  },
   name: "On Today",
   args: {
     badges: [{ label: "On Today", tone: "today" }],
@@ -58,6 +67,9 @@ export const OnToday: Story = {
 
 /** Signed in and holding tickets: the banner leads to them. */
 export const HoldingTickets: Story = {
+  parameters: {
+    verification: { caseId: "vc_608046fa-8cdc-4852-81d5-3643f8c0ca48" },
+  },
   name: "Holding Tickets",
   args: {
     notices: [
@@ -83,6 +95,9 @@ export const HoldingTickets: Story = {
 
 /** A restricted event's preview to its own audience. */
 export const RestrictedPreview: Story = {
+  parameters: {
+    verification: { caseId: "vc_bf891731-13a8-4b2f-b04f-573bd8aed783" },
+  },
   name: "Restricted Preview",
   args: {
     notices: [
@@ -107,6 +122,9 @@ export const RestrictedPreview: Story = {
 
 /** A canceled event: the badge and the refund notice. */
 export const Canceled: Story = {
+  parameters: {
+    verification: { caseId: "vc_b0f81017-da27-48f8-a59e-93ebfd198bee" },
+  },
   args: {
     badges: [{ label: "Canceled", tone: "canceled" }],
     notices: [
@@ -129,6 +147,9 @@ export const Canceled: Story = {
 
 /** The event is over. */
 export const Ended: Story = {
+  parameters: {
+    verification: { caseId: "vc_85646fa7-64ad-4778-b332-3aa4edf61fe5" },
+  },
   args: {
     badges: [{ label: "Ended", tone: "ended" }],
     notices: [

@@ -19,7 +19,11 @@ import {
   readScores,
   verifiedPngUrl,
 } from "./archive-client";
-import type { ReferenceFlag } from "./capture-stamp";
+import {
+  type ReferenceFlag,
+  UNCHANGED_LINE,
+  unchangedSinceApproval,
+} from "./capture-stamp";
 import {
   APPROVE_PANEL,
   type ApprovalBucket,
@@ -505,6 +509,14 @@ function StoryDialog({
   const [error, setError] = useState("");
   const [fullSize, setFullSize] = useState<FullSizeImage | null>(null);
   const allApproved = statusOfCase(item) === "approved";
+  const unchanged = PROFILE_ORDER.every(({ id }) => {
+    const size = item.sizes[id];
+    const drift = driftOf(size, results);
+    return unchangedSinceApproval(
+      size.status,
+      drift.kind === "ratio" ? drift.ratio : undefined,
+    );
+  });
   const canApprove = tab === "approvals" && !allApproved && !loading;
   const readingWaits = loading && (tab === "approvals" || mode === "approved");
   const trimmed = comment.trim();
@@ -793,7 +805,9 @@ function StoryDialog({
                     ? "Approval opens once the references and approvals are in."
                     : allApproved
                       ? "Every size of this story is approved."
-                      : `Approve all sizes captures the live story at desktop, tablet and mobile in ${locale}, then approves those images.`}
+                      : unchanged
+                        ? UNCHANGED_LINE
+                        : `Approve all sizes captures the live story at desktop, tablet and mobile in ${locale}, then approves those images.`}
               </p>
               <div className="verification-inline-actions">
                 <button onClick={onClose} type="button">
@@ -828,7 +842,7 @@ function StoryDialog({
                     </button>
                     <button
                       className="verification-primary"
-                      disabled={pending !== null}
+                      disabled={pending !== null || unchanged}
                       onClick={() => void approve()}
                       type="button"
                     >

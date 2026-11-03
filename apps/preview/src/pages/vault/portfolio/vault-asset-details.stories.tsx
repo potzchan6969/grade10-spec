@@ -24,6 +24,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Graded asset shows grade, cert number with verify, storage, location, and condition. */
 export const Graded: Story = {
+  parameters: {
+    verification: { caseId: "vc_87d58d7e-a665-4809-b3c4-58009c937df8" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
     verifyHref: "https://www.psacard.com/cert/63261276",
@@ -50,6 +53,9 @@ export const Graded: Story = {
 
 /** Raw asset shows storage, location, and condition. */
 export const Raw: Story = {
+  parameters: {
+    verification: { caseId: "vc_ecfd5c78-78d8-414b-86e9-031450f265e9" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[1],
     onRequestRetrieval: () => {},

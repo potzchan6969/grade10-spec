@@ -35,6 +35,9 @@ const struck = (el: HTMLElement) =>
 /** A line on the site sale: the sale price beside the struck list price,
  * each the price of one, with hidden words saying which is charged. */
 export const SalePrice: Story = {
+  parameters: {
+    verification: { caseId: "vc_7330fbc8-faa9-4cad-be11-79391274f652" },
+  },
   args: {
     item: {
       ...SAMPLE_CART_ITEMS[0],
@@ -61,6 +64,9 @@ export const SalePrice: Story = {
 
 /** A list price equal to the price is still struck through. */
 export const EqualListPrice: Story = {
+  parameters: {
+    verification: { caseId: "vc_c1ad8e9d-bc03-4650-94cc-e17e010a4e59" },
+  },
   args: {
     item: {
       ...SAMPLE_CART_ITEMS[0],
@@ -80,6 +86,9 @@ export const EqualListPrice: Story = {
 
 /** A line off the sale reads its price alone, with no hidden words. */
 export const RegularPrice: Story = {
+  parameters: {
+    verification: { caseId: "vc_b0892da4-c148-419c-9206-5400f21305ee" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(struck(canvas.getByText(String(SAMPLE_CART_ITEMS[0].price)))).toBe(
@@ -96,6 +105,9 @@ export const RegularPrice: Story = {
  * meets a site sale reaches the drawer only as `PromoState`.
  */
 export const ProductCoupon: Story = {
+  parameters: {
+    verification: { caseId: "vc_d9c6a4dc-1e07-4432-aafc-51b8a65762ce" },
+  },
   args: {
     item: {
       ...SAMPLE_CART_ITEMS[0],

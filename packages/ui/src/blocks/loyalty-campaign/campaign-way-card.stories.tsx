@@ -52,6 +52,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Something to do: the steps, then the link form in the gold band. */
 export const SendYourLink: Story = {
+  parameters: {
+    verification: { caseId: "vc_727be7fa-fcab-47ab-a935-ed11197fb5bd" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("A Pokémon card pack")).toBeVisible();
@@ -63,6 +66,9 @@ export const SendYourLink: Story = {
 };
 
 export const Checking: Story = {
+  parameters: {
+    verification: { caseId: "vc_408c12dc-27dd-4a67-8749-088d917c40ba" },
+  },
   args: {
     steps: [],
     tone: "wait",
@@ -77,6 +83,9 @@ export const Checking: Story = {
 };
 
 export const Won: Story = {
+  parameters: {
+    verification: { caseId: "vc_9cc3d0c1-a6d5-48ed-8935-9ed23169f9d8" },
+  },
   args: {
     steps: [],
     tone: "won",
@@ -87,6 +96,9 @@ export const Won: Story = {
 };
 
 export const AllGone: Story = {
+  parameters: {
+    verification: { caseId: "vc_8c67399b-9e2f-4063-883b-68e73e3241e9" },
+  },
   args: {
     kindLabel: "Sign-up win",
     title: "First 50 sign-ups",
@@ -103,6 +115,9 @@ export const AllGone: Story = {
 
 /** A scene across the top; the gift moves down beside its name. */
 export const WithCover: Story = {
+  parameters: {
+    verification: { caseId: "vc_d46768cd-86c0-4261-87ff-e6e426021cc5" },
+  },
   args: { coverImageUrl: cover },
   play: async ({ canvasElement }) => {
     const top = canvasElement.querySelector('[data-slot="campaign-way-cover"]');
@@ -117,6 +132,9 @@ export const WithCover: Story = {
 
 /** The ways stacked, as the page lays them out. */
 export const Stacked: Story = {
+  parameters: {
+    verification: { caseId: "vc_e036116a-8ca1-4be5-9b2e-57ce4d337b54" },
+  },
   decorators: [
     (Story) => (
       <div className="grid max-w-4xl gap-4">

@@ -26,6 +26,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_ac6e9cd8-e7ac-4814-b2f7-67f83eee819e" },
+  },
   render: () => (
     <Dialog>
       <DialogTrigger render={<Button variant="outline" />}>
@@ -54,6 +57,9 @@ export const Default: Story = {
 
 /** Optional muted line under the title; body prose stays in `DialogBody`. */
 export const WithSubtext: Story = {
+  parameters: {
+    verification: { caseId: "vc_5fe044d7-49c3-4783-bb3a-7186394a9c53" },
+  },
   render: () => (
     <Dialog>
       <DialogTrigger render={<Button variant="outline" />}>
@@ -85,6 +91,9 @@ export const WithSubtext: Story = {
 
 /** Keep titles short and action-oriented; a long Title Case title truncates. */
 export const LongTitle: Story = {
+  parameters: {
+    verification: { caseId: "vc_035e3982-de36-4919-a025-c527795d0ffe" },
+  },
   render: () => (
     <Dialog>
       <DialogTrigger render={<Button variant="outline" />}>
@@ -114,6 +123,9 @@ export const LongTitle: Story = {
 
 /** `DialogFooter` can supply its own close button instead. */
 export const WithFooterClose: Story = {
+  parameters: {
+    verification: { caseId: "vc_1bd806b0-f9ca-4c84-a1c2-d7a472578777" },
+  },
   render: () => (
     <Dialog>
       <DialogTrigger render={<Button variant="outline" />}>
@@ -135,6 +147,9 @@ export const WithFooterClose: Story = {
 };
 
 export const WithForm: Story = {
+  parameters: {
+    verification: { caseId: "vc_71052f1d-940c-4be2-964e-56f5d879bad3" },
+  },
   render: () => (
     <Dialog>
       <DialogTrigger render={<Button variant="outline" />}>
@@ -172,6 +187,9 @@ export const WithForm: Story = {
 
 /** Set `showCloseButton={false}` on the header when the footer already offers a way out. */
 export const WithoutCloseButton: Story = {
+  parameters: {
+    verification: { caseId: "vc_a2e687fe-06b6-486d-94f2-c260b08d4756" },
+  },
   render: () => (
     <Dialog>
       <DialogTrigger render={<Button variant="outline" />}>
@@ -221,6 +239,9 @@ async function ringOf(control: HTMLElement) {
  * edge on every side, and the controls still span the header's column.
  */
 export const FullWidthControls: Story = {
+  parameters: {
+    verification: { caseId: "vc_6e156e35-5838-4d68-ba62-30a14fc5437f" },
+  },
   render: () => (
     <Dialog defaultOpen>
       <DialogContent>
@@ -274,6 +295,9 @@ export const FullWidthControls: Story = {
 
 /** Tall body content scrolls between the pinned header and footer. */
 export const ScrollableBody: Story = {
+  parameters: {
+    verification: { caseId: "vc_8b24f2f0-ce20-4b41-90d5-92063fcee449" },
+  },
   render: () => (
     <Dialog>
       <DialogTrigger render={<Button variant="outline" />}>

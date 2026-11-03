@@ -30,6 +30,9 @@ type Story = StoryObj<typeof meta>;
 /** The item's card: art, name, description, deadline where named, points.
  * A press reports the reward's id and redeems nothing. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_3065cb68-a867-4285-9c9d-72db6a7a38dc" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button"));
@@ -39,6 +42,9 @@ export const Default: Story = {
 
 /** The discount coupon draws the gift tile with the voucher cutouts. */
 export const Coupon: Story = {
+  parameters: {
+    verification: { caseId: "vc_9becf045-49aa-4e5b-b1a3-32d617ce525a" },
+  },
   args: { item: REWARDS[1] },
   play: async ({ canvasElement }) => {
     expect(
@@ -50,6 +56,9 @@ export const Coupon: Story = {
 /** A reward the balance cannot pay stays pressable — affordability is only
  * read here; the checkout surface does the refusing. */
 export const NotAffordable: Story = {
+  parameters: {
+    verification: { caseId: "vc_4536ae46-10ed-4737-a3db-d518fdb63b40" },
+  },
   args: { item: REWARDS[2], affordable: false },
   play: async ({ canvasElement }) => {
     expect(

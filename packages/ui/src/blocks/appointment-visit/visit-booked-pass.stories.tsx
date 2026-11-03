@@ -81,6 +81,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The pass first, its acts under it, and what to know beside it. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_6ddb6505-0e85-45ea-a4e2-fc2d42149ba8" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -103,6 +106,9 @@ export const Default: Story = {
 
 /** Taking the calendar file says it was saved. */
 export const CalendarSaved: Story = {
+  parameters: {
+    verification: { caseId: "vc_437ce05e-98ea-49ff-8a4f-f15662e8613d" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const link = canvas.getByRole("link", { name: "Add to calendar" });
@@ -116,6 +122,9 @@ export const CalendarSaved: Story = {
 
 /** Paid at booking: the receipt line, and what was paid on the pass. */
 export const PaidAndBooked: Story = {
+  parameters: {
+    verification: { caseId: "vc_80621d95-6dbb-48e5-9b2f-dd1b3d1b1259" },
+  },
   args: {
     receipt: "Paid HK$100.00 deposit. Your receipt is in that email.",
     paid: {
@@ -137,10 +146,18 @@ export const PaidAndBooked: Story = {
 };
 
 /** Booked for someone else: their name on the pass. */
-export const ForSomeoneElse: Story = { args: { name: "Ben Chan" } };
+export const ForSomeoneElse: Story = {
+  parameters: {
+    verification: { caseId: "vc_937e39aa-c841-4b65-96df-8cfd07251a0f" },
+  },
+  args: { name: "Ben Chan" },
+};
 
 /** No name on the visit: the pass names no one. */
 export const NoName: Story = {
+  parameters: {
+    verification: { caseId: "vc_08c8e93c-6d47-433e-8e7a-602eda83402b" },
+  },
   args: { name: null },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -149,5 +166,8 @@ export const NoName: Story = {
 };
 
 export const Phone: Story = {
+  parameters: {
+    verification: { caseId: "vc_1dcef786-e325-41b5-a502-0a4db28f71f2" },
+  },
   globals: { viewport: { value: "mobile1" } },
 };

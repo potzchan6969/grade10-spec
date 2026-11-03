@@ -29,6 +29,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Points applied: the credit shows in the summary with Remove, and the estimate drops by it. */
 export const PointsApplied: Story = {
+  parameters: {
+    verification: { caseId: "vc_e70f5d90-acae-460a-a66b-fe9c22892b89" },
+  },
   args: { pointsState: POINTS_APPLIED, estimatedTotal: APPLIED_TOTAL },
   play: () => {
     const canvas = drawer();
@@ -42,6 +45,9 @@ export const PointsApplied: Story = {
  * no verification copy or gate yet, so this shows the disabled checkout only.
  */
 export const VerificationRequired: Story = {
+  parameters: {
+    verification: { caseId: "vc_3226ff37-9ad2-4ce1-b431-e6f2b05a3aff" },
+  },
   args: { checkoutDisabled: true },
   play: () => {
     const canvas = drawer();
@@ -56,6 +62,7 @@ export const VerificationRequired: Story = {
 export const CheckoutRedirecting: Story = {
   args: { checkout: "pending" },
   parameters: {
+    verification: { caseId: "vc_3a4a7d30-93d0-48c3-a22f-924dedac6eee" },
     journeys: [
       "grade10-site-store-checkout-US-01",
       "g10.store-cart-drawer.US6",
@@ -78,6 +85,9 @@ export const CheckoutRedirecting: Story = {
 
 /** The redirect fails: the button restores and a toast says checkout did not open. */
 export const CheckoutFailed: Story = {
+  parameters: {
+    verification: { caseId: "vc_2a4fa0b5-f9a1-431b-8cf9-e7c00cc186e6" },
+  },
   args: { checkout: "failed" },
   play: async () => {
     const canvas = drawer();

@@ -30,6 +30,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The month heads a card of that month's entries. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_fabc4bc9-5181-469d-b6b1-06bb0c36eb16" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("October 2026")).toBeInTheDocument();
@@ -42,6 +45,9 @@ export const Default: Story = {
 /** The icon names the record — a redemption's gift, an order's bag, a
  * top-up's coin, credits' hand, an expiry's clock, an adjustment's sparkle. */
 export const Icons: Story = {
+  parameters: {
+    verification: { caseId: "vc_69cc2697-1268-44e7-9552-a7207e6532bc" },
+  },
   args: {
     entries: SETTLED.filter((entry) => entry.icon),
     month: "August 2026",
@@ -56,6 +62,9 @@ export const Icons: Story = {
 /** The pending variant: its own header, hourglass tiles, brand deltas, and
  * no dates — nothing has landed yet. */
 export const Pending: Story = {
+  parameters: {
+    verification: { caseId: "vc_e6469643-3839-4005-9f2a-c4344934c2f2" },
+  },
   args: {
     entries: PENDING,
     header: {
@@ -74,6 +83,9 @@ export const Pending: Story = {
 
 /** An entry whose month the consumer did not supply lists ungrouped. */
 export const Ungrouped: Story = {
+  parameters: {
+    verification: { caseId: "vc_95739a49-fb0d-4184-b161-c79e20889ef9" },
+  },
   args: {
     entries: [
       {

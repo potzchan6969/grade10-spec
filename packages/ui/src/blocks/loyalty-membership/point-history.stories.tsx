@@ -27,6 +27,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Totals on top, filters, what is on the way, then the months. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_3f405747-9b4f-44b6-9502-85d0b3a7a737" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("440 pts")).toBeInTheDocument();
@@ -40,6 +43,9 @@ export const Default: Story = {
 
 /** Each tab answers one track: Earned hides the spends, Pending the months. */
 export const Filtered: Story = {
+  parameters: {
+    verification: { caseId: "vc_e4fb7d89-5b76-4172-843e-3bd14cc6df79" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("tab", { name: /^Earned/ }));
@@ -53,6 +59,9 @@ export const Filtered: Story = {
 
 /** A purchase: the order tile, the order number, points earned. */
 export const Purchase: Story = {
+  parameters: {
+    verification: { caseId: "vc_cd9d6f45-7e80-4979-9849-b4f50c728b8c" },
+  },
   args: {
     state: {
       status: "ready",
@@ -80,6 +89,9 @@ export const Purchase: Story = {
 
 /** A points top-up bought as a pack, credited at once. */
 export const TopUp: Story = {
+  parameters: {
+    verification: { caseId: "vc_1bae180f-059f-4006-80f6-148ac1915a02" },
+  },
   args: {
     state: {
       status: "ready",
@@ -111,6 +123,9 @@ export const TopUp: Story = {
 
 /** A reward redeemed: points leave, the reward's name is the context. */
 export const RewardRedeemed: Story = {
+  parameters: {
+    verification: { caseId: "vc_3c7bd781-ebd3-440e-9172-eb449a58f229" },
+  },
   args: {
     state: {
       status: "ready",
@@ -140,6 +155,9 @@ export const RewardRedeemed: Story = {
 
 /** An operator's credit on the balance — a refund made good, say. */
 export const PointsAdjusted: Story = {
+  parameters: {
+    verification: { caseId: "vc_2a192d91-feaf-4a41-955f-01a4ff7d3395" },
+  },
   args: {
     state: {
       status: "ready",
@@ -167,6 +185,9 @@ export const PointsAdjusted: Story = {
 
 /** Points spent straight off an order's total at checkout. */
 export const CreditsAtCheckout: Story = {
+  parameters: {
+    verification: { caseId: "vc_8e9fe31a-3290-403d-ba55-4df89b1222bc" },
+  },
   args: {
     state: {
       status: "ready",
@@ -192,10 +213,18 @@ export const CreditsAtCheckout: Story = {
   },
 };
 
-export const Loading: Story = { args: { state: { status: "loading" } } };
+export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_67ef2bd0-4aa4-4064-9bec-0eeeb17c4dc2" },
+  },
+  args: { state: { status: "loading" } },
+};
 
 /** Nothing earned, nothing pending: the empty state points at the shop. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_d8afa929-ea0e-4e92-8884-a555ace66523" },
+  },
   args: {
     state: {
       status: "empty",

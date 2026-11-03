@@ -28,13 +28,25 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** Unlabelled, this forwards straight to `Separator`. */
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_e47de25d-cf56-4a16-8de4-67f50c6143fc" },
+  },
+};
 
 /** The labelled case: a line, the label, a line. */
-export const WithLabel: Story = { args: { label: "or" } };
+export const WithLabel: Story = {
+  parameters: {
+    verification: { caseId: "vc_754889c7-c8ec-474c-8bac-e25b94be785f" },
+  },
+  args: { label: "or" },
+};
 
 /** In context — the reason the labelled case exists. */
 export const BetweenContent: Story = {
+  parameters: {
+    verification: { caseId: "vc_a41f4ede-fbcb-4e4c-ae6f-f91199bd81e3" },
+  },
   args: { label: "or" },
   render: (args) => (
     <div className="flex flex-col gap-4">
@@ -47,6 +59,9 @@ export const BetweenContent: Story = {
 
 /** Vertical needs a parent with a height, since the line grows to fill it. */
 export const Vertical: Story = {
+  parameters: {
+    verification: { caseId: "vc_bef2539c-0524-455f-b0a9-ac5db9349a54" },
+  },
   args: { orientation: "vertical" },
   render: (args) => (
     <div className="flex h-24 flex-row items-stretch gap-4">
@@ -59,6 +74,9 @@ export const Vertical: Story = {
 
 /** A vertical label pads the block axis instead of the inline one. */
 export const VerticalWithLabel: Story = {
+  parameters: {
+    verification: { caseId: "vc_c6506de8-7bbd-4421-8f9e-5c51a8597b88" },
+  },
   args: { orientation: "vertical", label: "or" },
   render: (args) => (
     <div className="flex h-40 flex-row items-stretch gap-4">
@@ -71,5 +89,8 @@ export const VerticalWithLabel: Story = {
 
 /** A consumer's own `aria-label` wins over the rendered label. */
 export const CustomAccessibleName: Story = {
+  parameters: {
+    verification: { caseId: "vc_ed88f325-0ffe-485a-b673-b5dbee73a203" },
+  },
   args: { label: "or", "aria-label": "Alternative sign-in methods" },
 };

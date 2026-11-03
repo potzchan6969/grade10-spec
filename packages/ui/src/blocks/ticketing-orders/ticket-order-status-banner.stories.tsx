@@ -33,6 +33,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Held, counting down, with the way back to Stripe. */
 export const Held: Story = {
+  parameters: {
+    verification: { caseId: "vc_765d67d6-a04f-49c1-bdae-ffb068f9849f" },
+  },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const region = canvas.getByRole("region", { name: "Held for" });
@@ -47,6 +50,9 @@ export const Held: Story = {
 
 /** The hold reached zero. */
 export const Checking: Story = {
+  parameters: {
+    verification: { caseId: "vc_68ba7f51-9d14-44fd-a988-a8ad8d78cc29" },
+  },
   args: {
     kind: "checking",
     copy: {
@@ -64,6 +70,9 @@ export const Checking: Story = {
 };
 
 export const PartRefunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_09767de8-919f-4cad-8096-0cc2096099f7" },
+  },
   name: "One ticket refunded",
   args: {
     kind: "partRefunded",
@@ -82,6 +91,9 @@ export const PartRefunded: Story = {
 };
 
 export const Refunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_4c59a6d9-5e36-4c41-956c-d09e15fd4c95" },
+  },
   name: "Fully refunded",
   args: {
     kind: "refunded",
@@ -100,6 +112,9 @@ export const Refunded: Story = {
 };
 
 export const EventCancelled: Story = {
+  parameters: {
+    verification: { caseId: "vc_551018ba-fd59-481e-8c05-d793e6183f1c" },
+  },
   name: "Event cancelled",
   args: {
     kind: "eventCancelled",
@@ -119,6 +134,9 @@ export const EventCancelled: Story = {
 
 /** A guest in the browser that bought: see the order anywhere. */
 export const Guest: Story = {
+  parameters: {
+    verification: { caseId: "vc_97f24c21-9193-464f-b8f3-cf2795629740" },
+  },
   name: "Guest in the buying browser",
   args: {
     kind: "guest",

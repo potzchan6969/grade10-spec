@@ -20,9 +20,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Shipped: Story = {};
+export const Shipped: Story = {
+  parameters: {
+    verification: { caseId: "vc_e6054a9e-e569-4066-9db2-ec5e74aedfc9" },
+  },
+};
 
 export const Processing: Story = {
+  parameters: {
+    verification: { caseId: "vc_0c350507-e2db-4476-9709-bfa8752a0247" },
+  },
   args: {
     status: "processing",
     statusLabel: ORDER_DETAILS_COPY.status.processing,
@@ -30,6 +37,9 @@ export const Processing: Story = {
 };
 
 export const Refunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_a2b41dd5-688b-40ab-95a8-16f7c626ea5b" },
+  },
   args: {
     status: "refunded",
     statusLabel: ORDER_DETAILS_COPY.status.refunded,

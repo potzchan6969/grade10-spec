@@ -19,6 +19,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Silver: free to join, the plain border — not the rung held. */
 export const Silver: Story = {
+  parameters: {
+    verification: { caseId: "vc_309438d7-51eb-4d29-ad1d-296da25d57e5" },
+  },
   args: {
     tier: "Silver",
     caption: "Free to join",
@@ -37,6 +40,9 @@ export const Silver: Story = {
 
 /** Gold is the rung held: the primary border and its tinted shadow mark it. */
 export const Gold: Story = {
+  parameters: {
+    verification: { caseId: "vc_d4e15723-97ba-4e34-8505-3b77bd474def" },
+  },
   args: { currentTier: true },
   play: async ({ canvasElement }) => {
     const card = canvasElement.querySelector('[data-slot="tier-info-card"]');
@@ -47,6 +53,9 @@ export const Gold: Story = {
 
 /** Black: held by invitation, so no threshold is asked. */
 export const Black: Story = {
+  parameters: {
+    verification: { caseId: "vc_9fded2f8-f17d-4fb7-bd49-14e2ed2ea54b" },
+  },
   args: {
     tier: "Black",
     caption: "By invitation only",
@@ -60,6 +69,9 @@ export const Black: Story = {
 
 /** The card fills a narrow column; its designed cap only applies at `sm` up. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_0946c1c9-5359-42d8-baf9-66353e078cb2" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const card = canvasElement.querySelector('[data-slot="tier-info-card"]');

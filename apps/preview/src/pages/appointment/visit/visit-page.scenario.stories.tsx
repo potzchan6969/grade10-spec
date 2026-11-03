@@ -126,4 +126,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** A free visit, booked, before the day. */
-export const Scenario: Story = {};
+export const Scenario: Story = {
+  parameters: {
+    verification: { caseId: "vc_d31fec21-cb8c-4f66-aa5a-1bbee2ce86dd" },
+  },
+};

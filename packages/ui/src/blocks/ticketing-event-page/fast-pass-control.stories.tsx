@@ -152,6 +152,9 @@ type Story = StoryObj<typeof meta>;
 /** One `+ Fast Pass` for everyone on the pass; pressing it adds both days
  * and it grows into the pill with a dot per day. */
 export const Everyone: Story = {
+  parameters: {
+    verification: { caseId: "vc_a7e230f2-c035-4c50-adbb-82deff4e3c25" },
+  },
   render: () => <Demo />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -186,6 +189,9 @@ export const Everyone: Story = {
 
 /** At 390 px: the price moves under the label. */
 export const EveryonePhone: Story = {
+  parameters: {
+    verification: { caseId: "vc_be3d6de4-9cd1-4f48-98e9-8695ca210ed6" },
+  },
   name: "Everyone Phone",
   decorators: [
     (Story) => (
@@ -204,6 +210,9 @@ export const EveryonePhone: Story = {
 /** Choose per person: a pill per ticket, the tally, the nudge and Add for
  * everyone. */
 export const PerPerson: Story = {
+  parameters: {
+    verification: { caseId: "vc_70a92047-69f9-4483-a187-a5910275c41b" },
+  },
   name: "Per Person",
   render: () => (
     <Demo
@@ -233,6 +242,9 @@ export const PerPerson: Story = {
 
 /** A one-day pass: one day at most, so the pill has no + and no dots. */
 export const OneDay: Story = {
+  parameters: {
+    verification: { caseId: "vc_9421b451-da55-4baf-a73b-45d8c23c2097" },
+  },
   name: "One Day",
   render: () => (
     <Demo maxDays={1} start={{ mode: "everyone", all: 1, per: {} }} />
@@ -250,6 +262,9 @@ export const OneDay: Story = {
 
 /** One ticket: nobody to split from, so no Choose per person. */
 export const OnePerson: Story = {
+  parameters: {
+    verification: { caseId: "vc_0a30cc27-acb9-41a0-a3ee-7c1173cbaa27" },
+  },
   name: "One Person",
   render: () => <Demo people={["Adult"]} />,
   play: async ({ canvasElement }) => {

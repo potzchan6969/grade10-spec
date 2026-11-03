@@ -36,6 +36,9 @@ const CHOSEN = { qty: { adult2: 2, child2: 1 } } as const;
 
 /** Nothing chosen: no bar, Your Order last. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_cc370279-1794-4176-89a3-24c39dad409f" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
@@ -50,6 +53,9 @@ export const Default: Story = {
 /** A ticket chosen: the bar pins with the total, the saving and the jump
  * to Your Order. */
 export const Chosen: Story = {
+  parameters: {
+    verification: { caseId: "vc_abba3767-b197-4a0c-9d49-25cd20475e18" },
+  },
   args: { choice: CHOSEN },
   play: async ({ canvasElement }) => {
     const bar = within(canvasElement).getByRole("region", {
@@ -67,6 +73,9 @@ export const Chosen: Story = {
 /** Fast Pass per person: one pill per ticket, the tally and Add for
  * everyone. */
 export const FastPassPerPerson: Story = {
+  parameters: {
+    verification: { caseId: "vc_062e64c7-6000-4025-80d3-e71c37a27b47" },
+  },
   name: "Fast Pass per person",
   args: { choice: { ...CHOSEN, fast: { two: { all: 1 } } } },
   play: async ({ canvasElement }) => {

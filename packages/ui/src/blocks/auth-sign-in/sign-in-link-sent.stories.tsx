@@ -23,6 +23,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Ready state — lead + email on next line; Resend enabled; no Back. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_d456f9c7-1241-4d0b-ac0d-f6d835236052" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -39,6 +42,9 @@ export const Default: Story = {
  * disabled. Spec: shared-ui-auth-sign-in-SC-14 / shared-auth-sign-in-SC-46.
  */
 export const ResendCooldown: Story = {
+  parameters: {
+    verification: { caseId: "vc_157973a2-de67-4d27-8a76-549162a3c5e3" },
+  },
   name: "Resend countdown",
   args: {
     resendCooldownRemaining: 45,
@@ -58,6 +64,9 @@ export const ResendCooldown: Story = {
 
 /** Resend looks busy while its request is in flight. */
 export const Resending: Story = {
+  parameters: {
+    verification: { caseId: "vc_f871ac94-3958-453f-a24b-22dbef6683da" },
+  },
   name: "Resending",
   args: { resending: true },
   play: async ({ canvasElement }) => {
@@ -72,6 +81,9 @@ export const Resending: Story = {
  * sixty seconds. Does not wait a real minute in tests.
  */
 export const ResendCountdownTicks: Story = {
+  parameters: {
+    verification: { caseId: "vc_931bc01d-43f2-4afe-9728-3efc86cbf1cf" },
+  },
   name: "Countdown ticks",
   render: function ResendCountdownTicksDemo(args) {
     const [remaining, setRemaining] = useState(3);
@@ -113,6 +125,9 @@ export const ResendCountdownTicks: Story = {
  * runs in test to prove `onResend`.
  */
 export const ResendReportsActivation: Story = {
+  parameters: {
+    verification: { caseId: "vc_bb92fa15-4959-40e4-82ad-ddf82bb4be1d" },
+  },
   tags: ["!dev"],
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -123,6 +138,9 @@ export const ResendReportsActivation: Story = {
 
 /** A refused resend says why under Resend, which is pressable again. */
 export const ResendFailed: Story = {
+  parameters: {
+    verification: { caseId: "vc_ea5e112a-af02-4fd0-ae33-d923c8ed7c98" },
+  },
   name: "Resend refused",
   args: { resendFailed: "We couldn't send the link. Try again." },
   play: async ({ args, canvasElement }) => {

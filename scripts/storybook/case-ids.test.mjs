@@ -15,14 +15,16 @@ const file = (body, title = "Auction/Display/Screens/Thing") =>
   `const meta = { title: "${title}" };\nexport default meta;\n${body}`;
 
 describe("which stories need a case id", () => {
-  it("holds Auction stories, bar State Tests", () => {
+  it("holds every story bar a prototype", () => {
     assert.equal(needsCaseId("Auction/Display/Screens/Lot Details"), true);
     assert.equal(
       needsCaseId("Auction/Bidding/Screens/Bid Panel/State Tests/Setup"),
-      false,
+      true,
     );
-    assert.equal(needsCaseId("Store/Cart/Screens/Cart"), false);
+    assert.equal(needsCaseId("Store/Cart/Blocks/CartLine"), true);
+    assert.equal(needsCaseId("Design System/Forms/Button"), true);
     assert.equal(needsCaseId("Store/Flows/Guest Buys A Card"), true);
+    assert.equal(needsCaseId("Vault/Portfolio/Prototypes/Rewards"), false);
   });
 });
 
@@ -72,8 +74,10 @@ describe("case ids", () => {
     assert.equal(caseIdErrors(parsed).length, 2);
   });
 
-  it("ignores stories outside the verified domains", () => {
-    const parsed = parse(file("export const A = {};", "Store/Cart/Screens/X"));
+  it("ignores prototypes", () => {
+    const parsed = parse(
+      file("export const A = {};", "Store/Cart/Prototypes/X"),
+    );
     assert.deepEqual(caseIdErrors(parsed), []);
   });
 });

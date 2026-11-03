@@ -36,6 +36,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Nothing held yet: both wallets, and the actions that mint them. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_3ce9bcdf-7ce1-4525-8f10-81e7ce558b56" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
@@ -52,6 +55,9 @@ export const Default: Story = {
  * until Apple's licensed badge is added.
  */
 export const VendorArtwork: Story = {
+  parameters: {
+    verification: { caseId: "vc_63aa8f34-6241-4c39-84e5-ac7236c1e84a" },
+  },
   args: {
     wallets: [
       { ...google, artwork: { wallet: "google" } },
@@ -77,6 +83,9 @@ export const VendorArtwork: Story = {
 
 /** Google's button in the member's own language. */
 export const VendorArtworkTraditionalChinese: Story = {
+  parameters: {
+    verification: { caseId: "vc_19553792-bdfe-4f76-8d4a-8895d3c81d6e" },
+  },
   args: {
     wallets: [
       {
@@ -96,6 +105,9 @@ export const VendorArtworkTraditionalChinese: Story = {
 
 /** A mint in flight under the artwork: never dimmed, and a second tap waits. */
 export const VendorArtworkAdding: Story = {
+  parameters: {
+    verification: { caseId: "vc_4d9b06a9-a3cb-4d2e-a57a-1b7aa5174368" },
+  },
   args: {
     wallets: [{ ...google, adding: true, artwork: { wallet: "google" } }],
   },
@@ -110,6 +122,9 @@ export const VendorArtworkAdding: Story = {
 
 /** Minted: the artwork becomes the install link, under the same name. */
 export const VendorArtworkSaveable: Story = {
+  parameters: {
+    verification: { caseId: "vc_1bbf94df-7de5-499c-ac9d-87dca178b9b1" },
+  },
   args: {
     wallets: [
       {
@@ -132,6 +147,9 @@ export const VendorArtworkSaveable: Story = {
 
 /** One mint in flight. That wallet's control waits, and only that one. */
 export const AddingOne: Story = {
+  parameters: {
+    verification: { caseId: "vc_75dd8ed3-73ba-4709-ad10-4295104dadc4" },
+  },
   args: { wallets: [{ ...google, adding: true }, apple] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -148,6 +166,9 @@ export const AddingOne: Story = {
 
 /** Minted: the address is a credential, so it arrives only after the tap. */
 export const Saveable: Story = {
+  parameters: {
+    verification: { caseId: "vc_ce0e68f1-d6ea-49d6-a179-754cb669b99b" },
+  },
   args: {
     wallets: [
       {
@@ -174,6 +195,9 @@ export const Saveable: Story = {
  * recorded as holding one — the row existing is not the pass being installed.
  */
 export const SaveableWhileHeld: Story = {
+  parameters: {
+    verification: { caseId: "vc_7c6fee8c-34c3-4cfc-8c24-a8a0733c7e27" },
+  },
   args: {
     wallets: [
       {
@@ -204,6 +228,9 @@ export const SaveableWhileHeld: Story = {
  * whatever is carried there, so the offer is withdrawn rather than repeated.
  */
 export const HeldOneOfferedTheOther: Story = {
+  parameters: {
+    verification: { caseId: "vc_3927784e-cd57-4478-afc8-aed9ef73de3b" },
+  },
   args: {
     wallets: [
       {
@@ -227,6 +254,9 @@ export const HeldOneOfferedTheOther: Story = {
 
 /** Both held: one ending each, and no offer anywhere. */
 export const HeldBothEndsEach: Story = {
+  parameters: {
+    verification: { caseId: "vc_dc3dc618-d70f-4ef6-9bd4-9d6fe2288550" },
+  },
   args: {
     wallets: [
       {
@@ -252,6 +282,9 @@ export const HeldBothEndsEach: Story = {
 
 /** One ending in flight while the other stays actionable. */
 export const EndingOne: Story = {
+  parameters: {
+    verification: { caseId: "vc_90ccdd75-1971-493c-95e7-e2a9a625d4bc" },
+  },
   args: {
     wallets: [
       {
@@ -283,6 +316,9 @@ export const EndingOne: Story = {
  * once, which is the case a single block-level status cannot express.
  */
 export const EachWalletItsOwnState: Story = {
+  parameters: {
+    verification: { caseId: "vc_17d068b4-6f87-49d1-b9a4-97e6c2fe2595" },
+  },
   args: {
     wallets: [
       {
@@ -311,6 +347,9 @@ export const EachWalletItsOwnState: Story = {
  * something went through when it did not.
  */
 export const OneWalletFailed: Story = {
+  parameters: {
+    verification: { caseId: "vc_77819419-0e7e-46a6-b421-f592f748b29c" },
+  },
   args: {
     wallets: [
       {
@@ -340,6 +379,9 @@ export const OneWalletFailed: Story = {
  * body by the button unmounting, with nothing said.
  */
 export const FocusFollowsTheMint: Story = {
+  parameters: {
+    verification: { caseId: "vc_986ed4fa-d2a5-46b7-8642-d04298e938ca" },
+  },
   render: (args) => {
     const [minted, setMinted] = useState(false);
     return (
@@ -381,6 +423,9 @@ export const FocusFollowsTheMint: Story = {
 
 /** Held, with nothing on offer: the ending is the whole block. */
 export const HeldWithNothingOffered: Story = {
+  parameters: {
+    verification: { caseId: "vc_91a53f14-fed6-4345-bc38-ca9f26f81ea7" },
+  },
   args: {
     wallets: [
       {
@@ -403,6 +448,9 @@ export const HeldWithNothingOffered: Story = {
 
 /** A brand carrying no wallet draws nothing at all. */
 export const NoneOffered: Story = {
+  parameters: {
+    verification: { caseId: "vc_58646818-5ede-4086-875d-e48104dd881e" },
+  },
   args: { wallets: [] },
   play: async ({ canvasElement }) => {
     await expect(canvasElement.querySelector("[data-slot]")).toBeNull();
@@ -411,6 +459,9 @@ export const NoneOffered: Story = {
 
 /** Before the answer arrives, nothing is claimed either way. */
 export const Unknown: Story = {
+  parameters: {
+    verification: { caseId: "vc_7ebc17fe-dcb9-4c6f-a35b-21080c8cce7c" },
+  },
   args: { state: { status: "unknown" } },
   play: async ({ canvasElement }) => {
     await expect(canvasElement.querySelector("[data-slot]")).toBeNull();
@@ -422,6 +473,9 @@ export const Unknown: Story = {
  * block, which a member would read as carrying nothing.
  */
 export const Unreachable: Story = {
+  parameters: {
+    verification: { caseId: "vc_c0339aa4-86d5-4dfa-899a-deba4b293838" },
+  },
   args: {
     wallets: [],
     state: { status: "read", unreachable: true },

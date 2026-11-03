@@ -29,6 +29,9 @@ type Story = StoryObj<typeof meta>;
 
 /** A cancel is reported once, and only after the dialog confirms it. */
 export const Live: Story = {
+  parameters: {
+    verification: { caseId: "vc_ad705d3f-36b0-4dfc-9e66-886ad64977ac" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -61,6 +64,9 @@ export const Live: Story = {
 };
 
 export const Closed: Story = {
+  parameters: {
+    verification: { caseId: "vc_61d96d1a-9bfd-4d1b-9c7d-2af92c31029c" },
+  },
   args: { record: CANCELLED_RECORD },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -75,6 +81,9 @@ export const Closed: Story = {
 
 /** Marked in: the state shows, and neither a move nor a cancel is offered. */
 export const CheckedIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_db091854-7156-44c4-b315-672269e9bb87" },
+  },
   args: { record: CHECKED_IN_RECORD },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -85,6 +94,9 @@ export const CheckedIn: Story = {
 
 /** Still booked but past its end: nothing to move or cancel any more. */
 export const Ended: Story = {
+  parameters: {
+    verification: { caseId: "vc_c9cf4b98-ce3f-482a-9a4e-646de214e6a1" },
+  },
   args: { now: LIVE_RECORD.end },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -97,11 +109,17 @@ export const Ended: Story = {
 };
 
 export const WithError: Story = {
+  parameters: {
+    verification: { caseId: "vc_7ef769bb-05f7-48cc-9071-704614abafd2" },
+  },
   args: { error: "That time was just taken. Pick another." },
 };
 
 /** A move in flight draws busy on Move alone, and a second press does nothing. */
 export const MovePending: Story = {
+  parameters: {
+    verification: { caseId: "vc_cbf02851-e7b7-4f66-bc5d-c1af0873880e" },
+  },
   args: { movePending: true },
   play: async ({ args, canvasElement }) => {
     const move = within(canvasElement).getByRole("button", {
@@ -115,6 +133,9 @@ export const MovePending: Story = {
 
 /** A refused move says why on the card, and Move presses again. */
 export const MoveRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_a96943d7-604e-449e-8193-0d2a2f4333c4" },
+  },
   args: { moveFailed: "That time was just taken. Pick another." },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -130,6 +151,9 @@ export const MoveRefused: Story = {
 
 /** The dialog stays open and busy while the cancel runs; it closes as the result. */
 export const CancelHeldUntilCancelled: Story = {
+  parameters: {
+    verification: { caseId: "vc_d3ea3efd-3d5b-4988-9e2d-18aa39b80fe5" },
+  },
   render: function Render(args) {
     const [pending, setPending] = useState(false);
     const [record, setRecord] = useState(args.record);
@@ -176,6 +200,9 @@ export const CancelHeldUntilCancelled: Story = {
 
 /** A refused cancel shows in the open dialog, whose confirm presses again. */
 export const CancelRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_d92765ae-486c-4df4-b6aa-009972bfa211" },
+  },
   args: {
     cancelPending: false,
     cancelFailed: "We couldn't cancel this visit. Try again.",

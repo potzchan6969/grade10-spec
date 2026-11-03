@@ -22,12 +22,28 @@ const meta = {
 export default meta;
 
 export const SignedOut = responseStory(BID_PANEL_STATE_RESPONSES.signedOut);
+SignedOut.parameters = {
+  ...SignedOut.parameters,
+  verification: { caseId: "vc_b81278e3-5e44-4414-a72e-b6c2635b4fa9" },
+};
 export const NeedsPayment = responseStory(
   BID_PANEL_STATE_RESPONSES.needsPayment,
 );
+NeedsPayment.parameters = {
+  ...NeedsPayment.parameters,
+  verification: { caseId: "vc_a10dabd7-5a87-47ae-a458-3395d81b6523" },
+};
 export const LinkedCardEditable = responseStory(
   BID_PANEL_STATE_RESPONSES.linkedCardEditable,
 );
+LinkedCardEditable.parameters = {
+  ...LinkedCardEditable.parameters,
+  verification: { caseId: "vc_8dbda0b1-8d77-4cff-b88e-8d4b065a4b87" },
+};
 export const LinkedCardLocked = responseStory(
   BID_PANEL_STATE_RESPONSES.linkedCardLocked,
 );
+LinkedCardLocked.parameters = {
+  ...LinkedCardLocked.parameters,
+  verification: { caseId: "vc_924caf9d-0a51-47a2-a18b-439c9f431a96" },
+};

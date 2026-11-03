@@ -30,6 +30,9 @@ const main = (canvasElement: HTMLElement) =>
 /** Back from Stripe, paid, in the browser that paid: You're Going leads
  * the tickets. */
 export const Paid: Story = {
+  parameters: {
+    verification: { caseId: "vc_2a03fc3e-98c7-4c7c-96a0-f791dbb5b282" },
+  },
   args: { state: "paid" },
   play: async ({ canvasElement }) => {
     const canvas = main(canvasElement);
@@ -48,6 +51,9 @@ export const Paid: Story = {
 /** Confirmed and signed in: a QR card per ticket, the trail back to Your
  * Tickets, and the points earned. */
 export const Confirmed: Story = {
+  parameters: {
+    verification: { caseId: "vc_c3cf0b65-61b6-4ab9-8942-f10c74447826" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = main(canvasElement);
     await expect(
@@ -66,6 +72,9 @@ export const Confirmed: Story = {
 
 /** Held, counting down: no codes until it is paid. */
 export const Held: Story = {
+  parameters: {
+    verification: { caseId: "vc_1f43a238-a360-416f-be36-9623f708b72f" },
+  },
   name: "Held, counting down",
   args: { state: "held" },
   play: async ({ canvasElement }) => {
@@ -80,6 +89,9 @@ export const Held: Story = {
 
 /** The hold reached zero: the payment is being checked. */
 export const Checking: Story = {
+  parameters: {
+    verification: { caseId: "vc_11d331c4-2802-4d5a-a2f3-e1ffb97e71ef" },
+  },
   args: { state: "checking" },
   play: async ({ canvasElement }) => {
     await expect(
@@ -91,6 +103,9 @@ export const Checking: Story = {
 /** After the first day: each ticket says when it was used and what is
  * left; one is in today. */
 export const AfterDayOne: Story = {
+  parameters: {
+    verification: { caseId: "vc_1c89c85f-22ab-4621-92f2-cb3df7bba3e1" },
+  },
   name: "After day 1",
   args: { state: "afterDayOne" },
   play: async ({ canvasElement }) => {
@@ -103,6 +118,9 @@ export const AfterDayOne: Story = {
 
 /** One ticket refunded: its code fades, the others still admit. */
 export const OneTicketRefunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_c9a5b9f1-dc20-4bbe-afb4-d38da33887b6" },
+  },
   name: "One ticket refunded",
   args: { state: "partRefunded" },
   play: async ({ canvasElement }) => {
@@ -118,6 +136,9 @@ export const OneTicketRefunded: Story = {
 
 /** Every ticket refunded, and the points taken back. */
 export const FullyRefunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_f5b70c27-cdc4-4bad-8f41-c978df456833" },
+  },
   name: "Fully refunded",
   args: { state: "refunded" },
   play: async ({ canvasElement }) => {
@@ -129,6 +150,9 @@ export const FullyRefunded: Story = {
 
 /** The event was cancelled: the order is refunded in full. */
 export const EventCancelled: Story = {
+  parameters: {
+    verification: { caseId: "vc_79fd6542-56f7-4afc-a4aa-ff5e6489353c" },
+  },
   name: "Event cancelled",
   args: { state: "eventCancelled" },
   play: async ({ canvasElement }) => {
@@ -140,6 +164,9 @@ export const EventCancelled: Story = {
 
 /** A free order: Free, and no points. */
 export const FreeOrder: Story = {
+  parameters: {
+    verification: { caseId: "vc_215ae856-ee96-4110-aa47-0f8d18accb68" },
+  },
   name: "Free order",
   args: { state: "free" },
   play: async ({ canvasElement }) => {
@@ -151,6 +178,9 @@ export const FreeOrder: Story = {
 
 /** A guest in the browser that bought: sign in to see it anywhere. */
 export const Guest: Story = {
+  parameters: {
+    verification: { caseId: "vc_f23adf39-1f6a-40e6-b6c0-7cb9c0f302ea" },
+  },
   name: "Guest in the buying browser",
   args: { state: "guest" },
   play: async ({ canvasElement }) => {
@@ -165,6 +195,9 @@ export const Guest: Story = {
 /** Offered by the waiting line: how many, until when, Accept and Decline;
  * no codes until it is paid. */
 export const Offered: Story = {
+  parameters: {
+    verification: { caseId: "vc_a94b2a13-d63b-4952-8f03-87e889bb364f" },
+  },
   args: { state: "offered" },
   play: async ({ canvasElement }) => {
     const canvas = main(canvasElement);

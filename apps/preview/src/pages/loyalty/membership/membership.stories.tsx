@@ -16,6 +16,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The overview: tier, balance, the top-up entrance and Tiers & Benefits. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_be3b490f-0669-485c-a6e2-0dfe8b43d139" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -42,7 +45,10 @@ export const Default: Story = {
  * stays on the overview — this state is reached by acting from it. */
 export const TopUp: Story = {
   name: "Top Up",
-  parameters: { journeys: ["grade10-site-loyalty-programme-US-14"] },
+  parameters: {
+    verification: { caseId: "vc_f212f22b-951a-42e9-ae79-80c77eda4c0e" },
+    journeys: ["grade10-site-loyalty-programme-US-14"],
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const overlay = within(document.body);
@@ -90,6 +96,9 @@ export const TopUp: Story = {
 
 /** Nothing earned yet: an empty ledger, no coupons and nothing to redeem. */
 export const NoPoints: Story = {
+  parameters: {
+    verification: { caseId: "vc_0306927f-c7da-4fa4-ad8e-44da69d76c7d" },
+  },
   args: { view: MEMBERSHIP_STATE_VIEWS.noPoints },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -103,6 +112,9 @@ export const NoPoints: Story = {
 /** The default content at a phone width: the rail reads as a scrollable
  * line-tab row and the page never scrolls sideways. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_08ab7a3b-349b-4c3e-beb3-0b822b745c05" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

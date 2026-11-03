@@ -18,6 +18,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_48fc0e52-ff8d-4879-817e-8399ee9217ed" },
+  },
   render: () => (
     <Card className="w-60">
       <CardHeader>
@@ -34,6 +37,9 @@ export const Default: Story = {
 /** `padding={false}` is Figma's un-padded shell — for media or a nested grid
  * that supplies its own insets. */
 export const WithoutPadding: Story = {
+  parameters: {
+    verification: { caseId: "vc_8041263d-85d3-422a-a4ea-7b4fecdcd05d" },
+  },
   render: () => (
     <Card className="w-60" padding={false}>
       <img

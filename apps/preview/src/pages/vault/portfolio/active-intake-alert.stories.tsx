@@ -53,6 +53,9 @@ function LinkedAlert({ submissionCount }: { submissionCount: number }) {
 
 /** Two open submissions — the filled portfolio case. */
 export const WithSubmissions: Story = {
+  parameters: {
+    verification: { caseId: "vc_1f7c32e3-e41c-4f50-a283-1abfcb7db09d" },
+  },
   args: {
     submissionCount: 2,
     onTrackProgress: () => {},
@@ -71,6 +74,9 @@ export const WithSubmissions: Story = {
 
 /** One open submission — singular copy. */
 export const SingleSubmission: Story = {
+  parameters: {
+    verification: { caseId: "vc_de8e018f-31b5-4074-9b7a-05bd552de1c3" },
+  },
   args: {
     submissionCount: 1,
     onTrackProgress: () => {},
@@ -84,6 +90,9 @@ export const SingleSubmission: Story = {
 
 /** No open intake — the alert does not render. */
 export const None: Story = {
+  parameters: {
+    verification: { caseId: "vc_e776e2da-8da1-434b-aef3-37f67dfa0186" },
+  },
   args: {
     submissionCount: 0,
     onTrackProgress: () => {},

@@ -325,6 +325,9 @@ type Story = StoryObj<typeof meta>;
 
 /** On the day: Running late tells the shop, and the page says it did. */
 export const Today: Story = {
+  parameters: {
+    verification: { caseId: "vc_c5ff5f1f-5dbb-4d6e-b9a8-a6f9b89c5d11" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -346,6 +349,9 @@ export const Today: Story = {
 
 /** The Running late sheet, with I’m here for a collector already outside. */
 export const RunningLateSheet: Story = {
+  parameters: {
+    verification: { caseId: "vc_f6e0d584-0290-422e-90ff-1308b9315cfb" },
+  },
   args: { state: "runningLate" },
   play: async () => {
     const sheet = within(await screen.findByRole("dialog"));
@@ -354,11 +360,24 @@ export const RunningLateSheet: Story = {
 };
 
 /** Running late sent: only Update running late and Directions. */
-export const RunningLate: Story = { args: { state: "lateTold" } };
+export const RunningLate: Story = {
+  parameters: {
+    verification: { caseId: "vc_005afa29-777e-4e5a-89f9-ba932b4a8aa3" },
+  },
+  args: { state: "lateTold" },
+};
 
-export const CheckedIn: Story = { args: { state: "checkedIn" } };
+export const CheckedIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_8557b16a-e877-44b3-9664-d67f9dbea1f1" },
+  },
+  args: { state: "checkedIn" },
+};
 
 export const Called: Story = {
+  parameters: {
+    verification: { caseId: "vc_ebce5152-0aa7-4ced-aca6-7920d50b9e80" },
+  },
   args: { state: "called" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -369,10 +388,18 @@ export const Called: Story = {
 };
 
 /** Handed to grading: the cards are with grading now. */
-export const WithGrading: Story = { args: { state: "withGrading" } };
+export const WithGrading: Story = {
+  parameters: {
+    verification: { caseId: "vc_bb616755-0726-4401-a2d9-53e533ca95ff" },
+  },
+  args: { state: "withGrading" },
+};
 
 /** Past the hold: come anyway, change, cancel or book another time. */
 export const TimePassed: Story = {
+  parameters: {
+    verification: { caseId: "vc_7305daed-7597-4fd1-9bd3-e99c3f5fe850" },
+  },
   args: { state: "timePassed" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -384,21 +411,49 @@ export const TimePassed: Story = {
 };
 
 /** Missed: what you told us is kept for Book again. */
-export const Missed: Story = { args: { state: "missed" } };
+export const Missed: Story = {
+  parameters: {
+    verification: { caseId: "vc_ae258c23-9aa8-4909-9ba6-82647f097819" },
+  },
+  args: { state: "missed" },
+};
 
 /** On the day, paid: cancelling now keeps the deposit. */
-export const TodayPaid: Story = { args: { state: "todayPaid" } };
+export const TodayPaid: Story = {
+  parameters: {
+    verification: { caseId: "vc_0693c3c7-2419-44da-b8b5-8ee948cd2ae1" },
+  },
+  args: { state: "todayPaid" },
+};
 
 /** The shop closed for the weather, the deposit on its way back. */
 export const ShopClosedRefunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_868fa099-f910-4058-8e8f-ad18edd980dc" },
+  },
   args: { state: "shopClosedRefunded" },
 };
 
 /** Missed, paid: the deposit is kept. */
-export const MissedPaid: Story = { args: { state: "missedPaid" } };
+export const MissedPaid: Story = {
+  parameters: {
+    verification: { caseId: "vc_e37d717b-ad3e-4309-a24b-83820b789e1e" },
+  },
+  args: { state: "missedPaid" },
+};
 
 /** Today offers nothing at this shop: the earliest at each, and walking in. */
-export const FullToday: Story = { args: { state: "fullToday" } };
+export const FullToday: Story = {
+  parameters: {
+    verification: { caseId: "vc_65f78de4-29d6-485e-a3ca-d3147065003a" },
+  },
+  args: { state: "fullToday" },
+};
 
 /** A Book press refused: a visit already held, or too many tries. */
-export const AlreadyBooked: Story = { args: { state: "alreadyBooked" } };
+export const AlreadyBooked: Story = {
+  parameters: {
+    verification: { caseId: "vc_d217577d-b0b9-49b0-90de-d9cd9b8794e2" },
+  },
+  args: { state: "alreadyBooked" },
+};

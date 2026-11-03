@@ -33,6 +33,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Pay the full total, or take the code off. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_999a1920-934e-43c5-8e4f-c95ddc85a2f1" },
+  },
   play: async ({ args, canvasElement }) => {
     const notice = within(canvasElement).getByRole("alert");
     await userEvent.click(
@@ -48,6 +51,9 @@ export const Default: Story = {
 
 /** Paying the full total: Pay waits, and Remove Code with it. */
 export const Paying: Story = {
+  parameters: {
+    verification: { caseId: "vc_ccd3f60d-c9d2-4d6a-9dae-137f4ef3401d" },
+  },
   args: { paying: true },
   play: async ({ canvasElement }) => {
     const notice = within(canvasElement).getByRole("alert");

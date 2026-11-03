@@ -29,6 +29,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Open: the wait for each service now; a booked-only one links to booking. */
 export const Open: Story = {
+  parameters: {
+    verification: { caseId: "vc_bdd2def4-9c54-4b6c-a942-9180251374e8" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("About 15 to 25 min")).toBeVisible();
@@ -41,6 +44,9 @@ export const Open: Story = {
 };
 
 export const Paused: Story = {
+  parameters: {
+    verification: { caseId: "vc_5d72f0d7-12bb-4361-8ad2-b5417ee73e97" },
+  },
   args: {
     copy: {
       ...WAIT_COPY,
@@ -55,6 +61,9 @@ export const Paused: Story = {
 
 /** Closed today: the other shops open today replace the wait. */
 export const ClosedToday: Story = {
+  parameters: {
+    verification: { caseId: "vc_7bf00789-274c-4214-a25a-bdd74159c655" },
+  },
   args: {
     open: false,
     closedToday: true,

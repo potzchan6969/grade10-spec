@@ -311,6 +311,8 @@ describe("checkStories", () => {
     assert.deepEqual(errors, [
       '"Store Cart/CartItem" - a title reads "<Domain>/<Feature>/Screens/<Screen>"',
       "apps/preview/src/pages/store/cart/cart-content.ts - imports ../home/home-content from another feature; move what both use to the nearest folder above them",
+      'apps/preview/src/pages/store/cart/cart-page.stories.tsx - "Default" has no verification caseId; run pnpm storybook:case-ids --write',
+      'packages/ui/src/blocks/store-cart/cart-item.stories.tsx - "Default" has no verification caseId; run pnpm storybook:case-ids --write',
       'docs/prds/products/grade10-site/store/cart.md:2 - no story "store-cart-screens-cart--gone"',
     ]);
     assert.deepEqual(warnings, [

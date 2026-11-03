@@ -14,6 +14,9 @@ type Story = StoryObj<typeof meta>;
 const FRUIT = ["Apple", "Banana", "Orange"] as const;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_e836186c-7909-4b27-a687-e42469cd3031" },
+  },
   render: () => (
     <CheckboxList className="w-40" label="Label">
       {FRUIT.map((fruit, index) => (
@@ -32,6 +35,9 @@ export const Default: Story = {
 
 /** Omit `label` and the heading is not rendered — Figma's `showLabel`. */
 export const WithoutLabel: Story = {
+  parameters: {
+    verification: { caseId: "vc_1aaf4a41-9ff5-4163-a9ff-f9fa00b2c026" },
+  },
   render: () => (
     <CheckboxList className="w-40">
       {FRUIT.map((fruit) => (
@@ -45,6 +51,9 @@ export const WithoutLabel: Story = {
 
 /** The PLP filter lists use the `sm` rung. */
 export const Small: Story = {
+  parameters: {
+    verification: { caseId: "vc_3f3a4adc-448f-4327-a99f-819baaed6726" },
+  },
   render: () => (
     <CheckboxList className="w-40" label="Label">
       {FRUIT.map((fruit, index) => (
@@ -63,6 +72,9 @@ export const Small: Story = {
 };
 
 export const WithDisabledItem: Story = {
+  parameters: {
+    verification: { caseId: "vc_dda1d3e1-7bde-4b5b-84bf-9145907b6409" },
+  },
   render: () => (
     <CheckboxList className="w-40" label="Label">
       <CheckboxListInput count="10" defaultChecked value="Apple">

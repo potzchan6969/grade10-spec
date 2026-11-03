@@ -44,6 +44,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The four mechanics, stacked or paired by width. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_1fd51595-c5c9-4731-895c-f3ecbc097575" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -58,6 +61,9 @@ export const Default: Story = {
 
 /** The single-column stack at a phone width. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_dd68c2fd-b9f7-46cf-a8b8-c0a7275cd705" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     expect(

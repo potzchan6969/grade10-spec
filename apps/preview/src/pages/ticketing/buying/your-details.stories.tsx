@@ -30,6 +30,9 @@ type Story = StoryObj<typeof meta>;
 
 /** A guest: empty fields, Sign In offered, the bot check. */
 export const Guest: Story = {
+  parameters: {
+    verification: { caseId: "vc_49389ce4-b8a6-46ce-b1a1-c112839b8a72" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
@@ -49,6 +52,9 @@ export const Guest: Story = {
 /** Continue with nothing typed: each field says what to fix, and so does
  * the bar. */
 export const FieldErrors: Story = {
+  parameters: {
+    verification: { caseId: "vc_1c38da3c-3f9b-4a67-a8a1-882072e9ef48" },
+  },
   name: "Field errors",
   args: { onContinue: () => {} },
   play: async ({ canvasElement }) => {
@@ -70,6 +76,9 @@ export const FieldErrors: Story = {
 
 /** Signed in: the account's name, a fixed email, and Not You?. */
 export const SignedIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_8bcfd7e0-ab0b-41da-8e61-7b4a24d0bc35" },
+  },
   name: "Signed in",
   args: { buyer: "signedIn" },
   play: async ({ canvasElement }) => {
@@ -87,6 +96,9 @@ export const SignedIn: Story = {
 /** Signed in with an account whose name is only its email: the name is
  * asked for. */
 export const SignedInNoName: Story = {
+  parameters: {
+    verification: { caseId: "vc_304e90c5-b9c8-422d-887c-8287f7c693e7" },
+  },
   name: "Signed in without a usable name",
   args: { buyer: "signedInNoName" },
   play: async ({ canvasElement }) => {
@@ -100,6 +112,9 @@ export const SignedInNoName: Story = {
 
 /** The session is still being read: the buyer's section waits. */
 export const SessionResolving: Story = {
+  parameters: {
+    verification: { caseId: "vc_56f3a39f-d061-4f8b-9f4d-e0ce7ae878ef" },
+  },
   name: "Session resolving",
   args: { buyer: "resolving" },
   play: async ({ canvasElement }) => {
@@ -113,6 +128,9 @@ export const SessionResolving: Story = {
 
 /** A free order: no points line. */
 export const FreeOrder: Story = {
+  parameters: {
+    verification: { caseId: "vc_e9b0398b-172c-4c5e-8b8a-69bfbac1fc56" },
+  },
   name: "Free order",
   args: { free: true },
   play: async ({ canvasElement }) => {

@@ -35,6 +35,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Interactive playground: nested sheet, held pick, typed apply, points */
 export const InteractiveMember: Story = {
+  parameters: {
+    verification: { caseId: "vc_a09d42fa-ef32-47c8-855c-b1845a317282" },
+  },
   render: (args) => {
     const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
     const [points, setPoints] = useState<PointsState>({ status: "collapsed" });
@@ -214,6 +217,9 @@ const AMOUNT_STEPS = [
 
 /** Bump subtotal and estimated total up/down to preview the Stepper-style roll. */
 export const AmountRolling: Story = {
+  parameters: {
+    verification: { caseId: "vc_293e7417-67c5-4396-8aa3-4692c570deee" },
+  },
   render: (args) => {
     const [step, setStep] = useState(1);
     const amount = AMOUNT_STEPS[step];
@@ -251,6 +257,9 @@ export const AmountRolling: Story = {
 };
 
 export const ConfirmingCartUpdate: Story = {
+  parameters: {
+    verification: { caseId: "vc_7cc13a20-685e-4c09-bbc1-264f0082e655" },
+  },
   args: { checkoutDisabled: true, onCheckout: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -267,6 +276,9 @@ export const ConfirmingCartUpdate: Story = {
 
 /** Shared interaction guard: footer mutations remain visible but inert. */
 export const InteractionPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_540acc6e-955f-49eb-a31c-e221ba0689ba" },
+  },
   args: {
     interactionPending: true,
     promoState: { status: "expanded" },

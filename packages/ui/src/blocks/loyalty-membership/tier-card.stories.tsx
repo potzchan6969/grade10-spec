@@ -30,6 +30,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Silver: upgrade progress toward Gold under the slate skin. */
 export const Silver: Story = {
+  parameters: {
+    verification: { caseId: "vc_717d2d76-7caa-4088-8c46-710afcdff417" },
+  },
   args: {
     variant: "silver",
     tier: "Silver",
@@ -59,6 +62,9 @@ export const Silver: Story = {
 
 /** Gold: the retention ask is keeping the tier already held. The card is inert — nothing on it navigates. */
 export const Gold: Story = {
+  parameters: {
+    verification: { caseId: "vc_35670d81-8718-4940-aee0-45f79ef2107c" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const card = canvasElement.querySelector('[data-slot="tier-card"]');
@@ -75,6 +81,9 @@ export const Gold: Story = {
 
 /** Black is held by invitation: the crown badge, and no progress at all. */
 export const Black: Story = {
+  parameters: {
+    verification: { caseId: "vc_a893b504-b1d4-4d1f-a9be-58316afb724d" },
+  },
   args: {
     variant: "black",
     tier: "Black",
@@ -98,6 +107,9 @@ export const Black: Story = {
 
 /** Past the threshold the bar caps at the threshold instead of overflowing. */
 export const ThresholdReached: Story = {
+  parameters: {
+    verification: { caseId: "vc_e20463af-35d9-46b7-b658-88555e2b8a72" },
+  },
   args: { qualifyingPoints: 610 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -109,6 +121,9 @@ export const ThresholdReached: Story = {
 
 /** A member holding nothing: zero reads, and a bar at none. */
 export const NoPoints: Story = {
+  parameters: {
+    verification: { caseId: "vc_07daeb0e-0fa6-4149-b60a-660cfb73fbc2" },
+  },
   args: {
     variant: "silver",
     tier: "Silver",

@@ -278,6 +278,9 @@ const ticket = (sheet: Sheet, label: string) =>
  * opens. No code, no discount row.
  */
 export const OnSale: Story = {
+  parameters: {
+    verification: { caseId: "vc_81dae2b5-c867-4e1a-8a0c-04b6c77e15a8" },
+  },
   render: () => (
     <>
       <Toast position="bottom-right" />
@@ -308,6 +311,9 @@ export const OnSale: Story = {
  * ticket moves apart, muted, with that reason and no Apply.
  */
 export const Refuse: Story = {
+  parameters: {
+    verification: { caseId: "vc_b99e5e09-c5eb-4949-8b22-7ed81ddde005" },
+  },
   render: () => <SiteSalePromoHost mode="refuse" />,
   play: async () => {
     // shared-ui-store-cart-SC-28, shared-ui-store-cart-SC-29,
@@ -375,6 +381,9 @@ export const Refuse: Story = {
  * shows only the code's discount. Removing it leaves the lines on the sale.
  */
 export const Stack: Story = {
+  parameters: {
+    verification: { caseId: "vc_54f21928-3266-4a8a-8161-1a1fe5b98656" },
+  },
   render: () => <SiteSalePromoHost mode="stack" />,
   play: async () => {
     // shared-ui-store-cart-SC-27 and shared-ui-store-cart-SC-31
@@ -408,6 +417,9 @@ export const Stack: Story = {
  * shows only the code's discount.
  */
 export const Replace: Story = {
+  parameters: {
+    verification: { caseId: "vc_76f5b936-5281-405c-9b3f-2bbd7ef2e0fa" },
+  },
   render: () => <SiteSalePromoHost mode="replace" initialPromoApplied />,
   play: async () => {
     // shared-ui-store-cart-SC-30
@@ -426,6 +438,9 @@ export const Replace: Story = {
 
 /** Removing the replacing code puts the sale back on the line it had taken. */
 export const FallbackAfterRemove: Story = {
+  parameters: {
+    verification: { caseId: "vc_7a656cf4-f4aa-4248-b30e-82b4d880c320" },
+  },
   name: "Fallback after remove",
   render: () => <SiteSalePromoHost mode="replace" initialPromoApplied />,
   play: async () => {
@@ -451,6 +466,9 @@ export const FallbackAfterRemove: Story = {
  * SAVE20, read the replaced line and the footer, then remove it.
  */
 export const ReplaceAndRemoveWalk: Story = {
+  parameters: {
+    verification: { caseId: "vc_f412537c-8126-4988-8bb2-6f93b095e25c" },
+  },
   name: "Replace and remove walk",
   render: () => <SiteSalePromoHost mode="replace" />,
   play: async () => {
@@ -489,6 +507,9 @@ const MIXED_ORDER_DISCOUNT = {
  * after the Subtotal, with no Remove.
  */
 export const ProductSaleWithOrderDiscount: Story = {
+  parameters: {
+    verification: { caseId: "vc_e27888ab-4c47-403c-9e7c-acf50a42197c" },
+  },
   name: "Product sale with order discount",
   args: {
     items: [

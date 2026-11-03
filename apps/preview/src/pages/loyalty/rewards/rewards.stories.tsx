@@ -184,6 +184,9 @@ type Story = StoryObj<typeof meta>;
 /** The rewards shop page. The checkout opens only when a card is pressed —
  * each sheet state is drawn under `Loyalty/Rewards/Blocks/RewardCheckout`. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_ce366a57-2401-4e22-beac-ba2ccd563f2d" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -199,6 +202,9 @@ export const Default: Story = {
 /** The reward that ran out: the sheet refuses, closes itself, and the page
  * raises the run-out toast. */
 export const SoldOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_077a778e-27cd-4f16-8bfe-5f70ed863c20" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
@@ -223,6 +229,9 @@ export const SoldOut: Story = {
  * open with the press live — nothing proceeds until the member taps
  * Redeem again themselves. */
 export const RetryableFailure: Story = {
+  parameters: {
+    verification: { caseId: "vc_ced49011-28ba-4cbb-afd2-18795d3ecb3c" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
@@ -247,6 +256,9 @@ export const RetryableFailure: Story = {
 /** The same flaky reward, retried: the member taps Redeem again after the
  * refusal and the redeemed phase lands. */
 export const RetryableFailureRecovered: Story = {
+  parameters: {
+    verification: { caseId: "vc_111e30e3-b978-4c13-8ea8-56471db6263c" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
@@ -267,6 +279,9 @@ export const RetryableFailureRecovered: Story = {
 /** The balance fell short elsewhere since the sheet opened: the page
  * refetches, the deficit row re-reads it, and the toast says so. */
 export const BalanceDropped: Story = {
+  parameters: {
+    verification: { caseId: "vc_3981852b-42ce-43fb-88a3-5be2a20c0b6d" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(

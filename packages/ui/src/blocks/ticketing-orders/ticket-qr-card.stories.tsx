@@ -31,6 +31,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Valid: Story = {
+  parameters: {
+    verification: { caseId: "vc_7d0407a7-e1e0-4b0b-8c3c-cba67dbe271c" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const card = canvas.getByRole("region", { name: "Ticket 1 of 3" });
@@ -45,6 +48,9 @@ export const Valid: Story = {
 
 /** After day 1: the day it was used, the days and Fast Pass days left. */
 export const DaysLeft: Story = {
+  parameters: {
+    verification: { caseId: "vc_bec2f559-a4c4-4fd6-b0b1-4d2a0942c824" },
+  },
   name: "Days left",
   args: strip(TICKETS_AFTER_DAY_ONE[0]),
   play: async ({ canvasElement }) => {
@@ -59,6 +65,9 @@ export const DaysLeft: Story = {
 
 /** In today: the time it came in, the code still shown for the next day. */
 export const UsedToday: Story = {
+  parameters: {
+    verification: { caseId: "vc_8f835607-8bb0-4c66-a4e8-a7c0173f1e08" },
+  },
   name: "Used today",
   args: strip(TICKET_USED_TODAY),
   play: async ({ canvasElement }) => {
@@ -74,6 +83,9 @@ export const UsedToday: Story = {
 
 /** Refunded or cancelled: the code faded, the door refuses it. */
 export const Refunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_9022bbb4-dbc4-499e-970e-abd9e2a76109" },
+  },
   args: strip(TICKETS_PART_REFUNDED[2]),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -71,4 +71,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** A signed-in collector on the details step of a free drop-off. */
-export const Scenario: Story = {};
+export const Scenario: Story = {
+  parameters: {
+    verification: { caseId: "vc_e67bdf44-bb12-4a8d-8eb0-f21adccd1f84" },
+  },
+};

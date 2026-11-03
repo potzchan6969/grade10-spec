@@ -57,6 +57,9 @@ type Story = StoryObj<typeof meta>;
 
 /** By reference only on a phone: first names, Admit each. */
 export const Found: Story = {
+  parameters: {
+    verification: { caseId: "vc_227dbc83-933a-4e97-a6bc-62be828bc5dd" },
+  },
   name: "Find by reference",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -76,6 +79,9 @@ export const Found: Story = {
 
 /** Nothing asked yet; Enter sends the reference. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_f9c7fff6-acde-4b6b-bafa-f13f0c75b61a" },
+  },
   args: { query: "", result: { status: "idle" } },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -88,6 +94,9 @@ export const Empty: Story = {
 
 /** The reference is being looked up. */
 export const Searching: Story = {
+  parameters: {
+    verification: { caseId: "vc_cb4cbbdc-a4e8-471a-b0be-4a63bd1e448c" },
+  },
   args: { result: { status: "searching" } },
   play: async ({ canvasElement }) => {
     await expect(
@@ -98,6 +107,9 @@ export const Searching: Story = {
 
 /** No order with that reference for this event. */
 export const NotFound: Story = {
+  parameters: {
+    verification: { caseId: "vc_c32461ee-24fa-466d-94c6-98f148fd86f1" },
+  },
   name: "Reference not found",
   args: {
     query: "TK7Q2N",
@@ -118,6 +130,9 @@ export const NotFound: Story = {
 
 /** The console finds by reference or the buyer's exact email, full names. */
 export const Console: Story = {
+  parameters: {
+    verification: { caseId: "vc_0899c39d-0146-4a79-aaac-be1d43151d0e" },
+  },
   name: "Console, by email",
   args: {
     layout: "console",

@@ -25,6 +25,9 @@ type Story = StoryObj<typeof meta>;
  * under Auction first.
  */
 export const Open: Story = {
+  parameters: {
+    verification: { caseId: "vc_27c23772-6e45-4f11-82ac-e945924a9df8" },
+  },
   name: "Open",
   args: { onMembership: undefined },
   play: async ({ canvasElement, args }) => {
@@ -60,6 +63,9 @@ export const Open: Story = {
  * Membership, My Orders, My Auctions, Sign Out - and nothing else.
  */
 export const WithProfile: Story = {
+  parameters: {
+    verification: { caseId: "vc_ad695cca-bfbe-4651-aed5-17a7320c5fbe" },
+  },
   name: "Open, with Profile",
   args: { onProfile: fn() },
   play: async ({ canvasElement, args }) => {
@@ -89,6 +95,9 @@ export const WithProfile: Story = {
 
 /** No sign-in email: the account label alone, with no avatar. */
 export const WithoutEmail: Story = {
+  parameters: {
+    verification: { caseId: "vc_e6b84f65-a564-4d29-96ff-c92d466f1945" },
+  },
   name: "Open, without email",
   args: { accountEmail: undefined },
   play: async ({ canvasElement, args }) => {
@@ -109,6 +118,9 @@ const PROFILE_IMAGE =
 
 /** A profile image: the menu's avatar shows it in place of the initial. */
 export const WithProfileImage: Story = {
+  parameters: {
+    verification: { caseId: "vc_bb7148e7-95d2-4ea0-bd48-aa34181e3687" },
+  },
   name: "Open, with profile image",
   args: { onMembership: undefined, accountAvatarSrc: PROFILE_IMAGE },
   play: async ({ canvasElement }) => {
@@ -127,6 +139,9 @@ export const WithProfileImage: Story = {
 
 /** A profile image that fails to load: the email's initial, no broken image. */
 export const WithBrokenProfileImage: Story = {
+  parameters: {
+    verification: { caseId: "vc_c648f237-e4a6-4b72-ac8e-fcf178468b88" },
+  },
   name: "Open, profile image fails",
   args: {
     onMembership: undefined,
@@ -150,6 +165,9 @@ export const WithBrokenProfileImage: Story = {
  * press does nothing, and the Account button spins too.
  */
 export const SigningOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_bdf01693-ceeb-4f07-885f-2e37dbbbd8ee" },
+  },
   name: "Signing out",
   args: { onMembership: undefined, signOutPending: true },
   play: async ({ canvasElement, args }) => {

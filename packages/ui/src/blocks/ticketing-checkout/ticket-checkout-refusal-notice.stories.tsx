@@ -35,6 +35,9 @@ type Story = StoryObj<typeof meta>;
 /** Every answer the checkout can give instead of a payment page, each with
  * its sentence and the way on. */
 export const EveryRefusal: Story = {
+  parameters: {
+    verification: { caseId: "vc_80c16694-5ec2-4454-bd0a-5745f78174b8" },
+  },
   render: () => (
     <div className="flex flex-col gap-6">
       {REFUSALS.map((refusal) => (
@@ -68,6 +71,9 @@ export const EveryRefusal: Story = {
 
 /** Busy after the page's own retries: Pay again, in the primary tone. */
 export const Busy: Story = {
+  parameters: {
+    verification: { caseId: "vc_986dd3cf-ff71-4516-9ff7-b671f8b463e1" },
+  },
   play: async ({ args, canvasElement }) => {
     const notice = within(canvasElement).getByRole("alert");
     expect(notice).toHaveTextContent("Too many people are buying this second.");
@@ -78,6 +84,9 @@ export const Busy: Story = {
 
 /** No rule opens this pass to the address before the public sale. */
 export const NotOpenToYouYet: Story = {
+  parameters: {
+    verification: { caseId: "vc_afb38880-36f4-4871-aa3d-12da738286e1" },
+  },
   args: {
     copy: byCode("NOT_OPEN_TO_YOU_YET").copy,
     action: { label: "Back to Passes", tone: "outline", onClick: fn() },
@@ -93,6 +102,9 @@ export const NotOpenToYouYet: Story = {
 
 /** More than the address's access lets it hold. */
 export const OverYourAccessLimit: Story = {
+  parameters: {
+    verification: { caseId: "vc_478cbdf2-9ffa-42ac-97d0-3b32c95c3045" },
+  },
   args: {
     copy: byCode("ACCESS_LIMIT").copy,
     action: { label: "Back to Passes", tone: "outline", onClick: fn() },
@@ -106,6 +118,9 @@ export const OverYourAccessLimit: Story = {
 
 /** Sales closed: the sentence alone, no way on. */
 export const NoWayOn: Story = {
+  parameters: {
+    verification: { caseId: "vc_f14477a7-0d08-4f42-a7fb-9ed15115f111" },
+  },
   args: { copy: byCode("TICKETING_CLOSED").copy, action: undefined },
   play: async ({ canvasElement }) => {
     const notice = within(canvasElement).getByRole("alert");
@@ -116,6 +131,9 @@ export const NoWayOn: Story = {
 /** The same answer to a second press: the notice shakes once to say it
  * heard it. */
 export const SameAnswerAgain: Story = {
+  parameters: {
+    verification: { caseId: "vc_614489b8-bfb1-41d6-b09f-e5310d4db9e6" },
+  },
   args: { attempt: 1 },
   play: async ({ canvasElement }) => {
     expect(within(canvasElement).getByRole("alert")).toHaveTextContent(

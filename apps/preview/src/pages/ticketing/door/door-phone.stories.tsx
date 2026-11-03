@@ -29,6 +29,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Getting in: the passcode and this phone's name, then the camera. */
 export const EnterThePasscode: Story = {
+  parameters: {
+    verification: { caseId: "vc_78441a2e-a5d2-47c6-8646-26ae282e2fde" },
+  },
   name: "Enter the passcode",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -46,6 +49,9 @@ export const EnterThePasscode: Story = {
 
 /** A wrong passcode: how many tries are left. */
 export const WrongPasscode: Story = {
+  parameters: {
+    verification: { caseId: "vc_c31ffcf0-853e-433e-87e3-e0d03aa92a6b" },
+  },
   name: "Wrong passcode",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -65,6 +71,9 @@ export const WrongPasscode: Story = {
 
 /** Too many tries: the form waits. */
 export const Slowed: Story = {
+  parameters: {
+    verification: { caseId: "vc_2a00d50c-3c59-49f1-b009-05e3440fb7f0" },
+  },
   name: "Slowed after 5 tries",
   args: {
     start: {
@@ -85,6 +94,9 @@ export const Slowed: Story = {
 
 /** The passcode is right but the door opens later. */
 export const NotOpenYet: Story = {
+  parameters: {
+    verification: { caseId: "vc_1b115b8c-7cd3-46f8-8b0d-69fe16359bee" },
+  },
   name: "Not open yet",
   args: {
     start: {
@@ -110,6 +122,9 @@ export const NotOpenYet: Story = {
 
 /** In: pointing at a code, today's count on this phone. */
 export const Scanning: Story = {
+  parameters: {
+    verification: { caseId: "vc_eada6de7-3130-449a-a3a9-45d63f1cb279" },
+  },
   args: { start: { at: "scanner", status: "ready" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -120,6 +135,9 @@ export const Scanning: Story = {
 
 /** The browser is asking for the camera. */
 export const CameraAsks: Story = {
+  parameters: {
+    verification: { caseId: "vc_ee308704-1414-49b9-bc3d-9c598fc1e57a" },
+  },
   name: "The camera asks",
   args: { start: { at: "scanner", status: "asking" } },
   play: async ({ canvasElement }) => {
@@ -130,6 +148,9 @@ export const CameraAsks: Story = {
 };
 
 export const CameraBlocked: Story = {
+  parameters: {
+    verification: { caseId: "vc_3ca271bd-56c1-4b8b-8933-0d4e518edcb4" },
+  },
   name: "Camera blocked",
   args: { start: { at: "scanner", status: "blocked" } },
   play: async ({ canvasElement }) => {
@@ -147,6 +168,9 @@ export const CameraBlocked: Story = {
 };
 
 export const NoCamera: Story = {
+  parameters: {
+    verification: { caseId: "vc_ba8d5a01-65b1-437a-8650-883835f732ac" },
+  },
   name: "No camera",
   args: { start: { at: "scanner", status: "noCamera" } },
   play: async ({ canvasElement }) => {
@@ -160,6 +184,9 @@ export const NoCamera: Story = {
 
 /** No connection: every scan reads Not checked until it is back. */
 export const Offline: Story = {
+  parameters: {
+    verification: { caseId: "vc_6dbe4a32-dd27-4483-bb69-e0b3060cef2d" },
+  },
   args: { start: { at: "scanner", status: "ready" }, offline: true },
   play: async ({ canvasElement }) => {
     await expect(
@@ -171,6 +198,9 @@ export const Offline: Story = {
 /** Admitted: Undo counts down beside Scan next; Use Fast Pass spends one,
  * and Undo Fast Pass gives it back. */
 export const Admitted: Story = {
+  parameters: {
+    verification: { caseId: "vc_178a408e-85e8-4db6-9b4a-679d19ee1534" },
+  },
   args: { start: { at: "answer", answer: "admitted", undoFrom: 7 } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -191,6 +221,9 @@ export const Admitted: Story = {
 
 /** Undo pressed in time: the ticket can be scanned again. */
 export const Undone: Story = {
+  parameters: {
+    verification: { caseId: "vc_4219a653-7856-465f-b7c5-5c98b0164f47" },
+  },
   args: { start: { at: "answer", answer: "admitted", undoFrom: 9 } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -204,6 +237,9 @@ export const Undone: Story = {
 };
 
 export const AlreadyIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_86a58eef-6d5e-41fe-80dc-1866d54884e3" },
+  },
   name: "Already in today",
   args: { start: { at: "answer", answer: "alreadyIn" } },
   play: async ({ canvasElement }) => {
@@ -214,6 +250,9 @@ export const AlreadyIn: Story = {
 };
 
 export const NoEntriesLeft: Story = {
+  parameters: {
+    verification: { caseId: "vc_d9cb6da2-64a3-4608-a958-9ecec24cb07a" },
+  },
   name: "No entries left",
   args: { start: { at: "answer", answer: "noEntriesLeft" } },
   play: async ({ canvasElement }) => {
@@ -224,6 +263,9 @@ export const NoEntriesLeft: Story = {
 };
 
 export const Void: Story = {
+  parameters: {
+    verification: { caseId: "vc_c3914e38-ceeb-4617-b0c2-956610000c3c" },
+  },
   name: "Refunded or cancelled",
   args: { start: { at: "answer", answer: "void" } },
   play: async ({ canvasElement }) => {
@@ -234,6 +276,9 @@ export const Void: Story = {
 };
 
 export const NotATicket: Story = {
+  parameters: {
+    verification: { caseId: "vc_92aeaf6a-0d82-461f-a0d9-6604086180ed" },
+  },
   name: "Not a ticket",
   args: { start: { at: "answer", answer: "notATicket" } },
   play: async ({ canvasElement }) => {
@@ -244,6 +289,9 @@ export const NotATicket: Story = {
 };
 
 export const WrongEvent: Story = {
+  parameters: {
+    verification: { caseId: "vc_a14c344a-7041-48bd-a1e0-0c5a2570ebb9" },
+  },
   name: "Wrong event",
   args: { start: { at: "answer", answer: "wrongEvent" } },
   play: async ({ canvasElement }) => {
@@ -254,6 +302,9 @@ export const WrongEvent: Story = {
 };
 
 export const NotValidToday: Story = {
+  parameters: {
+    verification: { caseId: "vc_d766b18c-e503-4bdf-90d4-df50e25542ce" },
+  },
   name: "Not valid today",
   args: { start: { at: "answer", answer: "notValidToday" } },
   play: async ({ canvasElement }) => {
@@ -265,6 +316,9 @@ export const NotValidToday: Story = {
 
 /** No answer in four seconds: don't let them in yet, and Try Again. */
 export const NotChecked: Story = {
+  parameters: {
+    verification: { caseId: "vc_195b032d-6989-44c9-9e05-28967b4b53e1" },
+  },
   name: "Not checked",
   args: { start: { at: "answer", answer: "notChecked" }, offline: true },
   play: async ({ canvasElement }) => {
@@ -280,6 +334,9 @@ export const NotChecked: Story = {
 
 /** Find by reference: the order's tickets, each with Admit or why not. */
 export const FindByReference: Story = {
+  parameters: {
+    verification: { caseId: "vc_918a3219-a55e-4607-baa6-c7d3b3995edc" },
+  },
   name: "Find by reference",
   args: { start: { at: "find", query: "", result: { status: "idle" } } },
   play: async ({ canvasElement }) => {
@@ -298,6 +355,9 @@ export const FindByReference: Story = {
 };
 
 export const ReferenceNotFound: Story = {
+  parameters: {
+    verification: { caseId: "vc_d576a90c-1227-4ada-87ec-d2797812102f" },
+  },
   name: "Reference not found",
   args: { start: { at: "find", query: "", result: { status: "idle" } } },
   play: async ({ canvasElement }) => {
@@ -312,6 +372,9 @@ export const ReferenceNotFound: Story = {
 
 /** The passcode was changed in the console: every phone signed out. */
 export const PasscodeChanged: Story = {
+  parameters: {
+    verification: { caseId: "vc_edd06b39-912e-4fce-93b7-a42a836adbdf" },
+  },
   name: "Passcode changed",
   args: { start: { at: "passcodeChanged" } },
   play: async ({ canvasElement }) => {

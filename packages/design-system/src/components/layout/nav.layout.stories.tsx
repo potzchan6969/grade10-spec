@@ -25,6 +25,9 @@ type Story = StoryObj<typeof meta>;
  * utilities, and language (nested drawer) live in the left menu.
  */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_6f7b5b03-0e1c-4828-8a1d-1aa1229fb816" },
+  },
   name: "Narrow (375px)",
   decorators: [
     (Story) => (
@@ -61,6 +64,9 @@ export const Narrow: Story = {
 
 /** Opens the compact menu — primary, then utilities, language nested drawer. */
 export const MenuOpen: Story = {
+  parameters: {
+    verification: { caseId: "vc_5bc2d09d-13ce-4c1b-bce2-13b9f1ed4d15" },
+  },
   name: "Menu open (375px)",
   decorators: [
     (Story) => (
@@ -110,6 +116,9 @@ export const MenuOpen: Story = {
  * items plus trailing controls do not overlap.
  */
 export const CompactAt800: Story = {
+  parameters: {
+    verification: { caseId: "vc_e979ffb2-8bb7-4794-8708-a5f5b2551af9" },
+  },
   name: "Compact (800px)",
   decorators: [
     (Story) => (
@@ -136,6 +145,9 @@ export const CompactAt800: Story = {
 
 /** Language opens a nested drawer from the compact menu. */
 export const LanguageNested: Story = {
+  parameters: {
+    verification: { caseId: "vc_626cb732-1cb7-416f-9007-29838dbd7b69" },
+  },
   name: "Language nested (375px)",
   decorators: [
     (Story) => (

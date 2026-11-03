@@ -35,6 +35,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Both regions loading. */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_5c38f483-1f43-4101-b1f7-1f50857ba462" },
+  },
   args: {
     groups: { status: "loading" },
     results: { status: "loading" },
@@ -43,6 +46,9 @@ export const Loading: Story = {
 
 /** Results failed, sidebar stands. The two boundaries resolve independently. */
 export const ResultsError: Story = {
+  parameters: {
+    verification: { caseId: "vc_a7b5fefa-55d8-4e41-b95b-e973894df324" },
+  },
   args: {
     results: {
       status: "error",
@@ -61,6 +67,9 @@ export const ResultsError: Story = {
 
 /** Filter groups still loading, results ready. The count and grid show anyway. */
 export const GroupsLoading: Story = {
+  parameters: {
+    verification: { caseId: "vc_c88b66b9-d879-45e2-84ea-c0b856528bfe" },
+  },
   args: { groups: { status: "loading" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -71,6 +80,9 @@ export const GroupsLoading: Story = {
 /** Filters match nothing: the message and a clear-filters action, with the
  * sidebar and the current selection intact. */
 export const NoMatch: Story = {
+  parameters: {
+    verification: { caseId: "vc_3aceba99-49c5-46d6-9b00-b711b12345ad" },
+  },
   args: {
     resultCount: "0 Products",
     selection: SELECTION,
@@ -93,6 +105,9 @@ export const NoMatch: Story = {
 
 /** An empty catalog: a different message, and no clear-filters action. */
 export const EmptyCatalog: Story = {
+  parameters: {
+    verification: { caseId: "vc_b3073114-a33e-4987-81aa-ed3c1c18fd8e" },
+  },
   args: {
     resultCount: "0 Products",
     selection: {},
@@ -114,6 +129,9 @@ export const EmptyCatalog: Story = {
 
 /** Appending the next page shows Boneyard skeleton tiles below the grid. */
 export const LoadingMore: Story = {
+  parameters: {
+    verification: { caseId: "vc_af2f3e7a-7c37-407d-8263-5523ca45e201" },
+  },
   args: {
     loadingMore: true,
     hasMore: true,
@@ -129,6 +147,9 @@ export const LoadingMore: Story = {
 
 /** The end of the catalog hides the load sentinel. */
 export const EndOfCatalog: Story = {
+  parameters: {
+    verification: { caseId: "vc_cf05a37a-4dc3-4930-a9f5-4b36b66de1ca" },
+  },
   args: { hasMore: false },
   play: async ({ canvasElement }) => {
     expect(

@@ -23,6 +23,9 @@ type Story = StoryObj<typeof meta>;
 
 /** No key art yet: the hero draws its own night with a warm glow. */
 export const WithoutArt: Story = {
+  parameters: {
+    verification: { caseId: "vc_37eb7d93-a52b-4839-9638-386b394e3d17" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -36,6 +39,9 @@ export const WithoutArt: Story = {
 };
 
 export const WithArt: Story = {
+  parameters: {
+    verification: { caseId: "vc_03ffe843-94d8-46d8-b042-7b1163d07471" },
+  },
   args: {
     imageUrl: heroImage,
   },
@@ -47,6 +53,9 @@ export const WithArt: Story = {
 };
 
 export const Ended: Story = {
+  parameters: {
+    verification: { caseId: "vc_e7a7f472-8007-4b86-86b7-ac7eb7cef552" },
+  },
   args: { phase: "ended", phaseLabel: "Ended 30 Nov", actions: undefined },
   play: async ({ canvasElement }) => {
     const hero = canvasElement.querySelector('[data-slot="campaign-hero"]');

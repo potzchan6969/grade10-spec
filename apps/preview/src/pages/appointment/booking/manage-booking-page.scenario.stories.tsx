@@ -99,4 +99,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** A booked visit, opened from its link while signed in. */
-export const Scenario: Story = {};
+export const Scenario: Story = {
+  parameters: {
+    verification: { caseId: "vc_329a9d42-e2cc-4f42-9a63-a8dd6e08afd0" },
+  },
+};

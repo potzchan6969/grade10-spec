@@ -67,6 +67,9 @@ type Story = StoryObj;
 
 /** Every upload state — idle, uploading, processing, error, done. */
 export const States: Story = {
+  parameters: {
+    verification: { caseId: "vc_4897ba71-dde7-48bc-ae70-e6295cbcc769" },
+  },
   name: "States",
   render: () => (
     <VStack className="w-full max-w-md" gap="sm" hAlign="stretch">
@@ -102,6 +105,9 @@ export const States: Story = {
 
 /** Row sizes - default and xs. */
 export const Sizes: Story = {
+  parameters: {
+    verification: { caseId: "vc_68d74b2f-0db8-4cb9-ada4-a1b33cf2ee56" },
+  },
   name: "Sizes",
   render: () => (
     <VStack className="w-full max-w-md" gap="sm" hAlign="stretch">
@@ -127,6 +133,9 @@ export const Sizes: Story = {
 
 /** Layout - a horizontal row and a vertical tile. */
 export const Orientations: Story = {
+  parameters: {
+    verification: { caseId: "vc_dcbab49f-ffd4-45fe-ad52-15a886567c33" },
+  },
   name: "Orientations",
   render: () => (
     <HStack gap="sm" vAlign="start">
@@ -152,6 +161,9 @@ export const Orientations: Story = {
 
 /** Thumbnail well holding an image preview. */
 export const ImageMedia: Story = {
+  parameters: {
+    verification: { caseId: "vc_a2c23c9a-5253-4059-9e07-5fe510d27c77" },
+  },
   name: "Image media",
   render: () => (
     <Attachment className="w-full max-w-md">
@@ -168,6 +180,9 @@ export const ImageMedia: Story = {
 
 /** Compact horizontal strip with snapping scroll. */
 export const Group: Story = {
+  parameters: {
+    verification: { caseId: "vc_389d1163-7bbd-4458-ba73-ed5bc2cfdf93" },
+  },
   name: "Group",
   render: () => (
     <AttachmentGroup aria-label="Attachments" className="max-w-sm">
@@ -187,6 +202,9 @@ export const Group: Story = {
 
 /** Full-card trigger — the row opens while actions stay clickable. */
 export const Trigger: Story = {
+  parameters: {
+    verification: { caseId: "vc_b3268bf6-c47d-4652-b1bb-68b5f7bf17b8" },
+  },
   name: "Trigger",
   render: () => (
     <Attachment className="w-full max-w-md">
