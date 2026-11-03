@@ -4,7 +4,11 @@ spec: grade10-site/loyalty/programme
 order: 3
 ---
 
+::phase{id="store-launch-2" priority="P0"}
+
 ## Reward Types
+
+::phase{id="pre-store-launch" priority="P1"}
 
 | Type | Discount | Scope | Minimum spend | Example |
 | --- | --- | --- | --- | --- |
@@ -172,6 +176,8 @@ Product's call.
 
 ## Reward Catalog
 
+::phase{id="pre-store-launch" priority="P1"}
+
 Every reward the programme knows, on sale or not; the
 [Reward Shop](#reward-shop) is the part of it a member can buy.
 
@@ -193,6 +199,8 @@ Every reward the programme knows, on sale or not; the
   call
 
 ## Gifts from a Campaign
+
+::phase{id="pre-store-launch" priority="P0"}
 
 A grant-only reward is one only a campaign hands out -
 [Campaigns](/p/grade10-site/loyalty/campaigns).

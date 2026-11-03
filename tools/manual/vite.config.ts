@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import { deskDevFallback, deskDevProxy } from "./src/store/desk-dev.mts";
 import { manualStorePlugin } from "./src/store/vite-plugin.mts";
 
 /**
@@ -46,10 +47,10 @@ if (both.length > 0)
   );
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), manualStorePlugin()],
+  plugins: [react(), tailwindcss(), deskDevFallback(), manualStorePlugin()],
   // Fixed port so links into the manual are stable; 6006/6010 are the workbenches.
-  server: { port: 6017, strictPort: true },
-  preview: { port: 6017, strictPort: true },
+  server: { port: 6017, strictPort: true, proxy: deskDevProxy() },
+  preview: { port: 6017, strictPort: true, proxy: deskDevProxy() },
   build: {
     rolldownOptions: { output: { codeSplitting: { groups: VENDOR_CHUNKS } } },
   },

@@ -4,6 +4,8 @@ spec: grade10-site/store/membership
 order: 7
 ---
 
+::phase{id="store-launch-2" priority="P0"}
+
 Shopify is the online checkout and the till: it prices the basket, takes the
 payment and shows a discount, and never holds a balance, a tier or a coupon.
 
@@ -26,6 +28,8 @@ records the order, and the programme moves the balance once.
 ::image{src="assets/diagrams/shopify-order-pipeline.svg" alt="The paid path both channels share, from choosing points to the balance moving"}
 
 ## Customer Pairing
+
+::phase{id="pre-store-launch" priority="P0"}
 
 | Rule | Value |
 | --- | --- |

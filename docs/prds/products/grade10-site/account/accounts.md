@@ -3,6 +3,8 @@ title: Accounts
 icon: key
 ---
 
+::phase{id="auction" priority="P2"}
+
 Accounts is how a person gets into a brand's site or console, and what happens to their account once they are in. A person signs in with an emailed link, or with Google where the brand offers it. Each site or console keeps its own session. Operators manage roles, users, sessions and the audit trail on the same accounts, each behind its own permission.
 
 ## Pages

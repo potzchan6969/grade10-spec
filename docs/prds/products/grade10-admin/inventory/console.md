@@ -3,6 +3,8 @@ title: Inventory Console
 order: 7
 ---
 
+::phase{id="internal-consignment" priority="P0"}
+
 The Inventory section of the admin console: one page per item that says what
 it is, whose it is, where it is and what is happening to it, and the desks
 that receive, move and count.

@@ -15,6 +15,11 @@ import {
   readManualSuites,
 } from "./read-manual.mts";
 import { readReferences, readReferencesReadme } from "./read-references.mts";
+import {
+  readCapabilityCases,
+  readPhaseRegistry,
+  readTeam,
+} from "./read-release.mts";
 import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
 import { checkWarnings } from "./warnings.mts";
@@ -41,6 +46,9 @@ export function composeStore(
   const references = readReferences(roots.store, git);
   const referencesReadme = readReferencesReadme(roots.store);
   const { pages } = readManualPages(roots, git);
+  const phases = readPhaseRegistry(roots);
+  const capabilityCases = readCapabilityCases(roots);
+  const team = readTeam(roots);
 
   return {
     snapshot: {
@@ -57,6 +65,9 @@ export function composeStore(
       history: git.history,
       warnings,
       ...(designSync ? { designSync } : {}),
+      ...(phases ? { phases } : {}),
+      ...(capabilityCases ? { capabilityCases } : {}),
+      ...(team ? { team } : {}),
     },
     references,
   };

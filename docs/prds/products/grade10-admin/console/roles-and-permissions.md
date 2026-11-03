@@ -4,6 +4,8 @@ spec: grade10-admin/console/roles-and-permissions
 order: 2
 ---
 
+::phase{id="auction" priority="P2"}
+
 What each closed role may do, and what each permission means, shown to
 operators from the shipped mapping — never edited from the console.
 

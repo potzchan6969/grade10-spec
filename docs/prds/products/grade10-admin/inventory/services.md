@@ -3,6 +3,8 @@ title: Services and Hand-offs
 order: 6
 ---
 
+::phase{id="internal-consignment" priority="P1"}
+
 ## Values
 
 | Service | Its mark | Opens | Closes |

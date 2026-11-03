@@ -4,6 +4,8 @@ spec: grade10-site/store/cross-sell
 order: 4
 ---
 
+::phase{id="store-launch-1" priority="P2"}
+
 Below a card on [Product Details](/p/grade10-site/store/product-page), the
 store shows other cards the collector may also like.
 

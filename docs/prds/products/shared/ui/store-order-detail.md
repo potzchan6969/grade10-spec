@@ -4,6 +4,8 @@ spec: shared/ui/store-order-detail
 order: 8
 ---
 
+::phase{id="store-launch-1" priority="P2"}
+
 Order Details is one shared page body with reusable header, delivery, item,
 summary, payment, and address parts. Applications supply the facts, formatted
 values, copy, and actions; the blocks fetch nothing and navigate nowhere.

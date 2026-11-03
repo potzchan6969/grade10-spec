@@ -1,0 +1,9 @@
+{
+  // The Worker compiles against the Workers runtime, the tests against Node:
+  // their globals disagree, so each half is its own project.
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.worker.json" },
+    { "path": "./tsconfig.test.json" }
+  ]
+}

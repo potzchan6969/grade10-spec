@@ -3,6 +3,8 @@ title: Consignment Retrieval
 order: 2
 ---
 
+::phase{id="internal-consignment" priority="P1"}
+
 The collector takes a card off sale before it sells. The card stays in the
 vault and keeps earning.
 

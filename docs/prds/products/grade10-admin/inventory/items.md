@@ -4,6 +4,8 @@ spec: grade10-admin/inventory/items
 order: 2
 ---
 
+::phase{id="internal-consignment" priority="P0"}
+
 An item is one physical thing the house knows about, graded or not, with one
 owner: a collector's slab in the vault, a watch kept for storage, a coin the
 company owns. Stock counts units of a product; an item is one object.

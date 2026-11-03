@@ -457,9 +457,9 @@ test("the merge workflow detects print messages and executes workflow-owned code
     );
     return readFileSync(output, "utf8").trim();
   };
-  assert.equal(detect(), "records=false");
+  assert.equal(detect(), "records=false\nsheet=false\ndesk=false");
   commitRun(root, record);
-  assert.equal(detect(), "records=true");
+  assert.equal(detect(), "records=true\nsheet=true\ndesk=false");
 });
 
 test("the writer prints, skips identical rewrites, renames, finalizes and locks a merged run", (t) => {

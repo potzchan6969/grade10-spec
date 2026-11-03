@@ -3,6 +3,8 @@ title: Consignment
 icon: storefront
 ---
 
+::phase{id="internal-consignment" priority="P2"}
+
 Consignment is selling a card a collector keeps in the Grade10 vault, in the
 store or at auction, for a commission. Every consigned card is a vaulted card:
 it is registered into the vault first, then consigned, either in the same visit
@@ -13,7 +15,7 @@ or later from the collector's dashboard, with no second intake -
 # At the counter
 
 ## Collector — Intake and consign
-At a card event, or the shop's counter from Phase 2; on the intake form staff set the card to Consign, with the store or the auction and the lowest price the collector accepts.
+At a card event, or the shop's counter after card events; on the intake form staff set the card to Consign, with the store or the auction and the lowest price the collector accepts.
 
 ## Collector — Sign
 The Vault Terms and the Consignment Agreement together, on the shop's tablet or by an emailed link.

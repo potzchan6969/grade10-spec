@@ -3,6 +3,8 @@ title: Intake and Release
 order: 5
 ---
 
+::phase{id="internal-consignment" priority="P0"}
+
 ## Values
 
 | Channel | Starts with | Custody starts |

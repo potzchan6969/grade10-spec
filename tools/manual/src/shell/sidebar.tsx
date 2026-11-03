@@ -1,6 +1,11 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { cn } from "@grade10/design-system/lib/utils";
-import { BookOpenText, CaretDown, CaretRight } from "@phosphor-icons/react";
+import {
+  BookOpenText,
+  CaretDown,
+  CaretRight,
+  FlagBanner,
+} from "@phosphor-icons/react";
 import { type MouseEvent, use, useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import type { NavGroup, NavItem, NavProduct } from "../api/derive";
@@ -140,6 +145,22 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
             </Text>
           ) : (
             <div className="flex flex-col gap-5 pt-2">
+              {index.snapshot.phases ? (
+                <NavLink
+                  className={({ isActive }: { isActive: boolean }) =>
+                    cn(
+                      ROW,
+                      "text-secondary-foreground hover:text-foreground",
+                      isActive && "bg-muted font-medium text-foreground",
+                    )
+                  }
+                  onClick={onNavigate}
+                  to="/phases"
+                >
+                  <FlagBanner aria-hidden size={16} />
+                  Release phases
+                </NavLink>
+              ) : null}
               {index.groups.map((group) => (
                 <GroupSection
                   group={group}

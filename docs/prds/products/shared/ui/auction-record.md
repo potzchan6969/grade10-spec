@@ -4,6 +4,8 @@ spec: shared/ui/auction-record
 order: 9
 ---
 
+::phase{id="auction" priority="P2"}
+
 Blocks make the account's auction record, written once and composed by every
 application that shows it. What the record means — the states, the ordering,
 the privacy — is [My Auctions](/p/grade10-site/auction/bidding#my-auctions-watchlist-and-notifications); this

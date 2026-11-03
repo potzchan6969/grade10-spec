@@ -4,6 +4,8 @@ spec: shared/ui/store-locator
 order: 12
 ---
 
+::phase{id="store-launch-1" priority="P2"}
+
 - **Shared export** — applications import `StoreLocator` from `@grade10/ui`:
   the Location & Hours block between site chrome, with a map that opens Google
   Maps, the store name, the street address lines and the week's hours. The

@@ -4,6 +4,8 @@ spec: grade10-site/auction/auction
 order: 3
 ---
 
+::phase{id="auction" priority="P0"}
+
 How a lot is won: the rules every bid is held to, the panel a collector bids
 from, and the record and letters that follow their lots.
 

@@ -3,6 +3,8 @@ title: Loyalty Service
 order: 3
 ---
 
+::phase{id="pre-store-launch" priority="P2"}
+
 Points, tiers, and a reward menu, general enough for any product. All behavior lives in `@grade10/loyalty-service`; `apps/backend/grade10/loyalty` is an assembly — program config, bindings, migrations, nothing else. Which products run one: [Multi-Product Assembly](/platform/multi-product). The core: **the ledger is an append-only list of dated point lots, every balance is a query over it, and every ledger write happens once, under that member's row lock.** Three clocks run on top of it — the member's activity clock, which says when their balance lapses; an earned tier's term, which says when it must be earned again; and a redemption's fulfilment lifecycle, which runs until the member holds what they bought.
 
 ## Model

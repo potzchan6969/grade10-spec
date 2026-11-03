@@ -5,6 +5,8 @@ audience: operator
 order: 9
 ---
 
+::phase{id="pre-store-launch" priority="P1"}
+
 ## Moving Points
 
 An operator moves points by hand from the admin console two ways, and the two
@@ -48,6 +50,8 @@ pausing a member's top-ups, the flags, and recovering a
 chargeback's shortfall — [Top-ups](/p/grade10-site/loyalty/top-ups#operator-console).
 
 ## Authoring a Reward
+
+::phase{id="pre-store-launch" priority="P0"}
 
 An operator writes a reward's whole definition in the console's reward form,
 with no call to the admin API. The form offers three choices, each saved as

@@ -43,6 +43,7 @@ import { checkCopy } from "./copy.mjs";
 import { checkDense } from "./dense.mjs";
 import { checkMarkInProse } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
+import { checkPhases } from "./phases.mjs";
 import { checkLooseRules } from "./rules.mjs";
 import { checkTaxonomy } from "./shape.mjs";
 
@@ -89,6 +90,7 @@ export async function runChecks(target, git, { fix = false } = {}) {
   checkMarkInProse(ctx, pages);
   checkDense(ctx, pages);
   checkLooseRules(ctx, pages);
+  checkPhases(ctx, pages);
 
   if (!ctx.stories && ctx.storyIds.size > 0) {
     notes.push(

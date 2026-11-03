@@ -3,6 +3,8 @@ title: Earnings Wallet
 order: 8
 ---
 
+::phase{id="internal-consignment" priority="P0"}
+
 One wallet per collector, where everything they can cash out collects: the
 vault's daily incentive and consignment sale proceeds -
 [Incentive](/p/grade10-site/vault/incentive),
@@ -41,6 +43,8 @@ vault's daily incentive and consignment sale proceeds -
 
 ## Cash-Out
 
+::phase{id="store-launch-1" priority="P1"}
+
 - 🚧 **Request** — at least US$65 and at most US$6,500, one every 7 days; each figure an admin setting
   - 🚧 **Asked from the Wallet** — the collector asks from their wallet page: the amount and what it arrives in, where it goes, a review, then a submitted confirmation
   - 🚧 **To the Bank on File** — a request pays the Hong Kong bank account the collector named at their consignment, in Hong Kong dollars; there is nothing to pick
@@ -57,6 +61,8 @@ vault's daily incentive and consignment sale proceeds -
 
 ## Payouts
 
+::phase{id="store-launch-1" priority="P1"}
+
 What finance does with the requests.
 
 - **Batches** — finance approves cash-outs in batches, pays them by FPS or bank transfer to the saved account, and marks each paid with its payment reference
@@ -66,6 +72,8 @@ What finance does with the requests.
 - **Statements** — issued each period, with a credit note for a refund after settlement - [Vault Documents](/p/grade10-site/vault/documents#papers)
 
 ## Identity Check
+
+::phase{id="store-launch-1" priority="P1"}
 
 - 🚧 **One Check, for the Account** — identity is verified once per account and reused, never by a service at an intake, a signing or a sale - [KYC](/p/grade10-site/account/kyc)
 - 🚧 **Before Money Leaves** — a cash-out, or a loan advance when the loan offer is accepted, before the transfer; also once for a mail-in, where no staff see the ID - [Vault Intake](/p/grade10-site/vault/intake#mail-in)
@@ -87,6 +95,8 @@ What finance does with the requests.
 
 ## Held List
 
+::phase{id="store-launch-1" priority="P1"}
+
 The console's list of what the money-out gate held, on the earnings desk.
 
 - 🚧 **What It Lists** — held cash-outs, then loan offers held at acceptance, oldest first, each with why: above the review amount, the ID number differs, or the name differs
@@ -98,6 +108,8 @@ The console's list of what the money-out gate held, on the earnings desk.
 - 🚧 **A Decision Stands** — once one is recorded, an approver acting the other way is told it stands
 
 ## Abuse Checks
+
+::phase{id="store-launch-1" priority="P1"}
 
 - 🚧 **Signals** — accounts sharing a phone, device or bank account; a card vaulted, retrieved and vaulted again; a card's price moving sharply on SNKRDUNK
 - 🚧 **Review** — staff may pause incentive on the card or the account

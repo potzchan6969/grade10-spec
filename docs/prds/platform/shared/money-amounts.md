@@ -34,6 +34,8 @@ refused on every surface.
 
 ## Currencies in Use
 
+::phase{id="internal-consignment" priority="P1" rules="a-reference-price-may-be-converted"}
+
 A brand or surface quotes in the currency its owning page sets. This table
 names those currencies and does not decide them.
 

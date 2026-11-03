@@ -15,6 +15,10 @@ const INFO: Record<string, BlockInfo> = {
     label: "Children",
     hint: "Cards for the pages under this directory.",
   },
+  phase: {
+    label: "Phase",
+    hint: "The release the lines under this heading launch in, at P0, P1 or P2; before the first heading, the whole page. `rules` names the rules that launch in another phase.",
+  },
   callout: {
     label: "Callout",
     hint: "A note, a decision or a warning, set apart.",

@@ -1,13 +1,20 @@
 import { type ReactNode, useMemo } from "react";
 import type { ManualIndex, ParsedPage } from "../api/derive";
+import { pageMarks } from "../api/page-phases";
 import { casesOfPage } from "../api/suites";
+import { releaseOf, useDeskVerdicts } from "../api/use-release";
 import { BlockList } from "../blocks/block-list";
 import { BlockScopeProvider } from "../blocks/block-scope";
 import { BrokenCard } from "../blocks/broken-card";
+import { PhaseMarksProvider } from "../blocks/phase-chip";
 import { sectionRows } from "../blocks/side-blocks";
 import { useEditMode } from "../editor/edit-mode";
 import { PageEditor } from "../editor/page-editor";
 import { useLayoutMaybe } from "../shell/layout";
+import {
+  type PageRelease,
+  PageReleaseProvider,
+} from "../shell/section-readiness";
 import {
   HintedPage,
   hasSide,
@@ -16,6 +23,7 @@ import {
 } from "../shell/side-panel";
 import { PageWarnings, warningsForPage } from "./check-warnings";
 import { NotFoundPage } from "./not-found";
+import { PageChips } from "./page-chips";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";
 
@@ -40,7 +48,26 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
   const suites = index.snapshot.suites;
   const rows = useMemo(() => sectionRows(blocks ?? []), [blocks]);
   const cases = useMemo(() => casesOfPage(suites ?? [], path), [suites, path]);
-  const side = hasSide(rows, cases);
+  const reading = releaseOf(index);
+  const marks = useMemo(
+    () => (reading ? pageMarks(reading, path) : null),
+    [reading, path],
+  );
+  const inRelease = useMemo(
+    () => reading?.units.some((unit) => unit.pages.includes(path)) ?? false,
+    [reading, path],
+  );
+  const verdicts = useDeskVerdicts(path, inRelease);
+  const team = index.snapshot.team;
+  const release = useMemo<PageRelease | null>(
+    () => (reading && marks ? { reading, marks, verdicts, team } : null),
+    [reading, marks, verdicts, team],
+  );
+  const phaseMarks = useMemo(
+    () => (reading && marks ? { marks, phases: reading.phases } : null),
+    [reading, marks],
+  );
+  const side = hasSide(rows, cases, release);
   const split = (layout?.split ?? false) && side;
   // Each section's hint on a wide page holds its stories and engineering
   // detail, so the reading leaves them out; a narrow screen keeps them.
@@ -55,6 +82,7 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
   const head = (
     <>
       <PageHeading
+        chips={release ? <PageChips release={release} /> : null}
         eyebrow={eyebrow}
         summary={frontmatter.summary}
         title={frontmatter.title}
@@ -64,24 +92,28 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
   );
   return (
     <BlockScopeProvider value={{ index, pagePath: path }}>
-      {/* Folded rail, wide screen: each section's stories, engineering
+      <PageReleaseProvider value={release}>
+        <PhaseMarksProvider value={phaseMarks}>
+          {/* Folded rail, wide screen: each section's stories, engineering
           detail and cases sit beside it. */}
-      {split ? (
-        <SplitPage cases={cases} head={head} rows={rows}>
-          {children}
-        </SplitPage>
-      ) : (
-        <>
-          {head}
-          {hinted ? (
-            <HintedPage cases={cases} rows={rows} />
+          {split ? (
+            <SplitPage cases={cases} head={head} rows={rows}>
+              {children}
+            </SplitPage>
           ) : (
-            <BlockList blocks={page.ast.blocks} />
+            <>
+              {head}
+              {hinted ? (
+                <HintedPage cases={cases} rows={rows} />
+              ) : (
+                <BlockList blocks={page.ast.blocks} />
+              )}
+              {children}
+            </>
           )}
-          {children}
-        </>
-      )}
-      {layout && side ? <ReadingRunout /> : null}
+          {layout && side ? <ReadingRunout /> : null}
+        </PhaseMarksProvider>
+      </PageReleaseProvider>
     </BlockScopeProvider>
   );
 }

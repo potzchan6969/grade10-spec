@@ -15,12 +15,12 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: "Print a trial, finalize it, cancel finalization, or copy a merged run"
+        description: "Print a trial, finalize it, cancel finalization, copy a merged run, or open the run on the run desk"
         type: choice
         default: print
-        options: [print, finalize, reopen, copy]
+        options: [print, finalize, reopen, copy, desk-open]
       run_id:
-        description: "Run id for finalize, reopen or copy"
+        description: "Run id for finalize, reopen or copy; with desk-open, the desk run whose failed and blocked rows to re-run"
         type: string
       confirmed:
         description: "Printed fingerprint confirmed by a human"
@@ -57,6 +57,23 @@ on:
         type: string
       scope:
         description: "Only read suites whose path contains this"
+        required: false
+        type: string
+      phase:
+        description: "Cases of the units in this release phase (phases.yaml id)"
+        required: false
+        type: string
+      release_priority:
+        description: "Units at these release priorities — P0, P1, P2"
+        required: false
+        type: string
+      ready:
+        description: "Only units reviewed or further"
+        required: false
+        default: false
+        type: boolean
+      section:
+        description: "One store section, <page>#<section>"
         required: false
         type: string
       env:
@@ -124,7 +141,7 @@ jobs:
       # Say which piece of setup is missing, rather than failing later inside
       # Google's auth with a message about an audience nobody configured.
       - name: Check the repository is configured
-        if: ${{ !inputs.dry_run }}
+        if: ${{ !inputs.dry_run && inputs.action != 'desk-open' }}
         env:
           PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
@@ -146,6 +163,23 @@ jobs:
             exit 1
           fi
 
+      # The run desk sits behind Cloudflare Access; the run sheet reaches it
+      # with a service token, never a person's sign-in.
+      - name: Check the desk's service token is configured
+        if: ${{ !inputs.dry_run && inputs.action == 'desk-open' }}
+        env:
+          CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+        run: |
+          missing=""
+          [ -n "$CLIENT_ID" ] || missing="$missing CF_ACCESS_CLIENT_ID"
+          [ -n "$CLIENT_SECRET" ] || missing="$missing CF_ACCESS_CLIENT_SECRET"
+          if [ -n "$missing" ]; then
+            echo "::error::Repository secrets not set:$missing — the run desk's Access service token"
+            echo "Settings → Secrets and variables → Actions → Secrets."
+            exit 1
+          fi
+
       # The selection reaches the script through a file, so a long id list is
       # not a shell argument and nothing in it is interpolated.
       - name: Collect the selection
@@ -159,7 +193,7 @@ jobs:
           printf '%s' "$EXCLUSIONS" > /tmp/exclusions.json
 
       - name: Authenticate to Google
-        if: ${{ !inputs.dry_run }}
+        if: ${{ !inputs.dry_run && inputs.action != 'desk-open' }}
         uses: google-github-actions/auth@v2
         id: auth
         with:
@@ -191,9 +225,45 @@ jobs:
           SANDBOX: ${{ inputs.sandbox }}
           OVERWRITE: ${{ inputs.overwrite }}
           DRY_RUN: ${{ inputs.dry_run }}
+          PHASE: ${{ inputs.phase }}
+          RELEASE_PRIORITY: ${{ inputs.release_priority }}
+          READY: ${{ inputs.ready }}
+          SECTION: ${{ inputs.section }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+          DESK_URL: ${{ vars.DESK_URL }}
         run: |
           # `if` rather than `&&`: the default shell is `bash -e`, and a false
           # test on an empty input would end the step rather than skip a flag.
+          if [ "$ACTION" = "desk-open" ]; then
+            # A phase's environment is its own unless one was asked for.
+            set -- --desk --out .run-sheet-output/run-spec.json
+            if [ -n "$RUN_ENV" ] && { [ -z "$PHASE" ] || [ "$RUN_ENV" != "staging-1" ]; }; then set -- "$@" --env "$RUN_ENV"; fi
+            if [ "$DRY_RUN" = "true" ]; then set -- "$@" --dry-run; else set -- "$@" --open; fi
+            if [ -n "$CONFIRMED" ]; then set -- "$@" --confirmed "$CONFIRMED"; fi
+            if [ -n "$RUN_NAME" ]; then set -- "$@" --name "$RUN_NAME"; fi
+            if [ -n "$RUN_ID" ]; then
+              set -- "$@" --rerun "$RUN_ID"
+            else
+              if [ -s /tmp/exclusions.json ]; then set -- "$@" --exclusions-file /tmp/exclusions.json; fi
+              if [ -n "$CHANGED_SINCE" ]; then set -- "$@" --changed-since "$CHANGED_SINCE"; fi
+              if [ -n "$SELECTION" ]; then set -- "$@" --selection "$SELECTION"; fi
+              if [ -s /tmp/cases.txt ]; then set -- "$@" --cases-file /tmp/cases.txt; fi
+              if [ -n "$SUITES" ]; then set -- "$@" --suites "$SUITES"; fi
+              if [ -n "$PRIORITY" ]; then set -- "$@" --priority "$PRIORITY"; fi
+              if [ -n "$LEVEL" ]; then set -- "$@" --level "$LEVEL"; fi
+              if [ -n "$SCOPE" ]; then set -- "$@" --scope "$SCOPE"; fi
+              if [ -n "$PHASE" ]; then set -- "$@" --phase "$PHASE"; fi
+              if [ -n "$RELEASE_PRIORITY" ]; then set -- "$@" --release-priority "$RELEASE_PRIORITY"; fi
+              if [ "$READY" = "true" ]; then set -- "$@" --ready; fi
+              if [ -n "$SECTION" ]; then set -- "$@" --section "$SECTION"; fi
+              if [ "$INCLUDE_DRAFT" = "true" ]; then set -- "$@" --include-draft; fi
+              if [ "$INCLUDE_AUTOMATED" = "false" ]; then set -- "$@" --exclude-automated; fi
+            fi
+            set -o pipefail
+            node scripts/openspec/run-sheet.mjs "$@" | tee /tmp/run-sheet.out
+            exit 0
+          fi
           set -- --env "${RUN_ENV:-staging-1}" --record-output .run-sheet-output/run-record.json
           if [ -s /tmp/exclusions.json ]; then set -- "$@" --exclusions-file /tmp/exclusions.json; fi
           if [ -n "$SOURCE_REF" ]; then set -- "$@" --source-ref "$SOURCE_REF"; fi
@@ -212,6 +282,10 @@ jobs:
           if [ -n "$PRIORITY" ]; then set -- "$@" --priority "$PRIORITY"; fi
           if [ -n "$LEVEL" ]; then set -- "$@" --level "$LEVEL"; fi
           if [ -n "$SCOPE" ]; then set -- "$@" --scope "$SCOPE"; fi
+          if [ -n "$PHASE" ]; then set -- "$@" --phase "$PHASE"; fi
+          if [ -n "$RELEASE_PRIORITY" ]; then set -- "$@" --release-priority "$RELEASE_PRIORITY"; fi
+          if [ "$READY" = "true" ]; then set -- "$@" --ready; fi
+          if [ -n "$SECTION" ]; then set -- "$@" --section "$SECTION"; fi
           if [ "$INCLUDE_DRAFT" = "true" ]; then set -- "$@" --include-draft; fi
           if [ "$INCLUDE_AUTOMATED" = "true" ]; then set -- "$@" --include-automated; fi
           if [ "$INCLUDE_AUTOMATED" = "false" ]; then set -- "$@" --exclude-automated; fi
@@ -222,11 +296,19 @@ jobs:
           node scripts/openspec/run-sheet.mjs "$@" | tee /tmp/run-sheet.out
 
       - name: Upload the run record
-        if: ${{ success() && !inputs.sandbox && !inputs.dry_run }}
+        if: ${{ success() && !inputs.sandbox && !inputs.dry_run && inputs.action != 'desk-open' }}
         uses: actions/upload-artifact@v4
         with:
           name: run-record
           path: .run-sheet-output/run-record.json
+          if-no-files-found: error
+
+      - name: Upload the run desk's RunSpec
+        if: ${{ success() && inputs.action == 'desk-open' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-spec
+          path: .run-sheet-output/run-spec.json
           if-no-files-found: error
 
       - name: Summarise

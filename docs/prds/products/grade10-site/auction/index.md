@@ -3,6 +3,8 @@ title: Auction
 icon: gavel
 ---
 
+::phase{id="auction" priority="P2"}
+
 Grade10 Auction sells graded cards one lot at a time, and it is open to the
 public. A collector signs in,
 finds a lot, bids by naming the most they will pay, and after the close pays

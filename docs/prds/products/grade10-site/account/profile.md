@@ -4,6 +4,8 @@ spec: grade10-site/store/account-profile
 order: 1
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 The profile is what a collector says about themselves in the store, on their
 own account page and shown to nobody else. Grade10 and ZZZ show the same page.
 

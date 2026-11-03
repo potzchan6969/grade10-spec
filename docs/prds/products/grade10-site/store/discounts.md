@@ -4,7 +4,11 @@ spec: grade10-site/store/discounts
 order: 20
 ---
 
+::phase{id="store-launch-1" priority="P0"}
+
 ## Kinds of Discount
+
+::phase{id="store-launch-2" priority="P0" rules="order-coupon,product-coupon,gift,points"}
 
 Amounts are HKD. Each kind has a class, product or order, that the
 [combine rules](#authoring-rules) read.
@@ -24,11 +28,15 @@ Amounts are HKD. Each kind has a class, product or order, that the
 
 ### Public Codes
 
+::phase{id="store-launch-2" priority="P0" rules="order-beside-wallet-codes"}
+
 - **Shown in the Drawer** — the picker lists public codes to guests and members — [Cart Drawer](/p/grade10-site/store/cart#promo-code)
 - **Source** — Shopify discounts tagged `public`
 - **Order Beside Wallet Codes** — those that fit first, soonest to expire first, across both
 
 ## Authoring Rules
+
+::phase{id="store-launch-2" priority="P1" rules="store-default"}
 
 | Discount | Allowed | Combines with |
 | --- | --- | --- |
@@ -51,6 +59,8 @@ Amounts are HKD. Each kind has a class, product or order, that the
 - **A Code Joins** — the shop keeps the combination that takes the most off, so a product discount not set to combine can leave the cart above the card
 
 ## Order of Application
+
+::phase{id="store-launch-2" priority="P0" rules="points"}
 
 The shop prices every combination its combine rules allow, online and at the
 till, and Grade10 accepts its price. Each combination is priced in this order:
@@ -207,6 +217,10 @@ shipping is paid in money.
 
 ## Online Checkout
 
+::phase{id="store-launch-2" priority="P0" rules="discount-code,points,nothing-held,the-newer-promise-retires-the-older"}
+
+::phase{id="store-launch-2" priority="P1" rules="a-retired-counter-sale-keeps-its-cart,a-retired-counter-sale-gives-back-its-reward"}
+
 - **What a Checkout Carries** — at most one discount code, points, and the site discounts the shop applies
   - **Discount Code** — whichever one the checkout carries, an order coupon, a product coupon or a gift, minted when the checkout is submitted; a percentage coupon keeps its own rate, which the shop takes
   - **Points** — one discount off the order
@@ -228,6 +242,8 @@ shipping is paid in money.
 :::
 
 ## At the Till
+
+::phase{id="store-launch-2" priority="P1"}
 
 - **Till Cart** — Shopify POS rings the sale on its own cart; the store's POS extension, a home tile, puts the member's benefits on that cart
 - **One Order a Session** — the store records one order per till session, and the cart decides what landed, never the plan

@@ -4,6 +4,8 @@ spec: shared/ui/store-home
 order: 3
 ---
 
+::phase{id="store-launch-1" priority="P2"}
+
 Three blocks make a store's main page, between the site chrome and a row of
 products. A **hero** shows an eyebrow, title, description and image, with two
 actions it reports. A **section header** shows a title and, only when an address

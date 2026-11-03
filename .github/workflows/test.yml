@@ -52,7 +52,7 @@ jobs:
           BEFORE: ${{ github.event_name == 'push' && github.event.before || '' }}
           DOCS_ONLY: ^(openspec/changes|docs)/
           PLAN_ONLY: ^openspec/changes/.+/tasks\.md$
-          TOOLING: ^(tools/(manual|openspec-store)/|tools/openspec-viewer(/|$)|scripts/(openspec|storybook|design-sync)/|packages/(design-system|ui|date)/|openspec/(schemas/|config\.yaml$)|\.design-sync/|\.github/workflows/|package\.json$|pnpm-(lock|workspace)\.yaml$)
+          TOOLING: ^(tools/(manual|openspec-store|run-desk)/|tools/openspec-viewer(/|$)|scripts/(openspec|storybook|design-sync)/|packages/(design-system|ui|date)/|openspec/(schemas/|config\.yaml$)|\.design-sync/|\.github/workflows/|package\.json$|pnpm-(lock|workspace)\.yaml$)
           EVENT: ${{ github.event_name }}
         run: |
           base=HEAD^1

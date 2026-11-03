@@ -4,6 +4,8 @@ spec: grade10-site/auction/winner-order
 order: 4
 ---
 
+::phase{id="auction" priority="P0"}
+
 What happens after a lot stops taking bids: the result, then the winner's
 order — set up, invoiced, paid, shipped — and the letters that carry it.
 

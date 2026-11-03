@@ -15,6 +15,8 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 
 ### Auth owns sign-in; the KYC service owns the verified record
 
+::phase{id="store-launch-1" priority="P2"}
+
 - Sign-in identity, the account name and the account's own picture live in auth
 - 🚧 The store keeps the name a member chose for the shop, empty until they choose one. The profile, the till, the pass and the membership page show one name: that name, else the account name in auth, else the address before the `@`
 - 🚧 The store keeps the avatar a member chose for the shop: its key on the profile, the image in the store's own bucket
@@ -104,6 +106,8 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 
 ### Showing other users
 
+::phase{id="store-launch-1" priority="P2"}
+
 - 🚧 Rows store only `user_id`; render the latest name and avatar through an uncached auth lookup that asks for the whole batch at once
 - Immutable records (invoices, settled bids) snapshot instead — a rename must not rewrite history
 
@@ -175,6 +179,8 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 - Backups add scheduled logical dumps to R2
 
 ## Examples (store)
+
+::phase{id="store-launch-1" priority="P2"}
 
 | Data | Home |
 | --- | --- |

@@ -47,7 +47,27 @@ export type ImageBlock = {
 };
 export type ChildrenBlock = { type: "children" };
 
-export type LeafBlock = FigmaBlock | StoryBlock | ImageBlock | ChildrenBlock;
+export const RELEASE_PRIORITIES = ["P0", "P1", "P2"] as const;
+export type ReleasePriority = (typeof RELEASE_PRIORITIES)[number];
+
+/** The release a heading's lines launch in, at a release priority. Under a
+ * heading it covers every line beneath it; before a page's first heading,
+ * the whole page. `rules` names rule anchors, as a case's trace writes them,
+ * that launch in this phase while the rest of the section keeps its own. The
+ * phase ids are `phases.yaml`'s; `check:manual` holds them to it. */
+export type PhaseBlock = {
+  type: "phase";
+  id: string;
+  priority: ReleasePriority;
+  rules?: string;
+};
+
+export type LeafBlock =
+  | FigmaBlock
+  | StoryBlock
+  | ImageBlock
+  | ChildrenBlock
+  | PhaseBlock;
 
 export type BodyItem = ProseBlock | LeafBlock;
 
@@ -162,6 +182,26 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
       String(a.alt ?? "").trim() === "" ? "alt must not be empty" : null,
   },
   children: { container: false, attrs: [] },
+  phase: {
+    container: false,
+    attrs: [
+      { name: "id", required: true },
+      { name: "priority", required: true, oneOf: RELEASE_PRIORITIES },
+      { name: "rules" },
+    ],
+    check: (a) => {
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(a.id))) {
+        return "`id` is a phase id from phases.yaml, such as `store-launch-1`";
+      }
+      if (
+        a.rules !== undefined &&
+        !/^[\p{L}\p{N}-]+(?:,[\p{L}\p{N}-]+)*$/u.test(String(a.rules))
+      ) {
+        return "`rules` is a comma-separated list of rule anchors, with no spaces";
+      }
+      return null;
+    },
+  },
   callout: {
     container: true,
     attrs: [

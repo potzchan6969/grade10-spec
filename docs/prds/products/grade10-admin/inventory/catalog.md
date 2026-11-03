@@ -4,6 +4,8 @@ spec: grade10-admin/inventory/catalog
 order: 1
 ---
 
+::phase{id="internal-consignment" priority="P0"}
+
 An admin creates and classifies products, then records the stock physically
 received. The catalogue keeps card identity, operational inventory, and a
 traceable current market reference together without turning the reference into

@@ -4,6 +4,8 @@ spec: shared/ui/store-product-listing
 order: 4
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 The blocks a store's catalogue is browsed with: a filter sidebar, a results header and a grid of product tiles.
 
 ## What the App Supplies

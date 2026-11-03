@@ -4,6 +4,8 @@ spec: grade10-admin/console/daily-reminder
 order: 5
 ---
 
+::phase{id="auction" priority="P2"}
+
 What an operator looks at first each day: what is new since yesterday and what
 is flagged or still waiting on them. It opens as a dialog, stays on Today and
 posts to Slack. Auction also posts when a listing goes live, ends or is

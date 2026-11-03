@@ -15,6 +15,7 @@ import {
   routeForPagePath,
   slugify,
 } from "../api/paths";
+import { traceAnchor } from "../api/phases";
 import { REF_PATTERN, resolveRef } from "../content/refs";
 import {
   columnCount,
@@ -23,6 +24,7 @@ import {
   equalWidthTables,
 } from "../content/table-layout";
 import { AnchorLink } from "./anchor";
+import { PhaseChip, type PhaseMarksScope, phaseNamed } from "./phase-chip";
 
 /** Where a markdown href actually points, once the store layout is applied. */
 type Target =
@@ -39,7 +41,7 @@ const FILED_UNDER = ["docs/governance/", "docs/references/", "openspec/"];
 const REFERENCE_FILE = /^docs\/references\/(.+)\.md$/;
 /** The routes that are the app's own rather than a page's. Prose may link to
  * any of them, and a route the app does not serve still reads as dead. */
-const APP_ROUTES = new Set(["/", "/design", REFERENCES_ROUTE]);
+const APP_ROUTES = new Set(["/", "/design", "/phases", REFERENCES_ROUTE]);
 
 export function classifyHref(
   href: string,
@@ -140,6 +142,66 @@ function inlineRefs() {
 
 const REF_PLUGINS = [inlineRefs];
 
+const RULE_PROPERTY = "dataPhaseRule";
+const RULE_HEADING_PROPERTY = "dataPhaseHeading";
+const HEADING_TAGS = new Set(["h2", "h3", "h4"]);
+const MARK_ONLY = /^[\s🚧❓]*$/u;
+
+function hastText(node: HastNode): string {
+  if (node.type === "text") return node.value ?? "";
+  return (node.children ?? []).map(hastText).join("");
+}
+
+/** The bold name a list item opens with, past its mark: what a rule is. */
+function ruleName(item: HastNode): { parent: HastNode; at: number } | null {
+  const children = item.children ?? [];
+  for (let at = 0; at < children.length; at += 1) {
+    const child = children[at];
+    if (child.type === "text" && MARK_ONLY.test(child.value ?? "")) continue;
+    if (child.type !== "element") return null;
+    if (child.tagName === "strong") return { parent: item, at };
+    // A loose list wraps the item's words in a paragraph.
+    if (child.tagName === "p") return ruleName(child);
+    return null;
+  }
+  return null;
+}
+
+/**
+ * Marks each rule's bold name with the heading above it, so a rule whose
+ * phase differs from its heading's can wear a chip. A block that opens
+ * below its heading — after a `::phase` block — knows no heading, and asks
+ * by the rule alone.
+ */
+function phaseRules() {
+  return (tree: unknown) => {
+    let heading: string | null = null;
+    const visit = (node: HastNode) => {
+      if (node.type === "element" && HEADING_TAGS.has(node.tagName ?? "")) {
+        heading = slugify(hastText(node));
+        return;
+      }
+      if (node.type === "element" && node.tagName === "li") {
+        const found = ruleName(node);
+        if (found) {
+          const strong = found.parent.children?.[found.at] as HastNode;
+          found.parent.children?.splice(found.at + 1, 0, {
+            type: "element",
+            tagName: "span",
+            properties: {
+              [RULE_PROPERTY]: traceAnchor(hastText(strong)),
+              [RULE_HEADING_PROPERTY]: heading ?? "",
+            },
+            children: [],
+          });
+        }
+      }
+      for (const child of node.children ?? []) visit(child);
+    };
+    visit(tree as HastNode);
+  };
+}
+
 function splitRefs(parent: HastNode) {
   if (!parent.children) return;
   const split: HastNode[] = [];
@@ -218,6 +280,8 @@ type MarkdownViewProps = {
   /** Manual-page prose only. A reference document is quoted, not authored
    * here, so its brackets stay brackets. */
   refs?: boolean;
+  /** A page's phases, where its prose wears their chips. */
+  phases?: PhaseMarksScope | null;
   className?: string;
 };
 
@@ -233,11 +297,32 @@ export const MarkdownView = memo(function MarkdownView({
   index,
   anchors = false,
   refs = false,
+  phases = null,
   className,
 }: MarkdownViewProps) {
   const components = useMemo<Components>(
     () => ({
       span: ({ children, node, ...rest }: SpanProps) => {
+        const rule = node?.properties?.[RULE_PROPERTY];
+        if (typeof rule === "string") {
+          const heading = node?.properties?.[RULE_HEADING_PROPERTY];
+          const chip = phases?.marks.rule(
+            typeof heading === "string" && heading !== "" ? heading : null,
+            rule,
+          );
+          if (!phases || !chip) return null;
+          return (
+            <>
+              {" "}
+              <PhaseChip
+                apart
+                assignment={chip}
+                phase={phaseNamed(phases.phases, chip.phase)}
+                small
+              />
+            </>
+          );
+        }
         const raw = node?.properties?.[REF_PROPERTY];
         if (typeof raw !== "string") return <span {...rest}>{children}</span>;
         return <InlineRef index={index} raw={raw} />;
@@ -275,17 +360,17 @@ export const MarkdownView = memo(function MarkdownView({
         );
       },
       h1: ({ children }: ComponentProps<"h1">) => (
-        <Heading anchors={anchors} level={2}>
+        <Heading anchors={anchors} level={2} phases={phases}>
           {children}
         </Heading>
       ),
       h2: ({ children }: ComponentProps<"h2">) => (
-        <Heading anchors={anchors} level={2}>
+        <Heading anchors={anchors} level={2} phases={phases}>
           {children}
         </Heading>
       ),
       h3: ({ children }: ComponentProps<"h3">) => (
-        <Heading anchors={anchors} level={3}>
+        <Heading anchors={anchors} level={3} phases={phases}>
           {children}
         </Heading>
       ),
@@ -324,18 +409,22 @@ export const MarkdownView = memo(function MarkdownView({
         />
       ),
     }),
-    [anchors, baseDir, index],
+    [anchors, baseDir, index, phases],
   );
 
   const remarkPlugins = useMemo<
     ComponentProps<typeof Markdown>["remarkPlugins"]
   >(() => [remarkGfm, equalWidthTables], []);
+  const rehypePlugins = useMemo(
+    () => [...(refs ? REF_PLUGINS : []), ...(phases ? [phaseRules] : [])],
+    [refs, phases],
+  );
 
   return (
     <div className={className ?? "manual-prose"}>
       <Markdown
         components={components}
-        rehypePlugins={refs ? REF_PLUGINS : undefined}
+        rehypePlugins={rehypePlugins.length > 0 ? rehypePlugins : undefined}
         remarkPlugins={remarkPlugins}
       >
         {text}
@@ -347,17 +436,28 @@ export const MarkdownView = memo(function MarkdownView({
 function Heading({
   level,
   anchors,
+  phases,
   children,
 }: {
   level: 2 | 3;
   anchors: boolean;
+  phases: PhaseMarksScope | null;
   children: ReactNode;
 }) {
   const id = anchors ? slugify(textOf(children)) : undefined;
   const Tag = level === 2 ? "h2" : "h3";
+  const chip = id && phases ? phases.marks.heading(id) : undefined;
   return (
-    <Tag className="group/anchor flex items-center gap-1" id={id}>
+    <Tag className="group/anchor flex flex-wrap items-center gap-1" id={id}>
       <span>{children}</span>
+      {chip && phases ? (
+        <span className="ml-1 inline-flex" data-heading-aside>
+          <PhaseChip
+            assignment={chip}
+            phase={phaseNamed(phases.phases, chip.phase)}
+          />
+        </span>
+      ) : null}
       {id ? <AnchorLink id={id} label="Copy link to this heading" /> : null}
     </Tag>
   );

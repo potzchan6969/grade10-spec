@@ -4,6 +4,8 @@ spec: grade10-site/loyalty/programme
 order: 2
 ---
 
+::phase{id="pre-store-launch" priority="P0"}
+
 ## Ladder
 
 | Tier | Earns | Reached by | Kept by |
@@ -23,6 +25,8 @@ catalog is the lever an operator holds.
   The owner's call, made 2026/10/30
 
 ## Tier Progress
+
+::phase{id="store-launch-2" priority="P0"}
 
 A member holds **one balance**: earning adds to it, redeeming takes from it,
 and it expires 12 months after the last activity.
@@ -54,6 +58,8 @@ Gold's rate in between keep what they earned.
   2026/10/29
 
 ## Earn Multiplier
+
+::phase{id="store-launch-2" priority="P0"}
 
 Customer reaches a tier upon reaching the points required for that tier.
 The multiplier is only applied starting from the next order.

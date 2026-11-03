@@ -19,6 +19,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { Unit } from "../api/phases";
 import type { PageCases } from "../api/suites";
 import { BlockList } from "../blocks/block-list";
 import { BlockView } from "../blocks/block-view";
@@ -36,6 +37,12 @@ import { CaseList, type CaseRow } from "./case-list";
 import { clamp, PAGE_MIN_WIDTH, PANEL_WIDTH, useLayout } from "./layout";
 import { PageSectionsContext } from "./page-sections";
 import { ResizeHandle } from "./resize-handle";
+import {
+  type PageRelease,
+  ReadinessCard,
+  usePageRelease,
+  useSectionReadings,
+} from "./section-readiness";
 
 const TAB_LABEL: Record<SideTab, string> = {
   ui: "UI",
@@ -57,10 +64,17 @@ type Shelf = Record<"ui" | "tech", SideItem[]> & {
   qa: CaseRow[];
   /** The rules the section names, which its cases are filed under. */
   rules: SectionRule[];
+  /** The units the section is read into, whose readiness heads its cases. */
+  units: Unit[];
 };
 
-function shelfOf(row: SectionRow, cases: PageCases): Shelf {
+function shelfOf(
+  row: SectionRow,
+  cases: PageCases,
+  release: PageRelease | null,
+): Shelf {
   return {
+    units: release?.marks.sectionUnits(row.section) ?? [],
     ui: row.side.filter((item) => item.tab === "ui"),
     tech: row.side.filter((item) => item.tab === "tech"),
     rules: rulesOf(row.main),
@@ -74,12 +88,20 @@ function shelfOf(row: SectionRow, cases: PageCases): Shelf {
   };
 }
 
-const isEmpty = (shelf: Shelf) =>
-  SIDE_TABS.every((tab) => shelf[tab].length === 0);
+/** Whether a section has anything under a tab: a unit's readiness heads
+ * the QA tab even before it has a case. */
+const holds = (shelf: Shelf, tab: SideTab) =>
+  shelf[tab].length > 0 || (tab === "qa" && shelf.units.length > 0);
+
+const isEmpty = (shelf: Shelf) => SIDE_TABS.every((tab) => !holds(shelf, tab));
 
 /** Whether a page has anything to read beside it. */
-export function hasSide(rows: SectionRow[], cases: PageCases): boolean {
-  return rows.some((row) => !isEmpty(shelfOf(row, cases)));
+export function hasSide(
+  rows: SectionRow[],
+  cases: PageCases,
+  release: PageRelease | null = null,
+): boolean {
+  return rows.some((row) => !isEmpty(shelfOf(row, cases, release)));
 }
 
 /** How many items each tab holds across the page. */
@@ -101,6 +123,7 @@ export function HintedPage({
   rows: SectionRow[];
   cases: PageCases;
 }) {
+  const release = usePageRelease();
   return rows.map((row) => (
     <div
       className="group/section relative mt-6"
@@ -108,7 +131,7 @@ export function HintedPage({
       key={row.section || "opening"}
     >
       <BlockList blocks={row.main} />
-      <SectionHint section={row.section} shelf={shelfOf(row, cases)} />
+      <SectionHint section={row.section} shelf={shelfOf(row, cases, release)} />
     </div>
   ));
 }
@@ -118,7 +141,7 @@ function SectionHint({ section, shelf }: { section: string; shelf: Shelf }) {
   const layout = useLayout();
   const { sections } = use(PageSectionsContext);
   const [peek, setPeek] = useState<SideTab | null>(null);
-  const tabs = SIDE_TABS.filter((tab) => shelf[tab].length > 0);
+  const tabs = SIDE_TABS.filter((tab) => holds(shelf, tab));
   if (tabs.length === 0) return null;
   const title =
     sections.find((found) => found.id === section)?.title ?? "Opening";
@@ -186,7 +209,7 @@ function SectionHint({ section, shelf }: { section: string; shelf: Shelf }) {
                 </button>
               </div>
               <BareEmbedContext value>
-                <SideList shelf={shelf} tab={peek} />
+                <SideList section={section} shelf={shelf} tab={peek} />
               </BareEmbedContext>
             </div>
           </div>
@@ -243,7 +266,8 @@ export function SplitPage({
     return () => setSideShown(false);
   }, [setSideShown]);
 
-  const shelves = rows.map((row) => shelfOf(row, cases));
+  const release = usePageRelease();
+  const shelves = rows.map((row) => shelfOf(row, cases, release));
   const totals = tabTotals(shelves);
 
   return (
@@ -291,9 +315,13 @@ export function SplitPage({
             </HeldReading>
             <div className="min-w-0">
               {/* Blank where the section has nothing under the tab. */}
-              {shelf[layout.tab].length > 0 ? (
+              {holds(shelf, layout.tab) ? (
                 <BareEmbedContext value>
-                  <SideItems shelf={shelf} tab={layout.tab} />
+                  <SideItems
+                    section={row.section}
+                    shelf={shelf}
+                    tab={layout.tab}
+                  />
                 </BareEmbedContext>
               ) : null}
             </div>
@@ -361,20 +389,36 @@ function HeldReading({ children }: { children: ReactNode }) {
 /** What one section holds under the tab, held below the switcher while the
  * section is read. A side taller than the screen scrolls, or its end could
  * never be reached while it is held. */
-function SideItems({ shelf, tab }: { shelf: Shelf; tab: SideTab }) {
+function SideItems({
+  section,
+  shelf,
+  tab,
+}: {
+  section: string;
+  shelf: Shelf;
+  tab: SideTab;
+}) {
   return (
     <div className="sticky top-30 overflow-y-auto overscroll-contain py-4 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]">
-      <SideList shelf={shelf} tab={tab} />
+      <SideList section={section} shelf={shelf} tab={tab} />
     </div>
   );
 }
 
 /** One section's items under one tab. */
-function SideList({ shelf, tab }: { shelf: Shelf; tab: SideTab }) {
+function SideList({
+  section,
+  shelf,
+  tab,
+}: {
+  section: string;
+  shelf: Shelf;
+  tab: SideTab;
+}) {
   return (
     <div className="flex flex-col gap-3">
       {tab === "qa" ? (
-        <CaseList rows={shelf.qa} rules={shelf.rules} />
+        <SectionCases section={section} shelf={shelf} />
       ) : (
         shelf[tab].map((item, position) =>
           item.block.type === "detail" ? (
@@ -393,6 +437,28 @@ function SideList({ shelf, tab }: { shelf: Shelf; tab: SideTab }) {
         )
       )}
     </div>
+  );
+}
+
+/** A section's readiness, one card a unit, heading its cases with each
+ * case's latest verdict. */
+export function SectionCases({
+  section,
+  shelf,
+}: {
+  section: string;
+  shelf: Pick<Shelf, "qa" | "rules">;
+}) {
+  const { readings, results } = useSectionReadings(section);
+  return (
+    <>
+      {readings.map((reading) => (
+        <ReadinessCard key={reading.unit.key} reading={reading} />
+      ))}
+      {shelf.qa.length > 0 ? (
+        <CaseList results={results} rows={shelf.qa} rules={shelf.rules} />
+      ) : null}
+    </>
   );
 }
 

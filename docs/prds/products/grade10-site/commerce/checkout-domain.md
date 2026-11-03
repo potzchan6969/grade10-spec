@@ -3,6 +3,8 @@ title: Checkout Domain
 order: 2
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 `checkout.<brand domain>` exists to host Shopify's checkout under our name.
 Shopify serves the checkout and nothing else — every other path is redirected
 to our own site, so the native storefront it comes with (theme home page,

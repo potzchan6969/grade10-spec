@@ -4,6 +4,8 @@ spec: grade10-site/loyalty/programme
 order: 5
 ---
 
+::phase{id="store-launch-2" priority="P0"}
+
 A coupon is Grade10's own instrument: what a redemption leaves the member
 holding, and what an order carries to spend it. Grade10 decides whether the
 member may spend it on the order's lines; online, the shop prices it, from a
@@ -15,6 +17,10 @@ works that figure out by the shop's own rules where they reach the basket —
 ::image{src="assets/diagrams/coupon-life.svg" alt="A coupon from redeemed or granted, to available, to claimed by a sale, to used when that order is paid, with the Shopify discount code a claim mints above it"}
 
 ## Validity
+
+::phase{id="pre-store-launch" priority="P1"}
+
+::phase{id="store-launch-2" priority="P0" rules="the-scan-tokens-life,points-still-buy-more"}
 
 A coupon carries the reward's definition as it stood on the day it was bought,
 so redefining the reward never rewrites a coupon a member already holds —

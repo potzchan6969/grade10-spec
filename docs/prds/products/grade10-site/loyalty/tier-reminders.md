@@ -4,6 +4,8 @@ spec: grade10-site/loyalty/tier-reminders
 order: 11
 ---
 
+::phase{id="pre-store-launch" priority="P2"}
+
 ## Raising a Tier Reminder
 
 - 🚧 **Owed when the period is closing** - a Gold member whose period ends

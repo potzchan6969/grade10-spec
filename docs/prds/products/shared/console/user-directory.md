@@ -5,6 +5,8 @@ audience: operator
 order: 2
 ---
 
+::phase{id="auction" priority="P1"}
+
 This is the operator's view of the identity directory: a table of accounts,
 filters the console offers, an account panel beside the list, and the dialogs
 that confirm irreversible moves. Both brands' consoles render it from the same

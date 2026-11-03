@@ -5,6 +5,8 @@ audience: operator
 order: 5
 ---
 
+::phase{id="auction" priority="P1"}
+
 ## Directory
 
 - **Who sees it** — only holders of the directory grant

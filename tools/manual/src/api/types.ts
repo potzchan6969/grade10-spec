@@ -1,3 +1,5 @@
+import type { Phase } from "./phases.ts";
+
 /** Shapes of the static artifacts. Everything comes from the pages and the
  * references on disk — nothing here is restated by hand. */
 
@@ -109,6 +111,18 @@ export type ReferenceEntry = {
 /** `/api/reference/<slug>` — the document as written. */
 export type ReferenceDocument = ReferenceEntry & { text: string };
 
+/** A capability suite's case, as readiness needs it. */
+export type CaseSummary = {
+  id: string;
+  status?: string;
+  marker?: string;
+  rev?: number;
+  severity?: string;
+};
+
+/** One handle of the team map. */
+export type TeamMember = { handle: string; email?: string; roles: string[] };
+
 /** `/api/snapshot` — boots the app. */
 export type Snapshot = {
   generatedAt: string;
@@ -133,4 +147,10 @@ export type Snapshot = {
   history: HistoryEvent[];
   warnings: CheckWarning[];
   designSync?: DesignSyncReport;
+  /** `phases.yaml`, in release order; absent where the manual has none. */
+  phases?: Phase[];
+  /** Each capability's `feature-tcs.md` cases by spec id; absent where the
+   * store keeps no OpenSpec suites. */
+  capabilityCases?: Record<string, CaseSummary[]>;
+  team?: TeamMember[];
 };

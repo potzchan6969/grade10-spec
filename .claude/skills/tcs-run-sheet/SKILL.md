@@ -1,6 +1,6 @@
 ---
 name: tcs-run-sheet
-description: Pick cases for a manual pass, print a trial Google Sheet, and finalize one recorded snapshot per run. Use for test runs, regression passes, smoke passes, and cases affected by a change. Invoke as /tcs-run-sheet <what to walk>.
+description: Pick cases for a manual pass, by filter or by release phase, open them as a run on the run desk or print a trial Google Sheet, and finalize one recorded snapshot per run. Use for test runs, regression passes, smoke passes, a phase handed to QA, re-runs of failed rows, and cases affected by a change. Invoke as /tcs-run-sheet <what to walk>.
 ---
 
 # Writing a Run Sheet
@@ -14,7 +14,7 @@ description: Pick cases for a manual pass, print a trial Google Sheet, and final
 | Finalized | Human-confirmed snapshot; one message-only print commit, reusing the current feature branch |
 | Merged | Immutable; a later pass is a new run |
 
-Execution results stay in Sheets, never in a suite or a print commit. A structured commit message records printed case identities and revisions.
+Execution results stay in Sheets or on the run desk, never in a suite or a print commit. A structured commit message records printed case identities and revisions.
 
 The print target chooses the spreadsheet. The test environment says where the tester
 executes the cases. Printing to PROD Sheet does not mean testing against `prod`.
@@ -32,6 +32,9 @@ normalize to `staging-1` and `prod` for new selections.
 - **Judgment** — read the capability's spec, journeys, feature suite and relevant domain suite; resolve the request to explicit ids
 - **Intentional exclusions** — record ids and reasons in a JSON array, `[{"id":"...","reason":"..."}]`. Several ids may use the same reason. The array removes cases from property-filter selections. An id cannot be both explicitly selected and excluded. Natural filter exclusions need no individual reason. Intentionally removing an eligible case from an explicit reprint list requires a reason
 - **Copied runs** — `--copy-run <id>` takes a merged run's ids, resolves the latest accepted cases and creates a new run. Missing or deprecated ids stop for a revised selection. The new record names its source run
+- **By phase** — "run Store Launch 1's P0s that are ready" is `--phase store-launch-1 --release-priority P0 --ready`. A unit is a store section in a phase, bringing the cases that trace a rule in it, or a capability in a phase, bringing its suite; `--ready` means Reviewed or further. `--section cart#promo-code` takes one store section. They intersect with the other filters, never with explicit ids, and read units through the manual's own reader at the pinned source. An unknown phase stops with the list. The phase's environment is the run's unless `--env` says otherwise
+- **Other phase's cases** — where the dry run says a capability spans another phase, leave that phase's cases out with exclusions and a reason; only a run selected by phase leaves cases out of a unit
+- **Re-run** — `--desk --rerun <run id> [--only failed,blocked]` takes the desk run's failed and blocked rows, a per-row case only the rows to walk again, as a new run. `--rerun-record <file>` reads a downloaded run instead
 
 ## Filter Semantics
 
@@ -54,6 +57,15 @@ AND Severity IN (blocker, critical)
 - **More suite tags** — adding prod also requires production suitability; it can only retain or reduce the result set
 - **Sheet visibility** — filtering changes which cases are shown, not whether a case is excluded from the run, executed or passed
 - **Other multi-select fields** — this reference does not settle their semantics
+
+## The Run Desk
+
+The run desk replaces the Sheet as where results are marked; until one phase passes on it, the Sheet path below keeps working.
+
+1. **Dry-run** — the same selection with `--desk --dry-run`, e.g. `pnpm tcs:run-sheet --name sl1-p0 --phase store-launch-1 --release-priority P0 --ready --sha origin/main --desk --dry-run`. It prints the Sheet's coverage report, the units, rows and walks, and writes the `RunSpec` JSON (`--out <file>`, default under the OS temp dir)
+2. **Show coverage and stop** — as for a Sheet: wait for the person's yes to the fingerprint
+3. **Open** — `gh workflow run run-sheet.yml -f action=desk-open -f name=sl1-p0 -f phase=store-launch-1 -f release_priority=P0 -f ready=true -f confirmed=<fingerprint>`; a re-run passes `run_id=<desk run id>`. Locally `--desk --open --confirmed <fingerprint>` with `CF_ACCESS_CLIENT_ID` and `CF_ACCESS_CLIENT_SECRET`. Without the Access service token (a known Blocker) open the written JSON from the desk's runs page, "Open a run"
+4. **Finalize on the desk**, then **commit** — download the record the desk offers once finalized and run `pnpm tcs:run-record --desk-record <file>`, or `--desk-run <id>` with the service token. Same commit rules as a Sheet: one empty commit on the feature branch, idempotent, `--replace` after a reopen. The `tcs/run-finalized` check reads the run from the desk: finalized or closed, same cases, revisions and phase
 
 ## Printing
 
@@ -114,6 +126,7 @@ Run: <tab name>
 Sheet: <spreadsheet ID>
 Tab: <gid>
 Test environment: <provided or default>
+Phase: <phase id, only for a run selected by phase>
 Source: <commit SHA>
 
 Printed cases:
@@ -122,6 +135,7 @@ Printed cases:
 ```
 
 - **Identity** — the full tab name includes its run id. Sheet identity and source SHA identify the printed snapshot
+- **Desk run** — `chore(qa): record <name> desk run`, with `Run: <name>` and `Desk: <run id>` in place of the Run, Sheet and Tab lines; the rest is the same
 - **Cases** — one line per selected TC, in print order. Use the stable marker suffix and its actual revision. For a source without a marker, write `- <case id> | unmarked`; never invent a revision
 - **Last print** — search the same spreadsheet's most recent merged print commit for the TC identity and revision. Heading ids can change; use the marker with its capability scope when comparing revisions
 - **Limits** — the message records ids and revisions, not content digests or execution results. Case content changes must bump the source marker revision
@@ -143,6 +157,8 @@ Configure `tcs/run-finalized` as a required PR check.
 | Printed message format and lookup | `scripts/openspec/lib/printed-run-message.mjs` |
 | Local commit | `scripts/openspec/run-sheet-record.mjs` |
 | Merge verification | `scripts/openspec/verify-run-record.mjs`; the workflow embeds the same checker for bootstrap without running candidate files |
+| Phase units | `scripts/openspec/lib/release-units.mjs` over the manual's `tools/manual/src/api/units.ts`; `unitSelection` in `select-cases.mjs` |
+| Run desk | `scripts/openspec/lib/run-spec.mjs` (the `RunSpec`), `lib/run-desk.mjs` (open, re-run); the contract is `tools/manual/src/api/desk.ts` |
 
 ## Printed Cases
 

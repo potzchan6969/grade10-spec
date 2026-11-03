@@ -9,7 +9,11 @@ import {
   Trash,
 } from "@phosphor-icons/react";
 import { useState } from "react";
+import { useManualIndex } from "../api/use-manual-index";
 import { BlockView } from "../blocks/block-view";
+import { PhaseChip, phaseNamed } from "../blocks/phase-chip";
+import type { SectionRule } from "../blocks/side-blocks";
+import type { Block, PhaseBlock } from "../content/grammar";
 import { AttrForm } from "./attr-form";
 import { BlockList } from "./block-list";
 import { blockHint, blockLabel } from "./descriptions";
@@ -36,6 +40,8 @@ type BlockCardProps = {
   first: boolean;
   last: boolean;
   nested?: boolean;
+  /** For a phase block: the rules of the heading it sits under. */
+  rules?: SectionRule[];
 };
 
 export function BlockCard({
@@ -47,6 +53,7 @@ export function BlockCard({
   first,
   last,
   nested = false,
+  rules,
 }: BlockCardProps) {
   const own = problems.get(block.id) ?? [];
   const [editing, setEditing] = useState(() => startsOpen(block, own));
@@ -112,10 +119,15 @@ export function BlockCard({
 
       <div className="px-4 py-3">
         {editing ? (
-          <Editing block={block} onChange={onChange} problems={problems} />
+          <Editing
+            block={block}
+            onChange={onChange}
+            problems={problems}
+            rules={rules}
+          />
         ) : preview ? (
           <div className="[&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-            <BlockView block={preview} />
+            <Preview block={preview} />
           </div>
         ) : (
           <ProblemList problems={own} />
@@ -149,10 +161,12 @@ function Editing({
   block,
   problems,
   onChange,
+  rules,
 }: {
   block: DraftBlock;
   problems: Problems;
   onChange: (next: DraftBlock) => void;
+  rules?: SectionRule[];
 }) {
   const own = problems.get(block.id) ?? [];
 
@@ -176,13 +190,39 @@ function Editing({
         attrs={head.attrs}
         onChange={(attrs) => onChange({ ...head, attrs })}
         problems={own}
+        rules={rules}
         type={block.type}
       />
       {preview && !isContainer(block) ? (
         <div className="rounded-(--radius-2xl) border border-border-subtle bg-background-subtle px-4 py-1 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-          <BlockView block={preview} />
+          <Preview block={preview} />
         </div>
       ) : null}
+    </div>
+  );
+}
+
+/** A block's reading face. A phase block renders nothing in the reading,
+ * so its card shows what it places instead. */
+function Preview({ block }: { block: Block }) {
+  if (block.type === "phase") return <PhaseSummary block={block} />;
+  return <BlockView block={block} />;
+}
+
+function PhaseSummary({ block }: { block: PhaseBlock }) {
+  const phases = useManualIndex().snapshot.phases ?? [];
+  return (
+    <div className="flex flex-wrap items-center gap-2 py-2">
+      <PhaseChip
+        apart={Boolean(block.rules)}
+        assignment={{ phase: block.id, priority: block.priority }}
+        phase={phaseNamed(phases, block.id)}
+      />
+      <Text as="span" size="sm" tone="secondary">
+        {block.rules
+          ? `for ${block.rules.split(",").join(", ")}`
+          : "every line under its heading"}
+      </Text>
     </div>
   );
 }

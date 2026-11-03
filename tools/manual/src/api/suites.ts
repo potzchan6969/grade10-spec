@@ -1,4 +1,4 @@
-import type { SuiteEntry } from "./types";
+import type { SuiteEntry } from "./types.ts";
 
 /** One test case as its suite writes it: what it traces, and the body a
  * tester walks — pre-conditions, data, steps and expected results. */
@@ -6,6 +6,14 @@ export type TestCase = {
   id: string;
   title: string;
   severity?: string;
+  priority?: string;
+  /** `draft`, `actual` or `deprecated`, as its classification says. */
+  status?: string;
+  /** Its stable trace marker and revision, where it carries one. */
+  marker?: string;
+  rev?: number;
+  testability?: string;
+  automation?: string;
   traces: CaseTrace[];
   body: string;
   /** The suite's path, for a link to the file. */
@@ -23,11 +31,31 @@ export type PageCases = {
   page: TestCase[];
 };
 
-const CASE_HEADING = /^#{3,4}\s+(\S+\.TC\d+):\s*(.+?)\s*$/;
+const CASE_HEADING = /^#{3,4}\s+(\S+[.-]TC\d+):\s*(.+?)\s*$/;
 const CASE_END = /^(#{2,4}\s|<!--\s*trace:case)/;
 const PROPERTY = /^\s*[-*]\s+\*\*([^*]+?):\*\*\s*(.*)$/;
 const TRACE = /^([a-z0-9-]+)(?:#([a-z0-9-]+)(?:\/([a-z0-9-]+))?)?$/;
 const CLASSIFICATION = /^\*\*Classification:\*\*\s*$/;
+const MARKER = /^<!--\s*trace:case\s+id=(\S+)\s+rev=(\d+)\s*-->/;
+
+/** The trace marker written just above a case's heading. */
+function markerAbove(
+  lines: string[],
+  at: number,
+): { marker: string; rev: number } | undefined {
+  for (let back = at - 1; back >= 0; back -= 1) {
+    if (lines[back].trim() === "") continue;
+    const found = MARKER.exec(lines[back].trim());
+    return found ? { marker: found[1], rev: Number(found[2]) } : undefined;
+  }
+  return undefined;
+}
+
+const optional = (
+  properties: Map<string, string>,
+  name: string,
+  key: string,
+) => (properties.has(name) ? { [key]: properties.get(name) as string } : {});
 
 /** A suite under `tests/` traces the pages one level up, beside it otherwise. */
 function pagesDirOf(suitePath: string): string {
@@ -73,6 +101,7 @@ export function readSuite(suite: SuiteEntry): TestCase[] {
       const property = PROPERTY.exec(line);
       if (property) properties.set(property[1], property[2].trim());
     }
+    const marked = markerAbove(lines, at);
     at = end - 1;
     if (properties.has("Retired")) continue;
 
@@ -89,9 +118,12 @@ export function readSuite(suite: SuiteEntry): TestCase[] {
     cases.push({
       id: heading[1],
       title: heading[2],
-      ...(properties.has("Severity")
-        ? { severity: properties.get("Severity") }
-        : {}),
+      ...optional(properties, "Severity", "severity"),
+      ...optional(properties, "Priority", "priority"),
+      ...optional(properties, "Status", "status"),
+      ...optional(properties, "Testability", "testability"),
+      ...optional(properties, "Automation status", "automation"),
+      ...(marked ? marked : {}),
       traces,
       body: bodyOf(body),
       suite: suite.path,

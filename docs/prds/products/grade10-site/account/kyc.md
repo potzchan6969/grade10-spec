@@ -4,6 +4,8 @@ spec: grade10-site/store/account-identity
 order: 2
 ---
 
+::phase{id="auction" priority="P0"}
+
 A collector verifies who they are once, from their own account, and is
 recognised wherever Grade10 asks: at a bid at or above the bar,
 when Grade10 asks them to verify, and at a vault visit.
@@ -77,6 +79,8 @@ reason, from the account's Identity card - [Users](/p/grade10-admin/console/user
   today an admin asks; Product confirms
 
 ## Before Money Leaves
+
+::phase{id="store-launch-1" priority="P1"}
 
 - 🚧 **The Same Check** — a cash-out or a loan advance asks for this verification, compared with the ID staff read at intake; the vault runs no check of its own - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
 

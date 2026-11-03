@@ -5,6 +5,8 @@ audience: operator
 order: 2
 ---
 
+::phase{id="auction" priority="P1"}
+
 A house maximum an admin puts on a lot to protect its final price. Collectors
 cannot see it; Grade10 commits it at a time the admin sets and then bids it as
 any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bidding).

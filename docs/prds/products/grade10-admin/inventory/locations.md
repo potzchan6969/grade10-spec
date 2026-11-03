@@ -3,6 +3,8 @@ title: Locations
 order: 3
 ---
 
+::phase{id="internal-consignment" priority="P1"}
+
 ## Values
 
 | Rule | Value |

@@ -1,0 +1,749 @@
+import {
+  BULK_MARKS,
+  ENV_SITE,
+  MARK_LABEL,
+  type Mark,
+  type MarkInput,
+  type MarkValue,
+  type Observation,
+  type RowObjects,
+  type RunCase,
+  type RunRow,
+  type RunSpec,
+  type RunView,
+  SURFACE_LABEL,
+  type Surface,
+} from "../api/desk.ts";
+import { rowVerdict } from "../api/verdicts.ts";
+
+/** The run as the page reads it: rows by case, and each row's current mark
+ * per surface, newest winning. */
+export type RunReading = {
+  view: RunView;
+  caseById: Map<string, RunCase>;
+  rowsByCase: Map<string, RunRow[]>;
+  rowByKey: Map<string, RunRow>;
+  current: Map<string, Partial<Record<Surface, Mark>>>;
+  /** Every mark a row was given, oldest first. */
+  history: Map<string, Mark[]>;
+};
+
+export function readRun(view: RunView): RunReading {
+  const caseById = new Map(view.spec.cases.map((one) => [one.id, one]));
+  const rowsByCase = new Map<string, RunRow[]>();
+  for (const row of view.rows) {
+    const list = rowsByCase.get(row.case) ?? [];
+    list.push(row);
+    rowsByCase.set(row.case, list);
+  }
+  for (const list of rowsByCase.values())
+    list.sort((a, b) => a.index - b.index);
+  const current = new Map<string, Partial<Record<Surface, Mark>>>();
+  const history = new Map<string, Mark[]>();
+  for (const mark of [...view.marks].sort((a, b) => a.seq - b.seq)) {
+    const row = current.get(mark.row) ?? {};
+    row[mark.surface] = mark;
+    current.set(mark.row, row);
+    history.set(mark.row, [...(history.get(mark.row) ?? []), mark]);
+  }
+  return {
+    view,
+    caseById,
+    rowsByCase,
+    rowByKey: new Map(view.rows.map((row) => [row.key, row])),
+    current,
+    history,
+  };
+}
+
+/** A row's answer on one surface: its current mark, else to do where the
+ * surface is in play and n/a where it never was. */
+export function valueOn(
+  reading: RunReading,
+  row: RunRow,
+  surface: Surface,
+): MarkValue {
+  const marked = reading.current.get(row.key)?.[surface];
+  if (marked) return marked.value;
+  const testCase = reading.caseById.get(row.case);
+  return testCase?.surfaces.includes(surface) ? "todo" : "na";
+}
+
+export type Counts = Record<MarkValue, number> & {
+  total: number;
+  /** Pass over every row but n/a, as the Summary tab counts it; null when
+   * nothing is left to count. */
+  rate: number | null;
+};
+
+export function surfaceCounts(reading: RunReading, surface: Surface): Counts {
+  const counts: Counts = {
+    todo: 0,
+    pass: 0,
+    fail: 0,
+    blocked: 0,
+    skipped: 0,
+    na: 0,
+    total: 0,
+    rate: null,
+  };
+  for (const row of reading.view.rows) {
+    counts[valueOn(reading, row, surface)] += 1;
+    counts.total += 1;
+  }
+  const counted = counts.total - counts.na;
+  counts.rate = counted > 0 ? counts.pass / counted : null;
+  return counts;
+}
+
+/** Worst first, on one surface: a case shows its worst row. */
+const WORST: MarkValue[] = ["fail", "blocked", "todo", "skipped", "pass", "na"];
+
+export function caseResult(
+  reading: RunReading,
+  caseId: string,
+  surface: Surface,
+): MarkValue {
+  const values = (reading.rowsByCase.get(caseId) ?? []).map((row) =>
+    valueOn(reading, row, surface),
+  );
+  return values.reduce<MarkValue>(
+    (found, one) => (WORST.indexOf(one) < WORST.indexOf(found) ? one : found),
+    "na",
+  );
+}
+
+/** A case is done on a surface once none of its rows is left to do. */
+export const caseDone = (
+  reading: RunReading,
+  caseId: string,
+  surface: Surface,
+): boolean =>
+  (reading.rowsByCase.get(caseId) ?? []).every(
+    (row) => valueOn(reading, row, surface) !== "todo",
+  );
+
+/** Until a run closes, a row is walked again in place, so a re-run is
+ * offered only on a closed run that holds a failed or blocked row. */
+export function canRerun(reading: RunReading): boolean {
+  if (reading.view.run.state !== "closed") return false;
+  return reading.view.rows.some((row) => {
+    const { verdict } = rowVerdict(
+      reading.current.get(row.key) ?? {},
+      reading.caseById.get(row.case)?.surfaces,
+    );
+    return verdict === "fail" || verdict === "blocked";
+  });
+}
+
+/** A bug marked with no issue linked yet reads so until one is pasted. */
+export const NO_ISSUE = "bug · no issue yet";
+
+/** `#1532` for an issue's link, else the link's own words. */
+export const issueLabel = (link: string): string => {
+  const number =
+    /\/issues\/(\d+)/.exec(link)?.[1] ?? /^#?(\d+)$/.exec(link.trim())?.[1];
+  return number ? `#${number}` : link;
+};
+
+/** `TC19` out of `g10.store-cart.TC19`. */
+export const shortId = (id: string): string => /[^.]+$/.exec(id)?.[0] ?? id;
+
+// Filters
+
+export const FILTERS = [
+  "product",
+  "domain",
+  "capability",
+  "level",
+  "severity",
+  "priority",
+  "phase",
+  "result",
+] as const;
+export type FilterKey = (typeof FILTERS)[number];
+/** Each filter keeps any of its chosen values: fail or blocked. */
+export type Filters = Partial<Record<FilterKey, string[]>>;
+
+export const FILTER_LABEL: Record<FilterKey, string> = {
+  product: "Product",
+  domain: "Domain",
+  capability: "Capability",
+  level: "Level",
+  severity: "Severity",
+  priority: "Priority",
+  phase: "Phase",
+  result: "Result",
+};
+
+const facet = (
+  testCase: RunCase,
+  key: Exclude<FilterKey, "result">,
+): string | undefined => testCase[key];
+
+export const SEVERITY_ORDER = ["blocker", "critical", "major", "minor"];
+export const PRIORITY_ORDER = ["P0", "P1", "P2", "P3"];
+
+/** Known values in their own order, unknown ones after, as first met. */
+const ranked = (order: string[]) => (a: string, b: string) => {
+  const at = (value: string) => {
+    const found = order.findIndex(
+      (one) => one.toLowerCase() === value.toLowerCase(),
+    );
+    return found >= 0 ? found : order.length;
+  };
+  return at(a) - at(b);
+};
+
+/** The values a filter can take in this run: a result any of QA's words, a
+ * severity or a priority in its own order, anything else as cases first use
+ * it; a facet no case carries offers nothing. */
+export function filterOptions(reading: RunReading, key: FilterKey): string[] {
+  if (key === "result") return [...WORST];
+  const seen = new Set<string>();
+  for (const testCase of reading.view.spec.cases) {
+    const value = facet(testCase, key);
+    if (value) seen.add(value);
+  }
+  const values = [...seen];
+  if (key === "severity") return values.sort(ranked(SEVERITY_ORDER));
+  if (key === "priority") return values.sort(ranked(PRIORITY_ORDER));
+  return values;
+}
+
+export const filterValueLabel = (key: FilterKey, value: string): string =>
+  key === "result" ? MARK_LABEL[value as MarkValue] : value;
+
+/** A case fits a result when any of its rows reads it on the surface, so a
+ * skipped row is found beside a row still to do. */
+const hasResult = (
+  reading: RunReading,
+  caseId: string,
+  surface: Surface,
+  wanted: string[],
+): boolean =>
+  (reading.rowsByCase.get(caseId) ?? []).some((row) =>
+    wanted.includes(valueOn(reading, row, surface)),
+  );
+
+/** Whether a case answers the words typed in the list's search: its id,
+ * its marker or its title. */
+export function matchesQuery(testCase: RunCase, query: string): boolean {
+  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return true;
+  const said = [testCase.id, testCase.marker ?? "", testCase.title]
+    .join(" ")
+    .toLowerCase();
+  return words.every((word) => said.includes(word));
+}
+
+/** The cases a filter shows. The run itself is never touched: a filter only
+ * changes what shows. */
+export function shownCases(
+  reading: RunReading,
+  filters: Filters,
+  surface: Surface,
+  query = "",
+): Set<string> {
+  const shown = new Set<string>();
+  for (const testCase of reading.view.spec.cases) {
+    const fits = FILTERS.every((key) => {
+      const wanted = filters[key];
+      if (!wanted || wanted.length === 0) return true;
+      if (key === "result")
+        return hasResult(reading, testCase.id, surface, wanted);
+      const value = facet(testCase, key);
+      return value !== undefined && wanted.includes(value);
+    });
+    if (fits && matchesQuery(testCase, query)) shown.add(testCase.id);
+  }
+  return shown;
+}
+
+export type CaseSort = "run" | "priority" | "severity";
+export const SORT_LABEL: Record<CaseSort, string> = {
+  run: "Run order",
+  priority: "Priority",
+  severity: "Severity",
+};
+
+/** A section's cases in the order chosen; ties keep the run's order. */
+export function sortCases(cases: RunCase[], by: CaseSort): RunCase[] {
+  if (by === "run") return cases;
+  const order = by === "priority" ? PRIORITY_ORDER : SEVERITY_ORDER;
+  const compare = ranked(order);
+  return [...cases].sort((a, b) => compare(a[by] ?? "", b[by] ?? ""));
+}
+
+/** Each case's id as the list shows it: the short id, and as much of the
+ * full one as tells two alike apart. */
+export function caseLabels(cases: Pick<RunCase, "id">[]): Map<string, string> {
+  const parts = new Map(cases.map((one) => [one.id, one.id.split(".")]));
+  const labels = new Map<string, string>();
+  for (const [id, segments] of parts) {
+    let take = 1;
+    const label = () => segments.slice(-take).join(".");
+    while (
+      take < segments.length &&
+      [...parts].some(
+        ([other, theirs]) =>
+          other !== id && theirs.slice(-take).join(".") === label(),
+      )
+    )
+      take += 1;
+    labels.set(id, label());
+  }
+  return labels;
+}
+
+/** `1 case`, `2 cases`. */
+export const plural = (count: number, one: string, many = `${one}s`): string =>
+  `${count} ${count === 1 ? one : many}`;
+
+/** Of these cases, how many still have rows to do on each surface a person
+ * walks. */
+export function outstanding(
+  reading: RunReading,
+  caseIds: string[],
+): Record<"web" | "mobile", number> {
+  const count = (surface: Surface) =>
+    caseIds.filter((id) => !caseDone(reading, id, surface)).length;
+  return { web: count("web"), mobile: count("mobile") };
+}
+
+// Grouping
+
+export type SectionGroup = {
+  key: string;
+  title: string;
+  cases: RunCase[];
+};
+
+export type PageGroup = {
+  key: string;
+  title: string;
+  /** The page's route, where the manual shows it. */
+  sections: SectionGroup[];
+};
+
+export type WalkGroup = {
+  id: string;
+  title: string;
+  steps: number;
+  seen: number;
+  /** The walk's cases in route order, each once. */
+  cases: string[];
+  /** Its cases that still have rows to do on the surface. */
+  open: string[];
+};
+
+/** The current tick on each route step of each walk. */
+export function currentObservations(
+  observations: Observation[],
+): Map<string, Observation> {
+  const current = new Map<string, Observation>();
+  for (const one of observations) {
+    const key = `${one.walk}#${one.step}`;
+    const held = current.get(key);
+    if (!held || held.seq < one.seq) current.set(key, one);
+  }
+  return current;
+}
+
+export function walkCases(spec: RunSpec, walkId: string): string[] {
+  const walk = spec.walks.find((one) => one.id === walkId);
+  if (!walk) return [];
+  const ids = new Set(spec.cases.map((one) => one.id));
+  return [...new Set(walk.route.flatMap((step) => step.cases))].filter((id) =>
+    ids.has(id),
+  );
+}
+
+export function walkGroups(reading: RunReading, surface: Surface): WalkGroup[] {
+  const ticks = currentObservations(reading.view.observations);
+  return reading.view.spec.walks.map((walk) => {
+    const cases = walkCases(reading.view.spec, walk.id);
+    return {
+      id: walk.id,
+      title: walk.title,
+      steps: walk.route.length,
+      seen: walk.route.filter(
+        (_, step) => ticks.get(`${walk.id}#${step}`)?.seen,
+      ).length,
+      cases,
+      open: cases.filter((id) => !caseDone(reading, id, surface)),
+    };
+  });
+}
+
+/** Cases by page and section, as the run selected them; a case with no
+ * page sits under its suite. Groups keep the order the run lists cases. */
+export function pageGroups(
+  spec: RunSpec,
+  pageTitle: (path: string) => string,
+): PageGroup[] {
+  const pages = new Map<string, PageGroup>();
+  for (const testCase of spec.cases) {
+    const pageKey = testCase.page ?? `suite:${testCase.suite}`;
+    const page = pages.get(pageKey) ?? {
+      key: pageKey,
+      title: testCase.page
+        ? pageTitle(testCase.page)
+        : (testCase.capability ?? suiteTitle(testCase.suite)),
+      sections: [],
+    };
+    pages.set(pageKey, page);
+    const sectionKey = testCase.section ?? "";
+    let section = page.sections.find((one) => one.key === sectionKey);
+    if (!section) {
+      section = {
+        key: sectionKey,
+        title:
+          testCase.sectionTitle ??
+          (testCase.section ? humanize(testCase.section) : "Whole page"),
+        cases: [],
+      };
+      page.sections.push(section);
+    }
+    section.cases.push(testCase);
+  }
+  return [...pages.values()];
+}
+
+const humanize = (anchor: string) =>
+  anchor.replace(/-/g, " ").replace(/^./, (first) => first.toUpperCase());
+
+function suiteTitle(path: string): string {
+  const file = path.slice(path.lastIndexOf("/") + 1).replace(/\.md$/, "");
+  return humanize(file.replace(/-tcs$/, ""));
+}
+
+// Marking
+
+export type MarkCommand =
+  | { kind: "send"; marks: MarkInput[] }
+  | { kind: "ask-expectation"; row: string }
+  | { kind: "refused"; reason: string };
+
+export const NOT_BULK =
+  "A pass or a fail is marked one row at a time; many rows at once only as blocked, skipped, n/a or to do.";
+
+/** What pressing a mark does: one row, or every selected row where the mark
+ * may go on many; a fail first asks which expectation broke. */
+export function markCommand({
+  value,
+  surface,
+  focus,
+  selected,
+  hasExpectations,
+  makeId,
+}: {
+  value: MarkValue;
+  surface: Surface;
+  focus: string | null;
+  selected: string[];
+  hasExpectations: boolean;
+  makeId: () => string;
+}): MarkCommand {
+  const rows = selected.length > 0 ? selected : focus ? [focus] : [];
+  if (rows.length === 0) return { kind: "refused", reason: "No row in focus." };
+  if (rows.length > 1) {
+    if (!BULK_MARKS.includes(value))
+      return { kind: "refused", reason: NOT_BULK };
+    return {
+      kind: "send",
+      marks: rows.map((row) => ({ id: makeId(), row, surface, value })),
+    };
+  }
+  if (value === "fail" && hasExpectations)
+    return { kind: "ask-expectation", row: rows[0] };
+  return {
+    kind: "send",
+    marks: [{ id: makeId(), row: rows[0], surface, value }],
+  };
+}
+
+/** A change to a mark is a newer mark: the old one stays in the row's
+ * history. */
+export function amend(
+  mark: Mark,
+  patch: Partial<Pick<Mark, "triage" | "issue" | "note" | "expectation">>,
+  makeId: () => string,
+): MarkInput {
+  const next: MarkInput = {
+    id: makeId(),
+    row: mark.row,
+    surface: mark.surface,
+    value: mark.value,
+    ...(mark.expectation !== undefined
+      ? { expectation: mark.expectation }
+      : {}),
+    ...(mark.triage ? { triage: mark.triage } : {}),
+    ...(mark.issue ? { issue: mark.issue } : {}),
+    ...(mark.note ? { note: mark.note } : {}),
+  };
+  for (const [key, value] of Object.entries(patch) as [
+    keyof typeof patch,
+    unknown,
+  ][]) {
+    if (value === undefined || value === "") delete next[key];
+    else (next as Record<string, unknown>)[key] = value;
+  }
+  return next;
+}
+
+// The case's own parts
+
+export type ExpectationChoice = { index: number; text: string; from: string };
+
+/** What a fail can name: the case's own expectation lines, never its test
+ * data. */
+export function expectationChoices(
+  testCase: RunCase,
+  _row?: RunRow,
+): ExpectationChoice[] {
+  return testCase.expect.map((one, index) => ({
+    index,
+    text: one.text,
+    from: one.step ? `Step ${one.step}` : "Expected",
+  }));
+}
+
+/** The words a mark's expectation names. A position past the case's lines
+ * names one of the row's data cells, by column, as earlier marks did. */
+export function expectationText(
+  testCase: RunCase,
+  row: RunRow | undefined,
+  index: number | undefined,
+): string | undefined {
+  if (index === undefined) return undefined;
+  const line = testCase.expect[index];
+  if (line) return line.text;
+  if (!row || row.index < 1) return undefined;
+  return testCase.data?.rows[row.index - 1]?.[index - testCase.expect.length];
+}
+
+/** A line's words with its code marks taken off, where it reads as plain
+ * text. */
+export const plainText = (text: string): string => text.replace(/`/g, "");
+
+/** Each step with the expectations keyed to it, and the rest after; a case
+ * of one step takes them all beside it. */
+export function stepsBeside(testCase: RunCase): {
+  steps: { text: string; expect: string[] }[];
+  after: string[];
+} {
+  const steps = testCase.steps.map((text, at) => ({
+    text,
+    expect: testCase.expect
+      .filter((one) => one.step === at + 1)
+      .map((one) => one.text),
+  }));
+  const loose = testCase.expect
+    .filter(
+      (one) =>
+        one.step === undefined || one.step < 1 || one.step > steps.length,
+    )
+    .map((one) => one.text);
+  if (steps.length === 1) {
+    steps[0].expect.push(...loose);
+    return { steps, after: [] };
+  }
+  return { steps, after: loose };
+}
+
+// Test data in use
+
+const PLACEHOLDER = /<[A-Za-z][^<>\n`|]*?>/g;
+
+export function placeholdersIn(text: string): string[] {
+  return text.match(PLACEHOLDER) ?? [];
+}
+
+/** Every placeholder the case's own words use, in reading order. */
+export function casePlaceholders(testCase: RunCase): string[] {
+  const texts = [
+    testCase.lead ?? "",
+    ...testCase.given,
+    ...testCase.steps,
+    ...testCase.expect.map((one) => one.text),
+    ...(testCase.data
+      ? [...testCase.data.header, ...testCase.data.rows.flat()]
+      : []),
+    ...(testCase.other ?? []).map((one) => one.text),
+  ];
+  return [...new Set(texts.flatMap(placeholdersIn))];
+}
+
+export type PlaceholderAnswer =
+  | { kind: "environment"; value: string; known: boolean }
+  | { kind: "follows"; from: string; value?: string }
+  | { kind: "asked" };
+
+/** The site a run's environment serves; where none is known, the
+ * environment's own name, said to be one. */
+export function envSite(env: string): { value: string; known: boolean } {
+  const site = ENV_SITE[env];
+  return site ? { value: site, known: true } : { value: env, known: false };
+}
+
+/** The environment's address and a value that follows from another are
+ * never asked; everything else is asked on each row. */
+export function placeholderAnswer(
+  name: string,
+  words: string | undefined,
+  env: string,
+  known: (name: string) => string | undefined = () => undefined,
+): PlaceholderAnswer {
+  if (name === "<g10url>") return { kind: "environment", ...envSite(env) };
+  const said = (words ?? "").replace(/`/g, "").trim();
+  const owner = /^(<[^<>]+>)'s\s/.exec(said);
+  if (owner) return { kind: "follows", from: owner[1] };
+  if (/^\S*<[^<>]+>\S*$/.test(said)) {
+    const [from] = placeholdersIn(said);
+    const base =
+      from === "<g10url>" ? envSite(env).value : (known(from) ?? undefined);
+    return {
+      kind: "follows",
+      from,
+      ...(base !== undefined ? { value: said.replace(from, base) } : {}),
+    };
+  }
+  return { kind: "asked" };
+}
+
+/** What a placeholder stands for before any row says: the environment's
+ * site, or a value that follows from it; nothing that must be asked. */
+export function settledValue(
+  spec: Pick<RunSpec, "env" | "placeholders">,
+  name: string,
+  known: (name: string) => string | undefined = () => undefined,
+): string | undefined {
+  const answer = placeholderAnswer(
+    name,
+    spec.placeholders[name],
+    spec.env,
+    known,
+  );
+  return answer.kind === "asked" ? undefined : answer.value;
+}
+
+/** What the page says aloud once a mark is made. */
+export function markSaid(
+  marks: Pick<MarkInput, "row" | "value" | "surface">[],
+  label: (row: string) => string,
+): string {
+  if (marks.length === 0) return "";
+  const { value, surface } = marks[0];
+  const where =
+    marks.length === 1 ? label(marks[0].row) : plural(marks.length, "row");
+  return `${where} marked ${MARK_LABEL[value]} on ${SURFACE_LABEL[surface]}`;
+}
+
+/** Values other rows of this run used for a placeholder, offered and never
+ * taken as given. */
+export function offeredValues(
+  objects: Record<string, RowObjects>,
+  name: string,
+  exceptRow: string,
+): string[] {
+  const values = new Set<string>();
+  for (const [row, held] of Object.entries(objects)) {
+    if (row === exceptRow) continue;
+    const value = held[name];
+    if (value) values.add(value);
+  }
+  return [...values];
+}
+
+/** The run's surfaces in a person's reach: Web and Mobile, unless an Auto
+ * surface is the one chosen. */
+export const MARK_KEYS: Record<string, MarkValue> = {
+  p: "pass",
+  f: "fail",
+  b: "blocked",
+  s: "skipped",
+  n: "na",
+  t: "todo",
+};
+
+export type KeyCommand =
+  | { kind: "case"; step: 1 | -1 }
+  | { kind: "row" }
+  | { kind: "mark"; value: MarkValue }
+  | { kind: "select" }
+  | { kind: "clear" }
+  | { kind: "list" };
+
+/** The desk's keys, read from a key press outside a field. */
+export function keyCommand(event: {
+  key: string;
+  metaKey?: boolean;
+  ctrlKey?: boolean;
+  altKey?: boolean;
+}): KeyCommand | null {
+  if (event.metaKey || event.ctrlKey || event.altKey) return null;
+  const key = event.key;
+  if (key === "j") return { kind: "case", step: 1 };
+  if (key === "k") return { kind: "case", step: -1 };
+  if (key === "Enter") return { kind: "row" };
+  if (key === "x") return { kind: "select" };
+  if (key === "Escape") return { kind: "clear" };
+  if (key === "l") return { kind: "list" };
+  const value = MARK_KEYS[key];
+  return value ? { kind: "mark", value } : null;
+}
+
+/** The case `step` away in the order shown, staying put at either end. */
+export function stepCase(
+  order: string[],
+  at: string | null,
+  step: 1 | -1,
+): string | null {
+  if (order.length === 0) return null;
+  const now = at ? order.indexOf(at) : -1;
+  if (now === -1) return order[step === 1 ? 0 : order.length - 1];
+  return order[Math.min(order.length - 1, Math.max(0, now + step))];
+}
+
+/** The next row of the case after the one in focus, or the first row of the
+ * next case once the case's rows run out. */
+export function nextRow(
+  reading: RunReading,
+  order: string[],
+  focus: { case: string | null; row: string | null },
+): { case: string | null; row: string | null } {
+  if (!focus.case) {
+    const first = order[0] ?? null;
+    return { case: first, row: first ? firstRow(reading, first) : null };
+  }
+  const rows = reading.rowsByCase.get(focus.case) ?? [];
+  const at = rows.findIndex((row) => row.key === focus.row);
+  if (at >= 0 && at < rows.length - 1)
+    return { case: focus.case, row: rows[at + 1].key };
+  const next = stepCase(order, focus.case, 1);
+  if (!next || next === focus.case) return focus;
+  return { case: next, row: firstRow(reading, next) };
+}
+
+export const firstRow = (reading: RunReading, caseId: string): string | null =>
+  reading.rowsByCase.get(caseId)?.[0]?.key ?? null;
+
+/** The case and row the address asks for. A case the run does not hold is
+ * named back and nothing takes focus, so no key marks a case nobody chose;
+ * no case asked is the first shown, unless a walk is open. */
+export function focusOf(
+  reading: RunReading,
+  order: string[],
+  asked: { case: string | null; row: string | null; walk: boolean },
+): { case: string | null; row: string | null; unknown?: string } {
+  if (asked.case && !reading.caseById.has(asked.case))
+    return { case: null, row: null, unknown: asked.case };
+  const caseId = asked.case ?? (asked.walk ? null : (order[0] ?? null));
+  if (!caseId) return { case: null, row: null };
+  const row =
+    asked.row && reading.rowByKey.get(asked.row)?.case === caseId
+      ? asked.row
+      : firstRow(reading, caseId);
+  return { case: caseId, row };
+}

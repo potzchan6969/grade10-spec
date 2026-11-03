@@ -4,6 +4,8 @@ spec: grade10-site/commerce/commerce
 order: 1
 ---
 
+::phase{id="store-launch-1" priority="P2"}
+
 How the storefronts sell: Shopify is each brand's product catalog, a payment provider collects the money, and every order of record lives in that store's own Postgres. Where account data lives: [Account Data](/platform/account-data).
 
 ## Parts
@@ -86,6 +88,8 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 
 ### Points pay through a draft order, not the cart
 
+::phase{id="store-launch-2" priority="P2"}
+
 - A basket with points on it is priced by Shopify as a **draft order** carrying one merchant-applied fixed-amount discount worth exactly the points chosen, and the buyer pays its `invoiceUrl`. Everything else keeps the Storefront cart
 - Points buy eligible goods only, capped at `min(chosen, spendable goods)` — never shipping, never tax, and never a gift card, which would mint itself
 - The DraftOrder GID is the whole correlation, recorded as `payment_checkout_ref` before the invoice URL leaves the worker. An invoice-completed order carries no `cart_token`, so no webhook can bind it on the token alone — the paid webhook hands the order id it names to the same read the cron sweep runs, and that read settles the sale on the webhook's own round trip. The sweep is the net behind it
@@ -95,6 +99,8 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 - A return of everything the sale is measured in — the goods the shop states, or the whole charge where it states none — gives every point back, once, keyed on the refund's own id. Only goods a refund states count towards it: an amount an operator types closes money without naming a good, and money is not evidence that one came home. Nothing is prorated either: the discount was spread over every line the shop sold, so no part of the sale carried it. A member who returns everything that earned and keeps a gift card is counted (`store.points_tender.return_held`) and paid back by hand
 
 ### Loyalty earns on the goods, not the whole charge
+
+::phase{id="store-launch-2" priority="P2"}
 
 - A paid order's earning is the provider's own lines put through the eligible-goods rule, then this store's priced items, then the goods total the provider stated. Never the charge, and never the goods total where the lines answer: the rule drops a gift card and a grading fee, and the first rung is smaller than the last exactly where it does
 - Earning on the charge would pay a buyer for their own delivery and make the rate depend on the shipping they picked; a discount they entered at checkout is theirs and lowers it

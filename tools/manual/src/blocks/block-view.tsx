@@ -29,5 +29,7 @@ export function BlockView({ block }: { block: Block | BodyItem }) {
       return <FlowBlockView block={block} />;
     case "example":
       return <ExampleBlockView block={block} />;
+    case "phase":
+      return null;
   }
 }

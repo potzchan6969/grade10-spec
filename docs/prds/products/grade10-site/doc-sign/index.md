@@ -3,6 +3,8 @@ title: Document Signing
 icon: signature
 ---
 
+::phase{id="internal-consignment" priority="P0"}
+
 A customer sits at a counter with an iPad, reads the documents, draws a
 signature, and walks away with a sealed PDF carrying a certificate of
 completion. It is built and run in house: no DocuSign, no hosted provider.

@@ -3,6 +3,8 @@ title: Documents Service
 order: 1
 ---
 
+::phase{id="internal-consignment" priority="P1"}
+
 ## Values
 
 | Area | Documents |

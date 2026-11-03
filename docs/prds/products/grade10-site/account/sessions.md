@@ -5,6 +5,8 @@ audience: operator
 order: 6
 ---
 
+::phase{id="auction" priority="P1"}
+
 ## Listing
 
 An operator with the session-list grant lists one person's sessions by user id. The list never shows the secret that signs a session in, so reading it gives no one a way in.

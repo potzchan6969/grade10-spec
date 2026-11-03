@@ -12,7 +12,7 @@ commission is the revenue - [Consignment](/p/grade10-site/consignment).
 # In the vault
 
 ## Collector — Intake
-At a card event, or the shop in Causeway Bay from Phase 2; staff read the collector's ID, record and photograph each card, and the collector signs the Vault Terms.
+At a card event, or the shop in Causeway Bay; staff read the collector's ID, record and photograph each card, and the collector signs the Vault Terms.
 
 ## Staff — Authenticate and store
 The card is checked at the counter, or stored first and checked later.
@@ -49,18 +49,20 @@ Incentive, after the identity check.
 | [Vault Operations](/p/grade10-site/vault/operations) | The staff side: queues, moves, roles, the daily run, reports |
 | [Earnings Wallet](/p/grade10-site/account/earnings-wallet) | Where incentive and sale proceeds collect, and cash-out |
 
-## Phases
+## Rollout
 
-Each phase goes live before the first moment the business needs it, and is
+::phase{id="internal-consignment" priority="P2" rules="vault-and-incentive,consign-and-sell"}
+
+Each step goes live before the first moment the business needs it, and is
 done when its last line works with a real collector and a real card.
 
 1. **Vault and Incentive** — mid November 2026
    - **Delivers** — intake at card events, with a confirmed email, a phone number, the collector's ID read by staff and the ownership declaration; authentication, custody and moves; the daily price feed, eligibility and the daily amount; the collector's dashboard and the staff's
-   - **Until Phase 2** — intake is at card events only; nothing cashes out, so incentive builds up; staff run retrievals by hand
+   - **Until Consign and Sell** — intake is at card events only; nothing cashes out, so incentive builds up; staff run retrievals by hand
    - **Done When** — a card taken in at an event is authenticated, earns from its Earning Starts date, and the collector sees it and its daily amount in the dashboard
 2. **Consign and Sell** — 6 December 2026 for the store
    - **Delivers** — intake at the shop's counter, on the same form as events; consigning at intake or later from the dashboard, with the agreement signed in the app; the shop's tills, at the shop and events, and auction lots from vault stock; statements and commission invoices; incentive stopping when a card sells; the identity check before money leaves, compared with the ID read at intake; cash-out at least US$65 once every 7 days, to an account in the verified name; the consignment dashboard
-   - **Until a Later Phase** — staff enter store price changes
+   - **Until Pricing by Rule** — staff enter store price changes
    - **Done When** — a vaulted card is consigned and signed, sold at the shop and at auction, its proceeds and incentive reach the wallet, and the collector passes the identity check and cashes out
 3. **Mail-In and Retrieval** — sending cards in by post, and taking a card home through the product
    - ❓ **Date** — not set. Product confirms
@@ -73,7 +75,9 @@ done when its last line works with a real collector and a real card.
 
 ## Where It Is Open
 
-- 🚧 **Not open yet** — nothing of the vault-first intake runs; the first phase opens it at card events, and the second at the shop
+::phase{id="internal-consignment" priority="P2"}
+
+- 🚧 **Not open yet** — nothing of the vault-first intake runs; Vault and Incentive opens it at card events, and Consign and Sell at the shop
 
 :::detail{title="Product decisions" for="pm"}
 Collectors hold cards they might sell some day but won't list today, and

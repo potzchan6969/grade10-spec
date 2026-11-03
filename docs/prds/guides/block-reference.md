@@ -174,6 +174,18 @@ bottom:
 ::children
 ```
 
+The release a heading's lines launch in, at a release priority from `P0` to
+`P2`, named from `docs/prds/phases.yaml`. Before the page's first heading it
+covers the whole page; under a heading, every line under it. `rules` names the
+rules that launch in another phase, by the anchors a case's trace writes, and
+the rest of the section keeps its own. The nearest block wins, and a rule's
+nested rules follow it - [Release Phases](/p/shared/planning/release-phases):
+
+```md
+::phase{id="store-launch-1" priority="P0"}
+::phase{id="store-launch-2" priority="P1" rules="held-codes,points"}
+```
+
 Containers hold markdown and, one level deep, leaf directives. A callout is
 `note`, `decision` or `warning`. A `warning` wears a signature — whose
 judgment it is and when it was last shaped — because hand-written divergence
@@ -322,5 +334,8 @@ silent overwrite.
 parse or is not canonical, on an image no file under `docs/prds/assets`
 answers, on a `story=` id the workbench Storybook does not index, on an
 example ledger whose balances do not add up, and when a product, topic or
-guide `manual.yaml` lists has no page, or is listed twice. A `[[ref]]` that no
-page's `spec` names is a warning.
+guide `manual.yaml` lists has no page, or is listed twice. It fails a `::phase` block naming a phase
+`phases.yaml` does not list, a rule its heading does not hold or a rule
+another block names, two whole blocks under one heading, and a block inside
+another block. A `[[ref]]` that no page's `spec` names is a warning, and so is
+a line being built in no phase on a page that names one.

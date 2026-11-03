@@ -4,6 +4,8 @@ spec: grade10-site/store/home
 order: 1
 ---
 
+::phase{id="store-launch-1" priority="P0"}
+
 `grade10.com/store` is the front door: a hero, a grid of collections, one
 row of cards. Links people already hold still land here.
 
@@ -23,11 +25,15 @@ row of cards. Links people already hold still land here.
 
 ## Merchandised Row
 
+::phase{id="store-launch-1" priority="P1"}
+
 - **Cards** — from whichever collection the shop lists first
   - **Card Status** — sold out, and what it used to cost where the shop has marked it down, both said the way the browse listing says them
   - **Opens, Never Sells** — a card opens the product's own page and offers no cart
 
 ## Loading and Errors
+
+::phase{id="store-launch-1" priority="P1"}
 
 - **Catalogue Read** — the grid and the row are read from the shop after the hero
   - **Loading** — each says it is loading

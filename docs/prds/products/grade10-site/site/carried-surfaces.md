@@ -4,7 +4,15 @@ spec: grade10-site/site/carried-surfaces
 order: 4
 ---
 
+::phase{id="store-launch-1" priority="P0"}
+
 ## What Each Lane Carries
+
+::phase{id="internal-consignment" priority="P0" rules="vault"}
+
+::phase{id="pre-store-launch" priority="P0" rules="membership"}
+
+::phase{id="store-launch-1" priority="P2" rules="booking,grading,labs"}
 
 A build of the site carries a surface or it does not, and there is no third
 answer. What a build carries is fixed when it is made, so a lane cannot be

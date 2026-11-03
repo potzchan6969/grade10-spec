@@ -3,6 +3,8 @@ title: Account
 order: 1
 ---
 
+::phase{id="auction" priority="P0"}
+
 What a collector needs before bidding: an account, a verified identity above
 the bar, and a delivery address to confirm onto a won lot. Sign-in and the
 identity check are the same across Grade10 — [Sign-In](/p/grade10-site/account/sign-in)

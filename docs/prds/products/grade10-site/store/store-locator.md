@@ -4,6 +4,8 @@ spec: grade10-site/store/store-locator
 order: 4
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 Store Locator is the public page for Grade10's one Hong Kong shop: where it
 is, when it is open, and a way into Google Maps. It is a store detail, not a
 multi-store finder.

@@ -4,6 +4,8 @@ spec: grade10-site/commerce/product-status
 order: 5
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 Product Status defines Shopify's answer for each variant, the listing tile's
 rollup for a product, and the one internal sale identity a product page uses.
 The cart reads the identity on each line again when it reviews the cart.

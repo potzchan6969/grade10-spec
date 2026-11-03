@@ -4,6 +4,8 @@ spec: grade10-site/vault/portfolio
 order: 3
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 What a collector holds in the vault and what they do with it. The portfolio
 is the custody half of the vault — items held, not loans — drawn on the
 collector's own pages.

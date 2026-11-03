@@ -4,6 +4,8 @@ spec: shared/ui/store-cart
 order: 5
 ---
 
+::phase{id="store-launch-1" priority="P1"}
+
 The cart is a drawer that slides in over the page. It lists the items the
 shopper is buying and fades at the edge when there is more to scroll to.
 

@@ -17,7 +17,7 @@ import { isAutomated, prop, readAllSuites } from "./suites.mjs";
 
 /** `grade10-site/store/home` → product, domain, capability. A domain suite
  *  sits one level up and names no capability. */
-function splitCapability(id) {
+export function splitCapability(id) {
   const parts = id.split("/");
   return {
     product: parts[0] ?? "",
@@ -296,7 +296,7 @@ function testabilityPrefill(tc) {
 
 /** A header's name, backticks and one surrounding pair of angle brackets
  *  removed. `Closed lot` stays `Closed lot`, so it does not fill `<closed lot>`. */
-function columnKey(header) {
+export function columnKey(header) {
   const bare = header.replace(/`/g, "").trim();
   const wrapped = bare.match(/^<([^<>]+)>$/);
   return wrapped ? wrapped[1] : bare;
@@ -309,7 +309,7 @@ function isSharedTable(table) {
 
 /** Run tables are the ones that open a sheet row. A `Field | Value` table is
  *  shared setup and stays in the Test data cell. */
-function runTablesOf(tc) {
+export function runTablesOf(tc) {
   return (tc.tables ?? []).filter(
     (table) => !isSharedTable(table) && table.rows.length > 0,
   );
@@ -532,4 +532,113 @@ export function inReadingOrder(picked) {
       (a.tc.tcNum ?? 0) - (b.tc.tcNum ?? 0) ||
       a.tc.id.localeCompare(b.tc.id, "en", { numeric: true }),
   );
+}
+
+const RELEASE_PRIORITIES = ["P0", "P1", "P2"];
+
+/** `cart#promo-code` → the store page holding it and its section, or an
+ *  error naming what the store holds. */
+function storeSection(release, value) {
+  const [page, section, extra] = String(value).split("#");
+  if (!page || !section || extra !== undefined)
+    throw new Error("--section is <page>#<section>, as a store case traces it");
+  const path = [...release.storePages].find((one) =>
+    one.endsWith(`/${page}.md`),
+  );
+  if (!path)
+    throw new Error(
+      `No store page \`${page}\`; the store has ${[...release.storePages]
+        .map((one) => one.replace(/^.*\/|\.md$/g, ""))
+        .join(", ")}`,
+    );
+  const sections = release.sections.get(path) ?? [];
+  if (!sections.some((one) => one.trace === section))
+    throw new Error(
+      `\`${page}\` has no section \`${section}\`; it has ${sections
+        .map((one) => one.trace)
+        .join(", ")}`,
+    );
+  return { page, section, path };
+}
+
+const tracesSection = (one, { page, section }) =>
+  prop(one.tc, "Trace")
+    .split(",")
+    .map((target) => target.trim())
+    .some(
+      (target) =>
+        target === `${page}#${section}` ||
+        target.startsWith(`${page}#${section}/`),
+    );
+
+/**
+ * What a selection by phase, release priority, readiness or store section
+ * takes, read from the release the manual reads (release-phases.md, **A Run
+ * per Phase**): the units it names, and a filter over candidates that
+ * intersects with every other filter.
+ *
+ * A store section unit brings the cases tracing a rule in it; a capability
+ * unit brings its suite. `--section` alone takes the cases tracing that
+ * section, whatever its phase. A capability unit whose page spans another
+ * phase is named in `spans`, so the dry run asks for the other phase's cases
+ * to be left out with a reason.
+ */
+export function unitSelection(
+  release,
+  { phase = null, releasePriority = null, ready = false, section = null },
+) {
+  if (phase && !release.phases.some((one) => one.id === phase))
+    throw new Error(
+      `No phase \`${phase}\`; phases.yaml lists ${release.phases
+        .map((one) => one.id)
+        .join(", ")}`,
+    );
+  const priorities = releasePriority
+    ? String(releasePriority)
+        .split(",")
+        .map((one) => one.trim().toUpperCase())
+        .filter(Boolean)
+    : null;
+  for (const one of priorities ?? [])
+    if (!RELEASE_PRIORITIES.includes(one))
+      throw new Error(
+        `--release-priority is ${RELEASE_PRIORITIES.join(", ")}, not ${one}`,
+      );
+  const where = section ? storeSection(release, section) : null;
+  const byUnit = Boolean(phase || priorities || ready);
+  const units = release.units.filter(
+    (unit) =>
+      (!phase || unit.phase === phase) &&
+      (!priorities || priorities.includes(unit.priority)) &&
+      (!ready || release.readySteps.includes(unit.step)) &&
+      (!where ||
+        (unit.kind === "section" &&
+          unit.pages[0] === where.path &&
+          unit.section?.trace === where.section)),
+  );
+  const ids = byUnit ? new Set(units.flatMap((unit) => unit.cases)) : null;
+  const spans = units
+    .filter((unit) => unit.kind === "capability")
+    .map((unit) => ({
+      unit,
+      others: [
+        ...new Set(
+          release.units
+            .filter(
+              (other) =>
+                other.kind === "capability" &&
+                other.spec === unit.spec &&
+                other.phase !== unit.phase,
+            )
+            .map((other) => other.phase),
+        ),
+      ],
+    }))
+    .filter((one) => one.others.length > 0);
+  return {
+    units,
+    spans,
+    keeps: (one) =>
+      (!ids || ids.has(one.tc.id)) && (!where || tracesSection(one, where)),
+  };
 }

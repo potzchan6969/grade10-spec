@@ -3,6 +3,8 @@ title: Membership
 icon: medal
 ---
 
+::phase{id="pre-store-launch" priority="P2"}
+
 One points programme across every Grade10 door. A member earns on qualifying
 spend, their tier sets the rate they earn at, and points settle two ways: as a
 coupon an order carries at either checkout, or straight off the bill. Grade10

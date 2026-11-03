@@ -4,6 +4,8 @@ spec: shared/ui/auction-listing
 order: 6
 ---
 
+::phase{id="auction" priority="P1"}
+
 Three blocks make an auction lot page: the media gallery, the bid panel, and
 the details section. Every label and accessible name comes from the
 application; what a bid does, and what it must clear, belongs to [Bidding

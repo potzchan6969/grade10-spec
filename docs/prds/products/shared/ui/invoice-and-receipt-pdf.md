@@ -4,6 +4,8 @@ spec: shared/ui/invoice-and-receipt-pdf
 order: 20
 ---
 
+::phase{id="auction" priority="P1"}
+
 These blocks are the shared PDF contract for an auction order's invoice and
 receipt. They take application-resolved document data and return PDF bytes, so
 the preview and product applications consume one renderer without moving

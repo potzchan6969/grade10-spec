@@ -5,6 +5,8 @@ audience: operator
 order: 1
 ---
 
+::phase{id="auction" priority="P0"}
+
 The operator half of the auction: a listing is drafted, filled, priced,
 scheduled and published here, and a won lot is worked from the close until
 the card is in the winner's hands. The collector's half is
