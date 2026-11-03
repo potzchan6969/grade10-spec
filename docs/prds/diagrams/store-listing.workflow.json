@@ -11,6 +11,10 @@
   },
   "lanes": [
     {
+      "id": "inventory",
+      "label": "Grade10's inventory"
+    },
+    {
       "id": "admin",
       "label": "Grade10's admin panel"
     },
@@ -40,17 +44,17 @@
       "col": 1,
       "type": "frontend",
       "label": "Price set",
-      "sublabel": "by staff, or later by a rule",
-      "width": 160
+      "sublabel": "by staff, on the listing's home",
+      "width": 180
     },
     {
       "id": "rule",
-      "lane": "admin",
-      "col": 2,
+      "lane": "inventory",
+      "col": 1,
       "type": "backend",
-      "label": "Rule, daily",
-      "sublabel": "latest sale × markup, never below the floor",
-      "width": 190
+      "label": "Rule quote, later",
+      "sublabel": "from the latest sale, never below the floor",
+      "width": 180
     },
     {
       "id": "listing",
@@ -67,8 +71,8 @@
       "col": 2,
       "type": "external",
       "label": "One product",
-      "sublabel": "one unit, created by Grade10",
-      "width": 170
+      "sublabel": "one unit, the item's for life",
+      "width": 180
     },
     {
       "id": "edit",
@@ -76,8 +80,8 @@
       "col": 1,
       "type": "security",
       "label": "Shop edit",
-      "sublabel": "to a field Grade10 holds",
-      "width": 150
+      "sublabel": "found on reading it back",
+      "width": 170
     },
     {
       "id": "sold",
@@ -122,9 +126,8 @@
       "from": "rule",
       "to": "price",
       "variant": "dashed",
-      "fromSide": "left",
-      "toSide": "right",
-      "label": "later"
+      "fromSide": "bottom",
+      "toSide": "top"
     },
     {
       "from": "edit",

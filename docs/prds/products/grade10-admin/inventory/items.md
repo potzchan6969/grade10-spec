@@ -12,7 +12,7 @@ company owns. Stock counts units of a product; an item is one object.
 
 | Rule | Value |
 | --- | --- |
-| Owner | one account, or one of the company's two entities: the custodian or the lender, or no one once the owner is erased |
+| Owner | one account, or one of the company's two entities: the custodian or the lender, or an unnamed buyer, or no one once the owner is erased |
 | Category | trading card, comic, coin, banknote, stamp, bullion, watch, jewellery, memorabilia, other |
 | Grader | PSA, BGS, CGC, SGC, TAG, PCGS, NGC, PMG, or none |
 | Grade | as printed on the slab; only with a grader |
@@ -35,6 +35,9 @@ company owns. Stock counts units of a product; an item is one object.
   [Collector Page](/p/grade10-admin/console/collector-page#sections)
 - **Owner of a bought or gifted item** - the custodian; the lender only
   through a forfeit
+- 🚧 **Sold to an unnamed buyer** - the owner of a house item a walk-in
+  buyer with no account took, set when it is handed over or delivered -
+  [Services and Hand-offs](/p/grade10-admin/inventory/services#a-sale)
 
 ## Facts
 
@@ -169,5 +172,6 @@ recorded with who and why; marks closed by hand, expected near zero.
 | An item names its product | Decided | A Cert record links to the item the custodian owns, and any item may name the catalogue product it is an instance of without counting as stock - [Inventory](/p/grade10-admin/inventory) - decided under the owner's delegation, 2026-10-08 | Product |
 | A partner owns its items | Decided | An organisation an admin registers owns the items it sends under a deal - [Intake and Release](/p/grade10-admin/inventory/intake#partner-deals) - decided under the owner's delegation, 2026-10-08 | Product |
 | What the register holds | Decided | By default a place on every item, the photographs staff take as received and one cover value for caps; valuations, loan terms and amounts stay in the vault, and the item page reads them from it. An admin may turn cover values off, and caps then count only what each service checks itself. This is the revisit the row on who owns what outside the vault asks for - [Locations](/p/grade10-admin/inventory/locations) - decided by the owner, 2026-10-08 | Product |
+| A walk-in buyer | Decided | An item sold to a buyer with no account moves to a new owner, sold to an unnamed buyer, when it is handed over or delivered, rather than staying the house's - decided by the owner, 2026-11-03 | Product |
 | Selling from the vault | Decided | By default a storage-lane item sells from the vault and its owner moves to the buyer, in place of refusing a vaulted item a new owner; an admin setting turns it off - [Services and Hand-offs](/p/grade10-admin/inventory/services#marks-that-share-an-item) - decided by the owner, 2026-10-08 | Product |
 :::

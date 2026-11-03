@@ -51,7 +51,6 @@ that receive, move and count.
 | Documents | every agreement and receipt covering the item, across services |
 | Owners | every change of owner: a transfer, a sale, a forfeit |
 | Activity | every act on the item from the audit chain |
-| 🚧 Store | the item's store listing: its price beside the floor and the market price, manual or by rule, its channels and location, whether the shop has it, missing filters, a link to the product, and every price change - [Store Listings](/p/grade10-site/store/store-listings) |
 
 - **Apply to a service** - one menu naming the vault, grading, consignment,
   the auction and the store, each offered or withheld with the reason in

@@ -14,7 +14,7 @@ The Grade10 store is the trading-card and collectibles shop at
 ## Who Owns What
 
 - **Shopify owns**
-  1. Product catalog
+  1. Product catalog, except item listings
   2. Inventory — one location, the shop - [Inventory and Sales Channels](/p/grade10-site/store/inventory-and-channels)
   3. Orders
   4. Shipping
@@ -29,7 +29,8 @@ The Grade10 store is the trading-card and collectibles shop at
 - **Collectors** — browse and buy
 - **Shopkeepers** — sell at the till in the physical shop, through the
   Shopify app on an iPad
-- **Stock keepers** — manage inventory in the Shopify dashboard
+- **Stock keepers** — manage counted stock in the Shopify dashboard
+- 🚧 **Staff** — list and price items from the admin panel - [Store Listings](/p/grade10-site/store/store-listings#admin-homes)
 - **Admins** — manage store-wide configuration in the admin panel: account
   suspension, discount promotions, the coupon catalog
 

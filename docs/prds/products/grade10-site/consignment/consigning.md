@@ -22,13 +22,13 @@ From the dashboard, for cards already in the vault.
 
 ## Terms
 
-The collector sets one price, the lowest acceptable price: a hard limit no sale
-goes below. Grade10 prices the listing at approval.
+The collector sets one price, the lowest acceptable price: a limit no sale
+goes below unless the collector agrees. Grade10 prices the listing at approval.
 
 | Term | At the store | At auction |
 | --- | --- | --- |
 | 🚧 Lowest acceptable price | required: the lowest the collector sells for; staff may price higher at their will | required: the reserve; the lot never sells below it |
-| 🚧 Price Grade10 sets | the list price, never below the lowest acceptable price | the starting price |
+| 🚧 Price Grade10 sets | the list price; below the lowest acceptable price only once the consignor agrees | the starting price |
 | Commission | 🚧 a share of the sale price, one rate for the store, replacing the price bands | a share of the hammer price only, one rate; the buyer's premium is Grade10's |
 
 - **Commission**
@@ -94,11 +94,11 @@ For a card with a market price of HKD 10,000:
   - **First Sale Wins** — the card comes off the other channels at once; a second sale of the same card is refunded
     - 🚧 **Sold Twice** — a till sale of a card an online buyer paid for at the same moment stands; the online buyer is refunded and staff alerted
   - 🚧 **One Buyer at a Time** — an open order holds the card, refusing every other buyer until it is paid, expires or is cancelled
-  - 🚧 **Phase 1: the Shop's Tills Only** — the online store and partners are switched off, so a card consigned to the store sells at the shop in Causeway Bay and at events until they are switched on
+  - 🚧 **Phase 1: the Shop's Tills Only** — the online store and partners are switched off, so a card consigned to the store sells at the shop in Causeway Bay and at events until they are switched on; it is published to grade10.com too, which sells nothing while the store is closed, so the shelf scanner names it
   - **Marketplace** — online, later, with no date; it joins as one more store channel, the first sale wins, and its commission is decided then
 - **Sales Report Themselves** — the store and the auction report each sale, delivery and refund; staff record one by hand only where a channel didn't
-- 🚧 **Price Changes** — entered by staff; they may raise the price at their will, never below the lowest acceptable price
-  - **Later, by Rule** — from the latest sale, never below the lowest acceptable price; the product's details and filters come from the vaulted item - [Store Listings](/p/grade10-site/store/store-listings)
+- 🚧 **Price Changes** — entered by staff; they may raise the price at their will, and lower it below the lowest acceptable price only once the consignor agrees
+  - **Later, by Rule** — from the latest sale, never below the lowest acceptable price; the product's details and filters come from the inventory item - [Store Listings](/p/grade10-site/store/store-listings)
 - 🚧 **Handover** — the buyer takes the card at the counter; a card held elsewhere moves to the shop first
   - **Online Orders** — once online is on, an order ships from the shop, Kerry Logistics collecting it there
   - **First Hold Wins** — a card held for an online checkout is the shop's to keep for that checkout; the till never cancels it
@@ -157,6 +157,7 @@ By email, in the collector's language.
 | Agreement signed | the sealed agreement, with its terms |
 | On sale | listed in the shop or at auction, with its link |
 | Price changed | staff changed the price |
+| Price moved by the rule | later: one weekly digest, only when the rule moved a price, from and to; no email a change |
 | Off sale | taken off sale, with the reason |
 | Sold | the sale price, and when the proceeds reach the wallet |
 | Ended unsold | the period ended without a sale |
@@ -173,7 +174,7 @@ By email, in the collector's language.
 A consigned card is always a vaulted card, authenticated and photographed once,
 so consigning it takes no second intake: a tick on the intake form, or a few
 taps later. Asking only for the lowest price the collector accepts
-lets Grade10 price the listing while the collector keeps a hard limit.
+lets Grade10 price the listing while the collector keeps the limit.
 
 - **Vault first, then consign** — at intake both happen in one visit, the card registered into the vault before it is consigned; later the collector consigns from the dashboard, where staff may help but never submit. Either way the collector signs, so the agreement is their own act
 - **Every lot has a reserve** — the lowest price is required at auction too, so the price check and the minimum commission always have a floor to read - owner, 2026-11-03

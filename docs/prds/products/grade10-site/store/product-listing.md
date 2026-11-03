@@ -27,6 +27,7 @@ order: 2
 - **Filter Groups** — lists of options to tick
   - **Worlds** — such as Pokémon and One Piece; the top five, then a link to the rest
   - **Types** — such as Graded Card and Booster Box; always listed in full
+  - ❓ **Language** — such as Japanese and English; the catalogue reads it, and the filter panel doesn't list it yet. Design confirms
 - **Combining Options** — options ticked in one group widen the results; options in different groups narrow them
   - Pokémon + One Piece shows both worlds; adding Graded Cards keeps only the graded cards from either
 - **Option Count** — number of products picking the option would give, with the other filters

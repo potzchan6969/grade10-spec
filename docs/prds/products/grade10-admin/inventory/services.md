@@ -11,15 +11,15 @@ order: 6
 | Grading | a grading card on a submission | at hand-in | at hand-back, or a hand-off |
 | Consignment | a consignment | when its agreement is signed | when the item is sold and paid out, or goes back |
 | Auction | a lot | when the listing takes the item | when the lot is unsold or called off, or its buyer takes the item |
-| Store | a store listing | when the item goes on sale | when it sells or comes off sale |
+| Store | a house-stock listing | when the item goes on sale | when its buyer takes it, or it comes off sale |
 
 ## Marks That Share an Item
 
 A mark is a service acting on an item. Three kinds share one item; every
 other mark stands alone.
 
-- **A consignment with its sale** - a consignment and its auction lot, or a
-  consignment and its store listing
+- **A consignment with its sale** - a consignment and its auction lot; a
+  consigned item on sale in the store stays under the consignment's mark
 - 🚧 **Selling from the vault** - a storage-lane vault case shares its item
   with a consignment and that consignment's sale; the case stays under the
   sale and the vault releases the card to its buyer on delivery
@@ -46,7 +46,8 @@ other mark stands alone.
 - **Paper behind every mark** - an item the house holds for someone else is
   always under a signed agreement of a service holding it
 - 🚧 **Sell as house stock** - the store creates the item's product at the
-  price staff set, never below its cost, under the store's mark -
+  price staff set, never below its cost while that setting is on, under the
+  store's mark -
   [Store Listings](/p/grade10-site/store/store-listings)
 
 ## Hand-offs
@@ -94,6 +95,10 @@ new intake and no new label.
   mark, so the item can go on sale again
 - **House stock settles** - a paid order sells the lot's stock hold -
   [Products and Stock](/p/grade10-admin/inventory/catalog#intake)
+- 🚧 **A house item sells** - the store closes its mark and moves the owner
+  when the buyer takes the item, handed over or delivered: to the buyer's
+  account, or to an unnamed buyer for a walk-in sale -
+  [Items](/p/grade10-admin/inventory/items#owners)
 
 :::detail{title="Product decisions" for="pm"}
 Only the vault marks the items it acts on. Nothing stops a card at the
@@ -115,7 +120,7 @@ zero; marks refused by name; hand-offs completed in one visit.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Every service marks | Decided | Grading, consignment, the auction and the store mark the items they act on, as the vault does; the store sells a consigned item under the consignment's mark - decided under the owner's delegation, 2026-10-08 | Product |
+| Every service marks | Decided | Grading, consignment, the auction and the store mark the items they act on, as the vault does; the store sells a consigned item under the consignment's mark, and house stock under its own - decided under the owner's delegation, 2026-10-08 | Product |
 | Ask before marking | Decided | A service asks before it marks and is refused by name; what it then does under its mark is mirrored and never refused - decided under the owner's delegation, 2026-10-08 | Engineering |
 | Which marks share an item | Decided | A consignment with its sale; one sale at a time - decided under the owner's delegation, 2026-10-08. A storage-lane vault case with a consignment and its sale - Selling from the vault, below | Product |
 | A hand-off is one act | Decided | Paper first, the owner decides, and the item never leaves custody - decided under the owner's delegation, 2026-10-08 | Product |
@@ -127,6 +132,7 @@ zero; marks refused by name; hand-offs completed in one visit.
 | A lot of an item | Decided | A lot whose product links one item asks before it is published; its mark opens when it goes live and closes sold when its order is paid, moving the owner to the winner, or unsold when nobody won or the order is cancelled, or withdrawn when the lot is called off - decided under the owner's delegation, 2026-10-10 | Product |
 | A consigned lot | Decided | Closes sold when its buyer takes the item, delivered or collected, and moves no owner; consignment moves it - decided under the owner's delegation, 2026-10-11 | Product |
 | When a house lot's owner moves | ❓ Open | Whether a house lot moves its owner when the winner takes the item, as a consigned lot does, or when its order is paid, as the row above says | Product |
+| A house item's owner | Decided | Moves when its buyer takes it, handed over or delivered, not when the order is paid; a walk-in buyer with no account becomes a new owner, sold to an unnamed buyer, so a till sale never needs an account - decided by the owner, 2026-11-03 | Product |
 | A card going home | Decided | The grading mark closes at hand-back or withdrawal and the item leaves custody; a card the grader did not return closes lost and stays on the register - decided under the owner's delegation, 2026-10-10 | Product |
 | A forfeited item for sale | ❓ Open | Who sells an item the lender owns | Legal |
 :::
