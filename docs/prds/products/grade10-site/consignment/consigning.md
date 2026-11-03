@@ -14,7 +14,7 @@ order: 1
 From the dashboard, for cards already in the vault.
 
 1. 🚧 **Cards** — chosen from the collector's vaulted cards
-2. 🚧 **Terms** — per card, the store, the auction or both, and the lowest acceptable price; the commission shown at Grade10's rate for each channel chosen
+2. 🚧 **Terms** — per card, the store or the auction, and the lowest acceptable price; the commission shown at Grade10's rate for the channel chosen
 3. 🚧 **Review and Sign** — the estimated payout, then the Consignment Agreement signed in the app
 
 - 🚧 **Pending Approval** — what the collector sees until staff approve the listing
@@ -31,7 +31,6 @@ goes below. Grade10 prices the listing at approval.
 | 🚧 Price Grade10 sets | the list price, never below the lowest acceptable price | the starting price |
 | Commission | 🚧 a share of the sale price, one rate for the store, replacing the price bands | a share of the hammer price only, one rate; the buyer's premium is Grade10's |
 
-- 🚧 **Both** — one agreement and one lowest acceptable price, required, cover both; the commission is the schedule's rate of the channel the card sells in, and the lowest price clears the minimum commission in both - [Consign to Store & Auction](/p/grade10-site/consignment/consigning#consign-to-store-auction)
 - **Commission**
   - **Minimum Charge** — optional, per card
   - **Pinned to the Agreement** — the rates in force when the agreement is prepared; a later change reaches only the next agreement
@@ -78,7 +77,6 @@ For a card with a market price of HKD 10,000:
   - **Authenticated First** — a card checked later waits until it passes - [Authentication](/p/grade10-site/vault/intake#authentication)
   - **The Vault's Word on Each Card** — approval waits until the Vault Terms seal and the card is authenticated; the vault also confirms each card is the collector's and still held, and the market price is read by Grade10, never sent by the page
   - **List or Starting Price** — set by Grade10, as the terms say
-  - **Starting Channel** — for a card consigned to both, staff decide which channel it starts in; the collector doesn't choose the order
   - **Approved** — listed: a store product, or the card added to an auction lot
   - **Rejected** — the mandate ends as rejected, the collector is emailed why, and the card stays in the vault, earning
 - 🚧 **Changing the Lowest Price** — from the dashboard; approved like a new listing
@@ -86,6 +84,8 @@ For a card with a market price of HKD 10,000:
   - **At Auction** — until the catalogue is published, then locked
 
 ## Consign to Store & Auction
+
+- 🚧 **One Channel a Consignment** — for the store or the auction; a card unsold in one goes to the other under a new consignment, signed again; it is never in both at once - [Services and Hand-offs](/p/grade10-admin/inventory/services#hand-offs)
 
 ### At the Store
 
@@ -115,14 +115,6 @@ For a card with a market price of HKD 10,000:
 - 🚧 **Winner Doesn't Pay** — the card is relisted
 - 🚧 **Handover** — shipped from the shop, or collected there
 
-### Both
-
-- 🚧 **One at a Time** — a card consigned to both is never on the store shelf and in an auction together
-- 🚧 **Moving** — if it doesn't sell, staff move it to the other channel without the collector signing again, taking it off the first channel at once; it keeps its one lowest price
-  - **An Unsold Lot** — moves on to the store
-  - **From an Auction** — only before the catalogue is published, or after the auction ends unsold
-- 🚧 **Dashboard** — shows which channel the card is in now
-
 ## The Sale Price
 
 - **Paid on the Listed Price** — a discount the buyer gets at checkout is Grade10's, and so is a refund where the buyer keeps the card
@@ -147,7 +139,7 @@ For a card with a market price of HKD 10,000:
 
 - 🚧 **Ended** — `profile.consignments.view.ended` ("Ended"): declined, lapsed, rejected, unsold, taken off sale or refunded; a card still in the vault is vault-only again and keeps earning
 
-::image{src="assets/diagrams/consignment-mandate.svg" alt="A sale mandate: Ready to sign, made at Keep or Consign; Waiting for approval, which waits for the vault's word; On sale in the store, at auction or both; Sold, when the card stops earning; Closed with the proceeds in the wallet. A declined or lapsed agreement, a rejection, or a card unsold or taken off sale ends the mandate, and the card keeps earning; a sale refunded has its proceeds reversed, and a store refund before delivery relists the card, while a refund after delivery or at auction ends the mandate"}
+::image{src="assets/diagrams/consignment-mandate.svg" alt="A sale mandate: Ready to sign, made at Keep or Consign; Waiting for approval, which waits for the vault's word; On sale in the store or at auction; Sold, when the card stops earning; Closed with the proceeds in the wallet. A declined or lapsed agreement, a rejection, or a card unsold or taken off sale ends the mandate, and the card keeps earning; a sale refunded has its proceeds reversed, and a store refund before delivery relists the card, while a refund after delivery or at auction ends the mandate"}
 
 ## Seller Name
 
@@ -186,7 +178,7 @@ lets Grade10 price the listing while the collector keeps a hard limit.
 - **Vault first, then consign** — at intake both happen in one visit, the card registered into the vault before it is consigned; later the collector consigns from the dashboard, where staff may help but never submit. Either way the collector signs, so the agreement is their own act
 - **Every lot has a reserve** — the lowest price is required at auction too, so the price check and the minimum commission always have a floor to read - owner, 2026-11-03
 - **The price check warns low and refuses high** — a low price may be the collector's reason and is confirmed twice; a price far above market would only stall the sale
-- **Both channels, one at a time** — a card is never on the shelf and in an auction together, so it can't sell twice; moving it needs no second signature
+- **One channel a consignment** — a card is never on the shelf and in an auction together, and moving it is signed again, so the consignor agrees to each channel's terms; this replaces one agreement for both, moved without a second signature - owner, 2026-11-03
 - **A year's period** — long enough for an auction cycle and a slow card, and an unsold card simply goes back to earning
 - **Not in scope** — a paper consignment; a collector consigning a card that isn't vaulted, which only a partner does, after 6 December; the collector setting the list price
 

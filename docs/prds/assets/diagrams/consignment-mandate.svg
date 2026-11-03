@@ -95,15 +95,15 @@ svg[data-diagram="consignment-mandate"] .c-grid{stroke-dasharray: 1 4; opacity: 
           <text data-node-label="" data-detail-anchor="" x="248" y="147" class="t-primary" font-size="9.1" font-weight="600" text-anchor="middle">Waiting for approval</text>
           <text data-detail="context" x="248" y="163" class="t-muted" font-size="7" text-anchor="middle">the vault&#39;s word first</text>
         </g>
-        <g data-step="onsale" id="consignment-mandate-node-onsale" data-node-id="onsale" data-node-label="On sale" aria-label="Focus On sale, store, auction or both, Consigned" data-node-kind="active" data-node-sublabel="store, auction or both" data-node-context="Consigned">
-          <title>On sale · store, auction or both · Consigned</title>
+        <g data-step="onsale" id="consignment-mandate-node-onsale" data-node-id="onsale" data-node-label="On sale" aria-label="Focus On sale, in the store or at auction, Consigned" data-node-kind="active" data-node-sublabel="in the store or at auction" data-node-context="Consigned">
+          <title>On sale · in the store or at auction · Consigned</title>
           <rect x="343" y="126" width="118" height="62" rx="7" class="c-mask"/>
           <rect x="343" y="126" width="118" height="62" rx="7" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="active" class="semantic-sigil s-backend" transform="translate(444 132) scale(0.6875)">
             <path d="M2 8h3l1.5-3.5L9 12l1.6-4H14"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="402" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">On sale</text>
-          <text data-detail="context" x="402" y="163" class="t-muted" font-size="7" text-anchor="middle">store, auction or both</text>
+          <text data-detail="context" x="402" y="163" class="t-muted" font-size="7" text-anchor="middle">in the store or at auction</text>
         </g>
         <g data-step="sold" id="consignment-mandate-node-sold" data-node-id="sold" data-node-label="Sold" aria-label="Focus Sold, stops earning, Consigned" data-node-kind="success" data-node-sublabel="stops earning" data-node-context="Consigned">
           <title>Sold · stops earning · Consigned</title>

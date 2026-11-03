@@ -15,11 +15,11 @@ agreement - [Vault Intake](/p/grade10-site/vault/intake#intake-form).
 ## Terms
 
 - 🚧 **Per Consigned Card** — the channel, the lowest acceptable price, the commission and the minimum commission - [Consigning](/p/grade10-site/consignment/consigning#terms)
-  - **Channel** — the store, the auction or both; required on every card
+  - **Channel** — the store or the auction; required on every card
   - **Lowest Acceptable Price** — price-checked against the card's market price
   - **Commission** — Grade10's rate for the channel; another rate takes `consignment:approve`
   - **Minimum Commission** — optional, takes `consignment:approve`, and refused at or above the lowest acceptable price
-    - 🚧 **The Schedule's Minimum Too** — the lowest price clears the channel's minimum from the schedule as well, and a card consigned to both clears it in both
+    - 🚧 **The Schedule's Minimum Too** — the lowest price clears the channel's minimum from the schedule as well
   - **List Price Later** — Grade10 sets it at approval - [Consignment Console](/p/grade10-site/consignment/operator-console#one-consignment)
 - 🚧 **No Incentive** — the vault's daily incentive replaces it - [Incentive](/p/grade10-site/vault/incentive)
 - 🚧 **No Payout Account** — the consignor names one at cash-out - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#cash-out)

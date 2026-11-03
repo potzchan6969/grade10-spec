@@ -45,7 +45,7 @@
       "id": "onsale",
       "type": "active",
       "label": "On sale",
-      "sublabel": "store, auction or both",
+      "sublabel": "in the store or at auction",
       "lane": "main",
       "col": 2
     },

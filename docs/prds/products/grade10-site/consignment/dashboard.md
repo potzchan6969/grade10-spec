@@ -27,7 +27,7 @@ the share of vaulted cards that get consigned, and the time it takes.
 
 - 🚧 **Consignment Approval** — consignments waiting for approval, oldest first, with how long each has waited - [Consigning](/p/grade10-site/consignment/consigning#listing-approval)
   - **Row** — the collector's lowest acceptable price against the market price, and any low price the collector confirmed
-  - **Act in the Row** — approve, reject with a reason, set the list or starting price and the starting channel
+  - **Act in the Row** — approve, reject with a reason, set the list or starting price
   - **Bulk Approve** — rows with nothing flagged
 - 🚧 **Incentive Approval** — cards waiting to be approved to earn, oldest first, with the price match and liquidity beside each; a card approved at intake doesn't appear - [Incentive](/p/grade10-site/vault/incentive#earning)
 - 🚧 **Approval Target** — 2 business days by default, an admin setting; a consignment past it turns amber and moves to the top
@@ -35,8 +35,8 @@ the share of vaulted cards that get consigned, and the time it takes.
 ## On-Sale Monitor
 
 - 🚧 **Cards on Sale** — by channel and days on sale
-- 🚧 **Slow Cards** — a card with no sale after 45 days, an admin setting, is flagged, so staff can lower its list price, never below the lowest acceptable price, or move a card consigned to both to the other channel
-- 🚧 **Unsold Lots** — auction lots that ended unsold, to move or relist
+- 🚧 **Slow Cards** — a card with no sale after 45 days, an admin setting, is flagged, so staff can lower its list price, below the lowest acceptable price only once the consignor agrees, or offer the consignor a new consignment in the other channel
+- 🚧 **Unsold Lots** — auction lots that ended unsold, to hand off or relist
 
 ## Conversion Funnel
 

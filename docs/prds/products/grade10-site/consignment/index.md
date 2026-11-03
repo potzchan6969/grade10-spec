@@ -13,7 +13,7 @@ or later from the collector's dashboard, with no second intake -
 # At the counter
 
 ## Collector — Intake and consign
-At a card event, or the shop's counter from Phase 2; on the intake form staff set the card to Consign, with the store, the auction or both and the lowest price the collector accepts.
+At a card event, or the shop's counter from Phase 2; on the intake form staff set the card to Consign, with the store or the auction and the lowest price the collector accepts.
 
 ## Collector — Sign
 The Vault Terms and the Consignment Agreement together, on the shop's tablet or by an emailed link.
@@ -24,7 +24,7 @@ The card is authenticated, at the counter or later, and stored; it goes on sale 
 # Selling
 
 ## Staff — Approve the listing
-Once the Vault Terms seal and the card passes, Grade10 sets the list or starting price, and for both channels where the card starts; or rejects it, and the card stays in the vault, earning.
+Once the Vault Terms seal and the card passes, Grade10 sets the list or starting price; or rejects it, and the card stays in the vault, earning.
 
 ## Buyer — Buy it
 At the shop's counter, online or at auction; the card stops earning.

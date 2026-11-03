@@ -48,13 +48,14 @@ the settings the schedule runs on.
 | Timeline | every act and every message sent |
 
 - **Acts** - receive, set terms, prepare the agreement, list, change the
-  price, take off sale, return, extend, move to the other channel or the
-  vault - [Services and Hand-offs](/p/grade10-admin/inventory/services#hand-offs)
-- 🚧 **Approve or Reject** — approve sets the list or starting price, never below the lowest acceptable price and price-checked again, and the starting channel of a card consigned to both; reject ends the mandate with a reason, and the card stays in the vault, earning; receiving, the terms and the signing are taken at the counter, which ends at signing - [Consignment Counter](/p/grade10-site/consignment/counter)
+  price, take off sale, return, extend, or hand it off to the vault or to a
+  new consignment in the other channel -
+  [Services and Hand-offs](/p/grade10-admin/inventory/services#hand-offs)
+- 🚧 **Approve or Reject** — approve sets the list or starting price, never below the lowest acceptable price and price-checked again; reject ends the mandate with a reason, and the card stays in the vault, earning; receiving, the terms and the signing are taken at the counter, which ends at signing - [Consignment Counter](/p/grade10-site/consignment/counter)
 - **Before the act** - a dialog states the rule first: the floor, the
   schedule, the term
 - **Withheld in words** - an act not offered yet says why
-- **Live at auction** - take back, move and price change are withheld while
+- **Live at auction** - take back, hand-off and price change are withheld while
   the lot is published, until the auction calls it off or it closes
 - **Retry** - sends the item again to a channel that refused it or stopped
   answering
