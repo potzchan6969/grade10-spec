@@ -46,11 +46,12 @@ pnpm storybook:workbench
 
 ## Give A Story A Case
 
-- **Rule** - Every Auction story, bar those under State Tests, carries `parameters.verification.caseId` in the form `vc_<uuid>`. A case names one story, so no two stories share one.
+- **Rule** - Every story carries `parameters.verification.caseId` in the form `vc_<uuid>`: screens, flows, blocks and Design System primitives alike. A case names one story, so no two stories share one.
 - **Permanent** - Mint it once and never change it. Archived runs find the story by it, so a new id orphans the history.
-- **New story** - `pnpm storybook:check` fails an Auction story with no id. `pnpm storybook:case-ids --write` adds one to each story that lacks it; then run Biome on the files.
-- **Other domains** - Add the domain to `VERIFIED_DOMAINS` in `scripts/storybook/case-ids.mjs`, then run the same command.
-- **State Tests** - These stories drive an API response and have no site screen to compare, so they carry no id.
+- **New story** - `pnpm storybook:check` fails a story with no id. `pnpm storybook:case-ids --write` adds one to each story that lacks it; then run Biome on the files.
+- **A story that copies another** - A story spread from a sibling (`...Filled`) has no literal for the command to fill. Add `parameters: { ...Filled.parameters, verification: { caseId } }` by hand, or it would carry the sibling's id.
+- **Prototypes** - Drafts outside the agreed look carry no id: nobody approves them.
+- **Captured only when declared** - ❓ A full capture covers the cases an application's site run declares, so a block or primitive with an id but no site recipe has no reference yet. Tony L confirms how the workbench captures those.
 
 ## Capture One Domain
 
@@ -75,6 +76,7 @@ pnpm storybook:workbench
 - **What an approval judges** - One captured reference image, tied to its SHA-256. A later capture of the same PNG carries the approval. A capture that changes one pixel is not approved.
 - **Newest wins** - Approvals are never edited or deleted. A new one on the same image replaces the shown one; the history lists every decision at that size and locale.
 - **First baseline** - With no approval yet there is nothing to diff. Approve to start one.
+- **Nothing new** - When every size's current reference is the approved image, or no pixel apart from it, Approve all sizes is off and says why. A size not yet compared, or a change request on the approved image, keeps it on.
 - **Loading** - Until a story's references and approvals load, the Approve and Site Compare tabs say so: the size tabs, the flag and the image slots wait, nothing is compared, and Approve, Request changes and Capture are off. An empty list is never shown as "no reference" before it has loaded.
 - **Commit** - Each capture records the commit it drew. Hosted, that is the deploy's build receipt. Locally, it is this checkout's commit, flagged when the checkout had uncommitted changes.
 - **Who** - Hosted, the approver is the Cloudflare Access identity, never a name typed in the panel. The publisher token cannot approve. Locally, every approval is `local-development`.
@@ -111,7 +113,7 @@ pnpm storybook:workbench
 - **Approvals tab** - Reference drift only, in three sections: unapproved references past the tolerance, worst first; stories with no baseline; the other unapproved references. Pressing the Approved box lists the approved stories.
 - **Site drift tab** - One list, the highest site drift between the sizes first. A screen size filter ranks by that size alone. Compare the site with Last approved, where a size with no approved reference has nothing to compare and shows `-`, or Current reference, the reference the run recorded, where a compact label says when that reference is approved.
 - **Domain filter** - Choosing a domain groups either tab by Storybook path, each path keeping its tab's order and ranking from 1.
-- **Story dialog** - Row Approve only opens the dialog, so a person sees the images first. Approve all sizes makes the focused capture the Approve tab makes. Request changes needs one size and a comment. On the Site drift tab there is no approval: nobody approves a site capture.
+- **Story dialog** - Row Approve only opens the dialog, so a person sees the images first. Approve all sizes makes the focused capture the Approve tab makes, and is off by the same Nothing new rule. Request changes needs one size and a comment. On the Site drift tab there is no approval: nobody approves a site capture.
 - **Fix prompts** - On the Site drift tab, Copy prompt copies one story's drift report with a sample prompt to fix the site. The button above the table copies every drift past the tolerance in the current filters as one batch prompt. The page shows what it copied.
 
 ## Where Captures And Approvals Live
