@@ -3,16 +3,20 @@
  * Release a phase - docs/prds/products/shared/planning/release-phases.md#releasing-a-phase.
  *
  *   pnpm phase:checked <phase> [--dry-run] [--verdicts <file>]
- *   pnpm phase:release <phase> [--write] [--date YYYY-MM-DD] [--verdicts <file>]
+ *   pnpm phase:release <phase> [--date YYYY-MM-DD] [--verdicts <file>]
+ *   pnpm phase:release <phase> --write --confirmed <fingerprint> [...]
  *
  * `checked` takes the 🚧 off the lines of every unit of the phase that has
  * passed, in one commit. `release` is a dry run until `--write`: what
- * launches, what moves to the next phase, the marks that come off and
- * whether the phase signs off; written, it folds `checked` in, records the
- * release date in phases.yaml, removes the phase's blocks and moves each
- * unit not passed, in one commit. Verdicts come from the run desk through
- * the Access service token (CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET,
- * DESK_URL), or from a saved answer with `--verdicts`.
+ * launches, what moves to the next phase, the marks that come off, whether
+ * the phase signs off and the fingerprint of all of it; written, with the
+ * fingerprint a person confirmed, it folds `checked` in, records the release
+ * date in phases.yaml, removes the phase's blocks and moves each unit not
+ * passed, in one commit — or writes nothing where the plan differs from the
+ * one confirmed or a launched line would stay under another phase's block.
+ * Verdicts come from the run desk through the Access service token
+ * (CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, DESK_URL), or from a saved
+ * answer with `--verdicts`.
  */
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
@@ -31,12 +35,14 @@ import {
   readEdited,
   readStore,
   releaseEdits,
+  releaseFingerprint,
   writeReleased,
 } from "./lib/phase-release.mjs";
 
 const USAGE = [
   "usage: pnpm phase:checked <phase> [--dry-run] [--verdicts <file>]",
-  "       pnpm phase:release <phase> [--write] [--date YYYY-MM-DD] [--verdicts <file>]",
+  "       pnpm phase:release <phase> [--date YYYY-MM-DD] [--verdicts <file>]",
+  "       pnpm phase:release <phase> --write --confirmed <fingerprint> [--date YYYY-MM-DD] [--verdicts <file>]",
 ].join("\n");
 
 class Refused extends Error {}
@@ -111,7 +117,7 @@ function checked(root, store, plan, { dryRun }) {
   console.log(`\ncommitted ${commit(root, files, message)}`);
 }
 
-function release(root, store, plan, { write, date, verdictsFile }) {
+function release(root, store, plan, { write, date, verdictsFile, confirmed }) {
   const { phase, next } = plan;
   console.log(`Release ${phase.name} (${phase.id}) on ${date}\n`);
   console.log(`Launches (${plan.launches.length}):`);
@@ -147,8 +153,11 @@ function release(root, store, plan, { write, date, verdictsFile }) {
     ? []
     : proveRelease(store, plan, readEdited(store, texts));
   if (stillPlaced.length > 0) {
-    console.log("\nLaunching, yet still under another phase's block:");
-    for (const one of stillPlaced) console.log(`  ${one.name} → ${one.phase}`);
+    console.log(
+      "\nLaunching, yet no edit keeps these lines out of another phase's block — place them by hand:",
+    );
+    for (const one of stillPlaced)
+      console.log(`  ${one.path}: \`${one.text}\` stays in ${one.phase}`);
   }
 
   if (plan.refusals.length > 0) {
@@ -161,6 +170,17 @@ function release(root, store, plan, { write, date, verdictsFile }) {
   console.log(
     "\nSign-off: every P0 unit passed, no question in a unit that launches, no automated fail left untriaged",
   );
+  if (stillPlaced.length > 0) {
+    if (write)
+      throw new Refused(
+        `these launched lines stay under another phase's block, so nothing is written:\n${stillPlaced.map((one) => `  ${one.path}: \`${one.text}\` stays in ${one.phase}`).join("\n")}`,
+      );
+    console.log(
+      "\ndry run: nothing written, and the release cannot be until each line above is placed",
+    );
+    return;
+  }
+  const fingerprint = releaseFingerprint(plan, date, texts);
   if (!write) {
     const confirm = [
       "pnpm phase:release",
@@ -169,12 +189,23 @@ function release(root, store, plan, { write, date, verdictsFile }) {
       "--date",
       date,
       ...(verdictsFile ? ["--verdicts", verdictsFile] : []),
+      "--confirmed",
+      fingerprint,
     ].join(" ");
+    console.log(`\nFingerprint: ${fingerprint}`);
     console.log(
       `\ndry run: nothing written. Once a person confirms, run:\n  ${confirm}`,
     );
     return;
   }
+  if (!confirmed)
+    throw new Refused(
+      "--write needs --confirmed <fingerprint>: dry-run it, show the person, then pass the fingerprint they confirmed",
+    );
+  if (confirmed !== fingerprint)
+    throw new Refused(
+      `this is not the release confirmed: its fingerprint is now ${fingerprint} — dry-run it again and show the person — nothing written`,
+    );
 
   const registryPath = `${store.roots.manual}/phases.yaml`;
   const registry = writeReleased(
@@ -221,6 +252,7 @@ async function main(argv) {
         write: { type: "boolean" },
         date: { type: "string" },
         verdicts: { type: "string" },
+        confirmed: { type: "string" },
       },
     });
   } catch (cause) {
@@ -228,7 +260,10 @@ async function main(argv) {
   }
   const { values, positionals } = parsed;
   if (positionals.length !== 1) throw new Refused(USAGE);
-  if (command === "checked" && (values.write || values.date))
+  if (
+    command === "checked" &&
+    (values.write || values.date || values.confirmed)
+  )
     throw new Refused(`phase:checked writes unless --dry-run\n${USAGE}`);
   if (command === "release" && values.write && values["dry-run"])
     throw new Refused("--write and --dry-run together");
@@ -251,6 +286,7 @@ async function main(argv) {
       write: Boolean(values.write),
       date,
       verdictsFile: values.verdicts,
+      confirmed: values.confirmed,
     });
   }
 }

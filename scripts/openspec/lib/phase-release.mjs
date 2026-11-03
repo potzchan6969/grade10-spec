@@ -7,9 +7,11 @@
  * Every edit is made to a page's source line by line, never by writing the
  * parse back, and is proven before anything is written: each edited page
  * parses to the canonical text the editor writes, and the pages read again
- * place every line where the plan says it lands.
+ * place every line where the plan says it lands — a launched line in no
+ * phase, a moved line in the next, every other line where it was.
  */
 
+import { createHash } from "node:crypto";
 import { sectionSlug } from "../../../tools/manual/src/api/paths.ts";
 import {
   outlineOf,
@@ -133,12 +135,13 @@ export function planPhase(store, phaseId, verdicts) {
 export const plural = (count, word) =>
   `${count} ${word}${count === 1 ? "" : "s"}`;
 
-/** Where the top-level `::phase` lines and `##` headings sit in a page's
+/** Where the top-level `::phase` lines and the headings sit in a page's
  * source, outside fences and containers — the lines the parse reads as
- * placed blocks and as sections. */
+ * placed blocks, as sections and as the headings under them. */
 function sourceMap(lines) {
   const blocks = [];
   const sections = new Map();
+  const headings = new Map();
   let fence = null;
   let depth = 0;
   lines.forEach((line, at) => {
@@ -155,14 +158,16 @@ function sourceMap(lines) {
     else if (/^:::[a-z]/.test(line)) depth = 1;
     else if (depth === 0 && /^::phase(\{.*\})?\s*$/.test(line)) blocks.push(at);
     else if (depth === 0) {
-      const heading = /^##\s+(.+?)\s*#*\s*$/.exec(line);
+      const heading = /^(#{2,4})\s+(.+?)\s*#*\s*$/.exec(line);
       if (heading) {
-        const anchor = sectionSlug(heading[1]);
-        if (!sections.has(anchor)) sections.set(anchor, at);
+        const anchor = sectionSlug(heading[2]);
+        if (!headings.has(anchor)) headings.set(anchor, at);
+        if (heading[1] === "##" && !sections.has(anchor))
+          sections.set(anchor, at);
       }
     }
   });
-  return { blocks, sections };
+  return { blocks, sections, headings };
 }
 
 export const blockLine = (block) =>
@@ -243,10 +248,13 @@ export function checkedEdits(store, keys) {
 /**
  * The edits releasing `plan.phase` makes: the passed units' marks come off,
  * its blocks go, and each moving unit's lines land in the next phase at the
- * priority their block gave them.
+ * priority their block gave them. Where a removed block leaves launched
+ * lines under another phase's block above them, that block is pushed down
+ * onto what it still covers, so the launched lines read in no phase.
  */
 export function releaseEdits(store, plan) {
   const moving = new Set(plan.moves.map((one) => one.unit.key));
+  const launching = new Set(plan.launches.map((one) => one.unit.key));
   const passed = new Set(plan.passed.map((one) => one.unit.key));
   const { phase, next } = plan;
   const pages = new Map();
@@ -256,9 +264,168 @@ export function releaseEdits(store, plan) {
     const marks = markEdits(path, source, page, units, passed);
     const blocks = blockEdits(path, source, page, units, phase, next, moving);
     if (marks.length === 0 && blocks.ops.length === 0) continue;
-    pages.set(path, { marks, ...blocks });
+    const wants = units.map((key) => wantOf(key, launching));
+    const settled = settleEdits(applyEdits(source, { ops: blocks.ops }), wants);
+    pages.set(path, {
+      marks,
+      ops: blocks.ops,
+      settle: settled.ops,
+      notes: [...blocks.notes, ...settled.notes],
+    });
   }
   return pages;
+}
+
+/** What a release asks of a line: to launch, reading in no phase; to keep
+ * the phase it lands in; or nothing, for a line in no unit. */
+const wantOf = (key, launching) =>
+  key === undefined ? "free" : launching.has(key) ? "launch" : "keep";
+
+/** Whether a line sits under a heading, at any depth. */
+function under(outline, line, anchor) {
+  for (let at = line.heading; at !== null; ) {
+    if (at === anchor) return true;
+    at = outline.headings.find((one) => one.anchor === at)?.parent ?? null;
+  }
+  return anchor === null;
+}
+
+/**
+ * A whole block that covers launched lines, pushed down onto what else it
+ * covers: the same block on each heading below whose lines all stay, and a
+ * block naming the rules of the lines that stay directly under a heading
+ * that also holds launched ones. Null where a line that stays names no
+ * rule, so no block can cover it alone.
+ */
+function pushDown(outline, phases, block, wants) {
+  const covered = outline.lines.flatMap((line, index) =>
+    phases.blockOf(line) === block ? [index] : [],
+  );
+  const lines = (anchor) =>
+    covered.filter((index) => under(outline, outline.lines[index], anchor));
+  const whole = [];
+  const named = new Map();
+  const into = (anchor) => {
+    for (const child of outline.headings) {
+      if (child.parent !== anchor) continue;
+      const below = lines(child.anchor);
+      if (below.length === 0) continue;
+      if (below.some((index) => wants[index] === "launch")) {
+        if (!into(child.anchor)) return false;
+      } else whole.push(child.anchor);
+    }
+    for (const index of covered) {
+      const line = outline.lines[index];
+      if (line.heading !== anchor || wants[index] !== "keep") continue;
+      const rule = line.rule?.anchor ?? line.within[0];
+      if (!rule) return false;
+      const rules = named.get(anchor) ?? [];
+      if (!rules.includes(rule)) rules.push(rule);
+      named.set(anchor, rules);
+    }
+    return true;
+  };
+  return into(block.heading) ? { whole, named } : null;
+}
+
+/** The edits, made after the release's own, that push down each whole block
+ * a launched line still reads under. A push-down is kept only where every
+ * line that stays keeps its phase and the block's launched lines read in
+ * none; otherwise the block is left whole, for the proof to name its lines. */
+function settleEdits(text, wants) {
+  const lines = text.split("\n");
+  const { outline, phases } = outlineAt(text);
+  const map = sourceMap(lines);
+  const sourceOf = (placed) => map.blocks[outline.phases.indexOf(placed)];
+  const before = outline.lines.map((line) => phases.line(line));
+  const offending = new Set();
+  outline.lines.forEach((line, index) => {
+    const block = phases.blockOf(line);
+    if (wants[index] === "launch" && block && block.rules.length === 0)
+      offending.add(block);
+  });
+
+  const rulesBlock = (block, heading, rules) => {
+    const held = outline.phases.find(
+      (one) =>
+        one.heading === heading &&
+        one.rules.length > 0 &&
+        one.block.id === block.block.id &&
+        one.block.priority === block.block.priority,
+    );
+    const all = [...new Set([...(held?.rules ?? []), ...rules])];
+    return {
+      held: held && sourceOf(held),
+      text: blockLine({ ...block.block, rules: all.join(",") }),
+    };
+  };
+
+  const pushedOps = (block, pushed) => {
+    const at = sourceOf(block);
+    const ops = [];
+    const own = pushed.named.get(block.heading);
+    if (!own) ops.push({ kind: "remove", at });
+    else {
+      const { held, text } = rulesBlock(block, block.heading, own);
+      if (held === undefined) ops.push({ kind: "replace", at, text });
+      else
+        ops.push({ kind: "replace", at: held, text }, { kind: "remove", at });
+    }
+    for (const heading of pushed.whole)
+      ops.push({
+        kind: "insert",
+        at: map.headings.get(heading),
+        text: blockLine(block.block),
+      });
+    for (const [heading, rules] of pushed.named) {
+      if (heading === block.heading) continue;
+      const { held, text } = rulesBlock(block, heading, rules);
+      ops.push(
+        held === undefined
+          ? { kind: "insert", at: map.headings.get(heading), text }
+          : { kind: "replace", at: held, text },
+      );
+    }
+    const where = [
+      ...pushed.whole.map((heading) => `placed it under \`${heading}\``),
+      ...[...pushed.named].map(
+        ([heading, rules]) =>
+          `named ${rules.join(", ")} under ${heading === null ? "the page" : `\`${heading}\``}`,
+      ),
+    ];
+    const note = `kept launched lines out of \`${lines[at]}\`${where.length > 0 ? `: ${where.join("; ")}` : ""}`;
+    return { ops, note };
+  };
+
+  const holds = (ops, block) => {
+    const read = outlineAt(applyOps(text, [], ops));
+    if (read.outline.lines.length !== outline.lines.length) return false;
+    return read.outline.lines.every((line, index) => {
+      const now = read.phases.line(line);
+      if (wants[index] === "keep")
+        return (
+          now?.phase === before[index]?.phase &&
+          now?.priority === before[index]?.priority
+        );
+      if (wants[index] === "launch")
+        return (
+          phases.blockOf(outline.lines[index]) !== block || now === undefined
+        );
+      return true;
+    });
+  };
+
+  const ops = [];
+  const notes = [];
+  for (const block of offending) {
+    const pushed = pushDown(outline, phases, block, wants);
+    if (!pushed) continue;
+    const made = pushedOps(block, pushed);
+    if (!holds([...ops, ...made.ops], block)) continue;
+    ops.push(...made.ops);
+    notes.push(made.note);
+  }
+  return { ops, notes };
 }
 
 function blockEdits(path, source, page, units, phase, next, moving) {
@@ -407,7 +574,12 @@ function coveredBy(lines, at, block, count) {
  * block line replaced, removed with the blank line after it, or a block
  * placed after a heading with blank lines around it.
  */
-export function applyEdits(source, { marks = [], ops = [] }) {
+export function applyEdits(source, { marks = [], ops = [], settle = [] }) {
+  const first = applyOps(source, marks, ops);
+  return settle.length > 0 ? applyOps(first, [], settle) : first;
+}
+
+function applyOps(source, marks, ops) {
   const lines = source.split("\n");
   const replaced = new Map(marks.map((edit) => [edit.at, edit.after]));
   const removed = new Set();
@@ -470,12 +642,13 @@ export function readEdited(store, texts) {
 
 /**
  * Proves a release's edits: no line is left in the phase, a moving unit's
- * lines all land in the next phase, and a launching unit's lines that land
- * in another phase are returned for the person to see.
+ * lines all land in the next phase, every line outside the phase stays
+ * where it was, and a launching unit's lines read in no phase — those that
+ * still read in one are returned, and the release cannot be written.
  */
 export function proveRelease(store, plan, after) {
   const moving = new Set(plan.moves.map((one) => one.unit.key));
-  const launching = new Map(plan.launches.map((one) => [one.unit.key, one]));
+  const launching = new Set(plan.launches.map((one) => one.unit.key));
   const stillPlaced = [];
   for (const [path, page] of store.reading.pages) {
     const edited = after.pages.get(path);
@@ -485,32 +658,52 @@ export function proveRelease(store, plan, after) {
     const units = lineUnits(page);
     page.outline.lines.forEach((line, index) => {
       const now = edited.phases.line(lines[index]);
+      const was = page.phases.line(line);
       if (now?.phase === plan.phase.id)
         throw new Error(
           `${path}: \`${line.text}\` is still in ${plan.phase.name}`,
         );
       const key = units[index];
       if (moving.has(key)) {
-        const was = page.phases.line(line);
         if (now?.phase !== plan.next.id || now.priority !== was.priority)
           throw new Error(
             `${path}: \`${line.text}\` did not move to ${plan.next.name} at ${was.priority}`,
           );
-      }
-      if (launching.has(key) && now) {
-        const name = launching.get(key).name;
-        if (
-          !stillPlaced.some(
-            (one) => one.name === name && one.phase === now.phase,
-          )
-        )
-          stillPlaced.push({ name, phase: now.phase });
-      }
+      } else if (launching.has(key)) {
+        if (now) stillPlaced.push({ path, text: line.text, phase: now.phase });
+      } else if (
+        was?.phase !== plan.phase.id &&
+        key !== undefined &&
+        (now?.phase !== was?.phase || now?.priority !== was?.priority)
+      )
+        throw new Error(
+          `${path}: the release moved \`${line.text}\` from ${was?.phase ?? "no phase"} to ${now?.phase ?? "no phase"}`,
+        );
     });
   }
   if (after.units.some((unit) => unit.phase === plan.phase.id))
     throw new Error(`a unit is still in ${plan.phase.name}`);
   return stillPlaced;
+}
+
+/**
+ * The fingerprint of a release as its dry run shows it: the phase and day,
+ * what launches and moves, and every page and line it writes. A written
+ * release must name the fingerprint a person confirmed.
+ */
+export function releaseFingerprint(plan, date, texts) {
+  const named = (list) => list.map((one) => `${one.unit.priority} ${one.name}`);
+  return createHash("sha256")
+    .update(
+      JSON.stringify({
+        phase: plan.phase.id,
+        date,
+        launches: named(plan.launches),
+        moves: named(plan.moves),
+        pages: [...texts].sort(([a], [b]) => a.localeCompare(b)),
+      }),
+    )
+    .digest("hex");
 }
 
 /** `phases.yaml` with `released: <date>` written on one phase, its comments

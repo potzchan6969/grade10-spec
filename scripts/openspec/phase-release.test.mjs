@@ -134,13 +134,14 @@ ${tc("g10.cart.TC5", "cart#shipping/standard, cart#shipping/express")}
 
 ${tc("g10.cart.TC6", "cart#gifts/wrap, cart#gifts/card, cart#gifts/note")}`;
 
-function fixture() {
+function fixture(extra = {}) {
   const root = mkdtempSync(join(tmpdir(), "phase-release-"));
   const files = {
     [REGISTRY]: PHASES,
     [CART]: CART_PAGE,
     [TIERS]: TIERS_PAGE,
     [`${STORE}/tests/cart-tcs.md`]: SUITE,
+    ...extra,
   };
   for (const [name, content] of Object.entries(files)) {
     mkdirSync(dirname(join(root, name)), { recursive: true });
@@ -197,6 +198,29 @@ const run = (root, args, env = {}) =>
       ...env,
     },
   });
+
+/** The fingerprint a release's dry run prints for a person to confirm. */
+function fingerprintOf(root, phase, file, date) {
+  const dry = run(root, ["release", phase, "--date", date, "--verdicts", file]);
+  assert.equal(dry.status, 0, dry.stderr);
+  const found = /^Fingerprint: ([0-9a-f]{64})$/m.exec(dry.stdout);
+  assert.ok(found, dry.stdout);
+  return found[1];
+}
+
+/** A release written with the fingerprint its dry run printed. */
+const release = (root, phase, file, date) =>
+  run(root, [
+    "release",
+    phase,
+    "--write",
+    "--date",
+    date,
+    "--verdicts",
+    file,
+    "--confirmed",
+    fingerprintOf(root, phase, file, date),
+  ]);
 
 const canonical = (text) => assert.equal(serializePage(parsePage(text)), text);
 
@@ -275,11 +299,13 @@ test("a release's dry run says what launches, moves and comes off, and writes no
     assert.ok(out.includes(moved), moved);
   assert.match(out, /Marks that come off \(3\):/);
   assert.match(out, /Sign-off: every P0 unit passed/);
-  assert.match(
-    out,
-    new RegExp(
-      `pnpm phase:release store-launch-1 --write --date 2026-12-01 --verdicts ${file}`,
+  const fingerprint = /^Fingerprint: ([0-9a-f]{64})$/m.exec(out)?.[1];
+  assert.ok(fingerprint, out);
+  assert.ok(
+    out.includes(
+      `pnpm phase:release store-launch-1 --write --date 2026-12-01 --verdicts ${file} --confirmed ${fingerprint}`,
     ),
+    out,
   );
   assert.equal(read(CART), CART_PAGE);
   assert.equal(read(REGISTRY), PHASES);
@@ -324,15 +350,7 @@ test("sign-off refuses a P0 not passed, a question in a launching unit and an un
 test("a written release records the day, removes the phase's blocks and moves what did not pass, in one commit", () => {
   const { root, git, read } = fixture();
   const file = verdicts(root, { "g10.cart.TC1": PASS, "g10.cart.TC2": PASS });
-  const write = run(root, [
-    "release",
-    "store-launch-1",
-    "--write",
-    "--date",
-    "2026-12-01",
-    "--verdicts",
-    file,
-  ]);
+  const write = release(root, "store-launch-1", file, "2026-12-01");
   assert.equal(write.status, 0, write.stderr + write.stdout);
 
   const registry = read(REGISTRY);
@@ -486,4 +504,167 @@ test("without the service token or a saved answer, one line names what is missin
     }),
     /answered 403: \{"error":"forbidden"\}/,
   );
+});
+
+test("a written release needs the fingerprint of the dry run a person confirmed", () => {
+  const { root, git, read } = fixture();
+  const file = verdicts(root, { "g10.cart.TC1": PASS, "g10.cart.TC2": PASS });
+  const confirmed = fingerprintOf(root, "store-launch-1", file, "2026-12-01");
+  const write = (args) =>
+    run(root, [
+      "release",
+      "store-launch-1",
+      "--write",
+      "--date",
+      "2026-12-01",
+      "--verdicts",
+      file,
+      ...args,
+    ]);
+
+  const bare = write([]);
+  assert.equal(bare.status, 1);
+  assert.match(bare.stderr, /--confirmed <fingerprint>/);
+
+  verdicts(root, {
+    "g10.cart.TC1": PASS,
+    "g10.cart.TC2": PASS,
+    "g10.cart.TC5": PASS,
+  });
+  const moved = write(["--confirmed", confirmed]);
+  assert.equal(moved.status, 1);
+  assert.match(moved.stderr, /not the release confirmed/);
+
+  assert.equal(read(CART), CART_PAGE);
+  assert.equal(read(REGISTRY), PHASES);
+  assert.equal(git("rev-list", "--count", "HEAD").trim(), "1");
+});
+
+const WISHLIST = `${STORE}/wishlist.md`;
+const wishlistSuite = (traces) => `---
+title: grade10-site/store/wishlist Test Cases
+---
+
+## wishlist#saving: Saving
+
+${traces.map((trace, at) => tc(`g10.wish.TC${at + 1}`, trace)).join("\n")}`;
+
+test("a release keeps its launched lines out of a later phase's block above them", () => {
+  const page = `---
+title: Wishlist
+---
+
+::phase{id="store-launch-2" priority="P1"}
+
+## Saving
+
+::phase{id="store-launch-1" priority="P0"}
+
+- **Heart** — a tap saves
+- **List** — the saved items
+
+## Sharing
+
+::phase{id="store-launch-1" priority="P0" rules="link"}
+
+- **Link** — a link to the list
+- **Embed** — a list on another page
+
+## Later
+
+- **Import** — another shop's list
+`;
+  const { root, read } = fixture({
+    [WISHLIST]: page,
+    [`${STORE}/tests/wishlist-tcs.md`]: wishlistSuite([
+      "wishlist#saving/heart, wishlist#saving/list",
+      "wishlist#sharing/link",
+    ]),
+  });
+  const file = verdicts(root, {
+    "g10.cart.TC1": PASS,
+    "g10.cart.TC2": PASS,
+    "g10.wish.TC1": PASS,
+    "g10.wish.TC2": PASS,
+  });
+  const write = release(root, "store-launch-1", file, "2026-12-01");
+  assert.equal(write.status, 0, write.stderr + write.stdout);
+  const written = read(WISHLIST);
+  canonical(written);
+  assert.equal(
+    written,
+    `---
+title: Wishlist
+---
+
+## Saving
+
+- **Heart** — a tap saves
+- **List** — the saved items
+
+## Sharing
+
+::phase{id="store-launch-2" priority="P1" rules="embed"}
+
+- **Link** — a link to the list
+- **Embed** — a list on another page
+
+## Later
+
+::phase{id="store-launch-2" priority="P1"}
+
+- **Import** — another shop's list
+`,
+  );
+});
+
+test("a release no edit can keep out of a later phase's block refuses, naming each line", () => {
+  const page = `---
+title: Wishlist
+---
+
+::phase{id="store-launch-2" priority="P1"}
+
+## Sharing
+
+::phase{id="store-launch-1" priority="P0" rules="link"}
+
+The list can be shared.
+
+- **Link** — a link to the list
+- **Embed** — a list on another page
+`;
+  const { root, git, read } = fixture({
+    [WISHLIST]: page,
+    [`${STORE}/tests/wishlist-tcs.md`]: wishlistSuite([
+      "wishlist#sharing/link",
+    ]),
+  });
+  const file = verdicts(root, {
+    "g10.cart.TC1": PASS,
+    "g10.cart.TC2": PASS,
+    "g10.wish.TC1": PASS,
+  });
+  const dry = run(root, ["release", "store-launch-1", "--verdicts", file]);
+  assert.equal(dry.status, 0, dry.stderr);
+  assert.match(
+    dry.stdout,
+    /wishlist\.md: `\*\*Link\*\* — a link to the list` stays in store-launch-2/,
+  );
+  assert.doesNotMatch(dry.stdout, /^Fingerprint:/m);
+
+  const write = run(root, [
+    "release",
+    "store-launch-1",
+    "--write",
+    "--verdicts",
+    file,
+    "--confirmed",
+    "0".repeat(64),
+  ]);
+  assert.equal(write.status, 1);
+  assert.match(write.stderr, /launched lines stay under another phase/);
+  assert.equal(read(WISHLIST), page);
+  assert.equal(read(CART), CART_PAGE);
+  assert.equal(git("rev-list", "--count", "HEAD").trim(), "1");
 });

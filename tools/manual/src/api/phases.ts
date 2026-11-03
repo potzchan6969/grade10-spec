@@ -379,6 +379,8 @@ export type PagePhases = {
   /** A line's phase: the block naming its rule or a rule it sits in, else
    * its heading's. */
   line(line: OutlineLine): Assignment | undefined;
+  /** The block that gives a line its phase. */
+  blockOf(line: OutlineLine): PlacedPhase | undefined;
   /** A traced rule's phase under a traced heading, both as traces name them. */
   traced(heading: string, rule?: string): Assignment | undefined;
   /** Whether any block on the page names a phase. */
@@ -399,26 +401,37 @@ export function phasesOf(outline: PageOutline): PagePhases {
     named.set(placed.heading, byRule);
   }
 
-  const heading = (anchor: string | null): Assignment | undefined => {
+  const wholeOf = (anchor: string | null): PlacedPhase | undefined => {
     for (const at of chainOf(outline, anchor)) {
       const placed = whole.get(at);
-      if (placed) return assignmentOf(placed);
+      if (placed) return placed;
     }
     return undefined;
   };
 
-  const ruleUnder = (
+  const namedOf = (
     anchor: string | null,
     rules: string[],
-  ): Assignment | undefined => {
+  ): PlacedPhase | undefined => {
     for (const rule of rules) {
       for (const at of chainOf(outline, anchor)) {
         const placed = named.get(at)?.get(rule);
-        if (placed) return assignmentOf(placed);
+        if (placed) return placed;
       }
     }
     return undefined;
   };
+
+  const assigned = (placed: PlacedPhase | undefined) =>
+    placed ? assignmentOf(placed) : undefined;
+  const heading = (anchor: string | null) => assigned(wholeOf(anchor));
+  const ruleUnder = (anchor: string | null, rules: string[]) =>
+    assigned(namedOf(anchor, rules));
+  const blockOf = (line: OutlineLine) =>
+    namedOf(line.heading, [
+      ...(line.rule ? [line.rule.anchor] : []),
+      ...line.within,
+    ]) ?? wholeOf(line.heading);
 
   return {
     outline,
@@ -426,11 +439,8 @@ export function phasesOf(outline: PageOutline): PagePhases {
       ? assignmentOf(whole.get(null) as PlacedPhase)
       : undefined,
     heading,
-    line: (line) =>
-      ruleUnder(line.heading, [
-        ...(line.rule ? [line.rule.anchor] : []),
-        ...line.within,
-      ]) ?? heading(line.heading),
+    line: (line) => assigned(blockOf(line)),
+    blockOf,
     traced: (traced, rule) => {
       const found = outline.headings.find((one) => one.trace === traced);
       const anchor = found ? found.anchor : null;
