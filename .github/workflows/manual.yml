@@ -6,14 +6,17 @@ name: Manual
 # the data — all state lives in commits.
 #
 # Local equivalent: pnpm manual:build && wrangler deploy -c tools/manual/wrangler.jsonc
+# (after wrangler deploy -c tools/run-desk/wrangler.jsonc, the first time).
 #
 # One-time ops:
 # - Repo secret CLOUDFLARE_API_TOKEN_QA (same staging token Storybook uses).
 # - Confirm Cloudflare Access covers spec.grade10-stg.com if you gate
 #   the staging zone.
 #
-# The hosted site is static assets only, always read-only — editing happens
-# against a local dev server, never here.
+# The hosted site is static assets, always read-only — editing happens
+# against a local dev server, never here. Its Worker runs only /api/desk/*,
+# passing it to the run desk (tools/run-desk), a Worker of its own deployed
+# from this job when its code moves.
 
 on:
   # Every push, unfiltered: the open page's banner promises the site rebuilds
@@ -24,6 +27,11 @@ on:
   # Lint's fix commit and Design sync's report commit are pushed with the
   # default GITHUB_TOKEN, which starts no workflow; each dispatches this.
   workflow_dispatch:
+    inputs:
+      deploy_desk:
+        description: Redeploy the run desk even if its code did not move (restarts its live connections)
+        type: boolean
+        default: false
   repository_dispatch:
     types: [deployment-evidence-updated]
 
@@ -98,6 +106,26 @@ jobs:
 
       - name: Build
         run: pnpm run manual:build
+
+      # The desk is its own Worker so the manual's deploy on every push never
+      # restarts the Durable Object holding live runs. Deploying the desk
+      # restarts it even with its code unchanged, so it deploys only when its
+      # code moved in this push (the previous commit, for a dispatch) or when
+      # asked; it deploys before the manual, whose binding names it. A push
+      # cancelled before this step leaves its desk change to a dispatch with
+      # deploy_desk.
+      - name: Deploy run desk
+        env:
+          BEFORE: ${{ github.event.before }}
+          FORCE: ${{ inputs.deploy_desk }}
+        run: |
+          base=${BEFORE:-HEAD~1}
+          if [ "$FORCE" = true ] || ! git cat-file -e "$base^{commit}" 2>/dev/null \
+            || ! git diff --quiet "$base" HEAD -- tools/run-desk tools/manual/src/api/desk.ts tools/manual/src/api/verdicts.ts; then
+            pnpm dlx wrangler@${{ env.WRANGLER_VERSION }} deploy -c tools/run-desk/wrangler.jsonc
+          else
+            echo "The run desk did not move since $base; not redeployed."
+          fi
 
       - name: Deploy
         working-directory: tools/manual
