@@ -15,6 +15,7 @@ const RULE_TITLES: Record<string, string> = {
   rule: "Rules written as a paragraph, not a list item",
   ledger: "Ledgers written as a table, outside an example",
   icon: "No icon in the rail",
+  "phase-warn": "Lines being built in no phase, or in a released phase",
 };
 
 /** A key with no sentence behind it is a rule somebody added and nobody
