@@ -23,12 +23,7 @@
       "label": "Shopify"
     }
   ],
-  "mainPath": [
-    "listed",
-    "listing",
-    "product",
-    "sold"
-  ],
+  "mainPath": ["listed", "listing", "product", "sold"],
   "nodes": [
     {
       "id": "listed",
