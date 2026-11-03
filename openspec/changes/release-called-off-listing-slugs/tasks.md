@@ -5,7 +5,7 @@
 - [ ] 1.3 Walks: after acceptance, rewrite the called-off steps and observations in the site feature walks through `/tcs-review` so each matches its revised case: listing-page Walks 1, 2, 8, 9 and 10 (`g10.auction-listing-page.US1-TC3`, `g10.auction-listing-page.US1-TC4`, `g10.auction-listing-page.US3-TC3`, `g10.auction-listing-page.US3-TC4`, `g10.auction-listing-page.US10-TC11`, `g10.auction-listing-page.US11-TC4`) and lot-status Walk 2 (`g10.auction-lot-status.US2-TC4`, `g10.auction-lot-status.US3-TC1`). A delta cannot carry a feature walk that names cases it does not define. — blocked: `/tcs-review` is a human QA review
 - [x] 1.4 Verify: changed-page manual validation, writing review and source links for all 3 capability pages.
 
-## 2. Release Earlier Called-Off Slugs (grade10)
+## 2. Release Earlier Called-Off Slugs (grade10) (owner: @htonyl)
 
 This group authors the migration. Apply it only after group 3's compatible public projection and cancellation writer are deployed, in the migration window described in tech-design.md.
 
