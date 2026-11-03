@@ -14,20 +14,29 @@ collector's own pages.
 - 🚧 **Four states** — In Vault, Listed, Live Auction, Retrieval Pending; an
   item awaiting a retrieval decision still counts as in the vault, and a
   tab with nothing in it is hidden
-- 🚧 **One item** — its gallery, status, estimated value since intake, grade
-  and certification, storage location, condition, custody history and
-  documents; graded and raw items read differently
+- 🚧 **One item** — its gallery, status, grade and certification, condition,
+  custody history and documents; graded and raw items read differently
 - 🚧 **Acts on an item** — list it for auction or for sale, submit a raw item
   for grading, or ask for it back
+- 🚧 **Earnings wallet** — the available earnings balance with an estimated
+  daily rate, marked as an estimate from 30-day median market prices and
+  liquidity factors
+- 🚧 **Per-item estimate** — each holding's card shows its estimated daily
+  earning under the title; a paused price feed reads the estimate as paused
+  with a warning
+- 🚧 **Daily earnings record** — the day's earned sums in the ledger; a credit
+  covering days a price outage paused reads as backdated earnings
 - **Verify at the source** — a graded item's certificate opens the grading
   institute's own record in a new tab
 - **Documents** — each document on the item opens or downloads
 
 ## The item's page
 
-- 🚧 **Estimated value since intake** — the intake figure and how far it has
-  moved; a listed or auctioned item instead reads its listed price or
-  current bid and links out to its listing
+- 🚧 **Earnings to date** — the item's cumulative earnings with the estimated
+  daily rate, marked as an estimate; a listed or auctioned item instead
+  reads its listed price or current bid and links out to its listing
+- 🚧 **Estimate paused** — when the market price is unavailable the daily
+  estimate pauses; missed days credit immediately once pricing resumes
 - 🚧 **Value potential** — a raw item shows its graded estimate and the
   upside, with `Submit for Grading` inside the callout
 - **Custody log** — where the item has been and when, latest first,
