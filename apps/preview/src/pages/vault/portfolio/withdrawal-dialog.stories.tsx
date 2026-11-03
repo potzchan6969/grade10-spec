@@ -1,6 +1,7 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ComponentProps, useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
@@ -10,9 +11,11 @@ import { WithdrawalDialog, type WithdrawalMethod } from "./withdrawal-dialog";
 function WithdrawalDialogDemo({
   initialStep,
   payoutMethods,
+  flow,
 }: {
   initialStep?: ComponentProps<typeof WithdrawalDialog>["initialStep"];
   payoutMethods?: WithdrawalMethod[];
+  flow?: ComponentProps<typeof WithdrawalDialog>["flow"];
 }) {
   const [open, setOpen] = useState(true);
 
@@ -38,9 +41,11 @@ function WithdrawalDialogDemo({
         minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
         payoutMethods={payoutMethods}
         initialStep={initialStep}
+        flow={flow}
         open={open}
         onOpenChange={setOpen}
       />
+      <Toast position="bottom-right" />
     </div>
   );
 }
@@ -183,6 +188,24 @@ export const ManualRequest: Story = {
       contact.getByRole("button", { name: "Open Mail App" }),
     ).toBeVisible();
     expect(contact.getByRole("button", { name: "Copy Message" })).toBeVisible();
+  },
+};
+
+/** On-file bank — paperwork captured in store: HKD only, no add or overseas. */
+export const OnFileBank: Story = {
+  parameters: {
+    verification: { caseId: "vc_2d2a84d8-c12f-4c05-9f41-3051c7c5d04e" },
+  },
+  args: { flow: "prelinked", payoutMethods: [PAYOUT_METHODS[0]] },
+  play: async ({ canvasElement }) => {
+    const dialog = await openDialog(canvasElement);
+    await waitFor(() =>
+      expect(
+        dialog.getByRole("heading", { name: "Withdraw Earnings" }),
+      ).toBeVisible(),
+    );
+    expect(dialog.queryByText("Receive in")).toBeNull();
+    expect(dialog.queryByText("US Dollar")).toBeNull();
   },
 };
 

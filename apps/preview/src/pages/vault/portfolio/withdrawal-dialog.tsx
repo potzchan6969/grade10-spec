@@ -329,8 +329,8 @@ function WithdrawalDialog({
   onOpenChange,
   onSubmit,
   onViewWithdrawal,
-  requestId = "WD-24818",
   initialStep = "amount",
+  flow = "standard",
 }: {
   availableUsd: number;
   minWithdrawalUsd: number;
@@ -341,12 +341,17 @@ function WithdrawalDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit?: (amountUsd: number, currency: "USD" | "HKD") => void;
-  /** Opens the withdrawal tab/details after submit. */
+  /** Opens the withdrawal tab/details from the submitted toast. */
   onViewWithdrawal?: () => void;
-  /** Reference shown on the submitted beat. */
-  requestId?: string;
   /** Step the dialog opens on — workbench stories only; defaults to `amount`. */
   initialStep?: WithdrawalStep;
+  /**
+   * `standard` offers the receive-in choice, add-method and the overseas
+   * request; `prelinked` is the collector whose bank was captured on the
+   * in-store paperwork — HKD payout to that account only, so the currency
+   * radio and the action rows are not drawn.
+   */
+  flow?: "standard" | "prelinked";
 }) {
   const [step, setStep] = useState<WithdrawalStep>(initialStep);
   const [amountInput, setAmountInput] = useState(String(availableUsd));
@@ -571,43 +576,45 @@ function WithdrawalDialog({
             value={amountInput}
             onChange={(event) => setAmountInput(event.target.value)}
           />
-          <RadioList
-            aria-label="Receive in"
-            className="gap-3"
-            label="Receive in"
-            onValueChange={(value) => {
-              if (value === "HKD" || value === "USD") setReceiveIn(value);
-            }}
-            value={receiveIn}
-          >
-            <RadioCard
-              description={`${formatHkd(convertedHkd)} (US$1 = HK$${hkdPerUsd})`}
-              title="Hong Kong Dollar"
-              value="HKD"
-            />
-            <RadioCard
-              action={
-                <Link
-                  render={
-                    <button
-                      type="button"
-                      onClick={() => setContactOpen(true)}
-                    />
-                  }
-                  size="sm"
-                >
-                  Request
-                </Link>
-              }
-              className="opacity-100"
-              description={
-                <span className="opacity-50">Not available now</span>
-              }
-              disabled
-              title={<span className="opacity-50">US Dollar</span>}
-              value="USD"
-            />
-          </RadioList>
+          {flow === "prelinked" ? null : (
+            <RadioList
+              aria-label="Receive in"
+              className="gap-3"
+              label="Receive in"
+              onValueChange={(value) => {
+                if (value === "HKD" || value === "USD") setReceiveIn(value);
+              }}
+              value={receiveIn}
+            >
+              <RadioCard
+                description={`${formatHkd(convertedHkd)} (US$1 = HK$${hkdPerUsd})`}
+                title="Hong Kong Dollar"
+                value="HKD"
+              />
+              <RadioCard
+                action={
+                  <Link
+                    render={
+                      <button
+                        type="button"
+                        onClick={() => setContactOpen(true)}
+                      />
+                    }
+                    size="sm"
+                  >
+                    Request
+                  </Link>
+                }
+                className="opacity-100"
+                description={
+                  <span className="opacity-50">Not available now</span>
+                }
+                disabled
+                title={<span className="opacity-50">US Dollar</span>}
+                value="USD"
+              />
+            </RadioList>
+          )}
         </VStack>
       ) : null}
 
@@ -630,31 +637,35 @@ function WithdrawalDialog({
                 />
               ))}
             </RadioList>
-            <ActionRow
-              dashed
-              icon={<Plus aria-hidden size={20} weight="regular" />}
-              title="Add Hong Kong bank or FPS"
-              onClick={() => setStep("add-method")}
-            />
-            <ActionRow
-              detail="Not available now"
-              disabled
-              icon={<Globe aria-hidden size={20} weight="regular" />}
-              title="Overseas bank"
-              trailing={
-                <Link
-                  render={
-                    <button
-                      type="button"
-                      onClick={() => setContactOpen(true)}
-                    />
+            {flow === "prelinked" ? null : (
+              <>
+                <ActionRow
+                  dashed
+                  icon={<Plus aria-hidden size={20} weight="regular" />}
+                  title="Add Hong Kong bank or FPS"
+                  onClick={() => setStep("add-method")}
+                />
+                <ActionRow
+                  detail="Not available now"
+                  disabled
+                  icon={<Globe aria-hidden size={20} weight="regular" />}
+                  title="Overseas bank"
+                  trailing={
+                    <Link
+                      render={
+                        <button
+                          type="button"
+                          onClick={() => setContactOpen(true)}
+                        />
+                      }
+                      size="sm"
+                    >
+                      Request
+                    </Link>
                   }
-                  size="sm"
-                >
-                  Request
-                </Link>
-              }
-            />
+                />
+              </>
+            )}
           </div>
         </VStack>
       ) : null}
