@@ -24,6 +24,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_35b8a477-a35d-4d95-a1af-c0216b7ef287" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("100 Products")).toBeInTheDocument();
@@ -39,6 +42,9 @@ export const Default: Story = {
 
 /** No applied-filter region when none are supplied. */
 export const NoAppliedFilters: Story = {
+  parameters: {
+    verification: { caseId: "vc_458545f9-5e7d-4c48-bc74-d4311b7fff62" },
+  },
   args: { appliedFilters: [] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -54,6 +60,9 @@ export const NoAppliedFilters: Story = {
 
 /** Free-text search sits among applied filters as a dismissible chip. */
 export const SearchChip: Story = {
+  parameters: {
+    verification: { caseId: "vc_ac430b70-f32a-4cab-8d64-0c546d2fa2ec" },
+  },
   args: {
     appliedFilters: [
       { groupId: "search", optionId: "abyss", label: 'Search: "abyss"' },

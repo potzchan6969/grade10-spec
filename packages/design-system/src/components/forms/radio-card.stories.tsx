@@ -37,6 +37,9 @@ const ADDRESSES = [
 ] as const;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_e3593926-cc71-4147-9476-81c6eec04b81" },
+  },
   render: () => (
     <RadioList
       aria-label="Delivery address"
@@ -89,6 +92,9 @@ export const Default: Story = {
 };
 
 export const WithAction: Story = {
+  parameters: {
+    verification: { caseId: "vc_e3ea85fb-3a03-48be-93fd-0cd2fd94a668" },
+  },
   name: "With action",
   render: () => {
     const onRemove = fn();
@@ -171,6 +177,9 @@ export const WithIcon: Story = {
 };
 
 export const Disabled: Story = {
+  parameters: {
+    verification: { caseId: "vc_1d2f6594-14be-45a6-9a14-6b7749d91871" },
+  },
   render: () => (
     <RadioList aria-label="Options" className="max-w-md" defaultValue="a">
       <RadioCard description="Still available." title="Enabled" value="a" />
@@ -185,6 +194,9 @@ export const Disabled: Story = {
 };
 
 export const DescriptionOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_d2b512a3-b557-4d62-b4d6-af77ed6f2d91" },
+  },
   name: "Description only",
   render: () => (
     <RadioList aria-label="Options" className="max-w-md" defaultValue="one">

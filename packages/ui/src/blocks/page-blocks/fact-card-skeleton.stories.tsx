@@ -19,6 +19,9 @@ type Story = StoryObj<typeof meta>;
  * slot, the status keeps the design system's `stack`
  * (shared-ui-page-blocks-SC-18). */
 export const Two: Story = {
+  parameters: {
+    verification: { caseId: "vc_a9ab41bb-166e-4303-8f38-2e4be8b9facd" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const statuses = canvas.getAllByRole("status");
@@ -37,6 +40,9 @@ export const Two: Story = {
 
 /** The status carries the slot it is given (shared-ui-page-blocks-SC-18). */
 export const WithSlot: Story = {
+  parameters: {
+    verification: { caseId: "vc_63313731-9014-40ff-9810-43a672652bdf" },
+  },
   args: { slot: "vault-cases-loading" },
   play: async ({ canvasElement }) => {
     expect(within(canvasElement).getByRole("status")).toHaveAttribute(

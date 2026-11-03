@@ -30,6 +30,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The open-time read is still running: lines are skeletons and Proceed waits. */
 export const PendingReview: Story = {
+  parameters: {
+    verification: { caseId: "vc_3265ac7f-d4c3-46aa-87d0-c171f772a617" },
+  },
   args: { loading: true },
   play: () => {
     const canvas = drawer();
@@ -45,6 +48,9 @@ export const PendingReview: Story = {
  * totals say so, and a persistent toast offers Retry. Checkout waits.
  */
 export const ReviewFailedWithRetry: Story = {
+  parameters: {
+    verification: { caseId: "vc_a364ab36-4801-4d07-b90f-4425da40b19f" },
+  },
   args: {
     items: UNCHECKED_ITEMS,
     subtotal: UNCHECKED_TOTAL,

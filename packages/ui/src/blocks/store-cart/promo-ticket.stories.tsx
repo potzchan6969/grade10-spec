@@ -33,6 +33,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Applicable ticket with Apply in the action slot. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_bd7ed944-a1ed-4cac-a357-4adefbb2979b" },
+  },
   args: {
     action: (
       <Button size="sm" variant="secondary" onClick={fn()}>
@@ -50,6 +53,9 @@ export const Default: Story = {
 
 /** Selected when this held code is the applied promo on the cart. */
 export const Selected: Story = {
+  parameters: {
+    verification: { caseId: "vc_b15da7d4-2d37-4557-b470-61d7f325caf9" },
+  },
   args: {
     selected: true,
     action: (
@@ -63,6 +69,9 @@ export const Selected: Story = {
 /** A code running out — the consumer flags it, the ticket counts nothing —
  * reads its Use by line emphasised. */
 export const ExpiringSoon: Story = {
+  parameters: {
+    verification: { caseId: "vc_0033d7b7-7416-434f-b4e8-ebaf10da7577" },
+  },
   args: {
     code: {
       ...applicable,
@@ -123,6 +132,9 @@ const CONTRACT_APPLY = {
 
 /** Contract coverage for consumer-owned detail emphasis. */
 export const ContractStates: Story = {
+  parameters: {
+    verification: { caseId: "vc_566c87a2-860e-4891-9bab-dcaf72069a45" },
+  },
   render: () => (
     <div className="flex w-full flex-col gap-2">
       {CONTRACT_CODES.map((code, index) => (
@@ -219,6 +231,9 @@ export const ContractStates: Story = {
 
 /** Inapplicable — muted, reason in the footer, no action. */
 export const NotApplicable: Story = {
+  parameters: {
+    verification: { caseId: "vc_8b6d94a8-97c0-4dd8-8009-7bc5d3144725" },
+  },
   args: {
     code: inapplicable,
     muted: true,
@@ -267,6 +282,9 @@ function TicketWithScanCard(args: Parameters<typeof PromoTicket>[0]) {
  * card below the ticket; the readable code stays shown either way. No
  * Apply — that belongs to the online cart. */
 export const WithQrCode: Story = {
+  parameters: {
+    verification: { caseId: "vc_86387a16-de70-46aa-b768-4141987a6777" },
+  },
   args: {
     code: { ...applicable, label: "G10-50-7Q2M" },
     qrCode: {
@@ -301,6 +319,9 @@ export const WithQrCode: Story = {
  * the collection under a storefront mark, and Use now opens its scan
  * card. */
 export const CollectionTicket: Story = {
+  parameters: {
+    verification: { caseId: "vc_400d10b4-c93e-46cd-9228-778ffff188e5" },
+  },
   args: {
     code: {
       applicable: true,
@@ -335,6 +356,9 @@ export const CollectionTicket: Story = {
 /** Spent: the ticket mutes, names it used, and drops both the scan
  * control and any action — there is nothing left to scan or apply. */
 export const UsedTicket: Story = {
+  parameters: {
+    verification: { caseId: "vc_489bc358-e327-4bc2-a978-f3d4534b4a93" },
+  },
   args: {
     code: { ...applicable, label: "G10-50-7Q2M" },
     usedLabel: "Used on 12 Oct 2026",
@@ -366,6 +390,9 @@ export const UsedTicket: Story = {
 
 /** Boneyard skeleton while the held codes resolve. */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_987e134d-b949-470b-92e9-de5f05b541e6" },
+  },
   args: { loading: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -376,11 +403,17 @@ export const Loading: Story = {
 
 /** Boneyard capture target — keep `loading` so the CLI reads the fixture. */
 export const BoneyardCapture: Story = {
+  parameters: {
+    verification: { caseId: "vc_bf19c35c-cf15-48ab-aadd-f1a59f76aefc" },
+  },
   args: { loading: true },
 };
 
 /** Stack of tickets as they appear in the promo sheet. */
 export const List: Story = {
+  parameters: {
+    verification: { caseId: "vc_b4664a91-1acd-45d6-803d-a412338be86c" },
+  },
   render: () => (
     <div className="flex w-full flex-col gap-2">
       {SAMPLE_HELD_PROMO_CODES.map((code) => (

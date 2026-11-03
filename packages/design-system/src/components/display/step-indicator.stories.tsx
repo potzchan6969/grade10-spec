@@ -26,6 +26,9 @@ type Story = StoryObj<typeof meta>;
  * connector. Must not use CheckboxButton `disabled` (`opacity-50`).
  */
 export const Upcoming: Story = {
+  parameters: {
+    verification: { caseId: "vc_6af9bff7-fd04-43d9-821b-3177abfbf1c0" },
+  },
   args: { state: "upcoming" },
   play: async ({ canvasElement }) => {
     const ring = canvasElement.querySelector('[data-slot="checkbox-button"]');
@@ -36,10 +39,16 @@ export const Upcoming: Story = {
 };
 
 export const Progress: Story = {
+  parameters: {
+    verification: { caseId: "vc_b11f329c-1117-41eb-b8f2-1afc85f0c15f" },
+  },
   args: { state: "progress" },
 };
 
 export const Completed: Story = {
+  parameters: {
+    verification: { caseId: "vc_b5506e1a-a213-4bf6-be82-135399b53154" },
+  },
   args: { state: "completed" },
   play: async ({ canvasElement }) => {
     const ring = canvasElement.querySelector('[data-slot="checkbox-button"]');
@@ -54,6 +63,9 @@ export const Completed: Story = {
  * set, sized to match the checkbox ring.
  */
 export const ErrorState: Story = {
+  parameters: {
+    verification: { caseId: "vc_71c2e744-0012-46c5-8e46-d009dd2a9729" },
+  },
   name: "Error",
   args: { state: "error" },
   play: async ({ canvasElement }) => {
@@ -66,6 +78,9 @@ export const ErrorState: Story = {
 
 /** The same indicator moving on, as a stepper does when an order advances. */
 export const UpcomingBecomesCompleted: Story = {
+  parameters: {
+    verification: { caseId: "vc_c570bf09-5050-4117-80de-9f93ee3fa181" },
+  },
   render: () => {
     const [done, setDone] = useState(false);
     return (

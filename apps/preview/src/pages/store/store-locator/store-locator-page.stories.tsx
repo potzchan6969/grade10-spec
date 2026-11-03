@@ -55,6 +55,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_5cefd122-e971-4fca-b3ac-316b9f440490" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await Promise.all(
@@ -90,11 +93,17 @@ export const Default: Story = {
 };
 
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_2878dad7-d73f-4e22-877f-0b5cedb01025" },
+  },
   globals: { viewport: { value: "mobile1" } },
 };
 
 /** The map has not loaded: its place still opens Google Maps and the box keeps its size, with no message. */
 export const MapNotLoaded: Story = {
+  parameters: {
+    verification: { caseId: "vc_47bd7ac2-a7ad-4649-9fdc-b22dc66fde45" },
+  },
   args: { mapLoaded: false },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

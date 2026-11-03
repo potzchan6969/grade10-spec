@@ -36,6 +36,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Store chrome with language, account, and cart. */
 export const AllControls: Story = {
+  parameters: {
+    verification: { caseId: "vc_4385a402-924b-4382-ae7a-3ad5ab333e15" },
+  },
   name: "All controls",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -88,6 +91,9 @@ export const AllControls: Story = {
 
 /** A compound header can replace the built-in cart control with its own slot. */
 export const CartSlot: Story = {
+  parameters: {
+    verification: { caseId: "vc_73d73558-7c63-466a-a1f3-ef1f5f8de5b3" },
+  },
   name: "Cart slot",
   args: {
     cartSlot: (
@@ -125,6 +131,9 @@ const slotOnlyClick = fn();
 
 /** A cart slot with no `onCartClick`: the slot alone is the cart. */
 export const CartSlotOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_4a679705-39c6-443c-b3dc-9ab2c1370baa" },
+  },
   name: "Cart slot only",
   args: {
     onCartClick: undefined,
@@ -158,12 +167,18 @@ export const CartSlotOnly: Story = {
 
 /** Promo bar omitted — utility row or main bar is the top edge. */
 export const NoPromo: Story = {
+  parameters: {
+    verification: { caseId: "vc_3122b2ba-3a45-4463-adab-eff1eb47ac4f" },
+  },
   name: "No promo bar",
   args: { promo: null },
 };
 
 /** Same shell wearing another brand's copy — nothing inherited. */
 export const AnotherBrand: Story = {
+  parameters: {
+    verification: { caseId: "vc_8e9e16fa-9e20-46c7-824b-31b741fde4f0" },
+  },
   name: "Another brand",
   args: {
     promo: null,
@@ -184,6 +199,9 @@ export const AnotherBrand: Story = {
 
 /** No navigation item is current. */
 export const NoCurrentItem: Story = {
+  parameters: {
+    verification: { caseId: "vc_548c0d0b-4477-4971-934f-b117b87a6c82" },
+  },
   name: "No current item",
   args: { navItems: NAV_ITEMS.map(({ label, href }) => ({ label, href })) },
   play: async ({ canvasElement }) => {
@@ -198,6 +216,9 @@ export const NoCurrentItem: Story = {
 
 /** Every visible string was supplied — the shell invents none. */
 export const NoDefaultCopy: Story = {
+  parameters: {
+    verification: { caseId: "vc_4c02e5e6-0647-4fba-8cce-128af63ca89f" },
+  },
   name: "No default copy",
   args: {
     promo: null,

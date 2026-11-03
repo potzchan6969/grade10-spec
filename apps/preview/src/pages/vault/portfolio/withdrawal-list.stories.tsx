@@ -17,6 +17,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Filled: Story = {
+  parameters: {
+    verification: { caseId: "vc_5465167e-2411-45d6-a66b-f7f9f88fa468" },
+  },
   args: { requests: PAYOUT_REQUESTS },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -29,6 +32,9 @@ export const Filled: Story = {
 
 /** A request Grade10 turned down — struck-through muted amounts. */
 export const Declined: Story = {
+  parameters: {
+    verification: { caseId: "vc_611af09a-60a8-472e-820b-05d01507898c" },
+  },
   args: {
     requests: [
       {
@@ -49,5 +55,9 @@ export const Declined: Story = {
 /** Below `sm` the rows keep their shape: icon, destination, amount, chevron. */
 export const Narrow: Story = {
   ...Filled,
+  parameters: {
+    ...Filled.parameters,
+    verification: { caseId: "vc_ccc16656-f733-4ce0-bf63-1567c063b5dc" },
+  },
   globals: { viewport: { value: "mobile1" } },
 };

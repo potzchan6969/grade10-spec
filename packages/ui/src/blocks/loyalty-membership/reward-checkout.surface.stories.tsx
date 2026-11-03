@@ -18,6 +18,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Under 640px the surface is a bottom sheet. */
 export const NarrowIsSheet: Story = {
+  parameters: {
+    verification: { caseId: "vc_677c50dc-4394-4ec0-85bc-7857d0e06d25" },
+  },
   globals: { viewport: { value: "mobile1" } },
   args: { reward: ITEM },
   play: async () => {
@@ -34,6 +37,9 @@ export const NarrowIsSheet: Story = {
 
 /** From 640px up the surface is a dialog. */
 export const WideIsDialog: Story = {
+  parameters: {
+    verification: { caseId: "vc_2431dc2a-3017-4895-b982-2750465213bf" },
+  },
   globals: { viewport: { value: "desktop" } },
   args: { reward: ITEM },
   play: async () => {

@@ -87,6 +87,9 @@ type Story = StoryObj<typeof meta>;
 
 /** My visits: upcoming first, past after, each row opening its visit. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_a0c38647-ff1d-44e1-9cdf-1165f8f4fa74" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -107,6 +110,9 @@ export const Default: Story = {
 };
 
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_95c765b1-9487-4095-a71f-27db95006d06" },
+  },
   args: { empty: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

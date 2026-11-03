@@ -20,6 +20,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Early bird: the full price struck, read as "Was …". */
 export const EarlyBird: Story = {
+  parameters: {
+    verification: { caseId: "vc_b33aabaf-c964-4995-a985-848da91e99f9" },
+  },
   name: "Early Bird",
   play: async ({ canvasElement }) => {
     const struck = canvasElement.querySelector("s");
@@ -29,6 +32,9 @@ export const EarlyBird: Story = {
 
 /** Sales ended: the price alone, in grey. */
 export const Ended: Story = {
+  parameters: {
+    verification: { caseId: "vc_9a6548ec-c2e3-4ccb-a175-399db9b0d3cf" },
+  },
   args: { was: undefined, muted: true, price: "HK$480.00" },
   play: async ({ canvasElement }) => {
     await expect(

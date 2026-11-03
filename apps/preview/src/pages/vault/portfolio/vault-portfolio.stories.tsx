@@ -242,6 +242,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Filled: Story = {
+  parameters: {
+    verification: { caseId: "vc_860bac23-7b5e-4ad7-92d3-0cffd3050880" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     // Sections enter with a staggered animation — wait for them to settle.
@@ -280,6 +283,9 @@ export const Filled: Story = {
 
 /** Holdings fetch in flight — Boneyard card skeletons under the tab bar. */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_7748f315-badc-47d8-986d-ebed82c5d998" },
+  },
   args: { loading: true },
   play: async ({ canvasElement }) => {
     await waitFor(() =>
@@ -294,6 +300,9 @@ export const Loading: Story = {
 };
 
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_e26f590e-29b1-4396-8fbb-c14b8d88c0cb" },
+  },
   args: { empty: true, intakeSubmissionCount: 0 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -305,6 +314,9 @@ export const Empty: Story = {
 
 /** Empty vault with open intake — alert still surfaces above the empty state. */
 export const EmptyWithIntake: Story = {
+  parameters: {
+    verification: { caseId: "vc_f991d30e-0f68-4c69-9c0e-0f07738dd4a5" },
+  },
   args: { empty: true, intakeSubmissionCount: 2 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

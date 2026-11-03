@@ -90,6 +90,9 @@ type Story = StoryObj<typeof meta>;
  * order with its code field and points, and the guest's agreement, which
  * keeps the tickets in a Grade10 account for the email. */
 export const GuestNotAgreed: Story = {
+  parameters: {
+    verification: { caseId: "vc_776b1385-1bc1-4143-a4a3-28c7e561da50" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const details = canvas.getByRole("region", { name: "Your Details" });
@@ -119,6 +122,9 @@ export const GuestNotAgreed: Story = {
 /** Pay pressed without the tick: the card and the bar say to tick first,
  * and nothing is paid. */
 export const PayPressedUnticked: Story = {
+  parameters: {
+    verification: { caseId: "vc_7e15be8c-9233-4da6-aee2-08df7b085957" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
@@ -137,6 +143,9 @@ export const PayPressedUnticked: Story = {
 
 /** Ticked after being asked: both errors go, and Pay goes on. */
 export const TickedAfterAsking: Story = {
+  parameters: {
+    verification: { caseId: "vc_693287f9-488c-4eb7-b7de-da23d0bf8c37" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const pay = canvas.getByRole("button", { name: "Pay HK$1,150.00" });
@@ -153,6 +162,9 @@ export const TickedAfterAsking: Story = {
 
 /** A guest who ticked: Pay goes on. */
 export const GuestAgreed: Story = {
+  parameters: {
+    verification: { caseId: "vc_ea67ddb1-eb23-4ecd-ac86-fbf3a325a395" },
+  },
   args: { defaultAgreed: true },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -168,6 +180,9 @@ export const GuestAgreed: Story = {
 
 /** Signed in: the Terms of Sale only, and the points go to the account. */
 export const SignedIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_96dfb684-9dcd-4093-9281-a1f920fb27bd" },
+  },
   args: {
     copy: REVIEW_COPY_SIGNED_IN,
     order: accountOrder,
@@ -197,6 +212,9 @@ export const SignedIn: Story = {
 
 /** Pay pressed into a crowd, after 3 seconds: still trying, and Pay waits. */
 export const SlowAfterThreeSeconds: Story = {
+  parameters: {
+    verification: { caseId: "vc_23755a54-c14a-426b-aa79-c2b530103638" },
+  },
   args: { defaultAgreed: true, payState: "slow" },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -212,6 +230,9 @@ export const SlowAfterThreeSeconds: Story = {
 
 /** Leaving for Stripe: Opening payment… under the waiting press. */
 export const OpeningPayment: Story = {
+  parameters: {
+    verification: { caseId: "vc_73e76caf-d08a-4bf1-a168-b20b3920bcc4" },
+  },
   args: { defaultAgreed: true, payState: "opening" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -225,6 +246,9 @@ export const OpeningPayment: Story = {
 /** The early bird ended while the buyer was here: a warning names the new
  * total, the lines show the new prices, and Pay follows. */
 export const EarlyBirdEnded: Story = {
+  parameters: {
+    verification: { caseId: "vc_be11b629-7bb2-4029-a341-cf47dd69b25b" },
+  },
   args: {
     copy: REVIEW_COPY_SIGNED_IN,
     agreementStatement: <AccountStatement />,
@@ -265,6 +289,9 @@ export const EarlyBirdEnded: Story = {
 
 /** A pass that costs nothing: Get Tickets, nothing charged, no bot check. */
 export const FreeOrder: Story = {
+  parameters: {
+    verification: { caseId: "vc_830d1f2b-5612-4bdd-b8bb-8da919fb890d" },
+  },
   args: {
     copy: REVIEW_COPY_SIGNED_IN,
     agreementStatement: <AccountStatement />,

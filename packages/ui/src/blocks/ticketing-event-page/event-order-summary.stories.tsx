@@ -53,6 +53,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Nothing chosen: how to choose, and Continue waits. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_5b96b3e7-c698-4593-bfb2-09427182bd30" },
+  },
   args: {
     lines: [],
     count: "0 tickets",
@@ -75,6 +78,9 @@ export const Empty: Story = {
 /** Early bird: each line's full price struck, the saving on a gold tint,
  * and the Fast Pass prompt while none is chosen. */
 export const WithSaving: Story = {
+  parameters: {
+    verification: { caseId: "vc_899a9c79-18e7-4cc7-9fa2-d49e3fe489c4" },
+  },
   name: "With Saving",
   args: {
     fastPassPrompt: {
@@ -102,6 +108,9 @@ export const WithSaving: Story = {
 
 /** Fast Pass chosen: its line comes off with a ✕, and the prompt is gone. */
 export const WithFastPass: Story = {
+  parameters: {
+    verification: { caseId: "vc_addbcf28-3c47-4141-98ff-86cedd18f29e" },
+  },
   name: "With Fast Pass",
   args: {
     lines: [
@@ -128,6 +137,9 @@ export const WithFastPass: Story = {
 
 /** At the email's limit, and signed in with the points estimate. */
 export const AtTheLimit: Story = {
+  parameters: {
+    verification: { caseId: "vc_d0e56ac8-18b5-42a1-8ed8-cc9b261709f0" },
+  },
   name: "At the Limit",
   args: {
     lines: [

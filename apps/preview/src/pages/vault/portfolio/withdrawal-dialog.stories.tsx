@@ -74,6 +74,9 @@ async function enterMaxAndContinue(dialog: ReturnType<typeof within>) {
 
 /** Step 1 — amount entry, `Max` fills it, HK$ is the receive-in default. */
 export const Amount: Story = {
+  parameters: {
+    verification: { caseId: "vc_66568eca-21ec-48a4-a86e-e40cb6a5f8dc" },
+  },
   args: { payoutMethods: PAYOUT_METHODS },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
@@ -96,6 +99,9 @@ export const Amount: Story = {
 
 /** Step 2 — saved destinations drawn like the order setup picker. */
 export const Destination: Story = {
+  parameters: {
+    verification: { caseId: "vc_7d984d02-57e9-4630-bc56-6debd13f968c" },
+  },
   args: { payoutMethods: PAYOUT_METHODS },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
@@ -115,6 +121,9 @@ export const Destination: Story = {
 
 /** Add a method — bank form with the verified name prefilled, editable. */
 export const AddMethod: Story = {
+  parameters: {
+    verification: { caseId: "vc_52cd112b-b53e-4157-a9ad-57d9530341f5" },
+  },
   args: { payoutMethods: PAYOUT_METHODS },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
@@ -134,6 +143,9 @@ export const AddMethod: Story = {
 
 /** First payout — no destination on file, so the form opens from step 1. */
 export const FirstPayout: Story = {
+  parameters: {
+    verification: { caseId: "vc_c159aa07-9175-4689-bf60-e08cbfb8d718" },
+  },
   args: { payoutMethods: [] },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
@@ -148,6 +160,9 @@ export const FirstPayout: Story = {
 
 /** Manual request — US$/overseas banks get their own form, no step rail. */
 export const ManualRequest: Story = {
+  parameters: {
+    verification: { caseId: "vc_57fb92b8-3636-4606-af08-e39e67ed663d" },
+  },
   args: { initialStep: "manual-request", payoutMethods: PAYOUT_METHODS },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
@@ -195,6 +210,9 @@ export const ManualRequest: Story = {
 
 /** Step 3 — the review names the converted amount and the destination. */
 export const Review: Story = {
+  parameters: {
+    verification: { caseId: "vc_46d9b1cd-2e36-40a7-88e6-3ab58a08fc55" },
+  },
   args: { payoutMethods: PAYOUT_METHODS },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
@@ -221,6 +239,9 @@ export const Review: Story = {
 
 /** Submitted — the request lands as Pending on the portfolio. */
 export const Submitted: Story = {
+  parameters: {
+    verification: { caseId: "vc_4526f079-757d-47b2-b8ba-504d72c394bd" },
+  },
   args: { payoutMethods: PAYOUT_METHODS },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
@@ -251,6 +272,9 @@ export const Submitted: Story = {
 
 /** 390px phone — the amount field and steps keep their full width. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_287b68c3-466b-4565-a0ea-f8797ff0542a" },
+  },
   args: { payoutMethods: PAYOUT_METHODS },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {

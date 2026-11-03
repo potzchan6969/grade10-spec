@@ -26,6 +26,9 @@ type Story = StoryObj<typeof meta>;
  * Index, then Help.
  */
 export const CartOnAuction: Story = {
+  parameters: {
+    verification: { caseId: "vc_5d31b8d8-e795-4831-95fa-2395749cb0f2" },
+  },
   name: "Cart on Auction",
   args: {
     session: "signed-in",
@@ -88,6 +91,9 @@ export const CartOnAuction: Story = {
  * account icon takes the same box and nothing else moves, and back to pending.
  */
 export const Pending: Story = {
+  parameters: {
+    verification: { caseId: "vc_f021b8d0-5c39-40bd-82e6-1c9a899ac97d" },
+  },
   name: "Pending",
   args: { session: "pending" },
   decorators: [

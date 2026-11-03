@@ -41,6 +41,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Default active item with stepper — catalogue price only, no sale or coupon */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_4d5d87e4-5148-4c55-aa62-edfc98802033" },
+  },
   args: {
     item: {
       ...SAMPLE_CART_ITEMS[0],
@@ -66,6 +69,9 @@ export const Default: Story = {
 
 /** Boneyard skeleton loading state while fetching item details */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_b3c3b570-b4f7-4f7d-9b3a-ab052885db5e" },
+  },
   args: {
     loading: true,
   },
@@ -73,6 +79,9 @@ export const Loading: Story = {
 
 /** Shared interaction guard: item actions stay visible but cannot dispatch. */
 export const InteractionPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_e1851ddb-9b53-4663-910c-d691046ae70d" },
+  },
   args: {
     interactionPending: true,
     item: {

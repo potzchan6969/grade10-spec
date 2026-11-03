@@ -53,6 +53,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const ShippedWithLines: Story = {
+  parameters: {
+    verification: { caseId: "vc_e983cb00-44be-4d65-9232-bd4fc1d0c674" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Order #G10-10391")).toBeVisible();
@@ -68,6 +71,9 @@ export const ShippedWithLines: Story = {
 
 /** Three 320px line items overflow the shared 960px frame (minus body padding). */
 export const OverflowingLines: Story = {
+  parameters: {
+    verification: { caseId: "vc_a1a77822-f557-4c40-8c29-0dfbbff5fd5b" },
+  },
   play: async ({ canvasElement }) => {
     const body = canvasElement.querySelector(
       '[data-slot="order-history-card-body"]',
@@ -79,6 +85,9 @@ export const OverflowingLines: Story = {
 };
 
 export const CompletedWithoutTrack: Story = {
+  parameters: {
+    verification: { caseId: "vc_5bfc2735-26b3-48d1-ae6b-8ba31ca865e8" },
+  },
   args: {
     orderId: PAST_COMPLETED.orderId,
     status: PAST_COMPLETED.status,

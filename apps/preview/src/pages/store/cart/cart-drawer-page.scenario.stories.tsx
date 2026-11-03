@@ -156,4 +156,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** A member's cart with an order code applied. */
-export const Scenario: Story = {};
+export const Scenario: Story = {
+  parameters: {
+    verification: { caseId: "vc_1a47ec1a-907c-46bc-9b80-c8f9fed1b1fb" },
+  },
+};

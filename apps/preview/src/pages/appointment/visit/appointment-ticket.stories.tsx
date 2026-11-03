@@ -118,6 +118,9 @@ type Story = StoryObj<typeof meta>;
 
 /** In line: Leave the line asks first, then the ticket says it left. */
 export const Waiting: Story = {
+  parameters: {
+    verification: { caseId: "vc_ecc511f7-7161-49a6-8747-13fd3fe86ed9" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("3rd in line")).toBeVisible();
@@ -134,12 +137,25 @@ export const Waiting: Story = {
   },
 };
 
-export const Next: Story = { args: { state: "next" } };
+export const Next: Story = {
+  parameters: {
+    verification: { caseId: "vc_a05f2d52-ac74-4596-87cd-0e1a1ebfc95a" },
+  },
+  args: { state: "next" },
+};
 
-export const Called: Story = { args: { state: "called" } };
+export const Called: Story = {
+  parameters: {
+    verification: { caseId: "vc_a17cd0ca-c1f0-41b5-9332-fc10e4fd5e11" },
+  },
+  args: { state: "called" },
+};
 
 /** No signal: the last place it knew, and leaving waits for it. */
 export const Offline: Story = {
+  parameters: {
+    verification: { caseId: "vc_54ae3f1c-3c8e-4677-b994-5d56e40b05a2" },
+  },
   args: { state: "offline" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -149,14 +165,44 @@ export const Offline: Story = {
   },
 };
 
-export const Missed: Story = { args: { state: "missed" } };
+export const Missed: Story = {
+  parameters: {
+    verification: { caseId: "vc_96b9a005-50e0-492e-ba0d-79cc06f4b10f" },
+  },
+  args: { state: "missed" },
+};
 
-export const Left: Story = { args: { state: "left" } };
+export const Left: Story = {
+  parameters: {
+    verification: { caseId: "vc_e41b1f8f-733d-455d-b062-6766a672c381" },
+  },
+  args: { state: "left" },
+};
 
-export const Seen: Story = { args: { state: "seen" } };
+export const Seen: Story = {
+  parameters: {
+    verification: { caseId: "vc_79fc88ba-66fe-4448-b46b-ae4a7f8a09f2" },
+  },
+  args: { state: "seen" },
+};
 
-export const Closed: Story = { args: { state: "closed" } };
+export const Closed: Story = {
+  parameters: {
+    verification: { caseId: "vc_50cb8bf0-ae29-48e2-a116-75b2d7dee4b5" },
+  },
+  args: { state: "closed" },
+};
 
-export const Loading: Story = { args: { state: "loading" } };
+export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_3f535112-5320-47b1-8f3c-4a7731e2ee33" },
+  },
+  args: { state: "loading" },
+};
 
-export const NotFound: Story = { args: { state: "notFound" } };
+export const NotFound: Story = {
+  parameters: {
+    verification: { caseId: "vc_4dbb37a7-429f-4fb3-9598-3fbba9eafdc6" },
+  },
+  args: { state: "notFound" },
+};

@@ -16,6 +16,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_aa6aa46e-04a3-4ba8-9fd6-8a09db015e33" },
+  },
   render: () => (
     <Breadcrumbs>
       <BreadcrumbItem href="#home">Home</BreadcrumbItem>
@@ -28,6 +31,9 @@ export const Default: Story = {
 };
 
 export const WithEllipsis: Story = {
+  parameters: {
+    verification: { caseId: "vc_b306752d-624d-46ef-823f-caa64219f13f" },
+  },
   render: () => (
     <Breadcrumbs>
       <BreadcrumbItem href="#home">Home</BreadcrumbItem>
@@ -40,6 +46,9 @@ export const WithEllipsis: Story = {
 };
 
 export const DisabledItem: Story = {
+  parameters: {
+    verification: { caseId: "vc_6caf2577-06ac-4389-a0a5-64a274cbc45f" },
+  },
   render: () => (
     <Breadcrumbs>
       <BreadcrumbItem disabled href="#home">

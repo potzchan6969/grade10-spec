@@ -52,27 +52,48 @@ const pictureActions: Story["play"] = async ({ canvasElement, args }) => {
 };
 
 export const Picture: Story = {
+  parameters: {
+    verification: { caseId: "vc_d57ebcd4-c56a-4e02-8ae5-f1c24a787f6e" },
+  },
   args: { item: PICTURE_CART_ITEM },
   play: pictureActions,
 };
 export const PictureWithoutAlt: Story = {
+  parameters: {
+    verification: { caseId: "vc_385c65e9-717d-498b-8d60-5fe2e3170eaf" },
+  },
   args: { item: { ...PICTURE_CART_ITEM, imageAlt: undefined } },
 };
 export const PictureWithEmptyAlt: Story = {
+  parameters: {
+    verification: { caseId: "vc_dc3923c6-5734-4eea-bb63-b5697af6a96b" },
+  },
   args: { item: { ...PICTURE_CART_ITEM, imageAlt: "" } },
 };
 export const PictureWithWhitespaceAlt: Story = {
+  parameters: {
+    verification: { caseId: "vc_84a971c4-616c-4ca6-a494-679580d35e20" },
+  },
   args: { item: { ...PICTURE_CART_ITEM, imageAlt: "  " } },
 };
 export const WithoutPicture: Story = {
+  parameters: {
+    verification: { caseId: "vc_5e3d93dc-57ed-47ea-8457-694a1867d089" },
+  },
   args: { item: { ...PICTURE_CART_ITEM, imageSrc: undefined } },
   play: pictureActions,
 };
 export const EmptyPictureSource: Story = {
+  parameters: {
+    verification: { caseId: "vc_90a6cecd-5819-4705-b942-f8f240cde786" },
+  },
   args: { item: { ...PICTURE_CART_ITEM, imageSrc: "" } },
   play: pictureActions,
 };
 export const SoldOutPicture: Story = {
+  parameters: {
+    verification: { caseId: "vc_f2cef7d7-5f88-484e-865a-f60f9a3ed3c9" },
+  },
   args: { item: { ...PICTURE_CART_ITEM, status: "soldOut" } },
   play: pictureActions,
 };

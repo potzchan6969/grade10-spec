@@ -20,6 +20,9 @@ type Story = StoryObj<typeof meta>;
 /** A gift, confirming: the hero image, the deadline badge, the use-at and
  * valid-for rows, and the balance before and after. */
 export const ItemConfirm: Story = {
+  parameters: {
+    verification: { caseId: "vc_71843cbf-2fa2-49db-8031-474bd2aeb2eb" },
+  },
   args: { reward: ITEM },
   play: async ({ args }) => {
     const canvas = sheet();
@@ -39,6 +42,9 @@ export const ItemConfirm: Story = {
 
 /** A coupon, confirming: the gift tile hero and the longer validity. */
 export const CouponConfirm: Story = {
+  parameters: {
+    verification: { caseId: "vc_b8ca426f-95f9-4b38-b5a9-29ee9fc96afc" },
+  },
   args: { reward: COUPON },
   play: async () => {
     const canvas = sheet();
@@ -53,6 +59,9 @@ export const CouponConfirm: Story = {
 
 /** A short balance names the deficit in the warning tone and refuses whole. */
 export const InsufficientBalance: Story = {
+  parameters: {
+    verification: { caseId: "vc_00c879af-f97b-44fa-9cfe-dd1d83fd59bd" },
+  },
   args: { reward: COUPON, balance: 10 },
   play: async () => {
     const canvas = sheet();
@@ -70,6 +79,9 @@ export const InsufficientBalance: Story = {
 /** While the redemption settles the button goes busy — a leading spinner,
  * presses ignored — before the surface swaps to the redeemed phase. */
 export const Redeeming: Story = {
+  parameters: {
+    verification: { caseId: "vc_45744f6b-9a72-4d6b-bfd7-cbfb9272df79" },
+  },
   args: { reward: COUPON, pending: true },
   play: async () => {
     const canvas = sheet();
@@ -83,6 +95,9 @@ export const Redeeming: Story = {
  * the refusal message is raised outside it (the consumer's toast; see the
  * screen-level SoldOut story). */
 export const RedemptionFailed: Story = {
+  parameters: {
+    verification: { caseId: "vc_1b050443-74fc-456a-9d62-0debcf984c10" },
+  },
   args: { reward: COUPON },
   render: function RefusalCloses(args: RewardCheckoutProps) {
     const [open, setOpen] = useState(true);

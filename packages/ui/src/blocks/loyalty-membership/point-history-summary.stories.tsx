@@ -27,6 +27,9 @@ type Story = StoryObj<typeof meta>;
 /** Earned reads success, Used stays neutral, Pending warns — the same
  * tones the ledger's deltas read. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_08026429-617c-466a-8de6-fb550fc5cf23" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Earned")).toBeInTheDocument();
@@ -38,6 +41,9 @@ export const Default: Story = {
 
 /** Nothing yet: the box still holds its place at zero. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_dcac8a5b-6a45-4f26-bd98-c4a34cdfcd50" },
+  },
   args: { totals: { earned: 0, used: 0, pending: 0 } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

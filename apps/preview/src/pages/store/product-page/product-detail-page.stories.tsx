@@ -81,6 +81,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_694bb4b1-3473-4aef-86e1-2d5cd13dddaa" },
+  },
   args: { product: PRODUCT_DETAIL_PRODUCT },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -107,11 +110,17 @@ export const Default: Story = {
 };
 
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_8105cf2c-d070-4f97-b073-a78db643319b" },
+  },
   args: { product: PRODUCT_DETAIL_PRODUCT },
   globals: { viewport: { value: "mobile1" } },
 };
 
 export const NoMedia: Story = {
+  parameters: {
+    verification: { caseId: "vc_1111cea8-4a0c-4c69-9b88-a9e9106f482a" },
+  },
   args: { product: { ...PRODUCT_DETAIL_PRODUCT, images: [] } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -122,6 +131,9 @@ export const NoMedia: Story = {
 };
 
 export const SoldOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_c928e402-5fa4-4c2c-be11-50fd4bbdd7a0" },
+  },
   args: { product: SOLD_OUT_PRODUCT },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -132,6 +144,9 @@ export const SoldOut: Story = {
 
 /** The description opens in place, and Show less folds it again. */
 export const DescriptionExpanded: Story = {
+  parameters: {
+    verification: { caseId: "vc_85490f9c-49f1-4d8d-ba38-b68fb13a0c09" },
+  },
   args: { product: PRODUCT_DETAIL_PRODUCT },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -144,6 +159,9 @@ export const DescriptionExpanded: Story = {
 
 /** Add to cart waits while the add runs, then the cart drawer opens with the card and the stepper resets. */
 export const AddQuantityPendingThenDrawerOpens: Story = {
+  parameters: {
+    verification: { caseId: "vc_7839d9ef-1026-40c8-b237-ee558dad9d01" },
+  },
   args: { product: PRODUCT_DETAIL_PRODUCT },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -162,6 +180,9 @@ export const AddQuantityPendingThenDrawerOpens: Story = {
 
 /** An address with no product: a not-found page that sends the collector back to the listing. */
 export const UnknownProductAddress: Story = {
+  parameters: {
+    verification: { caseId: "vc_30cd1af1-d009-49ea-9fa0-5a2f04c4fc06" },
+  },
   args: { product: null },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -180,6 +201,9 @@ export const UnknownProductAddress: Story = {
 
 /** The rail under the card: its picks, one sold out, each tile opening its own page. */
 export const WithYouMayAlsoLike: Story = {
+  parameters: {
+    verification: { caseId: "vc_8e5b688e-ecf1-4639-aca3-a27e8ddb02b0" },
+  },
   args: { product: PRODUCT_DETAIL_PRODUCT, related: RELATED_PRODUCTS },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

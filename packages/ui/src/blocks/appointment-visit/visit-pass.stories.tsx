@@ -16,6 +16,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Before the day: a compact card, who the visit is for, no code and no QR. */
 export const Booked: Story = {
+  parameters: {
+    verification: { caseId: "vc_0c441bbb-affc-48be-ac1c-2cc415931b9f" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("region", { name: VISIT_NAME })).toBeVisible();
@@ -30,6 +33,9 @@ export const Booked: Story = {
 
 /** On the day: centred and large, held up at the counter. */
 export const Today: Story = {
+  parameters: {
+    verification: { caseId: "vc_a8564122-8733-494a-ab46-bc9294ab37b1" },
+  },
   args: {
     size: "day",
     copy: {
@@ -41,6 +47,9 @@ export const Today: Story = {
 
 /** Called: the counter sits under the name, and the hold under the visit. */
 export const Called: Story = {
+  parameters: {
+    verification: { caseId: "vc_9f1a3998-5ef5-4d9f-a85f-0494a8ed3690" },
+  },
   args: {
     size: "day",
     copy: {

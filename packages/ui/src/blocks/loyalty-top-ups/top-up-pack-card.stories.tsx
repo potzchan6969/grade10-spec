@@ -58,6 +58,9 @@ type Story = StoryObj<typeof meta>;
 /** The dialog's tiles: an undiscounted pack, a discounted one, and a
  * discounted one picked — media box, count, bonus line, price, no ring. */
 export const Pack: Story = {
+  parameters: {
+    verification: { caseId: "vc_9fcbed58-c2c1-454b-8324-3ae806681540" },
+  },
   render: (args: TopUpPackCardProps) => (
     <PackList className={GRID} selected={args.value}>
       <TopUpPackCard
@@ -95,6 +98,9 @@ export const Pack: Story = {
 /** Over the day's limit: dimmed, aria-disabled, and the reason is in the
  * radio's accessible name and behind the warning icon's tooltip. */
 export const OverLimit: Story = {
+  parameters: {
+    verification: { caseId: "vc_937a4f30-66e9-4c65-b2d8-5b55c4d984d9" },
+  },
   name: "Over Limit",
   args: { disabled: true },
   render: (args: TopUpPackCardProps) => (
@@ -113,6 +119,9 @@ export const OverLimit: Story = {
 
 /** The drawer's rows: points and bonus lead, the price and the ring trail. */
 export const Small: Story = {
+  parameters: {
+    verification: { caseId: "vc_79a6b640-c302-48e5-a251-663a9c1b5c83" },
+  },
   args: { viewport: "small" },
   render: (args: TopUpPackCardProps) => (
     <PackList selected={args.value}>
@@ -156,6 +165,9 @@ export const Small: Story = {
 
 /** The drawer's row over the day's limit: same dimming, same reason. */
 export const OverLimitSmall: Story = {
+  parameters: {
+    verification: { caseId: "vc_e8266146-ab4c-4e63-8c47-550d8c8180a8" },
+  },
   name: "Over Limit Small",
   args: { disabled: true, viewport: "small" },
   render: (args: TopUpPackCardProps) => (

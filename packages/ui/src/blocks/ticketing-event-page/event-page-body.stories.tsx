@@ -29,6 +29,9 @@ const onContinue = fn();
 /** Early bird with three tickets chosen: struck prices on every row and
  * line, the Fast Pass prompt, and the saving under the total. */
 export const EarlyBird: Story = {
+  parameters: {
+    verification: { caseId: "vc_29a1f85f-a33d-4850-8962-f249e4567908" },
+  },
   name: "Early Bird",
   render: () => (
     <EventPageDemo choice={CHOSEN} mode="earlyBird" onContinue={onContinue} />
@@ -63,6 +66,9 @@ export const EarlyBird: Story = {
 
 /** On sale at full price, nothing chosen: no struck prices, Continue waits. */
 export const OnSale: Story = {
+  parameters: {
+    verification: { caseId: "vc_0d39711d-a961-4fbd-99b0-0515f7b7a2a5" },
+  },
   name: "On Sale",
   render: () => <EventPageDemo mode="onSale" />,
   play: async ({ canvasElement }) => {
@@ -83,6 +89,9 @@ export const OnSale: Story = {
 /** Before the public sale: each pass shows when it goes on sale and a
  * countdown, with no steppers. */
 export const NotStarted: Story = {
+  parameters: {
+    verification: { caseId: "vc_34cb4c6c-6994-424c-96e9-4177a5a07292" },
+  },
   name: "Not Started",
   render: () => <EventPageDemo mode="notStarted" />,
   play: async ({ canvasElement }) => {
@@ -99,6 +108,9 @@ export const NotStarted: Story = {
 
 /** Day 2 of the event: two-day passes ended, the One-Day pass sells today. */
 export const EventDay2: Story = {
+  parameters: {
+    verification: { caseId: "vc_1f735e4a-30e0-4e31-84b8-8fd274e540dd" },
+  },
   name: "Event Day 2",
   render: () => <EventPageDemo mode="eventDay2" />,
   play: async ({ canvasElement }) => {
@@ -113,6 +125,9 @@ export const EventDay2: Story = {
 
 /** The event is over: every pass ended, no order, no sign-in hints. */
 export const Ended: Story = {
+  parameters: {
+    verification: { caseId: "vc_3505c819-3783-417f-8909-f289decd5abf" },
+  },
   render: () => <EventPageDemo mode="eventOver" />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -127,6 +142,9 @@ export const Ended: Story = {
 
 /** A canceled event: the refund notice, no passes. */
 export const Canceled: Story = {
+  parameters: {
+    verification: { caseId: "vc_da6fd651-4bb1-4efd-8682-44c970f13dd8" },
+  },
   render: () => <EventPageDemo mode="canceled" />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -138,6 +156,9 @@ export const Canceled: Story = {
 
 /** Signed in, holding tickets, with an early-access pass open to them. */
 export const SignedIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_bfceec3f-451a-4d82-9908-46a2b8bad3f0" },
+  },
   name: "Signed In",
   render: () => (
     <EventPageDemo

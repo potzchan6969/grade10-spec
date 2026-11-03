@@ -26,12 +26,18 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_9830466e-31b1-49a7-a3e6-9101fa516dd0" },
+  },
   args: {
     results: { status: "loading" },
   },
 };
 
 export const Ready: Story = {
+  parameters: {
+    verification: { caseId: "vc_09e6c874-a73f-4899-9ba1-40a46992962f" },
+  },
   args: {
     results: { status: "ready", data: PRODUCTS },
   },
@@ -41,6 +47,9 @@ export const Ready: Story = {
 };
 
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_98687b37-dd18-4d00-a10c-49cf446e89df" },
+  },
   args: {
     results: {
       status: "empty",
@@ -66,6 +75,9 @@ export const Empty: Story = {
  * entrance may not be waiting on anything a re-render can take away.
  */
 export const RerenderDuringEntrance: Story = {
+  parameters: {
+    verification: { caseId: "vc_485b6e56-3738-435f-b7bc-be6d9b081941" },
+  },
   args: { results: { status: "loading" } },
   render: function Rerendering(args) {
     const [ready, setReady] = useState(false);

@@ -33,6 +33,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Activating a service reports its id; the picker marks nothing on its own. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_88773cea-f1a8-4e30-b78d-075923456d88" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Grading Submission")).toBeVisible();
@@ -46,6 +49,9 @@ export const Default: Story = {
 };
 
 export const Selected: Story = {
+  parameters: {
+    verification: { caseId: "vc_e02275ed-0b13-453c-be3b-5135caad55eb" },
+  },
   args: { selectedId: "svc_grading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -61,6 +67,9 @@ export const Selected: Story = {
 /** A fresh pick reports once; picking the ticked service again reports again,
  * so Back then Continue is never stuck. */
 export const Repick: Story = {
+  parameters: {
+    verification: { caseId: "vc_bdc8ac79-5c9e-4020-acfc-f4ab5fe07546" },
+  },
   args: { selectedId: "svc_grading" },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -78,10 +87,16 @@ export const Repick: Story = {
 };
 
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_17813516-81ba-4a2f-9416-1c7125533866" },
+  },
   args: { services: { status: "loading" } },
 };
 
 export const Failed: Story = {
+  parameters: {
+    verification: { caseId: "vc_f49eca97-a8c8-40e7-a043-58f427ebfc4d" },
+  },
   args: {
     services: {
       status: "error",
@@ -101,6 +116,9 @@ export const Failed: Story = {
 /** One group of the step under its quieter heading: who each service suits,
  * what a paid one charges, and its price and bring lines under the rule. */
 export const GradingGroup: Story = {
+  parameters: {
+    verification: { caseId: "vc_678afeaa-64fa-41b8-9e36-43d5da6f2fa3" },
+  },
   args: {
     copy: { title: "Grading" },
     heading: "group",
@@ -131,6 +149,9 @@ export const GradingGroup: Story = {
 };
 
 export const VaultGroup: Story = {
+  parameters: {
+    verification: { caseId: "vc_d5c410c2-d1a9-4766-86d8-d8f29075fef0" },
+  },
   args: {
     copy: { title: "Vault" },
     heading: "group",

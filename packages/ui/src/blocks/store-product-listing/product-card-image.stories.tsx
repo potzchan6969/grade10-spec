@@ -156,6 +156,9 @@ function expectAsSupplied(canvasElement: HTMLElement, opacity: string) {
  * edges of a square well that clips to its rounded corners, unblended.
  */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_293495a9-c41b-4779-870d-4ae7ecc0217e" },
+  },
   decorators: well,
   play: async ({ canvasElement }) => {
     const slot = canvasElement.querySelector(
@@ -182,6 +185,9 @@ export const Default: Story = {
 /** Scenario: shared-ui-store-product-listing-SC-64 - An on-sale photo is
  * drawn as supplied. */
 export const Sale: Story = {
+  parameters: {
+    verification: { caseId: "vc_b3c0a24f-f403-4420-89bb-638c0d33ca29" },
+  },
   args: { discounted: true },
   decorators: well,
   play: async ({ canvasElement }) => {
@@ -194,6 +200,9 @@ export const Sale: Story = {
 /** Scenario: shared-ui-store-product-listing-SC-64a - A sold-out photo takes
  * the sold-out treatment unblended. */
 export const SoldOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_9b53490d-9e17-48a8-8ddd-94d381bb66db" },
+  },
   args: { soldOut: true },
   decorators: well,
   play: async ({ canvasElement }) => {
@@ -210,6 +219,9 @@ export const SoldOut: Story = {
 /** Scenario: shared-ui-store-product-listing-SC-64 - An in-cart photo is
  * drawn as supplied. */
 export const InCart: Story = {
+  parameters: {
+    verification: { caseId: "vc_f242365b-11ba-4972-9873-73a18f1a17f0" },
+  },
   args: { inCart: true, cartCount: "1" },
   decorators: well,
   play: async ({ canvasElement }) => {
@@ -227,6 +239,9 @@ export const InCart: Story = {
  * each whole, centred, meeting the well's two edges along its longer side.
  */
 export const NonSquarePhoto: Story = {
+  parameters: {
+    verification: { caseId: "vc_74d72c65-6efb-481c-8d85-1f93cf09c145" },
+  },
   name: "Non Square Photo",
   render: (args) => (
     <div className="flex flex-wrap items-start gap-6">
@@ -256,6 +271,9 @@ export const NonSquarePhoto: Story = {
 };
 
 export const NoImage: Story = {
+  parameters: {
+    verification: { caseId: "vc_6daa885c-967b-4f92-b9a3-bcd952cc47d3" },
+  },
   args: { imageSrc: undefined },
   decorators: well,
   play: async ({ canvasElement }) => {
@@ -265,6 +283,9 @@ export const NoImage: Story = {
 
 /** Keyboard focus reveals the cart control and activating it reports quantity 1. */
 export const KeyboardRevealsCart: Story = {
+  parameters: {
+    verification: { caseId: "vc_9e0e0302-a12a-4712-9895-c949cac76a7c" },
+  },
   args: { onCartQuantityChange: fn() },
   decorators: well,
   play: async ({ args, canvasElement }) => {
@@ -288,6 +309,7 @@ export const KeyboardRevealsCart: Story = {
 export const NarrowViewportCartVisible: Story = {
   args: { onCartQuantityChange: fn(), name: "Ninja Spinner booster box" },
   parameters: {
+    verification: { caseId: "vc_932e427a-324b-401b-8712-e1a23b4fec28" },
     viewport: { defaultViewport: "mobile1" },
   },
   decorators: well,
@@ -307,6 +329,9 @@ export const NarrowViewportCartVisible: Story = {
  * on focus. The tile itself still activates.
  */
 export const DoesNotSell: Story = {
+  parameters: {
+    verification: { caseId: "vc_6be2fcc6-e2b8-43df-bc84-cfd04fb1c2c8" },
+  },
   args: {
     copy: { soldOut: "SOLD OUT", sale: "SALE" },
     name: "Ninja Spinner booster box",
@@ -341,6 +366,9 @@ export const DoesNotSell: Story = {
  * that opens keeps its treatment unblended. The image applies the tile's
  * rule: sold out, given a handler and no cart handler, it opens. */
 export const SoldOutWithHandler: Story = {
+  parameters: {
+    verification: { caseId: "vc_257ecc79-b86c-459c-aa4c-b78f483f1073" },
+  },
   args: {
     copy: { soldOut: "SOLD OUT", sale: "SALE" },
     name: "Ninja Spinner booster box",
@@ -368,6 +396,9 @@ export const SoldOutWithHandler: Story = {
  * opens by the tile's rule, as its own stop: Tab lands on the one control
  * named for the product, and Enter reports once. */
 export const OpensAlone: Story = {
+  parameters: {
+    verification: { caseId: "vc_bfa7c504-30e6-458f-ad8e-f282952c1d2f" },
+  },
   args: { name: "Ninja Spinner booster box", onClick: fn() },
   decorators: well,
   play: async ({ args, canvasElement }) => {
@@ -389,6 +420,9 @@ export const OpensAlone: Story = {
  * sold out where it sells, stays inert: pressing the photo reports nothing,
  * and no link or button is drawn. */
 export const SoldOutWhereItSells: Story = {
+  parameters: {
+    verification: { caseId: "vc_53365e47-4c3f-47a7-b49a-f2021119a529" },
+  },
   args: {
     copy: { soldOut: "SOLD OUT", sale: "SALE" },
     name: "Ninja Spinner booster box",

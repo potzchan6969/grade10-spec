@@ -40,6 +40,9 @@ const well: Decorator[] = [
 
 /** Figma `soldOut=false` — available product at list price. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_eb0e5c27-bfb5-4748-87d4-e4f8f1b4a606" },
+  },
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -54,6 +57,9 @@ export const Default: Story = {
 
 /** Strikethrough original price and SALE badge when a discount is supplied. */
 export const OnSale: Story = {
+  parameters: {
+    verification: { caseId: "vc_fefca711-91e5-49cc-8229-a3a2846538b2" },
+  },
   args: { originalPrice: "HK$123" },
   decorators: well,
   play: async ({ canvasElement }) => {
@@ -160,6 +166,9 @@ async function pressLink(
  * link and no button; pressing the name and the photo reports nothing, and
  * the dim photo takes no hover. */
 export const SoldOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_2e17daef-d95d-46cc-8c8e-416d564ae688" },
+  },
   args: {
     soldOut: true,
     href: "/store/products/abyss-eye-booster-box",
@@ -186,6 +195,9 @@ export const SoldOut: Story = {
  * control; the cart control is still there, and the name takes no underline
  * and no focus. */
 export const Inert: Story = {
+  parameters: {
+    verification: { caseId: "vc_57484e9b-b0eb-4b68-a815-4ad5088c06d8" },
+  },
   args: { onClick: undefined, href: undefined, onCartQuantityChange: fn() },
   decorators: well,
   play: async ({ canvasElement }) => {
@@ -209,6 +221,9 @@ export const Inert: Story = {
  * address alone is a link. The name is the one link named for the product,
  * to that address, and the photo's link carries the same address. */
 export const AddressOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_8aa9f906-c2fa-4955-800f-f0db0069fbdb" },
+  },
   args: {
     onClick: undefined,
     href: "/store/products/abyss-eye-booster-box",
@@ -230,6 +245,9 @@ export const AddressOnly: Story = {
  * open, on a tile that does not sell: Tab stops on the name alone, no cart
  * control is drawn, and Enter on the name reports once. */
 export const NamedOnceNotSelling: Story = {
+  parameters: {
+    verification: { caseId: "vc_47b712f0-add8-440a-acb1-4b44cc53ee00" },
+  },
   args: { onClick: fn(), onCartQuantityChange: undefined },
   decorators: well,
   play: async ({ args, canvasElement }) => {
@@ -250,12 +268,18 @@ export const NamedOnceNotSelling: Story = {
 
 /** Figma `inCart=true` — cart control with the supplied count. */
 export const InCart: Story = {
+  parameters: {
+    verification: { caseId: "vc_45c84e9b-e6e3-4fd7-993e-36071a764f61" },
+  },
   args: { inCart: true, cartCount: "1" },
   decorators: well,
 };
 
 /** The rungs Figma draws, at the designed 260px width. */
 export const States: Story = {
+  parameters: {
+    verification: { caseId: "vc_caf8ac90-5f04-49bd-8f1b-64939066c4c1" },
+  },
   render: (args) => (
     <div className="flex items-start gap-10">
       <div className="w-[260px]">
@@ -273,6 +297,9 @@ export const States: Story = {
 
 /** Set annotation: quantity on the cart button when already in the cart. */
 export const AddedToCart: Story = {
+  parameters: {
+    verification: { caseId: "vc_76b7bc46-16df-4f03-a5b5-c013a5361531" },
+  },
   args: { inCart: true, cartCount: "3" },
   decorators: well,
   play: async ({ canvasElement }) => {
@@ -283,6 +310,9 @@ export const AddedToCart: Story = {
 
 /** Boneyard capture target — keep `loading` at Figma's 260px card width. */
 export const BoneyardCapture: Story = {
+  parameters: {
+    verification: { caseId: "vc_71efeec1-4191-47d1-99e5-273148166ff7" },
+  },
   args: { loading: true, name: "", price: "" },
   decorators: well,
 };
@@ -298,6 +328,9 @@ export const BoneyardCapture: Story = {
  * underlined on hover and on keyboard focus, never at rest.
  */
 export const NamedOnce: Story = {
+  parameters: {
+    verification: { caseId: "vc_b26e7d95-47f6-482f-9502-6ce508b7cfb8" },
+  },
   decorators: well,
   args: { onCartQuantityChange: () => {}, onClick: fn() },
   play: async ({ args, canvasElement }) => {
@@ -337,6 +370,9 @@ export const NamedOnce: Story = {
  * exposed as unavailable.
  */
 export const AtCartMaximum: Story = {
+  parameters: {
+    verification: { caseId: "vc_8c4d2f43-4b6d-4751-a846-75cbe69c4345" },
+  },
   args: {
     inCart: true,
     cartCount: "2",
@@ -365,6 +401,9 @@ export const AtCartMaximum: Story = {
  * control counts on.
  */
 export const BelowCartMaximum: Story = {
+  parameters: {
+    verification: { caseId: "vc_2a07ea63-e8f2-42cc-a63e-fa6eff81a1b0" },
+  },
   args: {
     inCart: true,
     cartCount: "1",
@@ -391,6 +430,9 @@ export const BelowCartMaximum: Story = {
  * the control keeps a ceiling of none.
  */
 export const NoCartMaximum: Story = {
+  parameters: {
+    verification: { caseId: "vc_e44a1a13-9fca-4fa7-ac48-c761c8177f96" },
+  },
   args: {
     inCart: true,
     cartCount: "3",
@@ -419,6 +461,9 @@ export const NoCartMaximum: Story = {
  * the maximum, so a shopper who reaches it can go back down.
  */
 export const DecrementAtCartMaximum: Story = {
+  parameters: {
+    verification: { caseId: "vc_e878f7fe-7584-4da5-a749-909ddac47753" },
+  },
   args: {
     inCart: true,
     cartCount: "2",
@@ -445,6 +490,9 @@ export const DecrementAtCartMaximum: Story = {
  * displayed as supplied, in the consumer's own words.
  */
 export const RemainingCount: Story = {
+  parameters: {
+    verification: { caseId: "vc_66b177a8-f618-4dba-a28e-9c45e3c2a27f" },
+  },
   args: { remainingLabel: "Only 3 left" },
   decorators: well,
   play: async ({ canvasElement }) => {
@@ -457,6 +505,9 @@ export const RemainingCount: Story = {
 /** A refused cart change: the control holds the cart's quantity and the tile
  * says why beneath it, still pressable. */
 export const CartRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_2bac73ef-be33-4977-ae6c-99a3d966d388" },
+  },
   args: {
     inCart: true,
     cartCount: "2",
@@ -479,6 +530,9 @@ export const CartRefused: Story = {
  * listing card communicates availability without exposing a remaining count.
  */
 export const NoRemainingCount: Story = {
+  parameters: {
+    verification: { caseId: "vc_7b84806d-d77c-4dba-83a7-991138451647" },
+  },
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -491,6 +545,9 @@ export const NoRemainingCount: Story = {
  * can rise past the shop's count without a tile-imposed ceiling.
  */
 export const QuantityBeyondBrowseCount: Story = {
+  parameters: {
+    verification: { caseId: "vc_585b7a0a-bb71-409d-9788-c21871c7f393" },
+  },
   args: {
     inCart: true,
     cartCount: "4",
@@ -515,6 +572,9 @@ export const QuantityBeyondBrowseCount: Story = {
  * nothing about what is left, because there is nothing left to run out of.
  */
 export const SoldOutWithRemainingCount: Story = {
+  parameters: {
+    verification: { caseId: "vc_4a042f4c-6441-4f33-8ede-dda5d643ff29" },
+  },
   args: { soldOut: true, remainingLabel: "Only 3 left" },
   decorators: well,
   play: async ({ canvasElement }) => {
@@ -531,6 +591,9 @@ export const SoldOutWithRemainingCount: Story = {
  * suite's grade10-site-store-cross-sell-US1-TC6-1 credits this story with a
  * sold-out pick's place, its words and its activation. */
 export const SoldOutOpensWhereNothingSells: Story = {
+  parameters: {
+    verification: { caseId: "vc_46dfed47-45d8-466e-a44a-80d5d8460948" },
+  },
   args: {
     soldOut: true,
     onClick: fn(),
@@ -562,6 +625,9 @@ export const SoldOutOpensWhereNothingSells: Story = {
  * and the link's own navigation gives way to it; a press with a modifier key
  * on either link is the browser's and reports nothing. */
 export const OpensAsALink: Story = {
+  parameters: {
+    verification: { caseId: "vc_b2b9f843-d87a-4ecb-b97f-6d8191c0dca4" },
+  },
   args: {
     href: "/store/products/abyss-eye-booster-box",
     onClick: fn(),
@@ -597,6 +663,9 @@ export const OpensAsALink: Story = {
 /** A sold-out tile given its address on a surface that does not sell: both
  * links open it, and its dim photo grows on hover like an available one. */
 export const SoldOutOpensAsALink: Story = {
+  parameters: {
+    verification: { caseId: "vc_2e820c95-7d5f-4eea-befc-9f1ff6cfcacc" },
+  },
   args: {
     soldOut: true,
     href: "/store/products/abyss-eye-booster-box",
@@ -622,6 +691,9 @@ export const SoldOutOpensAsALink: Story = {
 /** shared-ui-store-product-listing-SC-92: a tile drawn without a cart control
  * needs no cart words. */
 export const NoCartWords: Story = {
+  parameters: {
+    verification: { caseId: "vc_d9f8c6b9-df08-489c-844f-85573ea02dc9" },
+  },
   args: { copy: {}, onCartQuantityChange: undefined },
   decorators: well,
   play: async ({ canvasElement }) => {

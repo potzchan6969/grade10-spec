@@ -20,6 +20,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Signed out over a product: the address step, the send disabled until an address is typed. */
 export const EmailStep: Story = {
+  parameters: {
+    verification: { caseId: "vc_9f42739f-5a63-4057-91e2-43d24bb16147" },
+  },
   name: "Email step",
   play: async () => {
     const body = within(document.body);
@@ -34,6 +37,9 @@ export const EmailStep: Story = {
 
 /** The send in flight: the address stays, and the send action is busy. */
 export const Sending: Story = {
+  parameters: {
+    verification: { caseId: "vc_79720811-8574-4473-9cd7-25aac5a5be4e" },
+  },
   args: { step: "sending", email: SIGN_IN_EMAIL },
   play: async () => {
     const body = within(document.body);
@@ -45,6 +51,9 @@ export const Sending: Story = {
 
 /** The link is sent: the confirmation with the address, and Resend waiting. */
 export const CheckYourEmail: Story = {
+  parameters: {
+    verification: { caseId: "vc_eb7a8e62-b405-4a7e-b73f-91c85b1728be" },
+  },
   name: "Check your email",
   args: { step: "sent", email: SIGN_IN_EMAIL, cooldown: 0 },
   play: async () => {
@@ -61,6 +70,9 @@ export const CheckYourEmail: Story = {
 
 /** Resend is off for the wait after a send, and counts down in seconds. */
 export const ResendCountdown: Story = {
+  parameters: {
+    verification: { caseId: "vc_e390e08f-1855-4e0f-910a-704b3dbd9ed0" },
+  },
   name: "Resend countdown",
   args: { step: "sent", email: SIGN_IN_EMAIL, cooldown: 45 },
   play: async () => {
@@ -71,6 +83,9 @@ export const ResendCountdown: Story = {
 
 /** Opened from Add to Cart: the same dialog, titled for the action that asked. */
 export const FromAddToCart: Story = {
+  parameters: {
+    verification: { caseId: "vc_b5197c11-0416-49b8-aa37-561b17a588b9" },
+  },
   name: "From add to cart",
   args: { fromCart: true },
   play: async () => {

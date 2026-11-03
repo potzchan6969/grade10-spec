@@ -33,6 +33,9 @@ type Story = StoryObj<typeof meta>;
 
 /** A line that sold out after it was added keeps its row, marked Sold Out, and leaves the count. */
 export const SoldOutLine: Story = {
+  parameters: {
+    verification: { caseId: "vc_95240793-c2bf-4eef-bd2f-c1ee2a511edd" },
+  },
   args: { items: SOLD_OUT_ITEMS },
   play: () => {
     const canvas = drawer();
@@ -42,7 +45,10 @@ export const SoldOutLine: Story = {
 
 /** The shop filled fewer than the shopper asked for: the line reads adjusted, with the warning. */
 export const QuantityAdjusted: Story = {
-  parameters: { journeys: ["grade10-site-store-checkout-US-02"] },
+  parameters: {
+    verification: { caseId: "vc_ce2384bc-0eb7-4aac-b860-c6ae80c64965" },
+    journeys: ["grade10-site-store-checkout-US-02"],
+  },
   args: {
     items: ADJUSTED_ITEMS,
     subtotal: "HK$40,400.00",
@@ -58,6 +64,9 @@ export const QuantityAdjusted: Story = {
 
 /** Lines on the site sale show the sale price with the list price struck through. */
 export const SiteSaleOnLines: Story = {
+  parameters: {
+    verification: { caseId: "vc_5a40da46-68f5-4020-829d-40bda5abaf32" },
+  },
   args: {
     items: SITE_SALE_ITEMS,
     subtotal: SITE_SALE_SUBTOTAL,
@@ -72,6 +81,9 @@ export const SiteSaleOnLines: Story = {
 
 /** A delisted line is cleared by the open-time read; the rest stay and one toast names it. */
 export const UnavailableLinesRemoved: Story = {
+  parameters: {
+    verification: { caseId: "vc_7e289ec2-6b9e-40b3-8ea8-c022930f5855" },
+  },
   args: { items: DELISTED_ITEMS, delistOnOpen: true },
   play: async () => {
     const body = within(document.body);

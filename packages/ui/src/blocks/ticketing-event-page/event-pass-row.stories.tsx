@@ -51,6 +51,9 @@ function Picking({ max = 8 }: { max?: number }) {
 /** Wide: the struck full price and the early-bird price beside the stepper,
  * which has no visible label. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_f8fe3bf6-35a4-4015-8ab4-286c18f8f482" },
+  },
   render: () => <Picking />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -67,6 +70,9 @@ export const Default: Story = {
 
 /** On a phone: the price moves under the label and the stepper narrows. */
 export const Phone: Story = {
+  parameters: {
+    verification: { caseId: "vc_eec66fc4-a306-4f9e-9dfc-d98a94cd605d" },
+  },
   decorators: [
     (Story) => (
       <div className="w-[326px]">
@@ -86,6 +92,9 @@ export const Phone: Story = {
 
 /** At the limit: the + stops. */
 export const AtTheLimit: Story = {
+  parameters: {
+    verification: { caseId: "vc_ebb312a4-9fa4-4a3e-8532-470abcce0f02" },
+  },
   name: "At the Limit",
   render: () => <Picking max={2} />,
   play: async ({ canvasElement }) => {
@@ -98,6 +107,9 @@ export const AtTheLimit: Story = {
 
 /** Sales ended: the price in grey and no stepper. */
 export const Ended: Story = {
+  parameters: {
+    verification: { caseId: "vc_9bd65345-68a2-47d8-8be1-99010dec62ee" },
+  },
   args: { price: { price: "HK$480.00", muted: true } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -71,6 +71,9 @@ function LiveFastPass(props: DoorAnswerProps) {
 
 /** Let in, with Fast Pass uses left: Use Fast Pass, and Undo for 10 s. */
 export const FastPassLeft: Story = {
+  parameters: {
+    verification: { caseId: "vc_16936125-340c-4077-864b-b1c6a555dc9b" },
+  },
   name: "Fast Pass left",
   render: (args) => <LiveFastPass {...args} />,
   play: async ({ canvasElement }) => {
@@ -94,6 +97,9 @@ export const FastPassLeft: Story = {
 
 /** The Fast Pass use is spent on this entry; Undo Fast Pass gives it back. */
 export const FastPassUsed: Story = {
+  parameters: {
+    verification: { caseId: "vc_e1dc5626-0353-4e67-bf0e-8fe427ea0b24" },
+  },
   name: "Fast Pass used",
   args: {
     fastPass: { state: "used", label: "Fast Pass used · 1 left" },
@@ -118,6 +124,9 @@ export const FastPassUsed: Story = {
 
 /** VIP: Fast Pass comes with every day, but the door still chooses to use it. */
 export const Vip: Story = {
+  parameters: {
+    verification: { caseId: "vc_b735f095-b36c-45f1-a746-a68df51f4283" },
+  },
   name: "VIP",
   args: {
     fastPass: { state: "available", label: "Fast Pass: included today" },
@@ -139,6 +148,9 @@ export const Vip: Story = {
 
 /** No Fast Pass on this ticket: a quiet line and no button. */
 export const WithoutFastPass: Story = {
+  parameters: {
+    verification: { caseId: "vc_b6757fdd-7958-400c-93bd-ae8fe45d4810" },
+  },
   name: "Without Fast Pass",
   args: {
     fastPass: { state: "none", label: "Fast Pass: none" },
@@ -160,6 +172,9 @@ export const WithoutFastPass: Story = {
 
 /** Every Fast Pass use already spent: the quiet line says so. */
 export const FastPassAllUsed: Story = {
+  parameters: {
+    verification: { caseId: "vc_a4aac5bc-004c-4d95-8f07-1abcfb773f77" },
+  },
   name: "Fast Pass all used",
   args: {
     fastPass: { state: "none", label: "Fast Pass: all used" },
@@ -179,6 +194,9 @@ export const FastPassAllUsed: Story = {
 
 /** After Undo: the entry and its Fast Pass use are unused again. */
 export const Undone: Story = {
+  parameters: {
+    verification: { caseId: "vc_a002b3df-ad2b-4884-931e-d2843e3f4b92" },
+  },
   args: {
     kind: "undone",
     title: "Undone",

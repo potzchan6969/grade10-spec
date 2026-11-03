@@ -33,6 +33,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const TabsInDrawerLayout: Story = {
+  parameters: {
+    verification: { caseId: "vc_6f2d0ad8-e851-4139-b404-f274e02a867b" },
+  },
   args: { facetLayout: "tabs", showHeading: false },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

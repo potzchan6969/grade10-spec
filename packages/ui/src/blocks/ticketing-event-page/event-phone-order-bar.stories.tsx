@@ -28,6 +28,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The total, the saving, the jump to Your Order and Continue. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_8f8c43b2-0f1a-4c3d-b37d-891f9a438c94" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const bar = canvas.getByRole("region", { name: "Order total" });
@@ -44,6 +47,9 @@ export const Default: Story = {
 
 /** Full price: no saving line. */
 export const NoSaving: Story = {
+  parameters: {
+    verification: { caseId: "vc_711d3957-60b3-4020-9a00-f4902b7d5949" },
+  },
   name: "No Saving",
   args: { saving: undefined, total: "HK$1,140.00" },
   play: async ({ canvasElement }) => {
@@ -54,6 +60,9 @@ export const NoSaving: Story = {
 
 /** Continue pressed: the next step is on its way. */
 export const Busy: Story = {
+  parameters: {
+    verification: { caseId: "vc_41359e17-fbab-46d3-8093-71d969a26313" },
+  },
   args: { busy: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

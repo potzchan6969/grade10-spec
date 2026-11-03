@@ -51,6 +51,9 @@ function VipWithPicker() {
 /** The gold card that leads the list: the perks, the early-bird price with
  * the full price struck through, and one stepper. No wristband. */
 export const Vip: Story = {
+  parameters: {
+    verification: { caseId: "vc_9911db3f-e81c-4844-8b39-7b4748ebbb26" },
+  },
   name: "VIP",
   render: () => <VipWithPicker />,
   play: async ({ canvasElement }) => {
@@ -73,6 +76,9 @@ export const Vip: Story = {
 
 /** At 390 px: the price and the stepper move under the perks. */
 export const VipPhone: Story = {
+  parameters: {
+    verification: { caseId: "vc_73b92065-c1d4-476f-9d73-0e4be023f849" },
+  },
   name: "VIP Phone",
   decorators: [
     (Story) => (
@@ -92,6 +98,9 @@ export const VipPhone: Story = {
 
 /** Sales ended: the price in grey, Sales Ended, no stepper. */
 export const VipEnded: Story = {
+  parameters: {
+    verification: { caseId: "vc_fea66d6b-e2b6-42bc-9065-41e7facaf5d2" },
+  },
   name: "VIP Ended",
   render: () => (
     <EventPassCard
@@ -113,6 +122,9 @@ export const VipEnded: Story = {
 
 /** Before the public sale: when it goes on sale, no stepper. */
 export const VipNotStarted: Story = {
+  parameters: {
+    verification: { caseId: "vc_01fbbd5b-e205-4269-a8dc-505327eec939" },
+  },
   name: "VIP Not Started",
   render: () => (
     <EventPassCard
@@ -164,6 +176,9 @@ function RowsWithPickers({ chosen }: { chosen?: boolean }) {
 /** A pass with Adult and Child rows; its border turns gold once a ticket is
  * chosen. */
 export const Rows: Story = {
+  parameters: {
+    verification: { caseId: "vc_e7a92bfc-02cc-4552-847f-aac9973893b6" },
+  },
   render: () => <RowsWithPickers />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -182,6 +197,9 @@ export const Rows: Story = {
 
 /** Ended on event day 2: grey prices, Sales Ended, the note under the rows. */
 export const RowsEnded: Story = {
+  parameters: {
+    verification: { caseId: "vc_534acd25-0eeb-475f-bf2d-154a75c8f099" },
+  },
   name: "Rows Ended",
   render: () => (
     <EventPassCard
@@ -218,6 +236,9 @@ export const RowsEnded: Story = {
 /** An early-access pass before its public sale, to a buyer no access rule
  * lets in: `Opens …`, no stepper. */
 export const EarlyAccessOpens: Story = {
+  parameters: {
+    verification: { caseId: "vc_86681cae-163a-44f8-bb6e-6bf70074862a" },
+  },
   name: "Early Access Opens",
   render: () => (
     <EventPassCard
@@ -272,6 +293,9 @@ function EarlyAccessForYouCard() {
 /** The same pass to a buyer an access rule lets in now: `For you now`, a
  * stepper up to the rule's limit. */
 export const EarlyAccessForYou: Story = {
+  parameters: {
+    verification: { caseId: "vc_1d674975-455e-4dfa-9994-9d16044ee4cf" },
+  },
   name: "Early Access For You",
   render: () => <EarlyAccessForYouCard />,
   play: async ({ canvasElement }) => {
@@ -298,6 +322,9 @@ export const EarlyAccessForYou: Story = {
 /** During an early bird with a later price set: when it ends, above the
  * early-access note, each on its own line. */
 export const EarlyBirdEnds: Story = {
+  parameters: {
+    verification: { caseId: "vc_8a305a97-f00c-466f-afef-52398e09129d" },
+  },
   name: "Early Bird Ends",
   render: () => (
     <EventPassCard

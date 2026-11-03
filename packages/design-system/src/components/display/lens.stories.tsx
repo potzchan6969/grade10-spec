@@ -28,6 +28,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The lens follows the pointer and hides when it leaves. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_9a7d767c-74f1-4406-8052-914779450faa" },
+  },
   args: {
     children: (
       <img
@@ -59,6 +62,9 @@ export const Default: Story = {
  * copy of the image under it.
  */
 export const MagnifiedSource: Story = {
+  parameters: {
+    verification: { caseId: "vc_e6945e0b-b8ea-41c1-91a7-2d0322bf60c7" },
+  },
   args: {
     children: (
       <img
@@ -90,6 +96,9 @@ export const MagnifiedSource: Story = {
 
 /** Focused, the lens appears centered and steps with the arrow keys; Escape hides it. */
 export const Keyboard: Story = {
+  parameters: {
+    verification: { caseId: "vc_646bafae-ee89-4469-b9cc-fa6a691053e6" },
+  },
   args: {
     children: (
       <img

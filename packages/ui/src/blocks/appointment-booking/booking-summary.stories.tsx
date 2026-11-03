@@ -34,6 +34,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Every pick with its value and a Change on each but the step being made. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_fb33b9f2-d7ad-42af-8bba-e4a80cafbb3e" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -55,6 +58,9 @@ export const Default: Story = {
 
 /** Before anything is picked every row says so. */
 export const NothingYet: Story = {
+  parameters: {
+    verification: { caseId: "vc_7c5206a3-c017-4582-8f93-44232a26c3eb" },
+  },
   args: {
     service: undefined,
     location: undefined,
@@ -71,6 +77,9 @@ export const NothingYet: Story = {
 
 /** No service runs at more than one shop: no shop row. */
 export const OneShop: Story = {
+  parameters: {
+    verification: { caseId: "vc_adf0d61f-4e4e-4d39-88ab-c13ceb481580" },
+  },
   args: { hideLocation: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -81,6 +90,9 @@ export const OneShop: Story = {
 /** Booking for someone else, for a paid service: who comes in, and what is
  * charged now. */
 export const ForSomeoneElsePaid: Story = {
+  parameters: {
+    verification: { caseId: "vc_b08ca250-9103-46bc-bb5c-4490e0c7b820" },
+  },
   args: {
     service: "Bulk grading drop-off",
     extraRows: [
@@ -97,6 +109,9 @@ export const ForSomeoneElsePaid: Story = {
 
 /** A booking in flight: no Change works. */
 export const Busy: Story = {
+  parameters: {
+    verification: { caseId: "vc_9301699c-7148-4dd0-b451-26f43008a609" },
+  },
   args: { busy: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -108,6 +123,9 @@ export const Busy: Story = {
 
 /** Under 1024px the summary is a bar on top: one line, unfolding into the rows. */
 export const Bar: Story = {
+  parameters: {
+    verification: { caseId: "vc_2a92cb63-002f-4e92-893e-758db4e8d8b5" },
+  },
   render: (args) => (
     <BookingSummaryBar
       {...args}

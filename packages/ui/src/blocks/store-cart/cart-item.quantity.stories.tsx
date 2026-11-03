@@ -35,6 +35,9 @@ type Story = StoryObj<typeof meta>;
  * `StepperInput` bound the line has always relied on.
  */
 export const AtLineMaximum: Story = {
+  parameters: {
+    verification: { caseId: "vc_2dd6e175-a9af-4b14-846c-e4fe0ec1c0e5" },
+  },
   args: {
     item: {
       ...SAMPLE_CART_ITEMS[0],
@@ -66,6 +69,9 @@ export const AtLineMaximum: Story = {
  * stepper that counts on.
  */
 export const NoLineMaximum: Story = {
+  parameters: {
+    verification: { caseId: "vc_f05d7c42-b2ee-4504-94bf-39d926ad536b" },
+  },
   args: {
     item: {
       ...SAMPLE_CART_ITEMS[0],

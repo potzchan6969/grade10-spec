@@ -36,6 +36,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const SignedIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_9fe348c7-bf37-4454-be5f-81e0c773a73e" },
+  },
   name: "Signed in, newest first",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -56,6 +59,9 @@ export const SignedIn: Story = {
 };
 
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_1d6228dc-f0a9-49f4-a141-44a24504d43d" },
+  },
   name: "No orders yet",
   args: { state: { status: "ready", orders: [] } },
   play: async ({ canvasElement }) => {
@@ -71,6 +77,9 @@ export const Empty: Story = {
 };
 
 export const SignedOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_7f8f5b5f-b578-4456-90c9-722f501f9e23" },
+  },
   name: "Signed out",
   args: { state: { status: "signedOut" } },
   play: async ({ canvasElement, args }) => {
@@ -84,6 +93,9 @@ export const SignedOut: Story = {
 };
 
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_23223ae5-6387-439f-94b5-3ce203d58530" },
+  },
   args: { state: { status: "loading" } },
   play: async ({ canvasElement }) => {
     expect(
@@ -95,6 +107,9 @@ export const Loading: Story = {
 };
 
 export const Failed: Story = {
+  parameters: {
+    verification: { caseId: "vc_7ce4436c-8dd0-4329-9615-968e6b9dca96" },
+  },
   name: "Load failed",
   args: { state: { status: "error" } },
   play: async ({ canvasElement, args }) => {
@@ -112,6 +127,9 @@ const SIGN_IN_TITLE = "Sign In to See Your Tickets";
 /** Signed out, Sign In with Email opens the site's emailed-link dialog; the
  * consumer owns it. Sending moves it to Check Your Email. */
 export const SignInDialog: Story = {
+  parameters: {
+    verification: { caseId: "vc_2e9b9930-406d-4159-a9a6-e9f894bef35d" },
+  },
   name: "Sign in, then Check Your Email",
   args: { state: { status: "signedOut" } },
   render: function Render(args) {
@@ -183,6 +201,9 @@ export const SignInDialog: Story = {
 /** Back from the link: signed in, the guest's orders listed, and the
  * consumer's toast says the points are on the account. */
 export const BackFromTheLink: Story = {
+  parameters: {
+    verification: { caseId: "vc_189881de-192e-41fa-84d7-8c846abd20c5" },
+  },
   name: "Back from the link",
   render: function Render(args) {
     useEffect(() => {

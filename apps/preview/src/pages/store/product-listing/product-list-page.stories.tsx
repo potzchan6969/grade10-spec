@@ -461,6 +461,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_62e6ab7f-20be-4a62-9a28-56bfac142fa0" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("combobox", { name: "Search products" });
@@ -477,6 +480,9 @@ export const Default: Story = {
 
 /** A second query change while loading restarts the simulated results request. */
 export const RapidChangesRestartResults: Story = {
+  parameters: {
+    verification: { caseId: "vc_92fe66ab-18df-4a67-8c67-453a27faced6" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const user = userEvent.setup();
@@ -506,11 +512,17 @@ export const RapidChangesRestartResults: Story = {
 };
 
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_89af622a-219c-466a-ab4b-0b7152fea286" },
+  },
   globals: { viewport: { value: "mobile1" } },
 };
 
 /** A filter or search matches no product: the message and a clear-filters action. */
 export const NoMatch: Story = {
+  parameters: {
+    verification: { caseId: "vc_89c63b80-79a1-4c1e-bb48-fca43c75cb95" },
+  },
   args: { listing: "noMatch" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -526,6 +538,9 @@ export const NoMatch: Story = {
 
 /** A store with no products yet: its own message, and no clear-filters action. */
 export const EmptyCatalogue: Story = {
+  parameters: {
+    verification: { caseId: "vc_d08f7bef-19e5-4b4e-97bc-ef94029e9ae3" },
+  },
   args: { listing: "emptyCatalogue" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

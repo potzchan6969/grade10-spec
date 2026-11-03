@@ -18,6 +18,9 @@ type Story = StoryObj<typeof meta>;
  * the Coupons screen draws: open coupons with their amount, scope and
  * expiry, the record under the second tab. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_2e2b32db-0bb2-4569-918d-62d2181d5456" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -39,6 +42,9 @@ export const Default: Story = {
  * state — the rest of the page still reads. The per-tab empty lines are
  * the shared ledger's own states, drawn under Loyalty/Coupons. */
 export const NoCoupons: Story = {
+  parameters: {
+    verification: { caseId: "vc_d57e672e-d370-4bd9-b00c-6bff576904ab" },
+  },
   args: { view: MEMBERSHIP_STATE_VIEWS.noCoupons },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

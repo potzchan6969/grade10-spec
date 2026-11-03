@@ -101,6 +101,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_9253eb5e-ab24-41c0-a147-ff08b988912d" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -116,6 +119,16 @@ export const Default: Story = {
   },
 };
 
-export const PaidAndBooked: Story = { args: { paid: true } };
+export const PaidAndBooked: Story = {
+  parameters: {
+    verification: { caseId: "vc_82e43181-b91b-4028-a2e3-f5ca014d0267" },
+  },
+  args: { paid: true },
+};
 
-export const Phone: Story = { globals: { viewport: { value: "mobile1" } } };
+export const Phone: Story = {
+  parameters: {
+    verification: { caseId: "vc_0dfb03a9-8ba5-4d3e-9e39-3983781b440c" },
+  },
+  globals: { viewport: { value: "mobile1" } },
+};

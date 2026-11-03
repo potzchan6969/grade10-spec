@@ -23,6 +23,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Signed in: the phone's name, Find by reference and the door menu. */
 export const SignedIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_a9b2df89-2f99-4014-84cc-25036f3e809a" },
+  },
   name: "Signed in",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -36,6 +39,9 @@ export const SignedIn: Story = {
 
 /** Before the passcode: the door's name and no buttons. */
 export const SignedOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_291749b9-7dff-499d-9ff3-9be8b6fa6985" },
+  },
   name: "Signed out",
   args: { mode: "signedOut", title: "Grade10 door" },
   play: async ({ canvasElement }) => {
@@ -47,6 +53,9 @@ export const SignedOut: Story = {
 
 /** Outside production every screen says its tickets are test tickets. */
 export const Staging: Story = {
+  parameters: {
+    verification: { caseId: "vc_d909015f-a9cf-4dc5-abe8-918daefa4ec7" },
+  },
   args: { environment: { name: "Staging", text: ": test tickets only" } },
   play: async ({ canvasElement }) => {
     await expect(within(canvasElement).getByRole("note")).toHaveTextContent(
@@ -57,6 +66,9 @@ export const Staging: Story = {
 
 /** No connection: a line under the header until it is back. */
 export const Offline: Story = {
+  parameters: {
+    verification: { caseId: "vc_3de23dfe-9b23-485c-9d97-7ba100bc4070" },
+  },
   args: {
     offlineNotice:
       "No connection. Every scan reads Not checked until it is back.",

@@ -37,6 +37,9 @@ type Story = StoryObj<typeof meta>;
  * one says its own line in the detail's place, and an expired one reads
  * its expiry — which already says so. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_241a0273-2d04-413f-8a40-fc3861abd0b5" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("GRD-50-7Q2M")).toBeInTheDocument();
@@ -57,6 +60,9 @@ export const Default: Story = {
 /** An open coupon inside its last 14 days — the consumer's flag, the list
  * does no counting — reads its Use by line emphasised. */
 export const ExpiringSoon: Story = {
+  parameters: {
+    verification: { caseId: "vc_b10a53bd-eab1-4e7e-803b-fd1714e67182" },
+  },
   args: {
     state: {
       status: "ready",
@@ -83,6 +89,9 @@ export const ExpiringSoon: Story = {
 /** The open coupon's Use now opens its scan card — a dialog from 640px up —
  * over the list, and closing hands the member back to it. */
 export const ScanCoupon: Story = {
+  parameters: {
+    verification: { caseId: "vc_31da12c8-162a-4672-a13a-602158ef7e44" },
+  },
   /* The consumer's cue to refetch: open reports the coupon, close reports
    * it again — by then a scanned one may have been spent at the till. */
   args: { onScanOpenChange: fn() },
@@ -123,6 +132,9 @@ export const ScanCoupon: Story = {
 
 /** Under 640px the same press slides the scan card up as a sheet. */
 export const ScanCouponNarrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_da24870b-f715-4534-a9c2-6736206f5afa" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -139,6 +151,9 @@ export const ScanCouponNarrow: Story = {
  * from the wallet by id — reads its stub as its amount, and its scan is
  * still its way to the till. */
 export const Codeless: Story = {
+  parameters: {
+    verification: { caseId: "vc_8aa84859-5e93-4305-bda1-f93916c4d671" },
+  },
   args: {
     state: {
       status: "ready",
@@ -156,6 +171,9 @@ export const Codeless: Story = {
 
 /** Three skeleton tickets while the wallet resolves. */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_5f227ae5-d8cd-4bd5-bfe2-cee6636f64a1" },
+  },
   args: { state: { status: "loading" } },
   play: async ({ canvasElement }) => {
     expect(
@@ -167,6 +185,9 @@ export const Loading: Story = {
 
 /** The empty wallet names itself and says how to fill it. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_b0578eee-3887-4378-9faa-78c5741972e7" },
+  },
   args: {
     state: {
       status: "empty",

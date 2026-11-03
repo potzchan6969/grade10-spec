@@ -22,6 +22,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_ea9fed3c-7af0-4009-8cc6-c8de993267a2" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -36,6 +39,9 @@ export const Default: Story = {
 /** The service's description sits under Before you come, and each answer
  * under What you told us, a list joined into one line. */
 export const BeforeYouCome: Story = {
+  parameters: {
+    verification: { caseId: "vc_550cb09d-3997-4fe8-ab8b-5c82aab0a011" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Before you come")).toBeVisible();
@@ -50,6 +56,9 @@ export const BeforeYouCome: Story = {
 };
 
 export const WithoutDescriptionOrAnswers: Story = {
+  parameters: {
+    verification: { caseId: "vc_aab8bace-16cc-4cef-91d5-35b2804f426a" },
+  },
   args: { description: undefined, answers: [] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -59,6 +68,9 @@ export const WithoutDescriptionOrAnswers: Story = {
 };
 
 export const WithoutCalendarFile: Story = {
+  parameters: {
+    verification: { caseId: "vc_74922b53-92d4-4f88-b8c3-ad6777f0bdab" },
+  },
   args: { calendarHref: undefined },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

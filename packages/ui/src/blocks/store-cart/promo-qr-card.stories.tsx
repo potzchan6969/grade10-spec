@@ -32,6 +32,9 @@ type Story = StoryObj<typeof meta>;
  * mounts it wherever the till reads it; the ticket only carries the Use
  * now control that opens it. */
 export const Open: Story = {
+  parameters: {
+    verification: { caseId: "vc_8d19fab9-909b-4edf-941e-91a81f794cfe" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -46,6 +49,9 @@ export const Open: Story = {
 
 /** No caption — the plate alone where the surface says nothing under it. */
 export const WithoutCaption: Story = {
+  parameters: {
+    verification: { caseId: "vc_13f97bd9-4eb6-4043-a689-c4d1d8bc4c1e" },
+  },
   args: {
     qrCode: {
       value: "g10:collect:reward-slab-sleeves:7Q2M",

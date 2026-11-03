@@ -22,10 +22,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_ee6faa48-3906-408a-8dc9-e96cc7da5d2a" },
+  },
+};
 
 /** The consumer supplies the failure copy. */
 export const ErrorState: Story = {
+  parameters: {
+    verification: { caseId: "vc_822ecf7e-71f4-4043-8ee6-8d2f091fefa5" },
+  },
   name: "Error",
   args: { error: "Could not send the sign-in link." },
 };
@@ -33,6 +40,9 @@ export const ErrorState: Story = {
 /** The send action holds until an address exists; submit fires without the
  * form knowing what "send" means. */
 export const ActionNeedsAnAddress: Story = {
+  parameters: {
+    verification: { caseId: "vc_55848522-aaf7-4f90-9f7c-c6747e0de11b" },
+  },
   name: "Needs an email",
   args: { email: "" },
   play: async ({ args, canvasElement }) => {
@@ -47,6 +57,9 @@ export const ActionNeedsAnAddress: Story = {
 /** The step's one control while its request is in flight: it is the only
  * button on the step, and it is the one that looks busy. */
 export const LinkRequestRunning: Story = {
+  parameters: {
+    verification: { caseId: "vc_bfcec42d-79bd-4172-a6ce-0dd23d464fbf" },
+  },
   name: "Sending",
   args: { submitting: true },
   play: async ({ canvasElement }) => {
@@ -62,6 +75,9 @@ export const LinkRequestRunning: Story = {
  * runs in test to prove `onSubmit`.
  */
 export const SubmitIsReported: Story = {
+  parameters: {
+    verification: { caseId: "vc_9c4431d8-d1d5-4713-a676-e1d9ec10510e" },
+  },
   tags: ["!dev"],
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -80,6 +96,9 @@ export const SubmitIsReported: Story = {
  * accessibility one. Same paint as Needs an email; hidden from the gallery.
  */
 export const FieldIsLabelledWithoutVisibleText: Story = {
+  parameters: {
+    verification: { caseId: "vc_b0b83f29-8ea8-482e-8d05-009e2c7fa0cb" },
+  },
   tags: ["!dev"],
   args: { email: "" },
   play: async ({ canvasElement }) => {

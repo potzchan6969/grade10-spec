@@ -18,6 +18,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Matches the published Figma composition: first page active, previous disabled. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_3f8cdd41-a9ee-420c-8634-5256783866ea" },
+  },
   render: () => (
     <Pagination>
       <PaginationPrevious disabled />
@@ -32,6 +35,9 @@ export const Default: Story = {
 };
 
 export const NextDisabled: Story = {
+  parameters: {
+    verification: { caseId: "vc_0eb28890-d290-4c47-9616-580ac6350330" },
+  },
   render: () => (
     <Pagination>
       <PaginationPrevious />

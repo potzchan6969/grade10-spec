@@ -14,6 +14,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_3e27d4a9-3b2e-4116-bafc-ac007fd5e3cc" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("link", { name: /Pokémon/ })).toBeInTheDocument();

@@ -34,6 +34,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Paid: Story = {
+  parameters: {
+    verification: { caseId: "vc_6cd74465-fca4-4df2-ba20-8e97bbfde6e0" },
+  },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     expect(
@@ -50,6 +53,9 @@ export const Paid: Story = {
 const chooseAgain = { label: "Choose Again", href: "/tickets/show" };
 
 export const WentBack: Story = {
+  parameters: {
+    verification: { caseId: "vc_93e03c49-b846-4ca6-945c-575959e7211b" },
+  },
   name: "Went back",
   args: {
     kind: "wentBack",
@@ -73,6 +79,9 @@ export const WentBack: Story = {
 };
 
 export const HoldRanOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_726d2d6e-d3a4-4dab-9671-8da3dbf1fb0c" },
+  },
   name: "Hold ran out",
   args: {
     kind: "holdRanOut",
@@ -93,6 +102,9 @@ export const HoldRanOut: Story = {
 };
 
 export const PaidTooLate: Story = {
+  parameters: {
+    verification: { caseId: "vc_9ee60174-2b7d-41b8-9712-52bc960a964e" },
+  },
   name: "Paid too late",
   args: {
     kind: "paidTooLate",
@@ -114,6 +126,9 @@ export const PaidTooLate: Story = {
 /** A copied or shared link, or any browser but the one that paid: no name,
  * email, ticket count or code. */
 export const OtherBrowser: Story = {
+  parameters: {
+    verification: { caseId: "vc_a71d8a1b-ab24-42f5-b5d4-65a790614367" },
+  },
   name: "Other browser",
   args: {
     kind: "otherBrowser",
@@ -135,6 +150,9 @@ export const OtherBrowser: Story = {
 };
 
 export const NotTheirOrder: Story = {
+  parameters: {
+    verification: { caseId: "vc_0dfd59c8-df04-4a74-964f-a2ed88494837" },
+  },
   name: "Signed in, not their order",
   args: {
     kind: "notTheirs",

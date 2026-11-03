@@ -35,6 +35,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Who is signed in, the visits, then Book a visit across the page. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_6a354e33-8aa3-45e9-a337-7c8ea87c293c" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -51,6 +54,9 @@ export const Default: Story = {
 
 /** Not you? is signing out: it spins, keeps focus and takes no second press. */
 export const NotYouPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_cd84b0c0-8891-40ed-8a00-941ec255fa52" },
+  },
   args: { notYouPending: true },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -65,6 +71,9 @@ export const NotYouPending: Story = {
 
 /** The sign-out was refused: the reason shows under Not you?, which works again. */
 export const NotYouFailed: Story = {
+  parameters: {
+    verification: { caseId: "vc_f1e0ab9c-512a-400b-a06b-1745b7baf436" },
+  },
   args: { notYouFailed: "We couldn’t sign you out. Try again." },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);

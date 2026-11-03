@@ -43,6 +43,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Graded asset summary — every feature wired, no grading prompt. */
 export const Graded: Story = {
+  parameters: {
+    verification: { caseId: "vc_ec947792-8714-4f0d-9a85-ef8314ce6a71" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
     showEstimateChange: true,
@@ -64,6 +67,9 @@ export const Graded: Story = {
 
 /** Raw asset summary — every feature wired, surfaces the grading value prompt. */
 export const Raw: Story = {
+  parameters: {
+    verification: { caseId: "vc_a12e659e-8ae2-4869-adbf-0f6d6d69bd3f" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[1],
     showEstimateChange: true,
@@ -84,6 +90,9 @@ export const Raw: Story = {
  * their features ship; each flag flips on its own timeline.
  */
 export const GradedSoftLaunch: Story = {
+  parameters: {
+    verification: { caseId: "vc_46053e71-7505-4977-b8c6-8519cd28e0a2" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
     listForAuction: false,
@@ -101,6 +110,9 @@ export const GradedSoftLaunch: Story = {
 
 /** Soft launch on a raw asset — the grading prompt still shows. */
 export const RawSoftLaunch: Story = {
+  parameters: {
+    verification: { caseId: "vc_c34275cc-5589-40a2-a0f2-0b07d1bf44b6" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[1],
     listForAuction: false,

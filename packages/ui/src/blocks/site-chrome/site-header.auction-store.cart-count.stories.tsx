@@ -108,6 +108,9 @@ function countPlay(
 
 /** Cart control present; a count of 0 shows no badge. */
 export const EmptyNoBadge: Story = {
+  parameters: {
+    verification: { caseId: "vc_1ce16159-94ef-4e00-85d7-a899ddfed21f" },
+  },
   name: "Empty — no badge",
   args: { ...BASKET_ARGS, cartItemCount: 0 },
   play: async ({ canvasElement, step }) => {
@@ -126,6 +129,9 @@ export const EmptyNoBadge: Story = {
 
 /** Cart control present; an omitted count shows no badge. */
 export const OmittedCountNoBadge: Story = {
+  parameters: {
+    verification: { caseId: "vc_8891f1eb-5a3b-4e29-885e-678da86783ad" },
+  },
   name: "Omitted count — no badge",
   args: { ...BASKET_ARGS, cartItemCount: undefined },
   play: async ({ canvasElement, step }) => {
@@ -144,6 +150,9 @@ export const OmittedCountNoBadge: Story = {
 
 /** Brand count shows `1`. Signed in — lines require a session. */
 export const Count1: Story = {
+  parameters: {
+    verification: { caseId: "vc_259536e7-9f62-4c08-a2a3-2e69da2c2a32" },
+  },
   name: "1 item",
   args: { ...BASKET_ARGS, session: "signed-in", cartItemCount: 1 },
   play: countPlay(1, "shared-ui-site-chrome-SC-24"),
@@ -151,6 +160,9 @@ export const Count1: Story = {
 
 /** Brand count shows `3` — same full count the drawer title badge would show. */
 export const Count3: Story = {
+  parameters: {
+    verification: { caseId: "vc_d225b67a-4deb-4769-8c33-53cb42a7e45a" },
+  },
   name: "3 items",
   args: { ...BASKET_ARGS, session: "signed-in", cartItemCount: 3 },
   play: countPlay(3, "shared-ui-site-chrome-SC-25"),
@@ -158,6 +170,9 @@ export const Count3: Story = {
 
 /** Counts above two digits stay complete instead of `99+`. */
 export const Count123: Story = {
+  parameters: {
+    verification: { caseId: "vc_46eb2cf5-b4c7-40ce-838e-7272df842bda" },
+  },
   name: "123 items",
   args: { ...BASKET_ARGS, session: "signed-in", cartItemCount: 123 },
   play: countPlay(123, "shared-ui-site-chrome-SC-26"),
@@ -166,6 +181,10 @@ export const Count123: Story = {
 /** Compact SoT — count badge beside Account and Menu. */
 export const CompactCount3: Story = {
   ...Count3,
+  parameters: {
+    ...Count3.parameters,
+    verification: { caseId: "vc_caaebb5a-5672-4d2c-a0a2-b8f0da7a52aa" },
+  },
   name: "Compact — 3 items (375px)",
   decorators: compactContainer,
   play: countPlay(3, "shared-ui-site-chrome-SC-25", true),
@@ -173,6 +192,9 @@ export const CompactCount3: Story = {
 
 /** Header and drawer title use the same supplied active-line count. */
 export const MatchesDrawerTitle: Story = {
+  parameters: {
+    verification: { caseId: "vc_af41c7c0-b3aa-4074-bed8-bd2946358230" },
+  },
   name: "Matches drawer title",
   args: { session: "signed-in", cartItemCount: 3 },
   render: (args) => (
@@ -202,6 +224,9 @@ export const MatchesDrawerTitle: Story = {
 
 /** A positive count is ignored when the host omits the cart handler. */
 export const NoCartHandler: Story = {
+  parameters: {
+    verification: { caseId: "vc_2b425d34-ed00-47d7-9db9-4836b38d4315" },
+  },
   name: "No cart handler",
   args: {
     session: "signed-in",

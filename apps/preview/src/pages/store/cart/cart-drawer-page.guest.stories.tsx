@@ -30,6 +30,7 @@ type Story = StoryObj<typeof meta>;
 export const Guest: Story = {
   args: { guest: true },
   parameters: {
+    verification: { caseId: "vc_bd289e59-a938-4dd4-bdf7-dcf30bc18c22" },
     journeys: ["g10.store-cart-drawer.US10", "g10.store-cart-drawer.US11"],
   },
   play: () => {

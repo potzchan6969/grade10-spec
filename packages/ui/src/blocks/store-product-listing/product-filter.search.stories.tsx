@@ -38,6 +38,7 @@ export const Suggestions: Story = {
   // Base UI's open autocomplete hides the page from assistive tech but leaves
   // it tabbable; see docs/governance/ui-component-testing.md.
   parameters: {
+    verification: { caseId: "vc_cc73669c-7b84-463d-8be0-5e20e54d321a" },
     a11y: { config: { rules: [{ id: "aria-hidden-focus", enabled: false }] } },
   },
   play: async ({ canvasElement }) => {
@@ -61,6 +62,9 @@ export const Suggestions: Story = {
 
 /** Enter with no row highlighted commits free text. */
 export const Commit: Story = {
+  parameters: {
+    verification: { caseId: "vc_05bc114b-297f-4441-b981-ea148c76cd10" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("combobox", { name: "Search products" });
@@ -72,6 +76,9 @@ export const Commit: Story = {
 
 /** Activating a suggestion reports it and does not navigate. */
 export const SelectSuggestion: Story = {
+  parameters: {
+    verification: { caseId: "vc_90de7e46-8b9b-46e0-8f4f-80a9784ca07a" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("combobox", { name: "Search products" });
@@ -90,6 +97,9 @@ export const SelectSuggestion: Story = {
 
 /** Supplied empty groups show Figma empty copy; Enter still commits. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_8400767c-680b-4bc9-972c-6acf198b1820" },
+  },
   render: (args) => <ProductFilter {...args} />,
   args: {
     searchValue: "zzz",
@@ -109,6 +119,9 @@ export const Empty: Story = {
 
 /** Omitting suggestion groups keeps the panel closed; Enter still commits. */
 export const GroupsOmitted: Story = {
+  parameters: {
+    verification: { caseId: "vc_fc7b27f6-09a6-4db2-b7f0-810484b5812b" },
+  },
   render: (args) => <ProductFilter {...args} />,
   args: {
     searchValue: "zzz",
@@ -138,6 +151,7 @@ export const Pending: Story = {
     copy: { ...productFilterArgs.copy, searchSearching: "Searching…" },
   },
   parameters: {
+    verification: { caseId: "vc_558fa672-6a49-4039-a6be-818c24bc0193" },
     a11y: { config: { rules: [{ id: "aria-hidden-focus", enabled: false }] } },
   },
   play: async ({ args, canvasElement }) => {

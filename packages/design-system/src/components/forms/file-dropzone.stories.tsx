@@ -98,6 +98,9 @@ type Story = StoryObj;
 
 /** Drop target only — no file rows. */
 export const TargetOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_099a566b-8969-45ae-a663-62319053cd93" },
+  },
   name: "Target",
   render: () => (
     <FileDropzoneTarget
@@ -117,6 +120,9 @@ export const TargetOnly: Story = {
 
 /** File list with image and PDF rows. */
 export const FileList: Story = {
+  parameters: {
+    verification: { caseId: "vc_d2faba77-e98c-4b17-b3ba-18c79d7a316e" },
+  },
   name: "File list",
   render: () => (
     <FileDropzoneFileList
@@ -140,6 +146,9 @@ export const FileList: Story = {
 
 /** Row lifecycle — processing pulse, error tint, ready. */
 export const FileStates: Story = {
+  parameters: {
+    verification: { caseId: "vc_a767e185-cfaa-4a0a-884f-9f4bc2d54491" },
+  },
   name: "File states",
   render: () => (
     <FileDropzoneFileList
@@ -175,6 +184,9 @@ export const FileStates: Story = {
 
 /** Target + list composed by the consumer. */
 export const Composed: Story = {
+  parameters: {
+    verification: { caseId: "vc_aeb4dccd-8ea2-4007-bd33-bddc72252b78" },
+  },
   name: "Composed",
   render: () => <ComposedDemo />,
   play: async ({ canvasElement }) => {
@@ -189,12 +201,18 @@ export const Composed: Story = {
 
 /** Convenience wrapper that owns both parts. */
 export const Combined: Story = {
+  parameters: {
+    verification: { caseId: "vc_001a686b-91fc-4492-aaca-838a77027eab" },
+  },
   name: "Combined",
   render: () => <CombinedDemo />,
 };
 
 /** Oversized files are rejected without changing the controlled list. */
 export const RejectsOversizedFile: Story = {
+  parameters: {
+    verification: { caseId: "vc_9149c8dd-2f7e-4336-b071-1ad61b9b176e" },
+  },
   name: "Rejects oversized file",
   render: () => {
     const [files, setFiles] = useState<FileDropzoneItem[]>([]);
