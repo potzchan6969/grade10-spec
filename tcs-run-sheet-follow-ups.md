@@ -18,21 +18,21 @@
 Answered on the [Release Phases](docs/prds/products/shared/planning/release-phases.md#results) page.
 
 - [x] Define how automated and manual results combine without treating unreliable automation as a human verdict - decided 2026-11-03: **One Verdict per Row**
-- [ ] Define false-positive fields and ownership for `blocked`, `fail` and `skipped` - proposed: **Triage** on each marked cell, filtered by mark and surface (flaky on the automated columns only, deferred on a skip only, no "not a bug"), whose next step falls to a team-map role or to the bug issue's assignee
-- [ ] Decide whether per-row cases need row-level failure identity in Summary - proposed: yes, **Row Identity**; run 5 printed `g10.store-cart.TC1` three times under one id
-- [ ] Add tests for the settled triage rules
+- [x] Define false-positive fields and ownership for `blocked`, `fail` and `skipped` - built on the run desk: **Triage** on each marked cell, filtered by mark and surface (flaky on the automated columns only, deferred on a skip only, no "not a bug"), whose next step falls to a team-map role or to the bug issue's assignee
+- [x] Decide whether per-row cases need row-level failure identity in Summary - yes, built as **Row Identity**; run 5 printed `g10.store-cart.TC1` three times under one id
+- [x] Add tests for the settled triage rules
 
 ## Phases, Readiness and the Run Desk
 
 Planned on the [Release Phases](docs/prds/products/shared/planning/release-phases.md) page. The run desk replaces the Sheet as the place results are marked, keeping QA's words but not the spreadsheet's shape.
 
-- [ ] Select by phase, release priority and readiness (`--phase`, `--release-priority`, `--ready`, `--section`), resolving to explicit ids through the manual's own unit reader; `--ready` means reviewed or further
-- [ ] Record `Phase: <id>` in the print commit of a run selected by phase, so its reasoned exclusions leave a capability's cases out of that phase's unit
-- [ ] Re-run the failed and blocked rows of a run as a new run (`--rerun <run> --only fail,blocked`)
-- [ ] Open a confirmed selection as a run on the run desk instead of printing a tab; keep the dry run, the fingerprint and the print commit, which names the run in place of the sheet and tab
-- [ ] Mark on the desk as a run list beside the case: walks first, the rules a case checks, steps beside expectations, the suite's own row table, the Summary's per-surface counts; marking from the list; no grid view
-- [ ] Keep the real test data objects each row used, offering earlier values without assuming them
-- [ ] Triage and Issue on every marked cell, the expectation that broke, the row named on each expanded per-row case, and a prefilled bug report from a failed row carrying the objects it used
-- [ ] Walk a fixed row again in place until the run closes, at the same case revision
-- [ ] An Access service token for the run sheet, the release command and the finalized-run check to reach the desk
-- [ ] Retire the Sheets writer, its layout and its Google identity once a phase has passed on the run desk
+- [x] Select by phase, release priority and readiness (`--phase`, `--release-priority`, `--ready`, `--section`), resolving to explicit ids through the manual's own unit reader; `--ready` means reviewed or further
+- [x] Record `Phase: <id>` in the print commit of a run selected by phase, so its reasoned exclusions leave a capability's cases out of that phase's unit
+- [x] Re-run the failed and blocked rows of a run as a new run (`--rerun <run> --only fail,blocked`)
+- [x] Open a confirmed selection as a run on the run desk instead of printing a tab; keep the dry run, the fingerprint and the print commit, which names the run in place of the sheet and tab
+- [x] Mark on the desk as a run list beside the case: walks first, the rules a case checks, steps beside expectations, the suite's own row table, the Summary's per-surface counts; marking from the list; no grid view
+- [x] Keep the real test data objects each row used, offering earlier values without assuming them
+- [x] Triage and Issue on every marked cell, the expectation that broke, the row named on each expanded per-row case, and a prefilled bug report from a failed row carrying the objects it used
+- [x] Walk a fixed row again in place until the run closes, at the same case revision
+- [ ] An Access service token for the run sheet, the release command and the finalized-run check to reach the desk - blocked on the repository secrets `CF_ACCESS_CLIENT_ID` and `CF_ACCESS_CLIENT_SECRET`
+- [ ] Retire the Sheets writer, its layout and its Google identity once a phase has passed on the run desk - the writer stays until then
