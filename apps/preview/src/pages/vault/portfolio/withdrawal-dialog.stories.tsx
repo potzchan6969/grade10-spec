@@ -86,7 +86,7 @@ export const Amount: Story = {
     expect(dialog.getAllByText(/Available: US\$160/).length).toBeGreaterThan(0);
     expect(dialog.getByText("Hong Kong Dollar")).toBeVisible();
     expect(dialog.getByText("US Dollar")).toBeVisible();
-    expect(dialog.getByText(/By request only/)).toBeVisible();
+    expect(dialog.getByText("Not available now")).toBeVisible();
     expect(dialog.getByLabelText("Withdraw Amount")).toHaveValue(160);
     expect(dialog.getByRole("button", { name: "Continue" })).toBeEnabled();
     const field = dialog.getByLabelText("Withdraw Amount");
@@ -108,7 +108,7 @@ export const Destination: Story = {
     await enterMaxAndContinue(dialog);
     await waitFor(() =>
       expect(
-        dialog.getByRole("heading", { name: "Withdraw To" }),
+        dialog.getByRole("heading", { name: "Withdrawal Destination" }),
       ).toBeVisible(),
     );
     expect(dialog.getByText("HSBC")).toBeVisible();
@@ -171,9 +171,7 @@ export const ManualRequest: Story = {
         dialog.getByRole("heading", { name: "Withdraw Earnings" }),
       ).toBeVisible(),
     );
-    await userEvent.click(
-      dialog.getByRole("button", { name: "Request" }),
-    );
+    await userEvent.click(dialog.getByRole("button", { name: "Request" }));
     const page = body(canvasElement);
     const contact = await waitFor(() => {
       const found = page.getByRole("dialog", { name: "Email Grade10" });
@@ -184,9 +182,7 @@ export const ManualRequest: Story = {
     expect(
       contact.getByRole("button", { name: "Open Mail App" }),
     ).toBeVisible();
-    expect(
-      contact.getByRole("button", { name: "Copy Message" }),
-    ).toBeVisible();
+    expect(contact.getByRole("button", { name: "Copy Message" })).toBeVisible();
   },
 };
 
@@ -201,7 +197,7 @@ export const Review: Story = {
     await enterMaxAndContinue(dialog);
     await waitFor(() =>
       expect(
-        dialog.getByRole("heading", { name: "Withdraw To" }),
+        dialog.getByRole("heading", { name: "Withdrawal Destination" }),
       ).toBeVisible(),
     );
     await userEvent.click(dialog.getByRole("button", { name: "Continue" }));
@@ -240,11 +236,11 @@ export const Submitted: Story = {
       dialog.getByRole("button", { name: "Submit Request" }),
     );
     await waitFor(() =>
-      expect(dialog.getByText(/Withdrawal of US\$160 requested/)).toBeVisible(),
+      expect(dialog.getByText("Withdrawal Requested")).toBeVisible(),
     );
-    expect(dialog.getByText("Request submitted")).toBeVisible();
+    expect(dialog.getByText("Withdrawal requested")).toBeVisible();
     expect(dialog.getByText("Grade10 review")).toBeVisible();
-    expect(dialog.getByText(/Withdrawn to HSBC/)).toBeVisible();
+    expect(dialog.getByText("Transfer sent")).toBeVisible();
     expect(
       dialog.getByRole("button", { name: "View Withdrawal" }),
     ).toBeVisible();

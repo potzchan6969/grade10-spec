@@ -437,10 +437,10 @@ function WithdrawalDialog({
 
   const TITLE: Record<WithdrawalStep, string> = {
     amount: "Withdraw Earnings",
-    destination: "Withdraw To",
+    destination: "Withdrawal Destination",
     "add-method": "Add Withdrawal Method",
     review: "Review Withdrawal",
-    submitted: `Withdrawal of ${formatUsd(amount)} Requested`,
+    submitted: "Withdrawal Requested",
   };
 
   /** Ready email for a US$/overseas payout — handled by the team, not a form. */
@@ -615,9 +615,7 @@ function WithdrawalDialog({
               }
               className="opacity-100"
               description={
-                <span className="opacity-50">
-                  Not available now. By request only
-                </span>
+                <span className="opacity-50">Not available now</span>
               }
               disabled
               title={<span className="opacity-50">US Dollar</span>}
@@ -653,7 +651,7 @@ function WithdrawalDialog({
               onClick={() => setStep("add-method")}
             />
             <ActionRow
-              detail="Not available now. By request only"
+              detail="Not available now"
               disabled
               icon={<Globe aria-hidden size={20} weight="regular" />}
               title="Overseas bank"
@@ -912,7 +910,7 @@ function WithdrawalDialog({
             </DetailRow>
             <DetailRow label="Fixed rate">US$1 = HK${hkdPerUsd}</DetailRow>
             <DetailRow label="Withdrawal fee">Free</DetailRow>
-            <DetailRow className="border-b-0" label="Est. processing time">
+            <DetailRow className="border-b-0" label="Processing time">
               Most transfers are sent within {WITHDRAWAL_PROCESSING_DAYS}
             </DetailRow>
           </div>
@@ -929,32 +927,33 @@ function WithdrawalDialog({
               as="span"
               className="font-heading text-xl font-semibold tracking-tight"
             >
-              Withdrawal of {formatUsd(amount)} requested
+              Withdrawal Requested
             </Text>
-            <Text className="text-center text-secondary-foreground" size="sm">
-              {formatHkd(convertedHkd)} to{" "}
-              {destination?.title ?? "your account"}. We’ll email you once
-              Grade10 approves it.
+            <Text
+              className="text-center text-balance text-secondary-foreground"
+              size="sm"
+            >
+              We’ll email you once Grade10 transfers it.
             </Text>
           </VStack>
-          <div className="w-full rounded-(--radius-2xl) bg-muted p-4">
+          <div className="w-full rounded-(--radius-2xl) bg-background-subtle p-4">
             <Stepper orientation="vertical">
               <Step
                 description={`Today · ${requestId}`}
-                label="Request submitted"
+                label="Withdrawal requested"
                 orientation="vertical"
                 showLeadingConnector={false}
                 state="completed"
               />
               <Step
-                description="Shows as Pending review"
+                description="Waiting for review"
                 label="Grade10 review"
                 orientation="vertical"
                 state="progress"
               />
               <Step
-                description={`${WITHDRAWAL_PROCESSING_DAYS} after approval`}
-                label={`Withdrawn to ${destination?.title ?? "your account"}`}
+                className="min-h-0"
+                label="Transfer sent"
                 orientation="vertical"
                 showTrailingConnector={false}
                 state="upcoming"
