@@ -27,8 +27,9 @@ order: 11
 - 🚧 **Email carries it** - the owed reminder is sent to the member's email
   address, naming the period's end and the points still needed. The
   letters live in `apps/emails/emails/loyalty`. Product
-- ❓ **Lead time** - how far ahead the reminder fires; the points reminder
-  carries 30 days and this starts from the same value. Product
+- 🚧 **Lead time** - the reminder is owed once the period's last day is 30
+  days off or nearer, one configured lead, the same value the points
+  reminder carries
 
 :::detail{title="Product decisions" for="pm"}
 A member who drops off Gold without knowing the line was coming has been
@@ -40,6 +41,6 @@ rather than dropping to Silver.
 | --- | --- | --- | --- |
 | What is raised | 🚧 Being built | That a reminder is owed, naming the member, the period end, the points earned and the points still needed. | Product |
 | Which channel carries it | 🚧 Being built | Email, the same channel the points reminder ships on. | Product |
-| Lead time | ❓ Open | Starting at 30 days to match the points reminder; a ladder or a different lead is a value, not a rule. | Product |
+| Lead time | 🚧 Being built | One lead of 30 days, matching the points reminder; a ladder or a different lead is a value, not a rule ([9gag/grade10#1693](https://github.com/9gag/grade10/issues/1693#issuecomment-6571705441)). | Product |
 | Silver periods and Black invitations | ❓ Open | Neither owes a warning yet: Silver rolls over and an invitation's end is operator-set. | Product |
 :::
