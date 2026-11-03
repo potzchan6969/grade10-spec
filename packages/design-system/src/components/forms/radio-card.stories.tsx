@@ -141,6 +141,9 @@ export const WithAction: Story = {
 };
 
 export const WithIcon: Story = {
+  parameters: {
+    verification: { caseId: "vc_fcb3b585-afb5-4922-a93d-3fb3688832f5" },
+  },
   name: "With icon",
   render: () => (
     <RadioList
