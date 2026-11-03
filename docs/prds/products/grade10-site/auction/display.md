@@ -122,11 +122,11 @@ the one a search engine keeps.
 
 ::story{id="auction-display-screens-auction-list-all-auctions--empty" title="No auctions"}
 
-::story{id="auction-display-parts-auctionlotcard--active" title="Active"}
+::story{id="auction-display-blocks-auctionlotcard--active" title="Active"}
 
-::story{id="auction-display-parts-auctionlotcard--upcoming" title="Upcoming"}
+::story{id="auction-display-blocks-auctionlotcard--upcoming" title="Upcoming"}
 
-::story{id="auction-display-parts-auctionlotcard--ended" title="Closed"}
+::story{id="auction-display-blocks-auctionlotcard--ended" title="Closed"}
 
 ## Auction Details
 
@@ -171,7 +171,7 @@ lot before any script runs.
   updates; the readable label stays Bidder N —
   [Bidding · Auction Panel](/p/grade10-site/auction/bidding#auction-panel)
 
-::story{id="auction-display-parts-listingproduct--default" title="A live lot page, gallery and bid panel assembled"}
+::story{id="auction-display-blocks-listingproduct--default" title="A live lot page, gallery and bid panel assembled"}
 
 ### Media Gallery
 

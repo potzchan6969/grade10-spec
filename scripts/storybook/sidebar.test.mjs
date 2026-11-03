@@ -43,6 +43,7 @@ describe("sidebar", () => {
   it("reads the manual's domains, each with its features by order: then page title, and leaves out a domain manual.yaml does not list", () => {
     assert.deepEqual(sidebar(root), {
       "Start Here": [],
+      Dashboard: [],
       Store: ["Cart", "Home", "Store Locator", "Cross Sell", "Wishlist"],
       "Post Bidding": [],
       "Design System": [],

@@ -12,6 +12,7 @@ import { caseIdErrors } from "./case-ids.mjs";
 import { COVERAGE_FILE, declared, featureCoverage } from "./coverage.mjs";
 import {
   DESIGN_SYSTEM,
+  DOCS_PAGES,
   FLOWS,
   KINDS,
   START_HERE,
@@ -79,9 +80,11 @@ export function placementErrors(root, path, file) {
   const parts = title.split("/");
 
   if (path.endsWith(".mdx")) {
-    if (title !== START_HERE || path !== "apps/preview/src/start-here.mdx")
+    if (DOCS_PAGES[path] !== title)
       errors.push(
-        `docs page "${title}" - the one MDX page is ${START_HERE}, at apps/preview/src/start-here.mdx`,
+        `docs page "${title}" - the MDX pages are ${Object.entries(DOCS_PAGES)
+          .map(([file, name]) => `${name}, at ${file}`)
+          .join("; ")}`,
       );
     return errors;
   }
@@ -149,18 +152,18 @@ export function placementErrors(root, path, file) {
   }
 
   const featureFolder = `${sanitize(domain)}/${sanitize(feature)}/`;
+  // A block is an `@grade10/ui` export, or drawn beside its feature's screens.
   const expected = {
-    Screens: PAGES + featureFolder,
-    Parts: PAGES + featureFolder,
-    Prototypes: PROTOTYPES + featureFolder,
-    Blocks: BLOCKS,
+    Screens: [PAGES + featureFolder],
+    Prototypes: [PROTOTYPES + featureFolder],
+    Blocks: [BLOCKS, PAGES + featureFolder],
   }[kind];
-  if (!path.startsWith(expected))
+  if (!expected.some((folder) => path.startsWith(folder)))
     errors.push(
-      `"${title}" - a story under ${kind} lives in ${expected}, not ${path}`,
+      `"${title}" - a story under ${kind} lives in ${expected.join(" or ")}, not ${path}`,
     );
   if (!fourth) errors.push(`"${title}" - name what sits under ${kind}`);
-  if ((kind === "Parts" || kind === "Blocks") && fourth) {
+  if (kind === "Blocks" && fourth) {
     const leaf = leafError(fourth);
     if (leaf) errors.push(leaf);
   }

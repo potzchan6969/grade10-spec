@@ -9,20 +9,42 @@ screens, every state, and the journeys between them. The sidebar reads like
 the [manual](https://spec.grade10-stg.com): domain, then feature, then what
 you are looking at.
 
+## Links
+
+- **This Storybook** - hosted at [storybook.grade10-stg.com](https://storybook.grade10-stg.com), local at `http://localhost:6006`
+- **UI Verification Dashboard** - <a href="/?path=/verification-dashboard/" target="_top">open the dashboard</a>, or `?path=/verification-dashboard/` on either host
+- **Reference captures** - <a href="/?path=/reference-captures/" target="_top">open the captures</a>, or `?path=/reference-captures/` on either host
+- **The manual** - hosted at [spec.grade10-stg.com](https://spec.grade10-stg.com), local with `pnpm manual`
+
+The hosted Storybook is the published copy of `main`. The dashboard and the
+captures page open in the Storybook you are reading now, hosted or local. The
+dashboard is also in the sidebar, as **Dashboard**, below this page.
+
 ## Reading the Sidebar
 
-- **Appointment › Booking** — a domain and a feature, the same words as the manual's page
-- **Flows** — a domain's critical journeys as a tree of screens: the Canvas lays the steps out with their other states below them, the Screen control focuses one, and the Verification panel follows it, or on Canvas shows every screen at once
-- **Screens** — the feature's screens, such as Book Visit, with one story per state
-- **Scenario** — one story per screen given what staging can be set to: set its controls the way staging is, and the Given panel names each setting, the rule deciding it, and a link to paste beside a staging report
-- **Prototypes** — a screen not yet designed, as a wireframe, or directions to choose from
-- **Parts** — pieces drawn for this feature only
-- **Blocks** — shared components an app imports, with their states
-- **Design System** — primitives: buttons, fields, dialogs, by group
+- **Appointment › Booking** - a domain and a feature, the same words as the manual's page
+- **Flows** - a domain's critical journeys as a tree of screens: the Canvas lays the steps out with their other states below them, the Screen control focuses one, and the Verification panel follows it, or on Canvas shows every screen at once
+- **Screens** - the feature's screens, such as Book Visit, with one story per state
+- **Scenario** - one story per screen given what staging can be set to: set its controls the way staging is, and the Given panel names each setting, the rule deciding it, and a link to paste beside a staging report
+- **Prototypes** - a screen not yet designed, as a wireframe, or directions to choose from
+- **Blocks** - the components a feature's screens are made of, with their states
+- **Design System** - primitives: buttons, fields, dialogs, by group
 
 Every docs page links its feature's manual page at the top. A button on a
 screen opens the next screen's story, so a journey can be clicked through the
 way a collector walks it.
+
+## Verifying the UI
+
+A designer approves each story as the reference. The site is then held to
+that reference.
+
+- **Approve tab** - on a story, approve its reference at every size, or request changes
+- **Site Compare tab** - on a Flows story, compare the site capture with the last approved reference
+- **UI Verification Dashboard** - every story on one page: the approvals waiting, worst first, and the site drift, highest first. Open it from **Dashboard** in the sidebar, the links above, or Dashboard in the Approve or Site Compare tab
+- **Reference captures** - each full capture run of every reference, and a button to request one
+
+The rules: `docs/references/ui-verification.md`.
 
 ## Asking an Agent
 
@@ -42,10 +64,10 @@ or ❓.
 
 ## Commands
 
-- **`pnpm storybook`** — opens this Storybook at http://localhost:6006
-- **`pnpm storybook:check`** — holds every story to the sidebar's rules
-- **`pnpm storybook:coverage`** — what each feature holds, and the journeys no flow walks yet
-- **`pnpm test:stories`** — plays every story in a browser
+- **`pnpm storybook`** - opens this Storybook at http://localhost:6006
+- **`pnpm storybook:check`** - holds every story to the sidebar's rules
+- **`pnpm storybook:coverage`** - what each feature holds, and the journeys no flow walks yet
+- **`pnpm test:stories`** - plays every story in a browser
+- **`pnpm ui:verify capture`** - in the application repository, captures the site for Site Compare
 
-The rules: `docs/governance/storybook.md`. The published copy of `main`:
-[storybook.grade10-stg.com](https://storybook.grade10-stg.com).
+The Storybook rules: `docs/governance/storybook.md`.

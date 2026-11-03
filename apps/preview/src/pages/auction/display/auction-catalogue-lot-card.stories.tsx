@@ -20,7 +20,7 @@ import {
  * lives under Featured Auctions/Archived. Lots are from the collection draw.
  */
 const meta = {
-  title: "Auction/Display/Parts/AuctionLotCard",
+  title: "Auction/Display/Blocks/AuctionLotCard",
   component: AuctionLotCard,
   parameters: { layout: "padded" },
   beforeEach: pinCatalogueClock,

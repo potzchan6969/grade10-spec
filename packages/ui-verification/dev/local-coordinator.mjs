@@ -40,7 +40,9 @@ export function createFileCoordinatorStorage(archiveRoot) {
     async delete(key) {
       await rm(fileOf(key), { force: true });
     },
-    async list({ prefix = "" } = {}) {
+    // The Durable Object storage options the coordinator uses: a prefix, a
+    // key to start after, and a limit, in key order.
+    async list({ prefix = "", startAfter, limit } = {}) {
       let names;
       try {
         names = await readdir(directory);
@@ -48,13 +50,18 @@ export function createFileCoordinatorStorage(archiveRoot) {
         if (error?.code === "ENOENT") return new Map();
         throw error;
       }
-      const values = new Map();
-      for (const name of names
+      const keys = names
         .filter((entry) => entry.endsWith(".json"))
-        .sort()) {
-        const key = decodeURIComponent(name.slice(0, -".json".length));
-        if (key.startsWith(prefix)) values.set(key, await this.get(key));
-      }
+        .map((name) => decodeURIComponent(name.slice(0, -".json".length)))
+        .filter(
+          (key) =>
+            key.startsWith(prefix) &&
+            (startAfter === undefined || key > startAfter),
+        )
+        .sort()
+        .slice(0, limit ?? Number.POSITIVE_INFINITY);
+      const values = new Map();
+      for (const key of keys) values.set(key, await this.get(key));
       return values;
     },
   };

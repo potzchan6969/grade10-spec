@@ -1,25 +1,25 @@
-## 1. Align the Order Details product record (grade10-spec)
+## 1. Align the Order Details product record (grade10-spec) (owner: @kinisworking)
 
-- [ ] 1.1 Check the marked PRD line and recorded decisions against the accepted refund-reason delta before editing; this documentation-only group introduces no executable behavior or application scenario claim.
-- [ ] 1.2 Update `docs/prds/products/grade10-site/store/order-detail.md` only if implementation clarification is needed; retain the backend-scope and direct-text decisions, and leave 🚧 removal to archive.
-- [ ] 1.3 Verify: run the store's focused `pnpm check:manual` and strict change validation; keep frontend follow-on scope distinct.
+- [x] 1.1 Check the marked PRD line and recorded decisions against the accepted refund-reason delta before editing; this documentation-only group introduces no executable behavior or application scenario claim.
+- [x] 1.2 Update `docs/prds/products/grade10-site/store/order-detail.md` only if implementation clarification is needed; retain the backend-scope and direct-text decisions, and leave 🚧 removal to archive.
+- [x] 1.3 Verify: run the store's focused `pnpm check:manual` and strict change validation; keep frontend follow-on scope distinct.
 
-## 2. Add the optional refund metadata contracts (grade10)
+## 2. Add the optional refund metadata contracts (grade10) (owner: @kinisworking)
 
-- [ ] 2.1 First commit failing contract/decoder tests for omitted collection, optional reason, exact literal strings, explicit null versus omitted source fields, and source-line identity; tick this test task last. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC21`.
-- [ ] 2.2 Add the optional customer detail refund collection and backend metadata input contract defined in `tech-design.md`; retain old decoder compatibility and keep monetary refund inputs and idempotency semantics unchanged. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC21`.
-- [ ] 2.3 Verify: `pnpm --filter @grade10/store-contracts test`, `pnpm --filter @grade10/store-contracts typecheck`, and focused backend typechecking after the additive types land.
+- [x] 2.1 First commit failing contract/decoder tests for omitted collection, optional reason, exact literal strings, explicit null versus omitted source fields, and source-line identity; tick this test task last. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC21`.
+- [x] 2.2 Add the optional customer detail refund collection and backend metadata input contract defined in `tech-design.md`; retain old decoder compatibility and keep monetary refund inputs and idempotency semantics unchanged. `g10.store-order-detail.SC10`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC17`, `g10.store-order-detail.SC21`.
+- [x] 2.3 Verify: `pnpm --filter @grade10/store-contracts test`, `pnpm --filter @grade10/store-contracts typecheck`, and focused backend typechecking after the additive types land.
 
-## 3. Persist metadata and protect erasure (grade10)
+## 3. Persist metadata and protect erasure (grade10) (owner: @kinisworking)
 
 Depends on group 2's landed metadata input contract.
 
-- [ ] 3.1 First commit failing repository/PostgreSQL tests for unique per-refund rows, exact source-line associations, field-presence handling, source precedence, canonical empty, concurrent upserts and erasure/replay races; tick this test task last. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC22`.
-- [ ] 3.2 Add the single refund metadata table, source provenance and order erasure guard in the shared Store schema; generate Grade10 and ZZZ migrations with `pnpm db:drizzle:generate`, keeping generated output separate from unrelated changes. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC22`.
-- [ ] 3.3 Implement the order-locked metadata processor and extend existing erasure scope/status counting to clear refund text and prevent sync restoration, including orders found through the existing provider customer reference. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC22`.
-- [ ] 3.4 Verify: inspect generated SQL, run `pnpm check:migrations`, the affected Store repository/erasure tests, Grade10 and ZZZ Store migration lanes on isolated databases, and `pnpm --filter @grade10/store-service typecheck`. Exercise transaction rollback and lock races with a real local PostgreSQL lane.
+- [x] 3.1 First commit failing repository/PostgreSQL tests for unique per-refund rows, exact source-line associations, field-presence handling, source precedence, canonical empty, concurrent upserts and erasure/replay races; tick this test task last. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC22`.
+- [x] 3.2 Add the single refund metadata table, source provenance and order erasure guard in the shared Store schema; generate Grade10 and ZZZ migrations with `pnpm db:drizzle:generate`, keeping generated output separate from unrelated changes. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC15`, `g10.store-order-detail.SC16`, `g10.store-order-detail.SC22`.
+- [x] 3.3 Implement the order-locked metadata processor and extend existing erasure scope/status counting to clear refund text and prevent sync restoration, including orders found through the existing provider customer reference. `g10.store-order-detail.SC12`, `g10.store-order-detail.SC13`, `g10.store-order-detail.SC14`, `g10.store-order-detail.SC22`.
+- [x] 3.4 Verify: inspect generated SQL, run `pnpm check:migrations`, the affected Store repository/erasure tests, Grade10 and ZZZ Store migration lanes on isolated databases, and `pnpm --filter @grade10/store-service typecheck`. Exercise transaction rollback and lock races with a real local PostgreSQL lane.
 
-## 4. Ingest metadata before monetary filtering and dedupe (grade10)
+## 4. Ingest metadata before monetary filtering and dedupe (grade10) (owner: @kinisworking)
 
 Depends on groups 2 and 3.
 

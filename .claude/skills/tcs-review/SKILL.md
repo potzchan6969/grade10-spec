@@ -270,7 +270,12 @@ the verdict commits hold only the reviewer's decisions.
 7. **Propose test data.** Rows the rule implies, as **Rows add only what a
    rule implies** says, each with the rule it traces. The reviewer takes or
    refuses each row; a taken row is written in. A row added to an `actual`
-   case changes what it verifies: `rev` bumped, back to `draft`.
+   case changes what it verifies: `rev` bumped, back to `draft`. Propose a
+   row for what it changes on screen, never for where automation proves it:
+   an `automated` case's rows may sit in a unit or caller test while one walk
+   shows the page, and its `**Decided by:**` line names every one of those
+   tests. A taken row on such a case is owed by each named test, and the
+   summary says so.
 
 8. **Push, then summarise.** Push the branch once. Then one message before
    the first journey: the cases written for bare scenarios and the

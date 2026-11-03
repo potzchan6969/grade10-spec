@@ -8,7 +8,7 @@ import { WalletSummary } from "./wallet-summary";
  * while items stay in custody; the Withdraw CTA unlocks at the minimum.
  */
 const meta = {
-  title: "Vault/Portfolio/Parts/WalletSummary",
+  title: "Vault/Portfolio/Blocks/WalletSummary",
   component: WalletSummary,
   parameters: { layout: "padded" },
 } satisfies Meta<typeof WalletSummary>;

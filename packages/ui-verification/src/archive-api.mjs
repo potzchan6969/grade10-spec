@@ -144,6 +144,8 @@ function queryOptions(url, names) {
 
 function routeScope(method, pathname) {
   if (method === "GET") return "read";
+  // Names the pairs whose scores to read; a body because keys are long.
+  if (method === "POST" && pathname === "/api/scores/read") return "read";
   if (method === "PUT" && pathname === "/api/objects") return "publish";
   if (
     method === "POST" &&
@@ -151,6 +153,8 @@ function routeScope(method, pathname) {
   )
     return "approve";
   if (method === "POST" && pathname === "/api/reference-runs") return "approve";
+  // Queuing scores changes no evidence, but only a signed-in person asks.
+  if (method === "POST" && pathname === "/api/scores") return "approve";
   if (method === "POST" && ["/api/runs", "/api/assessments"].includes(pathname))
     return "publish";
   return null;
@@ -327,9 +331,34 @@ export function createArchiveHandler(
       }
 
       if (request.method === "GET" && url.pathname === "/api/references") {
+        const options = queryOptions(url, ["caseId", "cursor"]);
+        // The coordinator's index answers once filled; until then, the archive.
+        const indexed = coordinator?.listReferences
+          ? await coordinator.listReferences(options)
+          : null;
         return jsonResponse(
-          await archive.listReferences(queryOptions(url, ["caseId", "cursor"])),
+          indexed ?? (await archive.listReferences(options)),
           200,
+          headers,
+        );
+      }
+
+      if (request.method === "POST" && url.pathname === "/api/scores/read") {
+        return jsonResponse(
+          await requireCoordinator(coordinator).readScores(
+            await readJson(request),
+          ),
+          200,
+          headers,
+        );
+      }
+
+      if (request.method === "POST" && url.pathname === "/api/scores") {
+        return jsonResponse(
+          await requireCoordinator(coordinator).queueScores(
+            await readJson(request),
+          ),
+          202,
           headers,
         );
       }

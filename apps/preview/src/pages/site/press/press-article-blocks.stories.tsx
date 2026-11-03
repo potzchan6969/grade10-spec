@@ -122,7 +122,7 @@ function ArticleBlocks() {
 }
 
 const meta = {
-  title: "Site/Press/Parts/ArticleBlocks",
+  title: "Site/Press/Blocks/ArticleBlocks",
   component: ArticleBlocks,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

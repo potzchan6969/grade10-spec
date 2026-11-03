@@ -6,6 +6,10 @@ import type {
   VerificationManifest,
 } from "@grade10/ui-verification/model";
 import { captureLocale } from "@grade10/ui-verification/model";
+import {
+  pairKey,
+  settledWithoutPixels,
+} from "@grade10/ui-verification/pixel-diff";
 import type {
   Approval,
   ReferenceRecord,
@@ -18,7 +22,6 @@ import {
   referenceStatus,
 } from "./capture-stamp";
 import { type DiffTone, diffTone, HIGH_RATIO } from "./FlowPanel";
-import { anchorOf } from "./pixel-compare";
 
 export const PROFILE_ORDER: readonly {
   id: ProfileId;
@@ -91,40 +94,12 @@ export type StoryStatus =
 export type DriftTile = "ref-drift" | "ref-size" | "site-drift" | "site-size";
 export type Tile = StoryStatus | DriftTile;
 
-export function pairKey(reference: PairSide, other: PairSide): string {
-  const box = (side: PairSide) =>
-    side.region
-      ? `${side.region.x},${side.region.y},${side.region.width},${side.region.height}`
-      : "whole";
-  return [
-    reference.artifact.sha256,
-    box(reference),
-    other.artifact.sha256,
-    box(other),
-  ].join("|");
-}
+// One key and one settlement rule for the browser and the coordinator, so a
+// stored score is found under the key the dashboard looks it up by.
+export { pairKey, settledWithoutPixels };
 
 function makePair(reference: PairSide, other: PairSide): ImagePair {
   return { key: pairKey(reference, other), reference, other };
-}
-
-// Metadata settles most pairs, so only the rest cost two PNG downloads:
-// the same bytes cannot differ, and boxes of another size are never compared.
-export function settledWithoutPixels(pair: ImagePair): PairResult | null {
-  if (
-    pair.reference.artifact.sha256.toLowerCase() ===
-      pair.other.artifact.sha256.toLowerCase() &&
-    sameBox(pair)
-  ) {
-    return { kind: "compared", ratio: 0 };
-  }
-  return sameBox(pair) ? null : { kind: "size-mismatch" };
-}
-
-function sameBox(pair: ImagePair): boolean {
-  const reference = anchorOf(pair.reference.region, pair.reference.artifact);
-  const other = anchorOf(pair.other.region, pair.other.artifact);
-  return reference.width === other.width && reference.height === other.height;
 }
 
 export function readPair(

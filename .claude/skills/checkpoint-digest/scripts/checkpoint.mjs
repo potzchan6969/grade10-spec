@@ -9,6 +9,7 @@
 // is a commit with no files whose subject is the application commit the last digest covered.
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
+import { inOrder, manualScopes, scopeResolver } from "./scopes.mjs";
 
 const HK = 8 * 3600 * 1000;
 const REMOTE = process.env.CHECKPOINT_REMOTE ?? "origin";
@@ -209,12 +210,29 @@ function facts(r, date) {
   const buildDay = r.build && daySpan(r.build.dir, r.build, date);
   if (!specDay && !buildDay) fail(`nothing landed on ${branch} on ${date}`);
 
+  // Each commit names the manual scopes it touches, so the page groups its cards the way the manual groups its pages.
+  const manual = manualScopes(gitIn(undefined, "rev-parse", "--show-toplevel"));
+  const resolver = scopeResolver(
+    manual,
+    lines(
+      gitIn(
+        undefined,
+        "ls-tree",
+        "-r",
+        "--name-only",
+        r.spec.to,
+        "openspec/changes",
+      ),
+    ),
+  );
   const spec = specDay
-    ? specFacts(specDay)
+    ? specFacts(specDay, resolver)
     : { from: null, to: null, ...empty() };
   const build = buildDay
-    ? buildFacts(r.spec.to, r.build, buildDay)
+    ? buildFacts(r.spec.to, r.build, buildDay, resolver)
     : r.build && { repo: r.build.repo, from: null, to: null, ...empty() };
+  for (const c of [...spec.commits, ...(build?.commits ?? [])])
+    c.scopes = inOrder(manual, c.scopes);
   return {
     branch,
     repo: r.spec.repo,
@@ -222,13 +240,23 @@ function facts(r, date) {
     date,
     fromDate: date,
     base: r.spec.base,
+    scopes: touched(manual, spec.commits, build?.commits ?? []),
     ...spec,
     build: build && { base: r.build.base, ...build },
   };
 }
 
-function specFacts(d) {
-  const f = repoFacts(undefined, d, AREAS);
+// The scopes the day touched, in manual order, with how many commits each repository brought to them.
+function touched(manual, spec, build) {
+  return manual.flatMap((s) => {
+    const count = (list) => list.filter((c) => c.scopes.includes(s.id)).length;
+    const n = { spec: count(spec), build: count(build) };
+    return n.spec || n.build ? [{ ...s, commits: n }] : [];
+  });
+}
+
+function specFacts(d, resolver) {
+  const f = repoFacts(undefined, d, AREAS, resolver);
   return {
     ...f,
     openspec: openspecMoves(f.files),
@@ -244,8 +272,8 @@ function specFacts(d) {
 
 // The application's day, and which of its commits build which OpenSpec change: those a change's implementation
 // record names as its build, and those whose message names the change.
-function buildFacts(specTo, b, d) {
-  const f = repoFacts(b.dir, d, BUILD_AREAS);
+function buildFacts(specTo, b, d, resolver) {
+  const f = repoFacts(b.dir, d, BUILD_AREAS, resolver);
   const day = new Set(f.commits.map((c) => c.sha));
   const links = {};
   const link = (change, how, shas) => {
@@ -292,10 +320,12 @@ function buildFacts(specTo, b, d) {
   const linked = new Set(
     Object.values(links).flatMap((l) => Object.values(l).flat()),
   );
-  for (const c of f.commits)
+  for (const c of f.commits) {
     c.changes = Object.keys(links).filter((change) =>
       Object.values(links[change]).flat().includes(c.sha.slice(0, 9)),
     );
+    c.scopes = [...c.scopes, ...c.changes.flatMap(resolver.change)];
+  }
   return {
     repo: b.repo,
     ...f,
@@ -306,7 +336,7 @@ function buildFacts(specTo, b, d) {
 }
 
 // The commits, pull requests, lines per area, authors and kinds of one repository's day.
-function repoFacts(cwd, d, areaList) {
+function repoFacts(cwd, d, areaList, resolver) {
   const span = `${d.from}..${d.to}`;
   // Each commit's own files, so chunks.mjs can group the day's commits by what they touch.
   const touched = new Map();
@@ -357,6 +387,14 @@ function repoFacts(cwd, d, areaList) {
       fresh: d.fresh.includes(sha),
       areas: [...new Set(own.map((f) => areaOf(f.path, areaList)))],
       changes: [...new Set(own.flatMap((f) => changeOf(f.path) ?? []))],
+      // The application's own paths name only how-we-work scopes; the change it builds names the rest.
+      scopes: own.flatMap((f) =>
+        cwd === undefined ||
+        areaOf(f.path, areaList) === "Tooling and CI" ||
+        areaOf(f.path, areaList) === "Agent skills"
+          ? resolver.path(f.path)
+          : [],
+      ),
       added: own.reduce((n, f) => n + f.added, 0),
       removed: own.reduce((n, f) => n + f.removed, 0),
     };

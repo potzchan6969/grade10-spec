@@ -37,22 +37,29 @@ This definition SHALL be copied onto the coupon a redemption issues,
 unchanged by any later edit to the reward, and SHALL be what the coupon
 takes off wherever it is applied - online or at the till, identically.
 
-A sale at the till names its goods by variant alone, so a product coupon
-scoped to named products or to a catalog filter SHALL be good online only,
-whatever channels it names: the console's reward form SHALL save it for the
-online channel alone, the member's reward menu SHALL state it as good online
-only, the till SHALL show it as online only, staff SHALL NOT be able to apply
-it, and the till SHALL refuse it however it reaches the sale. Neither way a
-coupon reaches a counter sale under "A redemption settles as a coupon,
-whatever the reward" SHALL take such a coupon.
+A product coupon scoped to named products or to a catalog filter SHALL be
+good in every channel it names, the till included: the till SHALL read each
+line's product and catalog filters before it applies such a coupon, SHALL
+take it off the lines its scope matches, and SHALL refuse it where the catalog
+cannot place a line rather than guess. The console's reward form SHALL save
+such a reward for the channels the operator chose. A gift SHALL be good at the
+till alone, whatever channels it names.
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-qyo rev=2 -->
+A reward MAY hold its coupon to the member's birthday month. A member MAY
+give a birthday, a month and a day with no year, once; the member SHALL NOT
+change it after, and an operator holding the adjust permission MAY correct or
+clear it, recorded in the audit trail with a reason. Such a coupon SHALL be
+good, and such a reward SHALL be bought, only while the date in Hong Kong
+falls in that month, and SHALL be refused to a member with no birthday on
+file, before any points are spent.
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-qyo rev=3 -->
 #### Scenario: grade10-site-loyalty-programme-SC-152 - A fixed-amount coupon takes a set amount off its scope
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon whose discount is a fixed amount
-- **THEN** that amount comes off the lines its scope matches, online, or at
-  the till where its scope is named variants or the whole order
+- **THEN** that amount comes off the lines its scope matches, online or at
+  the till
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-gmn rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-153 - A percentage coupon is capped at its maximum discount
@@ -101,51 +108,73 @@ whatever the reward" SHALL take such a coupon.
 - **WHEN** a basket does not yet reach a gift's minimum spend
 - **THEN** the gift is refused until the basket reaches it
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-oqd rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-248 - The till holds a coupon scoped to named products or a filter to online only
+<!-- trace:scenario id=g10.loyalty-programme.SC-oqd rev=3 -->
+#### Scenario: grade10-site-loyalty-programme-SC-248 - The till takes a coupon scoped to named products or a filter
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **GIVEN** a member holding a coupon scoped to named products or to a
-  catalog filter, whichever channels the coupon names
-- **WHEN** the member is identified at a till
-- **THEN** the till shows that coupon as online only
-- **AND** staff cannot apply it to the sale
-- **AND** the member presenting it from their own session is refused with
-  `This coupon cannot be used on this sale.`, and the sale's price is
-  unchanged
+  catalog filter, good at the till
+- **WHEN** staff apply it to a sale holding one matching line and one other
+- **THEN** the cut comes off the matching line alone
+- **AND** where the catalog cannot place a line of the sale, the coupon is
+  refused and the sale's price is unchanged
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-62s rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-245 - The menu states a reward scoped to named products or a filter as online only
+<!-- trace:scenario id=g10.loyalty-programme.SC-62s rev=2 -->
+#### Scenario: grade10-site-loyalty-programme-SC-245 - The menu states the channels of a reward scoped to named products or a filter
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
-- **GIVEN** a reward scoped to named products or to a catalog filter,
-  whichever channels it names
+- **GIVEN** a reward scoped to named products or to a catalog filter, for
+  online and the till
 - **WHEN** a member reads the reward menu
-- **THEN** the reward states it is good online only, before any points are
-  spent
+- **THEN** the reward is offered for online and the till, before any points
+  are spent
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-1bu rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-249 - A reward scoped to named products or a filter is saved for online alone
+<!-- trace:scenario id=g10.loyalty-programme.SC-1bu rev=2 -->
+#### Scenario: grade10-site-loyalty-programme-SC-249 - A reward scoped to named products or a filter keeps the channels chosen
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **WHEN** an operator scopes a money-off reward to named products or to a
-  catalog filter in the reward form
-- **THEN** the form shows the reward as online only, and offers no channel
-  with the till
-- **AND** saving it saves it for the online channel alone, whichever channel
-  was chosen before
+  catalog filter in the reward form and chooses online and the till
+- **THEN** the form offers every channel
+- **AND** saving it saves it for online and the till
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-rwu rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-250 - A stored reward scoped to named products that names the till is saved online only
+<!-- trace:scenario id=g10.loyalty-programme.SC-rwu rev=2 -->
+#### Scenario: grade10-site-loyalty-programme-SC-250 - A stored reward scoped to named products that names the till keeps the till
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **GIVEN** a reward stored as a product coupon scoped to named products,
   for online and the till
 - **WHEN** an operator opens it in the reward form and saves it unchanged
-- **THEN** the form shows the reward as online only
-- **AND** it is saved for the online channel alone
-- **AND** moving its scope to named variants or to the whole order before
-  saving shows the channels it was stored with again
+- **THEN** it is saved for online and the till
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-n27 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-365 - A birthday coupon is good in the member's birthday month alone
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
+
+- **GIVEN** a member whose birthday is in March, holding a coupon held to the
+  birthday month
+- **WHEN** the member applies it on 31 March at 23:30 in Hong Kong
+- **THEN** it applies
+- **AND** applied on 1 April at 00:10 in Hong Kong, it is refused
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-6d5 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-366 - A member with no birthday on file is refused a birthday reward
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
+
+- **GIVEN** a member with no birthday on file
+- **WHEN** the member buys a reward held to the birthday month, or applies a
+  coupon held to it
+- **THEN** it is refused, and no points are spent
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-xnd rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-367 - A member gives a birthday once and staff correct it
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
+
+- **GIVEN** a member who has given a birthday
+- **WHEN** the member gives a different one
+- **THEN** it is refused, and the birthday on file is unchanged
+- **AND** an operator holding the adjust permission can correct or clear it
+  with a reason, recorded in the audit trail
 
 ### Requirement: The console's reward form authors a reward's full definition
 

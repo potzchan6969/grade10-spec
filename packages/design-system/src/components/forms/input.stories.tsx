@@ -54,6 +54,10 @@ export const Success: Story = {
  * border to the resting one. */
 export const Disabled: Story = { args: { disabled: true, status: "error" } };
 
+/** The 48px rung, as Stepper Input's `lg`; its text stays `text-base` at every
+ * width. */
+export const Large: Story = { args: { size: "lg" } };
+
 export const WithoutLabel: Story = { args: { label: undefined } };
 export const WithoutMessage: Story = { args: { message: undefined } };
 

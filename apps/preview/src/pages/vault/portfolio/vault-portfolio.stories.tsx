@@ -256,7 +256,8 @@ export const Filled: Story = {
       expect(canvas.getByText("Earned all time")).toBeVisible();
       expect(canvas.getByText("In withdrawal")).toBeVisible();
       expect(canvas.getByText("Withdrawn")).toBeVisible();
-      expect(canvas.getByText("Incentives & Withdrawal")).toBeVisible();
+      expect(canvas.getByRole("tab", { name: "Incentives" })).toBeVisible();
+      expect(canvas.getByRole("tab", { name: /^Withdrawal/ })).toBeVisible();
       expect(
         canvas.getByText("2 submissions currently in intake"),
       ).toBeVisible();

@@ -4,9 +4,8 @@ title: Store Product Details Test Cases
 
 # grade10-site/store/product-page Test Cases
 
-**Status:** reopened · 17/20
-**Reviewed:** 2026-11-01, tcs-rules r7, lapsed 2026-11-02
-**Drafts styled:** 2026-11-02, tcs-rules r7
+**Status:** approved · 20/20
+**Reviewed:** 2026-11-02, tcs-rules r7
 **Capabilities:** grade10-site/store/product-page, grade10-site/store/cross-sell, grade10-site/store/discounts
 
 ## Background
@@ -46,7 +45,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -84,12 +83,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** product-page#product-card/description
 
 **Pre-conditions:**
@@ -107,12 +106,12 @@ Runs once per row of **Test data**.
 
 1. Open `<page url>` and read the description.
 2. For the long-description row, select the read-in-full button.
-3. For the long-description row, select `Show less`.
+3. For the long-description row, select `product.showLess` ("Show less").
 
 **Expected Results:**
 
-* Step 1: a long description begins collapsed to three lines with a `Show more` button whose `aria-expanded` is false and whose `aria-controls` points to the description region; a description that fits within three lines appears whole without a button. UI matching store-product-page-blocks-storeproductdescription--short.
-* Step 2 shows the full long description and a `Show less` button with `aria-expanded` true, UI matching store-product-page-screens-product-detail--description-expanded; the address is unchanged.
+* Step 1: a long description begins collapsed to three lines with a `product.showMore` ("Show more") button whose `aria-expanded` is false and whose `aria-controls` points to the description region; a description that fits within three lines appears whole without a button. UI matching store-product-page-blocks-storeproductdescription--short.
+* Step 2 shows the full long description and a `product.showLess` ("Show less") button with `aria-expanded` true, UI matching store-product-page-screens-product-detail--description-expanded; the address is unchanged.
 * Step 3 restores the three-line collapsed description and `aria-expanded` false; the address is unchanged.
 
 ---
@@ -207,7 +206,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -226,7 +225,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 asks for no sign-in; while the add is pending, the stepper and add action are disabled and the action reads Adding…; UI matching store-product-page-screens-product-detail--add-quantity-pending-then-drawer-opens. Then the drawer opens with `<page product>` at 2, the page's quantity resets, and no on-page added confirmation appears.
+* Step 1 asks for no sign-in; while the add is pending, the stepper and add action are disabled and the action reads `store.adding` ("Adding…"); UI matching store-product-page-screens-product-detail--add-quantity-pending-then-drawer-opens. Then the drawer opens with `<page product>` at 2, the page's quantity resets, the cart total includes it, and no on-page added confirmation appears.
 * Step 2: one line for `<page product>`, at 3.
 
 ---

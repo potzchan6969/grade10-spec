@@ -1873,8 +1873,8 @@ Runs once per row of **Test data**.
 * Step 1 reads `<reads>`.
 * Step 2 completes as an ordinary sale with no collection step; the coupon reads used.
 
-<!-- trace:case id=g10.loyalty-programme.TC-t2k rev=1 covers=g10.loyalty-programme.SC-qyo,g10.loyalty-programme.SC-gmn,g10.loyalty-programme.SC-0tt,g10.loyalty-programme.SC-90a,g10.loyalty-programme.SC-29i,g10.loyalty-programme.SC-mn8,g10.loyalty-programme.SC-3q5,g10.loyalty-programme.SC-oqd,g10.loyalty-programme.SC-62s,g10.loyalty-programme.SC-gmp,g10.loyalty-programme.SC-wks,g10.loyalty-programme.SC-z32,g10.loyalty-programme.SC-ve1,g10.loyalty-programme.SC-zzl,g10.loyalty-programme.SC-cji -->
-### g10.loyalty-programme.US7-TC7: A coupon scoped to products or a filter is online only at the till
+<!-- trace:case id=g10.loyalty-programme.TC-t2k rev=2 covers=g10.loyalty-programme.SC-qyo,g10.loyalty-programme.SC-gmn,g10.loyalty-programme.SC-0tt,g10.loyalty-programme.SC-90a,g10.loyalty-programme.SC-29i,g10.loyalty-programme.SC-mn8,g10.loyalty-programme.SC-3q5,g10.loyalty-programme.SC-oqd,g10.loyalty-programme.SC-62s,g10.loyalty-programme.SC-gmp,g10.loyalty-programme.SC-wks,g10.loyalty-programme.SC-z32,g10.loyalty-programme.SC-ve1,g10.loyalty-programme.SC-zzl,g10.loyalty-programme.SC-cji -->
+### g10.loyalty-programme.US7-TC7: A coupon scoped to products or a filter applies at the till
 
 Runs once per row of **Test data**.
 
@@ -1883,7 +1883,7 @@ Runs once per row of **Test data**.
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -1892,28 +1892,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A member holds an unused HKD 20.00 coupon from `<reward>`; the till sale holds variant 1; staff have the panel open.
+* A member holds an unused HKD 20.00 coupon from `<reward>`, for online and in store; the till sale holds `<sale>`; staff have the panel open.
 
 **Test data:**
 
-| `<reward>` | `<applied by>` | `<outcome>` |
+| `<reward>` | `<sale>` | `<outcome>` |
 | --- | --- | --- |
-| named products, saved in the form | staff, from the panel | not applied |
-| a catalog filter, saved in the form | staff, from the panel | not applied |
-| named products, for online and in store through the admin API | staff, from the panel | not applied |
-| named products, for online and in store through the admin API | the member, from their phone | not offered |
-| a catalog filter, for online and in store through the admin API | the member, from their phone | not offered |
-| named products, for in store alone through the admin API | the member, from their phone | not offered |
+| named product 1 | one unit of product 1 and one unit of product 2 | HKD 20.00 off the product 1 line alone |
+| a filter of world 1 | one unit in world 1 and one unit in world 2 | HKD 20.00 off the world 1 line alone |
+| named product 1 | one unit of product 2 alone | refused, nothing in the sale matches; the price unchanged |
 
 **Steps:**
 
-1. Find the coupon in the panel, and apply it by `<applied by>`.
+1. Find the coupon in the panel, and apply it.
 
 **Expected Results:**
 
-* The panel marks it online only; it is `<outcome>`, the price unchanged; where the member tries from their phone, the coupon carries no Use at the counter.
+* The panel words it as off picked goods; the sale reads `<outcome>`.
 
-<!-- trace:case id=g10.loyalty-programme.TC-q9z rev=2 covers=g10.loyalty-programme.SC-qyo,g10.loyalty-programme.SC-gmn,g10.loyalty-programme.SC-0tt,g10.loyalty-programme.SC-90a,g10.loyalty-programme.SC-29i,g10.loyalty-programme.SC-mn8,g10.loyalty-programme.SC-3q5,g10.loyalty-programme.SC-oqd,g10.loyalty-programme.SC-62s,g10.loyalty-programme.SC-gmp,g10.loyalty-programme.SC-wks,g10.loyalty-programme.SC-z32,g10.loyalty-programme.SC-ve1,g10.loyalty-programme.SC-zzl,g10.loyalty-programme.SC-cji -->
+<!-- trace:case id=g10.loyalty-programme.TC-q9z rev=3 covers=g10.loyalty-programme.SC-qyo,g10.loyalty-programme.SC-gmn,g10.loyalty-programme.SC-0tt,g10.loyalty-programme.SC-90a,g10.loyalty-programme.SC-29i,g10.loyalty-programme.SC-mn8,g10.loyalty-programme.SC-3q5,g10.loyalty-programme.SC-oqd,g10.loyalty-programme.SC-62s,g10.loyalty-programme.SC-gmp,g10.loyalty-programme.SC-wks,g10.loyalty-programme.SC-z32,g10.loyalty-programme.SC-ve1,g10.loyalty-programme.SC-zzl,g10.loyalty-programme.SC-cji -->
 ### g10.loyalty-programme.US7-TC11: The menu says where a reward's coupon can be spent, before it is redeemed
 
 Runs once per row of **Test data**.
@@ -1938,9 +1935,9 @@ Runs once per row of **Test data**.
 
 | `<reward>` | `<channels>` | `<menu reads>` |
 | --- | --- | --- |
-| named products | online and in store | Online store only |
-| a catalog filter | online and in store | Online store only |
-| named products | in store alone | Online store only |
+| named products | online and in store | no channel |
+| a catalog filter | online and in store | no channel |
+| named products | in store alone | In store only |
 | named variants | online and in store | no channel |
 | named variants | online alone | Online store only |
 
@@ -2135,8 +2132,8 @@ Runs once per row of **Test data**.
 * Step 1 shows a gift picker and the minimum spend, no discount or scope.
 * Step 2 lists it, reopening as Gift with a purchase, variant 1 and HKD 500.00.
 
-<!-- trace:case id=g10.loyalty-programme.TC-gm2 rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-2m8,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-ji6,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
-### g10.loyalty-programme.US9-TC7: A scope of products or a filter saves the reward online only
+<!-- trace:case id=g10.loyalty-programme.TC-gm2 rev=2 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-2m8,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-ji6,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
+### g10.loyalty-programme.US9-TC7: A scope of products or a filter keeps the channels chosen
 
 Runs once per row of **Test data**.
 
@@ -2160,11 +2157,10 @@ Runs once per row of **Test data**.
 
 | `<scope>` | `<before saving>` | `<on reopening>` |
 | --- | --- | --- |
-| named product 1 | the online-only note; Online chosen, In store and Both unavailable | Online |
-| a filter of world 1 | the online-only note; Online chosen, In store and Both unavailable | Online |
+| named product 1 | no note; Both | Both |
+| a filter of world 1 | no note; Both | Both |
 | named variant 1 | no note; Both | Both |
 | the whole order | no note; Both | Both |
-| named product 1, then named variant 1 | no note; Both | Both |
 
 **Steps:**
 
@@ -2174,8 +2170,8 @@ Runs once per row of **Test data**.
 
 * Before saving it reads `<before saving>`; on reopening, `<on reopening>`.
 
-<!-- trace:case id=g10.loyalty-programme.TC-2kx rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-2m8,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-ji6,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
-### g10.loyalty-programme.US9-TC12: A product-scoped reward stored for the till saves online only
+<!-- trace:case id=g10.loyalty-programme.TC-2kx rev=2 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-2m8,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-ji6,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
+### g10.loyalty-programme.US9-TC12: A product-scoped reward stored for the till keeps the till
 
 Runs once per row of **Test data**.
 
@@ -2199,7 +2195,7 @@ Runs once per row of **Test data**.
 
 | `<edit>` | `<channels>` |
 | --- | --- |
-| none | Online |
+| none | Both |
 | its scope changed to named variant 1 | Both |
 
 **Steps:**
@@ -2208,7 +2204,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* It opens with Online chosen, In store and Both unavailable; after the save it reads `<channels>`.
+* It opens with Both chosen; after the save it reads `<channels>`.
 
 <!-- trace:case id=g10.loyalty-programme.TC-0t9 rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-2m8,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-ji6,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### g10.loyalty-programme.US9-TC8: A money-off reward edited into a free item reopens as one

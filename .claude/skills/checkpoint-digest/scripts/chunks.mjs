@@ -1,7 +1,7 @@
 // Group one day's commits into focused chunks, and say whether the day is big enough to hand each chunk to its own agent.
 // node chunks.mjs <facts.json> - prints the chunks as JSON
-// A commit joins the OpenSpec change it moves or builds, else its commit scope, else the first area it touches, so a
-// change proposed here and built in the application lands in one chunk. A group of half a chunk or more keeps a chunk
+// A commit joins the OpenSpec change it moves or builds, else the one manual scope it touches, else its commit scope,
+// else the first area it touches, so a change proposed here and built in the application lands in one chunk. A group of half a chunk or more keeps a chunk
 // of its own; the smaller ones, ordered by the area they touch most, fill chunks of up to `size` commits, so neighbours
 // share a chunk and no run dispatches more than MAX_CHUNKS agents. Bot commits that only record a report join none.
 import { readFileSync } from "node:fs";
@@ -18,7 +18,12 @@ export function chunk(facts) {
   const bots = [];
   const add = (repo, c) => {
     if (c.author === BOT) return bots.push(c.short);
-    const key = c.changes?.[0] ?? c.scope ?? c.areas?.[0] ?? "other";
+    const key =
+      c.changes?.[0] ??
+      (c.scopes?.length === 1 ? c.scopes[0] : null) ??
+      c.scope ??
+      c.areas?.[0] ??
+      "other";
     if (!groups.has(key))
       groups.set(key, { key, spec: [], build: [], areas: {}, lines: 0 });
     const g = groups.get(key);

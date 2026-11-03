@@ -35,6 +35,7 @@
       "id": "member-pass",
       "kind": "changed",
       "phase": "Blocks",
+      "scope": "shared/ui",
       "who": ["Members", "Design", "Engineering"],
       "title": "The member card becomes the member pass",
       "before": "`MemberCard`: a plain card with the code, a code to read out, and a used state",
@@ -109,6 +110,7 @@
       "id": "region-auctions",
       "kind": "new",
       "phase": "Requirements",
+      "scope": "grade10-site/auction",
       "who": ["Members", "Product"],
       "title": "Auctions close to regions that restrict them",
       "now": "A restricted region sees no way into auctions, and a winner there can still pay for what they won",
@@ -129,6 +131,7 @@
       "id": "site-words",
       "kind": "new",
       "phase": "Copy",
+      "scope": "grade10-site/site",
       "who": ["Visitors", "Product"],
       "title": "The company site's pages have their words",
       "now": "About, Finance, Press, Retail, Shows and Vault have catalogs in English and both Chinese scripts",
@@ -161,6 +164,7 @@
       "id": "digest-skill",
       "kind": "new",
       "phase": "Agent skills",
+      "scope": "work/tooling",
       "who": ["Engineering", "Product"],
       "title": "Main gets a digest in Slack",
       "now": "A push or a schedule draws what moved since the last digest and posts the page's link here",
@@ -242,19 +246,22 @@
       "id": "member-pass-apps",
       "title": "Move each app from `MemberCard` to `MemberPass`",
       "why": "The old names left `@grade10/ui`; an app that still imports them stops building at its next bump",
-      "owner": "Engineering"
+      "owner": "Engineering",
+      "scope": "shared/ui"
     },
     {
       "id": "finance-words",
       "title": "Translate the Finance page into Chinese",
       "why": "58 of its 65 words are still English in both Chinese catalogs",
-      "owner": "Product"
+      "owner": "Product",
+      "scope": "grade10-site/finance"
     },
     {
       "id": "site-pages-accept",
       "title": "Accept the 5 proposed company site pages",
       "why": "Their designs, cases and tasks are written and wait on acceptance",
-      "owner": "Product"
+      "owner": "Product",
+      "scope": "grade10-site/site"
     }
   ],
   "engineers": {

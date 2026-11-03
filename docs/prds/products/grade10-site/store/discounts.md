@@ -18,6 +18,7 @@ Amounts are HKD. Each kind has a class, product or order, that the
   - **Order Coupon** — a code the operator mints in the store admin console for a fixed amount off the whole order, or off named products or variants; single use, `PREFIX-XXXXXXXX`, one member, an expiry; order class, or product where it names products
   - **Product Coupon** — a reward the member redeems: a fixed amount, or a % with a ceiling, off its scope — [Rewards](/p/grade10-site/loyalty/rewards#reward-types); product class, or order where its scope is the whole order
   - **Gift** — a reward, or a coupon the operator mints: the gift product at 100% off once the goods pass a threshold, handed over at the till alone; product class
+  - 🚧 **Promotion Code** — a printed single-use code from a campaign batch, for anyone holding it: a rule on what the sale holds and a cut or a gift; at the till, and online where its coupon names the online channel; a gift reward stays at the till; the online cut rides as line discounts, so a guest can spend one
   - **Public Code** — a Shopify discount code the merchandiser opens to everyone, not minted to a member; order class — [Public Codes](#public-codes)
 - **Points** — **$1** a point, paid against the bill in the cart drawer or at the till, outside the count — [Paying with Points](/p/grade10-site/loyalty/paying-with-points)
 

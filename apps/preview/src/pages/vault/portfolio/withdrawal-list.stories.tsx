@@ -8,7 +8,7 @@ import { WithdrawalList } from "./withdrawal-list";
  * sets on each request, from Pending to Completed.
  */
 const meta = {
-  title: "Vault/Portfolio/Parts/WithdrawalList",
+  title: "Vault/Portfolio/Blocks/WithdrawalList",
   component: WithdrawalList,
   parameters: { layout: "padded" },
 } satisfies Meta<typeof WithdrawalList>;

@@ -41,15 +41,16 @@ Both kinds state:
 | A free booster pack | 100% | The variant it names | — |
 | A free booster pack over $500 | A free line, the pack's own variant | — | $500 |
 
-- **Online only by product or filter** — a till sale names its goods by
-  variant alone, so a coupon scoped to named products or a filter is online only
+- 🚧 **Products and filters at the till** — the till reads each line's product
+  and catalog filters, so a coupon scoped to named products or a filter is good
+  in every channel it names; a line the catalog cannot place refuses it
 
 ## Ways to Get a Reward
 
 | Way | When | Cost |
 | --- | --- | --- |
 | Reward shop | A member buys it | Points, the reward's cost |
-| Birthday `TBC` | Once a year, on the birthday the member's profile holds | None |
+| Birthday `TBC` | Once a year, on the birthday the member gave - [Coupons](/p/grade10-site/loyalty/coupons#validity) | None |
 | Registration `TBC` | Once, when the account is created | None |
 | Operator gift `TBC` | An operator hands one out as goodwill | None |
 | Campaign gift | A member wins a campaign - [Campaigns](/p/grade10-site/loyalty/campaigns) | None |
@@ -67,8 +68,9 @@ Stock reads as a yes or no, never a count.
 - **Nothing is held** - points are spent at the moment of taking, not reserved
 - **What the coupon needs, before the points go** - the basket it has to
   reach, and the one channel it is good at where there is only one
-- 🚧 **Online only on the menu** - a reward scoped to named products or a
-  catalog filter reads online only, whatever channels it names
+- 🚧 **Birthday rewards in the birthday month** - a reward held to the
+  birthday month is bought only in it, and refused before the points go to a
+  member with no birthday on file
 - 🚧 **A card per reward** - the shop draws the item's art or the coupon's
   gift tile, the deadline where one is named, and the price; a press opens
   the checkout

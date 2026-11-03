@@ -6,8 +6,9 @@ import {
 } from "../src/reference-capture.mjs";
 
 // The deployed workbench's capture coordinator lives in one Durable Object:
-// its storage holds the schedule, the live runs and the approvals, and its
-// alarm drives a full run batch by batch. Workers reach it through a proxy
+// its storage holds the schedule, the live runs, the approvals, the reference
+// index and the drift scores, and its alarm drives a full run batch by batch,
+// then fills the index and scores queued pairs. Workers reach it through a proxy
 // with the coordinator's own method names.
 
 const METHODS = [
@@ -16,6 +17,9 @@ const METHODS = [
   "captureFocused",
   "createApproval",
   "listApprovals",
+  "listReferences",
+  "queueScores",
+  "readScores",
   "status",
 ];
 const INSTANCE = "reference-captures";

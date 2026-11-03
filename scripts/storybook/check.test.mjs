@@ -63,7 +63,7 @@ describe("placementErrors", () => {
   const place = (path, title, component) =>
     placementErrors(root, path, { title, component });
 
-  it("accepts a screen, a part, a block and a primitive in their folders", () => {
+  it("accepts a screen, a block and a primitive in their folders", () => {
     assert.deepEqual(
       place(
         "apps/preview/src/pages/store/cart/cart-page.stories.tsx",
@@ -81,10 +81,18 @@ describe("placementErrors", () => {
     assert.deepEqual(
       place(
         "apps/preview/src/pages/store/cart/line.stories.tsx",
-        "Store/Cart/Parts/CartLine",
+        "Store/Cart/Blocks/CartLine",
         "CartLine",
       ),
       [],
+    );
+    assert.match(
+      place(
+        "apps/preview/src/pages/store/cart/line.stories.tsx",
+        "Store/Cart/Parts/CartLine",
+        "CartLine",
+      )[0],
+      /sits under Screens/,
     );
     assert.deepEqual(
       place(
@@ -183,11 +191,14 @@ describe("placementErrors", () => {
     );
     assert.match(error, /lives in apps\/preview\/src\/pages\/store\/cart\//);
     const [block] = place(
-      "apps/preview/src/pages/store/cart/item.stories.tsx",
+      "apps/preview/src/pages/store/home/item.stories.tsx",
       "Store/Cart/Blocks/CartItem",
       "CartItem",
     );
-    assert.match(block, /lives in packages\/ui\/src\/blocks\//);
+    assert.match(
+      block,
+      /lives in packages\/ui\/src\/blocks\/ or apps\/preview\/src\/pages\/store\/cart\//,
+    );
   });
 
   it("refuses a leaf that is not the component's name", () => {
@@ -284,6 +295,7 @@ describe("checkStories", () => {
       "apps/preview/.storybook-workbench/preview.tsx": `storySort: (a, b) => {\n${renderSidebar(
         {
           "Start Here": [],
+          Dashboard: [],
           Store: ["Cart"],
           "Post Bidding": [],
           "Design System": [],
@@ -333,6 +345,7 @@ ${story("Store/Flows")}`,
       "apps/preview/.storybook-workbench/preview.tsx": `storySort: (a, b) => {\n${renderSidebar(
         {
           "Start Here": [],
+          Dashboard: [],
           Store: ["Cart"],
           "Post Bidding": [],
           "Design System": [],

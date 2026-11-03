@@ -8,7 +8,7 @@ import {
 import { IntakeItemCard } from "./intake-item-card";
 
 const meta = {
-  title: "Submissions/Intake Tracker/Parts/IntakeItemCard",
+  title: "Submissions/Intake Tracker/Blocks/IntakeItemCard",
   component: IntakeItemCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -54,7 +54,7 @@ export const Vaulted: Story = {
 
 /**
  * Boneyard skeleton while the submissions fetch settles — also the capture
- * target for `boneyard-js build` (story id `submissions-intake-tracker-parts-intakeitemcard--loading`,
+ * target for `boneyard-js build` (story id `submissions-intake-tracker-blocks-intakeitemcard--loading`,
  * at the card's full page width).
  */
 export const Loading: Story = {

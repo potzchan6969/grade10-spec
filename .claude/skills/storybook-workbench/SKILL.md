@@ -32,9 +32,10 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
    journey shown as its steps, for review and site capture, is a Flow under
    `<Domain>/Flows` (`docs/governance/storybook.md#journeys`); an outcome that turns
    on what staging is set to is the Screen's Scenario; a screen not yet designed is a
-   wireframe Prototype; three directions to choose from is a Prototype; a piece
-   only this feature draws is a Part; an `@grade10/ui` export's own state is a
-   Block story, beside the block. A new block, variant or token is the
+   wireframe Prototype; three directions to choose from is a Prototype; a
+   component's own state is a Block story, beside the block: in
+   `packages/ui/src/blocks/` for an `@grade10/ui` export, or beside the screens
+   for a piece only this feature draws. A new block, variant or token is the
    designer's call and Design Override's; say so rather than adding one
 4. **Name it** — the title from the grammar; each state story named with the
    State column's words. A state the table lacks goes into `ui-design.md`

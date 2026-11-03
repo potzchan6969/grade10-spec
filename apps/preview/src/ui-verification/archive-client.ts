@@ -480,6 +480,58 @@ export async function createApproval(
   );
 }
 
+/** A pair's stored drift score, as the coordinator worked it out. */
+export type StoredScore =
+  | { kind: "compared"; ratio: number }
+  | { kind: "size-mismatch" }
+  | { kind: "error"; message: string };
+
+/** The stored drift scores of the named pairs; a pair with none is absent. */
+export async function readScores(
+  base: string,
+  keys: readonly string[],
+  signal: AbortSignal,
+): Promise<Record<string, StoredScore>> {
+  const payload = requireObject(
+    await requestJson(apiUrl(base, "/api/scores/read"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ keys }),
+      signal,
+    }),
+    "for the drift scores",
+  );
+  const scores: Record<string, StoredScore> = {};
+  const raw =
+    payload.scores && typeof payload.scores === "object" ? payload.scores : {};
+  // A stored failure is left out, so the browser compares that pair itself.
+  for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
+    const score = value as Partial<StoredScore & { ratio: number }>;
+    if (score?.kind === "compared" && Number.isFinite(score.ratio))
+      scores[key] = { kind: "compared", ratio: score.ratio as number };
+    else if (score?.kind === "size-mismatch")
+      scores[key] = { kind: "size-mismatch" };
+  }
+  return scores;
+}
+
+/** Asks the coordinator to score pairs it has not; a few hundred at most. */
+export async function queueScores(
+  base: string,
+  pairs: readonly {
+    reference: { artifact: ImageArtifact; region?: unknown };
+    other: { artifact: ImageArtifact; region?: unknown };
+  }[],
+): Promise<void> {
+  await requestJson(apiUrl(base, "/api/scores"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      pairs: pairs.map(({ reference, other }) => ({ reference, other })),
+    }),
+  });
+}
+
 export async function getImageObject(
   base: string,
   artifact: ImageArtifact,

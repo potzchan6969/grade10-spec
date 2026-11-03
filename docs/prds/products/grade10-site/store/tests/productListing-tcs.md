@@ -4,8 +4,8 @@ title: Store Product Listing Test Cases
 
 # grade10-site/store/product-listing Test Cases
 
-**Status:** pending-review · 0/35
-**Drafts styled:** 2026-10-24, tcs-rules r7
+**Status:** approved · 35/35
+**Reviewed:** 2026-11-02, tcs-rules r7
 **Capabilities:** grade10-site/store/product-listing, grade10-site/store/discounts
 
 ## Background
@@ -81,7 +81,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -116,7 +116,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -147,7 +147,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -190,7 +190,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -230,7 +230,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -265,12 +265,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** product-listing#products-display/small-screens
 
 **Pre-conditions:**
@@ -283,6 +283,7 @@ Runs once per row of **Test data**.
 | --- |
 | a desktop browser below the wide breakpoint, with a mouse |
 | a phone browser with touch |
+| a touch tablet at or above the wide breakpoint, such as an iPad held landscape |
 
 **Steps:**
 
@@ -301,7 +302,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -339,7 +340,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -387,7 +388,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -428,7 +429,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -446,7 +447,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | dismiss the `<type A>` chip | `<world A>` alone |
 | the browser's Back | `<world A>` alone |
-| Clear filters | none |
+| ❓ Clear filters - product confirms - recommended: offered whenever a narrowing is in force | none |
 
 **Steps:**
 
@@ -466,12 +467,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** product-listing#filters/small-screens, product-listing#sort/small-screens, product-listing#search/search-box
 
 **Pre-conditions:**
@@ -504,12 +505,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** product-listing#filters/small-screens
 
 **Pre-conditions:**
@@ -547,7 +548,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -584,7 +585,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -598,10 +599,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Words |
-| --- |
-| `<search words>` |
-| a string no title, world or type holds |
+| Words | Shows |
+| --- | --- |
+| `<search words>` | only the cards matching both, over the whole catalogue |
+| a string no title, world or type holds | no product matches the filters, UI matching store-product-listing-screens-product-list--no-match |
 
 **Steps:**
 
@@ -610,7 +611,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: a search chip beside the `<world A>` chip, the field empty, only cards matching both over the whole catalogue, and `q=` in the address.
+* Step 1: a search chip beside the `<world A>` chip, the field empty, the row's results, and `q=` in the address.
 * Step 2 lists `<world A>` alone again.
 
 ---
@@ -626,7 +627,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -666,12 +667,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation
 * **Trace:** product-listing
 
 **Pre-conditions:**
@@ -693,7 +694,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -724,7 +725,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -758,7 +759,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -791,7 +792,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -825,7 +826,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -856,13 +857,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#products-display/cart-button
+* **Trace:** product-listing#products-display/cart-button, product-listing#products-display/signed-out
 
 **Pre-conditions:**
 
@@ -891,12 +892,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** product-listing#products-display/product-count
 
 **Pre-conditions:**
@@ -922,7 +923,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -932,14 +933,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin is in the shop's admin; `<draft product>` carries `<world A>` and a title word `<draft word>` no other product has, in the row's state.
+* admin is in the store's Shopify admin; `<draft product>` carries `<world A>` and a title word `<draft word>` no other product has, in the row's state.
 
 **Test data:**
 
 | `<draft product>` |
 | --- |
-| ❓ created as Draft and published to the store's channel - product confirms |
-| ❓ an active product set to Draft and saved - product confirms |
+| created as Draft and published to the store's channel |
+| an active product set to Draft and saved |
 
 **Steps:**
 
@@ -961,7 +962,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -992,7 +993,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1028,7 +1029,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1064,7 +1065,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1127,7 +1128,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -1165,7 +1166,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1205,7 +1206,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1215,7 +1216,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on the row's view; admin is in the shop's admin, on `<change product>`.
+* customer is on the row's view; admin is in the store's Shopify admin, on `<change product>`.
 
 **Test data:**
 
@@ -1224,8 +1225,8 @@ Runs once per row of **Test data**.
 | publish a new product to the store's channel | `<listing url>` | 10 seconds |
 | unpublish `<change product>` | `<listing url>` | 10 seconds |
 | change `<change product>`'s price | `<listing url>` | 10 seconds |
-| sell `<change product>` out | `<listing url>` | 10 seconds |
-| restock a sold-out `<change product>` | `<listing url>` | 10 seconds |
+| sell `<change product>` out | `<listing url>` | 30 seconds |
+| restock a sold-out `<change product>` | `<listing url>` | 30 seconds |
 | reprice `<change product>`, in `<collection>` | `<listing url>?collection=<collection handle>` | 1 minute |
 
 **Steps:**
@@ -1244,7 +1245,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1272,7 +1273,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1300,7 +1301,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1333,7 +1334,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1367,7 +1368,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The row's price and strike; the card names no discount (❓ a conditional offer's name on the card waits on design).
-* For each row with a struck price, the screen reader says `Sale price` before the current price and `Was` before the struck price; neither label appears on screen.
+* For each row with a struck price, the screen reader says `store.salePriceLabel` ("Sale price") before the current price and `store.listPriceLabel` ("Was") before the struck price; neither label appears on screen.
 
 ## Settled
 

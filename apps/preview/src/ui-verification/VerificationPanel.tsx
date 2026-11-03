@@ -397,14 +397,14 @@ function comparisonStatus(comparison: ComparisonState | undefined): {
   };
 }
 
-interface FullSizeImage {
+export interface FullSizeImage {
   title: string;
   url: string;
 }
 
 // A blob URL opened in a new tab does not load from the Storybook manager,
 // so the full-size image opens in a modal dialog over the whole window.
-function FullSizeViewer({
+export function FullSizeViewer({
   image,
   onClose,
 }: {
@@ -613,12 +613,35 @@ function DiffEvidence({
 
 // The left image of a size in Site Compare: the last approved reference by
 // default, or the reference the run recorded.
+/** A reference image whose record has not loaded, so nothing is claimed yet. */
+function PendingEvidence({ title }: { title: string }) {
+  return (
+    <section
+      aria-busy="true"
+      aria-label={`${title} evidence`}
+      className="verification-image-card"
+    >
+      <div className="verification-image-heading">
+        <h4>{title}</h4>
+      </div>
+      <div
+        className="verification-image-frame"
+        data-loading="true"
+        style={{ aspectRatio: "16 / 10" }}
+      >
+        <p role="status">Loading the reference records…</p>
+      </div>
+    </section>
+  );
+}
+
 function BaseEvidence({
   againstApproved,
   capture,
   referenceUrl,
   approved,
   approvedUrl,
+  recordsKnown,
   onOpen,
 }: {
   againstApproved: boolean;
@@ -626,8 +649,12 @@ function BaseEvidence({
   referenceUrl: string | undefined;
   approved: RecordImage | undefined;
   approvedUrl: string | undefined;
+  recordsKnown: boolean;
   onOpen: (image: FullSizeImage) => void;
 }) {
+  if (againstApproved && !approved && !recordsKnown) {
+    return <PendingEvidence title="Reference, last approved" />;
+  }
   if (againstApproved && approved) {
     return (
       <ImageEvidence
@@ -729,6 +756,9 @@ export function VerificationPanel({
   const [references, setReferences] = useState<ReferenceRecord[]>([]);
   const [approvals, setApprovals] = useState<Approval[]>([]);
   const [recordsError, setRecordsError] = useState("");
+  // Which case and refresh the references and approvals were read for. Until
+  // they match, an empty list means "not loaded", never "none".
+  const [recordsReadFor, setRecordsReadFor] = useState("");
   const [referenceChoice, setReferenceChoice] =
     useState<ReferenceChoice>("approved");
   const [drifts, setDrifts] = useState<
@@ -971,11 +1001,14 @@ export function VerificationPanel({
   }, [active, effectiveRunId, refreshVersion, selectedIdentity]);
 
   const recordCaseId = selectedIdentity?.caseId ?? "";
-  // biome-ignore lint/correctness/useExhaustiveDependencies: refreshVersion reloads the records on demand
+  const recordsFor = `${recordCaseId}#${refreshVersion}`;
+  const recordsKnown = recordsReadFor === recordsFor;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: recordsFor carries the refresh that reloads the records
   useEffect(() => {
     setReferences([]);
     setApprovals([]);
     setRecordsError("");
+    setRecordsReadFor("");
     if (!active || !archiveBase || !recordCaseId) return;
     const controller = new AbortController();
     void Promise.all([
@@ -986,12 +1019,13 @@ export function VerificationPanel({
         if (controller.signal.aborted) return;
         setReferences(nextReferences);
         setApprovals(nextApprovals);
+        setRecordsReadFor(recordsFor);
       })
       .catch((error: unknown) => {
         if (!controller.signal.aborted) setRecordsError(messageOf(error));
       });
     return () => controller.abort();
-  }, [active, archiveBase, recordCaseId, refreshVersion]);
+  }, [active, archiveBase, recordCaseId, recordsFor]);
 
   const statuses = useMemo(
     () =>
@@ -1092,13 +1126,20 @@ export function VerificationPanel({
   }
 
   // The site is held to the approved reference; a size nobody has approved
-  // yet falls back to the reference its run recorded.
+  // yet falls back to the reference its run recorded. Until the records load,
+  // nobody knows which, so the choice holds and nothing is compared.
   function againstApproved(id: ProfileId): boolean {
     return (
       mode === "approve" ||
-      (referenceChoice === "approved" && Boolean(statuses[id]?.approved))
+      (referenceChoice === "approved" &&
+        (!recordsKnown || Boolean(statuses[id]?.approved)))
     );
   }
+  const recordsWait =
+    !recordsKnown && (mode === "approve" || referenceChoice === "approved");
+  const recordsNote = recordsError
+    ? "Reference status did not load"
+    : "Loading reference status…";
   const basisKey = PROFILE_TABS.map((item) =>
     againstApproved(item.id) ? "approved" : "current",
   ).join(",");
@@ -1239,7 +1280,7 @@ export function VerificationPanel({
     id: ProfileId,
   ): { base: PairSide; candidate: PairSide } | null {
     const urls = imageUrls[id];
-    if (!urls) return null;
+    if (!urls || recordsWait) return null;
     const { approved, current } = recordImages[id];
     const approvedSide =
       approved && urls.approved
@@ -1292,6 +1333,9 @@ export function VerificationPanel({
 
   function statusOf(id: ProfileId): { text: string; tone: Tone } {
     if (mode === "approve") {
+      if (!recordsKnown) {
+        return { text: recordsError ? "Unknown" : "Loading…", tone: "idle" };
+      }
       const status = statuses[id];
       if (!status?.current) return { text: "Not captured", tone: "idle" };
       if (!status.approved)
@@ -1806,12 +1850,24 @@ export function VerificationPanel({
                       ) : null}
                     </fieldset>
                   ) : null}
-                  <ReferenceFlagChip
-                    status={statuses[selectedProfile] as ReferenceStatus}
-                  />
+                  {recordsKnown ? (
+                    <ReferenceFlagChip
+                      status={statuses[selectedProfile] as ReferenceStatus}
+                    />
+                  ) : (
+                    <span
+                      aria-busy={!recordsError}
+                      className="verification-flag"
+                      data-flag="pending"
+                      role="status"
+                    >
+                      {recordsNote}
+                    </span>
+                  )}
                 </div>
               ) : null}
               {mode === "site" &&
+              recordsKnown &&
               referenceChoice === "approved" &&
               statuses[selectedProfile] &&
               !statuses[selectedProfile]?.approved ? (
@@ -1880,7 +1936,9 @@ export function VerificationPanel({
                         </legend>
                         {PROFILE_TABS.map((item) => {
                           const comparison = comparisons[item.id];
-                          const flag = statuses[item.id]?.flag;
+                          const flag = recordsKnown
+                            ? statuses[item.id]?.flag
+                            : undefined;
                           const scored =
                             comparison !== undefined &&
                             comparison !== "running" &&
@@ -1995,7 +2053,9 @@ export function VerificationPanel({
                           ) : mode === "approve" ? (
                             <>
                               <div className="verification-image-grid">
-                                {recordImages[item.id].approved ? (
+                                {!recordsKnown ? (
+                                  <PendingEvidence title="Last approved" />
+                                ) : recordImages[item.id].approved ? (
                                   <ImageEvidence
                                     title="Last approved"
                                     artifact={
@@ -2015,7 +2075,9 @@ export function VerificationPanel({
                                     baseline.
                                   </p>
                                 )}
-                                {recordImages[item.id].current ? (
+                                {!recordsKnown ? (
+                                  <PendingEvidence title="Current" />
+                                ) : recordImages[item.id].current ? (
                                   <ImageEvidence
                                     title="Current"
                                     artifact={
@@ -2051,6 +2113,13 @@ export function VerificationPanel({
                               {statuses[item.id] ? (
                                 <ReferenceApproval
                                   key={`${identityKey(capture)}::${capture.profileId}::${captureLocale(capture)}`}
+                                  pending={
+                                    recordsKnown
+                                      ? undefined
+                                      : recordsError
+                                        ? "failed"
+                                        : "loading"
+                                  }
                                   onApprove={(comment) =>
                                     captureCurrent(capture, true, comment)
                                   }
@@ -2080,6 +2149,7 @@ export function VerificationPanel({
                                 approvedUrl={urls?.approved}
                                 capture={capture}
                                 onOpen={setFullSize}
+                                recordsKnown={recordsKnown}
                                 referenceUrl={urls?.reference}
                               />
                               <ImageEvidence

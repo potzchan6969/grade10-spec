@@ -289,7 +289,7 @@ skips the table.
    cites, and check each id in `index.json`. For **High level**, the
    feature's `Screens`, and where the feature draws none of its own, the
    screens and blocks of the feature that shows it; for
-   **One behaviour**, the `Blocks`, `Parts` and screen states that show it
+   **One behaviour**, the `Blocks` and screen states that show it
 5. **Table it** -
 
    | Story | Shows | Link |

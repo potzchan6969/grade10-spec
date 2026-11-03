@@ -15,6 +15,8 @@ import {
   createApproval,
   listApprovals,
   listReferences,
+  queueScores,
+  readScores,
   verifiedPngUrl,
 } from "./archive-client";
 import type { ReferenceFlag } from "./capture-stamp";
@@ -61,7 +63,13 @@ import {
 import { HIGH_RATIO } from "./FlowPanel";
 import { themeVariables } from "./panel-theme";
 import { comparePixels } from "./pixel-compare";
-import { listAllRuns, listEvery, localeShortLabel } from "./VerificationPanel";
+import {
+  type FullSizeImage,
+  FullSizeViewer,
+  listAllRuns,
+  listEvery,
+  localeShortLabel,
+} from "./VerificationPanel";
 
 import "./verification-dashboard.css";
 import "./verification-panel.css";
@@ -73,6 +81,12 @@ const ARCHIVE_BASE =
   typeof window === "undefined" ? "" : window.location.origin;
 /** Two PNG downloads and a canvas per pair, so only a few run at once. */
 const COMPARE_CONCURRENCY = 4;
+/** Rows drawn at a time, worst first; the rest wait for Show more. */
+const PAGE_ROWS = 10;
+/** Pairs per request asking the coordinator to score them. */
+const SCORE_QUEUE_CHUNK = 200;
+/** Pair keys per request reading their stored scores. */
+const SCORE_READ_CHUNK = 500;
 const TOLERANCE_LABEL = `${HIGH_RATIO * 100}%`;
 
 const FLAG_SHORT: Readonly<Record<ReferenceFlag, string>> = {
@@ -158,7 +172,26 @@ interface Archive {
   approvals: Approval[];
 }
 
-type ReadStep = "waiting" | "done";
+/** How many placeholder rows stand in for the table before the runs arrive. */
+const SKELETON_ROWS = 6;
+
+function Skeleton({ width }: { width?: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="vd-skeleton"
+      style={width ? { width } : undefined}
+    />
+  );
+}
+
+function SkeletonCell({ first }: { first?: boolean }) {
+  return (
+    <td className="vd-cell" data-first={first || undefined}>
+      <Skeleton width="48px" />
+    </td>
+  );
+}
 
 function messageOf(error: unknown, fallback: string): string {
   return error instanceof Error ? error.message : fallback;
@@ -204,12 +237,16 @@ async function comparePair(
   }
 }
 
-// Ranking needs every number, so the pass covers all pairs rather than the rows
-// on screen. A pair is named by its hashes, so a result never goes stale.
-function usePairResults(pairs: readonly ImagePair[]) {
-  const [results, setResults] = useState<ReadonlyMap<string, PairResult>>(
-    new Map(),
-  );
+// The coordinator stores most scores, so the browser compares only the rows on
+// screen that it has not scored yet. A pair is named by its hashes, so a
+// result never goes stale.
+function useBrowserComparisons(
+  pairs: readonly ImagePair[],
+  results: ReadonlyMap<string, PairResult>,
+  setResults: React.Dispatch<
+    React.SetStateAction<ReadonlyMap<string, PairResult>>
+  >,
+) {
   const known = useRef(results);
   known.current = results;
   const pairsKey = pairs.map((pair) => pair.key).join("\n");
@@ -247,15 +284,39 @@ function usePairResults(pairs: readonly ImagePair[]) {
     }
     return () => controller.abort();
   }, [pairsKey]);
-  return results;
+}
+
+/** A dialog image that opens at full size when pressed. */
+function OpenableImage({
+  url,
+  label,
+  onOpen,
+}: {
+  url: string;
+  label: string;
+  onOpen: (image: FullSizeImage) => void;
+}) {
+  return (
+    <button
+      aria-label={`Open ${label} at full size`}
+      className="vd-shot-open"
+      onClick={() => onOpen({ title: label, url })}
+      title="Open at full size"
+      type="button"
+    >
+      <img alt={label} src={url} />
+    </button>
+  );
 }
 
 function ArchiveImage({
   artifact,
   label,
+  onOpen,
 }: {
   artifact: ImageArtifact;
   label: string;
+  onOpen: (image: FullSizeImage) => void;
 }) {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
@@ -279,13 +340,21 @@ function ArchiveImage({
   }, [artifact]);
   if (error) return <p className="vd-shot-note">{error}</p>;
   return url ? (
-    <img alt={label} src={url} />
+    <OpenableImage label={label} onOpen={onOpen} url={url} />
   ) : (
     <p className="vd-shot-note">Loading…</p>
   );
 }
 
-function PairDiffImage({ pair, label }: { pair: ImagePair; label: string }) {
+function PairDiffImage({
+  pair,
+  label,
+  onOpen,
+}: {
+  pair: ImagePair;
+  label: string;
+  onOpen: (image: FullSizeImage) => void;
+}) {
   const [state, setState] = useState<{ url?: string; note: string }>({
     note: "Comparing…",
   });
@@ -336,7 +405,7 @@ function PairDiffImage({ pair, label }: { pair: ImagePair; label: string }) {
     };
   }, [pair]);
   return state.url ? (
-    <img alt={label} src={state.url} />
+    <OpenableImage label={label} onOpen={onOpen} url={state.url} />
   ) : (
     <p className="vd-shot-note">{state.note}</p>
   );
@@ -345,9 +414,17 @@ function PairDiffImage({ pair, label }: { pair: ImagePair; label: string }) {
 type Shot =
   | { caption: string; kind: "image"; artifact: ImageArtifact }
   | { caption: string; kind: "diff"; pair: ImagePair }
-  | { caption: string; kind: "empty"; note: string };
+  | { caption: string; kind: "empty"; note: string }
+  | { caption: string; kind: "loading" };
 
-function shotsOf(size: CaseSize, tab: DashboardTab, mode: CompareMode): Shot[] {
+function shotsOf(
+  size: CaseSize,
+  tab: DashboardTab,
+  mode: CompareMode,
+  loading: boolean,
+): Shot[] {
+  const waits = (shot: Shot): Shot =>
+    loading ? { caption: shot.caption, kind: "loading" } : shot;
   const image = (caption: string, artifact?: ImageArtifact, note = ""): Shot =>
     artifact
       ? { caption, kind: "image", artifact }
@@ -370,19 +447,24 @@ function shotsOf(size: CaseSize, tab: DashboardTab, mode: CompareMode): Shot[] {
         "No reference captured",
       ),
       diff(size.drift, "Nothing to diff yet"),
-    ];
+    ].map(waits);
   }
   const capture = size.capture?.status === "captured" ? size.capture : null;
   const pair =
     mode === "approved" ? size.siteAgainstApproved : size.siteAgainstRun;
+  const held = (shot: Shot) => (mode === "approved" ? waits(shot) : shot);
   return [
-    image(
-      mode === "approved" ? "Last approved" : "Current reference",
-      pair?.reference.artifact,
-      mode === "approved" ? "No approved reference" : "No reference recorded",
+    held(
+      image(
+        mode === "approved" ? "Last approved" : "Current reference",
+        pair?.reference.artifact,
+        mode === "approved" ? "No approved reference" : "No reference recorded",
+      ),
     ),
     image("Site", capture?.site, "Not captured"),
-    diff(pair, capture ? "No approved reference to compare" : "Not captured"),
+    held(
+      diff(pair, capture ? "No approved reference to compare" : "Not captured"),
+    ),
   ];
 }
 
@@ -390,6 +472,7 @@ function StoryDialog({
   item,
   tab,
   mode,
+  loading,
   locale,
   results,
   onClose,
@@ -401,6 +484,8 @@ function StoryDialog({
   item: DashboardCase;
   tab: DashboardTab;
   mode: CompareMode;
+  /** The references and approvals are not in yet. */
+  loading: boolean;
   locale: string;
   results: ReadonlyMap<string, PairResult>;
   onClose: () => void;
@@ -418,8 +503,10 @@ function StoryDialog({
   const [comment, setComment] = useState("");
   const [pending, setPending] = useState<"approve" | "request" | null>(null);
   const [error, setError] = useState("");
+  const [fullSize, setFullSize] = useState<FullSizeImage | null>(null);
   const allApproved = statusOfCase(item) === "approved";
-  const canApprove = tab === "approvals" && !allApproved;
+  const canApprove = tab === "approvals" && !allApproved && !loading;
+  const readingWaits = loading && (tab === "approvals" || mode === "approved");
   const trimmed = comment.trim();
   const requestReference = item.sizes[requestSize].status.current;
 
@@ -496,7 +583,11 @@ function StoryDialog({
       onClick={(event) => {
         if (event.target === dialog.current) onClose();
       }}
-      onClose={onClose}
+      // The full-size image is a dialog inside this one; React hands its close
+      // event up here too, and closing it must leave the story open.
+      onClose={(event) => {
+        if (event.target === dialog.current) onClose();
+      }}
       ref={dialog}
     >
       <div className="vd-dialog-frame">
@@ -516,7 +607,9 @@ function StoryDialog({
             </button>
           </div>
           <div className="vd-flags">
-            {reasons.length ? (
+            {loading ? (
+              <Skeleton width="24ch" />
+            ) : reasons.length ? (
               reasons.map((reason) => (
                 <span
                   className="verification-flag"
@@ -543,42 +636,55 @@ function StoryDialog({
                     {label}
                     <span>{pixels}</span>
                   </h3>
-                  <span
-                    className="verification-flag"
-                    data-flag={size.status.flag}
-                  >
-                    {FLAG_LONG[size.status.flag]}
-                  </span>
+                  {loading ? (
+                    <Skeleton width="16ch" />
+                  ) : (
+                    <span
+                      className="verification-flag"
+                      data-flag={size.status.flag}
+                    >
+                      {FLAG_LONG[size.status.flag]}
+                    </span>
+                  )}
                   <p>
                     {tab === "approvals"
                       ? "Reference drift"
                       : `Site vs ${mode === "approved" ? "approved" : "run reference"}`}
-                    <strong>
-                      {readingLong(
-                        tab === "approvals"
-                          ? driftOf(size, results)
-                          : siteOf(size, mode, results),
-                      )}
-                    </strong>
+                    {readingWaits ? (
+                      <Skeleton width="12ch" />
+                    ) : (
+                      <strong>
+                        {readingLong(
+                          tab === "approvals"
+                            ? driftOf(size, results)
+                            : siteOf(size, mode, results),
+                        )}
+                      </strong>
+                    )}
                   </p>
                 </div>
                 <div className="vd-shots">
-                  {shotsOf(size, tab, mode).map((shot) => (
+                  {shotsOf(size, tab, mode, loading).map((shot) => (
                     <figure key={shot.caption}>
-                      <div className="vd-shot">
+                      <div
+                        className="vd-shot"
+                        data-loading={shot.kind === "loading" || undefined}
+                      >
                         {shot.kind === "image" ? (
                           <ArchiveImage
                             artifact={shot.artifact}
                             label={`${shot.caption} at ${label}`}
+                            onOpen={setFullSize}
                           />
                         ) : shot.kind === "diff" ? (
                           <PairDiffImage
                             label={`Pixel diff at ${label}`}
+                            onOpen={setFullSize}
                             pair={shot.pair}
                           />
-                        ) : (
+                        ) : shot.kind === "empty" ? (
                           <p className="vd-shot-note">{shot.note}</p>
-                        )}
+                        ) : null}
                       </div>
                       <figcaption>{shot.caption}</figcaption>
                     </figure>
@@ -683,9 +789,11 @@ function StoryDialog({
               <p>
                 {tab === "site"
                   ? "Nobody approves a site capture. Fix the site, or change the reference in Approve."
-                  : allApproved
-                    ? "Every size of this story is approved."
-                    : `Approve all sizes captures the live story at desktop, tablet and mobile in ${locale}, then approves those images.`}
+                  : loading
+                    ? "Approval opens once the references and approvals are in."
+                    : allApproved
+                      ? "Every size of this story is approved."
+                      : `Approve all sizes captures the live story at desktop, tablet and mobile in ${locale}, then approves those images.`}
               </p>
               <div className="verification-inline-actions">
                 <button onClick={onClose} type="button">
@@ -735,7 +843,46 @@ function StoryDialog({
           )}
         </footer>
       </div>
+      {fullSize ? (
+        <FullSizeViewer image={fullSize} onClose={() => setFullSize(null)} />
+      ) : null}
     </dialog>
+  );
+}
+
+/** The table's shape before the runs arrive, so the page does not jump. */
+function SkeletonRow({
+  profiles,
+  perSize,
+  gridStyle,
+}: {
+  profiles: readonly ProfileId[];
+  perSize: number;
+  gridStyle: React.CSSProperties;
+}) {
+  return (
+    <tr className="vd-row" style={gridStyle}>
+      <td className="vd-story-cell">
+        <span className="vd-story">
+          <span aria-hidden="true" className="vd-thumb" data-loading="true" />
+          <Skeleton width="26px" />
+          <span className="vd-story-text">
+            <Skeleton width="14ch" />
+            <Skeleton width="20ch" />
+          </span>
+        </span>
+      </td>
+      {profiles.flatMap((id) =>
+        ["first", "second"]
+          .slice(0, perSize)
+          .map((slot) => (
+            <SkeletonCell first={slot === "first"} key={`${id}-${slot}`} />
+          )),
+      )}
+      <td className="vd-actions">
+        <Skeleton width="64px" />
+      </td>
+    </tr>
   );
 }
 
@@ -746,6 +893,7 @@ function Row({
   profiles,
   tab,
   mode,
+  loading,
   results,
   gridStyle,
   onOpen,
@@ -757,18 +905,27 @@ function Row({
   profiles: readonly ProfileId[];
   tab: DashboardTab;
   mode: CompareMode;
+  /** The references and approvals are not in yet. */
+  loading: boolean;
   results: ReadonlyMap<string, PairResult>;
   gridStyle: React.CSSProperties;
   onOpen: () => void;
   onCopy: () => void;
 }) {
   const needsApproval = statusOfCase(item) !== "approved";
+  // The site held to the run's own reference is the one reading the runs settle alone.
+  const siteWaits = loading && mode === "approved";
+  const rankWaits = loading && (tab === "approvals" || mode === "approved");
   return (
     <tr className="vd-row" style={gridStyle}>
       <td className="vd-story-cell">
         <button className="vd-story" onClick={onOpen} type="button">
-          <span aria-hidden="true" className="vd-thumb">
-            {item.thumbnail ? (
+          <span
+            aria-hidden="true"
+            className="vd-thumb"
+            data-loading={loading || undefined}
+          >
+            {item.thumbnail && !loading ? (
               <img
                 alt=""
                 loading="lazy"
@@ -776,9 +933,13 @@ function Row({
               />
             ) : null}
           </span>
-          <span className="vd-rank" data-tone={rankTone}>
-            {rank}
-          </span>
+          {rankWaits ? (
+            <Skeleton width="26px" />
+          ) : (
+            <span className="vd-rank" data-tone={rankTone}>
+              {rank}
+            </span>
+          )}
           <span className="vd-story-text">
             <span className="vd-story-name">{item.name}</span>
             <span className="vd-story-path">{item.path}</span>
@@ -787,6 +948,12 @@ function Row({
       </td>
       {profiles.flatMap((id) => {
         const size = item.sizes[id];
+        if (loading && tab === "approvals") {
+          return [
+            <SkeletonCell first key={`${id}-a`} />,
+            <SkeletonCell key={`${id}-d`} />,
+          ];
+        }
         return tab === "approvals"
           ? [
               <ApprovalCell flag={size.status.flag} key={`${id}-a`} />,
@@ -797,27 +964,34 @@ function Row({
               />,
             ]
           : [
-              <ReadingCell
-                first
-                key={`${id}-s`}
-                reading={siteOf(size, mode, results)}
-                title={`Site drift: ${readingLong(siteOf(size, mode, results))}`}
-              />,
-              ...(mode === "run"
-                ? [
-                    <td
-                      className="vd-cell vd-ref-label"
-                      key={`${id}-r`}
-                      title={FLAG_LONG[size.status.flag]}
-                    >
-                      {size.status.flag === "approved" ? "Approved" : ""}
-                    </td>,
-                  ]
-                : []),
+              siteWaits ? (
+                <SkeletonCell first key={`${id}-s`} />
+              ) : (
+                <ReadingCell
+                  first
+                  key={`${id}-s`}
+                  reading={siteOf(size, mode, results)}
+                  title={`Site drift: ${readingLong(siteOf(size, mode, results))}`}
+                />
+              ),
+              ...(mode === "run" && loading
+                ? [<SkeletonCell key={`${id}-r`} />]
+                : mode === "run"
+                  ? [
+                      <td
+                        className="vd-cell vd-ref-label"
+                        key={`${id}-r`}
+                        title={FLAG_LONG[size.status.flag]}
+                      >
+                        {size.status.flag === "approved" ? "Approved" : ""}
+                      </td>,
+                    ]
+                  : []),
             ];
       })}
       <td className="vd-actions">
-        {tab === "approvals" && needsApproval ? (
+        {tab === "approvals" && loading ? <Skeleton width="72px" /> : null}
+        {tab === "approvals" && !loading && needsApproval ? (
           <button
             aria-label={`Review the images of ${item.name} to approve`}
             className="verification-primary"
@@ -827,7 +1001,9 @@ function Row({
             Approve
           </button>
         ) : null}
-        {tab === "site" && hasSiteDrift(item, profiles, mode, results) ? (
+        {tab === "site" &&
+        !siteWaits &&
+        hasSiteDrift(item, profiles, mode, results) ? (
           <button
             aria-label={`Copy a fix prompt for ${item.name}`}
             onClick={onCopy}
@@ -899,11 +1075,9 @@ export function VerificationDashboardPage() {
   const managerApi = useStorybookApi();
   const { index } = useStorybookState();
   const [archive, setArchive] = useState<Archive | null>(null);
-  const [steps, setSteps] = useState<Record<keyof Archive, ReadStep>>({
-    runs: "waiting",
-    references: "waiting",
-    approvals: "waiting",
-  });
+  // The runs draw the rows at once; what the references and approvals decide
+  // is drawn as a skeleton until both lists are in.
+  const [referencesLoading, setReferencesLoading] = useState(true);
   const [readError, setReadError] = useState("");
   const [refresh, setRefresh] = useState(0);
   const [tab, setTab] = useState<DashboardTab>("approvals");
@@ -917,6 +1091,15 @@ export function VerificationDashboardPage() {
   const [attention, setAttention] = useState(false);
   const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(new Set());
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [stored, setStored] = useState<ReadonlyMap<string, PairResult>>(
+    new Map(),
+  );
+  const [computed, setComputed] = useState<ReadonlyMap<string, PairResult>>(
+    new Map(),
+  );
+  const [shown, setShown] = useState(PAGE_ROWS);
+  // The archive whose stored scores are read; ranking waits for them.
+  const [scoresFor, setScoresFor] = useState<Archive | null>(null);
   const [note, setNote] = useState("");
   const [prompt, setPrompt] = useState<{
     title: string;
@@ -928,32 +1111,34 @@ export function VerificationDashboardPage() {
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
-    const reading = <T,>(key: keyof Archive, list: Promise<T>) =>
-      list.then((value) => {
-        if (!signal.aborted) {
-          setSteps((previous) => ({ ...previous, [key]: "done" }));
-        }
-        return value;
-      });
-    setSteps({ runs: "waiting", references: "waiting", approvals: "waiting" });
+    const fail = (failure: unknown) => {
+      if (isAbort(failure)) return;
+      // A partial list must not look complete, so nothing is drawn.
+      setArchive(null);
+      setReadError(messageOf(failure, "The archive request failed."));
+    };
     setReadError("");
-    void Promise.all([
-      reading("runs", listAllRuns(ARCHIVE_BASE, "", signal)),
-      reading(
-        "references",
-        listEvery(listReferences, ARCHIVE_BASE, "", signal),
-      ),
-      reading("approvals", listEvery(listApprovals, ARCHIVE_BASE, "", signal)),
-    ])
-      .then(([runs, references, approvals]) => {
-        if (!signal.aborted) setArchive({ runs, references, approvals });
+    const runs = listAllRuns(ARCHIVE_BASE, "", signal);
+    const decisions = Promise.all([
+      listEvery(listReferences, ARCHIVE_BASE, "", signal),
+      listEvery(listApprovals, ARCHIVE_BASE, "", signal),
+    ]);
+    // A refresh keeps the last archive whole until the new runs replace it.
+    // This then settles before the one below, whichever list answers first.
+    void runs
+      .then((list) => {
+        if (signal.aborted) return;
+        setArchive({ runs: list, references: [], approvals: [] });
+        setReferencesLoading(true);
       })
-      .catch((failure: unknown) => {
-        if (isAbort(failure)) return;
-        // A partial list must not look complete, so nothing is drawn.
-        setArchive(null);
-        setReadError(messageOf(failure, "The archive request failed."));
-      });
+      .catch(fail);
+    void Promise.all([runs, decisions])
+      .then(([list, [references, approvals]]) => {
+        if (signal.aborted) return;
+        setArchive({ runs: list, references, approvals });
+        setReferencesLoading(false);
+      })
+      .catch(fail);
     return () => controller.abort();
   }, [refresh]);
 
@@ -978,7 +1163,58 @@ export function VerificationDashboardPage() {
     [archive, index, locale],
   );
   const pairs = useMemo(() => pairsToCompare(cases, mode), [cases, mode]);
-  const results = usePairResults(pairs);
+  const results = useMemo(
+    () => new Map([...stored, ...computed]),
+    [stored, computed],
+  );
+
+  // Once the cases are built, read the stored scores of exactly their pairs,
+  // then ask the coordinator to score the rest, so the next visit ranks them
+  // at once. A read-only workbench refuses the ask, and nothing else changes;
+  // an archive with no coordinator has no scores, and the browser compares.
+  useEffect(() => {
+    if (!archive || referencesLoading) return;
+    const controller = new AbortController();
+    const wanted = new Map<string, ImagePair>();
+    for (const both of [
+      pairsToCompare(cases, "approved"),
+      pairsToCompare(cases, "run"),
+    ])
+      for (const pair of both)
+        if (!settledWithoutPixels(pair)) wanted.set(pair.key, pair);
+    const keys = [...wanted.keys()];
+    void (async () => {
+      const found: Record<string, PairResult> = {};
+      for (let start = 0; start < keys.length; start += SCORE_READ_CHUNK) {
+        try {
+          Object.assign(
+            found,
+            await readScores(
+              ARCHIVE_BASE,
+              keys.slice(start, start + SCORE_READ_CHUNK),
+              controller.signal,
+            ),
+          );
+        } catch (error) {
+          if (isAbort(error)) return;
+          break;
+        }
+      }
+      if (controller.signal.aborted) return;
+      setStored((previous) => new Map([...previous, ...Object.entries(found)]));
+      setScoresFor(archive);
+      const missing = [...wanted.values()].filter((pair) => !found[pair.key]);
+      for (let start = 0; start < missing.length; start += SCORE_QUEUE_CHUNK)
+        void queueScores(
+          ARCHIVE_BASE,
+          missing.slice(start, start + SCORE_QUEUE_CHUNK),
+        ).catch(() => {});
+    })();
+    return () => controller.abort();
+  }, [archive, cases, referencesLoading]);
+  // Stored scores never go stale, so only the first read holds the ranking;
+  // a refresh or an approval ranks on what is known while it reads again.
+  const scoresRead = scoresFor !== null;
 
   const locales = useMemo(() => {
     const unique = new Map<string, string>([["en", "en"]]);
@@ -1012,11 +1248,23 @@ export function VerificationDashboardPage() {
   const tileCount = (key: Tile) =>
     storyCount(scoped.filter((item) => matchesTile(item, key)));
 
+  const runsLoading = archive === null;
+  // Ranking also waits for the stored scores, read once the cases exist.
+  const loading = runsLoading || referencesLoading || !scoresRead;
+  // Only the site tiles held to the run's own reference need no reference.
+  const tileLoading = (key: Tile) =>
+    runsLoading ||
+    (referencesLoading && (!key.startsWith("site-") || mode === "approved"));
+  // Approvals, and the site held to the last approved reference, rank by what
+  // the references decide; until they are in, the rows keep their name order.
+  const rankLoading = loading && (tab === "approvals" || mode === "approved");
+
+  // A filter that waits on the references is held until they are in.
   const needle = query.trim().toLowerCase();
   const visible = scoped.filter(
     (item) =>
-      (!tile || matchesTile(item, tile)) &&
-      (!attention || needsAttention(item, mode, results)) &&
+      (!tile || tileLoading(tile) || matchesTile(item, tile)) &&
+      (!attention || rankLoading || needsAttention(item, mode, results)) &&
       (!needle ||
         [item.name, item.storyId, item.identity.caseId, item.path]
           .join(" ")
@@ -1028,8 +1276,9 @@ export function VerificationDashboardPage() {
     tab === "site" && sizeFocus !== "all"
       ? [sizeFocus]
       : PROFILE_ORDER.map(({ id }) => id);
-  const order =
-    tab === "approvals"
+  const order = rankLoading
+    ? visible
+    : tab === "approvals"
       ? orderForApprovals(visible, results, tile === "approved")
       : orderForSite(visible, profiles, mode, results);
 
@@ -1065,10 +1314,14 @@ export function VerificationDashboardPage() {
             {
               key: `path:${path}`,
               name: path,
-              meta: `${shown} of ${total} ${total === 1 ? "story" : "stories"} · ${
-                needs
-                  ? `${needs} ${needs === 1 ? "needs" : "need"} attention`
-                  : "all clear"
+              meta: `${shown} of ${total} ${total === 1 ? "story" : "stories"}${
+                rankLoading
+                  ? ""
+                  : ` · ${
+                      needs
+                        ? `${needs} ${needs === 1 ? "needs" : "need"} attention`
+                        : "all clear"
+                    }`
               }`,
               rows,
               header: true,
@@ -1076,7 +1329,7 @@ export function VerificationDashboardPage() {
             },
           ];
         })
-      : tab === "approvals"
+      : tab === "approvals" && !rankLoading
         ? ([0, 1, 2, 3] as ApprovalBucket[]).flatMap((bucket) => {
             const rows = order.filter(
               (item) => approvalBucket(item, results) === bucket,
@@ -1104,6 +1357,25 @@ export function VerificationDashboardPage() {
               restartRank: false,
             },
           ];
+
+  // Worst first, PAGE_ROWS at a time; the browser compares only rows it draws.
+  const openRows = sections.flatMap((section) =>
+    collapsed.has(section.key) ? [] : section.rows,
+  );
+  const shownCases = openRows.slice(0, shown);
+  const shownKey = shownCases.map((item) => item.key).join("\n");
+  // cases is a dependency too: the same rows gain pairs when references load.
+  // The browser waits for the stored scores before it compares anything.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: shownKey stands for the rows drawn
+  const browserPairs = useMemo(
+    () => (scoresRead ? pairsToCompare(shownCases, mode) : []),
+    [shownKey, mode, cases, scoresRead],
+  );
+  useBrowserComparisons(browserPairs, results, setComputed);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a new view starts from its worst rows again
+  useEffect(() => {
+    setShown(PAGE_ROWS);
+  }, [tab, tile, query, domain, target, locale, mode, sizeFocus, attention]);
 
   const perSize = tab === "site" && mode === "approved" ? 1 : 2;
   const cellColumns =
@@ -1184,13 +1456,14 @@ export function VerificationDashboardPage() {
         aria-pressed={tile === def.key}
         className="vd-tile"
         data-tone={def.tone ?? "high"}
+        disabled={tileLoading(def.key)}
         key={def.key}
         onClick={() => setTile(tile === def.key ? null : def.key)}
         type="button"
       >
         <span className="vd-tile-count">
-          {tileCount(def.key)}
-          <span> / {storyTotal}</span>
+          {tileLoading(def.key) ? <Skeleton width="2ch" /> : tileCount(def.key)}
+          <span> / {runsLoading ? <Skeleton width="2ch" /> : storyTotal}</span>
         </span>
         <span className="vd-tile-label">{def.label}</span>
         <span className="vd-tile-sub">{def.sub}</span>
@@ -1207,8 +1480,8 @@ export function VerificationDashboardPage() {
           <h2>UI Verification Dashboard</h2>
           <p>
             Every story's approval and layout changes, from the newest site run
-            of each version. Pixel diffs are worked out in this browser and
-            never stored.
+            of each version. Drift scores are stored as each pair is first
+            scored; diff images are worked out in this browser and never stored.
           </p>
         </div>
         <div className="verification-inline-actions">
@@ -1244,25 +1517,7 @@ export function VerificationDashboardPage() {
             Try again
           </button>
         </section>
-      ) : !archive ? (
-        <section className="vd-state" aria-label="Reading the archive">
-          <h3>Reading the archive</h3>
-          <ul>
-            <li>
-              <span>Site runs</span>
-              <span>{steps.runs === "done" ? "Read" : "Reading…"}</span>
-            </li>
-            <li>
-              <span>References</span>
-              <span>{steps.references === "done" ? "Read" : "Reading…"}</span>
-            </li>
-            <li>
-              <span>Approvals</span>
-              <span>{steps.approvals === "done" ? "Read" : "Reading…"}</span>
-            </li>
-          </ul>
-        </section>
-      ) : cases.length === 0 ? (
+      ) : !runsLoading && cases.length === 0 ? (
         <section className="vd-state">
           <h3>No site run yet</h3>
           <p>
@@ -1278,7 +1533,12 @@ export function VerificationDashboardPage() {
         <>
           <section aria-label="Approvals" className="vd-group-block">
             <h3>
-              Approvals · {storyTotal} {storyTotal === 1 ? "story" : "stories"}
+              Approvals ·{" "}
+              {runsLoading ? (
+                <Skeleton width="8ch" />
+              ) : (
+                `${storyTotal} ${storyTotal === 1 ? "story" : "stories"}`
+              )}
             </h3>
             <div className="vd-tiles vd-tiles-four">{tiles(STATUS_TILES)}</div>
           </section>
@@ -1339,6 +1599,7 @@ export function VerificationDashboardPage() {
             <label className="vd-check">
               <input
                 checked={attention}
+                disabled={rankLoading}
                 onChange={(event) => setAttention(event.currentTarget.checked)}
                 type="checkbox"
               />
@@ -1347,32 +1608,50 @@ export function VerificationDashboardPage() {
           </section>
 
           <div className="vd-summary-line">
-            <p>
-              <strong>
-                {shownStories} of {storyTotal}{" "}
-                {storyTotal === 1 ? "story" : "stories"}
-              </strong>{" "}
-              · {filterNote}
-            </p>
-            <p className="vd-progress">
-              <progress
-                aria-label={`${settledCount} of ${pairs.length} image pairs settled`}
-                max={Math.max(pairs.length, 1)}
-                value={settledCount}
-              />
-              {settledCount} of {pairs.length} pairs settled · {byHash} by
-              matching hash · {bySize} by region size · {byPixels} by pixels
-            </p>
+            {runsLoading ? (
+              <p>
+                <Skeleton width="16ch" />
+              </p>
+            ) : (
+              <p>
+                <strong>
+                  {shownStories} of {storyTotal}{" "}
+                  {storyTotal === 1 ? "story" : "stories"}
+                </strong>{" "}
+                · {rankLoading ? "in name order" : filterNote}
+              </p>
+            )}
+            {loading ? (
+              <p className="vd-progress" role="status">
+                Loading the references and approvals
+              </p>
+            ) : (
+              <p className="vd-progress">
+                <progress
+                  aria-label={`${settledCount} of ${pairs.length} image pairs settled`}
+                  max={Math.max(pairs.length, 1)}
+                  value={settledCount}
+                />
+                {settledCount} of {pairs.length} pairs settled · {byHash} by
+                matching hash · {bySize} by region size · {byPixels} by pixels
+              </p>
+            )}
           </div>
 
           <div aria-label="Dashboard view" className="vd-tabs" role="tablist">
             {(
               [
-                ["approvals", "Approvals", `${waiting} waiting`],
+                [
+                  "approvals",
+                  "Approvals",
+                  loading ? null : `${waiting} waiting`,
+                ],
                 [
                   "site",
                   "Site drift",
-                  `${siteHigh} past ${TOLERANCE_LABEL} or resized`,
+                  tileLoading("site-drift")
+                    ? null
+                    : `${siteHigh} past ${TOLERANCE_LABEL} or resized`,
                 ],
               ] as const
             ).map(([id, label, sub]) => (
@@ -1384,7 +1663,7 @@ export function VerificationDashboardPage() {
                 type="button"
               >
                 {label}
-                <span>{sub}</span>
+                <span>{sub ?? <Skeleton width="10ch" />}</span>
               </button>
             ))}
           </div>
@@ -1453,7 +1732,9 @@ export function VerificationDashboardPage() {
               </p>
               <button
                 className="verification-primary"
-                disabled={targetsForBatch.length === 0}
+                disabled={
+                  tileLoading("site-drift") || targetsForBatch.length === 0
+                }
                 onClick={() =>
                   copyPrompt(
                     `Batch prompt for ${targetsForBatch.length} ${
@@ -1465,8 +1746,11 @@ export function VerificationDashboardPage() {
                 title="Copies every drift past the tolerance in the current filters as one prompt"
                 type="button"
               >
-                Copy {targetsForBatch.length}{" "}
-                {targetsForBatch.length === 1 ? "drift" : "drifts"} as a prompt
+                {tileLoading("site-drift")
+                  ? "Copy drifts as a prompt"
+                  : `Copy ${targetsForBatch.length} ${
+                      targetsForBatch.length === 1 ? "drift" : "drifts"
+                    } as a prompt`}
               </button>
             </div>
           )}
@@ -1510,6 +1794,7 @@ export function VerificationDashboardPage() {
                   ? "Reference approvals by priority"
                   : "Site drift by priority"
               }
+              aria-busy={loading || undefined}
               className="vd-table"
               style={{ minWidth }}
             >
@@ -1557,11 +1842,27 @@ export function VerificationDashboardPage() {
                 </tr>
               </thead>
               <tbody>
+                {runsLoading
+                  ? Array.from({ length: SKELETON_ROWS }, (_, row) => (
+                      <SkeletonRow
+                        gridStyle={gridStyle}
+                        // biome-ignore lint/suspicious/noArrayIndexKey: placeholder rows have no identity
+                        key={row}
+                        profiles={profiles}
+                        perSize={perSize}
+                      />
+                    ))
+                  : null}
                 {(() => {
                   let running = 0;
+                  let budget = shown;
                   return sections.map((section) => {
                     if (section.restartRank) running = 0;
                     const open = !collapsed.has(section.key);
+                    const rows = open ? section.rows.slice(0, budget) : [];
+                    budget -= rows.length;
+                    // A section past the page waits for Show more, header too.
+                    if (open && rows.length === 0) return null;
                     return (
                       <React.Fragment key={section.key}>
                         {section.header ? (
@@ -1589,13 +1890,14 @@ export function VerificationDashboardPage() {
                           </tr>
                         ) : null}
                         {open
-                          ? section.rows.map((item) => {
+                          ? rows.map((item) => {
                               running += 1;
                               return (
                                 <Row
                                   gridStyle={gridStyle}
                                   item={item}
                                   key={item.key}
+                                  loading={referencesLoading}
                                   mode={mode}
                                   onCopy={() =>
                                     copyPrompt(
@@ -1619,7 +1921,20 @@ export function VerificationDashboardPage() {
                 })()}
               </tbody>
             </table>
-            {order.length === 0 ? (
+            {openRows.length > shown ? (
+              <div className="vd-more">
+                <button
+                  onClick={() => setShown((value) => value + PAGE_ROWS)}
+                  type="button"
+                >
+                  Show {Math.min(PAGE_ROWS, openRows.length - shown)} more
+                </button>
+                <span>
+                  {shown} of {openRows.length} rows
+                </span>
+              </div>
+            ) : null}
+            {!runsLoading && order.length === 0 ? (
               <div className="vd-empty">
                 <p>No story matches these filters.</p>
                 <button onClick={clearFilters} type="button">
@@ -1638,6 +1953,7 @@ export function VerificationDashboardPage() {
           }
           item={selected}
           key={selected.key}
+          loading={referencesLoading}
           locale={locale}
           mode={mode}
           onApproved={(result) => {
