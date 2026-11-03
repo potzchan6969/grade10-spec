@@ -39,6 +39,9 @@ signs - [Consignment Counter](/p/grade10-site/consignment/counter).
    - **Earning Starts** — the day each card starts earning; the day after intake unless staff choose another - [Incentive](/p/grade10-site/vault/incentive#earning)
    - **Authenticated Here or Check Later** — per card - [Authentication](/p/grade10-site/vault/intake#authentication)
    - **Receive** — one press takes every card into the vault and inventory at Taken At and prints its label; a card refused is named, and the rest wait for it
+     - 🚧 **Fixed Once Received** — the product, grade and certificate, and category are on the label and in inventory; to correct one, staff take the card off and add it again
+     - 🚧 **Editable Until Signed** — the price source, Earns Incentive, Earning Starts and authentication can still change on a received card; a change prepares the Vault Terms again and ends the link already handed over
+     - 🚧 **Photos** — can still be added after Receive
 3. 🚧 **Keep or Consign** — per card, with Keep All and Consign All; a consigned card takes its terms there - [Consignment Counter](/p/grade10-site/consignment/counter#terms)
 4. 🚧 **Sign** — in one handover, on the shop's tablet or by one email
    - **One Live Link** — emailing the link ends the one on the tablet, and a link opened on the tablet ends the one emailed; the email can be sent again
