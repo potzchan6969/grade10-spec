@@ -6,7 +6,9 @@
  */
 import { randomUUID } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
+import { STORY_CASES_FILE } from "../../packages/ui-verification/src/model.mjs";
+import { storyFingerprints } from "./story-graph.mjs";
 import { rootDirectory, storyIndex } from "./story-index.mjs";
 
 /** Drafts outside the agreed look; their references are never approved. */
@@ -115,7 +117,7 @@ export async function assignCaseIds({
   return { added, unplaceable, files: [...byFile.keys()] };
 }
 
-/** `caseId<TAB>storyId` for each story that carries one, to build a capture selection. */
+/** `[caseId, storyId, file]` for each story that carries one, to build a capture selection. */
 export function listCaseIds({ root = rootDirectory, domain } = {}) {
   const { entries, files } = storyIndex({ root });
   const byPath = new Map();
@@ -130,13 +132,46 @@ export function listCaseIds({ root = rootDirectory, domain } = {}) {
       const caseId =
         story.caseId ?? (file.stories.length === 1 ? file.caseId : null);
       if (caseId)
-        rows.push([caseId, byPath.get(`${path} ${story.exportName}`)]);
+        rows.push([caseId, byPath.get(`${path} ${story.exportName}`), path]);
     }
   }
   return rows;
 }
 
+/** Every story case, with its story file's render fingerprint. */
+export async function storyCases({ root = rootDirectory } = {}) {
+  const fingerprints = await storyFingerprints({ root });
+  return listCaseIds({ root }).map(([caseId, storyId, path]) => {
+    const inputs = fingerprints.get(path);
+    if (!storyId) throw new Error(`case ${caseId} names no built story`);
+    if (!inputs) throw new Error(`${path} has no render fingerprint`);
+    return { caseId, storyId, inputs };
+  });
+}
+
+/** Writes every story case into a built Storybook, for its Worker to declare. */
+export async function writeStoryCases(
+  directory,
+  { root = rootDirectory } = {},
+) {
+  const cases = await storyCases({ root });
+  await writeFile(
+    join(directory, STORY_CASES_FILE),
+    `${JSON.stringify({ schemaVersion: 1, cases }, null, 2)}\n`,
+  );
+  return cases;
+}
+
 async function main() {
+  const catalogue = process.argv.indexOf("--catalogue");
+  if (catalogue !== -1) {
+    const directory = process.argv[catalogue + 1];
+    if (!directory)
+      throw new Error("usage: case-ids.mjs --catalogue <storybook-static>");
+    const cases = await writeStoryCases(resolve(directory));
+    console.log(`Wrote ${cases.length} story cases to ${STORY_CASES_FILE}.`);
+    return;
+  }
   const list = process.argv.indexOf("--list");
   if (list !== -1) {
     const domain = process.argv[list + 1];

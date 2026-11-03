@@ -327,10 +327,17 @@ export function createArchiveHandler(
       }
 
       if (request.method === "GET" && url.pathname === "/api/runs") {
+        // With a coordinator, only the newest story declaration is listed.
+        const declaration = coordinator?.currentDeclaration
+          ? await coordinator.currentDeclaration()
+          : undefined;
         return jsonResponse(
-          await archive.listRuns(
-            queryOptions(url, ["caseId", "cursor", "locale"]),
-          ),
+          await archive.listRuns({
+            ...queryOptions(url, ["caseId", "cursor", "locale"]),
+            ...(declaration !== undefined
+              ? { storyRuns: declaration?.runIds ?? [] }
+              : {}),
+          }),
           200,
           headers,
         );

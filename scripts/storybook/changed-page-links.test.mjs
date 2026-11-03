@@ -5,11 +5,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import {
-  affectedPageStories,
-  changedFiles,
-  slackPayload,
-} from "./changed-page-links.mjs";
+import { changedFiles, slackPayload } from "./changed-page-links.mjs";
+import { affectedPageStories } from "./story-graph.mjs";
 
 async function fixture(files) {
   const root = await mkdtemp(join(tmpdir(), "storybook-links-"));

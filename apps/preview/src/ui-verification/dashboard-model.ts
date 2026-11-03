@@ -5,7 +5,11 @@ import type {
   ProfileId,
   VerificationManifest,
 } from "@grade10/ui-verification/model";
-import { captureLocale } from "@grade10/ui-verification/model";
+import {
+  captureLocale,
+  currentRuns,
+  isStoryCatalogue,
+} from "@grade10/ui-verification/model";
 import {
   pairKey,
   settledWithoutPixels,
@@ -216,7 +220,7 @@ export function buildCases(input: {
   entryOf: (storyId: string) => StoryEntry | undefined;
 }): DashboardCase[] {
   const { runs, references, approvals, locale, entryOf } = input;
-  const newestFirst = [...runs].sort((left, right) =>
+  const newestFirst = currentRuns(runs).sort((left, right) =>
     right.createdAt.localeCompare(left.createdAt),
   );
   const cases = new Map<string, DashboardCase>();
@@ -234,8 +238,10 @@ export function buildCases(input: {
         retired.add(key);
         continue;
       }
-      // A run that retried other cases holds no evidence for this one.
+      // A run that retried other cases holds no evidence for this one. A
+      // story catalogue's evidence is its references, never a site capture.
       if (
+        !isStoryCatalogue(run) &&
         !run.captures.some(
           (capture) =>
             capture.status !== "not-selected" &&

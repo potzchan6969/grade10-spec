@@ -1,5 +1,6 @@
 import { ArchiveError, createR2Archive } from "../src/archive.mjs";
 import { createCaptureCoordinator } from "../src/capture-coordinator.mjs";
+import { STORY_CASES_FILE } from "../src/model.mjs";
 import {
   openCaptureSession,
   readBuildReceipt,
@@ -14,6 +15,7 @@ import {
 const METHODS = [
   "requestFull",
   "noticeDeploy",
+  "currentDeclaration",
   "captureFocused",
   "createApproval",
   "listApprovals",
@@ -118,8 +120,9 @@ export function coordinatorProxy(namespace) {
   );
 }
 
-// The Worker's own clock: a Cron Trigger reads the build receipt from the
-// Worker's static assets, so a deploy is noticed without anyone telling it.
+// The Worker's own clock: a Cron Trigger reads the build receipt and the
+// story cases from the Worker's static assets, so a deploy is noticed, and
+// its stories declared, without anyone telling it.
 // The coordinator ignores a commit it has already seen.
 export async function watchDeploys(env) {
   const origin = env.STORYBOOK_ORIGIN;
@@ -134,8 +137,17 @@ export async function watchDeploys(env) {
       `the deployed build has no receipt (HTTP ${response.status})`,
     );
   const receipt = await response.json();
+  const listed = await env.ASSETS.fetch(
+    new Request(new URL(STORY_CASES_FILE, origin)),
+  );
+  if (!listed.ok)
+    throw new Error(
+      `the deployed build lists no story cases (HTTP ${listed.status})`,
+    );
+  const { cases } = await listed.json();
   return coordinatorProxy(env.REFERENCE_CAPTURES).noticeDeploy({
     commit: receipt.commit,
     baseURL: origin,
+    cases,
   });
 }

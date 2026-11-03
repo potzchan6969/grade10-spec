@@ -20,8 +20,12 @@ on:
       - "apps/preview/**"
       - "packages/date/**"
       - "packages/design-system/**"
+      - "packages/i18n/**"
       - "packages/ui/**"
       - "packages/ui-verification/**"
+      - "scripts/storybook/case-ids.mjs"
+      - "scripts/storybook/story-graph.mjs"
+      - "scripts/storybook/story-index.mjs"
       - ".github/workflows/storybook.yml"
       - "package.json"
   workflow_dispatch:
@@ -73,6 +77,11 @@ jobs:
 
       - name: Build workbench Storybook
         run: pnpm run storybook:build:workbench
+
+      # Every story case, for the Worker to declare as a reference-only run
+      # when it notices this deploy. Written before the receipt, which digests it.
+      - name: Write the story cases
+        run: node scripts/storybook/case-ids.mjs --catalogue apps/preview/storybook-static
 
       # The deployed Worker reads this receipt each hour: a commit it has not
       # seen starts a full reference capture on Cloudflare. It refuses a dirty
@@ -176,3 +185,44 @@ jobs:
             echo
             echo "Ref: \`${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  notify-deploy-failure:
+    name: Report failed Storybook deployment
+    needs: deploy
+    if: always() && needs.deploy.result == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build failure message
+        id: failure-message
+        env:
+          HEAD_SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          payload=$(jq -nc \
+            --arg sha "$HEAD_SHA" \
+            --arg run_url "$RUN_URL" \
+            '{
+              "text": "Storybook failed to deploy",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {"type": "mrkdwn", "text": ":x: *Storybook failed to deploy*\nThe UI Verification Dashboard still judges the last deployed reference."}
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {"type": "mrkdwn", "text": ("*Ref*\n`" + $sha + "`")},
+                    {"type": "mrkdwn", "text": ("*Logs*\n<" + $run_url + "|View logs>")}
+                  ]
+                }
+              ]
+            }')
+          echo "payload=$payload" >> "$GITHUB_OUTPUT"
+
+      - name: Notify Slack about failed Storybook deployment
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ vars.SLACK_CHANNEL_ID }}
+          payload: ${{ steps.failure-message.outputs.payload }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

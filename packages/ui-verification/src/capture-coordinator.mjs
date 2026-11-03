@@ -6,15 +6,22 @@ import {
   scorePair,
   settledByHashes,
 } from "./drift-scores.mjs";
-import { captureLocale, PROFILES } from "./model.mjs";
+import {
+  captureLocale,
+  currentRuns,
+  PROFILES,
+  storyCatalogueRuns,
+} from "./model.mjs";
 
 // One coordinator owns every reference capture and approval: a Durable
 // Object hosts it on the deployed workbench, and the local workbench hosts it
 // in-process. Its storage has the Durable Object storage shape (get, put,
 // delete, list by prefix), and it asks its host to wake it with setAlarm.
 
-/** At most one full capture starts in this window, deploy or manual. */
-export const FULL_INTERVAL_MS = 6 * 60 * 60 * 1000;
+/** A shot is captured again at most once in this window; others never wait. */
+export const SHOT_THROTTLE_MS = 6 * 60 * 60 * 1000;
+/** Waits before a wake whose browser could not start is tried again. */
+export const LAUNCH_BACKOFF_MS = [60_000, 5 * 60_000, 15 * 60_000];
 /** A focused capture covers a few stories, so it runs at once. */
 export const FOCUSED_TARGET_LIMIT = 5;
 /** Shots a full run takes per alarm before it saves and wakes again. */
@@ -25,6 +32,16 @@ const LIVE_RUN_LIMIT = 20;
 const SCHEDULE_KEY = "schedule";
 const RUN_PREFIX = "run:";
 const TARGETS_PREFIX = "targets:";
+/** Shots a run's due list holds per stored page. */
+const TARGETS_PAGE = 100;
+// One record per shot - its case, size and locale: the inputs it was last
+// captured from, when it last succeeded and when it was last tried. Due
+// shots are ordered by that last try, so what a stopped run left goes first.
+const LEDGER_PREFIX = "shot:";
+// Each story case's render inputs, as the newest declared build names them.
+const INPUTS_PREFIX = "inputs:";
+// The catalogue runs of the newest story declaration: the only ones read.
+const DECLARATION_KEY = "story-declaration";
 const APPROVAL_PREFIX = "approval:";
 // The coordinator indexes every reference by case, so a story's references
 // are one storage list, not a scan of the whole archive. The index is filled
@@ -43,7 +60,8 @@ export const SCORE_ATTEMPTS = 3;
 /** A stored failure is tried again when a client asks after this long. */
 export const SCORE_ERROR_RETRY_MS = 6 * 60 * 60 * 1000;
 const PROFILE_IDS = Object.keys(PROFILES);
-const TRIGGERS = ["deploy", "manual"];
+const TRIGGERS = ["deploy", "manual", "due"];
+const ENDED = ["succeeded", "failed", "superseded"];
 
 function text(value, path, max = 512) {
   if (typeof value !== "string" || value.trim() === "" || value.length > max)
@@ -86,7 +104,13 @@ function sameIdentity(left, right) {
 
 // What a run shows: everything but its working lists.
 function publicRun(run) {
-  const { targets: _targets, ...rest } = run;
+  const {
+    targets: _targets,
+    failedAt: _failedAt,
+    launchAttempts: _launchAttempts,
+    retryAt: _retryAt,
+    ...rest
+  } = run;
   return rest;
 }
 
@@ -118,6 +142,10 @@ function shotAt(targets, index) {
   return null;
 }
 
+function ledgerKey(shot) {
+  return `${LEDGER_PREFIX}${shot.caseId}:${shot.targetId}:${shot.capturePointId}:${shot.profileId}:${shot.locale.toLowerCase()}`;
+}
+
 function shotCount(targets) {
   return targets.reduce(
     (sum, target) => sum + target.locales.length * PROFILE_IDS.length,
@@ -138,20 +166,12 @@ export function createCaptureCoordinator({
   async function schedule() {
     return (
       (await storage.get(SCHEDULE_KEY)) ?? {
-        lastFullStartedAt: null,
         activeFullRunId: null,
         pending: null,
         deployedCommit: null,
+        nextDueAt: null,
       }
     );
-  }
-
-  // A window nobody has used is open from the start of time: reading the
-  // clock here as well would race the caller's own reading by a millisecond.
-  function windowOpensAt(state) {
-    return state.lastFullStartedAt === null
-      ? 0
-      : state.lastFullStartedAt + FULL_INTERVAL_MS;
   }
 
   async function saveRun(run) {
@@ -161,9 +181,18 @@ export function createCaptureCoordinator({
     });
   }
 
+  // A full run's progress, unless a person's request ended it meanwhile: a
+  // batch in flight then keeps its shots but leaves the run as it was ended.
+  async function saveProgress(run) {
+    const stored = await storage.get(`${RUN_PREFIX}${run.runId}`);
+    if (stored && ENDED.includes(stored.state)) return stored;
+    await saveRun(run);
+    return run;
+  }
+
   async function pruneRuns() {
     const runs = [...(await storage.list({ prefix: RUN_PREFIX })).values()]
-      .filter((run) => run.state === "succeeded" || run.state === "failed")
+      .filter((run) => ENDED.includes(run.state))
       .sort((left, right) => right.requestedAt.localeCompare(left.requestedAt));
     for (const run of runs.slice(LIVE_RUN_LIMIT)) {
       await storage.delete(`${RUN_PREFIX}${run.runId}`);
@@ -328,6 +357,9 @@ export function createCaptureCoordinator({
   }
 
   async function finish(run, state, message) {
+    // A run a person's request already replaced keeps that ending.
+    const stored = await storage.get(`${RUN_PREFIX}${run.runId}`);
+    if (stored && ENDED.includes(stored.state)) return stored;
     const finished = {
       ...run,
       state,
@@ -340,30 +372,158 @@ export function createCaptureCoordinator({
     return finished;
   }
 
-  // Every active case of every run, newest declaration first.
+  // Every active case of the current runs, newest declaration first: the
+  // site runs' cases, then the story cases no site run declares.
   async function fullTargets() {
-    const targets = [];
+    const runs = [];
     let cursor;
     do {
-      const page = await archive.listRuns({ cursor, limit: 100 });
-      const runs = [...page.runs].sort((left, right) =>
-        right.createdAt.localeCompare(left.createdAt),
-      );
-      for (const run of runs) {
-        for (const entry of run.catalogue) {
-          if (
-            entry.status === "active" &&
-            !targets.some((target) => sameIdentity(target, entry))
-          )
-            targets.push(targetOf(entry, run));
-        }
-      }
+      const page = await archive.listRuns({
+        cursor,
+        limit: 100,
+        storyRuns: (await currentDeclaration())?.runIds ?? [],
+      });
+      runs.push(...page.runs);
       cursor = page.cursor;
     } while (cursor);
+    const targets = [];
+    const newestFirst = currentRuns(runs).sort((left, right) =>
+      right.createdAt.localeCompare(left.createdAt),
+    );
+    for (const run of newestFirst) {
+      for (const entry of run.catalogue) {
+        if (
+          entry.status === "active" &&
+          !targets.some((target) => sameIdentity(target, entry))
+        )
+          targets.push(targetOf(entry, run));
+      }
+    }
     return targets;
   }
 
-  async function startFull(state, request) {
+  async function prefixed(prefix) {
+    return new Map(
+      [...(await storage.list({ prefix }))].map(([key, value]) => [
+        key.slice(prefix.length),
+        value,
+      ]),
+    );
+  }
+
+  // The shots whose inputs moved since they were last captured, never tried
+  // first, then the longest untried. A shot captured inside the throttle waits
+  // for it, and the earliest such wait is when the next due run starts.
+  async function dueShots({ hold = true } = {}) {
+    const inputs = await prefixed(INPUTS_PREFIX);
+    const ledger = await prefixed(LEDGER_PREFIX);
+    const due = [];
+    let nextDueAt = null;
+    for (const target of await fullTargets()) {
+      for (let index = 0; index < shotCount([target]); index += 1) {
+        const shot = shotAt([target], index);
+        const entry = ledger.get(ledgerKey(shot).slice(LEDGER_PREFIX.length));
+        const wanted = inputs.get(shot.caseId) ?? null;
+        if (entry?.capturedAt && (wanted === null || entry.inputs === wanted))
+          continue;
+        if (
+          hold &&
+          entry?.capturedAt &&
+          now() - entry.capturedAt < SHOT_THROTTLE_MS
+        ) {
+          const at = entry.capturedAt + SHOT_THROTTLE_MS;
+          nextDueAt = nextDueAt === null ? at : Math.min(nextDueAt, at);
+          continue;
+        }
+        due.push({ ...shot, inputs: wanted, triedAt: entry?.attemptedAt ?? 0 });
+      }
+    }
+    due.sort((left, right) => left.triedAt - right.triedAt);
+    return { due, nextDueAt };
+  }
+
+  async function recordShot(shot, captured) {
+    const key = ledgerKey(shot);
+    const entry = (await storage.get(key)) ?? {};
+    await storage.put(
+      key,
+      captured
+        ? { inputs: shot.inputs ?? null, capturedAt: now(), attemptedAt: now() }
+        : { ...entry, attemptedAt: now() },
+    );
+  }
+
+  async function saveTargets(runId, shots) {
+    for (let page = 0; page * TARGETS_PAGE < shots.length; page += 1)
+      await storage.put(
+        `${TARGETS_PREFIX}${runId}:${page}`,
+        shots.slice(page * TARGETS_PAGE, (page + 1) * TARGETS_PAGE),
+      );
+  }
+
+  async function targetAt(runId, index) {
+    const page = await storage.get(
+      `${TARGETS_PREFIX}${runId}:${Math.floor(index / TARGETS_PAGE)}`,
+    );
+    return page?.[index % TARGETS_PAGE] ?? null;
+  }
+
+  async function dropTargets(runId) {
+    for (const key of (
+      await storage.list({ prefix: `${TARGETS_PREFIX}${runId}:` })
+    ).keys())
+      await storage.delete(key);
+  }
+
+  // The story cases a Storybook build declares, as reference-only runs.
+  // The same cases at the same commit are the same runs, so declaring twice
+  // is a no-op.
+  async function declareStories({ cases, commit, ref }) {
+    const parts = await storyCatalogueRuns({
+      cases,
+      commit,
+      ref,
+      createdAt: iso(),
+    });
+    const stored = await prefixed(INPUTS_PREFIX);
+    const declared = new Map(
+      cases.map(({ caseId, inputs }) => [caseId, inputs ?? null]),
+    );
+    for (const [caseId, inputs] of declared)
+      if (stored.get(caseId) !== inputs)
+        await storage.put(`${INPUTS_PREFIX}${caseId}`, inputs);
+    for (const caseId of stored.keys())
+      if (!declared.has(caseId))
+        await storage.delete(`${INPUTS_PREFIX}${caseId}`);
+    // A part already published is the same declaration: an earlier attempt
+    // that stopped part-way is finished, and a repeat changes nothing.
+    let published = 0;
+    for (const part of parts) {
+      if (await archive.getRun(part.runId)) continue;
+      await archive.publish(part, []);
+      published += 1;
+    }
+    // The newest declaration is the one declared last, even when its runs
+    // were published before: a redeploy of an older commit names its own.
+    await storage.put(DECLARATION_KEY, {
+      runIds: parts.map((part) => part.runId),
+      commit,
+      declaredAt: iso(),
+    });
+    return {
+      state: published === 0 ? "unchanged" : "declared",
+      runIds: parts.map((part) => part.runId),
+      cases: cases.length,
+    };
+  }
+
+  async function currentDeclaration() {
+    return (await storage.get(DECLARATION_KEY)) ?? null;
+  }
+
+  // The schedule is read again here, after the caller's awaits: another
+  // request or the alarm may have changed it while those waited.
+  async function startFull(request, overrides = {}) {
     const runId = `capture-${newId()}`;
     const run = {
       schemaVersion: 1,
@@ -382,15 +542,19 @@ export function createCaptureCoordinator({
     };
     await saveRun(run);
     await storage.put(SCHEDULE_KEY, {
-      ...state,
-      lastFullStartedAt: now(),
+      ...(await schedule()),
+      ...overrides,
       activeFullRunId: runId,
       pending: null,
+      baseURL: request.baseURL,
     });
     await setAlarm(now());
     return run;
   }
 
+  // One full run at a time. A person's request starts now, replacing the run
+  // going; a deploy's request while one runs waits in the one pending slot,
+  // the newest replacing an older one, and starts when that run ends.
   async function requestFull({ trigger, person, baseURL }) {
     if (!TRIGGERS.includes(trigger))
       throw new TypeError(`trigger must be one of ${TRIGGERS.join(", ")}`);
@@ -401,26 +565,45 @@ export function createCaptureCoordinator({
       baseURL: text(baseURL, "baseURL", 2048),
     };
     const state = await schedule();
-    if (!state.activeFullRunId && now() >= windowOpensAt(state)) {
-      const run = await startFull(state, request);
+    if (state.activeFullRunId && trigger === "manual") {
+      // A person's request replaces the run going: what it captured stays,
+      // and what it had left is due in the run that starts now.
+      const active = await storage.get(`${RUN_PREFIX}${state.activeFullRunId}`);
+      if (active)
+        await finish(
+          active,
+          "superseded",
+          `replaced by a full capture requested by hand; ${Math.max(0, (active.passTotal ?? 0) - (active.pass ?? 0))} shot(s) it had left go to that run`,
+        );
+      const run = await startFull(request);
       return { state: "started", run: publicRun(run) };
     }
-    // A request inside the window waits in the one pending slot; the newest
-    // request replaces an older one, so the run captures the latest deploy.
-    const opensAt = windowOpensAt(state);
-    await storage.put(SCHEDULE_KEY, { ...state, pending: request });
-    if (!state.activeFullRunId) await setAlarm(opensAt);
-    return { state: "scheduled", startsAt: new Date(opensAt).toISOString() };
+    if (!state.activeFullRunId) {
+      const run = await startFull(request);
+      return { state: "started", run: publicRun(run) };
+    }
+    await storage.put(SCHEDULE_KEY, {
+      ...(await schedule()),
+      pending: request,
+    });
+    return { state: "waiting" };
   }
 
   // The host's clock calls this with the commit its build receipt names; a
   // commit not seen before is a deploy, and asks for a full capture.
-  async function noticeDeploy({ commit, baseURL }) {
+  // The deploy's story cases are declared first, so its full capture takes
+  // them in.
+  async function noticeDeploy({ commit, baseURL, cases }) {
     if (typeof commit !== "string" || !/^[0-9a-f]{40}$/.test(commit))
       throw new TypeError("commit must be a full lowercase commit");
     const state = await schedule();
     if (state.deployedCommit === commit) return { state: "unchanged" };
-    await storage.put(SCHEDULE_KEY, { ...state, deployedCommit: commit });
+    await declareStories({ cases, commit, ref: "deploy" });
+    // Declaring waits on the archive; the schedule may have moved meanwhile,
+    // and another notice may have taken this commit.
+    const after = await schedule();
+    if (after.deployedCommit === commit) return { state: "unchanged" };
+    await storage.put(SCHEDULE_KEY, { ...after, deployedCommit: commit });
     return requestFull({
       trigger: "deploy",
       person: { subject: "deploy" },
@@ -428,15 +611,82 @@ export function createCaptureCoordinator({
     });
   }
 
+  // The end of a pass: the shots that failed are tried once more, then the
+  // run ends, failed when any shot failed twice.
+  async function endPass(current) {
+    const stored = await storage.get(`${RUN_PREFIX}${current.runId}`);
+    if (stored && ENDED.includes(stored.state)) return stored;
+    if (!current.retried && current.failedAt.length > 0) {
+      const retry = [];
+      for (const index of current.failedAt)
+        retry.push(await targetAt(current.runId, index));
+      await dropTargets(current.runId);
+      await saveTargets(current.runId, retry);
+      const next = {
+        ...current,
+        retried: true,
+        pass: 0,
+        passTotal: retry.length,
+        failed: current.failed - retry.length,
+        failures: [],
+        failedAt: [],
+      };
+      await saveRun(next);
+      await setAlarm(now());
+      return next;
+    }
+    return finish(
+      current,
+      current.failed === 0 ? "succeeded" : "failed",
+      current.failed === 0
+        ? undefined
+        : `${current.failed} shot(s) failed twice; they go first next run`,
+    );
+  }
+
+  // A wake opens a browser and reads the receipt; when either fails it waits
+  // and tries again, and gives the run up only after every backoff.
   async function stepFull(run) {
     let current = run;
-    let targets = await storage.get(`${TARGETS_PREFIX}${run.runId}`);
-    const session = await openSession();
+    if (current.retryAt && now() < current.retryAt) {
+      await setAlarm(current.retryAt);
+      return current;
+    }
+    let session;
+    let provenance;
     try {
-      const provenance = await session.provenance(current.baseURL);
+      session = await openSession();
+      provenance = await session.provenance(current.baseURL);
+    } catch (error) {
+      await session?.close();
+      const attempts = (current.launchAttempts ?? 0) + 1;
+      if (attempts > LAUNCH_BACKOFF_MS.length)
+        return finish(
+          current,
+          "failed",
+          `the browser could not start after ${attempts} tries: ${messageOf(error)}`,
+        );
+      current = {
+        ...current,
+        launchAttempts: attempts,
+        retryAt: now() + LAUNCH_BACKOFF_MS[attempts - 1],
+        message: `the browser could not start; trying again: ${messageOf(error)}`,
+      };
+      const saved = await saveProgress(current);
+      if (saved === current) await setAlarm(current.retryAt);
+      return saved;
+    }
+    try {
+      current = { ...current, launchAttempts: 0, retryAt: null };
+      delete current.message;
       if (current.state === "queued") {
-        targets = await fullTargets();
-        await storage.put(`${TARGETS_PREFIX}${run.runId}`, targets);
+        // A person asking skips the six-hour hold; an unchanged shot is
+        // still never taken.
+        const { due, nextDueAt } = await dueShots({
+          hold: current.trigger !== "manual",
+        });
+        await saveTargets(current.runId, due);
+        await storage.put(SCHEDULE_KEY, { ...(await schedule()), nextDueAt });
         current = {
           ...current,
           state: "running",
@@ -445,21 +695,31 @@ export function createCaptureCoordinator({
           ref: provenance.ref,
           verified: provenance.verified,
           browser: session.browser,
-          total: shotCount(targets),
+          total: due.length,
+          pass: 0,
+          passTotal: due.length,
+          failedAt: [],
         };
       } else if (provenance.commit !== current.commit) {
+        // What this run captured stays; what it did not is still due, and
+        // goes first in the run that captures the new commit.
         return finish(
           current,
-          "failed",
-          `Storybook moved to ${provenance.commit} during the run; the next run captures it`,
+          "superseded",
+          `Storybook moved to ${provenance.commit} during the run; ${current.passTotal - current.pass} shot(s) wait for the next run`,
         );
       }
-      const end = Math.min(
-        current.done + current.failed + FULL_BATCH_SHOTS,
-        current.total,
-      );
-      for (let index = current.done + current.failed; index < end; index += 1) {
-        const shot = shotAt(targets, index);
+      for (
+        let step = 0;
+        step < FULL_BATCH_SHOTS && current.pass < current.passTotal;
+        step += 1
+      ) {
+        // A run a person's request replaced stops at its next shot.
+        const stored = await storage.get(`${RUN_PREFIX}${current.runId}`);
+        if (ENDED.includes(stored?.state)) break;
+        const index = current.pass;
+        const shot = await targetAt(current.runId, index);
+        current = { ...current, pass: index + 1 };
         try {
           const { bytes, region } = await session.shoot(shot, current.baseURL);
           const reference = await archive.createReference(
@@ -481,15 +741,18 @@ export function createCaptureCoordinator({
             current.requestedBy,
           );
           await indexReference(reference);
+          await recordShot(shot, true);
           current = {
             ...current,
             done: current.done + 1,
             referenceIds: [...current.referenceIds, reference.referenceId],
           };
         } catch (error) {
+          await recordShot(shot, false);
           current = {
             ...current,
             failed: current.failed + 1,
+            failedAt: [...current.failedAt, index],
             failures: [
               ...current.failures,
               {
@@ -507,20 +770,17 @@ export function createCaptureCoordinator({
     } finally {
       await session.close();
     }
-    if (current.done + current.failed < current.total) {
-      await saveRun(current);
-      await setAlarm(now());
-      return current;
+    if (current.pass < current.passTotal) {
+      const saved = await saveProgress(current);
+      if (saved === current) await setAlarm(now());
+      return saved;
     }
-    return finish(
-      current,
-      current.failed === 0 ? "succeeded" : "failed",
-      current.failed === 0 ? undefined : `${current.failed} shot(s) failed`,
-    );
+    return endPass(current);
   }
 
-  // The host wakes the coordinator here: a full run takes its next batch, and
-  // a pending request starts once its window opens.
+  // The host wakes the coordinator here: a full run takes its next batch;
+  // when it ends, a waiting request starts, and shots held by the throttle
+  // start their own run once it lifts.
   async function alarm() {
     const state = await schedule();
     if (state.activeFullRunId) {
@@ -532,24 +792,37 @@ export function createCaptureCoordinator({
         console.error("[ui-verification-captures] full run failed", error);
         result = await finish(run, "failed", messageOf(error));
       }
-      if (result.state === "succeeded" || result.state === "failed") {
+      if (ENDED.includes(result.state)) {
+        await dropTargets(result.runId);
         const after = await schedule();
+        // A person's request already replaced this run with its own.
+        if (after.activeFullRunId !== result.runId) {
+          await setAlarm(now());
+          return;
+        }
         await storage.put(SCHEDULE_KEY, { ...after, activeFullRunId: null });
+        if (after.pending) await startFull(after.pending);
         // Wake again at once: the index and the scores wait for a full run.
-        await setAlarm(now());
+        else await setAlarm(now());
       }
       return;
     }
-    if (state.pending) {
-      if (now() >= windowOpensAt(state)) {
-        await startFull(state, state.pending);
+    if (state.nextDueAt !== null && state.nextDueAt !== undefined) {
+      if (now() >= state.nextDueAt) {
+        await startFull(
+          {
+            trigger: "due",
+            requestedBy: { subject: "throttle" },
+            requestedAt: iso(),
+            baseURL: state.baseURL,
+          },
+          { nextDueAt: null },
+        );
         return;
       }
-      await setAlarm(windowOpensAt(state));
+      await setAlarm(state.nextDueAt);
     }
     // Between full runs the alarm fills the index, then scores queued pairs.
-    // A wake only ever moves sooner, so a pending run is never skipped: the
-    // next wake sets its window again.
     if ((await stepIndex()) || (await stepScores())) await setAlarm(now());
   }
 
@@ -665,6 +938,13 @@ export function createCaptureCoordinator({
         requestedBy,
       );
       await indexReference(reference);
+      await recordShot(
+        {
+          ...shot,
+          inputs: (await storage.get(`${INPUTS_PREFIX}${shot.caseId}`)) ?? null,
+        },
+        true,
+      );
       references.push(reference);
     }
     const approvals = [];
@@ -755,16 +1035,13 @@ export function createCaptureCoordinator({
       .map(publicRun);
     return {
       schedule: {
-        lastFullStartedAt:
-          state.lastFullStartedAt === null
-            ? null
-            : new Date(state.lastFullStartedAt).toISOString(),
-        nextFullAt: new Date(
-          Math.max(now(), windowOpensAt(state)),
-        ).toISOString(),
         activeFullRunId: state.activeFullRunId,
         pending: state.pending,
         deployedCommit: state.deployedCommit ?? null,
+        nextDueAt:
+          typeof state.nextDueAt === "number"
+            ? new Date(state.nextDueAt).toISOString()
+            : null,
       },
       runs,
     };
@@ -773,6 +1050,8 @@ export function createCaptureCoordinator({
   return {
     requestFull,
     noticeDeploy,
+    declareStories,
+    currentDeclaration,
     captureFocused,
     alarm,
     createApproval,

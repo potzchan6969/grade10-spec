@@ -65,10 +65,10 @@ export interface ReferenceCaptureInput {
 export interface CaptureRun {
   runId: string;
   lane: "full" | "focused";
-  trigger: "deploy" | "manual" | "approve" | "capture";
+  trigger: "deploy" | "manual" | "due" | "approve" | "capture";
   requestedBy: { subject: string; email?: string };
   requestedAt: string;
-  state: "queued" | "running" | "succeeded" | "failed";
+  state: "queued" | "running" | "succeeded" | "failed" | "superseded";
   commit?: string;
   browser?: string;
   total: number;
@@ -86,9 +86,9 @@ export interface CaptureRun {
 
 export interface CaptureStatus {
   schedule: {
-    lastFullStartedAt: string | null;
-    nextFullAt: string;
     activeFullRunId: string | null;
+    /** When shots held by the six-hour throttle start their own run. */
+    nextDueAt: string | null;
     pending: {
       trigger: string;
       requestedAt: string;
@@ -454,7 +454,7 @@ export async function getCaptureStatus(
 
 export async function requestFullCapture(
   base: string,
-): Promise<{ state: "started" | "scheduled"; startsAt?: string }> {
+): Promise<{ state: "started" | "waiting" }> {
   const payload = requireObject(
     await requestJson(apiUrl(base, "/api/reference-runs"), {
       method: "POST",
@@ -463,15 +463,10 @@ export async function requestFullCapture(
     }),
     "for the capture request",
   );
-  if (payload.state !== "started" && payload.state !== "scheduled") {
+  if (payload.state !== "started" && payload.state !== "waiting") {
     throw new Error("The archive returned an unreadable capture request.");
   }
-  return {
-    state: payload.state,
-    ...(typeof payload.startsAt === "string"
-      ? { startsAt: payload.startsAt }
-      : {}),
-  };
+  return { state: payload.state };
 }
 
 export async function createApproval(

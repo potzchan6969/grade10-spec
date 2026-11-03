@@ -6,7 +6,11 @@ import type {
   ProfileId,
   VerificationManifest,
 } from "@grade10/ui-verification/model";
-import { captureLocale } from "@grade10/ui-verification/model";
+import {
+  captureLocale,
+  currentRuns,
+  isStoryCatalogue,
+} from "@grade10/ui-verification/model";
 import * as React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -293,6 +297,19 @@ export async function listAllRuns(
   }
   return [...byId.values()].sort((left, right) =>
     right.createdAt.localeCompare(left.createdAt),
+  );
+}
+
+// A story catalogue is reference evidence only: Approve shows its cases that
+// no site run declares, and Site Compare never offers it.
+function shownRuns(
+  runs: VerificationManifest[],
+  mode: PanelMode,
+): VerificationManifest[] {
+  return currentRuns(runs).filter(
+    (run) =>
+      run.catalogue.length > 0 &&
+      (mode === "approve" || !isStoryCatalogue(run)),
   );
 }
 
@@ -966,7 +983,7 @@ export function VerificationPanel({
     void listAllRuns(archiveBase, listFilterCaseId, controller.signal)
       .then((nextRuns) => {
         if (controller.signal.aborted) return;
-        setRuns(nextRuns);
+        setRuns(shownRuns(nextRuns, mode));
       })
       .catch((error: unknown) => {
         if (!controller.signal.aborted) setHistoryError(messageOf(error));
@@ -975,7 +992,14 @@ export function VerificationPanel({
         if (!controller.signal.aborted) setLoadingRuns(false);
       });
     return () => controller.abort();
-  }, [active, listFilterCaseId, listStoryScope, refreshVersion, storyListOpen]);
+  }, [
+    active,
+    listFilterCaseId,
+    listStoryScope,
+    mode,
+    refreshVersion,
+    storyListOpen,
+  ]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: refreshVersion reloads the manifest on demand
   useEffect(() => {

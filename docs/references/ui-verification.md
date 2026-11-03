@@ -37,10 +37,10 @@ pnpm install --frozen-lockfile
 pnpm storybook:workbench
 ```
 
-- **Open** - Open a Flows story, such as Auction / Flows / Bid And Win A Lot, then the Approve or Site Compare tab. Site Compare compares flows only.
+- **Open** - Open any story, then the Approve tab. Site Compare compares flows only, and never offers a story catalogue run.
 - **Archive** - Development mounts the filesystem archive at the Storybook origin. The default is `.cache/ui-verification` in this checkout, or in the consuming app root when this checkout is its submodule. Set `UI_VERIFICATION_ARCHIVE` to an absolute directory before startup for another one.
 - **Hosted data, locally** - Set `UI_VERIFICATION_REMOTE` to the hosted Storybook origin, such as `https://storybook.grade10-stg.com`, to read its runs, references and approvals instead. Sign in once with `cloudflared access login <origin>`; the workbench asks `cloudflared access token` for each read and sends it as `cf-access-token`, so the Worker sees you. `UI_VERIFICATION_REMOTE_TOKEN` gives a token instead. It only reads: approve, capture and request changes are refused, because they would judge the hosted Storybook's reference, not this checkout's. It cannot be set beside `UI_VERIFICATION_ARCHIVE`.
-- **No data yet** - Both tabs stay empty until the application has captured a site run, which names the story's cases. Capture from the application repository, then press Refresh.
+- **No data yet** - Approve shows a story once its case is declared and a reference is captured. Site Compare stays empty until the application has captured a site run. Capture from the application repository, then press Refresh.
 - **Reference capture** - Approving uses the preview app's Playwright, launched by the workbench itself. `packages/ui-verification/src/reference-capture.mjs` renders the story from this Storybook: fixed sizes, scale 1, reduced motion, `en-US`, `Asia/Hong_Kong`, light. The application's site runs draw their reference with the same module.
 - **Capture** - Run `pnpm ui:verify capture` in the application repository. It captures every flow, starting the local stack and this Storybook when they are not running; `tools/ui-verification/README.md` there has the rest.
 
@@ -51,7 +51,7 @@ pnpm storybook:workbench
 - **New story** - `pnpm storybook:check` fails a story with no id. `pnpm storybook:case-ids --write` adds one to each story that lacks it; then run Biome on the files.
 - **A story that copies another** - A story spread from a sibling (`...Filled`) has no literal for the command to fill. Add `parameters: { ...Filled.parameters, verification: { caseId } }` by hand, or it would carry the sibling's id.
 - **Prototypes** - Drafts outside the agreed look carry no id: nobody approves them.
-- **Captured only when declared** - ❓ A full capture covers the cases an application's site run declares, so a block or primitive with an id but no site recipe has no reference yet. Tony L confirms how the workbench captures those.
+- **Story cases** - Each Storybook build lists every case in `ui-verification-cases.json`. When the Worker notices the deploy, it declares them as a story catalogue, in runs of 400 cases so each manifest stays under 1 MiB, under the target `storybook`, with no site outcome. The coordinator records the declaration it made last, and only its runs are read: by full captures, and by `/api/runs` for the dashboard and the Approve tab. Older declarations stay in the archive unread, and an older commit deployed again becomes the newest. The local workbench declares the checkout's cases when it starts. A case a site run declares keeps its site identity, so a story is captured under one identity only.
 
 ## Capture One Domain
 
@@ -83,19 +83,25 @@ pnpm storybook:workbench
 
 ## Capture Every Reference
 
-- **Full capture** - Every active case of every archived site run, at every size and in every locale that run recorded.
-- **When** - Within an hour of each Storybook deploy, and when someone presses Request a full capture on the Reference captures page.
-- **Noticing a deploy** - Each hour a Cron Trigger on the Worker reads the build receipt from its own static assets. A commit it has not seen asks for a full capture; the same commit asks for nothing. No CI step runs or requests a capture.
-- **Six hours** - At most one full capture starts in any six hours. A request inside that window waits in one slot, and the newest request replaces an older one. The waiting request starts when the window opens.
-- **Focused captures are apart** - Approve and Capture current reference never wait for the window, and they run beside a full capture.
+- **Full capture** - The shots that are due among every active case of every archived site run, at every size and in every locale that run recorded, then every story case of the newest story catalogue that no site run declares, at every size in English. No site is captured for a story case.
+- **Fingerprint** - CI fingerprints each story file as it builds Storybook: a SHA-256 of every file the story reads through its imports, and of the workbench's global inputs and everything they import. A workspace package is followed through its own `exports`. The preview loads the message catalogs for every story, so a copy change makes every story due. `ui-verification-cases.json` carries the fingerprint beside each case. The Worker only compares fingerprints.
+- **Due** - A shot - one case at one size and locale - is due when it was never captured, or its story's fingerprint differs from the one it was last captured at. An unchanged story is never shot again.
+- **Six hours a shot** - After a deploy, a shot captured in the last six hours waits until six hours have passed, then starts a run of its own. Every other shot is taken at once, so one busy story never holds the rest back. A full capture requested by hand does not wait.
+- **Order** - Due shots go in order of their last try, never tried first, so what a stopped run left is captured first.
+- **When** - Within an hour of each Storybook deploy, when someone presses Request a full capture on the Reference captures page, and when a held shot's six hours pass.
+- **Noticing a deploy** - Each hour a Cron Trigger on the Worker reads the build receipt and the story cases from its own static assets. A commit it has not seen declares its stories and asks for a full capture; the same commit asks for nothing. No CI step runs or requests a capture.
+- **One at a time** - A deploy's request while a full capture runs waits in one slot, the newest replacing an older one, and starts when that run ends.
+- **Requested by hand** - Request a full capture always starts at once. A capture running ends as Superseded at its next shot; what it captured stays, and what it had left is taken by the new run. Unchanged shots are still never taken.
+- **Focused captures are apart** - Approve and Capture current reference never wait, and run beside a full capture. They count as the shot's capture.
 - **Batches** - A full capture takes a few shots at a time, saves its progress, and goes on. A restart or an eviction resumes it from the last saved shot.
-- **A failed shot** - The run records it with its case, size, locale and message, and goes on. The run ends as Failed and names how many shots failed.
-- **A redeploy mid-run** - When the deployed commit changes during a full capture, the run stops as Failed rather than mix two commits. The deploy's own request captures the new commit.
+- **A browser that cannot start** - The wake is tried again after 1, 5 and 15 minutes. After the last, the run ends as Failed; its shots stay due.
+- **A failed shot** - The run records it with its case, size, locale and message, goes on, and tries it once more at the end. A shot that fails twice ends the run as Failed, and goes first next run.
+- **A redeploy mid-run** - When the deployed commit changes during a full capture, the run ends as Superseded. What it captured stays; what it did not stays due for the new commit's run.
 
 ## Reference Captures Page
 
 - **Where** - A page of its own, not a panel. Open it from Reference captures in the Approve tab, or at `?path=/reference-captures/`.
-- **Schedule** - When the last full capture started, when the next one can start, and the request that waits for it.
+- **Schedule** - When held shots start, and the request that waits for the running capture.
 - **Current runs** - Each running capture, full or focused, with a progress bar of shots captured, the failed count, and the commit being captured.
 - **Run history** - Every finished run: its lane and trigger, who asked, its state and message, its commit, and its shots.
 - **Live** - While a run goes or a request waits, the page refreshes every five seconds.
@@ -179,7 +185,7 @@ pnpm storybook:workbench
 - **Approve the reference, not the site** - Approval says the Storybook reference is the right design, at each version it is approved. Site Compare holds the site to it; nobody approves a site capture.
 - **No site reviews or calibration** - Human reviews of site captures and calibration are retired, with their routes. Model assessments stay advisory: nothing passes automatically.
 - **The workbench captures what it approves** - An approval names an image this workbench captured from the live story, so the designer approves what they see. The run's own reference shows drift; it is never approved.
-- **Focused and full captures** - A focused capture of a few stories runs at once, so approving never waits. A full capture of every case waits for a six-hour window, which bounds browser time however often the workbench deploys.
+- **Focused and full captures** - A focused capture of a few stories runs at once, so approving never waits. A full capture shoots only what changed, and each shot at most once in six hours, so browser time follows how much changed, however often the workbench deploys.
 - **The Worker notices its own deploys** - An hourly check of its own build receipt starts full captures, so CI only builds and deploys, and holds no capture credentials.
 - **One coordinator** - The schedule, the runs and the approvals live in one Durable Object, so one place decides when a capture starts and every approval is written in order.
 - **Hosted references come from Browser Rendering** - The deployed workbench captures in Cloudflare Browser Rendering. Its images do not match a local Playwright capture byte for byte, so local and hosted approvals stay in their own archives.

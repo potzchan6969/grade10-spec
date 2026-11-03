@@ -1436,7 +1436,7 @@ test("the dashboard has the coordinator store what it cannot settle, and ranks b
   await page.close();
 });
 
-test("the captures page requests a full capture, follows it, and holds the next one", {
+test("the captures page requests a full capture, follows it, and the next one shoots only what moved", {
   timeout: 240_000,
 }, async (t) => {
   const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-runs-"));
@@ -1483,14 +1483,17 @@ test("the captures page requests a full capture, follows it, and holds the next 
   assert.equal((await archive.listReferenceRuns()).runs.length, 1);
 
   await page.getByRole("button", { name: "Request a full capture" }).click();
-  await page.getByText(/^A full capture is scheduled for /).waitFor();
-  assert.match(
-    await page
-      .getByRole("region", { name: "Schedule" })
-      .getByText(/^manual by Panel browser fixture/)
-      .innerText(),
-    /^manual by Panel browser fixture · /,
-    "a request inside six hours waits",
+  await page.getByText("A full capture started.").waitFor();
+  await waitForCondition(
+    async () =>
+      (await history.getByRole("cell", { name: "Done" }).count()) === 2,
+    "the second full capture to finish on the page",
+    CAPTURE_TIMEOUT_MS,
+  );
+  assert.equal(
+    (await archive.listReferences()).references.length,
+    DECLARATIONS.length * 3,
+    "nothing moved, so the second capture shoots nothing",
   );
   await page.close();
 });

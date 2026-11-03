@@ -1,7 +1,8 @@
-import type {
-  ImageArtifact,
-  ProfileId,
-  VerificationManifest,
+import {
+  type ImageArtifact,
+  type ProfileId,
+  storyCatalogueRuns,
+  type VerificationManifest,
 } from "@grade10/ui-verification/model";
 import { describe, expect, it } from "vitest";
 import type { Approval, ReferenceRecord } from "./archive-client";
@@ -454,5 +455,48 @@ describe("pair identity", () => {
     expect(pairKey(side, side)).not.toBe(
       pairKey(side, { artifact: image("x") }),
     );
+  });
+});
+
+describe("story cases with no site", () => {
+  const catalogue = (caseIds: readonly string[], createdAt: string) =>
+    storyCatalogueRuns({
+      cases: caseIds.map((caseId) => ({ caseId, storyId: `story-${caseId}` })),
+      commit: "d".repeat(40),
+      ref: "main",
+      createdAt,
+    });
+
+  it("draws a row for each story case, judged by its references alone", async () => {
+    const stories = await catalogue(["block"], "2026-11-03T00:00:00Z");
+    const [row] = cases(stories, [], []);
+    expect(row.identity).toEqual({
+      caseId: "block",
+      targetId: "storybook",
+      capturePointId: "story",
+    });
+    expect(statusOfFlags(PROFILES.map((id) => row.sizes[id].status.flag))).toBe(
+      "none",
+    );
+    expect(siteOf(row.sizes.desktop, "approved", new Map())).toEqual({
+      kind: "not-captured",
+    });
+  });
+
+  it("holds a case a site run declares to its site identity", async () => {
+    const stories = await catalogue(["flow", "block"], "2026-11-03T00:00:00Z");
+    const rows = cases([run(["flow"]), ...stories], [], []);
+    expect(rows.map((row) => row.identity.targetId).sort()).toEqual([
+      "site",
+      "storybook",
+    ]);
+  });
+
+  it("reads only the newest catalogue, so a dropped story leaves", async () => {
+    const older = await catalogue(["block", "gone"], "2026-11-01T00:00:00Z");
+    const newer = await catalogue(["block"], "2026-11-03T00:00:00Z");
+    expect(
+      cases([...older, ...newer], [], []).map((row) => row.identity.caseId),
+    ).toEqual(["block"]);
   });
 });
