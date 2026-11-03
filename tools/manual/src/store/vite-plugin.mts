@@ -14,6 +14,7 @@ import { basename, dirname, extname, join, sep } from "node:path";
 import type { Plugin, ViteDevServer } from "vite";
 import { STORE_CHANGED } from "../api/live.ts";
 import { GrammarError, parsePage, serializePage } from "../content/grammar.ts";
+import { isDeskPath } from "./desk-dev.mts";
 import { confine, storePath } from "./disk.mts";
 import { git } from "./git.mts";
 import { type Roots, resolveRoots } from "./roots.mts";
@@ -147,7 +148,8 @@ function middleware(roots: Roots, artifacts: Artifacts) {
   ): void => {
     const url = new URL(req.url ?? "/", "http://manual.local");
     const path = url.pathname;
-    if (!path.startsWith("/api/") && !path.startsWith("/assets/")) {
+    const ours = path.startsWith("/api/") || path.startsWith("/assets/");
+    if (!ours || isDeskPath(path)) {
       next();
       return;
     }
