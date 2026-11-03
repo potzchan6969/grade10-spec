@@ -2,16 +2,27 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   // The Grade10 Manual at https://spec.grade10-stg.com on the staging
   // Cloudflare account. The build bakes the store snapshot into dist/api/*,
-  // so the site is static assets, nothing else — editing happens only against
-  // a local dev server, never here. dist/_headers gives the JSON artifacts
-  // their content type; SPA fallback keeps /p/... deep links working.
+  // so the site is static assets — editing happens only against a local dev
+  // server, never here. dist/_headers gives the JSON artifacts their content
+  // type; SPA fallback keeps /p/... deep links working.
+  //
+  // The one thing the Worker runs is /api/desk/*: it names the Access
+  // identity and passes the request to the run desk, a Worker of its own
+  // (tools/run-desk) with no address, so a deploy here never restarts it.
+  // ACCESS_TEAM_DOMAIN and ACCESS_AUD, set as vars on the deployed Worker
+  // (kept across deploys), make it verify the Access token's signature too.
   "name": "grade10-manual",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-08-01",
   "account_id": "de021143aac704ccbda9c3cd00be261d",
   "routes": [{ "pattern": "spec.grade10-stg.com", "custom_domain": true }],
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/desk/*"]
   },
+  "services": [{ "binding": "DESK", "service": "grade10-run-desk" }],
+  "keep_vars": true,
   "workers_dev": false
 }
