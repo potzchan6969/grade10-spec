@@ -38,16 +38,6 @@ import {
   DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
-import {
-  Drawer,
-  DrawerBody,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@grade10/design-system/components/overlays/drawer";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
   Bank,
@@ -56,13 +46,7 @@ import {
   Lightning,
   Plus,
 } from "@phosphor-icons/react";
-import {
-  type CSSProperties,
-  type ReactNode,
-  useEffect,
-  useId,
-  useState,
-} from "react";
+import { type ReactNode, useEffect, useId, useState } from "react";
 import {
   WINNER_ORDER_SUPPORT_EMAIL,
   type WinnerOrderContactMail,
@@ -240,7 +224,7 @@ const DRAFT_VALUE = "draft_method";
 
 const SM_UP_MQ = "(min-width: 640px)";
 
-/** Reads the 640px line — a bottom sheet below it, a dialog from it up. */
+/** Reads the 640px line — the amount field uses the md input rung below it. */
 function useSmUp() {
   const [smUp, setSmUp] = useState(
     () => typeof window === "undefined" || window.matchMedia(SM_UP_MQ).matches,
@@ -546,18 +530,20 @@ function WithdrawalDialog({
     onOpenChange(next);
   }
 
+  const smUp = useSmUp();
+
   const stepBody = (
     <>
       {step === "amount" ? (
         <VStack gap="md" hAlign="start">
           <NumberInput
-            className="[&_[data-slot=input]]:font-heading [&_[data-slot=input]]:text-2xl [&_[data-slot=input]]:font-medium [&_[data-slot=input]]:tabular-nums [&_[data-slot=input]]:[appearance:textfield] [&_[data-slot=input]::-webkit-inner-spin-button]:appearance-none [&_[data-slot=input]::-webkit-outer-spin-button]:appearance-none"
+            className="sm:[&_[data-slot=input]]:font-heading sm:[&_[data-slot=input]]:text-2xl sm:[&_[data-slot=input]]:font-medium [&_[data-slot=input]]:tabular-nums [&_[data-slot=input]]:[appearance:textfield] [&_[data-slot=input]::-webkit-inner-spin-button]:appearance-none [&_[data-slot=input]::-webkit-outer-spin-button]:appearance-none"
             inputMode="decimal"
             label="Withdraw Amount"
             message={
               <span>
                 {amountTooLow
-                  ? `The min. withdrawal is ${formatUsd(minWithdrawalUsd)}. `
+                  ? `Minimum withdrawal is ${formatUsd(minWithdrawalUsd)}. `
                   : `Available: ${formatUsd(availableUsd)}. `}
                 {amount !== availableUsd ? (
                   <Link
@@ -580,7 +566,7 @@ function WithdrawalDialog({
               </span>
             }
             prefix="US$"
-            size="lg"
+            size={smUp ? "lg" : "md"}
             status={amountTooHigh || amountTooLow ? "error" : "default"}
             value={amountInput}
             onChange={(event) => setAmountInput(event.target.value)}
@@ -965,9 +951,6 @@ function WithdrawalDialog({
     </>
   );
 
-  const smUp = useSmUp();
-  const Close = smUp ? DialogClose : DrawerClose;
-
   const secondaryAction =
     step === "submitted" ? (
       <Button
@@ -983,7 +966,7 @@ function WithdrawalDialog({
         View Withdrawal
       </Button>
     ) : step === "amount" ? (
-      <Close
+      <DialogClose
         render={
           <Button
             className="w-full sm:w-auto"
@@ -994,7 +977,7 @@ function WithdrawalDialog({
         }
       >
         Cancel
-      </Close>
+      </DialogClose>
     ) : (
       <Button
         className="w-full sm:w-auto"
@@ -1009,11 +992,11 @@ function WithdrawalDialog({
 
   const primaryAction =
     step === "submitted" ? (
-      <Close
+      <DialogClose
         render={<Button className="w-full sm:w-auto" size="md" type="button" />}
       >
         Done
-      </Close>
+      </DialogClose>
     ) : (
       <Button
         className="w-full sm:w-auto"
@@ -1033,47 +1016,6 @@ function WithdrawalDialog({
       onOpenChange={setContactOpen}
     />
   );
-
-  if (!smUp) {
-    return (
-      <>
-        <Drawer
-          onOpenChange={handleOpenChange}
-          open={open}
-          showSwipeHandle
-          swipeDirection="down"
-        >
-          <DrawerContent
-            style={{ "--drawer-content-max-height": "92dvh" } as CSSProperties}
-          >
-            <DrawerHeader>
-              <DrawerTitle
-                className={step === "submitted" ? "sr-only" : undefined}
-              >
-                {TITLE[step]}
-              </DrawerTitle>
-              {step !== "submitted" ? (
-                <p className="text-sm text-secondary-foreground">
-                  Step {stepIndex(step)} of 3
-                </p>
-              ) : null}
-              <DrawerDescription className="sr-only">
-                {TITLE[step]}
-              </DrawerDescription>
-            </DrawerHeader>
-            <DrawerBody className="gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
-              {stepBody}
-            </DrawerBody>
-            <DrawerFooter>
-              {primaryAction}
-              {secondaryAction}
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
-        {contactDialog}
-      </>
-    );
-  }
 
   return (
     <>
