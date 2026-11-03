@@ -105,8 +105,9 @@ export const Destination: Story = {
         dialog.getByRole("heading", { name: "Withdraw To" }),
       ).toBeVisible(),
     );
-    expect(dialog.getByText("HSBC ••• 8304")).toBeVisible();
-    expect(dialog.getByText(/FPS · \+852 9123/)).toBeVisible();
+    expect(dialog.getByText("HSBC")).toBeVisible();
+    expect(dialog.getByText("123 •••• 8304")).toBeVisible();
+    expect(dialog.getByText("+852 •••• 4567")).toBeVisible();
     expect(dialog.getByText("Add Hong Kong bank or FPS")).toBeVisible();
     expect(dialog.getByText("US$ or overseas bank")).toBeVisible();
   },
@@ -126,9 +127,7 @@ export const AddMethod: Story = {
     );
     expect(dialog.getByLabelText("Bank")).toBeVisible();
     expect(dialog.getByLabelText("Account Number")).toBeVisible();
-    expect(dialog.getByLabelText("Account Holder Name")).toHaveValue(
-      "Chan Tai Man",
-    );
+    expect(dialog.getByLabelText("Account Holder Name")).toHaveValue("");
     expect(dialog.getByText("Save for future withdrawals")).toBeVisible();
   },
 };
@@ -211,9 +210,9 @@ export const Review: Story = {
         dialog.getByRole("heading", { name: "Review Withdrawal" }),
       ).toBeVisible(),
     );
-    expect(dialog.getByText(/HK\$1,241/)).toBeVisible();
-    expect(dialog.getByText("HSBC ••• 8304")).toBeVisible();
-    expect(dialog.getByText("Chan Tai Man · HK$")).toBeVisible();
+    expect(dialog.getByText(/HK\$1,248/)).toBeVisible();
+    expect(dialog.getByText("HSBC")).toBeVisible();
+    expect(dialog.getByText("123 •••• 8304")).toBeVisible();
     expect(
       dialog.getByRole("button", { name: "Submit Request" }),
     ).toBeVisible();
@@ -242,7 +241,7 @@ export const Submitted: Story = {
     );
     expect(dialog.getByText("Request submitted")).toBeVisible();
     expect(dialog.getByText("Grade10 review")).toBeVisible();
-    expect(dialog.getByText(/Withdrawn to HSBC ••• 8304/)).toBeVisible();
+    expect(dialog.getByText(/Withdrawn to HSBC/)).toBeVisible();
     expect(
       dialog.getByRole("button", { name: "View Withdrawal" }),
     ).toBeVisible();

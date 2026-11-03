@@ -454,14 +454,14 @@ const PAYOUT_METHODS = [
   {
     id: "hsbc-8304",
     kind: "bank" as const,
-    title: "HSBC ••• 8304",
-    detail: "Chan Tai Man · HK$",
+    title: "HSBC",
+    detail: "123 •••• 8304",
   },
   {
     id: "fps-mobile",
     kind: "fps" as const,
-    title: "FPS · +852 9123 ••45",
-    detail: "Chan Tai Man · HK$",
+    title: "FPS",
+    detail: "+852 •••• 4567",
   },
 ];
 
@@ -560,7 +560,7 @@ const PORTFOLIO_SUMMARY = {
   cashedOutUsd: 40,
   minWithdrawalUsd: 65,
   /** Reference conversion for HKD withdrawals. */
-  hkdPerUsd: 7.76,
+  hkdPerUsd: 7.8,
   hasPayoutMethod: true,
 };
 

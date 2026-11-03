@@ -21,7 +21,7 @@ const SKELETON_ASSET: VaultAsset = PORTFOLIO_ASSETS[0];
 function VaultAssetCardBody({ asset }: { asset: VaultAsset }) {
   return (
     <>
-      <div className="relative aspect-square w-full overflow-hidden rounded-(--radius-3xl) border border-border bg-background-subtle">
+      <div className="relative aspect-square w-full overflow-hidden rounded-(--radius-2xl) border border-border bg-background-subtle">
         <img
           alt=""
           aria-hidden
