@@ -73,6 +73,8 @@
     "email:build": "pnpm --dir apps/emails run build",
     "email:deploy:staging": "pnpm --dir apps/emails run deploy:staging",
     "lint": "biome check .",
+    "phase:checked": "node scripts/openspec/phase-release.mjs checked",
+    "phase:release": "node scripts/openspec/phase-release.mjs release",
     "tcs:stale": "node scripts/openspec/validate-test-cases.mjs --stale-report",
     "tcs:validate": "node scripts/openspec/validate-test-cases.mjs",
     "tcs:retrace": "node scripts/openspec/tcs-retrace.mjs",
