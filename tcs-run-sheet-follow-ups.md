@@ -36,3 +36,4 @@ Planned on the [Release Phases](docs/prds/products/shared/planning/release-phase
 - [x] Walk a fixed row again in place until the run closes, at the same case revision
 - [ ] An Access service token for the run sheet, the release command and the finalized-run check to reach the desk - blocked on the repository secrets `CF_ACCESS_CLIENT_ID` and `CF_ACCESS_CLIENT_SECRET`
 - [ ] Retire the Sheets writer, its layout and its Google identity once a phase has passed on the run desk - the writer stays until then
+- [ ] Before releasing Internal Consignment or Pre-Store Launch, split the blocks on `site/carried-surfaces.md`, `loyalty/coupons.md` and `loyalty/shopify-integration.md`: an earlier phase's lines sit under a later phase's block beside lines no rule names, so `phase:release` refuses them and names each line
