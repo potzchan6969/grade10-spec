@@ -49,7 +49,6 @@ function sharedData(source: string): Record<string, string> {
 }
 
 function walksOf(suite: SuiteEntry): RunWalk[] {
-  const file = suite.path.slice(suite.path.lastIndexOf("/") + 1);
   const lines = suite.source.split("\n");
   const walks: RunWalk[] = [];
   for (let at = 0; at < lines.length; at += 1) {
@@ -85,7 +84,7 @@ function walksOf(suite: SuiteEntry): RunWalk[] {
     }
     const number = heading[1].replace(/\D/g, "");
     walks.push({
-      id: `${file}#walk-${number}`,
+      id: `${suite.path}#walk-${number}`,
       title: `${heading[1]} · ${heading[2]}`,
       suite: suite.path,
       start,

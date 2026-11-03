@@ -109,7 +109,8 @@ export type RunCase = {
 
 /** A suite's walk: a route over several cases from one starting state. */
 export type RunWalk = {
-  /** `cart-tcs.md#walk-1`. */
+  /** The suite's path and the walk, unique across suites:
+   * `docs/prds/products/grade10-site/store/cart-tcs.md#walk-1`. */
   id: string;
   title: string;
   suite: string;
