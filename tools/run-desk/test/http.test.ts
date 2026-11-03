@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import type { RunSummary, RunView } from "../../manual/src/api/desk.ts";
-import { handle, liveRun } from "../src/http.ts";
+import { handle, liveRun, MAX_BODY } from "../src/http.ts";
 import { aSpec, deskInMemory, TESTER } from "./desk.ts";
 
 const ORIGIN = "https://spec.grade10-stg.com";
@@ -13,7 +13,10 @@ function client() {
       method,
       ...(body === undefined
         ? {}
-        : { body: typeof body === "string" ? body : JSON.stringify(body) }),
+        : {
+            body: typeof body === "string" ? body : JSON.stringify(body),
+            headers: { "content-type": "application/json" },
+          }),
     });
     const { response, live } = await handle(store, request, TESTER);
     const text = await response.text();
@@ -122,6 +125,30 @@ test("errors are JSON with a status and a reason", async () => {
   });
   assert.equal(bulk.status, 400);
   assert.match(bulk.body.error, /one row at a time/);
+});
+
+test("a write that is not JSON, or past the desk's size, is refused", async () => {
+  const { store } = deskInMemory();
+  const post = (headers: Record<string, string>) =>
+    handle(
+      store,
+      new Request(`${ORIGIN}/api/desk/runs`, {
+        method: "POST",
+        body: JSON.stringify(aSpec()),
+        headers,
+      }),
+      TESTER,
+    ).then(({ response }) => response.status);
+  assert.equal(await post({ "content-type": "text/plain" }), 415);
+  assert.equal(await post({}), 415);
+  assert.equal(
+    await post({
+      "content-type": "application/json",
+      "content-length": String(MAX_BODY + 1),
+    }),
+    413,
+  );
+  assert.equal(await post({ "content-type": "application/json" }), 201);
 });
 
 test("the live path names its run", () => {

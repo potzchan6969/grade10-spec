@@ -32,8 +32,20 @@ function partsOf(path: string): string[] | undefined {
     .map(decodeURIComponent);
 }
 
+/** The largest body the desk reads: a whole-suite run's spec runs to a few
+ * megabytes; nothing a person sends comes near it. */
+export const MAX_BODY = 16 * 1024 * 1024;
+
 async function body(request: Request): Promise<unknown> {
+  const type = request.headers.get("content-type") ?? "";
+  if (!/^application\/json\b/i.test(type))
+    throw new DeskError(415, "the desk reads JSON: send application/json");
+  const length = Number(request.headers.get("content-length") ?? 0);
+  if (length > MAX_BODY)
+    throw new DeskError(413, `the body is past the desk's ${MAX_BODY} bytes`);
   const text = await request.text();
+  if (text.length > MAX_BODY)
+    throw new DeskError(413, `the body is past the desk's ${MAX_BODY} bytes`);
   if (text.trim() === "") return undefined;
   try {
     return JSON.parse(text);

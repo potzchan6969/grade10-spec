@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import type { MarkInput } from "../../manual/src/api/desk.ts";
 import { caseVerdict } from "../../manual/src/api/verdicts.ts";
-import { DeskError } from "../src/store.ts";
-import { aCase, aSpec, deskInMemory, TESTER } from "./desk.ts";
+import { DeskError, DeskStore, SPEC_PART } from "../src/store.ts";
+import { aCase, aSpec, deskInMemory, sqlOf, TESTER } from "./desk.ts";
 
 const refused = (status: number, pattern?: RegExp) => (error: unknown) => {
   assert.ok(error instanceof DeskError, String(error));
@@ -647,4 +647,67 @@ test("a row's history keeps every mark with who and when, oldest first", () => {
     ],
   );
   assert.throws(() => store.history(id, "nope"), refused(404));
+});
+
+test("a cell a spreadsheet would read as a formula is exported as text", () => {
+  const { store } = deskInMemory();
+  const { id } = store.open(
+    aSpec({
+      cases: [
+        aCase("TC3", { title: '=HYPERLINK("http://x")', surfaces: ["web"] }),
+      ],
+    }),
+    TESTER,
+  );
+  store.mark(
+    id,
+    {
+      marks: [
+        mark("TC3", "fail", { triage: "bug", note: "+cmd|' /C calc'!A0" }),
+      ],
+    },
+    TESTER,
+  );
+  const line = store.csv(id).split("\r\n")[1];
+  assert.ok(line.startsWith(`TC3,"'=HYPERLINK(""http://x"")",`), line);
+  assert.ok(line.includes(",'+cmd|' /C calc'!A0,"), line);
+});
+
+test("a mark's issue is an http link", () => {
+  const { store } = deskInMemory();
+  const { id } = store.open(aSpec(), TESTER);
+  assert.throws(
+    () =>
+      store.mark(
+        id,
+        {
+          marks: [
+            mark("TC2", "fail", {
+              triage: "bug",
+              issue: "javascript:alert(1)",
+            }),
+          ],
+        },
+        TESTER,
+      ),
+    /issue is a link/,
+  );
+});
+
+test("a spec past one SQLite value is written in parts and read back whole", () => {
+  const { store, db } = deskInMemory();
+  const long = "x".repeat(SPEC_PART);
+  const spec = aSpec({
+    cases: [
+      aCase("TC9", { title: long, surfaces: ["web"] }),
+      aCase("TC10", { title: long, surfaces: ["web"] }),
+    ],
+  });
+  const { id } = store.open(spec, TESTER);
+  const parts = db.prepare("select count(*) as n from spec_parts").get() as {
+    n: number;
+  };
+  assert.ok(parts.n >= 3, `written in ${parts.n} parts`);
+  const reread = new DeskStore(sqlOf(db));
+  assert.equal(reread.view(id).spec.cases[1].title, long);
 });

@@ -11,8 +11,8 @@ import {
   type ObservationInput,
   type RowHistory,
   type RowObjects,
-  type RunRecord,
   type RunCase,
+  type RunRecord,
   type RunRow,
   type RunSpec,
   type RunState,
@@ -54,7 +54,9 @@ const SCHEMA = [
     state text not null, opened_by text not null, opened_at text not null,
     finalized_at text, closed_at text)`,
   `create table if not exists specs (seq integer primary key, run text not null,
-    spec text not null, by text not null, at text not null)`,
+    by text not null, at text not null)`,
+  `create table if not exists spec_parts (seq integer not null,
+    part integer not null, text text not null, primary key (seq, part))`,
   `create table if not exists states (seq integer primary key, run text not null,
     state text not null, by text not null, at text not null)`,
   `create table if not exists marks (seq integer primary key, id text not null,
@@ -78,6 +80,12 @@ const NEXT: Record<RunState, RunState[]> = {
 };
 
 type Held = { seq: number; spec: RunSpec; rows: RunRow[] };
+
+/** A spec is written in parts: SQLite in a Durable Object holds no value past
+ * 2 MB, and a part of this many UTF-16 units stays under it in UTF-8. */
+export const SPEC_PART = 512 * 1024;
+/** Runs whose parsed spec stays in memory, the newest read first. */
+const HELD_RUNS = 8;
 
 export class DeskStore {
   #sql: Sql;
@@ -512,28 +520,47 @@ export class DeskStore {
 
   #held(id: string): Held {
     const [row] = this.#sql.exec(
-      "select seq, spec from specs where run = ? order by seq desc limit 1",
+      "select seq from specs where run = ? order by seq desc limit 1",
       id,
     );
     if (!row) throw new DeskError(404, `no run ${id} on the desk`);
     const cached = this.#specs.get(id);
-    if (cached?.seq === row.seq) return cached;
-    const spec = JSON.parse(String(row.spec)) as RunSpec;
+    this.#specs.delete(id);
+    if (cached?.seq === row.seq) {
+      this.#specs.set(id, cached);
+      return cached;
+    }
+    const text = this.#sql
+      .exec("select text from spec_parts where seq = ? order by part", row.seq)
+      .map((part) => String(part.text))
+      .join("");
+    const spec = JSON.parse(text) as RunSpec;
     const held = { seq: Number(row.seq), spec, rows: rowsOf(spec) };
     this.#specs.set(id, held);
+    for (const stale of this.#specs.keys()) {
+      if (this.#specs.size <= HELD_RUNS) break;
+      this.#specs.delete(stale);
+    }
     return held;
   }
 
   #writeSpec(id: string, spec: RunSpec, by: string, at: string): number {
     const seq = this.#next("seq");
     this.#sql.exec(
-      "insert into specs (seq, run, spec, by, at) values (?, ?, ?, ?, ?)",
+      "insert into specs (seq, run, by, at) values (?, ?, ?, ?)",
       seq,
       id,
-      JSON.stringify(spec),
       by,
       at,
     );
+    const text = JSON.stringify(spec);
+    for (let part = 0; part * SPEC_PART < text.length; part++)
+      this.#sql.exec(
+        "insert into spec_parts (seq, part, text) values (?, ?, ?)",
+        seq,
+        part,
+        text.slice(part * SPEC_PART, (part + 1) * SPEC_PART),
+      );
     return seq;
   }
 
@@ -607,7 +634,10 @@ export function rowsOf(spec: RunSpec): RunRow[] {
   );
 }
 
-function cell(text: string): string {
+/** A spreadsheet reads a cell opening with = + - @ as a formula; a quote in
+ * front keeps typed text text. */
+function cell(value: string): string {
+  const text = /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
   return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 }
 
@@ -705,6 +735,8 @@ function checkMark(
   }
   if (!optionalText(issue) || !optionalText(note))
     throw new DeskError(400, "a mark's issue and note are text");
+  if (typeof issue === "string" && issue !== "" && !/^https?:\/\//i.test(issue))
+    throw new DeskError(400, "a mark's issue is a link, http or https");
   return {
     id,
     row: held.key,

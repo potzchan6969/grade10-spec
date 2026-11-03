@@ -3,9 +3,8 @@ import type { RunCase, RunSpec } from "../../manual/src/api/desk.ts";
 import { DeskStore, type Sql, type SqlRow } from "../src/store.ts";
 
 /** A desk over an in-memory `node:sqlite`, on a clock the test moves. */
-export function deskInMemory() {
-  const db = new DatabaseSync(":memory:");
-  const sql: Sql = {
+export function sqlOf(db: DatabaseSync): Sql {
+  return {
     exec: (query, ...params) =>
       db.prepare(query).all(...(params as SQLInputValue[])) as SqlRow[],
     transaction(write) {
@@ -20,6 +19,11 @@ export function deskInMemory() {
       }
     },
   };
+}
+
+export function deskInMemory() {
+  const db = new DatabaseSync(":memory:");
+  const sql = sqlOf(db);
   let tick = 0;
   const now = () => new Date(Date.UTC(2026, 10, 3, 9, 0, tick++)).toISOString();
   return { store: new DeskStore(sql, now), db };
