@@ -54,7 +54,7 @@ export const Incentives: Story = {
     expect(canvas.getAllByText("Daily Earnings").length).toBe(
       DAILY_INCENTIVES.filter((entry) => !entry.catchUp).length,
     );
-    expect(canvas.getAllByText("Backdated earnings").length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("Backdated Earnings").length).toBeGreaterThan(0);
     expect(canvas.getAllByText("+US$16").length).toBeGreaterThan(0);
     expect(canvas.queryByText("Pending")).toBeNull();
   },

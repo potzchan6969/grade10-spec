@@ -38,7 +38,7 @@ function IncentiveRow({ entry }: { entry: IncentiveEntry }) {
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <Text className="truncate" weight="medium">
-          {entry.catchUp ? "Backdated earnings" : "Daily Earnings"}
+          {entry.catchUp ? "Backdated Earnings" : "Daily Earnings"}
         </Text>
         <Text size="sm" tone="secondary">
           {entry.date}
