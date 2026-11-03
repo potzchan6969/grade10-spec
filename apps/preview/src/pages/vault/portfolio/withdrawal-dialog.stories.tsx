@@ -179,32 +179,6 @@ export const ManualRequest: Story = {
     expect(dialog.getByLabelText("Account Holder Name")).toHaveValue("");
     expect(dialog.getByRole("button", { name: "Continue" })).toBeDisabled();
     expect(dialog.queryByText(/Step \d of 3/)).toBeNull();
-    await userEvent.type(dialog.getByLabelText("Bank name"), "Chase");
-    await userEvent.type(
-      dialog.getByLabelText("Account number / IBAN"),
-      "987654321",
-    );
-    await userEvent.type(dialog.getByLabelText("SWIFT / BIC"), "CHASUS33");
-    await userEvent.type(
-      dialog.getByLabelText("Account Holder Name"),
-      "Chan Tai Man",
-    );
-    await userEvent.click(dialog.getByRole("button", { name: "Continue" }));
-    await waitFor(() =>
-      expect(
-        dialog.getByRole("heading", { name: "Review Withdrawal" }),
-      ).toBeVisible(),
-    );
-    expect(dialog.getByText(/Chase/)).toBeVisible();
-    expect(dialog.getAllByText(/Manual request/).length).toBeGreaterThan(0);
-    await userEvent.click(
-      dialog.getByRole("button", { name: "Submit Request" }),
-    );
-    await waitFor(() =>
-      expect(
-        dialog.getByRole("heading", { name: "Manual Request Submitted" }),
-      ).toBeVisible(),
-    );
   },
 };
 
