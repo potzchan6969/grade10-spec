@@ -15,18 +15,19 @@
 
 ## Execution and Triage
 
-Each item has a proposed answer on the [Release Phases](docs/prds/products/shared/planning/release-phases.md#results) page, marked ❓ until QA confirms it.
+Answered on the [Release Phases](docs/prds/products/shared/planning/release-phases.md#results) page.
 
-- [ ] Define how automated and manual results combine without treating unreliable automation as a human verdict - proposed: **One Verdict per Row**
-- [ ] Define false-positive fields and ownership for `blocked`, `fail` and `skipped` - proposed: **Triage**, with the owner read from the delivering change's hands
+- [x] Define how automated and manual results combine without treating unreliable automation as a human verdict - decided 2026-11-03: **One Verdict per Row**
+- [ ] Define false-positive fields and ownership for `blocked`, `fail` and `skipped` - proposed: **Triage**, whose next step falls to a team-map role or to the bug issue's assignee
 - [ ] Decide whether per-row cases need row-level failure identity in Summary - proposed: yes, **Row Identity**
 - [ ] Add tests for the settled triage rules
 
-## Phases and Readiness
+## Phases, Readiness and the Run Desk
 
-Planned on the [Release Phases](docs/prds/products/shared/planning/release-phases.md) page.
+Planned on the [Release Phases](docs/prds/products/shared/planning/release-phases.md) page. The run desk replaces the Sheet as the place results are marked.
 
 - [ ] Select by phase, release priority and readiness (`--phase`, `--release-priority`, `--ready`, `--section`), resolving to explicit ids through the manual's own unit reader
-- [ ] Re-run the failed and blocked rows of a finalized run as a new run (`--rerun <run> --only fail,blocked`)
-- [ ] Add Triage and Issue cells after Auto mobile, and name the row on each expanded per-row case
-- [ ] Read the marks of finalized runs read-only into the manual's build; refresh when QA publishes results and on a schedule
+- [ ] Re-run the failed and blocked rows of a run as a new run (`--rerun <run> --only fail,blocked`)
+- [ ] Open a confirmed selection as a run on the run desk instead of printing a tab; keep the dry run, the fingerprint and the print commit, which names the run in place of the sheet and tab
+- [ ] Triage and Issue on every row, and the row named on each expanded per-row case
+- [ ] Retire the Sheets writer, its layout and its Google identity once a phase has passed on the run desk
