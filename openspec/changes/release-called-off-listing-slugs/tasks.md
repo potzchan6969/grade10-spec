@@ -23,7 +23,7 @@ This group can be built independently of group 2's migration. Its rollout preced
 - [x] 3.4 Preserve nullable-slug bidder history and its existing no-charge result. Verify the reused address cannot replace the called-off record or become its navigation target (`g10.auction-lot-status.SC14`).
 - [x] 3.5 Verify: focused service tests, database races and rollback, campaign repair, contract parity, account records, public reads and affected-package type checks. Include public-id/live readers, sandbox visibility, code-only refusal and closed/settled reservation controls. Inspect warm-read and campaign invalidation behavior.
 
-## 4. The walk (grade10)
+## 4. The walk (grade10) (owner: @htonyl)
 
 Uses draft feature and domain suites in this change as its planning input, after groups 2 and 3 land and the migration is applied. Keep the walks as this change's end-to-end suite.
 
