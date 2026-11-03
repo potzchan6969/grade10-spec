@@ -258,16 +258,15 @@ export const Submitted: Story = {
     await userEvent.click(
       dialog.getByRole("button", { name: "Submit Request" }),
     );
+    const page = body(canvasElement);
+    await waitFor(() => expect(page.queryByRole("dialog")).toBeNull());
     await waitFor(() =>
-      expect(dialog.getByText("Withdrawal Requested")).toBeVisible(),
+      expect(page.getByText("Withdrawal requested")).toBeVisible(),
     );
-    expect(dialog.getByText("Withdrawal requested")).toBeVisible();
-    expect(dialog.getByText("Grade10 review")).toBeVisible();
-    expect(dialog.getByText("Transfer sent")).toBeVisible();
     expect(
-      dialog.getByRole("button", { name: "View Withdrawal" }),
+      page.getByText(/to HSBC\. We’ll email you once it’s transferred\./),
     ).toBeVisible();
-    expect(dialog.getByRole("button", { name: "Done" })).toBeVisible();
+    expect(page.getByRole("button", { name: "View withdrawal" })).toBeVisible();
   },
 };
 

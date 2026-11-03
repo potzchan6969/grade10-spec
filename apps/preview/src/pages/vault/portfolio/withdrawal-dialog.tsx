@@ -1,6 +1,5 @@
 import { DetailRow } from "@grade10/design-system/components/display/detail-row";
-import { Step } from "@grade10/design-system/components/display/step";
-import { Stepper } from "@grade10/design-system/components/display/stepper";
+import { toast } from "@grade10/design-system/components/overlays/toast";
 import { Text } from "@grade10/design-system/components/display/text";
 import {
   Autocomplete,
@@ -39,13 +38,7 @@ import {
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
-import {
-  Bank,
-  CheckCircle,
-  Globe,
-  Lightning,
-  Plus,
-} from "@phosphor-icons/react";
+import { Bank, Globe, Lightning, Plus } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useId, useState } from "react";
 import {
   WINNER_ORDER_SUPPORT_EMAIL,
@@ -69,8 +62,7 @@ type WithdrawalMethod = {
   fullDetail?: string;
 };
 
-type WithdrawalStep =
-  "amount" | "destination" | "add-method" | "review" | "submitted";
+type WithdrawalStep = "amount" | "destination" | "add-method" | "review";
 
 type MethodKind = "bank" | "fps";
 
@@ -317,8 +309,8 @@ function ActionRow({
  * receive-in currency, the destination picker drawn like the winner-order
  * setup (saved methods, add a Hong Kong bank or FPS, an email request for
  * US$/overseas), a review that states the approval and the working days
- * before submit, then the submitted beat. Grade10 approves every request;
- * nothing leaves the wallet until then.
+ * before submit — the confirmation lands as a toast. Grade10 approves every
+ * request; nothing leaves the wallet until then.
  */
 function WithdrawalDialog({
   availableUsd,
@@ -429,13 +421,12 @@ function WithdrawalDialog({
     destination: "Withdrawal Destination",
     "add-method": "Add Withdrawal Method",
     review: "Review Withdrawal",
-    submitted: "Withdrawal Requested",
   };
 
   /** Ready email for a US$/overseas payout — handled by the team, not a form. */
   const manualMail: WinnerOrderContactMail = {
     to: WINNER_ORDER_SUPPORT_EMAIL,
-    subject: `Manual withdrawal request — ${formatUsd(amount)}`,
+    subject: `Manual withdrawal request: ${formatUsd(amount)}`,
     body: [
       "Hello Grade10,",
       "",
@@ -495,7 +486,13 @@ function WithdrawalDialog({
       saveMethod();
     } else if (step === "review") {
       onSubmit?.(amount, "HKD");
-      setStep("submitted");
+      toast.success("Withdrawal requested", {
+        description: `${formatHkd(convertedHkd)} to ${destination?.title ?? "your account"}. We’ll email you once it’s transferred.`,
+        action: onViewWithdrawal
+          ? { label: "View withdrawal", onClick: onViewWithdrawal }
+          : undefined,
+      });
+      onOpenChange(false);
     }
   };
 
@@ -522,11 +519,7 @@ function WithdrawalDialog({
 
   /** Closing mid-flow or with an amount typed asks before discarding it. */
   function handleOpenChange(next: boolean) {
-    if (
-      !next &&
-      step !== "submitted" &&
-      (step !== "amount" || amountInput.trim() !== "")
-    ) {
+    if (!next && (step !== "amount" || amountInput.trim() !== "")) {
       const leave = window.confirm(
         "Leave withdrawal? Your progress will not be saved.",
       );
@@ -913,70 +906,11 @@ function WithdrawalDialog({
           </div>
         </VStack>
       ) : null}
-
-      {step === "submitted" ? (
-        <VStack gap="lg" hAlign="stretch">
-          <VStack gap="sm" hAlign="center">
-            <span className="text-success">
-              <CheckCircle aria-hidden size={64} weight="fill" />
-            </span>
-            <Text
-              as="span"
-              className="font-heading text-xl font-semibold tracking-tight"
-            >
-              Withdrawal Requested
-            </Text>
-            <Text
-              className="text-center text-balance text-secondary-foreground"
-              size="sm"
-            >
-              We’ll email you once Grade10 transfers it.
-            </Text>
-          </VStack>
-          <div className="w-full rounded-(--radius-2xl) bg-background-subtle p-4">
-            <Stepper orientation="vertical">
-              <Step
-                description={`Today · ${requestId}`}
-                label="Withdrawal requested"
-                orientation="vertical"
-                showLeadingConnector={false}
-                state="completed"
-              />
-              <Step
-                description="Waiting for review"
-                label="Grade10 review"
-                orientation="vertical"
-                state="progress"
-              />
-              <Step
-                className="min-h-0"
-                label="Transfer sent"
-                orientation="vertical"
-                showTrailingConnector={false}
-                state="upcoming"
-              />
-            </Stepper>
-          </div>
-        </VStack>
-      ) : null}
     </>
   );
 
   const secondaryAction =
-    step === "submitted" ? (
-      <Button
-        className="w-full sm:w-auto"
-        size="md"
-        type="button"
-        variant="outline"
-        onClick={() => {
-          onViewWithdrawal?.();
-          onOpenChange(false);
-        }}
-      >
-        View Withdrawal
-      </Button>
-    ) : step === "amount" ? (
+    step === "amount" ? (
       <DialogClose
         render={
           <Button
@@ -1001,24 +935,17 @@ function WithdrawalDialog({
       </Button>
     );
 
-  const primaryAction =
-    step === "submitted" ? (
-      <DialogClose
-        render={<Button className="w-full sm:w-auto" size="md" type="button" />}
-      >
-        Done
-      </DialogClose>
-    ) : (
-      <Button
-        className="w-full sm:w-auto"
-        disabled={primaryDisabled}
-        size="md"
-        type="button"
-        onClick={next}
-      >
-        {primaryLabel}
-      </Button>
-    );
+  const primaryAction = (
+    <Button
+      className="w-full sm:w-auto"
+      disabled={primaryDisabled}
+      size="md"
+      type="button"
+      onClick={next}
+    >
+      {primaryLabel}
+    </Button>
+  );
 
   const contactDialog = (
     <WinnerOrderContactDialog
@@ -1033,14 +960,8 @@ function WithdrawalDialog({
       <Dialog onOpenChange={handleOpenChange} open={open}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle
-              className={step === "submitted" ? "sr-only" : undefined}
-            >
-              {TITLE[step]}
-            </DialogTitle>
-            {step !== "submitted" ? (
-              <DialogSubtext>Step {stepIndex(step)} of 3</DialogSubtext>
-            ) : null}
+            <DialogTitle>{TITLE[step]}</DialogTitle>
+            <DialogSubtext>Step {stepIndex(step)} of 3</DialogSubtext>
           </DialogHeader>
           <DialogBody className="gap-6" tabIndex={0}>
             <DialogDescription className="sr-only">
