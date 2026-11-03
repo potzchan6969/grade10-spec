@@ -29,6 +29,8 @@ records the order, and the programme moves the balance once.
 
 ## Customer Pairing
 
+::phase{id="pre-store-launch" priority="P0"}
+
 | Rule | Value |
 | --- | --- |
 | Link | **An opaque member key** in a unique customer metafield, never the account id |

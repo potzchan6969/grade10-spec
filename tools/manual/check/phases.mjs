@@ -77,12 +77,11 @@ function checkPage(ctx, path, outline, known, hasRegistry) {
           `\`rules\` under ${where(heading)} names \`${rule}\`, a rule ${where(heading)} does not hold`,
         );
       }
-      if (named.has(rule)) {
-        add(
-          `\`${rule}\` is named by two blocks, under ${where(named.get(rule))} and ${where(heading)}`,
-        );
+      const key = `${heading ?? ""}#${rule}`;
+      if (named.has(key)) {
+        add(`\`${rule}\` is named by two blocks under ${where(heading)}`);
       }
-      named.set(rule, heading);
+      named.set(key, heading);
     }
   }
 

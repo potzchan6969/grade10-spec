@@ -127,6 +127,8 @@ For a card with a market price of HKD 10,000:
 
 ## The Sale Price
 
+::phase{id="store-launch-2" priority="P1" rules="points-and-discounts"}
+
 - **Paid on the Listed Price** — a discount the buyer gets at checkout is Grade10's, and so is a refund where the buyer keeps the card
 - **The Collector's Until Sold** — ownership passes to the buyer only when the card is delivered or collected
 - **Points and Discounts** — points, coupons and the shop's discounts reach a consigned card, and the collector is still paid on the listed price; staff leave consigned cards out of a discount by its collection in the store

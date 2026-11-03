@@ -141,7 +141,7 @@ built later.
 The intake is the top of the funnel, so it asks for as little as it safely
 can: an account, a phone number, a declaration and the ID staff read in hand.
 
-- **Events first, then the shop, then the post** — card events take cards in person first, where staff reach collectors; the shop's counter joins on the same form; mail-in waits until the business settles how parcels are handled
+- **Events first, then the shop, then the post** — card events take cards in person first, where staff reach collectors; the shop's counter joins after them on the same form; mail-in waits until the business settles how parcels are handled
 - **Storage at nothing for now, as a setting** — a fee would turn away the intakes the incentive is paying for, and a setting leaves room to charge one later without a rebuild; pinned to the Vault Terms, so a fee is never added to terms a collector already signed
 - **Checked at the counter, or later** — the counter check is the usual way, but an intake shouldn't wait for a professional to be free; a card kept unchecked earns and sells nothing until it passes, so taking it early costs nothing
 - **One form, two papers** — keeping and consigning share every step and differ only in what is signed; the Vault Terms never wait on the consignment, so a declined agreement leaves the cards in the vault - the counter review, round 2, 2026-11-02

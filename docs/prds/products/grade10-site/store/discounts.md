@@ -28,6 +28,8 @@ Amounts are HKD. Each kind has a class, product or order, that the
 
 ### Public Codes
 
+::phase{id="store-launch-2" priority="P0" rules="order-beside-wallet-codes"}
+
 - **Shown in the Drawer** — the picker lists public codes to guests and members — [Cart Drawer](/p/grade10-site/store/cart#promo-code)
 - **Source** — Shopify discounts tagged `public`
 - **Order Beside Wallet Codes** — those that fit first, soonest to expire first, across both
@@ -57,6 +59,8 @@ Amounts are HKD. Each kind has a class, product or order, that the
 - **A Code Joins** — the shop keeps the combination that takes the most off, so a product discount not set to combine can leave the cart above the card
 
 ## Order of Application
+
+::phase{id="store-launch-2" priority="P0" rules="points"}
 
 The shop prices every combination its combine rules allow, online and at the
 till, and Grade10 accepts its price. Each combination is priced in this order:
@@ -212,6 +216,8 @@ shipping is paid in money.
 ::story{id="store-cart-blocks-cartdrawerfooter-interactive--interactive-member" title="A code typed in the cart"}
 
 ## Online Checkout
+
+::phase{id="store-launch-2" priority="P0" rules="discount-code,points,nothing-held,the-newer-promise-retires-the-older"}
 
 ::phase{id="store-launch-2" priority="P1" rules="a-retired-counter-sale-keeps-its-cart,a-retired-counter-sale-gives-back-its-reward"}
 

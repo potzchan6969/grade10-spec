@@ -49,6 +49,8 @@ In My Orders.
 
 ## Paying Again
 
+::phase{id="store-launch-1" priority="P1"}
+
 - **Invoice** — fixes the purchase; later cart edits don't change it
 - **Another Pay** — an unchanged purchase returns its existing invoice or order state, after a reload, from a second tab or after a lost answer; a purchase already paid opens its order
 - **Changed Purchase** — a changed basket, code or points starts a new purchase and retires the older unpaid invoice

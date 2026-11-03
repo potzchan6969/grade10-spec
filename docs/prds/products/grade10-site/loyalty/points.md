@@ -8,6 +8,8 @@ order: 1
 
 ## Rules
 
+::phase{id="store-launch-2" priority="P0"}
+
 | Rule | Value |
 | --- | --- |
 | Currency | **HKD**. A foreign currency is refused |
@@ -333,6 +335,8 @@ the 100 the slab's rate would price.
 :::
 
 ## Expiry
+
+::phase{id="pre-store-launch" priority="P2"}
 
 The redeemable balance lapses after twelve months with no activity, and a
 lapse that has happened is never undone.

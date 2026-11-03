@@ -15,7 +15,7 @@ or later from the collector's dashboard, with no second intake -
 # At the counter
 
 ## Collector — Intake and consign
-At a card event, or the shop's counter; on the intake form staff set the card to Consign, with the store or the auction and the lowest price the collector accepts.
+At a card event, or the shop's counter after card events; on the intake form staff set the card to Consign, with the store or the auction and the lowest price the collector accepts.
 
 ## Collector — Sign
 The Vault Terms and the Consignment Agreement together, on the shop's tablet or by an emailed link.

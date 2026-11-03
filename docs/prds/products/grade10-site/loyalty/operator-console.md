@@ -51,6 +51,8 @@ chargeback's shortfall — [Top-ups](/p/grade10-site/loyalty/top-ups#operator-co
 
 ## Authoring a Reward
 
+::phase{id="pre-store-launch" priority="P0"}
+
 An operator writes a reward's whole definition in the console's reward form,
 with no call to the admin API. The form offers three choices, each saved as
 one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-types).

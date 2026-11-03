@@ -20,6 +20,8 @@ works that figure out by the shop's own rules where they reach the basket —
 
 ::phase{id="pre-store-launch" priority="P1"}
 
+::phase{id="store-launch-2" priority="P0" rules="the-scan-tokens-life,points-still-buy-more"}
+
 A coupon carries the reward's definition as it stood on the day it was bought,
 so redefining the reward never rewrites a coupon a member already holds —
 [Rewards](/p/grade10-site/loyalty/rewards).

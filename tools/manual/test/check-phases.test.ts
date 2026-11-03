@@ -43,6 +43,28 @@ describe("phase blocks", () => {
     ).toEqual([]);
   });
 
+  it("pass one rule name placed apart under two headings", async () => {
+    expect(
+      await phaseFindings(
+        [
+          '::phase{id="store-launch-1" priority="P0"}',
+          "",
+          "## Kinds",
+          "",
+          '::phase{id="store-launch-1" priority="P1" rules="points"}',
+          "",
+          "- **Points** — a kind",
+          "",
+          "## Checkout",
+          "",
+          '::phase{id="store-launch-1" priority="P2" rules="points"}',
+          "",
+          "- **Points** — paid at checkout",
+        ].join("\n"),
+      ),
+    ).toEqual([]);
+  });
+
   it("fail an unknown phase, a rule the heading lacks, a rule named twice and two whole blocks", async () => {
     expect(
       await phaseFindings(
@@ -73,7 +95,7 @@ describe("phase blocks", () => {
         "fail",
         "`rules` under `orders` names `ghost`, a rule `orders` does not hold",
       ],
-      ["fail", "`now` is named by two blocks, under `orders` and `orders`"],
+      ["fail", "`now` is named by two blocks under `orders`"],
     ]);
   });
 
