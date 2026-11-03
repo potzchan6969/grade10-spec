@@ -69,7 +69,7 @@ export const Completed: Story = {
     expect(drawer.getByText(COMPLETED.id)).toBeVisible();
     expect(drawer.getByText("US$40")).toBeVisible();
     expect(drawer.getByText("Transfer sent")).toBeVisible();
-    expect(drawer.getByText("HK$312.4 received")).toBeVisible();
+    expect(drawer.getByText("HK$312.40 received")).toBeVisible();
     expect(drawer.getByText("Withdrawal requested")).toBeVisible();
     expect(drawer.getByText("Grade10 review")).toBeVisible();
     expect(drawer.getByText("Exchange rate")).toBeVisible();
