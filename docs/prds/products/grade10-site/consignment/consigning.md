@@ -27,7 +27,7 @@ goes below. Grade10 prices the listing at approval.
 
 | Term | At the store | At auction |
 | --- | --- | --- |
-| 🚧 Lowest acceptable price | required: the lowest the collector sells for; staff may price higher at their will | optional: the reserve; with none, the lot sells at the winning bid |
+| 🚧 Lowest acceptable price | required: the lowest the collector sells for; staff may price higher at their will | required: the reserve; the lot never sells below it |
 | 🚧 Price Grade10 sets | the list price, never below the lowest acceptable price | the starting price |
 | Commission | 🚧 a share of the sale price, one rate for the store, replacing the price bands | a share of the hammer price only, one rate; the buyer's premium is Grade10's |
 
@@ -41,10 +41,6 @@ goes below. Grade10 prices the listing at approval.
 - **Agreement** — one Consignment Agreement a consignment; a change makes a new version, never an edit
   - 🚧 **Renewal Is Signed** — extending or repricing prepares a renewal the consignor signs, linked to the one it renews
 - 🚧 **No Incentive at Consigning** — built as a setting that starts at 0, so the agreement leaves its line out; a vaulted card earns the vault's daily incentive instead - [Incentive](/p/grade10-site/vault/incentive)
-
-:::callout{kind="note"}
-- ❓ **The Auction's Lowest Price** — optional, as the table says, or required, as the build has it and the plan reads; the two disagree. The owner confirms
-:::
 
 ## Price Check
 
@@ -113,7 +109,7 @@ For a card with a market price of HKD 10,000:
 
 ### At Auction
 
-- 🚧 **Lot** — listed from the vault; the reserve is the lowest acceptable price where the collector set one, otherwise there is no reserve
+- 🚧 **Lot** — listed from the vault; the reserve is the lowest acceptable price
   - **Built** — the lot opens at the floor agreed at signing, with no reserve; an HKD floor at a dollar auction is converted at US$1 = HK$7.85, rounded up, the rate kept on the lot, and the sale comes back in HKD
 - 🚧 **Winner Doesn't Pay** — the card is relisted
 - 🚧 **Handover** — shipped from the shop, or collected there
@@ -187,7 +183,7 @@ taps later. Asking only for the lowest price the collector accepts
 lets Grade10 price the listing while the collector keeps a hard limit.
 
 - **Vault first, then consign** — at intake both happen in one visit, the card registered into the vault before it is consigned; later the collector consigns from the dashboard, where staff may help but never submit. Either way the collector signs, so the agreement is their own act
-- **A reserve only where the collector sets one** — at auction the lowest price is optional, so a collector who wants the hammer to decide isn't made to guess a floor
+- **Every lot has a reserve** — the lowest price is required at auction too, so the price check and the minimum commission always have a floor to read - owner, 2026-11-03
 - **The price check warns low and refuses high** — a low price may be the collector's reason and is confirmed twice; a price far above market would only stall the sale
 - **Both channels, one at a time** — a card is never on the shelf and in an auction together, so it can't sell twice; moving it needs no second signature
 - **A year's period** — long enough for an auction cycle and a slow card, and an unsold card simply goes back to earning
