@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Proceeds and refunds through the wallet",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": { "mode": "hidden" }
+  },
+  "lanes": [
+    { "id": "sale", "label": "The sale" },
+    { "id": "wallet", "label": "The wallet, in US dollars" },
+    { "id": "refund", "label": "A refund", "variant": "exception" }
+  ],
+  "mainPath": ["paid", "due", "credit", "cashout"],
+  "nodes": [
+    { "id": "paid", "lane": "sale", "col": 0, "type": "frontend", "label": "Buyer pays", "sublabel": "at the till, online or a lot", "width": 150 },
+    { "id": "due", "lane": "sale", "col": 1, "type": "backend", "label": "3 business days", "sublabel": "Hong Kong's calendar", "width": 150 },
+    { "id": "credit", "lane": "wallet", "col": 2, "type": "database", "label": "Proceeds credited", "sublabel": "sale less commission, converted once", "width": 170 },
+    { "id": "cashout", "lane": "wallet", "col": 3, "type": "external", "label": "Cash-out", "sublabel": "through the money-out gate", "width": 160 },
+    { "id": "refunded", "lane": "refund", "col": 1, "type": "security", "label": "Refunded", "sublabel": "the buyer paid back", "width": 150 },
+    { "id": "reversed", "lane": "refund", "col": 2, "type": "database", "label": "Reversed", "sublabel": "the same US$; short is a debt", "width": 170 }
+  ],
+  "edges": [
+    { "from": "paid", "to": "due", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "from": "due", "to": "credit", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "from": "credit", "to": "cashout", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "from": "paid", "to": "refunded", "variant": "security", "fromSide": "bottom", "toSide": "left", "label": "refund" },
+    { "from": "refunded", "to": "reversed", "variant": "dashed", "fromSide": "right", "toSide": "left", "label": "once credited" },
+    { "from": "reversed", "to": "credit", "variant": "dashed", "fromSide": "top", "toSide": "bottom" }
+  ]
+}
