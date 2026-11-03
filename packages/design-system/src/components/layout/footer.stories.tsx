@@ -165,6 +165,9 @@ type Story = StoryObj<typeof meta>;
  * duplicates, and no locale until selection exists.
  */
 export const AuctionOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_3fac2966-089a-4ae2-aca4-631c30efd061" },
+  },
   name: "Auction only",
   play: async ({ canvasElement }) => {
     const footer = canvasElement.querySelector<HTMLElement>(
@@ -293,6 +296,9 @@ export const AuctionOnly: Story = {
  * The bar carries copyright only — no duplicated legal links, no locale.
  */
 export const StoreLaunch: Story = {
+  parameters: {
+    verification: { caseId: "vc_3afeb76e-de1d-46b9-941e-ab75ceb3a92d" },
+  },
   name: "Store launch",
   args: { columns: STORE_LAUNCH_COLUMNS },
   play: async ({ canvasElement }) => {
@@ -365,6 +371,9 @@ export const StoreLaunch: Story = {
  * a phone, and the legal bar wraps rather than clipping at its fixed height.
  */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_77ca3ab6-2780-4e3c-b206-517f3e5d88ab" },
+  },
   args: { columns: STORE_LAUNCH_COLUMNS },
   decorators: [
     (Story) => (

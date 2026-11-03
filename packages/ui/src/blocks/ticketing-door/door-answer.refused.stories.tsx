@@ -40,6 +40,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Let in earlier today: when, by which phone, and Fast Pass then. */
 export const AlreadyAdmitted: Story = {
+  parameters: {
+    verification: { caseId: "vc_ea480720-edc2-42aa-a36c-b98d57401ad7" },
+  },
   name: "Already admitted today",
   args: {
     details: [
@@ -69,6 +72,9 @@ export const AlreadyAdmitted: Story = {
 
 /** Let in on every day it admits. */
 export const NoEntriesLeft: Story = {
+  parameters: {
+    verification: { caseId: "vc_357fd622-3dca-43c8-98dc-f25be0fb872e" },
+  },
   name: "No entries left",
   args: {
     kind: "noEntriesLeft",
@@ -91,6 +97,9 @@ export const NoEntriesLeft: Story = {
 
 /** Its order was refunded or cancelled; the order's other tickets may be good. */
 export const Void: Story = {
+  parameters: {
+    verification: { caseId: "vc_de3a9676-9c36-4fdd-87c6-98bed11e22aa" },
+  },
   name: "Void",
   args: {
     kind: "void",
@@ -115,6 +124,9 @@ export const Void: Story = {
 
 /** The event was cancelled, so no ticket for it lets anyone in. */
 export const EventCancelled: Story = {
+  parameters: {
+    verification: { caseId: "vc_c1a457fa-5abb-44cc-aaf9-b4945d7c5d74" },
+  },
   name: "Event cancelled",
   args: {
     kind: "eventCancelled",
@@ -135,6 +147,9 @@ export const EventCancelled: Story = {
 
 /** Not a ticket: forged, damaged or unknown. Find by reference is offered. */
 export const NotATicket: Story = {
+  parameters: {
+    verification: { caseId: "vc_5ea64db0-823f-4a75-b073-15bdaacb7212" },
+  },
   name: "Not a ticket",
   args: {
     kind: "notATicket",
@@ -157,6 +172,9 @@ export const NotATicket: Story = {
 
 /** A real ticket, for another event. */
 export const WrongEvent: Story = {
+  parameters: {
+    verification: { caseId: "vc_35622091-e623-41e9-837f-ff0ac0de489e" },
+  },
   name: "Wrong event",
   args: {
     kind: "wrongEvent",
@@ -177,6 +195,9 @@ export const WrongEvent: Story = {
 
 /** Today is outside the ticket's days. */
 export const NotValidToday: Story = {
+  parameters: {
+    verification: { caseId: "vc_b5a290f2-aeb6-4201-9694-a03f35c385bb" },
+  },
   name: "Not valid today",
   args: {
     kind: "notValidToday",
@@ -199,7 +220,10 @@ export const NotValidToday: Story = {
 /** No answer in 4 seconds, or no connection: don't let them in yet. */
 export const NotChecked: Story = {
   name: "Not checked, offline",
-  parameters: { offline: true },
+  parameters: {
+    verification: { caseId: "vc_43e2d2bb-d205-4912-9bed-f48d38eaaabf" },
+    offline: true,
+  },
   args: {
     kind: "notChecked",
     title: "Not checked",

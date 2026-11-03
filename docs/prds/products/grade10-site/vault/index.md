@@ -17,11 +17,11 @@ At a card event, or the shop in Causeway Bay from Phase 2; staff read the collec
 ## Staff — Authenticate and store
 The card is checked at the counter, or stored first and checked later.
 
-## Staff — Approve it to earn
-The card's market price and how easily it sells are checked.
-
 ## Collector — Earn daily
-An approved card earns a daily amount into the earnings wallet.
+From its Earning Starts date, once the Vault Terms seal, the card earns a daily amount into the earnings wallet.
+
+## Staff — Check it earns
+The card's market price and how easily it sells are checked; a card that shouldn't earn is Not Eligible from the next day.
 
 # Paid
 
@@ -57,9 +57,9 @@ done when its last line works with a real collector and a real card.
 1. **Vault and Incentive** — mid November 2026
    - **Delivers** — intake at card events, with a confirmed email, a phone number, the collector's ID read by staff and the ownership declaration; authentication, custody and moves; the daily price feed, eligibility and the daily amount; the collector's dashboard and the staff's
    - **Until Phase 2** — intake is at card events only; nothing cashes out, so incentive builds up; staff run retrievals by hand
-   - **Done When** — a card taken in at an event is authenticated, approved, earns from the next day, and the collector sees it and its daily amount in the dashboard
+   - **Done When** — a card taken in at an event is authenticated, earns from its Earning Starts date, and the collector sees it and its daily amount in the dashboard
 2. **Consign and Sell** — 6 December 2026 for the store
-   - **Delivers** — intake at the shop's counter, on the same form as events; consigning at intake or later from the dashboard, with the agreement signed in the app; the shop's tills, at the shop and events, and auction lots from vault stock; statements and commission invoices; incentive stopping when a card sells; the identity check before the first cash-out or sale payout; cash-out at least HKD 500 once every 7 days, to an account in the verified name; the consignment dashboard
+   - **Delivers** — intake at the shop's counter, on the same form as events; consigning at intake or later from the dashboard, with the agreement signed in the app; the shop's tills, at the shop and events, and auction lots from vault stock; statements and commission invoices; incentive stopping when a card sells; the identity check before money leaves, compared with the ID read at intake; cash-out at least US$65 once every 7 days, to an account in the verified name; the consignment dashboard
    - **Until a Later Phase** — staff enter store price changes
    - **Done When** — a vaulted card is consigned and signed, sold at the shop and at auction, its proceeds and incentive reach the wallet, and the collector passes the identity check and cashes out
 3. **Mail-In and Retrieval** — sending cards in by post, and taking a card home through the product

@@ -61,6 +61,9 @@ type Story = StoryObj<typeof meta>;
 
 /** A guest, nothing typed: Sign In over a name and an email, typed once. */
 export const Guest: Story = {
+  parameters: {
+    verification: { caseId: "vc_696446b6-ed2c-4434-a2ec-9c6897c05f9f" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -82,6 +85,9 @@ export const Guest: Story = {
 /** Continue pressed with the name empty and the email unfinished: each
  * field says what to fix, and the bar counts them. */
 export const FieldErrors: Story = {
+  parameters: {
+    verification: { caseId: "vc_4efb43d3-24b2-4d52-b763-2e827b2931d0" },
+  },
   args: { botCheck: <BotCheckStandIn checked /> },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -107,6 +113,9 @@ export const FieldErrors: Story = {
 /** Signed in: the account's name, which a friend's can replace, and the
  * account's email, fixed, with Not You?. */
 export const SignedInPrefilled: Story = {
+  parameters: {
+    verification: { caseId: "vc_db8a44b3-f88e-43dc-8563-077f6fa68917" },
+  },
   args: {
     buyer: { kind: "signedIn", email: EMAIL },
     copy: { ...DETAILS_COPY, nameHint: NAME_HINT_PREFILLED },
@@ -135,6 +144,9 @@ export const SignedInPrefilled: Story = {
 /** Signed in, but the account's name is only its email: the name field
  * starts empty, saying what it is for. */
 export const SignedInWithoutName: Story = {
+  parameters: {
+    verification: { caseId: "vc_94dd6214-d696-43c8-9b85-c6665af7ff2e" },
+  },
   args: {
     buyer: { kind: "signedIn", email: EMAIL },
     copy: { ...DETAILS_COPY, nameHint: NAME_HINT_EMPTY },
@@ -153,6 +165,9 @@ export const SignedInWithoutName: Story = {
 /** Continue pressed with only the name missing: one field to fix, and
  * typing clears it. */
 export const NameMissing: Story = {
+  parameters: {
+    verification: { caseId: "vc_d858760e-bb37-427c-a308-f5476651e250" },
+  },
   args: {
     buyer: { kind: "signedIn", email: EMAIL },
     copy: { ...DETAILS_COPY, nameHint: NAME_HINT_EMPTY },
@@ -173,6 +188,9 @@ export const NameMissing: Story = {
 /** The session is still resolving: the buyer's fields wait, and Continue
  * goes nowhere yet. */
 export const SessionResolving: Story = {
+  parameters: {
+    verification: { caseId: "vc_a221cac3-a6a3-48ee-8370-0d4a46157c48" },
+  },
   args: {
     buyer: { kind: "resolving" },
     order: (
@@ -195,6 +213,9 @@ export const SessionResolving: Story = {
 
 /** A pass that costs nothing: Free, no points, no bot check. */
 export const FreeOrder: Story = {
+  parameters: {
+    verification: { caseId: "vc_53cd5ec7-5dbf-409a-970f-f68647c68060" },
+  },
   args: {
     buyer: { kind: "signedIn", email: EMAIL },
     copy: { ...DETAILS_COPY, nameHint: NAME_HINT_PREFILLED },

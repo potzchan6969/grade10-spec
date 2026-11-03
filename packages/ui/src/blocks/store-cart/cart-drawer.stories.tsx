@@ -75,6 +75,9 @@ const meta = {
 } satisfies Meta<typeof CartDrawer>;
 
 export const Pictures: StoryObj<typeof meta> = {
+  parameters: {
+    verification: { caseId: "vc_fecd2915-b59b-4831-bede-5a5c6fce40c9" },
+  },
   args: {
     items: [{ ...PICTURE_CART_ITEM, status: "soldOut" }, SAMPLE_CART_ITEMS[0]],
   },
@@ -120,6 +123,9 @@ const settled = () =>
 
 /** Default: signed-in cart with interactive promo sheet and points */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_07e6bfd0-e5f6-4ca9-972a-35c690b7e559" },
+  },
   args: {
     items: [SAMPLE_CART_ITEMS[0], { ...SAMPLE_CART_ITEMS[1], quantity: 3 }],
   },
@@ -270,6 +276,9 @@ export const Default: Story = {
 
 /** Overflow state with 6 items: scrollable list */
 export const OverflowItems: Story = {
+  parameters: {
+    verification: { caseId: "vc_c4df8e75-b3fc-42b6-bcf5-b07691852796" },
+  },
   args: {
     items: OVERFLOW_CART_ITEMS,
     subtotal: "HK$83,600.00",
@@ -294,6 +303,9 @@ export const OverflowItems: Story = {
 
 /** Empty state: design-system empty state, hidden header count badge, and hidden footer */
 export const EmptyState: Story = {
+  parameters: {
+    verification: { caseId: "vc_b9b49b6a-9961-4bca-b532-a1dab4c84670" },
+  },
   args: {
     items: [],
     subtotal: "HK$0.00",
@@ -329,6 +341,9 @@ export const EmptyState: Story = {
 
 /** Empty state with no description: the icon and title alone */
 export const EmptyStateWithoutDescription: Story = {
+  parameters: {
+    verification: { caseId: "vc_296a7af7-7123-4392-8995-3ef82ed0db55" },
+  },
   args: {
     items: [],
     subtotal: "HK$0.00",
@@ -360,6 +375,9 @@ export const EmptyStateWithoutDescription: Story = {
  * disabled. `loading` is an arg, so a tester ends the read from Controls.
  */
 export const LoadingWithLines: Story = {
+  parameters: {
+    verification: { caseId: "vc_ecef29de-affe-40e9-84f5-60f47d5b742b" },
+  },
   args: {
     loading: true,
     promoState: {
@@ -397,6 +415,9 @@ export const LoadingWithLines: Story = {
  * `loading` is an arg; turned off, the empty state shows.
  */
 export const LoadingNoLines: Story = {
+  parameters: {
+    verification: { caseId: "vc_928a25e5-63ce-4b2c-a46b-ba30379d9a6a" },
+  },
   args: {
     loading: true,
     items: [],
@@ -422,6 +443,9 @@ const ONLY_DELISTED_ITEMS: readonly CartItemSummary[] = SAMPLE_CART_ITEMS.map(
  * with one toast and ends on the empty state.
  */
 export const OnlyDelistedLines: Story = {
+  parameters: {
+    verification: { caseId: "vc_193d998b-4b24-4d19-a91a-e3bc3b391364" },
+  },
   args: { onRemoveItem: fn() },
   render: (args) => {
     const [open, setOpen] = useState(false);
@@ -475,6 +499,9 @@ export const OnlyDelistedLines: Story = {
 
 /** Every line sold out: listed with the footer, no count, no empty state */
 export const OnlySoldOutLines: Story = {
+  parameters: {
+    verification: { caseId: "vc_8d88b33c-9a99-481e-bbaf-bb926c34626a" },
+  },
   args: {
     items: SAMPLE_CART_ITEMS.map((item) => ({
       ...item,
@@ -502,6 +529,9 @@ const MIXED_UNAVAILABLE_NAME =
  * badge counts the active line alone and the unavailable line never renders.
  */
 export const MixedLineStates: Story = {
+  parameters: {
+    verification: { caseId: "vc_a75c0a48-cee3-4739-a172-103c91445fb1" },
+  },
   args: {
     loading: false,
     items: [
@@ -529,6 +559,9 @@ export const MixedLineStates: Story = {
 
 /** Points tender omitted — balance loading or no points on this member */
 export const WithoutPoints: Story = {
+  parameters: {
+    verification: { caseId: "vc_3356df20-b363-47f6-9f26-75b6f527dfb4" },
+  },
   args: {
     pointsState: null,
   },
@@ -557,6 +590,9 @@ export const WithoutPoints: Story = {
 
 /** Composed read-only tender context keeps facts while omitting mutations. */
 export const ReadOnlyTenderContext: Story = {
+  parameters: {
+    verification: { caseId: "vc_ee14179d-ae75-416e-abd9-f116c9c7bc96" },
+  },
   render: (args) => {
     const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
     const [points, setPoints] = useState<PointsState>({ status: "collapsed" });
@@ -628,6 +664,9 @@ export const ReadOnlyTenderContext: Story = {
  * Esc / backdrop close the nested promo sheet first, then the cart.
  */
 export const NestedPromoDismiss: Story = {
+  parameters: {
+    verification: { caseId: "vc_1e938252-ab9a-499d-b4f1-572fdaa8eb07" },
+  },
   render: (args) => {
     const [open, setOpen] = useState(true);
     const [promo, setPromo] = useState<PromoState>({ status: "expanded" });
@@ -668,6 +707,9 @@ export const NestedPromoDismiss: Story = {
 };
 
 export const TenderPendingWithOpenPromoSheet: Story = {
+  parameters: {
+    verification: { caseId: "vc_9cb38479-06b5-46c1-ab19-abc3035d3d85" },
+  },
   args: {
     promoState: { status: "expanded" },
     pointsState: { status: "applied", amountLabel: "HK$120.00" },
@@ -733,6 +775,9 @@ export const TenderPendingWithOpenPromoSheet: Story = {
 
 /** Shared interaction guard: the cart can still be dismissed while mutations wait. */
 export const InteractionPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_51a99143-abcd-448d-89ac-da45585724e2" },
+  },
   args: {
     interactionPending: true,
     promoState: { status: "collapsed" },
@@ -765,6 +810,9 @@ export const InteractionPending: Story = {
 
 /** Simulates initial status and price fetch on cart open with transition to ready */
 export const FetchingOnOpen: Story = {
+  parameters: {
+    verification: { caseId: "vc_aaf9e926-68c2-4d1f-8b0f-8ed2834f50f9" },
+  },
   render: (args) => {
     const [open, setOpen] = useState(false);
 
@@ -794,6 +842,9 @@ const DELISTED_PRODUCT_NAME =
  * bottom-right toast. Remaining lines stay.
  */
 export const UnavailableItemsRemoved: Story = {
+  parameters: {
+    verification: { caseId: "vc_05987118-0a79-4a58-aa58-19293898d99a" },
+  },
   render: (args) => {
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState<readonly CartItemSummary[]>([

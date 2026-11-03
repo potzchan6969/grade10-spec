@@ -22,6 +22,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Signed out: the sign-in hints above the notes. */
 export const SignedOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_cddd7de1-5aef-4a70-b80f-bd40aed53ad4" },
+  },
   name: "Signed Out",
   args: {
     hints: [
@@ -57,6 +60,9 @@ export const SignedOut: Story = {
 
 /** Signed in: the notes alone. */
 export const SignedIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_59bc1e8c-ced2-49df-a062-93801a82d3b1" },
+  },
   name: "Signed In",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

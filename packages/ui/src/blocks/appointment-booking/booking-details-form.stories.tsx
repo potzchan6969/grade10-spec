@@ -26,9 +26,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_faee6e04-9407-4d6e-a8ae-42464fd737f5" },
+  },
+};
 
 export const VaultDropOff: Story = {
+  parameters: {
+    verification: { caseId: "vc_42782d9d-8f99-47c2-bcd5-afb6a77d4ee3" },
+  },
   args: {
     questions: VAULTING_SERVICE.questions,
     description: VAULTING_SERVICE.description,
@@ -36,6 +43,9 @@ export const VaultDropOff: Story = {
 };
 
 export const CollectionConsultation: Story = {
+  parameters: {
+    verification: { caseId: "vc_87113497-87f6-4445-8d5c-ff7c467da2ee" },
+  },
   args: {
     questions: CONSULTATION_SERVICE.questions,
     description: CONSULTATION_SERVICE.description,
@@ -44,6 +54,9 @@ export const CollectionConsultation: Story = {
 
 /** A missing address is named, and nothing is reported. */
 export const MissingDetails: Story = {
+  parameters: {
+    verification: { caseId: "vc_eb5ee083-52f9-4cca-9731-b4971fca532b" },
+  },
   args: { questions: [], description: undefined },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -58,6 +71,9 @@ export const MissingDetails: Story = {
 
 /** Values come back trimmed and the address lowercased. */
 export const ReportsTrimmedValues: Story = {
+  parameters: {
+    verification: { caseId: "vc_ad847a56-1197-446f-a92b-1a85d6b55bce" },
+  },
   args: { questions: [], description: undefined },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -83,6 +99,9 @@ export const ReportsTrimmedValues: Story = {
 
 /** Required service answers are keyed by question key. */
 export const ReportsGradingAnswers: Story = {
+  parameters: {
+    verification: { caseId: "vc_8daec053-7b89-40fb-a069-2444cfb2f1c4" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const page = within(canvasElement.ownerDocument.body);
@@ -115,6 +134,9 @@ export const ReportsGradingAnswers: Story = {
 /** Each of the six kinds draws its own control, with its placeholder where it
  * has one, and reports its answer: a list for checkboxes, text otherwise. */
 export const SixKinds: Story = {
+  parameters: {
+    verification: { caseId: "vc_c99e3176-c151-43ab-9461-45f7e438cae8" },
+  },
   args: { questions: ALL_KINDS_QUESTIONS, description: undefined },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -161,6 +183,9 @@ export const SixKinds: Story = {
 
 /** An unticked required checkbox list is named, and nothing is reported. */
 export const RequiredCheckboxes: Story = {
+  parameters: {
+    verification: { caseId: "vc_9d30fdce-98c7-49e5-ab06-b5bd2360a04d" },
+  },
   args: {
     questions: [
       {
@@ -188,6 +213,9 @@ export const RequiredCheckboxes: Story = {
 
 /** The notes field is the site's to ask for: absent unless copy names it. */
 export const WithoutNotes: Story = {
+  parameters: {
+    verification: { caseId: "vc_ada56de2-64bf-472b-946a-0fca4fdd9ba0" },
+  },
   args: {
     copy: { ...DETAILS_FORM_COPY, notes: undefined },
     questions: [],
@@ -200,6 +228,9 @@ export const WithoutNotes: Story = {
 };
 
 export const WithNotes: Story = {
+  parameters: {
+    verification: { caseId: "vc_4881195c-dcec-43a9-b106-ec2df43e0aa2" },
+  },
   args: {
     questions: [],
     description: undefined,
@@ -225,6 +256,9 @@ export const WithNotes: Story = {
 
 /** The account email is shown and submitted, and cannot be typed over. */
 export const LockedEmail: Story = {
+  parameters: {
+    verification: { caseId: "vc_9585dde3-0812-4f20-bd4f-b8e29545b324" },
+  },
   args: {
     questions: [],
     description: undefined,
@@ -243,6 +277,9 @@ export const LockedEmail: Story = {
 /** While the booking is in flight the submit is held, and the consumer's
  * error — a time taken meanwhile — is shown beneath the fields. */
 export const PendingWithError: Story = {
+  parameters: {
+    verification: { caseId: "vc_38041d34-650a-4d80-b0a8-33d1a4e19837" },
+  },
   args: {
     questions: [],
     description: undefined,
@@ -270,6 +307,9 @@ export const PendingWithError: Story = {
 /** A signed-in collector's name and email read as one summary; the
  * reported values are the seeded ones. */
 export const Summarized: Story = {
+  parameters: {
+    verification: { caseId: "vc_eaf549e4-e6ea-4e61-a75e-0cf19caeb036" },
+  },
   args: {
     questions: [],
     description: undefined,
@@ -299,6 +339,9 @@ export const Summarized: Story = {
 /** A signed-in collector with no phone on the account is asked for one,
  * still optional. */
 export const SummarizedWithoutPhone: Story = {
+  parameters: {
+    verification: { caseId: "vc_06f0f79c-b04f-459a-8a68-965a19c220c8" },
+  },
   args: {
     questions: [],
     description: undefined,
@@ -317,6 +360,9 @@ export const SummarizedWithoutPhone: Story = {
 /** A service that needs a phone refuses an empty one and drops the
  * Optional mark; a summary without a phone keeps the phone field. */
 export const PhoneRequired: Story = {
+  parameters: {
+    verification: { caseId: "vc_a2a87aef-d1d8-412b-b9ea-39c44be631ca" },
+  },
   args: {
     questions: [],
     description: undefined,
@@ -348,6 +394,9 @@ const SIGNED_IN = (
 /** The board's grading questions under their heading, each hint in view;
  * an answer out of bounds is told what fits. */
 export const AboutYourCards: Story = {
+  parameters: {
+    verification: { caseId: "vc_ec761a8e-2fe0-434a-9542-84b7cb40a11b" },
+  },
   args: {
     questions: BOARD_GRADING_QUESTIONS,
     questionsTitle: "About your cards",
@@ -386,6 +435,9 @@ export const AboutYourCards: Story = {
 /** A hint and an error on one field leave the control beside it in line:
  * the label, hint, control and error of each field share the grid's rows. */
 export const AlignedBesideAHint: Story = {
+  parameters: {
+    verification: { caseId: "vc_b4b5d25d-e6e0-4594-81f5-5184175c9709" },
+  },
   args: {
     questions: BOARD_GRADING_QUESTIONS.slice(0, 2),
     questionsTitle: "About your cards",
@@ -408,6 +460,9 @@ export const AlignedBesideAHint: Story = {
 
 /** Signed out: each contact field with the line under its label. */
 export const SignedOutHints: Story = {
+  parameters: {
+    verification: { caseId: "vc_e419ca7d-8196-4b05-bc0e-2613f526fcef" },
+  },
   args: { questions: [], description: undefined, phoneRequired: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -420,6 +475,9 @@ export const SignedOutHints: Story = {
 
 /** Booking for someone else asks their name, and reports it. */
 export const ForSomeoneElse: Story = {
+  parameters: {
+    verification: { caseId: "vc_a66f7174-f8d5-4559-9835-d0db14a80a97" },
+  },
   args: {
     questions: [],
     description: undefined,
@@ -451,6 +509,9 @@ export const ForSomeoneElse: Story = {
 /** A paid service: the consent line closes the form, and the action bar
  * outside it sends it, naming the deposit. */
 export const PaidWithBar: Story = {
+  parameters: {
+    verification: { caseId: "vc_66d95089-9338-4bb9-8d49-2c068ed70903" },
+  },
   args: {
     questions: [],
     description: undefined,
@@ -495,6 +556,9 @@ export const PaidWithBar: Story = {
 
 /** A slow write: every field reads only. */
 export const Pending: Story = {
+  parameters: {
+    verification: { caseId: "vc_672234c1-6f6e-4db9-bf3f-1e4cb8dc0f80" },
+  },
   args: { questions: [], description: undefined, pending: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

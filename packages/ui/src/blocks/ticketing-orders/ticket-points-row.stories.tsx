@@ -32,6 +32,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const About: Story = {
+  parameters: {
+    verification: { caseId: "vc_d12f8ed6-67e8-444e-a5a4-28f3609be4cb" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Points")).toBeVisible();
@@ -40,6 +43,9 @@ export const About: Story = {
 };
 
 export const Earned: Story = {
+  parameters: {
+    verification: { caseId: "vc_ff0e6833-c6ae-4111-9c7a-1b5fac97a342" },
+  },
   args: {
     kind: "earned",
     copy: {
@@ -57,6 +63,9 @@ export const Earned: Story = {
 
 /** One ticket refunded: its share of the points went back. */
 export const PartTakenBack: Story = {
+  parameters: {
+    verification: { caseId: "vc_63231e04-321a-40b4-a8a8-6f6db0f31724" },
+  },
   name: "Part taken back",
   args: {
     kind: "about",
@@ -76,6 +85,9 @@ export const PartTakenBack: Story = {
 };
 
 export const TakenBack: Story = {
+  parameters: {
+    verification: { caseId: "vc_d3dcdae1-c2ce-4643-b614-d2c5f043868f" },
+  },
   name: "Taken back",
   args: {
     kind: "takenBack",

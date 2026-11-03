@@ -36,6 +36,9 @@ const before = (a: Node, b: Node) =>
  * the rows a table named by their own label (shared-ui-page-blocks-SC-03).
  * Given no slot, the card keeps `card` (shared-ui-page-blocks-SC-18). */
 export const EveryPart: Story = {
+  parameters: {
+    verification: { caseId: "vc_15293d8b-8b01-4691-a816-88ff629683e6" },
+  },
   args: {
     copy: {
       title: OFFER_TITLE,
@@ -74,6 +77,9 @@ export const EveryPart: Story = {
 /** Rows alone: the table takes the card's title, and nothing else is drawn
  * (shared-ui-page-blocks-SC-04). */
 export const RowsOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_6bbb1503-ef2f-4f61-8f85-22a4589a8afe" },
+  },
   args: { copy: { title: KEEPS_TITLE }, rows: KEEPS_ROWS },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -92,6 +98,9 @@ export const RowsOnly: Story = {
 
 /** A body with no rows draws no table (shared-ui-page-blocks-SC-05). */
 export const BodyOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_1c613a0a-8cca-4306-b8b0-771e8ee4a89d" },
+  },
   args: {
     copy: { title: REMINDERS_TITLE },
     children: <Text size="sm">{REMINDERS_FREE}</Text>,
@@ -107,6 +116,9 @@ export const BodyOnly: Story = {
 
 /** An empty list of rows is no rows (shared-ui-page-blocks-SC-05). */
 export const EmptyRows: Story = {
+  parameters: {
+    verification: { caseId: "vc_9c306d06-323d-4966-b29a-df31c061c691" },
+  },
   args: { ...BodyOnly.args, rows: [] },
   play: async ({ canvasElement }) => {
     const region = within(canvasElement).getByRole("region", {
@@ -119,6 +131,9 @@ export const EmptyRows: Story = {
 
 /** The card carries the slot it is given (shared-ui-page-blocks-SC-18). */
 export const WithSlot: Story = {
+  parameters: {
+    verification: { caseId: "vc_32dd0291-2f55-4476-84d3-adc9beba91eb" },
+  },
   args: { ...RowsOnly.args, slot: "vault-case-keeps" },
   play: async ({ canvasElement }) => {
     const region = within(canvasElement).getByRole("region", {

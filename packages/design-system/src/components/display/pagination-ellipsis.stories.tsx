@@ -10,4 +10,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_9274d7bf-1bce-48c8-b1e3-78bc91493162" },
+  },
+};

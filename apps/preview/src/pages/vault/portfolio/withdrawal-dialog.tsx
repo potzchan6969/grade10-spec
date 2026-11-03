@@ -1,13 +1,17 @@
-import { Alert } from "@grade10/design-system/components/display/alert";
 import { DetailRow } from "@grade10/design-system/components/display/detail-row";
-import { Step } from "@grade10/design-system/components/display/step";
-import { Stepper } from "@grade10/design-system/components/display/stepper";
 import { Text } from "@grade10/design-system/components/display/text";
+import {
+  Autocomplete,
+  AutocompleteContent,
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+} from "@grade10/design-system/components/forms/autocomplete";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { NumberInput } from "@grade10/design-system/components/forms/number-input";
-import { RadioButton } from "@grade10/design-system/components/forms/radio-button";
 import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { SegmentedControl } from "@grade10/design-system/components/forms/segmented-control";
@@ -32,33 +36,15 @@ import {
   DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
-import {
-  Drawer,
-  DrawerBody,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@grade10/design-system/components/overlays/drawer";
+import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
+import { Bank, Globe, Lightning, Plus } from "@phosphor-icons/react";
+import { type ReactNode, useEffect, useId, useState } from "react";
+import { WinnerOrderContactDialog } from "../../auction/post-bidding/winner-order-contact-dialog";
 import {
-  Bank,
-  CaretRight,
-  CheckCircle,
-  DeviceMobile,
-  Globe,
-  Info,
-  Plus,
-} from "@phosphor-icons/react";
-import {
-  type CSSProperties,
-  type ReactNode,
-  useEffect,
-  useId,
-  useState,
-} from "react";
+  WINNER_ORDER_SUPPORT_EMAIL,
+  type WinnerOrderContactMail,
+} from "../../auction/post-bidding/winner-order-contact-mail";
 import {
   formatHkd,
   formatUsd,
@@ -68,58 +54,169 @@ import {
 type WithdrawalMethod = {
   id: string;
   kind: "bank" | "fps";
-  /** Primary line — `HSBC ••• 8304`, `FPS · +852 9123 ••45`. */
+  /** Primary line — `HSBC`, `FPS`. */
   title: string;
-  /** Secondary line — `Chan Tai Man · HK$`. */
+  /** Secondary line — the masked identifier: `123 •••• 8304`, `+852 •••• 4567`. */
   detail: string;
+  /** The unmasked identifier, shown on the review step only. */
+  fullDetail?: string;
 };
 
-type WithdrawalStep =
-  | "amount"
-  | "destination"
-  | "add-method"
-  | "manual-request"
-  | "review"
-  | "submitted";
+type WithdrawalStep = "amount" | "destination" | "add-method" | "review";
 
 type MethodKind = "bank" | "fps";
 
+/** Hong Kong licensed retail banks and the eight virtual banks, `code – name`. */
 const HK_BANKS = [
-  "HSBC",
-  "Hang Seng Bank",
-  "Bank of China (Hong Kong)",
-  "Standard Chartered",
-  "Citibank",
-  "DBS Bank",
-  "Bank of East Asia",
+  "003 – Standard Chartered (Hong Kong)",
+  "004 – HSBC",
+  "009 – China Construction Bank (Asia)",
+  "012 – Bank of China (Hong Kong)",
+  "015 – Bank of East Asia",
+  "016 – DBS Bank (Hong Kong)",
+  "018 – China CITIC Bank International",
+  "020 – CMB Wing Lung Bank",
+  "024 – Hang Seng Bank",
+  "025 – Shanghai Commercial Bank",
+  "028 – Public Bank (Hong Kong)",
+  "035 – OCBC Bank (Hong Kong)",
+  "039 – Chiyu Banking Corporation",
+  "040 – Dah Sing Bank",
+  "041 – Chong Hing Bank",
+  "072 – ICBC (Asia)",
+  "128 – Fubon Bank (Hong Kong)",
+  "229 – CTBC Bank",
+  "250 – Citibank (Hong Kong)",
+  "269 – Shanghai Commercial & Savings Bank",
+  "382 – Bank of Communications (Hong Kong)",
+  "387 – ZA Bank",
+  "388 – livi bank",
+  "389 – Mox Bank",
+  "390 – WeLab Bank",
+  "391 – Fusion Bank",
+  "392 – PAObank",
+  "393 – Ant Bank (Hong Kong)",
+  "395 – Airstar Bank",
 ] as const;
+
+/**
+ * Banks whose accounts all share one published branch code — the virtuals.
+ * Traditional banks print the branch as the account's first 3 digits, so
+ * nothing can be prefilled for them.
+ */
+const BRANCH_CODES: Record<string, string> = {
+  "387 – ZA Bank": "747",
+  "392 – PAObank": "752",
+};
+
+/** `123456789001` → `123-456789-001` — branch (3), account (6), suffix (3). */
+function formatBankAccount(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 12);
+  const parts = [digits.slice(0, 3), digits.slice(3, 9), digits.slice(9)];
+  return parts.filter(Boolean).join("-");
+}
 
 const FPS_ID_TYPES = ["Mobile number", "Email address", "FPS ID"] as const;
 
-const MANUAL_CURRENCIES = ["US dollar", "Hong Kong dollar"] as const;
+/** Country codes offered on the mobile rail — HK first, then mainland. */
+const MOBILE_CODES = ["+852", "+86"] as const;
 
-const MANUAL_BANK_COUNTRIES = [
-  "United States",
-  "United Kingdom",
-  "Singapore",
-  "Australia",
-  "Canada",
-  "Japan",
-  "Mainland China",
-  "Other",
-] as const;
+const MOBILE_RULES: Record<
+  (typeof MOBILE_CODES)[number],
+  {
+    validate: (digits: string) => boolean;
+    error: string;
+    placeholder: string;
+    /** Grouping applied as the user types — `9123 4567`, `138 1234 5678`. */
+    format: (digits: string) => string;
+  }
+> = {
+  "+852": {
+    validate: (digits) => /^[4-9]\d{7}$/.test(digits),
+    error: "Enter an 8-digit Hong Kong mobile number.",
+    placeholder: "9123 4567",
+    format: (digits) => digits.slice(0, 8).replace(/(\d{4})(?=\d)/g, "$1 "),
+  },
+  "+86": {
+    validate: (digits) => /^1\d{10}$/.test(digits),
+    error: "Enter an 11-digit Mainland China mobile number.",
+    placeholder: "138 1234 5678",
+    format: (digits) =>
+      [digits.slice(0, 3), digits.slice(3, 7), digits.slice(7, 11)]
+        .filter(Boolean)
+        .join(" "),
+  },
+};
 
-const FPS_PLACEHOLDER: Record<(typeof FPS_ID_TYPES)[number], string> = {
-  "Mobile number": "e.g. +852 9123 4567",
-  "Email address": "e.g. chan@example.com",
-  "FPS ID": "e.g. 123456789",
+/** `Chan Tai Man` → `C*** T** M***` — the masking FPS name lookup returns. */
+function maskName(name: string) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word[0] + "*".repeat(word.length - 1))
+    .join(" ");
+}
+
+/** `chan@example.com` → `c•••@example.com`. */
+function maskEmail(email: string) {
+  const [local, domain] = email.trim().split("@");
+  return domain ? `${local[0] ?? ""}•••@${domain}` : email;
+}
+
+/** Stands in for the FPS proxy name lookup in the workbench. */
+const FPS_LOOKUP_NAME = "Chan Tai Man";
+
+const FPS_VALIDATORS: Record<
+  Exclude<(typeof FPS_ID_TYPES)[number], "Mobile number">,
+  (value: string) => boolean
+> = {
+  "Email address": (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()),
+  "FPS ID": (value) => /^\d{7,10}$/.test(value.trim()),
+};
+
+const FPS_ERRORS: Record<
+  Exclude<(typeof FPS_ID_TYPES)[number], "Mobile number">,
+  string
+> = {
+  "Email address": "Enter a valid email address.",
+  "FPS ID": "Enter a 7–10 digit FPS ID.",
+};
+
+const FPS_FIELDS: Record<
+  (typeof FPS_ID_TYPES)[number],
+  {
+    label: string;
+    placeholder: string;
+    type: "tel" | "email" | "number";
+    inputMode: "tel" | "email" | "numeric";
+  }
+> = {
+  "Mobile number": {
+    label: "Mobile Number",
+    placeholder: "9123 4567",
+    type: "tel",
+    inputMode: "tel",
+  },
+  "Email address": {
+    label: "Email Address",
+    placeholder: "name@example.com",
+    type: "email",
+    inputMode: "email",
+  },
+  "FPS ID": {
+    label: "FPS ID (7–10 digits)",
+    placeholder: "101234567",
+    type: "number",
+    inputMode: "numeric",
+  },
 };
 
 const DRAFT_VALUE = "draft_method";
 
 const SM_UP_MQ = "(min-width: 640px)";
 
-/** Reads the 640px line — a bottom sheet below it, a dialog from it up. */
+/** Reads the 640px line — the amount field uses the md input rung below it. */
 function useSmUp() {
   const [smUp, setSmUp] = useState(
     () => typeof window === "undefined" || window.matchMedia(SM_UP_MQ).matches,
@@ -143,57 +240,9 @@ function stepIndex(step: WithdrawalStep): number {
 
 function methodIcon(kind: WithdrawalMethod["kind"]) {
   return kind === "fps" ? (
-    <DeviceMobile aria-hidden size={20} weight="regular" />
+    <Lightning aria-hidden size={20} weight="regular" />
   ) : (
     <Bank aria-hidden size={20} weight="regular" />
-  );
-}
-
-/**
- * One destination row — icon, title and detail beside a trailing radio.
- * `RadioButton` wraps the label so the whole row selects; `flex-row-reverse`
- * puts the control on the right.
- */
-function DestinationOption({
-  value,
-  icon,
-  title,
-  detail,
-  disabled,
-}: {
-  value: string;
-  icon: ReactNode;
-  title: ReactNode;
-  detail: ReactNode;
-  disabled?: boolean;
-}) {
-  return (
-    <RadioButton
-      className={cn(
-        "w-full flex-row-reverse items-center gap-3 rounded-(--radius-2xl) border border-border bg-card p-4 text-left transition-colors",
-        "data-checked:border-primary data-checked:bg-primary/5",
-        disabled
-          ? "cursor-not-allowed opacity-50 disabled:opacity-50"
-          : "cursor-pointer hover:border-border-strong hover:bg-background-subtle data-checked:hover:border-primary data-checked:hover:bg-primary/10",
-      )}
-      disabled={disabled}
-      value={value}
-    >
-      <span className="flex min-w-0 flex-1 items-center gap-3">
-        <span
-          aria-hidden
-          className="flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) bg-muted text-foreground"
-        >
-          {icon}
-        </span>
-        <span className="flex min-w-0 flex-1 flex-col items-start">
-          <span className="text-sm leading-6 font-medium text-foreground">
-            {title}
-          </span>
-          <span className="text-sm text-secondary-foreground">{detail}</span>
-        </span>
-      </span>
-    </RadioButton>
   );
 }
 
@@ -204,6 +253,7 @@ function ActionRow({
   detail,
   trailing,
   dashed,
+  disabled,
   onClick,
 }: {
   icon: ReactNode;
@@ -211,25 +261,37 @@ function ActionRow({
   detail?: ReactNode;
   trailing?: ReactNode;
   dashed?: boolean;
-  onClick: () => void;
+  /** Dims the row and drops its own click — `trailing` stays interactive. */
+  disabled?: boolean;
+  onClick?: () => void;
 }) {
+  const Row = disabled ? "div" : "button";
   return (
-    <button
+    <Row
       className={cn(
-        "flex w-full cursor-pointer items-center gap-3 rounded-(--radius-2xl) border border-border bg-card p-4 text-left transition-colors",
-        "hover:border-border-strong hover:bg-background-subtle",
+        "flex w-full items-center gap-3 rounded-xl border border-border bg-card p-3 text-left transition-colors",
+        !disabled &&
+          "cursor-pointer hover:border-border-strong hover:bg-background-subtle",
         dashed && "border-dashed",
       )}
-      type="button"
-      onClick={onClick}
+      type={disabled ? undefined : "button"}
+      onClick={disabled ? undefined : onClick}
     >
       <span
         aria-hidden
-        className="flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) bg-muted text-foreground"
+        className={cn(
+          "flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) bg-muted text-foreground",
+          disabled && "opacity-50",
+        )}
       >
         {icon}
       </span>
-      <span className="flex min-w-0 flex-1 flex-col items-start">
+      <span
+        className={cn(
+          "flex min-w-0 flex-1 flex-col items-start",
+          disabled && "opacity-50",
+        )}
+      >
         <span className="text-sm leading-6 font-medium text-foreground">
           {title}
         </span>
@@ -238,30 +300,29 @@ function ActionRow({
         ) : null}
       </span>
       {trailing}
-    </button>
+    </Row>
   );
 }
 
 /**
  * Withdrawal — the stepped payout request: amount with `Max` and the
  * receive-in currency, the destination picker drawn like the winner-order
- * setup (saved methods, add a Hong Kong bank or FPS, manual request for
+ * setup (saved methods, add a Hong Kong bank or FPS, an email request for
  * US$/overseas), a review that states the approval and the working days
- * before submit, then the submitted beat. Grade10 approves every request;
- * nothing leaves the wallet until then.
+ * before submit — the confirmation lands as a toast. Grade10 approves every
+ * request; nothing leaves the wallet until then.
  */
 function WithdrawalDialog({
   availableUsd,
   minWithdrawalUsd,
   hkdPerUsd,
   payoutMethods,
-  collectorName = "Chan Tai Man",
   open,
   onOpenChange,
   onSubmit,
   onViewWithdrawal,
-  requestId = "WD-24818",
   initialStep = "amount",
+  flow = "standard",
 }: {
   availableUsd: number;
   minWithdrawalUsd: number;
@@ -269,17 +330,20 @@ function WithdrawalDialog({
   hkdPerUsd: number;
   /** Saved destinations; empty on a collector's first payout. */
   payoutMethods?: WithdrawalMethod[];
-  /** Verified profile name — prefills the account holder field. */
-  collectorName?: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit?: (amountUsd: number, currency: "USD" | "HKD") => void;
-  /** Opens the withdrawal tab/details after submit. */
+  /** Opens the withdrawal tab/details from the submitted toast. */
   onViewWithdrawal?: () => void;
-  /** Reference shown on the submitted beat. */
-  requestId?: string;
   /** Step the dialog opens on — workbench stories only; defaults to `amount`. */
   initialStep?: WithdrawalStep;
+  /**
+   * `standard` offers the receive-in choice, add-method and the overseas
+   * request; `prelinked` is the collector whose bank was captured on the
+   * in-store paperwork — HKD payout to that account only, so the currency
+   * radio and the action rows are not drawn.
+   */
+  flow?: "standard" | "prelinked";
 }) {
   const [step, setStep] = useState<WithdrawalStep>(initialStep);
   const [amountInput, setAmountInput] = useState(String(availableUsd));
@@ -289,30 +353,18 @@ function WithdrawalDialog({
   const [selection, setSelection] = useState(
     () => payoutMethods?.[0]?.id ?? "",
   );
-  const [manualRequest, setManualRequest] = useState(
-    initialStep === "manual-request",
-  );
+  const [contactOpen, setContactOpen] = useState(false);
   const [receiveIn, setReceiveIn] = useState<"HKD" | "USD">("HKD");
   const [methodKind, setMethodKind] = useState<MethodKind>("bank");
-  const [bankName, setBankName] = useState<string>(HK_BANKS[0]);
+  const [bank, setBank] = useState("");
   const [fpsIdType, setFpsIdType] =
     useState<(typeof FPS_ID_TYPES)[number]>("Mobile number");
+  const [mobileCode, setMobileCode] =
+    useState<(typeof MOBILE_CODES)[number]>("+852");
   const [accountNumber, setAccountNumber] = useState("");
-  const [accountHolder, setAccountHolder] = useState(collectorName);
+  const [accountHolder, setAccountHolder] = useState("");
   const [saveForFuture, setSaveForFuture] = useState(true);
-  const bankSelectId = useId();
   const fpsSelectId = useId();
-  const currencySelectId = useId();
-  const countrySelectId = useId();
-  const [manualReturnStep, setManualReturnStep] =
-    useState<WithdrawalStep>("amount");
-  const [receiveCurrency, setReceiveCurrency] =
-    useState<(typeof MANUAL_CURRENCIES)[number]>("US dollar");
-  const [manualCountry, setManualCountry] = useState("United States");
-  const [manualBank, setManualBank] = useState("");
-  const [manualAccount, setManualAccount] = useState("");
-  const [manualSwift, setManualSwift] = useState("");
-  const [manualHolder, setManualHolder] = useState("");
 
   const [wasOpen, setWasOpen] = useState(open);
   if (open !== wasOpen) {
@@ -322,17 +374,13 @@ function WithdrawalDialog({
       setAmountInput(String(availableUsd));
       setMethods([...(payoutMethods ?? [])]);
       setSelection(payoutMethods?.[0]?.id ?? "");
-      setManualRequest(initialStep === "manual-request");
-      setReceiveIn(initialStep === "manual-request" ? "USD" : "HKD");
+      setContactOpen(false);
+      setReceiveIn("HKD");
       setAccountNumber("");
-      setAccountHolder(collectorName);
+      setBank("");
+      setMobileCode("+852");
+      setAccountHolder("");
       setSaveForFuture(true);
-      setReceiveCurrency("US dollar");
-      setManualCountry("United States");
-      setManualBank("");
-      setManualAccount("");
-      setManualSwift("");
-      setManualHolder("");
     }
   }
 
@@ -341,16 +389,27 @@ function WithdrawalDialog({
   const amountTooHigh = amount > availableUsd;
   const amountTooLow = amountInput.trim() !== "" && amount < minWithdrawalUsd;
   const convertedHkd = Math.round(amount * hkdPerUsd * 100) / 100;
-  const balanceAfter = availableUsd - amount;
+  /** FPS proxy name preview — shown once the identifier passes its rule. */
+  const fpsIdentifierValid =
+    fpsIdType === "Mobile number"
+      ? MOBILE_RULES[mobileCode].validate(accountNumber.replace(/\D/g, ""))
+      : FPS_VALIDATORS[fpsIdType](accountNumber);
+  const fpsPreviewName =
+    methodKind === "fps" && fpsIdentifierValid
+      ? maskName(FPS_LOOKUP_NAME)
+      : null;
+  const fpsError =
+    methodKind === "fps" && accountNumber.trim() !== "" && !fpsIdentifierValid
+      ? fpsIdType === "Mobile number"
+        ? MOBILE_RULES[mobileCode].error
+        : FPS_ERRORS[fpsIdType]
+      : null;
   const methodDetailsValid =
-    accountHolder.trim() !== "" && accountNumber.trim() !== "";
-  const manualDetailsValid =
-    amountValid &&
-    manualCountry.trim() !== "" &&
-    manualBank.trim() !== "" &&
-    manualAccount.trim() !== "" &&
-    manualSwift.trim() !== "" &&
-    manualHolder.trim() !== "";
+    (methodKind === "bank"
+      ? (HK_BANKS as readonly string[]).includes(bank)
+      : fpsIdentifierValid) &&
+    accountHolder.trim() !== "" &&
+    accountNumber.trim() !== "";
   const hasMethods = methods.length > 0;
 
   const destination =
@@ -358,55 +417,82 @@ function WithdrawalDialog({
     methods.find((method) => method.id === DRAFT_VALUE);
 
   const TITLE: Record<WithdrawalStep, string> = {
-    amount: "Withdraw Incentives",
-    destination: "Withdraw To",
+    amount: "Withdraw Earnings",
+    destination: "Withdrawal Destination",
     "add-method": "Add Withdrawal Method",
-    "manual-request": "Manual Withdrawal Request",
     review: "Review Withdrawal",
-    submitted: manualRequest
-      ? "Manual Request Submitted"
-      : `Withdrawal of ${formatUsd(amount)} Requested`,
   };
 
-  function requestManually(from: WithdrawalStep) {
-    setManualReturnStep(from);
-    setManualRequest(true);
-    setStep("manual-request");
-  }
+  /** Ready email for a US$/overseas payout — handled by the team, not a form. */
+  const manualMail: WinnerOrderContactMail = {
+    to: WINNER_ORDER_SUPPORT_EMAIL,
+    subject: `Manual withdrawal request: ${formatUsd(amount)}`,
+    body: [
+      "Hello Grade10,",
+      "",
+      `I’d like to withdraw ${formatUsd(amount)} of rewards to a US$ or overseas bank account.`,
+      "",
+      `Amount: ${formatUsd(amount)}`,
+      "",
+      "Bank country / region:",
+      "Bank name:",
+      "Account number / IBAN:",
+      "SWIFT / BIC:",
+      "Account holder name:",
+      "",
+    ].join("\n"),
+    mailtoHref: "",
+    copyText: "",
+  };
 
   function saveMethod() {
-    const title =
+    const digits = accountNumber.replace(/\D/g, "");
+    const last4 = digits.slice(-4) || "••";
+    const identifier =
       methodKind === "bank"
-        ? `${bankName} ••• ${accountNumber.slice(-4) || "••"}`
-        : `FPS · ${accountNumber}`;
+        ? digits.length >= 7
+          ? `${digits.slice(0, 3)} •••• ${last4}`
+          : `••• ${last4}`
+        : fpsIdType === "Mobile number"
+          ? mobileCode === "+86"
+            ? `+86 ${digits.slice(0, 3)} •••• ${digits.slice(7)}`
+            : `+852 •••• ${digits.slice(4, 8)}`
+          : fpsIdType === "Email address"
+            ? maskEmail(accountNumber)
+            : `${accountNumber.slice(0, -4)}••••`;
     const method: WithdrawalMethod = {
       id: saveForFuture ? `saved-${Date.now()}` : DRAFT_VALUE,
       kind: methodKind,
-      title,
-      detail: `${accountHolder.trim()} · HK$`,
+      title: methodKind === "bank" ? (bank.split(" – ")[1] ?? bank) : "FPS",
+      detail: identifier,
+      fullDetail:
+        methodKind === "bank"
+          ? accountNumber
+          : fpsIdType === "Mobile number"
+            ? `${mobileCode} ${accountNumber}`
+            : accountNumber,
     };
     setMethods((held) => [...held.filter((m) => m.id !== DRAFT_VALUE), method]);
     setSelection(method.id);
-    setManualRequest(false);
     setStep("destination");
   }
 
   const next = () => {
     if (step === "amount") {
-      if (receiveIn === "USD") {
-        requestManually("amount");
-      } else {
-        setStep(hasMethods ? "destination" : "add-method");
-      }
+      setStep(hasMethods ? "destination" : "add-method");
     } else if (step === "destination") {
       setStep("review");
     } else if (step === "add-method") {
       saveMethod();
-    } else if (step === "manual-request") {
-      setStep("review");
     } else if (step === "review") {
-      onSubmit?.(amount, manualRequest ? "USD" : "HKD");
-      setStep("submitted");
+      onSubmit?.(amount, "HKD");
+      toast.success("Withdrawal requested", {
+        description: `${formatHkd(convertedHkd)} to ${destination?.title ?? "your account"}. We’ll email you once it’s transferred.`,
+        action: onViewWithdrawal
+          ? { label: "View withdrawal", onClick: onViewWithdrawal }
+          : undefined,
+      });
+      onOpenChange(false);
     }
   };
 
@@ -414,37 +500,26 @@ function WithdrawalDialog({
     if (step === "destination") setStep("amount");
     else if (step === "add-method")
       setStep(hasMethods ? "destination" : "amount");
-    else if (step === "manual-request") setStep(manualReturnStep);
-    else if (step === "review")
-      setStep(
-        manualRequest
-          ? "manual-request"
-          : hasMethods
-            ? "destination"
-            : "amount",
-      );
+    else if (step === "review") setStep(hasMethods ? "destination" : "amount");
   };
 
   const primaryDisabled =
     (step === "amount" && !amountValid) ||
     (step === "destination" && !selection) ||
-    (step === "add-method" && !methodDetailsValid) ||
-    (step === "manual-request" && !manualDetailsValid);
+    (step === "add-method" && !methodDetailsValid);
 
   const primaryLabel =
     step === "add-method"
-      ? "Save & Use"
+      ? saveForFuture
+        ? "Save & Use"
+        : "Use"
       : step === "review"
         ? "Submit Request"
         : "Continue";
 
   /** Closing mid-flow or with an amount typed asks before discarding it. */
   function handleOpenChange(next: boolean) {
-    if (
-      !next &&
-      step !== "submitted" &&
-      (step !== "amount" || amountInput.trim() !== "")
-    ) {
+    if (!next && (step !== "amount" || amountInput.trim() !== "")) {
       const leave = window.confirm(
         "Leave withdrawal? Your progress will not be saved.",
       );
@@ -453,18 +528,20 @@ function WithdrawalDialog({
     onOpenChange(next);
   }
 
+  const smUp = useSmUp();
+
   const stepBody = (
     <>
       {step === "amount" ? (
         <VStack gap="md" hAlign="start">
           <NumberInput
-            className="[&_[data-slot=input]]:font-heading [&_[data-slot=input]]:text-2xl [&_[data-slot=input]]:font-medium [&_[data-slot=input]]:tabular-nums [&_[data-slot=input]]:[appearance:textfield] [&_[data-slot=input]::-webkit-inner-spin-button]:appearance-none [&_[data-slot=input]::-webkit-outer-spin-button]:appearance-none"
+            className="sm:[&_[data-slot=input]]:font-heading sm:[&_[data-slot=input]]:text-2xl sm:[&_[data-slot=input]]:font-medium [&_[data-slot=input]]:tabular-nums [&_[data-slot=input]]:[appearance:textfield] [&_[data-slot=input]::-webkit-inner-spin-button]:appearance-none [&_[data-slot=input]::-webkit-outer-spin-button]:appearance-none"
             inputMode="decimal"
             label="Withdraw Amount"
             message={
               <span>
                 {amountTooLow
-                  ? `The min. withdrawal is ${formatUsd(minWithdrawalUsd)}. `
+                  ? `Minimum withdrawal is ${formatUsd(minWithdrawalUsd)}. `
                   : `Available: ${formatUsd(availableUsd)}. `}
                 {amount !== availableUsd ? (
                   <Link
@@ -487,73 +564,102 @@ function WithdrawalDialog({
               </span>
             }
             prefix="US$"
-            size="lg"
+            size={smUp ? "lg" : "md"}
             status={amountTooHigh || amountTooLow ? "error" : "default"}
             value={amountInput}
             onChange={(event) => setAmountInput(event.target.value)}
           />
-          <RadioList
-            aria-label="Receive in"
-            className="gap-3"
-            label="Receive in"
-            onValueChange={(value) => {
-              if (value === "HKD" || value === "USD") setReceiveIn(value);
-            }}
-            value={receiveIn}
-          >
-            <div className="flex w-full flex-col gap-2">
+          {flow === "prelinked" ? null : (
+            <RadioList
+              aria-label="Receive in"
+              className="gap-3"
+              label="Receive in"
+              onValueChange={(value) => {
+                if (value === "HKD" || value === "USD") setReceiveIn(value);
+              }}
+              value={receiveIn}
+            >
               <RadioCard
-                description={`≈ ${formatHkd(convertedHkd)} (US$1 = HK$${hkdPerUsd})`}
+                description={`${formatHkd(convertedHkd)} (US$1 = HK$${hkdPerUsd})`}
                 title="Hong Kong Dollar"
                 value="HKD"
               />
               <RadioCard
-                description="Not available now. By request only"
-                title="US Dollar"
+                action={
+                  <Link
+                    render={
+                      <button
+                        type="button"
+                        onClick={() => setContactOpen(true)}
+                      />
+                    }
+                    size="sm"
+                  >
+                    Request
+                  </Link>
+                }
+                className="opacity-100"
+                description={
+                  <span className="opacity-50">Not available now</span>
+                }
+                disabled
+                title={<span className="opacity-50">US Dollar</span>}
                 value="USD"
               />
-            </div>
-          </RadioList>
+            </RadioList>
+          )}
         </VStack>
       ) : null}
 
       {step === "destination" ? (
         <VStack gap="md" hAlign="stretch">
-          <RadioList
-            aria-label="Withdrawal destination"
-            className="gap-3"
-            onValueChange={setSelection}
-            value={selection}
-          >
-            <div className="flex w-full flex-col gap-2">
+          <div className="flex w-full flex-col gap-2">
+            <RadioList
+              aria-label="Withdrawal destination"
+              className="gap-3"
+              onValueChange={setSelection}
+              value={selection}
+            >
               {methods.map((method) => (
-                <DestinationOption
-                  detail={method.detail}
+                <RadioCard
+                  description={method.detail}
                   icon={methodIcon(method.kind)}
                   key={method.id}
                   title={method.title}
                   value={method.id}
                 />
               ))}
-            </div>
-          </RadioList>
-          <ActionRow
-            dashed
-            icon={<Plus aria-hidden size={20} weight="regular" />}
-            title="Add Hong Kong bank or FPS"
-            onClick={() => setStep("add-method")}
-          />
-          <ActionRow
-            detail="Submit a manual request"
-            icon={<Globe aria-hidden size={20} weight="regular" />}
-            title="US$ or overseas bank"
-            trailing={
-              <span aria-hidden className="text-secondary-foreground">
-                <CaretRight size={16} weight="regular" />
-              </span>
-            }
-            onClick={() => requestManually("destination")}
-          />
+            </RadioList>
+            {flow === "prelinked" ? null : (
+              <>
+                <ActionRow
+                  dashed
+                  icon={<Plus aria-hidden size={20} weight="regular" />}
+                  title="Add Hong Kong bank or FPS"
+                  onClick={() => setStep("add-method")}
+                />
+                <ActionRow
+                  detail="Not available now"
+                  disabled
+                  icon={<Globe aria-hidden size={20} weight="regular" />}
+                  title="Overseas bank"
+                  trailing={
+                    <Link
+                      render={
+                        <button
+                          type="button"
+                          onClick={() => setContactOpen(true)}
+                        />
+                      }
+                      size="sm"
+                    >
+                      Request
+                    </Link>
+                  }
+                />
+              </>
+            )}
+          </div>
         </VStack>
       ) : null}
 
@@ -562,6 +668,7 @@ function WithdrawalDialog({
           <SegmentedControl
             aria-label="Withdrawal method type"
             className="w-full"
+            size="sm"
             onValueChange={(next) => {
               const value = next[0];
               if (value === "bank" || value === "fps") setMethodKind(value);
@@ -577,31 +684,32 @@ function WithdrawalDialog({
           </SegmentedControl>
 
           {methodKind === "bank" ? (
-            <div className="flex w-full flex-col gap-2">
-              <label
-                className="text-sm font-medium text-secondary-foreground"
-                htmlFor={bankSelectId}
-              >
-                Bank
-              </label>
-              <Select
-                onValueChange={(value) => {
-                  if (typeof value === "string") setBankName(value);
-                }}
-                value={bankName}
-              >
-                <SelectTrigger className="w-full" id={bankSelectId}>
-                  <SelectValue placeholder="Select a bank" />
-                </SelectTrigger>
-                <SelectContent alignItemWithTrigger={false}>
-                  {HK_BANKS.map((bank) => (
-                    <SelectItem key={bank} label={bank} value={bank}>
+            <Autocomplete
+              items={HK_BANKS}
+              onValueChange={(value) => {
+                const next = value ?? "";
+                setBank(next);
+                const branch = BRANCH_CODES[next];
+                if (branch != null) setAccountNumber(`${branch}-`);
+              }}
+              openOnInputClick
+              value={bank}
+            >
+              <AutocompleteInput
+                label="Bank"
+                placeholder="Search bank name or code"
+              />
+              <AutocompleteContent>
+                <AutocompleteEmpty>No banks found.</AutocompleteEmpty>
+                <AutocompleteList>
+                  {(bank: string) => (
+                    <AutocompleteItem key={bank} value={bank}>
                       {bank}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                    </AutocompleteItem>
+                  )}
+                </AutocompleteList>
+              </AutocompleteContent>
+            </Autocomplete>
           ) : (
             <div className="flex w-full flex-col gap-2">
               <label
@@ -621,7 +729,10 @@ function WithdrawalDialog({
                 }}
                 value={fpsIdType}
               >
-                <SelectTrigger className="w-full" id={fpsSelectId}>
+                <SelectTrigger
+                  className="w-full text-base md:text-sm"
+                  id={fpsSelectId}
+                >
                   <SelectValue placeholder="Select an ID type" />
                 </SelectTrigger>
                 <SelectContent alignItemWithTrigger={false}>
@@ -635,31 +746,106 @@ function WithdrawalDialog({
             </div>
           )}
 
-          <TextInput
-            inputMode={methodKind === "bank" ? "numeric" : "text"}
-            label={
-              methodKind === "bank"
-                ? "Account Number"
-                : "Mobile Number, Email or FPS ID"
-            }
-            placeholder={
-              methodKind === "bank"
-                ? "e.g. 123-456789-001"
-                : FPS_PLACEHOLDER[fpsIdType]
-            }
-            value={accountNumber}
-            onChange={(event) => setAccountNumber(event.target.value)}
-          />
-          <div className="flex w-full flex-col gap-2">
+          {methodKind === "fps" && fpsIdType === "Mobile number" ? (
+            <div className="flex w-full flex-col gap-2">
+              <span className="text-sm font-medium text-secondary-foreground">
+                Mobile Number
+              </span>
+              <div className="flex w-full gap-2">
+                <Select
+                  onValueChange={(value) => {
+                    if (
+                      typeof value === "string" &&
+                      (MOBILE_CODES as readonly string[]).includes(value)
+                    ) {
+                      setMobileCode(value as (typeof MOBILE_CODES)[number]);
+                    }
+                  }}
+                  value={mobileCode}
+                >
+                  <SelectTrigger
+                    aria-label="Country code"
+                    className="w-24 text-base md:text-sm"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent alignItemWithTrigger={false}>
+                    {MOBILE_CODES.map((code) => (
+                      <SelectItem key={code} label={code} value={code}>
+                        {code}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <TextInput
+                  autoComplete="off"
+                  className="flex-1"
+                  data-1p-ignore
+                  data-lpignore="true"
+                  inputMode="tel"
+                  message={fpsError ?? undefined}
+                  placeholder={MOBILE_RULES[mobileCode].placeholder}
+                  status={fpsError ? "error" : "default"}
+                  type="tel"
+                  value={accountNumber}
+                  onChange={(event) =>
+                    setAccountNumber(
+                      MOBILE_RULES[mobileCode].format(
+                        event.target.value.replace(/\D/g, ""),
+                      ),
+                    )
+                  }
+                />
+              </div>
+              {fpsPreviewName ? (
+                <Text size="sm" tone="secondary">
+                  Name: {fpsPreviewName}
+                </Text>
+              ) : null}
+            </div>
+          ) : (
             <TextInput
-              label="Account Holder Name"
-              value={accountHolder}
-              onChange={(event) => setAccountHolder(event.target.value)}
+              autoComplete="off"
+              data-1p-ignore
+              data-lpignore="true"
+              inputMode={
+                methodKind === "bank"
+                  ? "numeric"
+                  : FPS_FIELDS[fpsIdType].inputMode
+              }
+              label={
+                methodKind === "bank"
+                  ? "Account Number"
+                  : FPS_FIELDS[fpsIdType].label
+              }
+              message={
+                fpsError ??
+                (fpsPreviewName ? `Name: ${fpsPreviewName}` : undefined)
+              }
+              pattern={methodKind === "bank" ? "[0-9-]*" : undefined}
+              placeholder={
+                methodKind === "bank"
+                  ? "e.g. 123-456789-001"
+                  : FPS_FIELDS[fpsIdType].placeholder
+              }
+              status={fpsError ? "error" : "default"}
+              type={methodKind === "bank" ? "text" : FPS_FIELDS[fpsIdType].type}
+              value={accountNumber}
+              onChange={(event) =>
+                setAccountNumber(
+                  methodKind === "bank"
+                    ? formatBankAccount(event.target.value)
+                    : event.target.value,
+                )
+              }
             />
-            <Text size="sm" tone="secondary">
-              Taken from your verified Grade10 profile.
-            </Text>
-          </div>
+          )}
+          <TextInput
+            label="Account Holder Name"
+            message="Match the full name registered with your bank account to avoid transfer rejection."
+            value={accountHolder}
+            onChange={(event) => setAccountHolder(event.target.value)}
+          />
           <CheckboxListInput
             checked={saveForFuture}
             onCheckedChange={(checked) => setSaveForFuture(checked === true)}
@@ -667,299 +853,65 @@ function WithdrawalDialog({
           >
             Save for future withdrawals
           </CheckboxListInput>
-          <Text size="sm" tone="secondary">
-            Overseas account?{" "}
-            <Link
-              render={
-                <button
-                  type="button"
-                  onClick={() => requestManually("add-method")}
-                />
-              }
-              size="sm"
-            >
-              Request manually
-            </Link>
-          </Text>
-        </VStack>
-      ) : null}
-
-      {step === "manual-request" ? (
-        <VStack gap="md" hAlign="stretch">
-          <div className="grid w-full grid-cols-2 gap-3">
-            <TextInput label="Amount (US$)" readOnly value={amountInput} />
-            <div className="flex w-full flex-col gap-2">
-              <label
-                className="text-sm font-medium text-secondary-foreground"
-                htmlFor={currencySelectId}
-              >
-                Receive in
-              </label>
-              <Select
-                onValueChange={(value) => {
-                  if (
-                    typeof value === "string" &&
-                    (MANUAL_CURRENCIES as readonly string[]).includes(value)
-                  ) {
-                    setReceiveCurrency(
-                      value as (typeof MANUAL_CURRENCIES)[number],
-                    );
-                  }
-                }}
-                value={receiveCurrency}
-              >
-                <SelectTrigger className="w-full" id={currencySelectId}>
-                  <SelectValue placeholder="Select a currency" />
-                </SelectTrigger>
-                <SelectContent alignItemWithTrigger={false}>
-                  {MANUAL_CURRENCIES.map((currency) => (
-                    <SelectItem
-                      key={currency}
-                      label={currency}
-                      value={currency}
-                    >
-                      {currency}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div className="flex w-full flex-col gap-2">
-            <label
-              className="text-sm font-medium text-secondary-foreground"
-              htmlFor={countrySelectId}
-            >
-              Bank country / region
-            </label>
-            <Select
-              onValueChange={(value) => {
-                if (typeof value === "string") setManualCountry(value);
-              }}
-              value={manualCountry}
-            >
-              <SelectTrigger className="w-full" id={countrySelectId}>
-                <SelectValue placeholder="Select a country or region" />
-              </SelectTrigger>
-              <SelectContent alignItemWithTrigger={false}>
-                {MANUAL_BANK_COUNTRIES.map((country) => (
-                  <SelectItem key={country} label={country} value={country}>
-                    {country}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <TextInput
-            label="Bank name"
-            placeholder="e.g. Chase"
-            value={manualBank}
-            onChange={(event) => setManualBank(event.target.value)}
-          />
-          <div className="grid w-full grid-cols-2 gap-3">
-            <TextInput
-              label="Account number / IBAN"
-              placeholder="Account number"
-              value={manualAccount}
-              onChange={(event) => setManualAccount(event.target.value)}
-            />
-            <TextInput
-              label="SWIFT / BIC"
-              placeholder="e.g. CHASUS33"
-              value={manualSwift}
-              onChange={(event) =>
-                setManualSwift(event.target.value.toUpperCase())
-              }
-            />
-          </div>
-          <TextInput
-            label="Account Holder Name"
-            value={manualHolder}
-            onChange={(event) => setManualHolder(event.target.value)}
-          />
         </VStack>
       ) : null}
 
       {step === "review" ? (
         <VStack gap="md" hAlign="start">
           <div className="flex w-full flex-col items-start gap-1">
+            <Text size="sm" tone="secondary" weight="medium">
+              You’ll receive
+            </Text>
             <span className="font-heading text-3xl font-medium tracking-tight tabular-nums">
-              {manualRequest
-                ? formatUsd(amount)
-                : `≈ ${formatHkd(convertedHkd)}`}
+              {formatHkd(convertedHkd)}
             </span>
-            <div className="flex w-full items-baseline justify-between">
-              <Text size="sm" tone="secondary">
-                You’ll receive
-              </Text>
-              <Text size="sm" tone="secondary">
-                from {formatUsd(amount)} of rewards
-              </Text>
-            </div>
           </div>
-          {manualRequest ? (
-            <div className="flex w-full items-center gap-4 rounded-(--radius-2xl) border border-border bg-background-subtle p-4">
-              <span
-                aria-hidden
-                className="flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) bg-muted text-foreground"
-              >
-                <Globe size={20} weight="regular" />
-              </span>
-              <VStack className="min-w-0" gap="xs" hAlign="start">
-                <Text as="span" weight="medium">
-                  {manualBank.trim() || "US$ or overseas bank"}
-                </Text>
-                <Text as="span" className="text-secondary-foreground" size="sm">
-                  {[
-                    manualCountry,
-                    manualAccount.trim() && `••• ${manualAccount.slice(-4)}`,
-                    "Manual request",
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </Text>
-              </VStack>
-            </div>
-          ) : (
-            <div className="flex w-full items-center gap-4 rounded-(--radius-2xl) border border-border bg-card p-4">
-              <span
-                aria-hidden
-                className="flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) bg-muted text-foreground"
-              >
-                {destination ? (
-                  methodIcon(destination.kind)
-                ) : (
-                  <Bank size={20} weight="regular" />
-                )}
-              </span>
-              <VStack className="min-w-0 flex-1" gap="xs" hAlign="start">
-                <Text as="span" weight="medium">
-                  {destination?.title}
-                </Text>
-                <Text as="span" className="text-secondary-foreground" size="sm">
-                  {destination?.detail}
-                </Text>
-              </VStack>
-              <Link
-                render={
-                  <button
-                    type="button"
-                    onClick={() => setStep("destination")}
-                  />
-                }
-                size="sm"
-              >
-                Change
-              </Link>
-            </div>
-          )}
+          <div className="flex w-full items-center gap-3 rounded-xl border border-border bg-card p-3">
+            <span
+              aria-hidden
+              className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-foreground [&_svg]:size-5"
+            >
+              {destination ? (
+                methodIcon(destination.kind)
+              ) : (
+                <Bank size={20} weight="regular" />
+              )}
+            </span>
+            <VStack className="min-w-0 flex-1" gap="xs" hAlign="start">
+              <Text as="span" weight="medium">
+                {destination?.title}
+              </Text>
+              <Text as="span" className="text-secondary-foreground" size="sm">
+                {destination?.fullDetail ?? destination?.detail}
+              </Text>
+            </VStack>
+            <Link
+              render={
+                <button type="button" onClick={() => setStep("destination")} />
+              }
+              size="sm"
+            >
+              Change
+            </Link>
+          </div>
           <div className="flex w-full flex-col">
             <DetailRow label="Withdraw from rewards">
-              <span className="font-medium">{formatUsd(amount)}</span>
+              {formatUsd(amount)}
             </DetailRow>
-            {manualRequest ? (
-              <DetailRow label="Handled by">
-                <span className="font-medium">Our team manually</span>
-              </DetailRow>
-            ) : (
-              <DetailRow label="Indicative rate">
-                <span className="font-medium">US$1 = HK${hkdPerUsd}</span>
-              </DetailRow>
-            )}
-            <DetailRow label="Balance after">
-              <span className="font-medium">
-                {formatUsd(Math.max(0, balanceAfter))}
-              </span>
+            <DetailRow label="Fixed rate">US$1 = HK${hkdPerUsd}</DetailRow>
+            <DetailRow label="Withdrawal fee">Free</DetailRow>
+            <DetailRow className="border-b-0" label="Processing time">
+              Most transfers are sent within {WITHDRAWAL_PROCESSING_DAYS}
             </DetailRow>
-            <DetailRow className="border-b-0" label="Arrives">
-              <span className="font-medium">
-                {WITHDRAWAL_PROCESSING_DAYS} after approval
-              </span>
-            </DetailRow>
-          </div>
-          <Alert
-            description={
-              manualRequest
-                ? "Our team will contact you to arrange the transfer. You can cancel before it’s approved."
-                : "The rate is set when Grade10 approves, so the final HK$ amount may differ slightly. Your history shows both US$ and HK$. You can cancel before it’s approved."
-            }
-            icon={<Info aria-hidden weight="regular" />}
-            status="default"
-            title={manualRequest ? "Manual request" : "Indicative rate"}
-          />
-        </VStack>
-      ) : null}
-
-      {step === "submitted" ? (
-        <VStack gap="lg" hAlign="stretch">
-          <VStack gap="sm" hAlign="center">
-            <span className="text-success">
-              <CheckCircle aria-hidden size={64} weight="fill" />
-            </span>
-            <Text
-              as="span"
-              className="font-heading text-xl font-semibold tracking-tight"
-            >
-              Withdrawal of {formatUsd(amount)} requested
-            </Text>
-            <Text className="text-center text-secondary-foreground" size="sm">
-              {manualRequest
-                ? "Our team will contact you to arrange the payout."
-                : `≈ ${formatHkd(convertedHkd)} to ${destination?.title ?? "your account"}. We’ll email you once Grade10 approves it.`}
-            </Text>
-          </VStack>
-          <div className="w-full rounded-(--radius-2xl) bg-muted p-4">
-            <Stepper orientation="vertical">
-              <Step
-                description={`Today · ${requestId}`}
-                label="Request submitted"
-                orientation="vertical"
-                showLeadingConnector={false}
-                state="completed"
-              />
-              <Step
-                description="Shows as Pending review"
-                label="Grade10 review"
-                orientation="vertical"
-                state="progress"
-              />
-              <Step
-                description={`${WITHDRAWAL_PROCESSING_DAYS} after approval`}
-                label={
-                  manualRequest
-                    ? "Paid by our team"
-                    : `Withdrawn to ${destination?.title ?? "your account"}`
-                }
-                orientation="vertical"
-                showTrailingConnector={false}
-                state="upcoming"
-              />
-            </Stepper>
           </div>
         </VStack>
       ) : null}
     </>
   );
 
-  const smUp = useSmUp();
-  const Close = smUp ? DialogClose : DrawerClose;
-
   const secondaryAction =
-    step === "submitted" ? (
-      <Button
-        className="w-full sm:w-auto"
-        size="md"
-        type="button"
-        variant="outline"
-        onClick={() => {
-          onViewWithdrawal?.();
-          onOpenChange(false);
-        }}
-      >
-        View Withdrawal
-      </Button>
-    ) : step === "amount" ? (
-      <Close
+    step === "amount" ? (
+      <DialogClose
         render={
           <Button
             className="w-full sm:w-auto"
@@ -970,7 +922,7 @@ function WithdrawalDialog({
         }
       >
         Cancel
-      </Close>
+      </DialogClose>
     ) : (
       <Button
         className="w-full sm:w-auto"
@@ -983,86 +935,48 @@ function WithdrawalDialog({
       </Button>
     );
 
-  const primaryAction =
-    step === "submitted" ? (
-      <Close
-        render={<Button className="w-full sm:w-auto" size="md" type="button" />}
-      >
-        Done
-      </Close>
-    ) : (
-      <Button
-        className="w-full sm:w-auto"
-        disabled={primaryDisabled}
-        size="md"
-        type="button"
-        onClick={next}
-      >
-        {primaryLabel}
-      </Button>
-    );
+  const primaryAction = (
+    <Button
+      className="w-full sm:w-auto"
+      disabled={primaryDisabled}
+      size="md"
+      type="button"
+      onClick={next}
+    >
+      {primaryLabel}
+    </Button>
+  );
 
-  if (!smUp) {
-    return (
-      <Drawer
-        onOpenChange={handleOpenChange}
-        open={open}
-        showSwipeHandle
-        swipeDirection="down"
-      >
-        <DrawerContent
-          style={{ "--drawer-content-max-height": "92dvh" } as CSSProperties}
-        >
-          <DrawerHeader>
-            <DrawerTitle
-              className={step === "submitted" ? "sr-only" : undefined}
-            >
-              {TITLE[step]}
-            </DrawerTitle>
-            {step !== "submitted" && step !== "manual-request" ? (
-              <p className="text-sm text-secondary-foreground">
-                Step {stepIndex(step)} of 3
-              </p>
-            ) : null}
-            <DrawerDescription className="sr-only">
-              {TITLE[step]}
-            </DrawerDescription>
-          </DrawerHeader>
-          <DrawerBody className="gap-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
-            {stepBody}
-          </DrawerBody>
-          <DrawerFooter>
-            {primaryAction}
-            {secondaryAction}
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    );
-  }
+  const contactDialog = (
+    <WinnerOrderContactDialog
+      mail={manualMail}
+      open={contactOpen}
+      onOpenChange={setContactOpen}
+    />
+  );
 
   return (
-    <Dialog onOpenChange={handleOpenChange} open={open}>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle className={step === "submitted" ? "sr-only" : undefined}>
-            {TITLE[step]}
-          </DialogTitle>
-          {step !== "submitted" && step !== "manual-request" ? (
+    <>
+      <Dialog onOpenChange={handleOpenChange} open={open}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{TITLE[step]}</DialogTitle>
             <DialogSubtext>Step {stepIndex(step)} of 3</DialogSubtext>
-          ) : null}
-        </DialogHeader>
-        <DialogBody className="gap-6" tabIndex={0}>
-          <DialogDescription className="sr-only">
-            {TITLE[step]}
-          </DialogDescription>
-          {stepBody}
-        </DialogBody>
-        <DialogFooter>
-          {secondaryAction}
-          {primaryAction}
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </DialogHeader>
+          <DialogBody className="gap-6" tabIndex={0}>
+            <DialogDescription className="sr-only">
+              {TITLE[step]}
+            </DialogDescription>
+            {stepBody}
+          </DialogBody>
+          <DialogFooter>
+            {secondaryAction}
+            {primaryAction}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      {contactDialog}
+    </>
   );
 }
 

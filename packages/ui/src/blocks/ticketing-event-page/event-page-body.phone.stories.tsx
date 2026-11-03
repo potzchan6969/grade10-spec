@@ -30,6 +30,9 @@ const CHOSEN = { qty: { adult2: 2, child2: 1 } } as const;
 /** Early bird, signed out, nothing chosen: struck-through full prices, no
  * bar, Your Order last. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_8ba266ac-7ef1-4fb5-b2bc-3dac575ac0b3" },
+  },
   render: () => <EventPageDemo mode="earlyBird" />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -52,6 +55,9 @@ export const Default: Story = {
 /** Two adults and a child on the Two-Day pass: the bar pins with the total,
  * the saving and the jump to Your Order. */
 export const Chosen: Story = {
+  parameters: {
+    verification: { caseId: "vc_d14958b9-049b-468a-8896-05f063320a1f" },
+  },
   render: () => <EventPageDemo choice={CHOSEN} mode="earlyBird" />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -72,6 +78,9 @@ export const Chosen: Story = {
 /** `+ Fast Pass` for everyone grows into the pill with both days, and Your
  * Order gains the Fast Pass line. */
 export const FastPassEveryone: Story = {
+  parameters: {
+    verification: { caseId: "vc_ee88a21d-969f-446a-a7d9-e8b86f811d7a" },
+  },
   name: "Fast Pass Everyone",
   render: () => <EventPageDemo choice={CHOSEN} mode="earlyBird" />,
   play: async ({ canvasElement }) => {
@@ -100,6 +109,9 @@ export const FastPassEveryone: Story = {
 /** Choose per person: one pill per ticket, the tally, the nudge and Add for
  * everyone, which covers everyone every day. */
 export const FastPassPerPerson: Story = {
+  parameters: {
+    verification: { caseId: "vc_a06f37c3-98fb-4b6f-a89a-7e05cdd39e75" },
+  },
   name: "Fast Pass Per Person",
   render: () => (
     <EventPageDemo
@@ -136,6 +148,9 @@ export const FastPassPerPerson: Story = {
 
 /** Two VIP Passes: Fast Pass is included, so no Fast Pass control or prompt. */
 export const Vip: Story = {
+  parameters: {
+    verification: { caseId: "vc_f358732b-3180-497b-8f82-3ca3abb65da2" },
+  },
   name: "VIP",
   render: () => <EventPageDemo choice={{ qty: { vip: 2 } }} mode="earlyBird" />,
   play: async ({ canvasElement }) => {
@@ -155,6 +170,9 @@ export const Vip: Story = {
 /** Day 2: the two-day passes and VIP ended in grey with Sales Ended; the
  * One-Day pass sells for today at its full price. */
 export const EventDay2: Story = {
+  parameters: {
+    verification: { caseId: "vc_8f0657fb-16ff-4374-b4a0-05a76d882ef7" },
+  },
   name: "Event Day 2",
   render: () => <EventPageDemo mode="eventDay2" />,
   play: async ({ canvasElement }) => {
@@ -173,6 +191,9 @@ export const EventDay2: Story = {
 
 /** Eight tickets on one email: every + stops and both places say why. */
 export const AtTheLimit: Story = {
+  parameters: {
+    verification: { caseId: "vc_de16ce43-5268-4401-950b-6e93e9a88c40" },
+  },
   name: "At the Limit",
   render: () => (
     <EventPageDemo
@@ -195,6 +216,9 @@ export const AtTheLimit: Story = {
 /** An early-access pass before its public sale, to a buyer no access rule
  * lets in: `Opens …` and no stepper. */
 export const EarlyAccessOpens: Story = {
+  parameters: {
+    verification: { caseId: "vc_8317a7ce-523a-4537-a5ad-6efb1ee8792a" },
+  },
   name: "Early Access Opens",
   render: () => <EventPageDemo earlyAccess="opens" mode="earlyBird" />,
   play: async ({ canvasElement }) => {
@@ -217,6 +241,9 @@ export const EarlyAccessOpens: Story = {
 /** The same pass to a signed-in buyer an access rule lets in: `For you
  * now`, a stepper up to the rule's limit, and what the rule allows. */
 export const EarlyAccessForYou: Story = {
+  parameters: {
+    verification: { caseId: "vc_ff591313-56e3-4755-b3d5-3fae1a8db128" },
+  },
   name: "Early Access For You",
   render: () => (
     <EventPageDemo
@@ -245,6 +272,9 @@ export const EarlyAccessForYou: Story = {
 /** A restricted event's page to its own audience: the preview notice says
  * orders are real. */
 export const RestrictedPreview: Story = {
+  parameters: {
+    verification: { caseId: "vc_3bb6e4c8-2c7e-4a99-93d3-6e9b2ac78547" },
+  },
   name: "Restricted Preview",
   render: () => <EventPageDemo mode="earlyBird" preview signedIn />,
   play: async ({ canvasElement }) => {
@@ -258,6 +288,9 @@ export const RestrictedPreview: Story = {
 
 /** A canceled event: the badge and the refund notice; no passes, no order. */
 export const Canceled: Story = {
+  parameters: {
+    verification: { caseId: "vc_48862dec-a680-42b3-b650-6b8f9f6b8eb1" },
+  },
   render: () => <EventPageDemo mode="canceled" />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -274,6 +307,9 @@ export const Canceled: Story = {
 
 /** Signed in and already holding tickets: the banner leads to them. */
 export const HoldingTickets: Story = {
+  parameters: {
+    verification: { caseId: "vc_f2ed53f7-8643-4700-a280-a1000e6e0ff9" },
+  },
   name: "Holding Tickets",
   render: () => <EventPageDemo holding mode="earlyBird" signedIn />,
   play: async ({ canvasElement }) => {

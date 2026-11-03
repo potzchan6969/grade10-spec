@@ -32,6 +32,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Signed-in default: compact promo row + Use points (checkout is members-only) */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_41cbc9b4-8aa7-4536-8550-9fe248ee908f" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Subtotal")).toBeInTheDocument();

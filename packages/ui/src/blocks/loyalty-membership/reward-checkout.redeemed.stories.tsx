@@ -23,6 +23,9 @@ type Story = StoryObj<typeof meta>;
  * and a Use now control that unfolds the scan-QR card below it; no Apply —
  * that belongs to the cart. */
 export const RedeemedCoupon: Story = {
+  parameters: {
+    verification: { caseId: "vc_496eaadf-f395-4c3f-a5ad-ca1873b84594" },
+  },
   args: {
     reward: COUPON,
     redemption: {
@@ -67,6 +70,9 @@ export const RedeemedCoupon: Story = {
 /** The redeemed gift's ticket names the collection under a storefront mark
  * — no code — and folds its collection QR behind Use now. */
 export const RedeemedItem: Story = {
+  parameters: {
+    verification: { caseId: "vc_e753e05e-3ad8-4fe6-8e65-b19df051bfe4" },
+  },
   args: {
     reward: ITEM,
     redemption: {
@@ -103,6 +109,9 @@ export const RedeemedItem: Story = {
  * mutes to used — the scan is gone because there is nothing left to
  * scan. */
 export const UsedAfterScan: Story = {
+  parameters: {
+    verification: { caseId: "vc_9894a04f-e006-45b0-8d03-bee6325d2823" },
+  },
   args: { reward: COUPON },
   render: function ScanToUsed(args: RewardCheckoutProps) {
     const [pending, setPending] = useState(false);

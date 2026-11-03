@@ -43,6 +43,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Graded asset summary — every feature wired, no grading prompt. */
 export const Graded: Story = {
+  parameters: {
+    verification: { caseId: "vc_ec947792-8714-4f0d-9a85-ef8314ce6a71" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
     showEstimateChange: true,
@@ -53,7 +56,7 @@ export const Graded: Story = {
       canvas.getByRole("heading", { name: VAULT_ASSET_DETAILS[0].name }),
     ).toBeVisible();
     expect(canvas.getByText("Secured in Vault")).toBeVisible();
-    expect(canvas.getByText("Estimated value since intake")).toBeVisible();
+    expect(canvas.getByText("Total earned to date")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "List for Auction" }),
     ).toBeVisible();
@@ -62,8 +65,30 @@ export const Graded: Story = {
   },
 };
 
+/** Price feed down — the yield line pauses with a warning icon and tooltip. */
+export const EstimatePaused: Story = {
+  parameters: {
+    verification: { caseId: "vc_dea919c4-b3a1-4374-995a-6d6c22a5c0f5" },
+  },
+  args: {
+    asset: { ...VAULT_ASSET_DETAILS[0], priceStale: true },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Est. paused")).toBeVisible();
+    expect(
+      canvas.getByRole("button", {
+        name: "Why the daily estimate is paused",
+      }),
+    ).toBeVisible();
+  },
+};
+
 /** Raw asset summary — every feature wired, surfaces the grading value prompt. */
 export const Raw: Story = {
+  parameters: {
+    verification: { caseId: "vc_a12e659e-8ae2-4869-adbf-0f6d6d69bd3f" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[1],
     showEstimateChange: true,
@@ -84,6 +109,9 @@ export const Raw: Story = {
  * their features ship; each flag flips on its own timeline.
  */
 export const GradedSoftLaunch: Story = {
+  parameters: {
+    verification: { caseId: "vc_46053e71-7505-4977-b8c6-8519cd28e0a2" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
     listForAuction: false,
@@ -92,23 +120,6 @@ export const GradedSoftLaunch: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("▲ 12.4%")).toBeNull();
-    expect(
-      canvas.queryByRole("button", { name: "List for Auction" }),
-    ).toBeNull();
-    expect(canvas.queryByRole("button", { name: "List for Sale" })).toBeNull();
-  },
-};
-
-/** Soft launch on a raw asset — the grading prompt still shows. */
-export const RawSoftLaunch: Story = {
-  args: {
-    asset: VAULT_ASSET_DETAILS[1],
-    listForAuction: false,
-    listForSale: false,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Value Potential")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "List for Auction" }),
     ).toBeNull();

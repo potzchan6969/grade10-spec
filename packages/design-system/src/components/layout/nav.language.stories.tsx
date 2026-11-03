@@ -21,6 +21,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Opens the language menu and picks Traditional Chinese. */
 export const SwitchLanguage: Story = {
+  parameters: {
+    verification: { caseId: "vc_ceda3ece-a5c8-40e0-9a2f-6ef47d3cdf6d" },
+  },
   name: "Switch language",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -37,6 +40,9 @@ export const SwitchLanguage: Story = {
 
 /** Label only — no handler, so nothing invites a click. */
 export const LabelOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_1478c34f-55db-44ca-8de1-8465c1a99852" },
+  },
   name: "Label only",
   args: {
     locales: [],

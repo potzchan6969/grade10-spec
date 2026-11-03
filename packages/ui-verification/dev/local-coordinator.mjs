@@ -9,6 +9,7 @@ import {
 } from "node:fs/promises";
 import { join } from "node:path";
 import { promisify } from "node:util";
+import { storyCases } from "../../../scripts/storybook/case-ids.mjs";
 import { createCaptureCoordinator } from "../src/capture-coordinator.mjs";
 import { openCaptureSession } from "../src/reference-capture.mjs";
 
@@ -127,6 +128,19 @@ export function createLocalCoordinator({
     .then((time) => (typeof time === "number" ? setAlarm(time) : undefined))
     .catch((error) =>
       console.error("[ui-verification-captures] could not resume", error),
+    );
+
+  // The checkout's stories are declared as it stands, so a block or a
+  // primitive can be approved here with no site run.
+  void Promise.all([provenance(), storyCases({ root: repoRoot })])
+    .then(([{ commit, ref }, cases]) =>
+      coordinator.declareStories({ cases, commit, ref }),
+    )
+    .catch((error) =>
+      console.error(
+        "[ui-verification-captures] could not declare stories",
+        error,
+      ),
     );
 
   return coordinator;

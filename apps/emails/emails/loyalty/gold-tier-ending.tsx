@@ -8,10 +8,8 @@ import { previewMember } from "@/emails/loyalty/fixtures";
 export const subject = `你的 ${previewMember.tier} 會籍有效期至 ${dayStamp(previewMember.periodEndsAt, "zh-HK", { year: true })}`;
 
 /**
- * Proposed letter — no spec raises a reminder for a tier period ending; the
- * loyalty spec only owes a reminder before points lapse. Drafted so the
- * product call on a tier warning has a concrete letter to judge: a Gold
- * member short of the 500-point retention line as their period closes.
+ * Sent to a Gold member whose period ends within the lead time short of the
+ * keep line: the closing day, the points earned and the points still needed.
  */
 export default function GoldTierEndingEmail() {
   const { periodEndsAt, periodGoal, periodProgress, shopUrl, tier } =
@@ -24,7 +22,7 @@ export default function GoldTierEndingEmail() {
       action={{ label: "前往購物", href: shopUrl }}
       campaign="gold_tier_ending"
       heading={`保持你的 ${tier} 會籍`}
-      lead={`你的 ${tier} 會藉將於 ${day} 結束。期內你已累積 ${periodProgress.toLocaleString()} 分，再賺取 ${remaining} 分即可延續 ${tier} 會籍 12 個月。`}
+      lead={`你的 ${tier} 會籍將於 ${day} 結束。期內你已累積 ${periodProgress.toLocaleString()} 分，再賺取 ${remaining} 分即可延續 ${tier} 會籍 12 個月。`}
       preheader={`於 ${day} 前再賺取 ${remaining} 分即可保持${tier}。`}
     >
       <FactsTable

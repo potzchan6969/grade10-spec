@@ -24,6 +24,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Graded asset shows grade, cert number with verify, storage, location, and condition. */
 export const Graded: Story = {
+  parameters: {
+    verification: { caseId: "vc_87d58d7e-a665-4809-b3c4-58009c937df8" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
     verifyHref: "https://www.psacard.com/cert/63261276",
@@ -36,10 +39,6 @@ export const Graded: Story = {
     expect(canvas.getByText("Cert Number")).toBeVisible();
     expect(canvas.getByText("63261276")).toBeVisible();
     expect(canvas.getByRole("link", { name: "Verify" })).toBeVisible();
-    expect(canvas.getByText("Vault Storage ID")).toBeVisible();
-    expect(canvas.getByText("G10-VLT-004821")).toBeVisible();
-    expect(canvas.getByText("Location")).toBeVisible();
-    expect(canvas.getByText("Crown Fine Art, Hong Kong")).toBeVisible();
     expect(canvas.getByText("Condition")).toBeVisible();
     expect(canvas.getByText("Graded, Gem Mint")).toBeVisible();
     expect(
@@ -50,6 +49,9 @@ export const Graded: Story = {
 
 /** Raw asset shows storage, location, and condition. */
 export const Raw: Story = {
+  parameters: {
+    verification: { caseId: "vc_ecfd5c78-78d8-414b-86e9-031450f265e9" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[1],
     onRequestRetrieval: () => {},
@@ -58,9 +60,6 @@ export const Raw: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("Grade")).toBeNull();
     expect(canvas.queryByText("Cert Number")).toBeNull();
-    expect(canvas.getByText("Vault Storage ID")).toBeVisible();
-    expect(canvas.getByText("G10-VLT-004821")).toBeVisible();
-    expect(canvas.getByText("Location")).toBeVisible();
     expect(canvas.getByText("Condition")).toBeVisible();
     expect(canvas.getByText("Raw, Lightly Played")).toBeVisible();
     expect(

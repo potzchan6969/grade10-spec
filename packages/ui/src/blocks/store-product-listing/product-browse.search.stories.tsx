@@ -32,6 +32,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Typing offers suggestions; Enter commits a Search chip above the grid. */
 export const SuggestionsAndCommit: Story = {
+  parameters: {
+    verification: { caseId: "vc_9380cc75-40c5-4fb1-81e6-3d7b91ff0437" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("combobox", { name: "Search products" });
@@ -48,6 +51,9 @@ export const SuggestionsAndCommit: Story = {
 
 /** Picking a filter suggestion applies that facet chip, not a search chip. */
 export const SelectFilterAppliesChip: Story = {
+  parameters: {
+    verification: { caseId: "vc_7924a6cc-3d52-45ee-b762-8a49f19682bc" },
+  },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("combobox", { name: "Search products" });

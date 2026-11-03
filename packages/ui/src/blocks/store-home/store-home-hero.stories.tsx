@@ -34,6 +34,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_9b7ee18f-b0a6-4db1-83d1-25bf6d97d31e" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -45,6 +48,9 @@ export const Default: Story = {
 };
 
 export const ShopOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_80b93142-d360-456d-bfce-a0e48bfbd817" },
+  },
   args: { onAuctionClick: undefined },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

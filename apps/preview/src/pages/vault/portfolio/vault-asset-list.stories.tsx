@@ -11,9 +11,9 @@ import { navigateToStory } from "../../workbench-story-nav";
 import { VaultAssetList } from "./vault-asset-list";
 
 /**
- * Holdings grid with status tabs and a per-tab sort — Figma `Vault Asset
- * List` (`7077:10911`). In Vault includes Retrieval Pending items
- * (annotation); tabs with zero items hide; each tab keeps its own sort.
+ * Holdings grid with status tabs — Figma `Vault Asset List`
+ * (`7077:10911`). In Vault includes Retrieval Pending items
+ * (annotation); tabs with zero items hide.
  */
 const meta = {
   title: "Vault/Portfolio/Blocks/VaultAssetList",
@@ -44,6 +44,9 @@ const listArgs = {
 } satisfies Story["args"];
 
 export const AllAssets: Story = {
+  parameters: {
+    verification: { caseId: "vc_c719b855-303a-4a57-80a5-0d263f602f52" },
+  },
   args: listArgs,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -57,21 +60,19 @@ export const AllAssets: Story = {
         canvas.getByRole("button", { name: "Live Auction" }),
       ).toBeVisible();
       expect(canvas.getByRole("button", { name: "Listed" })).toBeVisible();
-      expect(
-        canvas.getByRole("button", { name: "Highest Est. Value" }),
-      ).toBeVisible();
     });
-    // Highest estimate first — 1986 Fleer Michael Jordan at 156,000.
     const cards = canvasElement.querySelectorAll(
       '[data-slot="vault-asset-card"]',
     );
     expect(cards.length).toBe(6);
-    expect(cards[0]?.textContent).toContain("1986 Fleer Michael Jordan");
   },
 };
 
 /** In Vault also lists Retrieval Pending items awaiting admin approval. */
 export const InVault: Story = {
+  parameters: {
+    verification: { caseId: "vc_2f31f7a4-a18d-45fc-aec8-47052268ebcd" },
+  },
   args: listArgs,
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
@@ -91,8 +92,11 @@ export const InVault: Story = {
   },
 };
 
-/** Live Auction sorts Ending Soonest by default; Highest Bid is the other option. */
+/** Live Auction filters to cards under the hammer. */
 export const LiveAuction: Story = {
+  parameters: {
+    verification: { caseId: "vc_f8e74113-a988-46f3-8271-dde7eb07d8eb" },
+  },
   args: listArgs,
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
@@ -101,67 +105,38 @@ export const LiveAuction: Story = {
         canvas.getByRole("button", { name: "Live Auction" }),
       );
     });
-    await waitFor(() =>
-      expect(
-        canvas.getByRole("button", { name: "Ending Soonest" }),
-      ).toBeVisible(),
-    );
     const cards = canvasElement.querySelectorAll(
       '[data-slot="vault-asset-card"]',
     );
     expect(cards.length).toBe(2);
-    // Ending soonest first — va-004 ends 24 Oct before va-005 on 27 Oct.
     expect(cards[0]?.textContent).toContain("Pocket Monsters");
-    await step("Switch sort to Highest Bid", async () => {
-      await userEvent.click(
-        canvas.getByRole("button", { name: "Ending Soonest" }),
-      );
-      const menu = await within(canvasElement.ownerDocument.body).findByRole(
-        "menu",
-      );
-      await userEvent.click(
-        within(menu).getByRole("menuitem", { name: "Highest Bid" }),
-      );
-      // Base UI removes its focus-guard span a tick after the menu closes.
-      await waitFor(() =>
-        expect(
-          canvasElement.ownerDocument.querySelector(
-            "[data-base-ui-focus-guard]",
-          ),
-        ).toBeNull(),
-      );
-    });
-    const resorted = canvasElement.querySelectorAll(
-      '[data-slot="vault-asset-card"]',
-    );
-    // Highest bid first — va-005 at 52,000 outbids va-004 at 10,000.
-    expect(resorted[0]?.textContent).toContain("Lincoln Cent");
   },
 };
 
-/** Listed sorts Recently Listed by default. */
+/** Listed filters to store-listed cards. */
 export const Listed: Story = {
+  parameters: {
+    verification: { caseId: "vc_a28b4c98-d171-42bb-8436-7b585fa9529e" },
+  },
   args: listArgs,
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     await step("Open the Listed tab", async () => {
       await userEvent.click(canvas.getByRole("button", { name: "Listed" }));
     });
-    await waitFor(() =>
-      expect(
-        canvas.getByRole("button", { name: "Recently Listed" }),
-      ).toBeVisible(),
-    );
     const cards = canvasElement.querySelectorAll(
       '[data-slot="vault-asset-card"]',
     );
-    // Most recently listed first — va-006 (25 Oct) before va-002 (20 Oct).
-    expect(cards[0]?.textContent).toContain("Illustrator");
+    expect(cards.length).toBe(2);
+    expect(cards[0]?.textContent).toContain("Rolex");
   },
 };
 
 /** Only statuses present get tabs — here nothing is listed or on auction. */
 export const VaultedOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_7fc32b29-b5af-4a18-8f0e-3c80bbda47af" },
+  },
   args: {
     ...listArgs,
     assets: PORTFOLIO_ASSETS.filter(

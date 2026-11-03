@@ -1,6 +1,7 @@
 import {
   canonicalJson,
   captureLocale,
+  isStoryCatalogue,
   PROFILES,
   validateLocale,
   validateManifest,
@@ -622,6 +623,7 @@ function storeFactory(createStore) {
       cursor,
       limit = 50,
       filter,
+      keep,
       resultName,
     }) {
       if (!Number.isInteger(limit) || limit < 1 || limit > MAX_LIST_LIMIT) {
@@ -638,6 +640,8 @@ function storeFactory(createStore) {
       const page = await store.list(prefix, cursor, limit);
       const values = [];
       for (const key of page.keys) {
+        // A key left out is never read, however large its record.
+        if (keep && !keep(key)) continue;
         const value = await readRecord(key, key);
         if (value !== null && (!filter || filter(value))) values.push(value);
       }
@@ -651,14 +655,29 @@ function storeFactory(createStore) {
       return result;
     }
 
-    async function listRuns({ caseId, locale, cursor, limit } = {}) {
+    // With `storyRuns`, a story catalogue run is read only when it is one of
+    // those ids: the parts of the newest declaration, not every deploy's.
+    async function listRuns({ caseId, locale, cursor, limit, storyRuns } = {}) {
       if (caseId !== undefined) assertId(caseId, "caseId");
+      if (
+        storyRuns !== undefined &&
+        (!Array.isArray(storyRuns) ||
+          storyRuns.some((runId) => typeof runId !== "string"))
+      )
+        throw new TypeError("storyRuns must be an array of run ids");
       const requestedLocale =
         locale === undefined ? undefined : localeValue(locale, "locale");
+      const kept = storyRuns && new Set(storyRuns);
       return listJson({
         prefix: RUNS_PREFIX,
         cursor,
         limit,
+        keep: kept
+          ? (key) => {
+              const runId = key.slice(RUNS_PREFIX.length, -".json".length);
+              return !isStoryCatalogue({ runId }) || kept.has(runId);
+            }
+          : undefined,
         resultName: "runs",
         filter: (run) =>
           (!caseId || run.catalogue.some((entry) => entry.caseId === caseId)) &&
@@ -1163,8 +1182,10 @@ function storeFactory(createStore) {
       assertId(run.runId, "reference run.runId");
       if (!["full", "focused"].includes(run.lane))
         throw new TypeError("reference run.lane must be full or focused");
-      if (!["succeeded", "failed"].includes(run.state))
-        throw new TypeError("reference run.state must be succeeded or failed");
+      if (!["succeeded", "failed", "superseded"].includes(run.state))
+        throw new TypeError(
+          "reference run.state must be succeeded, failed or superseded",
+        );
       await putImmutable(
         `${REFERENCE_RUNS_PREFIX}${run.runId}.json`,
         jsonBytes(run, "reference run"),
@@ -1200,7 +1221,7 @@ function storeFactory(createStore) {
   };
 }
 
-function createFileStore(rootValue) {
+export function createFileStore(rootValue) {
   if (typeof rootValue !== "string" || rootValue.trim() === "") {
     throw new TypeError("archive root must be a non-empty path");
   }
@@ -1377,7 +1398,7 @@ function createFileStore(rootValue) {
   };
 }
 
-function createR2Store(bucket) {
+export function createR2Store(bucket) {
   if (
     !bucket ||
     typeof bucket.put !== "function" ||

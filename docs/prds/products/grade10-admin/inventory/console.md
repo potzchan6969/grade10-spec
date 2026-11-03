@@ -115,6 +115,7 @@ An admin changes every setting here; each starts on its default.
 | Missing until lost | **30** days | any number of days |
 | Sell from the vault | on, storage lane only | off |
 | A live loan and a sale | no sale until the vault case is released | the proceeds repay the loan first |
+| 🚧 House stock's lowest price | its cost | off |
 
 - **On the audit chain** - every change, with the old and new value
 

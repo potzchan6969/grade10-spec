@@ -46,6 +46,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_231c28b1-7dbb-46cc-88e4-d17ae9e0cda0" },
+  },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await waitFor(() => {
@@ -80,6 +83,9 @@ export const Default: Story = {
  * item row and the last step stay readable instead of clipping.
  */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_640cddc0-6c45-409b-b57f-3d44286b4f4d" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);

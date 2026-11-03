@@ -35,6 +35,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Default header with multiple active items showing count badge */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_17fbcea3-9f1c-48be-b6cc-41bc7385bdbe" },
+  },
   args: {
     itemCount: 2,
   },
@@ -50,6 +53,9 @@ export const Default: Story = {
 
 /** Header with 0 items (count badge is hidden when count is 0) */
 export const ZeroItems: Story = {
+  parameters: {
+    verification: { caseId: "vc_5ffeabbf-8db9-4736-a574-f001c4d55b3f" },
+  },
   args: {
     itemCount: 0,
   },
@@ -62,6 +68,9 @@ export const ZeroItems: Story = {
 
 /** Boneyard skeleton on the item-count badge while status/price are fetching */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_42319d14-28d8-496e-99eb-94a0042f64cb" },
+  },
   args: {
     loading: true,
     itemCount: 2,

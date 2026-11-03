@@ -21,6 +21,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const InScanning: Story = {
+  parameters: {
+    verification: { caseId: "vc_891ab2c9-d72e-42fd-89bf-3ceacf482329" },
+  },
   args: {
     item: VAULT_IN_PROGRESS_ITEMS[0],
   },
@@ -42,6 +45,9 @@ export const InScanning: Story = {
 };
 
 export const Vaulted: Story = {
+  parameters: {
+    verification: { caseId: "vc_9710880a-93d9-46ac-b6d1-5d626853cc0c" },
+  },
   args: {
     item: VAULT_COMPLETED_ITEMS[0],
   },
@@ -58,6 +64,9 @@ export const Vaulted: Story = {
  * at the card's full page width).
  */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_1c8b2143-7952-4322-8f67-0574ea16dece" },
+  },
   args: { item: VAULT_IN_PROGRESS_ITEMS[0], loading: true },
   render: ({ item }) => (
     <div className="w-full max-w-5xl">
@@ -67,6 +76,9 @@ export const Loading: Story = {
 };
 
 export const GradingInTransit: Story = {
+  parameters: {
+    verification: { caseId: "vc_63a96451-195b-4a20-be09-35f91d9f8e00" },
+  },
   args: {
     item: GRADING_IN_PROGRESS_ITEMS[0],
   },

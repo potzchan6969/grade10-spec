@@ -1,11 +1,11 @@
-## 1. Maintain Capability PRDs (grade10-spec)
+## 1. Maintain Capability PRDs (grade10-spec) (owner: @htonyl)
 
 - [x] 1.1 Run the changed-capability manual checks before the PRD update and record any rule or code-map discrepancy.
 - [x] 1.2 Update the Listings section of Auction Management and the Auction Details and Lot Status sections of Auction Display to match the verified delivery and its code map. Keep delivery marks until archive verifies implementation.
 - [ ] 1.3 Walks: after acceptance, rewrite the called-off steps and observations in the site feature walks through `/tcs-review` so each matches its revised case: listing-page Walks 1, 2, 8, 9 and 10 (`g10.auction-listing-page.US1-TC3`, `g10.auction-listing-page.US1-TC4`, `g10.auction-listing-page.US3-TC3`, `g10.auction-listing-page.US3-TC4`, `g10.auction-listing-page.US10-TC11`, `g10.auction-listing-page.US11-TC4`) and lot-status Walk 2 (`g10.auction-lot-status.US2-TC4`, `g10.auction-lot-status.US3-TC1`). A delta cannot carry a feature walk that names cases it does not define. — blocked: `/tcs-review` is a human QA review
 - [x] 1.4 Verify: changed-page manual validation, writing review and source links for all 3 capability pages.
 
-## 2. Release Earlier Called-Off Slugs (grade10)
+## 2. Release Earlier Called-Off Slugs (grade10) (owner: @htonyl)
 
 This group authors the migration. Apply it only after group 3's compatible public projection and cancellation writer are deployed, in the migration window described in tech-design.md.
 
@@ -13,7 +13,7 @@ This group authors the migration. Apply it only after group 3's compatible publi
 - [x] 2.2 Append the idempotent canceled-slug cleanup migration and its journal/snapshot records. Preserve migration history, code reservations and bidder records (`g10adm.auction-listing.SC156`).
 - [x] 2.3 Verify: apply the committed migration chain to a populated database, execute the cleanup twice, confirm no canceled slug remains and other states and identifiers are unchanged; run migration safety and schema-drift checks.
 
-## 3. Release and Resolve Listing Addresses (grade10)
+## 3. Release and Resolve Listing Addresses (grade10) (owner: @htonyl)
 
 This group can be built independently of group 2's migration. Its rollout precedes the migration's application.
 
@@ -23,7 +23,7 @@ This group can be built independently of group 2's migration. Its rollout preced
 - [x] 3.4 Preserve nullable-slug bidder history and its existing no-charge result. Verify the reused address cannot replace the called-off record or become its navigation target (`g10.auction-lot-status.SC14`).
 - [x] 3.5 Verify: focused service tests, database races and rollback, campaign repair, contract parity, account records, public reads and affected-package type checks. Include public-id/live readers, sandbox visibility, code-only refusal and closed/settled reservation controls. Inspect warm-read and campaign invalidation behavior.
 
-## 4. The walk (grade10)
+## 4. The walk (grade10) (owner: @htonyl)
 
 Uses draft feature and domain suites in this change as its planning input, after groups 2 and 3 land and the migration is applied. Keep the walks as this change's end-to-end suite.
 

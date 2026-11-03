@@ -34,7 +34,8 @@ export interface CaseDeclaration {
   storyId: string;
   label: string;
   scoreProfile: ProfileId;
-  recipe: string | { [key: string]: JsonValue };
+  /** A story case has no site recipe. */
+  recipe: string | { [key: string]: JsonValue } | null;
   reference: CaseReference;
 }
 
@@ -140,3 +141,29 @@ export function validateObjectKey(value: unknown): string;
 export function validateManifest(value: unknown): VerificationManifest;
 export function canonicalJson(value: unknown): string;
 export function fingerprint(value: unknown): Promise<string>;
+
+export const STORY_TARGET: "storybook";
+export const STORY_CAPTURE_POINT: "story";
+export const STORY_CASES_FILE: "ui-verification-cases.json";
+
+export interface StoryCase {
+  caseId: string;
+  storyId: string;
+}
+
+export function isStoryCatalogue(run: { runId: string }): boolean;
+export const STORY_RUN_CASES: number;
+export function storyCatalogueRuns(input: {
+  cases: readonly StoryCase[];
+  commit: string;
+  ref: string;
+  createdAt: string;
+}): Promise<VerificationManifest[]>;
+export function currentRuns<
+  Run extends {
+    runId: string;
+    createdAt: string;
+    catalogue: readonly { caseId: string }[];
+    captures: readonly { caseId: string }[];
+  },
+>(runs: readonly Run[]): Run[];

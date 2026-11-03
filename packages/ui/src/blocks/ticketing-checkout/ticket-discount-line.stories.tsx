@@ -33,6 +33,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Applied: what it takes off in the success tone, and Remove. */
 export const Applied: Story = {
+  parameters: {
+    verification: { caseId: "vc_915790d7-a576-496e-a44e-c9ab9e5060bb" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("−HK$190.00")).toBeVisible();
@@ -45,6 +48,9 @@ export const Applied: Story = {
 
 /** Used up at Pay: the amount struck through, not applied. */
 export const UsedUp: Story = {
+  parameters: {
+    verification: { caseId: "vc_e141e1dd-af35-4cdd-8941-1cadbc5231fd" },
+  },
   args: {
     state: "usedUp",
     copy: {
@@ -63,6 +69,9 @@ export const UsedUp: Story = {
 
 /** The removal is on its way: Remove waits. */
 export const Removing: Story = {
+  parameters: {
+    verification: { caseId: "vc_594ac990-6107-4276-8be4-7da00751e17b" },
+  },
   args: { removing: true },
   play: async ({ canvasElement }) => {
     expect(

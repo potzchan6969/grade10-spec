@@ -16,6 +16,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Past the threshold the bar caps at the threshold, and the count still reads true. */
 export const ThresholdReached: Story = {
+  parameters: {
+    verification: { caseId: "vc_e9eb5ec5-6e4e-4874-aace-cb03dd100ea3" },
+  },
   args: { view: MEMBERSHIP_STATE_VIEWS.thresholdReached },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

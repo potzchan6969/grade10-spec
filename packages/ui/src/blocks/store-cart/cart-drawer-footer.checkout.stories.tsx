@@ -29,6 +29,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Order-class site discount — its own row after Subtotal, no Remove */
 export const OrderDiscount: Story = {
+  parameters: {
+    verification: { caseId: "vc_47498784-03b9-4d29-b1f0-9ea89ef03501" },
+  },
   args: {
     orderDiscounts: [STORY_ORDER_DISCOUNT],
     estimatedTotal: "HK$38,430.00",
@@ -54,6 +57,9 @@ export const OrderDiscount: Story = {
 
 /** Order discount, then the applied code and points — only those two remove */
 export const OrderDiscountWithPromoAndPoints: Story = {
+  parameters: {
+    verification: { caseId: "vc_a40e6145-cc36-4369-9e1d-5e2a7e48b58d" },
+  },
   args: {
     orderDiscounts: [STORY_ORDER_DISCOUNT],
     promoState: {
@@ -76,6 +82,9 @@ export const OrderDiscountWithPromoAndPoints: Story = {
 
 /** Boneyard skeleton loading state for summary amounts during fetching */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_258b0a95-a87d-4a3d-80c1-0d13635a4712" },
+  },
   args: {
     loading: true,
     promoState: {
@@ -98,6 +107,9 @@ export const Loading: Story = {
 
 /** Checkout CTA pending redirect (e.g. Shopify) — click Proceed to see Redirecting… */
 export const CheckoutRedirecting: Story = {
+  parameters: {
+    verification: { caseId: "vc_c83d7b73-efcd-4c4f-97a8-1b6c8edf4150" },
+  },
   render: (args) => (
     <CartDrawerFooter {...args} onCheckout={() => new Promise(() => {})} />
   ),
@@ -117,6 +129,9 @@ export const CheckoutRedirecting: Story = {
 
 /** The consumer owns checkout: its pending draws the button busy, and a press does nothing more */
 export const CheckoutPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_9b51c36f-d678-4422-81bc-e8d4da7a4351" },
+  },
   args: { checkoutPending: true },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -129,6 +144,9 @@ export const CheckoutPending: Story = {
 
 /** The consumer's refusal shows under the button, which is pressable again */
 export const CheckoutRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_2031f2c8-081a-470b-a9d0-a8061d4418ef" },
+  },
   args: {
     checkoutPending: false,
     checkoutFailed: "Couldn’t open checkout. Try again.",
@@ -146,6 +164,9 @@ export const CheckoutRefused: Story = {
 
 /** Checkout redirect fails — button restores and a toast explains the error */
 export const CheckoutFailed: Story = {
+  parameters: {
+    verification: { caseId: "vc_234d754c-d3d7-4e6a-b544-32497fb0fd70" },
+  },
   render: (args) => (
     <>
       <Toast position="bottom-right" />
@@ -176,6 +197,9 @@ export const CheckoutFailed: Story = {
 
 /** Read-only tender context keeps eligibility facts while omitting mutations. */
 export const ReadOnlyTenderContext: Story = {
+  parameters: {
+    verification: { caseId: "vc_2cc780f2-8181-4600-bcc1-301fd60a5373" },
+  },
   render: () => {
     const promo: PromoState = { status: "expanded" };
     const [promoOpen, setPromoOpen] = useState(true);

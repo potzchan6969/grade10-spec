@@ -61,6 +61,9 @@ async function expectHeading(canvasElement: HTMLElement) {
  * external link, new tab) and SC-h4k (cards in the content module's order).
  */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_c5871f17-d979-4e99-a252-66652dba811e" },
+  },
   globals: { viewport: { value: "desktop" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -81,6 +84,9 @@ export const Default: Story = {
 
 /** Proves g10.site-media-coverage.SC-npo: one column, the same cards. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_ef53fde9-f952-4514-8c8b-b72ee87a1b7d" },
+  },
   globals: { viewport: { value: "mobile2" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -97,6 +103,9 @@ export const Narrow: Story = {
 
 /** Proves g10.site-media-coverage.SC-w2d: a story with a language marks it on its link. */
 export const AnotherLanguage: Story = {
+  parameters: {
+    verification: { caseId: "vc_64deb68b-c8aa-4086-978e-4e057b3e04fe" },
+  },
   render: () => (
     <main>
       <MediaCoverageGrid

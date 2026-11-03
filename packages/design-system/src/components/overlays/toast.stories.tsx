@@ -93,6 +93,9 @@ type Story = StoryObj<ToastStoryArgs>;
 
 /** Trigger one toast from the controls — Figma copy: Title / Description / Button. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_0cf78e83-e5a3-4931-bc50-9edfd0ed0186" },
+  },
   render: (args) => (
     <>
       <Button variant="outline" size="sm" onClick={() => showToast(args)}>
@@ -105,6 +108,9 @@ export const Default: Story = {
 
 /** Every Figma `type` rung, same title / description / action from the controls. */
 export const Types: Story = {
+  parameters: {
+    verification: { caseId: "vc_1814b19d-86cc-4394-9e45-8908046bc621" },
+  },
   render: (args) => (
     <>
       <div className="flex flex-wrap gap-2">
@@ -164,6 +170,9 @@ function HeldActionExample() {
  * and closes when the work settles; the caller draws the outcome.
  */
 export const HeldAction: Story = {
+  parameters: {
+    verification: { caseId: "vc_91f46d89-26b1-44e1-b65a-f3db22d31912" },
+  },
   render: () => <HeldActionExample />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

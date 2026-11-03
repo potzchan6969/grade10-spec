@@ -4,148 +4,44 @@ spec: grade10-site/vault/identity-check
 order: 4
 ---
 
-The identity a case's agreements are signed under. The vault holds a reference
-to it and nothing else — no name, no birth date, no document number — because
-the record and the one hosted check live with [KYC](/p/grade10-site/account/kyc);
-this page is what happens on site, and what a case demands of its identity.
+The identity a vault case's papers are signed under. The record and the one
+hosted check live with [KYC](/p/grade10-site/account/kyc); this page is what
+the vault asks of them.
 
 ## Getting an identity
 
-- **Reuse first** — a check the collector already passed, anywhere in Grade10,
-  is bound rather than asked for again
-- **No invitation** - a case invites nobody to a hosted check: booking a
-  visit sends none, an operator cannot send one, and the vault's own verify
-  page is withdrawn; a collector verifies from their account instead -
-  [KYC](/p/grade10-site/account/kyc)
-- **At the counter** — staff read the document in front of them and record it
-  from the case screen; never gated on a hosted attempt having been tried
-- **Pre-custody only** — recordable from draft through signing, never once the
-  item is in the vault
-
-## Counter check
-
-:::flow{title="Recording at the counter"}
-## Staff — Open the case
-The identity panel on the case screen, on a case that has not yet reached
-custody.
-## Staff — Read the document
-Legal name, date of birth, document type, number and expiry, from the document
-in hand; one photograph of the document.
-## Grade10 — Refuse what the record refuses
-Under age and an expired document, judged on the day; the raw number becomes a
-mask and a digest on the way in and is never kept.
-## Grade10 — Bind
-The identity lands on the case, and whatever hosted check was still out is
-withdrawn.
-:::
-
-- **Over a decline, an override** — the counter is never blocked, but
-  recording over a hosted check the provider declined carries a reason, names
-  who gave it, is refused without one, and shows on the case beside the
-  decline
-- **Not four eyes, yet** — `staff` holds `vault:approve` wherever it holds
-  `vault:operate`, and no other role holds either, so a higher grant would
-  separate nobody; the recorded reason is the control that works, and the
-  grant becomes one the day a role separates the two (a `shared/auth/roles`
-  change)
+- 🚧 **The ID Record** — read by staff on the intake form and kept on the collector's account, once for every service; the vault's papers print its legal name and masked number - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+- 🚧 **Verified Once, for the Account** — the identity check is the account's, done once and reused: asked before money leaves Grade10, a cash-out or a loan advance, and once for a mail-in, where no staff see the ID - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
+- 🚧 **The Store's Bid Bar** — a bid above it asks for the same check, once; the bar stays the store's own, US$15,000 by default - [KYC](/p/grade10-site/account/kyc)
+- **Built** — staff record the document on each case from the case screen, with its date of birth and a photograph, or bind a check the collector already passed; a case invites nobody to a hosted check, and recording over a declined check carries a reason
 
 ## Identity states
 
+- **Built** — a case shows Verified, Out, Stalled, Refused, Lapsed or None; a verdict that arrives after the case moved is refused, discarded and reported
+
 ::image{src="assets/diagrams/vault-identity-states.svg" alt="How a case moves between None, Out, Stalled, Verified, Lapsed and Refused"}
 
-| Shown | Meaning |
-| --- | --- |
-| Verified | An identity is bound — who checked it, and when |
-| Out | A hosted check is invited, started or submitted |
-| Stalled | A hosted check was submitted and the provider has not decided |
-| Refused | The last hosted check was declined, and why |
-| Lapsed | The last hosted check expired or was withdrawn |
-| None | Nothing has been asked for |
-
-A case with a check still out is not a case with no identity, and the screen
-says which — an operator arranging a visit needs to know the difference.
-
-The console's identity panel shows only these six states, never the
-provider's finer ones.
-
-## Verdict
-
-The identity binds under the case's own guard, and any signing packet still out
-is voided: its documents were written from the identity this replaces. What the
-bind displaces is settled rather than dropped — discarded when the new binding
-stands, restored when it does not.
-
-A verdict can arrive after the case has moved. A case in custody or beyond, one
-holding sealed signing evidence, one whose personal data has been erased, and
-one verified at the counter in the meantime all refuse it: the case keeps the
-identity it had, the late check is discarded, and the operator is told. A
-release packet reads the identity the executed agreement already holds, and an
-erased case takes no new personal data at all.
+- 🚧 **No States on a Case** — a case reads the ID record its visit took, and shows no verification of its own
 
 ## Gate
 
-No identity, no paperwork. Documents are never rendered for a case with no
-bound identity, and a packet whose identity changed between rendering and
-sealing cannot be sealed — the paper would name a person the case no longer says
-it is about. The name printed comes from the verified record and from nothing
-anybody types.
-
-- 🚧 **When identity is asked is a setting** — each point the vault may ask
-  for a verified identity — before the custody paperwork, the first cash-out,
-  the first sale payout, a withdrawal, a total held above a value — is
-  switched on or off by an admin, so the rule moves without a release
-- ❓ Owner — **Which points ask** — the vault-first answer is on
-  [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
-  and still being discussed; built as asking before the custody paperwork, at
-  every cash-out and before sale proceeds reach the balance
+- 🚧 **Papers Read the ID Record** — the papers are never prepared for a visit with no ID record, and the name printed comes from the record, never from anything typed later
+- 🚧 **One Gate for Cash-Out and Loan** — a contradiction holds the cash-out, or refuses the loan acceptance, onto one held list an approver decides - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#held-list)
+- 🚧 **No Settings** — the check is required before money leaves, so there is no point for an admin to switch on or off
+- **Built** — no paper is rendered for a case with no bound identity, a packet whose identity changed can't be sealed, and each point the vault asks — before the paperwork, at every cash-out and before sale proceeds reach the balance — is an admin setting
 
 :::detail{title="Product decisions" for="pm"}
-The vault is where an identity is felt: who is asked, when, what the counter
-can do when the hosted check cannot, and what happens to paperwork already
-rendered when the answer changes.
+The vault is where an identity used to be felt at the door. It now asks for
+none there: staff record the ID in hand once for the account, and the account's
+own check waits until money leaves.
 
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Vault operator | Collector arrives verified | Starts at the item; no passport handling. |
-| Vault operator | Collector arrives unverified | Checks the document and carries on, same as today. |
-| Vault operator | Verdict lands mid-appointment | Sees it, and sees that the old packet is void. |
-| Collector | No smartphone, or a document the provider cannot read | Verified at the counter, no worse off than today. |
-| Collector | Verdict arrives after their case was sealed | Nothing changes underneath a signed agreement. |
-
-**Not in scope.** Identity for any product but the vault. Retiring the counter
-check. Changing which case statuses may record a check. Re-verifying a
-collector whose document expires while their item is in custody.
-
-**Measurement.**
-
-| Signal | Definition | Owner |
-| --- | --- | --- |
-| Verified on arrival | Share of intake visits whose case already held an identity. | Operations |
-| Time to verified | Median hours from case submitted to identity verified. | Product |
-| Fallback rate | Share of visits that still need a counter check. | Operations |
-| Late verdicts | Count of verdicts refused because the case had moved. | Engineering |
-
-**Decisions.**
+**Not in scope.** The store's bid bar itself, which stays the store's own -
+[KYC](/p/grade10-site/account/kyc).
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Invitation trigger | Decided | None: a case invites nobody to a hosted check, and the account's own check is the way to verify at home, decided 2026-10-13. | Owner |
-| Pre-custody only | Decided | A check is recordable from draft through signing, never once the item is in the vault. | Compliance |
-| Reuse before asking | Decided | A case binds a check the collector already passed rather than paying for a second one. | Product |
-| Counter fallback | Decided | Permanent, and never gated on a hosted attempt; the counter is equal evidence, so no case must hold an approved hosted check. | Operations |
-| Override on a decline | Decided | The counter stays open, but over a decline it takes a recorded reason naming who gave it. No separate grant: no shipped role holds `vault:operate` without `vault:approve`, so one would separate nobody until the roles do. | Compliance |
-| Late verdict | Decided | Refused, discarded, and reported. The case keeps what it had. | Engineering |
-| Packet voiding | Decided | A bind voids an outstanding packet, whichever path produced the identity. | Product |
-| Operator visibility | Decided | The case distinguishes out, stalled, refused and lapsed from none. | Design |
-| Where the state is shown | Decided | Case detail alone. A column across every row would put a person's verification status on a screen nobody opened for it. | Design |
-
-**Risks.**
-
-- **A raced rebind** — the asynchronous verdict gives the existing rebind
-  machinery a new way to be raced; it already settles a displaced check,
-  discarding or restoring it, and now meets a race nobody at a counter could
-  previously cause
-- **A verdict landing late** — on a case that moved while it was in flight:
-  sealed, erased, past custody, or verified at the counter; the case keeps the
-  identity it had, and the late check is discarded rather than bound
+| Counter fallback | Decided | Permanent, and never gated on a hosted attempt; the counter is equal evidence. | Operations |
+| An account's identity, not a case's | 🚧 | The ID record is read once on the intake form and kept on the account for every service; the identity check is the account's, at cash-out alone, and the vault binds no verification to a case - the counter review, round 2, 2026-11-02, in place of the per-case binding, pre-custody recording, packet voiding and late-verdict rules | Product |
+| The store's bid bar | Decided | It stays the store's own control on buyers, not a payout gate, and reads the same account check - the counter review, round 3, 2026-11-02 | Product |
 :::

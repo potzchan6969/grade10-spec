@@ -22,6 +22,9 @@ type Story = StoryObj<typeof meta>;
  * destination.
  */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_c6d53025-0f10-452d-b813-a579580be9a3" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     /* The sections fade in once on first paint; read them once settled. */
@@ -59,6 +62,9 @@ export const Default: Story = {
  * destination in a new browsing context; the frame takes no focus.
  */
 export const KeyboardReachesTheMapOnce: Story = {
+  parameters: {
+    verification: { caseId: "vc_54102101-f47e-479b-bd3b-ef91d3e521a2" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const link = canvas.getByRole("link", { name: args.copy.openMap });
@@ -77,6 +83,9 @@ export const KeyboardReachesTheMapOnce: Story = {
 
 /** One column on a phone, the map above the shop's facts. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_fe4c7e1f-b159-4243-a8b5-59ba4371921e" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const map = canvasElement.querySelector(

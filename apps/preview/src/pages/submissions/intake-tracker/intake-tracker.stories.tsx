@@ -225,6 +225,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const InProgress: Story = {
+  parameters: {
+    verification: { caseId: "vc_19a0aaa6-dd01-45fd-9699-acb784179222" },
+  },
   args: {
     items: IN_PROGRESS_ITEMS,
     initialFilter: "in-progress",
@@ -254,6 +257,9 @@ export const InProgress: Story = {
 
 /** Submissions fetch in flight — Boneyard card skeletons under the tab bar. */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_9a369b8c-afaa-42f0-9595-f68104f8cfbb" },
+  },
   args: { loading: true },
   play: async ({ canvasElement }) => {
     await waitFor(() =>
@@ -268,6 +274,9 @@ export const Loading: Story = {
 };
 
 export const Completed: Story = {
+  parameters: {
+    verification: { caseId: "vc_94ec9e80-eb7c-4d92-82f2-163c31f68a16" },
+  },
   args: {
     items: COMPLETED_ITEMS,
     initialFilter: "completed",
@@ -289,6 +298,9 @@ export const Completed: Story = {
 };
 
 export const GradingInProgress: Story = {
+  parameters: {
+    verification: { caseId: "vc_61e72b3d-0c18-4e57-a352-1f72a4672c3d" },
+  },
   args: {
     items: GRADING_IN_PROGRESS_ITEMS,
     initialFilter: "in-progress",

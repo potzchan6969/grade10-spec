@@ -42,6 +42,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Each pick says whether the time is still held; the button names it. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_d8451cd0-b741-4c53-b7c2-1fe4df7fb627" },
+  },
   play: async ({ args }) => {
     const canvas = screen;
     await userEvent.click(
@@ -57,6 +60,9 @@ export const Default: Story = {
 };
 
 export const Sending: Story = {
+  parameters: {
+    verification: { caseId: "vc_02d93d76-9e89-42a4-8e1c-f3de6c612ad8" },
+  },
   args: { pending: true },
   play: async () => {
     const button = await screen.findByRole("button", { name: "Sending…" });
@@ -67,6 +73,9 @@ export const Sending: Story = {
 
 /** Already outside: I’m here tells the desk instead. */
 export const AlreadyOutside: Story = {
+  parameters: {
+    verification: { caseId: "vc_49763f10-96a8-459e-a625-f7102b4cbc90" },
+  },
   args: { here: { copy: HERE_COPY, onHere: fn() } },
   play: async ({ args }) => {
     await userEvent.click(
@@ -77,6 +86,9 @@ export const AlreadyOutside: Story = {
 };
 
 export const TooLate: Story = {
+  parameters: {
+    verification: { caseId: "vc_b175d773-4007-40e6-a2c2-4ef83e53ddf2" },
+  },
   args: {
     error:
       "We stopped holding your time at 10:25. Check in when you arrive, or pick another time.",

@@ -110,6 +110,9 @@ function GroupsExample() {
 
 /** Grouped suggestions — Figma Autocomplete with iPhone / iPad labels. */
 export const Groups: Story = {
+  parameters: {
+    verification: { caseId: "vc_f8df1d2f-2b1c-4e92-a3e9-db19670a1417" },
+  },
   render: () => <GroupsExample />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -167,6 +170,9 @@ function EmptyExample() {
 
 /** Empty list — Figma Autocomplete empty copy. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_c97b2292-87bb-4bef-bc0c-65a1d3697213" },
+  },
   render: () => <EmptyExample />,
   play: async () => {
     expect(
@@ -202,6 +208,9 @@ function LoadingExample() {
 
 /** Loading — Figma Autocomplete right column (spinner + Searching…). */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_8d476e86-246b-4d50-b99e-0257465c186c" },
+  },
   render: () => <LoadingExample />,
   play: async () => {
     expect(
@@ -240,6 +249,9 @@ function FlatExample() {
 }
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_5815dc38-540f-4356-89d9-66dd8f23b784" },
+  },
   render: () => <FlatExample />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -6,7 +6,11 @@ import type {
   ProfileId,
   VerificationManifest,
 } from "@grade10/ui-verification/model";
-import { captureLocale } from "@grade10/ui-verification/model";
+import {
+  captureLocale,
+  currentRuns,
+  isStoryCatalogue,
+} from "@grade10/ui-verification/model";
 import * as React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -38,6 +42,7 @@ import {
   FLAG_LABELS,
   type ReferenceStatus,
   referenceStatus,
+  unchangedSinceApproval,
 } from "./capture-stamp";
 
 import {
@@ -292,6 +297,19 @@ export async function listAllRuns(
   }
   return [...byId.values()].sort((left, right) =>
     right.createdAt.localeCompare(left.createdAt),
+  );
+}
+
+// A story catalogue is reference evidence only: Approve shows its cases that
+// no site run declares, and Site Compare never offers it.
+function shownRuns(
+  runs: VerificationManifest[],
+  mode: PanelMode,
+): VerificationManifest[] {
+  return currentRuns(runs).filter(
+    (run) =>
+      run.catalogue.length > 0 &&
+      (mode === "approve" || !isStoryCatalogue(run)),
   );
 }
 
@@ -965,7 +983,7 @@ export function VerificationPanel({
     void listAllRuns(archiveBase, listFilterCaseId, controller.signal)
       .then((nextRuns) => {
         if (controller.signal.aborted) return;
-        setRuns(nextRuns);
+        setRuns(shownRuns(nextRuns, mode));
       })
       .catch((error: unknown) => {
         if (!controller.signal.aborted) setHistoryError(messageOf(error));
@@ -974,7 +992,14 @@ export function VerificationPanel({
         if (!controller.signal.aborted) setLoadingRuns(false);
       });
     return () => controller.abort();
-  }, [active, listFilterCaseId, listStoryScope, refreshVersion, storyListOpen]);
+  }, [
+    active,
+    listFilterCaseId,
+    listStoryScope,
+    mode,
+    refreshVersion,
+    storyListOpen,
+  ]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: refreshVersion reloads the manifest on demand
   useEffect(() => {
@@ -1080,6 +1105,19 @@ export function VerificationPanel({
       >,
     [mode, statuses],
   );
+  const unchanged = PROFILE_TABS.every(({ id }) => {
+    const status = statuses[id];
+    const comparison = comparisons[id];
+    return (
+      status !== null &&
+      unchangedSinceApproval(
+        status,
+        typeof comparison === "object" && comparison.kind === "compared"
+          ? comparison.ratio
+          : undefined,
+      )
+    );
+  });
   const recordKey = PROFILE_TABS.map(
     (item) =>
       `${recordImages[item.id].approved?.artifact.key ?? ""}|${recordImages[item.id].current?.artifact.key ?? ""}`,
@@ -2130,6 +2168,7 @@ export function VerificationPanel({
                                     requestChanges(item.id, comment)
                                   }
                                   status={statuses[item.id] as ReferenceStatus}
+                                  unchanged={unchanged}
                                 />
                               ) : null}
                             </>

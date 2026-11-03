@@ -31,6 +31,9 @@ type Story = StoryObj<typeof meta>;
 
 /** No close while it waits: Escape does nothing. */
 export const Confirming: Story = {
+  parameters: {
+    verification: { caseId: "vc_8b7ff6b8-2d07-4753-af83-d79e3cfb3f1b" },
+  },
   play: async ({ args }) => {
     const body = within(document.body);
     const status = await body.findByRole("status");
@@ -46,6 +49,9 @@ export const Confirming: Story = {
 
 /** After a minute: the tickets follow by email, the reference, and Close. */
 export const SafeToClose: Story = {
+  parameters: {
+    verification: { caseId: "vc_4f0d2cb1-e8a9-4f28-ae08-d2d3ca5df7d2" },
+  },
   name: "Safe to close",
   args: { stage: "safeToClose" },
   play: async ({ args }) => {

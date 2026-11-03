@@ -62,53 +62,64 @@ const DECLINED = PAYOUT_REQUESTS[4];
 
 /** A paid-out HKD request — rate applied, every step done. */
 export const Completed: Story = {
+  parameters: {
+    verification: { caseId: "vc_a932acc9-0e40-4523-9463-c76e2cd0cf7b" },
+  },
   args: { request: COMPLETED },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
     expect(drawer.getByText("Reference")).toBeVisible();
     expect(drawer.getByText(COMPLETED.id)).toBeVisible();
     expect(drawer.getByText("US$40")).toBeVisible();
-    expect(drawer.getByText("Completed")).toBeVisible();
+    expect(drawer.getByText("Transfer sent")).toBeVisible();
     expect(drawer.getByText("HK$312.40 received")).toBeVisible();
     expect(drawer.getByText("Withdrawal requested")).toBeVisible();
     expect(drawer.getByText("Grade10 review")).toBeVisible();
-    expect(drawer.getByText("Exchange rate applied")).toBeVisible();
+    expect(drawer.getByText("Exchange rate")).toBeVisible();
     expect(drawer.getByText("HSBC ••• 8304")).toBeVisible();
   },
 };
 
 /** Awaiting Grade10's review — the HKD figure is still an estimate. */
 export const Pending: Story = {
+  parameters: {
+    verification: { caseId: "vc_99d100eb-bfa2-4e4b-b5b1-e364cf7883ec" },
+  },
   args: { request: PENDING },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
-    expect(drawer.getByText("Pending")).toBeVisible();
-    expect(drawer.getByText("Est. ~HK$650")).toBeVisible();
     expect(drawer.getByText("Waiting for review")).toBeVisible();
-    expect(drawer.queryByText("Exchange rate applied")).not.toBeInTheDocument();
+    expect(drawer.getByText("HK$650")).toBeVisible();
+    expect(drawer.getByText("Waiting for review")).toBeVisible();
+    expect(drawer.getByText("Exchange rate")).toBeVisible();
   },
 };
 
 /** Approved and on the way — the transfer step is in progress. */
 export const Processing: Story = {
+  parameters: {
+    verification: { caseId: "vc_e69c9623-d17d-40dc-ab03-89714f40e44b" },
+  },
   args: { request: PROCESSING },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
-    expect(drawer.getByText("Processing")).toBeVisible();
-    expect(drawer.getByText("Est. ~HK$497.92")).toBeVisible();
+    expect(drawer.getByText("Transfer in progress")).toBeVisible();
+    expect(drawer.getByText("HK$497.92")).toBeVisible();
     expect(drawer.getByText("4 Oct 2026")).toBeVisible();
   },
 };
 
 /** Turned down at review — the timeline ends there. */
 export const Declined: Story = {
+  parameters: {
+    verification: { caseId: "vc_33380d58-4208-4fec-8dcf-abb09bfbf56e" },
+  },
   args: { request: DECLINED },
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
-    /* The badge and the failed timeline step both read "Declined". */
-    expect(drawer.getAllByText("Declined").length).toBeGreaterThan(1);
+    expect(drawer.getByText("Declined")).toBeVisible();
     expect(drawer.getByText("8 Sep 2026")).toBeVisible();
-    expect(drawer.getByText("Est. ~HK$738")).toBeVisible();
+    expect(drawer.getByText("HK$738")).toBeVisible();
     expect(drawer.getByText("Withdrawal declined")).toBeVisible();
     expect(drawer.getByText(/account holder name didn’t match/)).toBeVisible();
     expect(drawer.queryByText("Completed")).not.toBeInTheDocument();
@@ -118,5 +129,9 @@ export const Declined: Story = {
 /** 390px phone — the drawer becomes a bottom sheet capped at 85dvh. */
 export const Narrow: Story = {
   ...Completed,
+  parameters: {
+    ...Completed.parameters,
+    verification: { caseId: "vc_32e4175e-d929-4e70-b2d7-8f586cb5ae9d" },
+  },
   globals: { viewport: { value: "mobile1" } },
 };

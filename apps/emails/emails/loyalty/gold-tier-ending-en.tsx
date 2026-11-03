@@ -7,10 +7,7 @@ import { previewMember } from "@/emails/loyalty/fixtures";
 
 export const subject = `Your ${previewMember.tier} membership runs to ${dayStamp(previewMember.periodEndsAt, "en", { year: true })}`;
 
-/**
- * English preview of `gold-tier-ending` — itself a proposed letter: no spec
- * raises a reminder for a tier period ending.
- */
+/** English preview of `gold-tier-ending`. */
 export default function GoldTierEndingEnEmail() {
   const { periodEndsAt, periodGoal, periodProgress, shopUrl, tier } =
     previewMember;

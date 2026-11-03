@@ -102,6 +102,9 @@ async function expectToastText(text: string) {
 
 /** Expired link — homepage after verify (shared-auth-sign-in-SC-37). */
 export const Expired: Story = {
+  parameters: {
+    verification: { caseId: "vc_2ad3b87c-244f-4b58-b7ab-1c9b90ab0f0d" },
+  },
   render: () => <FireErrorToast message={COPY.linkExpired} />,
   play: async () => {
     await expectToastText(COPY.linkExpired);
@@ -113,6 +116,9 @@ export const Expired: Story = {
  * (shared-auth-sign-in-SC-38 through SC-40).
  */
 export const NoLongerWorks: Story = {
+  parameters: {
+    verification: { caseId: "vc_60c354fe-cb2f-484c-986a-08410ae0837f" },
+  },
   name: "No longer works",
   render: () => <FireErrorToast message={COPY.linkInvalid} />,
   play: async () => {
@@ -122,6 +128,9 @@ export const NoLongerWorks: Story = {
 
 /** Banned account — does not invite another link (shared-auth-sign-in-SC-41). */
 export const Banned: Story = {
+  parameters: {
+    verification: { caseId: "vc_9fbc331d-f36b-4f49-ba39-1189c877d464" },
+  },
   render: () => <FireErrorToast message={COPY.linkBanned} />,
   play: async () => {
     await expectToastText(COPY.linkBanned);
@@ -133,6 +142,9 @@ export const Banned: Story = {
  * (`shared-auth-sign-in-US-09`).
  */
 export const DifferentAccount: Story = {
+  parameters: {
+    verification: { caseId: "vc_730b8401-1a89-4680-88fe-405b54c9b92f" },
+  },
   name: "Different account",
   render: () => <FireDifferentAccountToast />,
   play: async () => {
@@ -149,6 +161,9 @@ export const DifferentAccount: Story = {
  * (shared-auth-sign-in-SC-70 through SC-77).
  */
 export const SettledElsewhere: Story = {
+  parameters: {
+    verification: { caseId: "vc_36351a2d-0df9-4b4f-b543-7da5e6a02ff9" },
+  },
   name: "Settled elsewhere",
   render: () => <FireInfoToast message={COPY.settledElsewhere} />,
   play: async () => {

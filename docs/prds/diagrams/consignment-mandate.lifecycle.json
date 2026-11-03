@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "A sale mandate",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [1040, 680]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Consigned"
+    },
+    {
+      "id": "refund",
+      "label": "A refund"
+    },
+    {
+      "id": "terminal",
+      "label": "Mandate ended"
+    }
+  ],
+  "states": [
+    {
+      "id": "signing",
+      "type": "start",
+      "label": "Ready to sign",
+      "sublabel": "made at Keep or Consign",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "pending",
+      "type": "waiting",
+      "label": "Waiting for approval",
+      "sublabel": "the vault's word first",
+      "lane": "main",
+      "col": 1
+    },
+    {
+      "id": "onsale",
+      "type": "active",
+      "label": "On sale",
+      "sublabel": "in the store or at auction",
+      "lane": "main",
+      "col": 2
+    },
+    {
+      "id": "sold",
+      "type": "success",
+      "label": "Sold",
+      "sublabel": "stops earning",
+      "lane": "main",
+      "col": 3
+    },
+    {
+      "id": "closed",
+      "type": "neutral",
+      "label": "Closed",
+      "sublabel": "proceeds in the wallet",
+      "lane": "main",
+      "col": 4
+    },
+    {
+      "id": "ended",
+      "type": "neutral",
+      "label": "Ended",
+      "sublabel": "the card keeps earning",
+      "lane": "terminal",
+      "col": 0
+    },
+    {
+      "id": "refunded",
+      "type": "decision",
+      "label": "Refunded",
+      "sublabel": "proceeds reversed",
+      "lane": "refund",
+      "col": 1
+    }
+  ],
+  "transitions": [
+    {
+      "id": "signed",
+      "from": "signing",
+      "to": "pending",
+      "variant": "emphasis"
+    },
+    {
+      "id": "approved",
+      "from": "pending",
+      "to": "onsale",
+      "variant": "emphasis"
+    },
+    {
+      "id": "sells",
+      "from": "onsale",
+      "to": "sold",
+      "variant": "emphasis"
+    },
+    {
+      "id": "paid",
+      "from": "sold",
+      "to": "closed",
+      "variant": "emphasis"
+    },
+    {
+      "id": "lapses",
+      "from": "signing",
+      "to": "ended",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "label": "declined or lapsed"
+    },
+    {
+      "id": "rejected",
+      "from": "pending",
+      "to": "ended",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "label": "rejected"
+    },
+    {
+      "id": "unsold",
+      "from": "onsale",
+      "to": "ended",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "unsold or taken off",
+      "labelDy": 40
+    },
+    {
+      "id": "refund",
+      "from": "sold",
+      "to": "refunded",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "relist",
+      "from": "refunded",
+      "to": "onsale",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "bottom",
+      "label": "store, before delivery"
+    },
+    {
+      "id": "ends",
+      "from": "refunded",
+      "to": "ended",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "right",
+      "label": "after delivery, or auction",
+      "labelAt": [560, 430]
+    }
+  ]
+}

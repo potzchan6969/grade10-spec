@@ -34,7 +34,8 @@ availability and a link to its store page.
   publishes: card, slab, sealed box, comic and merch, sold out included, gift
   cards excepted
   - **Every Shelf Product Published** — the shop sells nothing on the shelf
-    that the store does not publish, so the scanner misses none
+    that the store does not publish, so the scanner misses none, including
+    every listed item - [Store Listings](/p/grade10-site/store/store-listings#the-listing)
 - **Catalogue Changes** — a product the shop publishes, reprices, sells out,
   brings back or changes the photos of reaches the scanner as the store's own
   copy of the catalogue moves —
@@ -46,7 +47,7 @@ availability and a link to its store page.
     shop's save; within 13 on an open scanner
   - **Dropped Product** — a product the store unpublishes or deletes leaves
     the scanner with the next copy
-    - **Sold Consigned Slab** — the store takes it off its catalogue, so it
+    - **Sold Listed Slab** — the store takes it off its catalogue, so it
       leaves the scanner rather than reading Sold out
   - **The Store's Version Wins** — an item changed on the scanner is put back
     to the store's version with the next copy
@@ -57,14 +58,11 @@ availability and a link to its store page.
 
 ## Slabs
 
-- **What Makes a Slab** — a consigned product whose item inventory holds with
-  a grader, whatever its type; a house-stock product of a graded type. Every
-  slab on the shop's shelf is a registered inventory item
-  - **Consigned Slab** — known by its consigned item, which inventory holds
-    with a grader
-  - **House-Stock Slab** — the stock keeper writes the slab's label code on
-    the product in the shop, naming its inventory item; the store reads the
-    grader, grade and cert from inventory, as for a consigned slab
+- **What Makes a Slab** — a listed item inventory holds with a grader,
+  whatever its type. Every slab on the shop's shelf is a registered inventory
+  item
+  - **Listed Slab** — known by its store listing, consigned or house stock -
+    [Store Listings](/p/grade10-site/store/store-listings)
   - **Raw Card** — consigned or not, no slab: recognised by its product photos
 - **Slab Label** — the scanner reading a slab's label names the one product
   that sells that copy, and the result shows its grade and cert
@@ -143,5 +141,6 @@ availability and a link to its store page.
 Shopkeepers need the store's answer for the product in their hand, and the
 scanner can only give it if it holds the store's catalogue.
 
+- **No hand-made house-slab products** — none exists, so every slab the store sells is joined through its store listing, and stock keepers write no label codes in the shop - owner, 2026-11-03
 - ❓ **Unmeasured** — the share of published products the scanner holds with the store's current title, price and availability, and graded products held without grade or cert; nothing records them yet. Product and Operations confirm
 :::

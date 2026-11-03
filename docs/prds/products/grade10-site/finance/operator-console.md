@@ -130,6 +130,10 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   reads `N days past due`, in calendar days on the brand's calendar as the
   collector's Past due stage counts them; once a forfeiture notice stands it
   reads `pay by <date>`, the brand's day the notice named, instead
+- 🚧 **An acceptance held on the ID** - an offer accepted under a verified ID
+  that contradicts the intake ID is refused, and the case goes on the held
+  list; once an approver clears it, staff record the acceptance again -
+  [Earnings Wallet](/p/grade10-site/account/earnings-wallet#held-list)
 - 🚧 **Cancel visit asks first** - naming the slot on the clock of the shop
   it is booked at, with that shop's zone, the address the collector is
   emailed at, and that the case keeps its status

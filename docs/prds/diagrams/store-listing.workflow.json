@@ -1,0 +1,141 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "An item's store listing",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "inventory",
+      "label": "Grade10's inventory"
+    },
+    {
+      "id": "admin",
+      "label": "Grade10's admin panel"
+    },
+    {
+      "id": "store",
+      "label": "Grade10's store"
+    },
+    {
+      "id": "shop",
+      "label": "Shopify"
+    }
+  ],
+  "mainPath": ["listed", "listing", "product", "sold"],
+  "nodes": [
+    {
+      "id": "listed",
+      "lane": "admin",
+      "col": 0,
+      "type": "frontend",
+      "label": "Item listed",
+      "sublabel": "consignment approval, or house stock",
+      "width": 170
+    },
+    {
+      "id": "price",
+      "lane": "admin",
+      "col": 1,
+      "type": "frontend",
+      "label": "Price set",
+      "sublabel": "by staff, on the listing's home",
+      "width": 180
+    },
+    {
+      "id": "rule",
+      "lane": "inventory",
+      "col": 1,
+      "type": "backend",
+      "label": "Rule quote, later",
+      "sublabel": "from the latest sale, never below the floor",
+      "width": 180
+    },
+    {
+      "id": "listing",
+      "lane": "store",
+      "col": 1,
+      "type": "database",
+      "label": "The listing",
+      "sublabel": "every change sent to the shop",
+      "width": 170
+    },
+    {
+      "id": "product",
+      "lane": "shop",
+      "col": 2,
+      "type": "external",
+      "label": "One product",
+      "sublabel": "one unit, the item's for life",
+      "width": 180
+    },
+    {
+      "id": "edit",
+      "lane": "shop",
+      "col": 1,
+      "type": "security",
+      "label": "Shop edit",
+      "sublabel": "found on reading it back",
+      "width": 170
+    },
+    {
+      "id": "sold",
+      "lane": "shop",
+      "col": 3,
+      "type": "external",
+      "label": "Sold",
+      "sublabel": "comes off every channel",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "from": "listed",
+      "to": "listing",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "from": "listing",
+      "to": "product",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "product",
+      "to": "sold",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "price",
+      "to": "listing",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "rule",
+      "to": "price",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "edit",
+      "to": "listing",
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "label": "written back"
+    }
+  ]
+}

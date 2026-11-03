@@ -42,14 +42,24 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Full: Story = {};
+export const Full: Story = {
+  parameters: {
+    verification: { caseId: "vc_ce17c72a-f3da-4c5e-af0d-8fe91b7ab38d" },
+  },
+};
 
 export const PointsEarned: Story = {
+  parameters: {
+    verification: { caseId: "vc_d826eab9-081b-482b-a352-d0e09fa7f835" },
+  },
   args: { status: "completed" },
 };
 
 /** Points bill-credit after Discount — label includes points deducted. */
 export const WithPointsCredit: Story = {
+  parameters: {
+    verification: { caseId: "vc_96c13262-aa3a-4af9-8e1c-2df24446bcaa" },
+  },
   args: {
     summary: FILLED_SUMMARY_WITH_POINTS,
   },
@@ -64,6 +74,9 @@ export const WithPointsCredit: Story = {
 
 /** Order promo without points — Points credit row stays omitted. */
 export const WithoutPointsCredit: Story = {
+  parameters: {
+    verification: { caseId: "vc_bc5126d5-87e1-4e4c-947e-207bac935627" },
+  },
   args: {
     summary: FILLED_SUMMARY_ORDER_DISCOUNT,
   },
@@ -76,6 +89,9 @@ export const WithoutPointsCredit: Story = {
 };
 
 export const Pickup: Story = {
+  parameters: {
+    verification: { caseId: "vc_dc6cdf13-6686-414c-9b74-f5f88f0332b9" },
+  },
   args: {
     status: "pickup",
     shippingAddress: undefined,
@@ -89,6 +105,9 @@ export const Pickup: Story = {
 
 /** Card brand + masked number — wallet pays still use Visa/Mastercard + number. */
 export const Mastercard: Story = {
+  parameters: {
+    verification: { caseId: "vc_fccbae5c-b5f8-4d73-8430-0314efb72083" },
+  },
   args: {
     payment: { brand: "mastercard", maskedNumber: "···· 4242" },
   },
@@ -96,6 +115,9 @@ export const Mastercard: Story = {
 
 /** Address lines stay useful when the recipient name is unavailable. */
 export const PartialAddress: Story = {
+  parameters: {
+    verification: { caseId: "vc_efdef13e-7029-4800-977f-b09395211ac9" },
+  },
   args: {
     shippingAddress: {
       lines: ["Flat 12B, Tower 3", "Wan Chai, Hong Kong"],
@@ -110,6 +132,9 @@ export const PartialAddress: Story = {
 
 /** An unrecognized provider stays text-only instead of receiving a guessed logo. */
 export const UnrecognizedPayment: Story = {
+  parameters: {
+    verification: { caseId: "vc_a7d1e970-1b2c-40e2-9359-4b74a3fae2f7" },
+  },
   args: {
     payment: { label: "Cartes Bancaires", maskedNumber: "···· 5678" },
   },
@@ -123,6 +148,9 @@ export const UnrecognizedPayment: Story = {
 
 /** A wallet name remains associated with its device-account mask. */
 export const WalletPayment: Story = {
+  parameters: {
+    verification: { caseId: "vc_aacd0c67-633e-4cf9-aaba-9b04a0633976" },
+  },
   args: {
     payment: { label: "Apple Pay", maskedNumber: "···· 1234" },
   },
@@ -135,6 +163,9 @@ export const WalletPayment: Story = {
 
 /** An empty payment object leaves no empty Payment Method section behind. */
 export const EmptyPayment: Story = {
+  parameters: {
+    verification: { caseId: "vc_297aeb78-ab7c-4966-a468-05ba944e021b" },
+  },
   args: {
     payment: {},
   },
@@ -145,6 +176,9 @@ export const EmptyPayment: Story = {
 };
 
 export const Minimal: Story = {
+  parameters: {
+    verification: { caseId: "vc_66caa7f4-cc4d-4ca3-8d80-07463641df7c" },
+  },
   args: {
     summary: {
       subtotal: FILLED_SUMMARY.subtotal,
@@ -156,6 +190,9 @@ export const Minimal: Story = {
 };
 
 export const PaidTotalOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_e20322eb-a9b9-4e1d-9deb-b378d3d23fd1" },
+  },
   args: {
     loyaltyPoints: undefined,
     payment: undefined,

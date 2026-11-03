@@ -23,6 +23,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Language options only — no currency. */
 export const SwitchLanguage: Story = {
+  parameters: {
+    verification: { caseId: "vc_9a01a8fb-72b4-464b-8ff0-240cf2d4dfe1" },
+  },
   name: "Switch language",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);

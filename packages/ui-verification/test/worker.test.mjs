@@ -502,7 +502,13 @@ test("the Worker's clock reads its own build receipt and notices a new deploy on
   const requested = [];
   env.ASSETS = {
     fetch: async (request) => {
-      requested.push(new URL(request.url).pathname);
+      const path = new URL(request.url).pathname;
+      requested.push(path);
+      if (path === "/ui-verification-cases.json")
+        return Response.json({
+          schemaVersion: 1,
+          cases: [{ caseId: "block-1", storyId: "x--default" }],
+        });
       return Response.json({
         schemaVersion: 1,
         target: "reference",
@@ -518,7 +524,9 @@ test("the Worker's clock reads its own build receipt and notices a new deploy on
   assert.deepEqual(await watchDeploys(env), { state: "unchanged" });
   assert.deepEqual(requested, [
     "/ui-verification-build.json",
+    "/ui-verification-cases.json",
     "/ui-verification-build.json",
+    "/ui-verification-cases.json",
   ]);
   await assert.rejects(
     watchDeploys({
@@ -526,5 +534,17 @@ test("the Worker's clock reads its own build receipt and notices a new deploy on
       ASSETS: { fetch: async () => new Response("missing", { status: 404 }) },
     }),
     /has no receipt \(HTTP 404\)/,
+  );
+  await assert.rejects(
+    watchDeploys({
+      ...env,
+      ASSETS: {
+        fetch: async (request) =>
+          new URL(request.url).pathname === "/ui-verification-cases.json"
+            ? new Response("missing", { status: 404 })
+            : Response.json({ commit: "a".repeat(40) }),
+      },
+    }),
+    /lists no story cases \(HTTP 404\)/,
   );
 });

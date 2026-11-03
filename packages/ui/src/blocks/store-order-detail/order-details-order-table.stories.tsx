@@ -58,9 +58,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_f7d87795-0868-4307-8d40-fe7011fa24b8" },
+  },
+};
 
 export const LongProductNameWrapsWithinTheTable: Story = {
+  parameters: {
+    verification: { caseId: "vc_9504ea68-0cf0-4275-9a8c-57ff388368b4" },
+  },
   decorators: [
     (Story) => (
       <div style={{ width: "640px" }}>
@@ -95,6 +102,9 @@ export const LongProductNameWrapsWithinTheTable: Story = {
 /** Narrower than the table's smallest fitting width, the rail scrolls
  * sideways instead of crushing the money columns. */
 export const ScrollsOnANarrowViewport: Story = {
+  parameters: {
+    verification: { caseId: "vc_85a10dad-7a60-4044-aa13-bd83a20c81b6" },
+  },
   decorators: [
     (Story) => (
       <div style={{ width: "300px" }}>
@@ -115,6 +125,9 @@ export const ScrollsOnANarrowViewport: Story = {
 };
 
 export const AmountsShowInFull: Story = {
+  parameters: {
+    verification: { caseId: "vc_406387d0-692d-4935-b2c7-4a655dac555e" },
+  },
   decorators: [
     (Story) => (
       <div style={{ width: "608px" }}>

@@ -99,6 +99,9 @@ function expectScrollingRow(canvasElement: HTMLElement, shownWhole: number) {
  * suite's grade10-site-store-cross-sell-US1-TC4-1 credits this story with the
  * cart control's absence. */
 export const PicksAndSimilar: Story = {
+  parameters: {
+    verification: { caseId: "vc_35920a66-1eae-42e3-9927-41265d142091" },
+  },
   play: async ({ canvasElement, args }) => {
     const region = rail(canvasElement);
     expect(
@@ -140,6 +143,9 @@ export const PicksAndSimilar: Story = {
  * modifier key is the browser's, so the tile's link opens where the browser
  * puts it, a new tab or window, and the rail reports nothing. */
 export const ModifiedPressOpensElsewhere: Story = {
+  parameters: {
+    verification: { caseId: "vc_e9ddf270-d7b8-42e1-8f73-fdebd15aae33" },
+  },
   play: async ({ canvasElement, args }) => {
     const link = nameLink(tiles(rail(canvasElement))[0]);
     let prevented: boolean | undefined;
@@ -164,6 +170,9 @@ export const ModifiedPressOpensElsewhere: Story = {
 
 /** A rail of one card keeps its heading and its one tile. */
 export const OneCard: Story = {
+  parameters: {
+    verification: { caseId: "vc_b1caf85f-da77-42e3-a1f5-09118fa13505" },
+  },
   args: { cards: [RELATED_RAIL_STORY[0]] },
   play: async ({ canvasElement }) => {
     const region = rail(canvasElement);
@@ -178,6 +187,9 @@ export const OneCard: Story = {
  * its treatment and price, and still opens its card from the photo well as
  * from the name, the name its one control. */
 export const SoldOutPickOpens: Story = {
+  parameters: {
+    verification: { caseId: "vc_0ef021f4-7dc9-4ef9-bb44-60969e6d1307" },
+  },
   args: { cards: [RELATED_RAIL_SOLD_OUT] },
   play: async ({ canvasElement, args }) => {
     const [tile] = tiles(rail(canvasElement));
@@ -201,6 +213,9 @@ export const SoldOutPickOpens: Story = {
 /** A phone: two whole tiles and part of the third. A long discounted name is
  * held to two lines, and its two prices stay inside the tile. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_d84631ec-513d-4750-8290-c834e86024dc" },
+  },
   args: { cards: [RELATED_RAIL_LONG_NAME, ...RELATED_RAIL_STORY.slice(0, 5)] },
   decorators: [box(360)],
   play: async ({ canvasElement }) => {
@@ -230,6 +245,9 @@ export const Narrow: Story = {
 /** A wide page: from 1152px six tiles fit side by side and nothing scrolls;
  * a pixel narrower and the row scrolls again. */
 export const Wide: Story = {
+  parameters: {
+    verification: { caseId: "vc_5011fafe-1222-4558-be06-d39f8b13b96b" },
+  },
   args: { cards: RELATED_RAIL_STORY.slice(0, 6) },
   decorators: [box(1152)],
   play: async ({ canvasElement }) => {

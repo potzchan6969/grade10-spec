@@ -13,7 +13,7 @@ or later from the collector's dashboard, with no second intake -
 # At the counter
 
 ## Collector — Intake and consign
-At a card event, or the shop's counter from Phase 2; on the intake form staff tick Consign Now for the card, with the store, the auction or both and the lowest price the collector accepts.
+At a card event, or the shop's counter from Phase 2; on the intake form staff set the card to Consign, with the store or the auction and the lowest price the collector accepts.
 
 ## Collector — Sign
 The Vault Terms and the Consignment Agreement together, on the shop's tablet or by an emailed link.
@@ -24,7 +24,7 @@ The card is authenticated, at the counter or later, and stored; it goes on sale 
 # Selling
 
 ## Staff — Approve the listing
-Grade10 sets the list or starting price, and for both channels where the card starts.
+Once the Vault Terms seal and the card passes, Grade10 sets the list or starting price; or rejects it, and the card stays in the vault, earning.
 
 ## Buyer — Buy it
 At the shop's counter, online or at auction; the card stops earning.
@@ -41,6 +41,7 @@ Sale price less commission reaches the wallet 3 business days after the buyer pa
 | [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval) | Taking a card off sale before it sells |
 | [Consignment Dashboard](/p/grade10-site/consignment/dashboard) | The staff view that turns vaulted cards into sales |
 | [Consignment Console](/p/grade10-site/consignment/operator-console) | The admin section's queue, one consignment, payouts and settings |
+| [Consignment Counter](/p/grade10-site/consignment/counter) | Taking a consignor's items in one visit: the consignor, the items, the terms |
 | [Earnings Wallet](/p/grade10-site/account/earnings-wallet#sale-proceeds) | Sale proceeds, statements and cash-out |
 
 ## Values
@@ -52,8 +53,8 @@ is the default it starts on.
 | --- | --- |
 | Consignment period | **1** year from signing |
 | Sale proceeds | in the wallet **3** business days after the buyer pays |
-| Fee for ending early | ❓ unset |
-| Currency | HKD |
+| Fee for ending early | **US$0**, charged only once an auction lot is prepared |
+| Currency | HKD, credited to the wallet in US dollars |
 
 - 🚧 **Proceeds as built** - the brand's payout setting picks where they go,
   by default a bank account kept on the consignor's list after the return

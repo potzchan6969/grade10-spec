@@ -26,6 +26,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Language switch, primary Sign In, no Store, no cart. */
 export const SignedOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_10a292af-04ef-433c-aef0-b1c37704e257" },
+  },
   name: "Signed out",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -50,6 +53,9 @@ export const SignedOut: Story = {
 
 /** Account icon in the bar; no Cart, Store, or Store Locator yet. */
 export const SignedIn: Story = {
+  parameters: {
+    verification: { caseId: "vc_535b7f5a-0004-4f29-ac47-a2c4bbbe755a" },
+  },
   name: "Signed in",
   args: { session: "signed-in" },
   play: async ({ canvasElement }) => {
@@ -68,6 +74,9 @@ export const SignedIn: Story = {
  * winners reach orders from My Auctions.
  */
 export const AccountMenu: Story = {
+  parameters: {
+    verification: { caseId: "vc_d00b53fa-91f1-4e32-aa2c-400bd4540fb6" },
+  },
   name: "Account menu open",
   args: { session: "signed-in", accountMenuDefaultOpen: true },
   play: async ({ canvasElement, args }) => {

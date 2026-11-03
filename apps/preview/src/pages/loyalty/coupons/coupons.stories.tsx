@@ -85,6 +85,9 @@ type Story = StoryObj<typeof meta>;
 /** The coupon wallet: Available holds what can still be spent, Used &
  * Expired holds the rest — each saying its own line. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_55b7ff1c-bcdb-4e7e-ba4f-750cdc4337a0" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -127,6 +130,9 @@ export const Default: Story = {
 /** Presenting a coupon at the till: Use now opens the ticket and its scan
  * card on a dialog from 640px up. */
 export const PresentAtTill: Story = {
+  parameters: {
+    verification: { caseId: "vc_ff986508-11de-425b-a81e-6f4b0f963aed" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Use now" }));
@@ -145,6 +151,9 @@ export const PresentAtTill: Story = {
 /** A member with no coupons at all: no tabs to flip between, just the
  * wallet's empty state. */
 export const NoCoupons: Story = {
+  parameters: {
+    verification: { caseId: "vc_e813ec97-1037-4941-bd84-cd4413584ce2" },
+  },
   args: { coupons: [] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -157,6 +166,9 @@ export const NoCoupons: Story = {
  * own empty line — the upsell yields to it — while the history tab holds
  * the record. */
 export const AvailableEmpty: Story = {
+  parameters: {
+    verification: { caseId: "vc_b34af04b-21de-4e2b-bf18-044482426e14" },
+  },
   args: { coupons: COUPONS.filter((coupon) => !isOpen(coupon)) },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -177,6 +189,9 @@ export const AvailableEmpty: Story = {
 /** A fresh wallet with only live coupons: Used & Expired is offered and
  * answers with its own empty line. */
 export const HistoryEmpty: Story = {
+  parameters: {
+    verification: { caseId: "vc_7862f42d-1512-4088-9844-4eca09d1f6c2" },
+  },
   args: { coupons: COUPONS.filter(isOpen) },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -197,6 +212,9 @@ export const HistoryEmpty: Story = {
 /** The same page at a phone width: Use now slides the scan card up as a
  * bottom sheet. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_08cbbcc0-fbb1-4959-8fec-b12d0c929a7b" },
+  },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -34,6 +34,9 @@ async function theToast() {
  * as back from checkout: the order page names the receipt's email and a
  * persistent toast asks to add the order to an account. */
 export const GuestOrder: Story = {
+  parameters: {
+    verification: { caseId: "vc_8721df69-03f1-4817-b9ce-3f4dbca8c9d6" },
+  },
   name: "Guest order from email",
   args: { ask: "guest" },
   play: async ({ canvasElement }) => {
@@ -60,6 +63,9 @@ export const GuestOrder: Story = {
  * receipt email, and a persistent toast offering sign-in to see it in the
  * account — the page itself shows no account facts. */
 export const MemberOrderSignedOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_a7ba948c-314a-4d91-a152-f29deb2626c3" },
+  },
   name: "Member order signed out",
   args: { ask: "member" },
   play: async ({ canvasElement }) => {
@@ -87,6 +93,9 @@ export const MemberOrderSignedOut: Story = {
  * but a link holder may hold no account, so the way out is the store, not
  * My Orders. */
 export const NotFound: Story = {
+  parameters: {
+    verification: { caseId: "vc_ad61e91b-1dfd-45e2-8e0a-d0548ce2f936" },
+  },
   name: "Not found",
   args: { notFound: true },
   play: async ({ canvasElement }) => {

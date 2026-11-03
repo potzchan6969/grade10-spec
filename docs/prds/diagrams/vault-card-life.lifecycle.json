@@ -8,12 +8,16 @@
     "legend": {
       "mode": "hidden"
     },
-    "viewBox": [930, 640]
+    "viewBox": [980, 760]
   },
   "lanes": [
     {
       "id": "main",
       "label": "In the vault"
+    },
+    {
+      "id": "day",
+      "label": "Some days"
     },
     {
       "id": "terminal",
@@ -25,7 +29,7 @@
       "id": "received",
       "type": "start",
       "label": "Received",
-      "sublabel": "recorded and photographed",
+      "sublabel": "labelled at Taken At",
       "lane": "main",
       "col": 0
     },
@@ -33,7 +37,7 @@
       "id": "authenticating",
       "type": "decision",
       "label": "Authenticating",
-      "sublabel": "at the counter, or later",
+      "sublabel": "here, or checked later",
       "lane": "main",
       "col": 1
     },
@@ -41,15 +45,15 @@
       "id": "in-vault",
       "type": "waiting",
       "label": "In the Vault",
-      "sublabel": "stored, not earning yet",
+      "sublabel": "Vault Terms sealed",
       "lane": "main",
       "col": 2
     },
     {
       "id": "earning",
       "type": "active",
-      "label": "Approved to Earn",
-      "sublabel": "earns each day it qualifies",
+      "label": "Earning",
+      "sublabel": "from Earning Starts",
       "lane": "main",
       "col": 3
     },
@@ -62,6 +66,14 @@
       "col": 4
     },
     {
+      "id": "not-eligible",
+      "type": "neutral",
+      "label": "Not Eligible",
+      "sublabel": "earns nothing that day",
+      "lane": "day",
+      "col": 0
+    },
+    {
       "id": "failed",
       "type": "failure",
       "label": "Failed",
@@ -70,7 +82,7 @@
       "col": 0
     },
     {
-      "id": "withdrawn",
+      "id": "retrieved",
       "type": "neutral",
       "label": "Retrieved",
       "sublabel": "collected at the shop",
@@ -81,7 +93,7 @@
       "id": "sold",
       "type": "success",
       "label": "Sold",
-      "sublabel": "stops earning",
+      "sublabel": "stops earning that day",
       "lane": "terminal",
       "col": 2
     }
@@ -94,13 +106,13 @@
       "variant": "emphasis"
     },
     {
-      "id": "passed",
+      "id": "sealed",
       "from": "authenticating",
       "to": "in-vault",
       "variant": "emphasis"
     },
     {
-      "id": "approved",
+      "id": "starts",
       "from": "in-vault",
       "to": "earning",
       "variant": "emphasis"
@@ -112,14 +124,30 @@
       "variant": "emphasis"
     },
     {
+      "id": "misses",
+      "from": "earning",
+      "to": "not-eligible",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "right",
+      "label": "some days"
+    },
+    {
       "id": "fail",
       "from": "authenticating",
       "to": "failed",
       "variant": "security",
+      "label": "fails",
       "fromSide": "bottom",
-      "toSide": "left",
-      "via": [[248, 479]],
-      "label": "fails"
+      "toSide": "left"
+    },
+    {
+      "id": "withdraw",
+      "from": "earning",
+      "to": "retrieved",
+      "variant": "dashed",
+      "label": "retrieved",
+      "labelDy": 40
     },
     {
       "id": "sell",
@@ -127,15 +155,7 @@
       "to": "sold",
       "variant": "emphasis",
       "label": "sold",
-      "labelAt": [710, 320]
-    },
-    {
-      "id": "withdraw",
-      "from": "earning",
-      "to": "withdrawn",
-      "variant": "dashed",
-      "label": "retrieved",
-      "labelAt": [556, 320]
+      "labelAt": [710, 240]
     },
     {
       "id": "ended",
@@ -145,9 +165,7 @@
       "route": "top-channel",
       "fromSide": "top",
       "toSide": "top",
-      "channelY": 96,
-      "label": "ended or unsold",
-      "labelAt": [633, 96]
+      "label": "ended, unsold or rejected"
     }
   ]
 }

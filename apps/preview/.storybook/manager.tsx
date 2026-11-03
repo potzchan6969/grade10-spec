@@ -3,6 +3,7 @@ import { AddonPanel } from "storybook/internal/components";
 import { CURRENT_STORY_WAS_SET } from "storybook/internal/core-events";
 import { Route } from "storybook/internal/router";
 import { addons, types, useStorybookState } from "storybook/manager-api";
+import { CopyReviewPage } from "../src/ui-verification/CopyReviewPage";
 import {
   APPROVE_PANEL,
   SITE_COMPARE_PANEL,
@@ -31,10 +32,12 @@ const ADDON_ID = SITE_COMPARE_PANEL;
 const APPROVE_ID = APPROVE_PANEL;
 const DASHBOARD_ID = `${ADDON_ID}/dashboard`;
 const CAPTURES_ID = `${ADDON_ID}/captures`;
+const COPY_ID = `${ADDON_ID}/copy-review`;
 // A trailing slash is what makes Storybook read this as a page's view mode,
 // as its own Settings page does.
 const CAPTURES_PATH = "/reference-captures/";
 const DASHBOARD_PATH = "/verification-dashboard/";
+const COPY_PATH = "/copy-review/";
 // Storybook's sidebar lists only stories and docs, so the dashboard has a docs
 // entry below Start Here that opens the page in its place.
 const PAGE_OF_ENTRY: Readonly<Record<string, string>> = {
@@ -92,6 +95,16 @@ addons.register(ADDON_ID, (api) => {
     render: () => (
       <Route path={CAPTURES_PATH} startsWith>
         <ReferenceCapturesPage />
+      </Route>
+    ),
+  });
+  addons.add(COPY_ID, {
+    type: types.experimental_PAGE,
+    url: COPY_PATH,
+    title: "Copy review",
+    render: () => (
+      <Route path={COPY_PATH} startsWith>
+        <CopyReviewPage />
       </Route>
     ),
   });

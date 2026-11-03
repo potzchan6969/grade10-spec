@@ -7,7 +7,7 @@ order: 3
 
 | Rule | Value |
 | --- | --- |
-| Sites | shop · vault · warehouse |
+| Sites | shop · vault · warehouse · card event |
 | Storage units | room · safe · locker · cabinet · display case · shelf · tray, each inside a site or another unit |
 | Outside places | grader · partner · storage provider · other |
 | Label | one short code per item, printed with its QR code and title |
@@ -21,11 +21,31 @@ order: 3
   `Locker A-12`; a unit may sit inside another, a locker inside a room
 - **Outside place** - a place the house sends items to and does not run: a
   grader's receiving address, a partner, a storage provider
+- 🚧 **Card Event** - a kind of site, beside a shop, that an admin opens
+  for an event with its name, address, time zone, opening and closing days
+  and the place its cards go next; cards taken there start there -
+  [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+  - **After It Closes** - every card still there shows To Move -
+    [Transit](/p/grade10-admin/inventory/transit)
+  - **Retired by Hand** - refused while it holds a card
+- 🚧 **Holds Vaulted Cards** - a setting on each storage unit, set from its kind
+  when it is made: a safe, locker, cabinet or room at a shop or a vault holds
+  vaulted cards, and an admin switches others on, KEC's among them
+- 🚧 **Display** - a setting on each storage unit, set for display cases and
+  shelves: it holds cards on sale
+- 🚧 **Kept At** - where a vaulted card belongs, kept on the vault's mark: it
+  starts as the Default Destination of the site it was taken at, a card
+  event's required, and staff may choose another place that holds vaulted
+  cards - [Vault Intake](/p/grade10-site/vault/intake#intake-form)
+  - **To Move** - read whenever a card sits somewhere that doesn't fit it -
+    [Transit](/p/grade10-admin/inventory/transit)
 - **One registry** - inventory keeps every place; the diary keeps the hours,
   desks and bookings of the sites that take visits, under the ids its shops
   carry today - [Diary](/p/grade10-admin/appointment/diary)
 - **Retired, never deleted** - retiring a place is refused while an item is
   in it
+
+::image{src="assets/diagrams/inventory-places.svg" alt="Where a vaulted card is kept: taken at a site, the shop or a card event, and received there, labelled in inventory; Kept At, the site's Default Destination, is a unit that holds vaulted cards, and a display unit only while the card is on sale; a card away from its Kept At, or on a display unit no longer on sale, reads To Move, read and never stored, until staff move it and it arrives"}
 
 ## Where an Item Is
 

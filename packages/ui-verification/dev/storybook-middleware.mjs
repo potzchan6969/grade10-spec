@@ -4,8 +4,10 @@ import { isIP } from "node:net";
 import { dirname, isAbsolute, resolve } from "node:path";
 import { Readable } from "node:stream";
 import { fileURLToPath } from "node:url";
-import { createArchive } from "../src/archive.mjs";
+import { createArchive, createFileStore } from "../src/archive.mjs";
 import { createArchiveHandler } from "../src/archive-api.mjs";
+import { createCopyReview } from "../src/copy-review.mjs";
+import { createLocalCopyShipper } from "./copy-local-shipper.mjs";
 import { createLocalCoordinator } from "./local-coordinator.mjs";
 import {
   createAccessTokenSource,
@@ -68,7 +70,7 @@ export function resolveArchiveRoot({
 export function createLocalArchiveHandler(
   archive,
   archiveRoot,
-  { coordinator = null } = {},
+  { coordinator = null, copyReview = null } = {},
 ) {
   if (typeof archiveRoot !== "string" || !isAbsolute(archiveRoot)) {
     throw new TypeError("archiveRoot must be an absolute path");
@@ -80,6 +82,7 @@ export function createLocalArchiveHandler(
         ? { kind: "human", reviewer: { subject: "local-development" } }
         : { kind: "publisher" },
     coordinator,
+    copyReview,
     sameOrigin: true,
     storage: { kind: "filesystem", location: archiveRoot },
   });
@@ -246,6 +249,11 @@ export function installUiVerificationArchive(
         createRequire(resolve(specRoot, "apps/preview/package.json"))(
           "playwright",
         ).chromium.launch({ headless: true }),
+    }),
+    // Approved copy is written into this checkout, for its person to commit.
+    copyReview: createCopyReview({
+      store: createFileStore(archiveRoot),
+      shipper: createLocalCopyShipper({ specRoot }),
     }),
   });
   app.use(createNodeArchiveMiddleware(handler));

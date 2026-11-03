@@ -32,6 +32,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Each line at the price it was held at, the total and the points. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_4db9fa16-9b91-4315-a5da-f56c19cd812f" },
+  },
   play: async ({ canvasElement }) => {
     const order = within(canvasElement).getByRole("region", {
       name: "Your Order",
@@ -47,6 +50,9 @@ export const Default: Story = {
 
 /** On Check Your Order: the Promo code field under the lines. */
 export const WithPromoCode: Story = {
+  parameters: {
+    verification: { caseId: "vc_02d71651-e8bd-4f13-adee-414292781ec2" },
+  },
   args: {
     promo: <TicketPromoCodeField copy={PROMO_COPY} onApply={fn()} />,
   },
@@ -59,6 +65,9 @@ export const WithPromoCode: Story = {
 
 /** A pass that costs nothing: Free, and no points line. */
 export const Free: Story = {
+  parameters: {
+    verification: { caseId: "vc_8bbfd0bf-2bf4-40cb-9cb4-2249b55590e9" },
+  },
   args: { lines: LINES_FREE, total: "Free", points: undefined },
   play: async ({ canvasElement }) => {
     expect(within(canvasElement).getAllByText("Free")).toHaveLength(2);

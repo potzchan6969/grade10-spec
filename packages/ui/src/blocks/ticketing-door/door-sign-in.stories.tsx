@@ -60,6 +60,9 @@ function Controlled(props: DoorSignInProps) {
 
 /** The passcode and this phone's name, no account. */
 export const EnterThePasscode: Story = {
+  parameters: {
+    verification: { caseId: "vc_e4bdabe8-7cc8-4ecc-8b6f-da9a54faae35" },
+  },
   name: "Enter the passcode",
   render: (args) => <Controlled {...args} />,
   play: async ({ canvasElement, args }) => {
@@ -84,6 +87,9 @@ export const EnterThePasscode: Story = {
 
 /** The passcode was refused: how many tries are left before a short wait. */
 export const WrongPasscode: Story = {
+  parameters: {
+    verification: { caseId: "vc_53f76a57-8c84-4d0b-b109-7db58de077ed" },
+  },
   name: "Wrong passcode",
   args: {
     passcode: "111111",
@@ -104,6 +110,9 @@ export const WrongPasscode: Story = {
 
 /** After five tries: a wait, and the form will not send until it ends. */
 export const Slowed: Story = {
+  parameters: {
+    verification: { caseId: "vc_9b9a15f3-047d-4a08-9ac4-6613c37f874e" },
+  },
   name: "Slowed after 5 tries",
   args: {
     deviceName: "Gate A phone 1",
@@ -127,6 +136,9 @@ export const Slowed: Story = {
 
 /** The passcode is sent and being checked. */
 export const Opening: Story = {
+  parameters: {
+    verification: { caseId: "vc_4ca4385e-44d1-4dec-9696-18a09f67f8be" },
+  },
   args: { passcode: "482913", deviceName: "Gate A phone 1", submitting: true },
   play: async ({ canvasElement }) => {
     await expect(
@@ -137,6 +149,9 @@ export const Opening: Story = {
 
 /** The right passcode before the door opens: how long until it does. */
 export const NotOpenYet: Story = {
+  parameters: {
+    verification: { caseId: "vc_93bc9a1c-6af1-43e5-9050-fe38b15fd216" },
+  },
   name: "Not open yet",
   args: {
     status: {

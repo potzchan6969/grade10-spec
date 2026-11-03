@@ -26,6 +26,9 @@ type Story = StoryObj<typeof meta>;
 /** Always shown under the order lines: a code and Apply. Apply and Enter
  * send the code; an empty field sends nothing. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_42b99806-a4c4-4ff0-8e8f-6241d8b6c702" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("textbox", { name: "Promo code" });
@@ -41,6 +44,9 @@ export const Empty: Story = {
 
 /** SPRING20 typed, or brought by a share link. */
 export const Typed: Story = {
+  parameters: {
+    verification: { caseId: "vc_3cad50d3-c80a-47f0-95cf-303611fd56bb" },
+  },
   args: { defaultValue: "SPRING20" },
   play: async ({ canvasElement }) => {
     expect(
@@ -51,6 +57,9 @@ export const Typed: Story = {
 
 /** The code is on its way: Apply waits. */
 export const Applying: Story = {
+  parameters: {
+    verification: { caseId: "vc_618a9e7f-9db8-46dc-99fe-40364793e202" },
+  },
   args: { defaultValue: "SPRING20", status: { kind: "applying" } },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -63,6 +72,9 @@ export const Applying: Story = {
 
 /** Applied: the code's line with Remove takes the field's place. */
 export const Applied: Story = {
+  parameters: {
+    verification: { caseId: "vc_5d74e773-8487-423a-9d20-60d178291ea7" },
+  },
   args: {
     applied: {
       copy: {
@@ -87,6 +99,9 @@ export const Applied: Story = {
 
 /** Ten wrong codes in an hour: the wait is named and Apply waits it out. */
 export const TooManyTries: Story = {
+  parameters: {
+    verification: { caseId: "vc_9a3055b2-3271-4e9b-a20d-3abfbb3206c6" },
+  },
   args: {
     defaultValue: "SPRNG21",
     status: { kind: "tooManyTries", message: PROMO_REFUSALS.tooManyTries },

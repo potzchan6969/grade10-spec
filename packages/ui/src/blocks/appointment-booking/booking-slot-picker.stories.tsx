@@ -44,6 +44,9 @@ type Story = StoryObj<typeof meta>;
 /** The month beside the picked day's times, grouped by part of the day, all
  * in the shop's zone. Past days are out of reach; a full day still picks. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_df5f400a-f8a3-485f-9dea-8996d090ace6" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -69,6 +72,9 @@ export const Default: Story = {
 
 /** Today: the header says so. */
 export const Today: Story = {
+  parameters: {
+    verification: { caseId: "vc_cdd942db-e9e0-454f-98df-2886f6a74832" },
+  },
   args: {
     selectedDate: "2026-10-15",
     selectedStart: TODAY_SLOTS[0]?.start,
@@ -86,6 +92,9 @@ export const Today: Story = {
 
 /** No day picked yet: the times column asks for one. */
 export const NoDay: Story = {
+  parameters: {
+    verification: { caseId: "vc_0c9dc251-b3ee-4162-9bc0-78ac4a7a9735" },
+  },
   args: { selectedDate: undefined },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -98,6 +107,9 @@ export const NoDay: Story = {
 
 /** A card show changes the day's hours: the line sits over its times. */
 export const SpecialHours: Story = {
+  parameters: {
+    verification: { caseId: "vc_6908d359-f4cb-4f9b-a6bb-c6aa0c1485a6" },
+  },
   args: {
     selectedDate: "2026-10-24",
     note: "Open 12:00 to 18:00 · Card show at the convention centre",
@@ -114,6 +126,9 @@ export const SpecialHours: Story = {
 
 /** A full day: the panel replaces its times and points at each shop's earliest. */
 export const FullDay: Story = {
+  parameters: {
+    verification: { caseId: "vc_0cc31255-8864-42af-86d2-c9d70f14ccfa" },
+  },
   args: {
     selectedDate: "2026-10-17",
     dayPanel: (
@@ -144,6 +159,9 @@ export const FullDay: Story = {
 
 /** A time taken under the collector: the warning leads the step. */
 export const TimeJustTaken: Story = {
+  parameters: {
+    verification: { caseId: "vc_7075afe3-224c-4cc0-a78d-37e61828f992" },
+  },
   args: {
     selectedStart: undefined,
     notice: (
@@ -163,6 +181,9 @@ export const TimeJustTaken: Story = {
 
 /** A phone reads a 14-day strip from today instead of the month. */
 export const Strip: Story = {
+  parameters: {
+    verification: { caseId: "vc_776b4d62-f28f-456a-a240-b6b2659e9d0a" },
+  },
   args: { layout: "strip", selectedDate: "2026-10-22" },
   globals: { viewport: { value: "mobile1" } },
   play: async ({ args, canvasElement }) => {
@@ -181,6 +202,9 @@ export const Strip: Story = {
 
 /** Stepping forward reports the next month; at the bound the step is gone. */
 export const MonthBounds: Story = {
+  parameters: {
+    verification: { caseId: "vc_d5d7969c-142c-4b8d-bd02-e768ac731aaf" },
+  },
   args: { month: "2026-12", minMonth: BOARD_MONTH, selectedDate: undefined },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -193,12 +217,18 @@ export const MonthBounds: Story = {
 };
 
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_990ab694-e1b1-4de0-ba10-85a7fbe521a8" },
+  },
   args: { days: { status: "loading" }, slots: { status: "loading" } },
 };
 
 /** A failed read of the times is an error with a way to retry, never a day
  * with nothing free. */
 export const Failed: Story = {
+  parameters: {
+    verification: { caseId: "vc_1f8894a4-a1de-4bc1-8884-72761083138b" },
+  },
   args: {
     slots: {
       status: "error",
@@ -218,6 +248,9 @@ export const Failed: Story = {
 
 /** A label the consumer passes replaces the zone's short name, as the drop-off page does. */
 export const LabelFromTheConsumer: Story = {
+  parameters: {
+    verification: { caseId: "vc_653f7ab5-5b80-488a-9a87-8042e31a1764" },
+  },
   args: { timeZoneLabel: "Hong Kong Standard Time" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

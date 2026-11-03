@@ -17,6 +17,8 @@ export {
   type LocaleOf,
   localesOf,
 } from "./brands.ts";
+/** Every layer's catalogs as written, for tools that review the words themselves. */
+export { brandCatalogs, sharedCatalogs };
 
 /**
  * The vocabulary: every user-facing string either site renders, named once.

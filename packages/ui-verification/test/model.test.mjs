@@ -3,8 +3,11 @@ import test from "node:test";
 import {
   canonicalJson,
   captureLocale,
+  currentRuns,
   fingerprint,
   PROFILES,
+  STORY_RUN_CASES,
+  storyCatalogueRuns,
   validateDeclaration,
   validateDeclarations,
   validateLocale,
@@ -244,5 +247,36 @@ test("image object keys reject traversal and platform-specific separators", () =
   assert.throws(
     () => validateObjectKey("ui-verification\\private.png"),
     /non-traversing/,
+  );
+});
+
+test("a story declaration splits into parts under the manifest limit, read as one", async () => {
+  const declare = (count, createdAt) =>
+    storyCatalogueRuns({
+      cases: Array.from({ length: count }, (_, index) => ({
+        caseId: `vc_case-${String(index).padStart(4, "0")}`,
+        storyId: `domain-feature-screens-screen-${index}--default`,
+      })),
+      commit: "c".repeat(40),
+      ref: "main",
+      createdAt,
+    });
+  const parts = await declare(
+    STORY_RUN_CASES * 4 + 155,
+    "2026-11-03T00:00:00.000Z",
+  );
+  assert.equal(parts.length, 5);
+  assert.match(parts[0].runId, /-1of5$/);
+  for (const part of parts)
+    assert.ok(
+      new TextEncoder().encode(canonicalJson(part)).length < 1024 * 1024,
+      `${part.runId} stays under 1 MiB`,
+    );
+  const older = await declare(10, "2026-11-01T00:00:00.000Z");
+  const current = currentRuns([...older, ...parts]);
+  assert.equal(current.length, 5, "only the newest declaration's parts");
+  assert.equal(
+    current.reduce((sum, run) => sum + run.catalogue.length, 0),
+    STORY_RUN_CASES * 4 + 155,
   );
 });

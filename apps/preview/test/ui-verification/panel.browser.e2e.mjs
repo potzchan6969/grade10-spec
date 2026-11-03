@@ -380,6 +380,9 @@ async function publishUnmatchedRun(archive, index) {
   );
 }
 
+// The Breadcrumbs Default story's own case id: every workbench story carries one.
+const BREADCRUMBS_CASE_ID = "vc_aa6aa46e-04a3-4ba8-9fd6-8a09db015e33";
+
 async function publishReferenceStoryRun(archive, browser) {
   const runId = "reference-story-history-0001";
   const createdAt = "2026-10-01T10:01:00.000Z";
@@ -387,7 +390,7 @@ async function publishReferenceStoryRun(archive, browser) {
   const referenceCommit = "1".repeat(40);
   const declaration = {
     schemaVersion: 1,
-    caseId: "vc_breadcrumbs_history",
+    caseId: BREADCRUMBS_CASE_ID,
     targetId: "breadcrumb-navigation",
     capturePointId: "default-navigation",
     storyId: "design-system-display-breadcrumbs--previous-name",
@@ -1433,7 +1436,7 @@ test("the dashboard has the coordinator store what it cannot settle, and ranks b
   await page.close();
 });
 
-test("the captures page requests a full capture, follows it, and holds the next one", {
+test("the captures page requests a full capture, follows it, and the next one shoots only what moved", {
   timeout: 240_000,
 }, async (t) => {
   const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-runs-"));
@@ -1480,14 +1483,17 @@ test("the captures page requests a full capture, follows it, and holds the next 
   assert.equal((await archive.listReferenceRuns()).runs.length, 1);
 
   await page.getByRole("button", { name: "Request a full capture" }).click();
-  await page.getByText(/^A full capture is scheduled for /).waitFor();
-  assert.match(
-    await page
-      .getByRole("region", { name: "Schedule" })
-      .getByText(/^manual by Panel browser fixture/)
-      .innerText(),
-    /^manual by Panel browser fixture · /,
-    "a request inside six hours waits",
+  await page.getByText("A full capture started.").waitFor();
+  await waitForCondition(
+    async () =>
+      (await history.getByRole("cell", { name: "Done" }).count()) === 2,
+    "the second full capture to finish on the page",
+    CAPTURE_TIMEOUT_MS,
+  );
+  assert.equal(
+    (await archive.listReferences()).references.length,
+    DECLARATIONS.length * 3,
+    "nothing moved, so the second capture shoots nothing",
   );
   await page.close();
 });
@@ -1908,12 +1914,11 @@ test("a story switch does not carry the prior case mapping while preparation is 
   breadcrumbsReleased = true;
   releaseBreadcrumbs();
   await page
-    .getByText(
-      "Archived entries match this story ID or its reference story ID.",
-      { exact: true },
-    )
+    .getByText(`Mapped case: ${BREADCRUMBS_CASE_ID}`, { exact: true })
     .waitFor();
-  await page.getByText(/^Mapped identity: vc_breadcrumbs_history/).waitFor();
+  await page
+    .getByText(new RegExp(`^Mapped identity: ${BREADCRUMBS_CASE_ID}`))
+    .waitFor();
   assert.equal(
     await page.getByRole("combobox", { name: "Verification target" }).count(),
     0,
@@ -1922,7 +1927,7 @@ test("a story switch does not carry the prior case mapping while preparation is 
   await page.close();
 });
 
-test("a shared story without a verification parameter finds its reference case after paging past unrelated runs", {
+test("a story finds its archived case under a previous story name after paging past unrelated runs", {
   timeout: 180_000,
 }, async (t) => {
   const archiveRoot = await mkdtemp(
@@ -1951,7 +1956,7 @@ test("a shared story without a verification parameter finds its reference case a
   );
   await page.getByRole("tab", { name: "Site Compare" }).click();
   await page
-    .getByText(/^Mapped identity: vc_breadcrumbs_history/)
+    .getByText(new RegExp(`^Mapped identity: ${BREADCRUMBS_CASE_ID}`))
     .waitFor({ timeout: 60_000 });
   assert.equal(
     await page.getByRole("combobox", { name: "Verification target" }).count(),

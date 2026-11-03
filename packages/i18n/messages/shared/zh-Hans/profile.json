@@ -18,15 +18,11 @@
   "saveFailed": "无法保存你的个人资料，请重试。",
   "consignments": {
     "view": {
-      "new": "已收到申请",
-      "toprice": "已收件",
-      "tosign": "待签署",
-      "tolist": "已签署",
+      "signing": "待签署",
+      "pending": "等待审批",
       "onsale": "发售中",
       "sold": "已售出",
-      "payout": "款项即將支付",
-      "ended": "已结束：请选择下一步",
-      "returning": "正寄回给你",
+      "ended": "已结束",
       "closed": "已完结"
     },
     "sellerLine": "卖家：{name}",

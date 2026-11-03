@@ -15,6 +15,15 @@
     "./archive": "./src/archive.mjs",
     "./archive-api": "./src/archive-api.mjs",
     "./capture-coordinator": "./src/capture-coordinator.mjs",
+    "./copy-catalog": {
+      "types": "./src/copy-catalog.d.mts",
+      "import": "./src/copy-catalog.mjs"
+    },
+    "./copy-checks": {
+      "types": "./src/copy-checks.d.mts",
+      "import": "./src/copy-checks.mjs"
+    },
+    "./copy-review": "./src/copy-review.mjs",
     "./local-coordinator": "./dev/local-coordinator.mjs",
     "./reference-capture": "./src/reference-capture.mjs",
     "./scoring": "./src/scoring.mjs",

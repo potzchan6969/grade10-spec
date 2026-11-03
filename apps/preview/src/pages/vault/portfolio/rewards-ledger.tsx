@@ -9,7 +9,12 @@ import { WithdrawalRow } from "./withdrawal-list";
 
 type LedgerTab = "incentives" | "withdrawal";
 
-type IncentiveEntry = { date: string; amountUsd: number };
+type IncentiveEntry = {
+  date: string;
+  amountUsd: number;
+  /** Missed days credited at once when a paused price feed resumed. */
+  catchUp?: boolean;
+};
 
 /** "29 Oct 2026" → "Oct 2026". */
 function monthKey(date: string) {
@@ -33,7 +38,7 @@ function IncentiveRow({ entry }: { entry: IncentiveEntry }) {
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <Text className="truncate" weight="medium">
-          Daily Incentives
+          {entry.catchUp ? "Backdated Earnings" : "Daily Earnings"}
         </Text>
         <Text size="sm" tone="secondary">
           {entry.date}
@@ -67,7 +72,7 @@ function MonthGroup({
 }
 
 /**
- * Incentive and withdrawal activity under one heading — Incentives lists
+ * Earnings and withdrawal activity under one heading — Incentives lists
  * each day's incentive sum, Withdrawal lists every request with the status
  * Grade10's approval sets. Entries are grouped by month and year, like the
  * points history ledger.
@@ -124,7 +129,7 @@ function RewardsLedger({
 
   return (
     <section
-      aria-label="Incentive and withdrawal activity"
+      aria-label="Earnings and withdrawal activity"
       className={cn("flex flex-col gap-6", className)}
       data-slot="rewards-ledger"
     >

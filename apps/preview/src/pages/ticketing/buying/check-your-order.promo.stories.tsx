@@ -37,6 +37,9 @@ const applyButton = (canvasElement: HTMLElement) =>
 /** SPRING20 typed and applied: its line takes 20% off the General passes
  * and the total drops. */
 export const PromoApplied: Story = {
+  parameters: {
+    verification: { caseId: "vc_1b165c3a-27df-4e34-88e0-b0f51f7f00af" },
+  },
   name: "Promo applied",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -55,6 +58,9 @@ export const PromoApplied: Story = {
 
 /** Remove takes the code off and the field comes back. */
 export const PromoRemoved: Story = {
+  parameters: {
+    verification: { caseId: "vc_89d48a2d-2e2a-47a7-94e4-3d115c0d80c4" },
+  },
   name: "Promo removed",
   args: { code: "SPRING20" },
   play: async ({ canvasElement }) => {
@@ -70,6 +76,9 @@ export const PromoRemoved: Story = {
 
 /** A code nobody made: the reason under the field. */
 export const CodeNotFound: Story = {
+  parameters: {
+    verification: { caseId: "vc_b1059152-6d50-404d-bb10-af19faeaa1e6" },
+  },
   name: "Code not found",
   play: async ({ canvasElement }) => {
     await userEvent.type(field(canvasElement), "SPRNG20");
@@ -82,6 +91,9 @@ export const CodeNotFound: Story = {
 
 /** A code that has ended. */
 export const CodeExpired: Story = {
+  parameters: {
+    verification: { caseId: "vc_7f53e534-7f6e-4bc8-86db-f0ba67bbb101" },
+  },
   name: "Code ended",
   play: async ({ canvasElement }) => {
     await userEvent.type(field(canvasElement), "AUTUMN10");
@@ -96,6 +108,9 @@ export const CodeExpired: Story = {
 
 /** A code whose conditions the order does not meet. */
 export const ConditionsNotMet: Story = {
+  parameters: {
+    verification: { caseId: "vc_b14f2871-441f-4a62-bc1c-e4c950cb5167" },
+  },
   name: "Conditions not met",
   play: async ({ canvasElement }) => {
     await userEvent.type(field(canvasElement), "GROUP4");
@@ -110,6 +125,9 @@ export const ConditionsNotMet: Story = {
 
 /** Too many wrong codes: the wait, and Apply waits with it. */
 export const TooManyTries: Story = {
+  parameters: {
+    verification: { caseId: "vc_7ed45ec6-08a5-4550-8145-3499fdb90d6d" },
+  },
   name: "Too many tries",
   args: {
     promoStatus: {
@@ -128,6 +146,9 @@ export const TooManyTries: Story = {
 
 /** CREW4 makes the order free: Get Tickets, no points. */
 export const FreeWithCode: Story = {
+  parameters: {
+    verification: { caseId: "vc_86e94be0-dd0b-4550-9f86-278b30c5009e" },
+  },
   name: "Free with CREW4",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -145,6 +166,9 @@ export const FreeWithCode: Story = {
 /** Pay found SPRING20's last use gone: pay the full total, or take the
  * code off. */
 export const UsedUpAtPay: Story = {
+  parameters: {
+    verification: { caseId: "vc_26d167f5-be17-4de7-abd7-e48ffc7a2a55" },
+  },
   name: "Code used up at Pay",
   args: { code: "SPRING20", codeUsedUp: true, defaultAgreed: true },
   play: async ({ canvasElement }) => {

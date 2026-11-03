@@ -11,9 +11,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_1230bd67-755a-4d68-890d-8c0266106ddd" },
+  },
+};
 
 /** Hover is a CSS pseudo-state — focus the control or hover it in the canvas. */
 export const Hover: Story = {
-  parameters: { pseudo: { hover: true } },
+  parameters: {
+    verification: { caseId: "vc_f82b5c83-f624-4cb0-bb3a-f92fd1e4be54" },
+    pseudo: { hover: true },
+  },
 };

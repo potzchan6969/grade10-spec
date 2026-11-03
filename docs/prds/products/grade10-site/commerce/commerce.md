@@ -45,7 +45,7 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 ### A copy the shop can always rebuild
 
 - **Shopify down** — checkout down; the listing keeps answering from the store's mirror — [Product Listing · Catalogue Source](/p/grade10-site/store/product-listing#catalogue-source)
-- **Derived, never authored** — every copy is what a Storefront read answered, and the next read overwrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
+- **Derived, never authored** — every copy is what a Storefront read answered, and the next read overwrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, except item listings, which the store writes, and no price or stock anyone pays on comes from it
 - The catalog client's error outcomes carry the query name, so the tail worker's metrics show exactly which reads are failing
 
 ### Money arrives as decimal strings
@@ -285,12 +285,12 @@ muted, and a muted alert is worse than none.
 
 - `read_orders` and `write_orders` scopes, plus subscriptions for `orders/paid`, `orders/cancelled`, `refunds/create`, and `orders/edited`
 - The Admin API has no deploy-time token: the worker trades `SHOPIFY_APP_CLIENT_ID` (var) and `SHOPIFY_APP_SECRET` (secret) for a token that expires in ~24h, cached and refreshed per isolate (`clientCredentialsToken.ts`)
-- The Admin token stays off every path a shopper can reach; only the refund and reconcile paths touch the Admin API
+- The Admin token stays off every path a shopper can reach; only the refund and reconcile paths, and the store's item listings, touch the Admin API
 
 ## Q & A
 
 - Why a copy of the catalogue in the worker rather than a record in Postgres?
-  - We do not own catalog data, and a record is a second store with sync obligations. A copy is a cache with a shape: one keeper per shop rebuilds it from the shop, every location reads it, and it answers every listing shape in one pass, so the public catalogue opens no database connection. A queryable store is the step after it, when a catalogue outgrows one memory pass.
+  - We do not own the catalogue's counted products, and a record is a second store with sync obligations. A copy is a cache with a shape: one keeper per shop rebuilds it from the shop, every location reads it, and it answers every listing shape in one pass, so the public catalogue opens no database connection. A queryable store is the step after it, when a catalogue outgrows one memory pass.
 - Why Checkout Sessions instead of raw PaymentIntents?
   - One server surface serves hosted, embedded, and Payment Element frontends; the UX can change without a backend change.
 - Why does a refund's event carry the goods rather than the money that moved?

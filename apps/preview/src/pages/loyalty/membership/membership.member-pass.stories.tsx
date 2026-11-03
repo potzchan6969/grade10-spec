@@ -16,6 +16,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The pass opens in its overlay over the page. */
 export const PassAdded: Story = {
+  parameters: {
+    verification: { caseId: "vc_63d50e05-8f8d-4200-8e4d-75610fba6851" },
+  },
   args: { view: MEMBERSHIP_STATE_VIEWS.passAdded },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

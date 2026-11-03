@@ -33,6 +33,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Nested promo sheet open — typed entry only (no held section) */
 export const PromoSheetOpen: Story = {
+  parameters: {
+    verification: { caseId: "vc_1d5036e5-e4a6-4ca7-88d2-f0eba7828e16" },
+  },
   render: (args) => {
     const promo: PromoState = { status: "expanded" };
     return (
@@ -63,6 +66,9 @@ export const PromoSheetOpen: Story = {
 
 /** Exported open-sheet state: draft input survives the shared pending guard. */
 export const InteractionPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_2076075c-82a0-46dd-bc70-7932a8b5d93c" },
+  },
   render: () => {
     const [pending, setPending] = useState(false);
     const [promo, setPromo] = useState<PromoState>({ status: "expanded" });
@@ -129,6 +135,9 @@ export const InteractionPending: Story = {
 
 /** Nested sheet with validation error */
 export const PromoSheetError: Story = {
+  parameters: {
+    verification: { caseId: "vc_59bbced3-810e-40a2-9ecd-326941888521" },
+  },
   render: (args) => {
     const promo: PromoState = {
       status: "expanded",
@@ -160,6 +169,9 @@ export const PromoSheetError: Story = {
 
 /** Promo applied — compact footer shows Discount line only */
 export const PromoAppliedSuccess: Story = {
+  parameters: {
+    verification: { caseId: "vc_60f17fc6-0ed7-4e29-a09a-7d1aaf3b2fa2" },
+  },
   args: {
     promoState: {
       status: "applied",
@@ -181,6 +193,9 @@ export const PromoAppliedSuccess: Story = {
 
 /** Nested sheet: held list partitioned applicable / not valid */
 export const HeldPromoSheet: Story = {
+  parameters: {
+    verification: { caseId: "vc_1907ba0e-fc62-464d-b5a0-9e6364c2e62a" },
+  },
   render: (args) => {
     const promo: PromoState = { status: "expanded" };
     return (
@@ -225,6 +240,9 @@ export const HeldPromoSheet: Story = {
 
 /** Partial callback matrix: each action follows only its own callback. */
 export const PartialCallbackMatrix: Story = {
+  parameters: {
+    verification: { caseId: "vc_df28d908-0411-41cf-8ddd-7bbf080d3b25" },
+  },
   render: (args) => {
     const promo: PromoState = { status: "expanded" };
     const [heldSheetOpen, setHeldSheetOpen] = useState(true);
@@ -482,6 +500,9 @@ export const PartialCallbackMatrix: Story = {
 
 /** Nested sheet: empty held list with Loyalty CTA stub */
 export const HeldPromoEmpty: Story = {
+  parameters: {
+    verification: { caseId: "vc_c3224775-4588-42c3-b1ec-b91987dadc36" },
+  },
   render: (args) => {
     const promo: PromoState = { status: "expanded" };
     return (
@@ -518,6 +539,9 @@ export const HeldPromoEmpty: Story = {
 
 /** Nested sheet: every held code is inapplicable */
 export const HeldPromoAllInapplicable: Story = {
+  parameters: {
+    verification: { caseId: "vc_997ecdc7-9333-468b-b31d-db9f871e8c39" },
+  },
   render: (args) => {
     const promo: PromoState = { status: "expanded" };
     return (
@@ -549,6 +573,9 @@ export const HeldPromoAllInapplicable: Story = {
 
 /** Promo cleared — toast (same rail as unavailable item removal) */
 export const PromoClearedNotice: Story = {
+  parameters: {
+    verification: { caseId: "vc_29bd5d6a-523b-44d8-9772-b4b4977d8733" },
+  },
   args: {
     promoState: { status: "collapsed" },
     promoNotice: {

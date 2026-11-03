@@ -52,7 +52,7 @@
 - Unsold close
   - Stock released: a listing that closes with no winner releases its inventory hold at the close, with no operator step
   - Released note: an Unsold listing says its stock was released, and when
-  - Relist: an Unsold listing's row in the Listings table opens a new draft with the same product, quantity and catalogue copy, once its stock is released, outside a campaign and once per listing
+  - Relist: an Unsold listing's row in the Listings table, or its listing page, opens a new draft with the same product, quantity and catalogue copy, once its stock is released, outside a campaign and once per listing
   - Earlier holds freed: holds left by earlier Unsold closes are released once
 - Unit-aware source selection
   - For a selected Cert record, the main selector offers the product's untagged source media and media tagged to that record. Every Cert record has a Cert ID.
@@ -77,14 +77,17 @@ listing's public address `/auction/listings/<slug>`.
 - A slug SHALL be unique among listings that currently hold that value. No
   two listings SHALL share a slug. A draft with no slug does not occupy one.
   Setting or creating a slug that another listing already holds SHALL be
-  refused, including when the other listing is `closed` or `settled`. A
+  refused, including when the other listing is `closed` or `settled`, except
+  a Relist Save taking its own Unsold source's slug. A
   listing rewriting its own slug to the same value is not a collision. A
   `canceled` listing SHALL NOT keep the slug it held before cancel: that
   original value is free for another listing. This applies to listings called
   off before or after this rule is delivered.
 - Slug SHALL be writable while `draft` or `created`. A write of slug on a
   `published`, `closed`, `settled`, or `canceled` listing SHALL be refused,
-  except the release Grade10 applies when the listing is canceled.
+  except the release Grade10 applies when the listing is canceled, and the
+  move Relist Save applies to its Unsold source per "Relist opens a new draft
+  from an Unsold listing".
 - A collector SHALL receive a `published`, `closed`, or `settled` listing by
   opening `/auction/listings/<slug>`. A slug that names no such listing
   SHALL be not found. A `draft`, `created`, or `canceled` listing SHALL NOT

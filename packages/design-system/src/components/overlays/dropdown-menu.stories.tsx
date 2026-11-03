@@ -29,6 +29,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_4feb54a7-3641-43e4-9377-3e1d40a82a35" },
+  },
   play: async ({ canvasElement }) => {
     const trigger = within(canvasElement).getByRole("button", {
       name: "Open menu",
@@ -69,6 +72,9 @@ export const Default: Story = {
 
 /** `inset` aligns unadorned items with those that carry an indicator. */
 export const WithSubmenu: Story = {
+  parameters: {
+    verification: { caseId: "vc_f3b89dba-cb80-4306-a574-8b3a4de246bd" },
+  },
   play: async ({ canvasElement }) => {
     const trigger = within(canvasElement).getByRole("button", {
       name: "Open menu",
@@ -136,6 +142,9 @@ function CheckboxItemsExample() {
 }
 
 export const CheckboxItems: Story = {
+  parameters: {
+    verification: { caseId: "vc_ccbeab7e-e082-4bd7-be10-c707716db765" },
+  },
   play: async ({ canvasElement }) => {
     const trigger = within(canvasElement).getByRole("button", {
       name: "Columns",
@@ -173,6 +182,9 @@ function RadioItemsExample() {
 }
 
 export const RadioItems: Story = {
+  parameters: {
+    verification: { caseId: "vc_1626bc0f-bdda-45a8-8f63-8fbfcffd9876" },
+  },
   play: async ({ canvasElement }) => {
     const trigger = within(canvasElement).getByRole("button", {
       name: "Range",
@@ -184,6 +196,9 @@ export const RadioItems: Story = {
 
 /** Figma Dropdown Menu with group labels (`6554:5963`). */
 export const WithGroups: Story = {
+  parameters: {
+    verification: { caseId: "vc_f15888cf-baca-49af-9bc5-bee5a20171ab" },
+  },
   play: async ({ canvasElement }) => {
     const trigger = within(canvasElement).getByRole("button", {
       name: "Devices",
@@ -239,6 +254,9 @@ function WorkItemsExample() {
  * keeps the menu open to draw it; an item without `pending` closes the menu.
  */
 export const WorkItems: Story = {
+  parameters: {
+    verification: { caseId: "vc_0f70e76a-e491-447f-b337-66149f7be14a" },
+  },
   play: async ({ canvasElement }) => {
     const page = within(document.body);
     await userEvent.click(

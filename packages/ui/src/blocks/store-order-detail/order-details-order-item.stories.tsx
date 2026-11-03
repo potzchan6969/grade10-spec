@@ -37,9 +37,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_55572002-37dc-4153-bc83-7b292732e24b" },
+  },
+};
 
 export const WithItemCoupon: Story = {
+  parameters: {
+    verification: { caseId: "vc_417cff93-13d5-4a82-b238-0fbc9a727bee" },
+  },
   args: {
     subtotal: "HK$94.50",
     total: "HK$94.50",
@@ -49,6 +56,9 @@ export const WithItemCoupon: Story = {
 
 /** Line item flagged with a status issue (refund, cancel, or other problem). */
 export const WithLineIssue: Story = {
+  parameters: {
+    verification: { caseId: "vc_1645d2c8-8a37-4dc7-93ab-ea29650788d6" },
+  },
   args: {
     lineStatus: "refunded",
     statusLabel: ORDER_DETAILS_COPY.status.refunded,
@@ -58,6 +68,9 @@ export const WithLineIssue: Story = {
 };
 
 export const Canceled: Story = {
+  parameters: {
+    verification: { caseId: "vc_fc6d1af5-39b3-47b2-8a61-f2d94bada63e" },
+  },
   args: {
     lineStatus: "canceled",
     statusLabel: ORDER_DETAILS_COPY.status.canceled,

@@ -89,6 +89,9 @@ type Story = StoryObj<typeof meta>;
  * frame draws at rest.
  */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_e0989e3c-95d5-452c-9f01-87b509ed4f82" },
+  },
   play: async () => {
     const body = within(document.body);
     const dialog = body.getByRole("dialog");
@@ -128,6 +131,9 @@ export const Default: Story = {
  * Also proves legal stays the body's last node when a status line is present.
  */
 export const WithMessage: Story = {
+  parameters: {
+    verification: { caseId: "vc_64b5ba66-a621-42f0-8d3c-881e7b67488d" },
+  },
   name: "Status message",
   args: {
     message: "Please wait a minute before requesting another email.",
@@ -175,6 +181,9 @@ export const WithMessage: Story = {
  * its own, so a consumer that supplies no wording gets none.
  */
 export const WithoutLegal: Story = {
+  parameters: {
+    verification: { caseId: "vc_c97fd495-5a1a-42ad-902e-e3dad33b7f68" },
+  },
   name: "Without legal",
   args: {
     copy: { title: "Sign In to Grade10" },
@@ -195,6 +204,9 @@ export const WithoutLegal: Story = {
  * proves order and the divider label for a consumer-owned control.
  */
 export const WithProviderSlot: Story = {
+  parameters: {
+    verification: { caseId: "vc_a6f8a93e-d9b7-4792-b274-77634e507ed6" },
+  },
   name: "Provider slot",
   args: {
     copy: {
@@ -235,6 +247,9 @@ export const WithProviderSlot: Story = {
  * stays inside the body's clip.
  */
 export const GoogleFrameStaysInsideTheClip: Story = {
+  parameters: {
+    verification: { caseId: "vc_a96d4233-179e-412a-9fb6-5b787c59be0c" },
+  },
   args: {
     providerSlot: (
       <div className="flex justify-center" data-slot="sign-in-provider">
@@ -271,6 +286,9 @@ export const GoogleFrameStaysInsideTheClip: Story = {
  * which holds at any viewport; a narrow one only shrinks the dialog below it.
  */
 export const HoldsTheFrameWidth: Story = {
+  parameters: {
+    verification: { caseId: "vc_d4b4db67-0dd1-49f8-af0b-016c41a49289" },
+  },
   name: "Frame width",
   play: async () => {
     const dialog = await within(document.body).findByRole("dialog");
@@ -286,6 +304,9 @@ export const HoldsTheFrameWidth: Story = {
  * something is actually there to divide. Gallery omits a fake Google control.
  */
 export const ProviderThatHasNotDrawnYet: Story = {
+  parameters: {
+    verification: { caseId: "vc_181ef71b-52e8-4581-a6e0-c5f0569c1831" },
+  },
   name: "Provider empty",
   args: {
     copy: {
@@ -326,6 +347,9 @@ export const ProviderThatHasNotDrawnYet: Story = {
  * reaches second and third.
  */
 export const CloseControlReportsDismissal: Story = {
+  parameters: {
+    verification: { caseId: "vc_78522b59-0ebd-423a-9694-4642766a674c" },
+  },
   tags: ["!dev"],
   play: async ({ args }) => {
     const body = within(document.body);
@@ -337,6 +361,9 @@ export const CloseControlReportsDismissal: Story = {
 };
 
 export const EscapeReportsDismissal: Story = {
+  parameters: {
+    verification: { caseId: "vc_63c42fcf-1294-400b-b89e-e050f37cad81" },
+  },
   tags: ["!dev"],
   play: async ({ args }) => {
     await userEvent.keyboard("{Escape}");
@@ -352,6 +379,9 @@ export const EscapeReportsDismissal: Story = {
  * activating what the dialog already renders — no separate mount to reach for.
  */
 export const ScrimReportsDismissal: Story = {
+  parameters: {
+    verification: { caseId: "vc_9b2febba-b40d-4cd1-8a2d-bb61054e645c" },
+  },
   tags: ["!dev"],
   play: async ({ args }) => {
     const scrim = document.body.querySelector('[data-slot="dialog-overlay"]');
@@ -378,6 +408,9 @@ export const ScrimReportsDismissal: Story = {
  * show is that dismissing never unmounts or navigates.
  */
 export const DismissalLeavesThePageBeneath: Story = {
+  parameters: {
+    verification: { caseId: "vc_0a55eaec-41ba-4b31-a43a-aa2069ae71c3" },
+  },
   name: "Dismissal leaves page",
   decorators: [
     (Story) => (
@@ -426,6 +459,9 @@ export const DismissalLeavesThePageBeneath: Story = {
  * Spec: shared-auth-sign-in-SC-42 / SC-46; shared-ui-auth-sign-in-SC-13–14.
  */
 export const LinkSent: Story = {
+  parameters: {
+    verification: { caseId: "vc_e3c7ab85-bed6-47a4-a344-c9c5a2dc5e45" },
+  },
   name: "Link sent",
   args: {
     providerSlot: undefined,
@@ -490,6 +526,7 @@ export const FromAddToCart: Story = {
     providerSlot: googleContinue,
   },
   parameters: {
+    verification: { caseId: "vc_4f72b0c1-3f56-4341-b149-d5dd1891eda3" },
     viewport: { defaultViewport: "mobile1" },
   },
   render: function FromAddToCartDemo(args) {

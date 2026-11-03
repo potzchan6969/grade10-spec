@@ -36,6 +36,9 @@ type Story = StoryObj<typeof meta>;
  * pressable, the checkout surface does the refusing — and the menu offers
  * no quantity, a redemption is always one unit. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_98c2ae3f-fee4-4616-8460-0b368e5d8b44" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const cards = canvas.getAllByRole("button");
@@ -62,10 +65,18 @@ export const Default: Story = {
   },
 };
 
-export const Loading: Story = { args: { state: { status: "loading" } } };
+export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_edeade4c-fabf-496b-9582-d526958e0764" },
+  },
+  args: { state: { status: "loading" } },
+};
 
 /** The consumer supplies the message and what to call the action. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_611837eb-5d02-4fd0-b2b1-f6e1b170baf1" },
+  },
   args: {
     state: {
       status: "empty",

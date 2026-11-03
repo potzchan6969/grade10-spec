@@ -19,14 +19,26 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_80cfec5a-d1dc-407c-973a-82b449502126" },
+  },
+};
 
 /** No products, no tiles. The empty and no-match messages are the browse
  * root's job, not the list's. */
-export const NoProducts: Story = { args: { products: [] } };
+export const NoProducts: Story = {
+  parameters: {
+    verification: { caseId: "vc_bba31da7-fdac-4444-969d-b24e360d90f3" },
+  },
+  args: { products: [] },
+};
 
 /** One column when the viewport cannot fit a 240px tile beside padding. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_d9c6ab45-3789-4202-92e1-e5306088e8aa" },
+  },
   globals: { viewport: { value: "mobile1" } },
 };
 
@@ -34,6 +46,9 @@ export const Narrow: Story = {
  * address is drawn as a tile whose photo and name are links to it, beside the
  * cart control the list still draws. */
 export const AddressedProducts: Story = {
+  parameters: {
+    verification: { caseId: "vc_eae07314-4ee5-4bda-a74b-e591aa39587c" },
+  },
   args: {
     products: [
       { ...PRODUCTS[1], id: "addressed", href: "/store/products/addressed" },
@@ -64,6 +79,9 @@ export const AddressedProducts: Story = {
  * activates the tile. Pressing one product's name, then its photo, reports
  * that product's id each time. */
 export const NameAndPhotoOpenTheirProduct: Story = {
+  parameters: {
+    verification: { caseId: "vc_52eeb04b-fd43-4b6a-bd88-d1dfbb0d4dd6" },
+  },
   args: { onProductCartQuantityChange: fn() },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -82,6 +100,9 @@ export const NameAndPhotoOpenTheirProduct: Story = {
 
 /** Appending the next page shows Boneyard skeleton tiles below the grid. */
 export const LoadingMore: Story = {
+  parameters: {
+    verification: { caseId: "vc_4fea3cc5-df2d-4cfc-bd03-1ba64b0d7877" },
+  },
   args: {
     loading: false,
     loadingMore: true,
@@ -92,6 +113,9 @@ export const LoadingMore: Story = {
 /** The cart action is reported, not performed: the tile does not change until
  * the consumer supplies a new `inCart`. */
 export const ActionIsReported: Story = {
+  parameters: {
+    verification: { caseId: "vc_6b31cefd-c128-437e-b66c-34a11afa5cd0" },
+  },
   args: {
     products: [{ ...PRODUCTS[1], id: "reported", inCart: false }],
     onProductCartQuantityChange: fn(),
@@ -119,6 +143,9 @@ export const ActionIsReported: Story = {
  * listing supplies both per product rather than once for the grid.
  */
 export const TileCeilingAndRemainingCount: Story = {
+  parameters: {
+    verification: { caseId: "vc_a711837c-30ca-46ca-b0aa-2f8dbb2be6b9" },
+  },
   args: {
     products: [
       {
@@ -167,6 +194,9 @@ function RefusingList() {
 /** A refused cart change shows on the tile it was pressed on, and the tile's
  * control stays pressable for a retry. */
 export const CartChangeRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_71c10375-e67c-4730-85d4-351b614777b1" },
+  },
   render: () => <RefusingList />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

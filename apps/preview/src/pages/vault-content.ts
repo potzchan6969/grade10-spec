@@ -166,6 +166,9 @@ type VaultAsset = {
   valuePotential?: VaultAssetValuePotential;
   /** ISO date vaulted — drives "Recently added" sorting. */
   vaultedAt?: string;
+  /** Market price feed is down — the daily estimate is paused and missed days
+   * credit immediately once pricing resumes. */
+  priceStale?: boolean;
   /** Listing fields for `Listed` assets. */
   listedAt?: string;
   listedHkd?: number;
@@ -317,16 +320,12 @@ const VAULT_ASSET_DETAILS: VaultAsset[] = [
     estimateHkd: 98000,
     valuationSource: "Intake estimate",
     estimateChangePercent: 12.4,
+    vaultedAt: "2026-08-15",
     custodyLog: [
       {
         label: "Stored in vault",
-        description: "Crown Fine Art, 12 Oct 2026",
+        description: "12 Oct 2026",
         state: "completed",
-      },
-      {
-        label: "Valuation recorded - HK$98,000",
-        description: "Intake estimate by Grade10 specialist, 12 Oct 2026",
-        state: "upcoming",
       },
       {
         label: "Authentication & inspection passed",
@@ -373,13 +372,8 @@ const VAULT_ASSET_DETAILS: VaultAsset[] = [
     custodyLog: [
       {
         label: "Stored in vault",
-        description: "Crown Fine Art, 12 Oct 2026",
+        description: "12 Oct 2026",
         state: "completed",
-      },
-      {
-        label: "Valuation recorded - HK$98,000",
-        description: "Intake estimate by Grade10 specialist, 12 Oct 2026",
-        state: "upcoming",
       },
       {
         label: "Authentication & inspection passed",
@@ -454,14 +448,16 @@ const PAYOUT_METHODS = [
   {
     id: "hsbc-8304",
     kind: "bank" as const,
-    title: "HSBC ••• 8304",
-    detail: "Chan Tai Man · HK$",
+    title: "HSBC",
+    detail: "123 •••• 8304",
+    fullDetail: "123-456-8304",
   },
   {
     id: "fps-mobile",
     kind: "fps" as const,
-    title: "FPS · +852 9123 ••45",
-    detail: "Chan Tai Man · HK$",
+    title: "FPS",
+    detail: "+852 •••• 4567",
+    fullDetail: "+852 9123 4567",
   },
 ];
 
@@ -560,18 +556,25 @@ const PORTFOLIO_SUMMARY = {
   cashedOutUsd: 40,
   minWithdrawalUsd: 65,
   /** Reference conversion for HKD withdrawals. */
-  hkdPerUsd: 7.76,
-  hasPayoutMethod: true,
+  hkdPerUsd: 7.8,
 };
 
 /** Daily incentive sums — one amount per day, no per-asset breakdown. */
-const DAILY_INCENTIVES: { date: string; amountUsd: number }[] = [
+const DAILY_INCENTIVES: {
+  date: string;
+  amountUsd: number;
+  catchUp?: boolean;
+}[] = [
   { date: "29 Oct 2026", amountUsd: 16 },
   { date: "28 Oct 2026", amountUsd: 16 },
   { date: "27 Oct 2026", amountUsd: 15 },
   { date: "26 Oct 2026", amountUsd: 15 },
   { date: "25 Oct 2026", amountUsd: 14 },
   { date: "24 Oct 2026", amountUsd: 14 },
+  // Catch-up: 3 paused days credited at once when the price feed resumed.
+  { date: "23 Oct 2026", amountUsd: 42, catchUp: true },
+  { date: "22 Oct 2026", amountUsd: 14 },
+  { date: "21 Oct 2026", amountUsd: 14 },
   { date: "30 Sep 2026", amountUsd: 13 },
   { date: "29 Sep 2026", amountUsd: 13 },
   { date: "28 Sep 2026", amountUsd: 12 },
@@ -661,7 +664,7 @@ const VAULT_FOOTER = {
     {
       heading: "VAULT",
       links: [
-        { label: "My Portfolio", href: VAULT_PORTFOLIO_HREF },
+        { label: "Vault", href: VAULT_PORTFOLIO_HREF },
         { label: "Book a visit", href: VAULT_BOOK_VISIT_HREF },
         { label: "Appointments", href: VAULT_MY_VISITS_HREF },
       ],
@@ -1063,6 +1066,18 @@ function formatUsd(amount: number): string {
   return `US$${amount.toLocaleString("en-HK", { maximumFractionDigits: 2 })}`;
 }
 
+/** Workbench fixture — daily incentive yield on an asset's HKD estimate. */
+const DAILY_INCENTIVE_RATE = 0.00025;
+const HKD_PER_USD = 7.8;
+
+/** Per-asset daily incentive estimate — baseline from the HKD estimate. */
+function assetEstDailyUsd(asset: VaultAsset): number {
+  return (
+    Math.round((asset.estimateHkd / HKD_PER_USD) * DAILY_INCENTIVE_RATE * 100) /
+    100
+  );
+}
+
 function assetSubtitle(asset: VaultAsset): string {
   if (asset.condition === "Graded" && asset.cert) {
     return `${asset.categoryLabel} · ${asset.grade}`;
@@ -1134,6 +1149,7 @@ export {
   ACTIVE_INTAKE_ALERT_STORY_ID,
   APPOINTMENTS_COPY,
   AUCTION_LOT_LIVE_STORY_ID,
+  assetEstDailyUsd,
   assetSubtitle,
   BOOK_VISIT_NAV_COPY,
   BOOK_VISIT_SERVICES,

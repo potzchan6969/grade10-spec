@@ -168,6 +168,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Graded: Story = {
+  parameters: {
+    verification: { caseId: "vc_54d6ca79-78e8-4dc3-99f0-dc57ce1597c5" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
     showEstimateChange: true,
@@ -181,7 +184,7 @@ export const Graded: Story = {
           name: VAULT_ASSET_DETAILS[0].name,
         }),
       ).toBeVisible();
-      expect(canvas.getByText("Estimated value since intake")).toBeVisible();
+      expect(canvas.getByText("Total earned to date")).toBeVisible();
       expect(
         canvas.getByRole("button", { name: "List for Auction" }),
       ).toBeVisible();
@@ -206,6 +209,9 @@ export const Graded: Story = {
 };
 
 export const Raw: Story = {
+  parameters: {
+    verification: { caseId: "vc_40ea9458-c29a-4891-acd0-4f15ad2ab98a" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[1],
     showEstimateChange: true,
@@ -241,6 +247,9 @@ export const Raw: Story = {
 
 /** Store-listed holding — LISTED PRICE plus a View Listing link to the product page. */
 export const Listed: Story = {
+  parameters: {
+    verification: { caseId: "vc_83cc5a7b-99ce-4d6d-9d49-ddd099417afe" },
+  },
   args: {
     asset: VAULT_LISTED_ASSET_DETAIL,
     listForAuction: false,
@@ -270,6 +279,9 @@ export const Listed: Story = {
 
 /** Auction-bound holding — BID PRICE plus a View Auction link to the lot. */
 export const LiveAuction: Story = {
+  parameters: {
+    verification: { caseId: "vc_02401d01-ca87-41bf-9047-d45db8bd0075" },
+  },
   args: {
     asset: VAULT_LIVE_AUCTION_ASSET_DETAIL,
     listForAuction: false,
@@ -299,6 +311,9 @@ export const LiveAuction: Story = {
  * own timeline via `showEstimateChange`, `onListForAuction`, `onListForSale`.
  */
 export const GradedSoftLaunch: Story = {
+  parameters: {
+    verification: { caseId: "vc_6b4117f1-2827-4466-8d42-1b1428e77103" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
     listForAuction: false,
@@ -325,6 +340,9 @@ export const GradedSoftLaunch: Story = {
  * a second time.
  */
 export const RetrievalPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_7c22e4c3-3bc7-45df-a0dd-40e4fbb0f712" },
+  },
   args: {
     asset: VAULT_RETRIEVAL_PENDING_ASSET_DETAIL,
   },
@@ -349,6 +367,9 @@ export const RetrievalPending: Story = {
  * Retrieval Pending with a success toast while the list CTAs lock.
  */
 export const RequestRetrieval: Story = {
+  parameters: {
+    verification: { caseId: "vc_787c3379-4928-4f94-892b-481216f425f1" },
+  },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
   },

@@ -27,6 +27,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Signed out at 375px — Sign In stays reachable, no horizontal overflow. */
 export const NarrowSignedOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_c3b4e146-a71c-4e42-a4bb-60c17705680d" },
+  },
   name: "Narrow signed out (375px)",
   decorators: [
     (Story) => (
@@ -62,6 +65,9 @@ export const NarrowSignedOut: Story = {
 
 /** Pending at 375px — the placeholder sits beside Cart in the compact bar. */
 export const NarrowPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_5054bafa-db48-4fbb-b044-34b321fd4571" },
+  },
   name: "Narrow pending (375px)",
   args: { session: "pending", onCartClick: fn() },
   decorators: [

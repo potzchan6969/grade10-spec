@@ -135,6 +135,9 @@ function orderHistoryRevealed(canvasElement: HTMLElement): boolean {
 }
 
 export const Filled: Story = {
+  parameters: {
+    verification: { caseId: "vc_6f57e0c3-1e71-4959-b157-2500e480c5f7" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));
@@ -156,7 +159,10 @@ export const Filled: Story = {
 export const WithGuestOrders: Story = {
   name: "With guest orders",
   args: { guestOrders: true },
-  parameters: { journeys: ["g10.store-order-history.US4"] },
+  parameters: {
+    verification: { caseId: "vc_de55a1dc-582b-47ff-bc2a-fdae7bd86df5" },
+    journeys: ["g10.store-order-history.US4"],
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));
@@ -168,6 +174,9 @@ export const WithGuestOrders: Story = {
 };
 
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_935d0c7b-3761-4165-befa-5c341a52b6f7" },
+  },
   args: { empty: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -182,6 +191,9 @@ export const Empty: Story = {
 
 /** The first read has not settled: the page says it is loading, with no empty-state claim. */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_7fe1751f-a060-4e6c-9644-b6db30d50dda" },
+  },
   args: { read: "loading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -197,6 +209,9 @@ export const Loading: Story = {
 
 /** The order read failed: the page offers Retry, which reads the orders again. */
 export const RecoverableFailure: Story = {
+  parameters: {
+    verification: { caseId: "vc_e42bfa1e-f5e7-4ffd-9636-32abe9b049df" },
+  },
   args: { read: "failed" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -215,7 +230,10 @@ export const RecoverableFailure: Story = {
 /** The paid order, found in My Orders while the store settles it. */
 export const PendingTotal: Story = {
   args: { pendingTotal: true },
-  parameters: { journeys: ["grade10-site-store-checkout-US-03"] },
+  parameters: {
+    verification: { caseId: "vc_0bc50aa1-3f13-4030-8b3a-ed1826d025d5" },
+    journeys: ["grade10-site-store-checkout-US-03"],
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));

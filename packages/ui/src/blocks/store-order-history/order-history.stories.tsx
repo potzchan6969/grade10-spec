@@ -65,6 +65,9 @@ function orderHistoryRevealed(canvasElement: HTMLElement): boolean {
 }
 
 export const Filled: Story = {
+  parameters: {
+    verification: { caseId: "vc_d7675749-50b5-44e2-90bc-aee338f45baf" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));
@@ -82,6 +85,9 @@ export const Filled: Story = {
 };
 
 export const ActiveOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_f6a8d4f4-fd3c-44ef-a660-c45c8eba5381" },
+  },
   args: { pastOrders: [] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -96,6 +102,9 @@ export const ActiveOnly: Story = {
 };
 
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_bbb25f2c-e8d4-495b-91c8-7349b0d8bf58" },
+  },
   args: { activeOrders: [], pastOrders: [] },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);

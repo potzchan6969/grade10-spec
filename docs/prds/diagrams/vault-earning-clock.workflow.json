@@ -1,0 +1,141 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "A card's earning clock",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": { "mode": "hidden" }
+  },
+  "lanes": [
+    { "id": "clock", "label": "Each card's own clock" },
+    { "id": "exit", "label": "Leaving before release", "variant": "exception" }
+  ],
+  "mainPath": ["seal", "starts", "day", "vesting", "release", "drip"],
+  "nodes": [
+    {
+      "id": "seal",
+      "lane": "clock",
+      "col": 0,
+      "type": "security",
+      "label": "Vault Terms seal",
+      "sublabel": "rate, lock, fee pinned",
+      "width": 140
+    },
+    {
+      "id": "starts",
+      "lane": "clock",
+      "col": 1,
+      "type": "backend",
+      "label": "Earning Starts",
+      "sublabel": "never before the seal",
+      "width": 140
+    },
+    {
+      "id": "day",
+      "lane": "clock",
+      "col": 2,
+      "type": "backend",
+      "label": "Each day",
+      "sublabel": "earns only if eligible",
+      "width": 140
+    },
+    {
+      "id": "vesting",
+      "lane": "clock",
+      "col": 3,
+      "type": "database",
+      "label": "Vesting",
+      "sublabel": "30 days, on the card",
+      "width": 140
+    },
+    {
+      "id": "release",
+      "lane": "clock",
+      "col": 4,
+      "type": "database",
+      "label": "Release",
+      "sublabel": "all vested, at once",
+      "width": 140
+    },
+    {
+      "id": "drip",
+      "lane": "clock",
+      "col": 5,
+      "type": "external",
+      "label": "Daily drip",
+      "sublabel": "into the wallet",
+      "width": 140
+    },
+    {
+      "id": "retrieved",
+      "lane": "exit",
+      "col": 3,
+      "type": "security",
+      "label": "Owner retrieves",
+      "sublabel": "forfeit, fee in its period",
+      "width": 150
+    },
+    {
+      "id": "sold",
+      "lane": "exit",
+      "col": 4,
+      "type": "backend",
+      "label": "Sold",
+      "sublabel": "forfeits nothing",
+      "width": 140
+    }
+  ],
+  "edges": [
+    {
+      "from": "seal",
+      "to": "starts",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "starts",
+      "to": "day",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "day",
+      "to": "vesting",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "vesting",
+      "to": "release",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "release",
+      "to": "drip",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "vesting",
+      "to": "retrieved",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "sold",
+      "to": "release",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "label": "on its own day"
+    }
+  ]
+}

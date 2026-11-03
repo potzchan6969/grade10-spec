@@ -15,7 +15,7 @@ lane's release; a financed case releases as before -
 From the dashboard, or staff for them; a consigned card ends its consignment first and comes back to the vault.
 
 ## Collector — Confirm what is forfeited
-Everything still vesting before release, or only the day's incentive after it.
+Everything still vesting before release, or only the day's incentive after it, and the early retrieval fee inside its period.
 
 # Collecting
 
@@ -39,27 +39,24 @@ The ID checked against the one recorded at intake, the condition against the int
   - **After Release** — only the day's incentive not yet posted
   - **In the Wallet** — never; it stays cashable
 
-:::callout{kind="note"}
-- ❓ **Admin fee** — whether a retrieval is charged; built as the early retrieval fee below. Product confirms
-:::
-
 ## Early Retrieval Fee
 
-As built: a card taken back inside its first days owes the vault's fee, fixed
-on the day of the request. Consignment's fee for ending early is its own -
-[Ending a Consignment](/p/grade10-site/consignment/ending-a-consignment).
+A card its owner takes back inside the fee's period owes the vault's fee, on
+top of forfeiting what is vesting. Consignment's fee for ending early is its
+own - [Consignment Retrieval](/p/grade10-site/consignment/consignment-retrieval).
 
-- 🚧 **Default** — HKD 0, and the period it applies for is unset
+- 🚧 **Period and Amount** — admin settings, 30 days from Earning Starts and HKD 0 by default; the period is the vault's own, set apart from the vesting days
+  - **Pinned to the Card** — signed with its Vault Terms; a change reaches only the next card - [Incentive](/p/grade10-site/vault/incentive#settings)
+  - **Fixed on the Request** — owed when the request is made inside the period, at the card's pinned amount
+- 🚧 **Either or Both** — the vault's fee and consignment's fee for ending early are separate settings; a card that ends its consignment and then goes home inside both periods owes both, and an admin sets either to 0 to charge only the other
+- 🚧 **Fee and Forfeit Apart** — the fee and the forfeit of what is vesting are separate settings, and either can be 0 - [Incentive](/p/grade10-site/vault/incentive#settings)
+- 🚧 **Only the Owner's Own Retrieval** — a sale, a card that fails authentication, or any return Grade10 starts owes no fee
 - 🚧 **Paid by Card on an Invoice** — one Shopify invoice per request, paid from its link or loaded at the shop's till; the retrieval paper prints the link, and the card is not handed back until it is paid
 - 🚧 **Never From the Wallet** — recorded on the vault's money register as paid by card
 - 🚧 **Called Off, Voided** — a request that is called off voids its invoice
 - 🚧 **Waived by Two** — staff may waive a fee with a second person's approval; a fee a refund reopens before the card leaves can then only be waived
 - 🚧 **Seen Before It Is Owed** — the collector sees the fee, and what the retrieval costs in incentive, before they confirm
 - 🚧 **A Refund** — staff are alerted as soon as the shop hears of it. Before the card leaves, the release reads the fee again and holds the card; after, it is recorded on the card when staff check its payment, and nothing is taken back from the collector on its own
-
-:::callout{kind="note"}
-- ❓ **The fee's period** — how many days from the start the fee applies; unset until the owner names it. Owner confirms
-:::
 
 ## Collection
 
@@ -68,6 +65,7 @@ on the day of the request. Consignment's fee for ending early is its own -
 - 🚧 **Handover** — at the shop, by appointment
   - **Identity** — staff check the collector's face against their ID, and the ID against the one recorded at intake, or the identity check for a mail-in: the legal name must match, and the ID number typed again must match the stored digest
   - **A Mismatch** — the card is handed over only with a recorded reason, naming the staff member who gave it
+  - **Checked This Hour** — a match counts for the handover for one hour
   - **Someone Else Collecting** — a person the collector named in the dashboard shows their own ID
   - **Condition** — checked against the intake photos
   - **Retrieval Note** — confirmed by whoever collects
@@ -91,7 +89,7 @@ over in person, against the ID recorded at intake.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Two early fees | Decided | The vault and consignment each have their own, either may be 0; the vault's runs on a period of its own | Owner |
+| Two early fees | Decided | The vault and consignment each have their own, either may be 0; the vault's runs on a period of its own - kept in the counter review, round 3, 2026-11-02, with its period 30 days from Earning Starts by default | Owner |
 | The fee at the till | Decided | A Shopify invoice paid by link or loaded at the till, so no amount is typed - decided under the owner's delegation, 2026-10-27 | Product |
 | The fee is paid by card | Decided | The early fee is paid on a Shopify invoice and recorded on the vault's money register, never taken from the wallet | Product |
 :::

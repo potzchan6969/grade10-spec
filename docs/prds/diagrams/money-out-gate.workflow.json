@@ -1,0 +1,189 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "The money-out gate and the held list",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "ask",
+      "label": "Money asked for"
+    },
+    {
+      "id": "gate",
+      "label": "The gate"
+    },
+    {
+      "id": "held",
+      "label": "The held list, any approver but its owner",
+      "variant": "exception"
+    }
+  ],
+  "mainPath": ["request", "verified", "compare", "passes", "paid"],
+  "nodes": [
+    {
+      "id": "request",
+      "lane": "ask",
+      "col": 0,
+      "type": "frontend",
+      "label": "Cash-out or loan",
+      "sublabel": "request, or offer accepted",
+      "width": 150
+    },
+    {
+      "id": "paid",
+      "lane": "ask",
+      "col": 4,
+      "type": "external",
+      "label": "Money leaves",
+      "sublabel": "batched, or transferred",
+      "width": 150
+    },
+    {
+      "id": "verified",
+      "lane": "gate",
+      "col": 1,
+      "type": "security",
+      "label": "Verified?",
+      "sublabel": "none: verify first",
+      "width": 140
+    },
+    {
+      "id": "compare",
+      "lane": "gate",
+      "col": 2,
+      "type": "security",
+      "label": "Against the intake ID",
+      "sublabel": "numbers, or else names",
+      "width": 160
+    },
+    {
+      "id": "passes",
+      "lane": "gate",
+      "col": 3,
+      "type": "backend",
+      "label": "Passes",
+      "sublabel": "the account stamped",
+      "width": 140
+    },
+    {
+      "id": "held-row",
+      "lane": "held",
+      "col": 3,
+      "type": "security",
+      "label": "Held",
+      "sublabel": "oldest first",
+      "width": 140
+    },
+    {
+      "id": "refused",
+      "lane": "held",
+      "col": 2,
+      "type": "backend",
+      "label": "Refused",
+      "sublabel": "amount back in the wallet",
+      "width": 160
+    },
+    {
+      "id": "cleared",
+      "lane": "held",
+      "col": 4,
+      "type": "backend",
+      "label": "Cleared",
+      "sublabel": "a loan is accepted again",
+      "width": 150
+    },
+    {
+      "id": "amount",
+      "lane": "held",
+      "col": 5,
+      "type": "security",
+      "label": "Amount review",
+      "sublabel": "another approver",
+      "width": 140
+    }
+  ],
+  "edges": [
+    {
+      "from": "request",
+      "to": "verified",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "verified",
+      "to": "compare",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "compare",
+      "to": "passes",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "match"
+    },
+    {
+      "from": "passes",
+      "to": "paid",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "compare",
+      "to": "held-row",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "label": "differs"
+    },
+    {
+      "from": "held-row",
+      "to": "refused",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "label": "refused, with a reason"
+    },
+    {
+      "from": "held-row",
+      "to": "cleared",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "cleared"
+    },
+    {
+      "from": "cleared",
+      "to": "paid",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "cleared",
+      "to": "amount",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "above the line"
+    },
+    {
+      "from": "amount",
+      "to": "paid",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "right",
+      "label": "approved"
+    }
+  ]
+}

@@ -23,6 +23,7 @@ const LANE_LABELS: Readonly<Record<CaptureRun["lane"], string>> = {
 const TRIGGER_LABELS: Readonly<Record<CaptureRun["trigger"], string>> = {
   deploy: "after a deploy",
   manual: "requested by hand",
+  due: "when the six-hour hold lifted",
   approve: "on approval",
   capture: "from the Approve tab",
 };
@@ -31,6 +32,7 @@ const STATE_LABELS: Readonly<Record<CaptureRun["state"], string>> = {
   running: "Running",
   succeeded: "Done",
   failed: "Failed",
+  superseded: "Superseded",
 };
 
 function shortCommit(value: string | undefined): string {
@@ -161,7 +163,7 @@ export function ReferenceCapturesPage() {
       setRequestNote(
         result.state === "started"
           ? "A full capture started."
-          : `A full capture is scheduled for ${result.startsAt}.`,
+          : "A full capture waits for the one running.",
       );
       setRefresh((value) => value + 1);
     } catch (failure) {
@@ -221,18 +223,17 @@ export function ReferenceCapturesPage() {
           <section className="verification-section" aria-label="Schedule">
             <h3>Schedule</h3>
             <p className="verification-metadata">
-              A full capture starts after each deploy or request, at most once
-              every six hours. A focused capture from the Approve tab runs at
-              once.
+              A full capture shoots only the stories whose source changed. After
+              a deploy it waits for any capture running, and a shot captured in
+              the last six hours waits for six hours to pass. Request a full
+              capture starts at once, replacing a capture running, and does not
+              wait for the six hours. A focused capture from the Approve tab
+              runs at once.
             </p>
             <dl className="verification-provenance">
               <div>
-                <dt>Last full capture started</dt>
-                <dd>{status.schedule.lastFullStartedAt ?? "Never"}</dd>
-              </div>
-              <div>
-                <dt>Next full capture can start</dt>
-                <dd>{status.schedule.nextFullAt}</dd>
+                <dt>Held shots start</dt>
+                <dd>{status.schedule.nextDueAt ?? "Nothing held"}</dd>
               </div>
               <div>
                 <dt>Waiting request</dt>

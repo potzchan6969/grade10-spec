@@ -51,6 +51,9 @@ type Story = StoryObj<typeof meta>;
 
 /** The console's door at its own width: Use Fast Pass beside the line. */
 export const Admitted: Story = {
+  parameters: {
+    verification: { caseId: "vc_02aaa9d3-00a7-4998-9592-e2c167135a2e" },
+  },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole("status")).toHaveTextContent("Admitted");
@@ -62,6 +65,9 @@ export const Admitted: Story = {
 };
 
 export const FastPassUsed: Story = {
+  parameters: {
+    verification: { caseId: "vc_5f6a9e9c-4ab5-49ba-9ce4-0e3916978f31" },
+  },
   name: "Fast Pass used",
   args: { fastPass: { state: "used", label: "Fast Pass used · 1 left" } },
   play: async ({ canvasElement }) => {
@@ -72,6 +78,9 @@ export const FastPassUsed: Story = {
 };
 
 export const AlreadyAdmitted: Story = {
+  parameters: {
+    verification: { caseId: "vc_5c45749a-1595-486d-869c-c08539b79f0d" },
+  },
   name: "Already admitted today",
   args: {
     kind: "alreadyAdmitted",
@@ -96,6 +105,9 @@ export const AlreadyAdmitted: Story = {
 };
 
 export const Void: Story = {
+  parameters: {
+    verification: { caseId: "vc_1b35e2ca-6eb9-4f67-8b1f-aed409efccd6" },
+  },
   args: {
     kind: "void",
     title: "Refunded or canceled",
@@ -117,6 +129,9 @@ export const Void: Story = {
 };
 
 export const NotChecked: Story = {
+  parameters: {
+    verification: { caseId: "vc_0b5c3a84-2836-4152-b285-6d3a2b9829f7" },
+  },
   name: "Not checked",
   args: {
     kind: "notChecked",

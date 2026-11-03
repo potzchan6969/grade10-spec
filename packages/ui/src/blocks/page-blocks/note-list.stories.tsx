@@ -32,6 +32,9 @@ function dividers(canvasElement: HTMLElement): boolean[] {
  * (shared-ui-page-blocks-SC-08). Given no slot, the list keeps `list`
  * (shared-ui-page-blocks-SC-18). */
 export const BeforeYouComeStorage: Story = {
+  parameters: {
+    verification: { caseId: "vc_bd1ce9d1-14bf-4ae2-a3b6-22e0f3e7289c" },
+  },
   play: async ({ canvasElement }) => {
     const items = within(canvasElement).getAllByRole("listitem");
     expect(items.map((item) => item.textContent)).toEqual(
@@ -48,6 +51,9 @@ export const BeforeYouComeStorage: Story = {
 /** Before you come on the financed lane: the third line keeps its divider
  * above the fourth (shared-ui-page-blocks-SC-08). */
 export const BeforeYouComeFinanced: Story = {
+  parameters: {
+    verification: { caseId: "vc_63d0cc01-69d0-4607-a083-49a66b917e8c" },
+  },
   args: { notes: BEFORE_FINANCED },
   play: async ({ canvasElement }) => {
     const items = within(canvasElement).getAllByRole("listitem");
@@ -60,6 +66,9 @@ export const BeforeYouComeFinanced: Story = {
 
 /** One line, no divider (shared-ui-page-blocks-SC-08). */
 export const One: Story = {
+  parameters: {
+    verification: { caseId: "vc_228292fd-d83a-4d51-a0d2-df872313b156" },
+  },
   args: { notes: BEFORE_STORAGE.slice(0, 1) },
   play: async ({ canvasElement }) => {
     expect(dividers(canvasElement)).toEqual([false]);
@@ -68,6 +77,9 @@ export const One: Story = {
 
 /** A line holding a link keeps it (shared-ui-page-blocks-SC-09). */
 export const WithLinkItem: Story = {
+  parameters: {
+    verification: { caseId: "vc_2f2c87a3-cfa9-4259-8308-46e3e2a255f6" },
+  },
   args: {
     notes: [
       {
@@ -91,6 +103,9 @@ export const WithLinkItem: Story = {
 
 /** No lines draws nothing (shared-ui-page-blocks-SC-10). */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_31a8c491-a7f5-4730-bef7-9a05747f89b6" },
+  },
   args: { notes: [] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -101,6 +116,9 @@ export const Empty: Story = {
 
 /** The list carries the slot it is given (shared-ui-page-blocks-SC-18). */
 export const WithSlot: Story = {
+  parameters: {
+    verification: { caseId: "vc_539b0485-8763-4770-bfc7-d6fd37092ecd" },
+  },
   args: { slot: "vault-case-before-you-come" },
   play: async ({ canvasElement }) => {
     expect(within(canvasElement).getByRole("list")).toHaveAttribute(

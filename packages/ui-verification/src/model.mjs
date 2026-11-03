@@ -642,3 +642,109 @@ export async function fingerprint(value) {
     byte.toString(16).padStart(2, "0"),
   ).join("");
 }
+
+// A story case the Storybook declares itself: its reference is captured and
+// approved like any other, and no site is ever captured for it.
+export const STORY_TARGET = "storybook";
+export const STORY_CAPTURE_POINT = "story";
+export const STORY_CASES_FILE = "ui-verification-cases.json";
+const STORY_RUN_PREFIX = "storybook-";
+
+export const isStoryCatalogue = (run) => run.runId.startsWith(STORY_RUN_PREFIX);
+
+/** Cases one story catalogue run holds, so its manifest stays under 1 MiB. */
+export const STORY_RUN_CASES = 400;
+const PART = /-\d+of\d+$/;
+
+// The parts of one declaration share a run id up to their part suffix.
+const declarationOf = (run) => run.runId.replace(PART, "");
+
+/**
+ * The runs that declare every story case at a commit, in parts of
+ * STORY_RUN_CASES, each outcome not-selected. The same cases at the same
+ * commit always make the same run ids.
+ */
+export async function storyCatalogueRuns({ cases, commit, ref, createdAt }) {
+  if (!Array.isArray(cases) || cases.length === 0)
+    fail("cases", "must be a non-empty array");
+  const sorted = [...cases].sort((left, right) =>
+    left.caseId.localeCompare(right.caseId),
+  );
+  const digest = await fingerprint(
+    sorted.map(({ caseId, storyId }) => ({ caseId, storyId })),
+  );
+  const revision = { ref, commit };
+  const identity = (caseId) => ({
+    caseId,
+    targetId: STORY_TARGET,
+    capturePointId: STORY_CAPTURE_POINT,
+  });
+  const parts = Math.ceil(sorted.length / STORY_RUN_CASES);
+  return Array.from({ length: parts }, (_, index) => {
+    const part = sorted.slice(
+      index * STORY_RUN_CASES,
+      (index + 1) * STORY_RUN_CASES,
+    );
+    return validateManifest({
+      schemaVersion: 1,
+      runId: `${STORY_RUN_PREFIX}${commit.slice(0, 12)}-${digest.slice(0, 12)}-${index + 1}of${parts}`,
+      createdAt,
+      checkpoint: { app: revision, reference: revision },
+      catalogue: part.map(({ caseId, storyId }) => ({
+        schemaVersion: 1,
+        ...identity(caseId),
+        storyId,
+        label: storyId,
+        scoreProfile: "desktop",
+        recipe: null,
+        reference: { storyId },
+        status: "active",
+      })),
+      captures: part.flatMap(({ caseId }) =>
+        PROFILE_IDS.map((profileId) => ({
+          ...identity(caseId),
+          profileId,
+          status: "not-selected",
+          inputFingerprint: digest,
+          provenance: {
+            verified: false,
+            appCommit: commit,
+            referenceCommit: commit,
+            capturedAt: createdAt,
+          },
+        })),
+      ),
+    });
+  });
+}
+
+/**
+ * The runs that decide what is captured and shown: every site run, and the
+ * newest story declaration's parts less the cases a site run already
+ * declares, so a story is held to one identity and a story dropped since
+ * stops being shown.
+ */
+export function currentRuns(runs) {
+  const sites = runs.filter((run) => !isStoryCatalogue(run));
+  const [newest] = runs
+    .filter(isStoryCatalogue)
+    .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+  if (!newest) return sites;
+  const declared = new Set(
+    sites.flatMap((run) => run.catalogue.map((entry) => entry.caseId)),
+  );
+  const own = (item) => !declared.has(item.caseId);
+  return [
+    ...sites,
+    ...runs
+      .filter(
+        (run) =>
+          isStoryCatalogue(run) && declarationOf(run) === declarationOf(newest),
+      )
+      .map((run) => ({
+        ...run,
+        catalogue: run.catalogue.filter(own),
+        captures: run.captures.filter(own),
+      })),
+  ];
+}

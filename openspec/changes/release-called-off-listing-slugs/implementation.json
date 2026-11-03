@@ -1,0 +1,72 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "7b9a9acff61fe5fc56e1df87d6511f04d9daff3d1c2a7f01cca5fb7838fd7f53"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "3fec33fc3bb579dad88bea9e0a3bce1a10d79dbf",
+    "capturedAt": "2026-11-03T05:44:42.574Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Operator may call off a listing that has not closed",
+          "Requirement: Slug is the listing's public lookup key"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An address that names no lot is refused",
+          "Requirement: Listing code remains separate from public address lookup",
+          "Requirement: The listing code is only exposed through the canonical address"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/lot-status/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/lot-status/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Collectors never see hidden lots",
+          "Requirement: Every visible lot has one external lot status",
+          "Requirement: Hidden lots have no public address"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/lot-status/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

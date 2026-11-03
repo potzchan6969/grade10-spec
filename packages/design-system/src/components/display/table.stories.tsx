@@ -57,6 +57,9 @@ const OVERFLOW_ROWS = [
 
 /** Matches the Figma `Table` composition frame (`4969:4934`). */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_1020bc33-cd96-441e-b0d4-fc1dbb7c2a86" },
+  },
   render: () => (
     <Table className="w-80">
       <TableHeader>
@@ -82,6 +85,7 @@ export const Default: Story = {
 /** Long labels truncate in the flexible column; fixed-width columns keep their full value. */
 export const OverflowingContent: Story = {
   parameters: {
+    verification: { caseId: "vc_5e5a63b5-1e4c-443b-8c5e-bcf82102a8aa" },
     docs: {
       description: {
         story:

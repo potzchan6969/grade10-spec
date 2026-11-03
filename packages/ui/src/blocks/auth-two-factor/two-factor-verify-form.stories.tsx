@@ -20,10 +20,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_96ee14ba-66c6-4543-869a-e0185853cde1" },
+  },
+};
 
 /** The consumer supplies the failure copy. */
 export const ErrorState: Story = {
+  parameters: {
+    verification: { caseId: "vc_5b5d122d-8433-4b02-8389-b204c1e7ff8a" },
+  },
   args: {
     copy: {
       label: "Backup code",
@@ -34,10 +41,18 @@ export const ErrorState: Story = {
   },
 };
 
-export const Pending: Story = { args: { pending: true } };
+export const Pending: Story = {
+  parameters: {
+    verification: { caseId: "vc_907a9d3d-ab39-4e45-9a75-6e0aa8228100" },
+  },
+  args: { pending: true },
+};
 
 /** Backup codes are neither six characters nor digits. */
 export const BackupCode: Story = {
+  parameters: {
+    verification: { caseId: "vc_8e345e9f-a777-4743-ae8b-9e888946499c" },
+  },
   args: {
     variant: "text",
   },
@@ -53,6 +68,9 @@ export const BackupCode: Story = {
  * not the typing — the keystrokes land on the same element a person's do.
  */
 export const CompletingTheRowSubmits: Story = {
+  parameters: {
+    verification: { caseId: "vc_1add12ef-73df-458b-993a-d1c7a016e552" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const input = canvas.getByRole("textbox");
@@ -65,6 +83,9 @@ export const CompletingTheRowSubmits: Story = {
 
 /** Verify holds until something is typed. */
 export const SubmitWaitsForACode: Story = {
+  parameters: {
+    verification: { caseId: "vc_792c1971-1718-489c-8f36-24d813a21633" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Verify" })).toBeDisabled();
@@ -74,6 +95,9 @@ export const SubmitWaitsForACode: Story = {
 
 /** Switching kinds is reported, and clears whatever was half-typed. */
 export const SecondaryActionIsReported: Story = {
+  parameters: {
+    verification: { caseId: "vc_f603e926-cae4-4c3d-9678-234ca137cf2e" },
+  },
   args: { secondaryAction: { label: "Use a backup code", onAction: fn() } },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);

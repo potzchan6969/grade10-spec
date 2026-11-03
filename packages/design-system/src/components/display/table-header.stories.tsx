@@ -21,6 +21,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const TwoColumns: Story = {
+  parameters: {
+    verification: { caseId: "vc_0e7d9e97-9a21-4283-b789-a29d903d9b62" },
+  },
   render: () => (
     <TableHeader className="w-80">
       <TableHead className="w-28 shrink-0">Table Head</TableHead>

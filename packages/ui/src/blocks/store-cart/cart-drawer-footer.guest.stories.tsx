@@ -25,6 +25,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Signed-out footer: guest checkout primary, quiet sign-in line, no points. */
 export const Guest: Story = {
+  parameters: {
+    verification: { caseId: "vc_8a36900a-6150-4681-91e9-63e51db4be81" },
+  },
   args: {
     pointsState: null,
     onSignIn: fn(),
@@ -53,6 +56,9 @@ export const Guest: Story = {
  * state and Browse loyalty, while `publicPromoCodes` still lists the codes
  * open to everyone under "Promo codes". */
 export const GuestWithPublicCode: Story = {
+  parameters: {
+    verification: { caseId: "vc_0908c03d-200c-4a75-91ff-b962de71aba4" },
+  },
   name: "Guest With Public Code",
   render: (args) => {
     const promo: PromoState = { status: "expanded" };
@@ -94,6 +100,9 @@ export const GuestWithPublicCode: Story = {
 /** Member's promo sheet: held and public codes list together under one
  * "Promo codes" heading, before "Not valid for this order". */
 export const MemberWithPublicCodes: Story = {
+  parameters: {
+    verification: { caseId: "vc_d214d7ab-4fac-486f-8493-30b24850a2f6" },
+  },
   name: "Member With Public Codes",
   render: (args) => {
     const promo: PromoState = { status: "expanded" };

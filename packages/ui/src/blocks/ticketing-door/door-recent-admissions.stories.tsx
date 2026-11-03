@@ -27,6 +27,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Every door's admissions, newest first: Undo this screen's, Reverse another's. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_59ee8fe7-a08d-4085-8d49-76859a3a2011" },
+  },
   name: "Every door",
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -45,6 +48,9 @@ export const Default: Story = {
 
 /** Before the first guest. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_3ae42404-c38e-423c-9bbf-f1d4085579a2" },
+  },
   args: { admissions: [] },
   play: async ({ canvasElement }) => {
     await expect(
@@ -55,6 +61,9 @@ export const Empty: Story = {
 
 /** A phone's width: the same list, narrower. */
 export const Narrow: Story = {
+  parameters: {
+    verification: { caseId: "vc_6989b93d-63df-4b90-8d4e-36d74c640369" },
+  },
   decorators: [
     (Story) => (
       <div className="w-[358px]">

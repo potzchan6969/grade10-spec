@@ -324,7 +324,7 @@ test("a captured reference and its finished run are immutable records", async ()
     await archive.createReferenceRun(run);
     await assert.rejects(
       archive.createReferenceRun({ ...run, state: "running" }),
-      /must be succeeded or failed/,
+      /must be succeeded, failed or superseded/,
     );
     assert.deepEqual((await archive.listReferenceRuns()).runs, [run]);
     assert.equal(
