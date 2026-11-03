@@ -101,13 +101,13 @@ function timelineSteps(request: VaultPayoutRequest): TimelineStep[] {
   }
 }
 
-/** The line under the amount — an estimate until approval sets the rate. */
+/** The line under the amount — the fixed HK$ figure once converted. */
 function amountSubtext(request: VaultPayoutRequest): string {
   if (request.currency === "HKD" && request.convertedHkd != null) {
     if (request.status === "Completed") {
       return `${formatHkd(request.convertedHkd)} received`;
     }
-    return `Est. ~${formatHkd(request.convertedHkd)}`;
+    return formatHkd(request.convertedHkd);
   }
   if (request.status === "Declined") return "Returned to rewards";
   return `To ${PAYOUT_METHOD.bankName} ${PAYOUT_METHOD.maskedAccount}`;
@@ -216,10 +216,9 @@ function WithdrawalDetails({
                 Details
               </Text>
               <div>
-                {request.currency === "HKD" &&
-                request.convertedHkd != null &&
-                request.status === "Completed" ? (
-                  <DetailRow label="Exchange rate applied">
+                {request.currency !== "USD" &&
+                request.convertedHkd != null ? (
+                  <DetailRow label="Exchange rate">
                     <span className="tabular-nums">
                       US$1 = HK$
                       {(request.convertedHkd / request.amountUsd).toFixed(2)}

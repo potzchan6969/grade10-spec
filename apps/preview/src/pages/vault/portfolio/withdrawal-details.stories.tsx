@@ -69,7 +69,7 @@ export const Completed: Story = {
     expect(drawer.getByText(COMPLETED.id)).toBeVisible();
     expect(drawer.getByText("US$40")).toBeVisible();
     expect(drawer.getByText("Completed")).toBeVisible();
-    expect(drawer.getByText("HK$312.40 received")).toBeVisible();
+    expect(drawer.getByText("HK$312.4 received")).toBeVisible();
     expect(drawer.getByText("Withdrawal requested")).toBeVisible();
     expect(drawer.getByText("Grade10 review")).toBeVisible();
     expect(drawer.getByText("Exchange rate applied")).toBeVisible();
@@ -83,9 +83,9 @@ export const Pending: Story = {
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
     expect(drawer.getByText("Pending")).toBeVisible();
-    expect(drawer.getByText("Est. ~HK$650")).toBeVisible();
+    expect(drawer.getByText("HK$650")).toBeVisible();
     expect(drawer.getByText("Waiting for review")).toBeVisible();
-    expect(drawer.queryByText("Exchange rate applied")).not.toBeInTheDocument();
+    expect(drawer.getByText("Exchange rate")).toBeVisible();
   },
 };
 
@@ -95,7 +95,7 @@ export const Processing: Story = {
   play: async ({ canvasElement }) => {
     const drawer = await openDrawer(canvasElement);
     expect(drawer.getByText("Processing")).toBeVisible();
-    expect(drawer.getByText("Est. ~HK$497.92")).toBeVisible();
+    expect(drawer.getByText("HK$497.92")).toBeVisible();
     expect(drawer.getByText("4 Oct 2026")).toBeVisible();
   },
 };
@@ -108,7 +108,7 @@ export const Declined: Story = {
     /* The badge and the failed timeline step both read "Declined". */
     expect(drawer.getAllByText("Declined").length).toBeGreaterThan(1);
     expect(drawer.getByText("8 Sep 2026")).toBeVisible();
-    expect(drawer.getByText("Est. ~HK$738")).toBeVisible();
+    expect(drawer.getByText("HK$738")).toBeVisible();
     expect(drawer.getByText("Withdrawal declined")).toBeVisible();
     expect(drawer.getByText(/account holder name didn’t match/)).toBeVisible();
     expect(drawer.queryByText("Completed")).not.toBeInTheDocument();

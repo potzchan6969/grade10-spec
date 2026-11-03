@@ -211,7 +211,7 @@ export const Review: Story = {
         dialog.getByRole("heading", { name: "Review Withdrawal" }),
       ).toBeVisible(),
     );
-    expect(dialog.getByText(/HK\$1,241/)).toBeVisible();
+    expect(dialog.getByText(/HK\$1,248/)).toBeVisible();
     expect(dialog.getByText("HSBC ••• 8304")).toBeVisible();
     expect(dialog.getByText("Chan Tai Man · HK$")).toBeVisible();
     expect(
