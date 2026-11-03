@@ -15,7 +15,18 @@
 
 ## Execution and Triage
 
-- [ ] Define how automated and manual results combine without treating unreliable automation as a human verdict
-- [ ] Define false-positive fields and ownership for `blocked`, `fail` and `skipped`
-- [ ] Decide whether per-row cases need row-level failure identity in Summary
+Each item has a proposed answer on the [Release Phases](docs/prds/products/shared/planning/release-phases.md#results) page, marked ❓ until QA confirms it.
+
+- [ ] Define how automated and manual results combine without treating unreliable automation as a human verdict - proposed: **One Verdict per Row**
+- [ ] Define false-positive fields and ownership for `blocked`, `fail` and `skipped` - proposed: **Triage**, with the owner read from the delivering change's hands
+- [ ] Decide whether per-row cases need row-level failure identity in Summary - proposed: yes, **Row Identity**
 - [ ] Add tests for the settled triage rules
+
+## Phases and Readiness
+
+Planned on the [Release Phases](docs/prds/products/shared/planning/release-phases.md) page.
+
+- [ ] Select by phase, release priority and readiness (`--phase`, `--release-priority`, `--ready`, `--section`), resolving to explicit ids through the manual's own unit reader
+- [ ] Re-run the failed and blocked rows of a finalized run as a new run (`--rerun <run> --only fail,blocked`)
+- [ ] Add Triage and Issue cells after Auto mobile, and name the row on each expanded per-row case
+- [ ] Read the marks of finalized runs read-only into the manual's build; refresh when QA publishes results and on a schedule
