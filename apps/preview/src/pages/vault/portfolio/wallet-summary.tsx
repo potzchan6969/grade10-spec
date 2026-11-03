@@ -17,10 +17,9 @@ import { formatUsd } from "../../vault-content";
  * The collector's vault wallet — withdrawal stats over the portfolio. Left:
  * the available balance and the acts on it; right: everything earned, split
  * into what is available, in withdrawal and withdrawn as a stacked bar.
- * Withdraw runs by bank transfer recorded after the money moves. Three
- * states: ready (balance at or over the minimum), below the minimum
- * (disabled CTA with the floor named), and no payout method yet (set-up
- * CTA first).
+ * Withdraw runs by bank transfer recorded after the money moves. Two
+ * states: ready (balance at or over the minimum) and below the minimum
+ * (disabled CTA with the floor named).
  */
 function WalletSummary({
   dailyIncentiveUsd,
@@ -30,11 +29,9 @@ function WalletSummary({
   cashedOutUsd,
   openCashOutCount,
   minWithdrawalUsd,
-  hasPayoutMethod,
   onCashOut,
   onViewActivity,
   onViewCashOuts,
-  onSetUpPayout,
   className,
 }: {
   dailyIncentiveUsd: number;
@@ -44,11 +41,9 @@ function WalletSummary({
   cashedOutUsd: number;
   openCashOutCount: number;
   minWithdrawalUsd: number;
-  hasPayoutMethod: boolean;
   onCashOut?: () => void;
   onViewActivity?: () => void;
   onViewCashOuts?: () => void;
-  onSetUpPayout?: () => void;
   className?: string;
 }) {
   const meetsMinimum = availableUsd >= minWithdrawalUsd;
@@ -200,9 +195,7 @@ function WalletSummary({
                 className="flex items-center gap-1 whitespace-nowrap tabular-nums"
                 weight="medium"
               >
-                {segment.label === "Available" &&
-                hasPayoutMethod &&
-                !meetsMinimum ? (
+                {segment.label === "Available" && !meetsMinimum ? (
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger

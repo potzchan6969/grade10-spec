@@ -49,16 +49,6 @@ export const BelowMinimum: Story = {
   },
 };
 
-/** No bank account on file — set-up CTA replaces Withdraw. */
-export const NoPayoutMethod: Story = {
-  args: { ...Filled.args, hasPayoutMethod: false },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Set Up Payout" })).toBeVisible();
-    expect(canvas.queryByRole("button", { name: "Withdraw" })).toBeNull();
-  },
-};
-
 /** Nothing in withdrawal — the middle segment collapses, no requests link. */
 export const NoInCashOut: Story = {
   args: { ...Filled.args, inCashOutUsd: 0, openCashOutCount: 0 },

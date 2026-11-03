@@ -555,17 +555,24 @@ const PORTFOLIO_SUMMARY = {
   minWithdrawalUsd: 65,
   /** Reference conversion for HKD withdrawals. */
   hkdPerUsd: 7.8,
-  hasPayoutMethod: true,
 };
 
 /** Daily incentive sums — one amount per day, no per-asset breakdown. */
-const DAILY_INCENTIVES: { date: string; amountUsd: number }[] = [
+const DAILY_INCENTIVES: {
+  date: string;
+  amountUsd: number;
+  catchUp?: boolean;
+}[] = [
   { date: "29 Oct 2026", amountUsd: 16 },
   { date: "28 Oct 2026", amountUsd: 16 },
   { date: "27 Oct 2026", amountUsd: 15 },
   { date: "26 Oct 2026", amountUsd: 15 },
   { date: "25 Oct 2026", amountUsd: 14 },
   { date: "24 Oct 2026", amountUsd: 14 },
+  // Catch-up: 3 paused days credited at once when the price feed resumed.
+  { date: "23 Oct 2026", amountUsd: 42, catchUp: true },
+  { date: "22 Oct 2026", amountUsd: 14 },
+  { date: "21 Oct 2026", amountUsd: 14 },
   { date: "30 Sep 2026", amountUsd: 13 },
   { date: "29 Sep 2026", amountUsd: 13 },
   { date: "28 Sep 2026", amountUsd: 12 },
@@ -1055,6 +1062,18 @@ function formatHkd(amount: number): string {
 
 function formatUsd(amount: number): string {
   return `US$${amount.toLocaleString("en-HK", { maximumFractionDigits: 2 })}`;
+}
+
+/** Workbench fixture — daily incentive yield on an asset's HKD estimate. */
+const DAILY_INCENTIVE_RATE = 0.00025;
+const HKD_PER_USD = 7.8;
+
+/** Per-asset daily incentive estimate — baseline from the HKD estimate. */
+function assetEstDailyUsd(asset: VaultAsset): number {
+  return (
+    Math.round((asset.estimateHkd / HKD_PER_USD) * DAILY_INCENTIVE_RATE * 100) /
+    100
+  );
 }
 
 function assetSubtitle(asset: VaultAsset): string {

@@ -116,7 +116,6 @@ function VaultPortfolioPage({
               cashedOutUsd={PORTFOLIO_SUMMARY.cashedOutUsd}
               dailyIncentiveUsd={PORTFOLIO_SUMMARY.dailyIncentiveUsd}
               earnedAllTimeUsd={PORTFOLIO_SUMMARY.earnedAllTimeUsd}
-              hasPayoutMethod={PORTFOLIO_SUMMARY.hasPayoutMethod}
               inCashOutUsd={PORTFOLIO_SUMMARY.inCashOutUsd}
               minWithdrawalUsd={PORTFOLIO_SUMMARY.minWithdrawalUsd}
               openCashOutCount={openCashOuts}
