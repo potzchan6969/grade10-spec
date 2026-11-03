@@ -138,6 +138,10 @@ the card is in the winner's hands. The collector's half is
   on a listing in a campaign or one already relisted. A consigned lot is
   relisted from its consignment, and reads Relist from consignment with its
   reference
+- ❓ **A canceled lot relisted before the Unsold-only rule** - a canceled
+  listing relisted while the code briefly allowed it keeps its successor link;
+  whether it shows Relisted beside Canceled or no badge is open. Product
+  confirms
 - **Media** — an operator can choose reusable assets from the selected
   inventory product or upload media directly to the listing, then order every
   item together. A chosen product asset becomes part of the listing on Save:

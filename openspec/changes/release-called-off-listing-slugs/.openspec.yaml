@@ -1,5 +1,6 @@
 schema: grade10-planning
 created: 2026-10-12
+ticket: 9gag/grade10#1738
 depends_on:
   - clarify-auction-shipping-progress-copy
 hands:
