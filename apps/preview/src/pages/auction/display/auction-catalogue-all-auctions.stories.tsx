@@ -1,6 +1,10 @@
+import { Footer } from "@grade10/design-system/components/layout/footer";
+import { SiteHeader } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, waitFor, within } from "storybook/test";
+import { AUCTION_SITE_HEADER } from "../../auction-lot-details-content";
+import { AUCTION_FOOTER } from "../../store-content";
 import {
   AuctionCatalogueAllAuctionsGrid,
   PAGE_SIZE,
@@ -14,7 +18,8 @@ import {
 
 /**
  * Quiet All auctions grid (launch layout — no category chrome) with infinite
- * scroll. Assembled with Featured under Auction/Display/Auction List → Default. Lot card
+ * scroll, under the site header and footer. Assembled with Featured under
+ * Auction/Display/Auction List → Default. Lot card
  * states live under All Auctions/Lot Card. Category button (later) lives under
  * All Auctions/Later.
  */
@@ -56,28 +61,32 @@ function AllAuctionsList({ lots }: { lots: readonly CatalogueLot[] }) {
   }
 
   return (
-    <div className="w-full bg-background px-4 pt-16 pb-16 text-foreground sm:px-8 lg:px-12">
-      <section aria-labelledby="all-auctions" className="min-w-0">
-        <h2
-          className="text-2xl font-semibold text-foreground"
-          id="all-auctions"
-        >
-          All Auctions
-        </h2>
-        {ordered.length === 0 ? (
-          <p className="mt-8 max-w-prose text-base text-foreground">
-            There are no auctions.
-          </p>
-        ) : (
-          <div className="mt-8">
-            <AuctionCatalogueAllAuctionsGrid
-              lots={ordered}
-              onToggle={toggleWatch}
-              watched={watched}
-            />
-          </div>
-        )}
-      </section>
+    <div className="flex min-h-svh w-full flex-col bg-background text-foreground">
+      <SiteHeader {...AUCTION_SITE_HEADER} />
+      <main className="w-full flex-1 px-4 pt-16 pb-16 sm:px-8 lg:px-12">
+        <section aria-labelledby="all-auctions" className="min-w-0">
+          <h2
+            className="text-2xl font-semibold text-foreground"
+            id="all-auctions"
+          >
+            All Auctions
+          </h2>
+          {ordered.length === 0 ? (
+            <p className="mt-8 max-w-prose text-base text-foreground">
+              There are no auctions.
+            </p>
+          ) : (
+            <div className="mt-8">
+              <AuctionCatalogueAllAuctionsGrid
+                lots={ordered}
+                onToggle={toggleWatch}
+                watched={watched}
+              />
+            </div>
+          )}
+        </section>
+      </main>
+      <Footer {...AUCTION_FOOTER} />
     </div>
   );
 }
@@ -111,11 +120,19 @@ export const Default: Story = {
       ),
     ).not.toBeNull();
 
-    // The test browser's viewport is taller than the observer's root, so the
-    // sentinel is brought into range by scrolling the window to its end, again
-    // on each retry while the page is still laying out.
+    // With the header above it the sentinel starts below the test browser's
+    // viewport, so the window is scrolled to put it mid-screen, again on each
+    // retry while the page is still laying out.
     await waitFor(() => {
-      window.scrollTo(0, document.documentElement.scrollHeight);
+      const sentinel = canvasElement.querySelector(
+        '[data-slot="all-auctions-load-more-sentinel"]',
+      );
+      window.scrollTo(
+        0,
+        window.scrollY +
+          (sentinel?.getBoundingClientRect().top ?? 0) -
+          window.innerHeight / 2,
+      );
       expect(
         canvas.getByLabelText("Loading more auctions"),
       ).toBeInTheDocument();
