@@ -26,6 +26,7 @@ the vault asks of them.
 ## Gate
 
 - 🚧 **Papers Read the ID Record** — the papers are never prepared for a visit with no ID record, and the name printed comes from the record, never from anything typed later
+- 🚧 **One Gate for Cash-Out and Loan** — a contradiction holds the cash-out, or refuses the loan acceptance, onto one held list an approver decides - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#held-list)
 - 🚧 **No Settings** — the check is required before money leaves, so there is no point for an admin to switch on or off
 - **Built** — no paper is rendered for a case with no bound identity, a packet whose identity changed can't be sealed, and each point the vault asks — before the paperwork, at every cash-out and before sale proceeds reach the balance — is an admin setting
 

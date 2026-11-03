@@ -17,6 +17,7 @@ management tracks. Turning vaulted cards into consignments has its own view -
 - 🚧 **Mail-In Parcels** — requests expected and parcels received at the KEC warehouse, from Phase 3 - [Mail-In](/p/grade10-site/vault/intake#mail-in)
 - 🚧 **Incentive Approval** — cards waiting to be approved to earn - [Incentive](/p/grade10-site/vault/incentive#earning)
   - **Second Approver** — a second staff member approves a card above a value threshold, skipped at intake or not
+- 🚧 **Held List** — cash-outs and loan offers the money-out gate held, oldest first, for any approver but their owner - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#held-list)
 - 🚧 **Retrieval Queue** — requests waiting for a move to Causeway Bay, the collection appointments, and the handover with the ID check and the Retrieval Note - [Vault Retrieval](/p/grade10-site/vault/vault-retrieval)
 
 :::callout{kind="note"}

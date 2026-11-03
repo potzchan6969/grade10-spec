@@ -74,6 +74,10 @@ reason, from the account's Identity card - [Users](/p/grade10-admin/console/user
 - ❓ **Who is asked** - rules that raise a request on their own come later;
   today an admin asks; Product confirms
 
+## Before Money Leaves
+
+- 🚧 **The Same Check** — a cash-out or a loan advance asks for this verification, compared with the ID staff read at intake; the vault runs no check of its own - [Earnings Wallet](/p/grade10-site/account/earnings-wallet#identity-check)
+
 ## Screening
 
 Every hosted check screens the person against watchlists and lists of
