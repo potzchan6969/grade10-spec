@@ -19,7 +19,7 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
   - **Estimate at Intake** — the intake form shows about how much each card earns a day and over a year, by this formula on the day's figures, from its Earning Starts date
   - **A Day's Price** — each day with a sale is one point, the average of its SNKRDUNK sales dated at +08:00, so a busy day weighs no more than a quiet one; a day older than SNKRDUNK's week is its one daily average; a day with no sale and the day still in progress count none
   - **Evidence** — each SNKRDUNK answer is kept as it came, and a price shows every sale behind it: counted, an outlier, or excluded by staff
-  - **In US Dollars** — SNKRDUNK prices are already in US dollars, and an admin enters a fixed price in US dollars, so a day's incentive is never converted
+  - 🚧 **In US Dollars** — a SNKRDUNK price is in yen, converted to US dollars through Hong Kong dollars at the European Central Bank's rates, both rate days kept with the day's amount; an admin enters a fixed price in US dollars, never converted
   - **Unlikely Data** — a price or a rate of exchange that jumps too far from the day before is used all the same and flagged for staff; a figure staff find wrong is corrected in Inventory's market prices — re-read from SNKRDUNK, or a wrong sale excluded — and every day priced from it is worked again, the difference credited or taken back
   - **Built** — a deployed environment imports rates of exchange but prices no card until the price worker that supplies the sales is connected, so no card earns there yet
 - 🚧 **Liquidity Factor** — how easily the card sells, from 0.2 to 1: velocity × price stability
@@ -151,7 +151,8 @@ vault, cash out and leave.
 | A sold card stops on the sale | Decided | It stops earning on the day it is marked sold, not at the delivery or the settlement, so a card earns nothing while its sale is being completed - decided by the owner, 2026-10-29 | Owner |
 | A sale is not an early retrieval | Decided | A card sold through consignment forfeits nothing; its vested days are paid on its own release day - built so, 2026-10-27; confirmed in the counter review, round 3, 2026-11-02 | Product |
 | The earnings model | Decided | Terms signed per card - the rate, 30 vesting days, forfeit on the owner's early retrieval, a value cap, Earning Starts, and the early retrieval fee's period and amount; a late pass backdates; earning rules are a deny-list; no account cap, a review instead; vesting always shown beside the wallet, so there is no view to choose; liquidity is the drafted formula with its tiers in US dollars - the counter review, round 3, 2026-11-02 | Product |
-| The wallet in US dollars from the start | Decided | The wallet holds US dollars from Phase 1, so its ledger never needs converting; SNKRDUNK prices are US dollars already and a fixed price is entered in them - the counter review, round 3, 2026-11-02 | Product |
+| The wallet in US dollars from the start | Decided | The wallet holds US dollars from Phase 1, so its ledger never needs converting; a fixed price is entered in them - the counter review, round 3, 2026-11-02 | Product |
+| SNKRDUNK in yen | 🚧 | Inventory prices SNKRDUNK in yen, so the vault converts a yen price to US dollars through HKD at the ECB's rates and records both rate days, in place of reading SNKRDUNK prices as US dollars already (2026-11-02) - decided by the owner, 2026-11-03 | Owner |
 :::
 
 :::detail{title="Code map" for="engineer"}
