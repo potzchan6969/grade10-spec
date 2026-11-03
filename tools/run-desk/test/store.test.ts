@@ -456,7 +456,7 @@ test("a re-run walks the failed and blocked rows again, keeping their row number
   );
 });
 
-test("verdicts take each case from the newest run on its environment that holds it", () => {
+test("verdicts take each case from the newest run on its environment that walked it", () => {
   const { store } = deskInMemory();
   const older = store.open(aSpec(), TESTER);
   store.mark(older.id, { marks: [mark("TC2", "fail")] }, TESTER);
@@ -710,4 +710,51 @@ test("a spec past one SQLite value is written in parts and read back whole", () 
   assert.ok(parts.n >= 3, `written in ${parts.n} parts`);
   const reread = new DeskStore(sqlOf(db));
   assert.equal(reread.view(id).spec.cases[1].title, long);
+});
+
+test("a mark made on an older revision, or on data the row no longer holds, no longer speaks for it", () => {
+  const { store } = deskInMemory();
+  const { id } = store.open(aSpec(), TESTER);
+  store.mark(id, { marks: [mark("TC2", "pass")] }, TESTER);
+  store.mark(id, { marks: [mark("TC1#2", "fail", { triage: "bug" })] }, TESTER);
+  store.mark(id, { marks: [mark("TC1#1", "pass")] }, TESTER);
+  const spec = aSpec();
+  const [tc1, tc2, ...rest] = spec.cases;
+  const data = tc1.data as NonNullable<typeof tc1.data>;
+  const replaced = store.replaceSpec(
+    id,
+    {
+      ...spec,
+      cases: [
+        {
+          ...tc1,
+          data: {
+            ...data,
+            rows: [data.rows[0], ["Platinum", "P10"], ...data.rows.slice(1)],
+          },
+        },
+        { ...tc2, rev: (tc2.rev ?? 0) + 1 },
+        ...rest,
+      ],
+    },
+    TESTER,
+  ).value;
+  assert.deepEqual(
+    replaced.marks.map((one) => [one.row, one.value]),
+    [["TC1#1", "pass"]],
+    "TC2's pass was on the old revision; TC1#2 now holds other data",
+  );
+  assert.equal(store.history(id, "TC1#2").marks.length, 1, "history keeps it");
+  assert.equal(store.verdicts().cases.qa.TC2.rows[0].marks.length, 0);
+});
+
+test("a newer run that has not walked a case leaves its result with the run that did", () => {
+  const { store } = deskInMemory();
+  const walked = store.open(aSpec(), TESTER);
+  store.mark(walked.id, { marks: [mark("TC3", "pass")] }, TESTER);
+  const fresh = store.open(aSpec({ phase: "store-launch-2" }), TESTER);
+  const qa = store.verdicts().cases.qa;
+  assert.equal(qa.TC3.run, walked.id);
+  assert.equal(caseVerdict(qa.TC3.rows).verdict, "pass");
+  assert.equal(qa.TC2.run, fresh.id, "never walked: the newest run holding it");
 });

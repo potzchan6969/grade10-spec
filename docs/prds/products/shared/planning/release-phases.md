@@ -118,7 +118,7 @@ QA's words in a run's own shape: the run as a list beside the case being walked,
 - 🚧 **One Verdict per Row** — where Web or Mobile is in play, a person's marks decide; automation decides alone only on a case nobody can walk
   - **Automation Disagrees** — an automated fail beside a person's pass counts as a pass, and the phase cannot sign off until it is triaged
   - **Worst First** — fail, then blocked, then not run, then skipped, then pass; a case takes its worst row
-  - **Latest Run, Same Revision** — the newest run on the phase's QA environment counts, while the case's revision matches the one in the run
+  - **Latest Run, Same Revision** — the newest run on the phase's QA environment that walked the case counts, while the case's revision matches the one in the run; a mark made on an older revision, or on data its row no longer holds, no longer counts
 - 🚧 **Triage** — on each fail, blocked or skipped mark, with the issue it links; the row's verdict still follows One Verdict per Row
   - **Bug** — the product is wrong; failing, for the issue's assignee
   - **Spec** — product and page disagree and nobody decided; failing, for the product manager, as an open question on the page

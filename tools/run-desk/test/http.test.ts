@@ -101,7 +101,11 @@ test("the desk answers the routes the manual and the run sheet call", async () =
   );
 
   const verdicts = await call("GET", "/verdicts");
-  assert.equal(verdicts.body.cases.qa.TC1.run, rerun.body.id);
+  assert.equal(
+    verdicts.body.cases.qa.TC1.run,
+    run.id,
+    "the run that walked it",
+  );
 });
 
 test("errors are JSON with a status and a reason", async () => {

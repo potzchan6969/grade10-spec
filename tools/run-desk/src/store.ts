@@ -62,7 +62,8 @@ const SCHEMA = [
   `create table if not exists marks (seq integer primary key, id text not null,
     run text not null, row text not null, surface text not null,
     value text not null, expectation integer, triage text, issue text,
-    note text, by text not null, at text not null, unique (run, id))`,
+    note text, by text not null, at text not null, walked text not null,
+    unique (run, id))`,
   "create index if not exists marks_current on marks (run, row, surface, seq)",
   `create table if not exists observations (seq integer primary key,
     id text not null, run text not null, walk text not null,
@@ -253,8 +254,8 @@ export class DeskStore {
         if (held) return toMark(held);
         const mark: Mark = { ...one, by, at, seq: this.#next("seq") };
         this.#sql.exec(
-          `insert into marks (seq, id, run, row, surface, value, expectation, triage, issue, note, by, at)
-            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          `insert into marks (seq, id, run, row, surface, value, expectation, triage, issue, note, by, at, walked)
+            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           mark.seq,
           mark.id,
           run.id,
@@ -267,6 +268,7 @@ export class DeskStore {
           mark.note ?? null,
           by,
           at,
+          walkedOf(spec, mark.row),
         );
         live.push({ run: run.id, message: { type: "mark", mark } });
         return mark;
@@ -414,27 +416,37 @@ export class DeskStore {
       const key = `${run}\n${mark.row}`;
       marksOf.set(key, [...(marksOf.get(key) ?? []), mark]);
     }
+    const walkedIn = (run: string, rows: RunRow[], id: string) =>
+      rows.some(
+        (row) =>
+          row.case === id &&
+          (marksOf.get(`${run}\n${row.key}`) ?? []).some(
+            (mark) => mark.value !== "todo",
+          ),
+      );
     const cases: DeskVerdicts["cases"] = {};
-    for (const run of runs) {
-      const { spec, rows } = this.#held(run.id);
-      cases[run.env] ??= {};
-      const byEnv = cases[run.env];
-      for (const one of spec.cases) {
-        if (byEnv[one.id]) continue;
-        byEnv[one.id] = {
-          run: run.id,
-          ...(one.marker ? { marker: one.marker } : {}),
-          ...(one.rev !== undefined ? { rev: one.rev } : {}),
-          rows: rows
-            .filter((row) => row.case === one.id)
-            .map((row) => ({
-              key: row.key,
-              inPlay: one.surfaces,
-              marks: marksOf.get(`${run.id}\n${row.key}`) ?? [],
-            })),
-        };
+    for (const walked of [true, false])
+      for (const run of runs) {
+        const { spec, rows } = this.#held(run.id);
+        cases[run.env] ??= {};
+        const byEnv = cases[run.env];
+        for (const one of spec.cases) {
+          if (byEnv[one.id]) continue;
+          if (walked && !walkedIn(run.id, rows, one.id)) continue;
+          byEnv[one.id] = {
+            run: run.id,
+            ...(one.marker ? { marker: one.marker } : {}),
+            ...(one.rev !== undefined ? { rev: one.rev } : {}),
+            rows: rows
+              .filter((row) => row.case === one.id)
+              .map((row) => ({
+                key: row.key,
+                inPlay: one.surfaces,
+                marks: marksOf.get(`${run.id}\n${row.key}`) ?? [],
+              })),
+          };
+        }
       }
-    }
     const excluded: DeskVerdicts["excluded"] = {};
     for (const run of [...runs].reverse()) {
       if (run.state === "open" || !run.phase) continue;
@@ -580,16 +592,34 @@ export class DeskStore {
     };
   }
 
+  /** The newest mark per row and surface among those made on the row as the
+   * run's selection now reads it: a mark on an older revision of the case, or
+   * on data the row no longer holds, no longer speaks for it. */
   #currentMarks(run?: string): (Mark & { run: string })[] {
-    return this.#sql
-      .exec(
-        `select * from marks m where (? is null or run = ?) and seq = (select max(seq)
-          from marks x where x.run = m.run and x.row = m.row and x.surface = m.surface)
-          order by seq`,
-        run ?? null,
-        run ?? null,
-      )
-      .map((row) => ({ ...toMark(row), run: String(row.run) }));
+    const walked = new Map<string, Map<string, string>>();
+    const now = (id: string) => {
+      let held = walked.get(id);
+      if (!held) {
+        const { spec, rows } = this.#held(id);
+        held = new Map(rows.map((row) => [row.key, walkedOf(spec, row.key)]));
+        walked.set(id, held);
+      }
+      return held;
+    };
+    const newest = new Map<string, Mark & { run: string }>();
+    for (const row of this.#sql.exec(
+      "select * from marks where (? is null or run = ?) order by seq",
+      run ?? null,
+      run ?? null,
+    )) {
+      const id = String(row.run);
+      if (now(id).get(String(row.row)) !== row.walked) continue;
+      newest.set(`${id}\n${row.row}\n${row.surface}`, {
+        ...toMark(row),
+        run: id,
+      });
+    }
+    return [...newest.values()].sort((a, b) => a.seq - b.seq);
   }
 
   #objects(run: string, row: string): RowObjects {
@@ -620,6 +650,15 @@ export class DeskStore {
     );
     return row ? Number(row.value) : 0;
   }
+}
+
+/** What a mark on a row was made against: the case's marker and revision,
+ * and the data the row held. */
+function walkedOf(spec: RunSpec, key: string): string {
+  const [id, index] = key.split("#");
+  const one = spec.cases.find((c) => c.id === id);
+  const data = index ? one?.data?.rows[Number(index) - 1] : undefined;
+  return JSON.stringify([one?.marker ?? id, one?.rev ?? null, data ?? null]);
 }
 
 export function rowsOf(spec: RunSpec): RunRow[] {
