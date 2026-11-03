@@ -10,14 +10,14 @@ It is paid into the [Earnings Wallet](/p/grade10-site/account/earnings-wallet).
 
 - 🚧 **Daily Incentive** — market price × liquidity factor × yearly rate ÷ 365
   - **Built** — the same formula, the factor's model still the owner's draft; each day's price, rate of exchange, factor, rate and settings are kept with its amount, so a changed setting never changes an amount already credited
-- 🚧 **Market Price** — the median of the card's sales on SNKRDUNK over 30 days, outliers removed
+- 🚧 **Market Price** — the median of the card's daily SNKRDUNK prices over 30 days, outlier days removed
   - **SNKRDUNK Card Required** — every card taken at the counter names its SNKRDUNK card, kept in Inventory and remembered on its catalogue product for the next copy
   - **Fixed Price** — entered by an admin only for a card with no SNKRDUNK listing to link; it stands as the card's market price until a SNKRDUNK card is linked
     - **SNKRDUNK Wins** — a linked SNKRDUNK card always replaces the fixed price, and an admin can't set one while the card's product already has a SNKRDUNK card
     - **A Changed Price** — applies from the next day; a mistake corrected is worked again like any other price
     - **Liquidity on a Fixed Price** — a fixed factor, an admin setting starting at 0.5, with no minimum sales, since no sales stand behind the price
   - **Estimate at Intake** — the intake form shows about how much each card earns a day and over a year, by this formula on the day's figures, from its Earning Starts date
-  - **A Day's Price** — the window's median is of every SNKRDUNK sale in it, each dated at +08:00; a day older than SNKRDUNK's week counts its one daily average; the day still in progress counts none
+  - **A Day's Price** — each day with a sale is one point, the average of its SNKRDUNK sales dated at +08:00, so a busy day weighs no more than a quiet one; a day older than SNKRDUNK's week is its one daily average; a day with no sale and the day still in progress count none
   - **Evidence** — each SNKRDUNK answer is kept as it came, and a price shows every sale behind it: counted, an outlier, or excluded by staff
   - **In US Dollars** — SNKRDUNK prices are already in US dollars, and an admin enters a fixed price in US dollars, so a day's incentive is never converted
   - **Unlikely Data** — a price or a rate of exchange that jumps too far from the day before is used all the same and flagged for staff; a figure staff find wrong is corrected in Inventory's market prices — re-read from SNKRDUNK, or a wrong sale excluded — and every day priced from it is worked again, the difference credited or taken back
@@ -32,7 +32,7 @@ A HKD 10,000 card, worked through:
 
 | Step | Working | Result |
 | --- | --- | --- |
-| Market price | the median of 30 days' sales on SNKRDUNK | HKD 10,000 |
+| Market price | the median of 30 days' daily average prices on SNKRDUNK | HKD 10,000 |
 | Price tier | US$650 – 2,599: at least 3 sales, a target of 10 | 12 sales: eligible |
 | Velocity | 12 ÷ 10, at most 1 | 1.00 |
 | Price variation | sales of 9,000, 9,500, 10,000, 10,500 and 13,000 sit 1,000, 500, 0, 500 and 3,000 from the median; the middle distance, 500, is 5% of it | 5% |
@@ -147,7 +147,7 @@ vault, cash out and leave.
 | Where prices come from | Decided | A separate price worker, reached by a service binding; its answer's shape is assumed until it exists - decided by the owner, 2026-10-27 | Owner |
 | Nothing is held | Decided | An unlikely price or rate is used and flagged, never held, because a credit stays locked until vesting ends and nothing is cashed out without a second treasurer; a wrong one is corrected in Inventory and the days it priced are worked again with no second approver - decided by the owner, 2026-10-28 | Owner |
 | A late fact waits | Decided | A day whose price or rate has not arrived waits and is paid in full, rather than earning nothing after 3 days - decided by the owner, 2026-10-28 | Owner |
-| A day's SNKRDUNK price | Decided | The median counts every sale in the window, each on its date at +08:00, read from a kept snapshot of SNKRDUNK's answer; a day past SNKRDUNK's week counts its daily average. SNKRDUNK's week holds each sale and its longer history one average per Japan day, so neither is merged into the other - decided by the owner, 2026-11-02, in place of the day taking its last point (2026-10-30) | Owner |
+| A day's SNKRDUNK price | Decided | Each day is one point, the average of its sales on their dates at +08:00, read from a kept snapshot of SNKRDUNK's answer, rounded half up; a day past SNKRDUNK's week is its daily average. The median is of the 30 calendar days' points, days without a sale left out, and the IQR fences drop whole days by their point; velocity and price variation still count the kept days' sales. A day then reads the same from the week's sales as from the daily history, and a busy day can't outweigh the rest - decided by the owner, 2026-11-03, in place of the median of every sale (2026-11-02) | Owner |
 | A sold card stops on the sale | Decided | It stops earning on the day it is marked sold, not at the delivery or the settlement, so a card earns nothing while its sale is being completed - decided by the owner, 2026-10-29 | Owner |
 | A sale is not an early retrieval | Decided | A card sold through consignment forfeits nothing; its vested days are paid on its own release day - built so, 2026-10-27; confirmed in the counter review, round 3, 2026-11-02 | Product |
 | The earnings model | Decided | Terms signed per card - the rate, 30 vesting days, forfeit on the owner's early retrieval, a value cap, Earning Starts, and the early retrieval fee's period and amount; a late pass backdates; earning rules are a deny-list; no account cap, a review instead; vesting always shown beside the wallet, so there is no view to choose; liquidity is the drafted formula with its tiers in US dollars - the counter review, round 3, 2026-11-02 | Product |
