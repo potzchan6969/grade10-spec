@@ -147,7 +147,10 @@ describe("the outbox", () => {
 
     expect(await outbox.flush(desk, () => {})).toEqual({
       rejected: [],
-      waiting: true,
+      held: {
+        reason: "unreachable",
+        message: "The desk cannot be reached: offline",
+      },
     });
     // A reload of the page reads the same waiting writes back.
     const reopened = new Outbox(run.id, keys);
@@ -163,7 +166,7 @@ describe("the outbox", () => {
       ),
     ).toEqual({
       rejected: [],
-      waiting: false,
+      held: null,
     });
     expect(acked).toEqual(["offline-1"]);
     expect(reopened.list()).toEqual([]);
@@ -197,7 +200,7 @@ describe("the outbox", () => {
       marks: [mark("g10.store-cart.TC19#1", "pass")],
     });
     const result = await outbox.flush(desk, () => {});
-    expect(result.waiting).toBe(false);
+    expect(result.held).toBeNull();
     expect(result.rejected[0]?.message).toMatch(/closed/);
     expect(outbox.list()).toEqual([]);
   });

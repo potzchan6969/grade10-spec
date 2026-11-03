@@ -14,7 +14,14 @@ import type {
   RunView,
 } from "../api/desk.ts";
 import { type DeskApi, type LiveStatus, unreachable } from "./client.ts";
-import { type Acknowledged, Outbox } from "./outbox.ts";
+import {
+  type Acknowledged,
+  type FlushResult,
+  type Held,
+  keepSending,
+  Outbox,
+  type Sender,
+} from "./outbox.ts";
 import {
   applyLive,
   withMarks,
@@ -113,12 +120,31 @@ export function useRun(
     [remember],
   );
 
-  const flush = useCallback(() => {
-    if (!desk) return;
-    outbox.flush(desk, onAck).then(({ rejected }) => {
+  const heldFor = useRef<Held["reason"] | null>(null);
+  const sent = useCallback(
+    ({ rejected, held }: FlushResult) => {
       for (const one of rejected) note(`Not saved: ${one.message}`);
-    });
-  }, [desk, outbox, onAck, note]);
+      if (held?.reason === "signed-out" && heldFor.current !== "signed-out")
+        note(
+          `Your sign-in has ended, so your marks wait here: sign in again and they send. ${held.message}`,
+        );
+      heldFor.current = held?.reason ?? null;
+    },
+    [note],
+  );
+
+  const sender = useRef<Sender | null>(null);
+  useEffect(() => {
+    if (!desk) return;
+    const started = keepSending(outbox, desk, { ack: onAck, result: sent });
+    sender.current = started;
+    started.wake();
+    return () => {
+      started.stop();
+      if (sender.current === started) sender.current = null;
+    };
+  }, [desk, outbox, onAck, sent]);
+  const flush = useCallback(() => sender.current?.wake(), []);
 
   useEffect(() => {
     held.current = false;
