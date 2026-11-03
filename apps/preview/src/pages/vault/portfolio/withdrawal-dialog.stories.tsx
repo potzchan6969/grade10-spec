@@ -115,7 +115,7 @@ export const Destination: Story = {
     expect(dialog.getByText("123 •••• 8304")).toBeVisible();
     expect(dialog.getByText("+852 •••• 4567")).toBeVisible();
     expect(dialog.getByText("Add Hong Kong bank or FPS")).toBeVisible();
-    expect(dialog.getByText("US$ or overseas bank")).toBeVisible();
+    expect(dialog.getByText("Overseas bank")).toBeVisible();
   },
 };
 
@@ -158,27 +158,35 @@ export const FirstPayout: Story = {
   },
 };
 
-/** Manual request — US$/overseas banks get their own form, no step rail. */
+/** Manual request — US$/overseas payouts go through an email to Grade10. */
 export const ManualRequest: Story = {
   parameters: {
     verification: { caseId: "vc_57fb92b8-3636-4606-af08-e39e67ed663d" },
   },
-  args: { initialStep: "manual-request", payoutMethods: PAYOUT_METHODS },
+  args: { payoutMethods: PAYOUT_METHODS },
   play: async ({ canvasElement }) => {
     const dialog = await openDialog(canvasElement);
     await waitFor(() =>
       expect(
-        dialog.getByRole("heading", { name: "Manual Withdrawal Request" }),
+        dialog.getByRole("heading", { name: "Withdraw Earnings" }),
       ).toBeVisible(),
     );
-    expect(dialog.getByLabelText("Amount (US$)")).toHaveValue("160");
-    expect(dialog.getByLabelText("Amount (US$)")).toHaveAttribute("readonly");
-    expect(dialog.getByLabelText("Bank country / region")).toBeVisible();
-    expect(dialog.getByLabelText("Bank name")).toBeVisible();
-    expect(dialog.getByLabelText("SWIFT / BIC")).toBeVisible();
-    expect(dialog.getByLabelText("Account Holder Name")).toHaveValue("");
-    expect(dialog.getByRole("button", { name: "Continue" })).toBeDisabled();
-    expect(dialog.queryByText(/Step \d of 3/)).toBeNull();
+    await userEvent.click(
+      dialog.getByRole("button", { name: "Request" }),
+    );
+    const page = body(canvasElement);
+    const contact = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "Email Grade10" });
+      expect(found).toBeVisible();
+      return within(found);
+    });
+    expect(contact.getByText("support@grade10.com")).toBeVisible();
+    expect(
+      contact.getByRole("button", { name: "Open Mail App" }),
+    ).toBeVisible();
+    expect(
+      contact.getByRole("button", { name: "Copy Message" }),
+    ).toBeVisible();
   },
 };
 
